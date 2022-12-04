@@ -1,5 +1,6 @@
 import express from "express";
 import cors, { CorsOptions } from "cors";
+import routerApi from "./routes";
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -26,6 +27,8 @@ app.get("/", (req, res) => {
 app.get("/nueva-ruta", (req, res) => {
   res.send("Hola, soy una nueva ruta");
 });
+
+routerApi(app);
 
 app.listen(port, () => {
   console.log("My port: " + port);
