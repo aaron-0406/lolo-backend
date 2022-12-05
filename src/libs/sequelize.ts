@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import config from "../config/config";
+import { setupModels } from "../db/models/index";
 
 const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
@@ -10,5 +11,7 @@ const sequelize = new Sequelize(URI, {
   dialect: "mysql",
   logging: true,
 });
+
+setupModels(sequelize);
 
 export default sequelize;

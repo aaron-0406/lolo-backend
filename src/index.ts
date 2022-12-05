@@ -1,6 +1,10 @@
 import express from "express";
 import cors, { CorsOptions } from "cors";
 import routerApi from "./routes";
+import errorHandlerr from "./middlewares/error.handler";
+
+const { logErrors, ormErrorHandler, boomErrorHandler, errorHandler } =
+  errorHandlerr;
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -20,15 +24,12 @@ const options: CorsOptions = {
 };
 app.use(cors(options));
 
-app.get("/", (req, res) => {
-  res.send("Hola mi server en express");
-});
-
-app.get("/nueva-ruta", (req, res) => {
-  res.send("Hola, soy una nueva ruta");
-});
-
 routerApi(app);
+
+app.use(logErrors);
+app.use(ormErrorHandler);
+app.use(boomErrorHandler);
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log("My port: " + port);

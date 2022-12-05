@@ -20,11 +20,13 @@
   },
   "homepage": "https://github.com/aaron-0406/lolo-backend#readme",
   "dependencies": {
+    "@hapi/boom": "^10.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mysql2": "^2.3.3",
-    "sequelize": "^6.26.0"
+    "sequelize": "^6.26.0",
+    "joi": "^17.4.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
