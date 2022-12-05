@@ -8,7 +8,10 @@
     "lint": "eslint",
     "production:build": "tsc",
     "production:start": "node dist/index.js",
-    "migrations:generate": "sequelize-cli migration:generate --name"
+    "migrations:generate": "sequelize-cli  migration:generate --name",
+    "migrations:run": "sequelize-cli db:migrate",
+    "migrations:revert": "sequelize-cli db:migrate:undo",
+    "migrations:delete": "sequelize-cli db:migrate:undo:all"
   },
   "repository": {
     "type": "git",
@@ -25,9 +28,9 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "joi": "^17.4.2",
     "mysql2": "^2.3.3",
-    "sequelize": "^6.26.0",
-    "joi": "^17.4.2"
+    "sequelize": "^6.26.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
@@ -38,6 +41,7 @@
     "eslint-plugin-prettier": "^3.4.1",
     "nodemon": "^2.0.12",
     "prettier": "^2.3.2",
+    "sequelize-cli": "^6.5.2",
     "typescript": "^4.9.3"
   }
 }
