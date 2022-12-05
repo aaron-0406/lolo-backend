@@ -1,4 +1,6 @@
 export type CustomerType = {
   id: string;
-  name: string;
+  ruc: string;
+  companyName: string;
+  description?: string;
 };

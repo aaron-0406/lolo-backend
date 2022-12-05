@@ -10,9 +10,18 @@ const CustomerSchema: ModelAttributes<Customer, CustomerType> = {
     primaryKey: true,
     type: DataTypes.INTEGER,
   },
-  name: {
+  ruc: {
     allowNull: false,
-    type: DataTypes.STRING,
+    unique: true,
+    type: DataTypes.STRING(11),
+  },
+  companyName: {
+    allowNull: false,
+    type: DataTypes.STRING(150),
+  },
+  description: {
+    allowNull: false,
+    type: DataTypes.TEXT("tiny"),
   },
 };
 
