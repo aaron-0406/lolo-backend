@@ -1,7 +1,7 @@
 import express from "express";
 import validatorHandler from "../middlewares/validator.handler";
-import CustomersService from "../services/customer.service";
-import customerSchemas from "../schemas/customer.schema";
+import CustomersService from "../app/customers/services/customer.service";
+import customerSchemas from "../app/customers/schemas/customer.schema";
 
 const { getCustomerSchema, createCustomerSchema } = customerSchemas;
 const router = express.Router();

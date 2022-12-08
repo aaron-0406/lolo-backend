@@ -1,4 +1,4 @@
-import sequelize from "../libs/sequelize";
+import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
 import { CustomerType } from "../types/customer.type";
 
