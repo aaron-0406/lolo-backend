@@ -1,5 +1,5 @@
 export type BankType = {
-  id: string;
+  id: number;
   name: string;
   description?: string;
   createAt: Date;
