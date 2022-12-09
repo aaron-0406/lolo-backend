@@ -1,25 +1,20 @@
 import { Model, DataTypes, Sequelize, ModelAttributes } from "sequelize";
-import { CustomerType } from "../../app/customers/types/customer.type";
+import { BankType } from "../../app/boss/types/banks.type";
 
-const CUSTOMER_TABLE = "CUSTOMER";
+const BANK_TABLE = "BANK";
 
-const CustomerSchema: ModelAttributes<Customer, CustomerType> = {
+const BankSchema: ModelAttributes<Bank, BankType> = {
   id: {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    field: "id_customer",
+    field: "id_bank",
     type: DataTypes.INTEGER,
   },
-  ruc: {
+  name: {
     allowNull: false,
-    unique: true,
-    type: DataTypes.STRING(11),
-  },
-  companyName: {
-    allowNull: false,
-    field: "company_name",
-    type: DataTypes.STRING(150),
+    field: "name",
+    type: DataTypes.STRING(100),
   },
   description: {
     allowNull: false,
@@ -33,7 +28,7 @@ const CustomerSchema: ModelAttributes<Customer, CustomerType> = {
   },
 };
 
-class Customer extends Model {
+class Bank extends Model {
   static associate() {
     //associate
   }
@@ -41,11 +36,11 @@ class Customer extends Model {
   static config(sequelize: Sequelize) {
     return {
       sequelize,
-      tableName: CUSTOMER_TABLE,
-      modelName: CUSTOMER_TABLE,
+      tableName: BANK_TABLE,
+      modelName: BANK_TABLE,
       timestamps: false,
     };
   }
 }
 
-export default { CUSTOMER_TABLE, CustomerSchema, Customer };
+export default { BANK_TABLE, BankSchema, Bank };
