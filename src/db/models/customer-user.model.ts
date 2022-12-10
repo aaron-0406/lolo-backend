@@ -1,5 +1,6 @@
 import { Model, DataTypes, Sequelize, ModelAttributes } from "sequelize";
 import { CustomerUserType } from "../../app/customers/types/customer-user.type";
+import customerModel from "./customer.model";
 
 const CUSTOMER_USER_TABLE = "CUSTOMER_USER";
 
@@ -45,9 +46,20 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
   },
   createdAt: {
     allowNull: false,
-    field: "created_at",
     defaultValue: DataTypes.NOW,
+    field: "created_at",
     type: DataTypes.DATE,
+  },
+  customerID: {
+    allowNull: false,
+    field: "CUSTOMER_id_customer",
+    type: DataTypes.INTEGER,
+    references: {
+      model: customerModel.CUSTOMER_TABLE,
+      key: "id_customer",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "SET NULL",
   },
 };
 

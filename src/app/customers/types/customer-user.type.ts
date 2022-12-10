@@ -8,4 +8,5 @@ export type CustomerUserType = {
   password: string;
   privilege: string;
   createdAt: Date;
+  customerID?: number;
 };

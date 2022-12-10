@@ -1,4 +1,10 @@
-import { Model, DataTypes, Sequelize, ModelAttributes } from "sequelize";
+import {
+  Model,
+  DataTypes,
+  Sequelize,
+  ModelAttributes,
+  ModelCtor,
+} from "sequelize";
 import { CustomerType } from "../../app/customers/types/customer.type";
 
 const CUSTOMER_TABLE = "CUSTOMER";
@@ -34,8 +40,11 @@ const CustomerSchema: ModelAttributes<Customer, CustomerType> = {
 };
 
 class Customer extends Model {
-  static associate() {
-    //associate
+  static associate(models: { [key: string]: ModelCtor<Model> }) {
+    this.hasMany(models.CUSTOMER, {
+      as: "customer-users",
+      foreignKey: "customerID",
+    });
   }
 
   static config(sequelize: Sequelize) {

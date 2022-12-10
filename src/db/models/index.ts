@@ -14,4 +14,6 @@ export const setupModels = (sequelize: Sequelize) => {
   Bank.init(BankSchema, Bank.config(sequelize));
   Module.init(ModuleSchema, Module.config(sequelize));
   CustomerUser.init(CustomerUserSchema, CustomerUser.config(sequelize));
+
+  Customer.associate(sequelize.models);
 };
