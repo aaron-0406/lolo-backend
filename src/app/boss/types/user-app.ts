@@ -1,11 +1,12 @@
-export type CustomerUserType = {
+export type UserAppType = {
   id: number;
+  code: string;
+  dni: string;
   name: string;
   lastName: string;
+  address?: string;
   phone: string;
-  dni: string;
   email: string;
   password: string;
-  privilege: string;
   createdAt: Date;
 };

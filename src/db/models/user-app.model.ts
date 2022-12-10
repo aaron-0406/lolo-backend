@@ -1,15 +1,23 @@
 import { Model, DataTypes, Sequelize, ModelAttributes } from "sequelize";
-import { CustomerUserType } from "../../app/customers/types/customer-user.type";
+import { UserAppType } from "../../app/boss/types/user-app";
 
-const CUSTOMER_USER_TABLE = "CUSTOMER_USER";
+const USER_APP_TABLE = "USER_APP";
 
-const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
+const UserAppSchema: ModelAttributes<UserApp, UserAppType> = {
   id: {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    field: "id_customer_user",
+    field: "id_user_app",
     type: DataTypes.INTEGER,
+  },
+  code: {
+    allowNull: false,
+    type: DataTypes.STRING(9),
+  },
+  dni: {
+    allowNull: false,
+    type: DataTypes.STRING(8),
   },
   name: {
     allowNull: false,
@@ -20,14 +28,13 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
     field: "last_name",
     type: DataTypes.STRING(100),
   },
+  address: {
+    allowNull: false,
+    type: DataTypes.STRING(150),
+  },
   phone: {
     allowNull: false,
     type: DataTypes.STRING(50),
-  },
-  dni: {
-    allowNull: false,
-    unique: true,
-    type: DataTypes.STRING(8),
   },
   email: {
     allowNull: false,
@@ -36,12 +43,7 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
   },
   password: {
     allowNull: false,
-    unique: true,
     type: DataTypes.STRING(70),
-  },
-  privilege: {
-    allowNull: false,
-    type: DataTypes.STRING(6),
   },
   createdAt: {
     allowNull: false,
@@ -51,7 +53,7 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
   },
 };
 
-class CustomerUser extends Model {
+class UserApp extends Model {
   static associate() {
     //associate
   }
@@ -59,11 +61,11 @@ class CustomerUser extends Model {
   static config(sequelize: Sequelize) {
     return {
       sequelize,
-      tableName: CUSTOMER_USER_TABLE,
-      modelName: CUSTOMER_USER_TABLE,
+      tableName: USER_APP_TABLE,
+      modelName: USER_APP_TABLE,
       timestamps: false,
     };
   }
 }
 
-export default { CUSTOMER_USER_TABLE, CustomerUserSchema, CustomerUser };
+export default { USER_APP_TABLE, UserAppSchema, UserApp };

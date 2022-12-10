@@ -1,5 +1,5 @@
 import { Model, DataTypes, Sequelize, ModelAttributes } from "sequelize";
-import { ModuleType } from "../../app/boss/types/modules.type";
+import { ModuleType } from "../../app/boss/types/module.type";
 
 const MODULE_TABLE = "MODULE";
 
@@ -20,9 +20,9 @@ const ModuleSchema: ModelAttributes<Module, ModuleType> = {
     allowNull: false,
     type: DataTypes.TEXT("tiny"),
   },
-  createAt: {
+  createdAt: {
     allowNull: false,
-    field: "create_at",
+    field: "created_at",
     defaultValue: DataTypes.NOW,
     type: DataTypes.DATE,
   },

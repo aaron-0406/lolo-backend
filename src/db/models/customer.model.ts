@@ -25,9 +25,9 @@ const CustomerSchema: ModelAttributes<Customer, CustomerType> = {
     allowNull: false,
     type: DataTypes.TEXT("tiny"),
   },
-  createAt: {
+  createdAt: {
     allowNull: false,
-    field: "create_at",
+    field: "created_at",
     defaultValue: DataTypes.NOW,
     type: DataTypes.DATE,
   },
