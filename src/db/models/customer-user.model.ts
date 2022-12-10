@@ -1,4 +1,10 @@
-import { Model, DataTypes, Sequelize, ModelAttributes } from "sequelize";
+import {
+  Model,
+  DataTypes,
+  Sequelize,
+  ModelAttributes,
+  ModelCtor,
+} from "sequelize";
 import { CustomerUserType } from "../../app/customers/types/customer-user.type";
 import customerModel from "./customer.model";
 
@@ -64,8 +70,8 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
 };
 
 class CustomerUser extends Model {
-  static associate() {
-    //associate
+  static associate(models: { [key: string]: ModelCtor<Model> }) {
+    this.belongsTo(models.CUSTOMER_USER, { as: "customer" });
   }
 
   static config(sequelize: Sequelize) {

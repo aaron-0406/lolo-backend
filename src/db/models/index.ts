@@ -16,4 +16,5 @@ export const setupModels = (sequelize: Sequelize) => {
   CustomerUser.init(CustomerUserSchema, CustomerUser.config(sequelize));
 
   Customer.associate(sequelize.models);
+  CustomerUser.associate(sequelize.models);
 };
