@@ -12,7 +12,7 @@ const createCustomerSchema = Joi.object<CustomerType, true>({
   ruc: ruc.required(),
   companyName: companyName.required(),
   description: description.optional(),
-  createAt: createAt.optional(),
+  createdAt: createAt.optional(),
 });
 
 const getCustomerSchema = Joi.object<{ id: number }, true>({
