@@ -52,7 +52,7 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
   },
   state: {
     allowNull: false,
-    type: DataTypes.BOOLEAN(),
+    type: DataTypes.TINYINT({ length: 1 }),
   },
   createdAt: {
     allowNull: false,
