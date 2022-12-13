@@ -3,5 +3,6 @@ export type CustomerType = {
   ruc: string;
   companyName: string;
   description?: string;
+  state: boolean;
   createdAt: Date;
 };

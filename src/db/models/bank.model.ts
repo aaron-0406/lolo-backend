@@ -20,6 +20,10 @@ const BankSchema: ModelAttributes<Bank, BankType> = {
     allowNull: false,
     type: DataTypes.TEXT("tiny"),
   },
+  state: {
+    allowNull: false,
+    type: DataTypes.BOOLEAN(),
+  },
   createdAt: {
     allowNull: false,
     field: "created_at",

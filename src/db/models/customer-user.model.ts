@@ -50,6 +50,10 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
     allowNull: false,
     type: DataTypes.STRING(6),
   },
+  state: {
+    allowNull: false,
+    type: DataTypes.BOOLEAN(),
+  },
   createdAt: {
     allowNull: false,
     defaultValue: DataTypes.NOW,

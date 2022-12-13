@@ -9,7 +9,9 @@ const dni = Joi.string().max(8);
 const email = Joi.string().min(2).max(70);
 const password = Joi.string().min(2).max(70);
 const privilege = Joi.string().max(6);
+const state = Joi.boolean();
 const createAt = Joi.date();
+const customerID = Joi.number();
 
 const createCustomerUserSchema = Joi.object<CustomerUserType, true>({
   id: id.required(),
@@ -20,7 +22,9 @@ const createCustomerUserSchema = Joi.object<CustomerUserType, true>({
   email: email.required(),
   password: password.required(),
   privilege: privilege.required(),
+  state: state.required(),
   createdAt: createAt.optional(),
+  customerID: customerID.required(),
 });
 
 const getCustomerUserSchema = Joi.object<{ id: number }, true>({

@@ -8,5 +8,6 @@ export type UserAppType = {
   phone: string;
   email: string;
   password: string;
+  state: boolean;
   createdAt: Date;
 };

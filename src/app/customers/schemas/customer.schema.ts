@@ -5,6 +5,7 @@ const id = Joi.number();
 const ruc = Joi.string().min(11);
 const companyName = Joi.string().min(2).max(150);
 const description = Joi.string();
+const state = Joi.boolean();
 const createAt = Joi.date();
 
 const createCustomerSchema = Joi.object<CustomerType, true>({
@@ -12,6 +13,7 @@ const createCustomerSchema = Joi.object<CustomerType, true>({
   ruc: ruc.required(),
   companyName: companyName.required(),
   description: description.optional(),
+  state: state.required(),
   createdAt: createAt.optional(),
 });
 

@@ -45,6 +45,10 @@ const UserAppSchema: ModelAttributes<UserApp, UserAppType> = {
     allowNull: false,
     type: DataTypes.STRING(70),
   },
+  state: {
+    allowNull: false,
+    type: DataTypes.BOOLEAN(),
+  },
   createdAt: {
     allowNull: false,
     field: "created_at",
