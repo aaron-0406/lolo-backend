@@ -6,7 +6,7 @@ import customerUserModel from "./customer-user.model";
 import cityModel from "./city.model";
 import clientModel from "./client.model";
 import userAppModel from "./user-app.model";
-import customerHasBank from "./many-to-many/customer-has-bank";
+import customerHasBank from "./many-to-many/customer-has-bank.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Bank, BankSchema } = banksModel;
