@@ -62,7 +62,7 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
   },
   customerID: {
     allowNull: false,
-    field: "CUSTOMER_id_customer",
+    field: "customer_id_customer",
     type: DataTypes.INTEGER,
     references: {
       model: customerModel.CUSTOMER_TABLE,
