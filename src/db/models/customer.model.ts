@@ -44,8 +44,8 @@ const CustomerSchema: ModelAttributes<Customer, CustomerType> = {
 
 class Customer extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
-    this.hasMany(models.CUSTOMER, {
-      as: "customer-users",
+    this.hasMany(models.CUSTOMER_USER, {
+      as: "customer-user",
       foreignKey: "customerID",
     });
 

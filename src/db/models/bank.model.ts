@@ -1,4 +1,10 @@
-import { Model, DataTypes, Sequelize, ModelAttributes } from "sequelize";
+import {
+  Model,
+  DataTypes,
+  Sequelize,
+  ModelAttributes,
+  ModelCtor,
+} from "sequelize";
 import { BankType } from "../../app/boss/types/bank.type";
 
 const BANK_TABLE = "BANK";
@@ -33,8 +39,11 @@ const BankSchema: ModelAttributes<Bank, BankType> = {
 };
 
 class Bank extends Model {
-  static associate() {
-    //associate
+  static associate(models: { [key: string]: ModelCtor<Model> }) {
+    this.hasMany(models.FUNCIONARIO, {
+      as: "funcionario",
+      foreignKey: "bankID",
+    });
   }
 
   static config(sequelize: Sequelize) {
