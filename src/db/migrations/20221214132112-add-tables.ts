@@ -7,6 +7,7 @@ import customerModel from "../models/customer.model";
 import moduleModel from "../models/module.model";
 import userAppModel from "../models/user-app.model";
 import customerHasBankModel from "../models/many-to-many/customer-has-bank.model";
+import funcionarioModel from "../models/funcionario.model";
 
 const { BankSchema, BANK_TABLE } = bankModel;
 const { CitySchema, CITY_TABLE } = cityModel;
@@ -16,6 +17,7 @@ const { CustomerSchema, CUSTOMER_TABLE } = customerModel;
 const { ModuleSchema, MODULE_TABLE } = moduleModel;
 const { UserAppSchema, USER_APP_TABLE } = userAppModel;
 const { CustomerHasBankSchema, CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
+const { FuncionarioSchema, FUNCIONARIO_TABLE } = funcionarioModel;
 
 export async function up(queryInterface: QueryInterface) {
   await queryInterface.createTable(CUSTOMER_TABLE, CustomerSchema);
@@ -25,12 +27,14 @@ export async function up(queryInterface: QueryInterface) {
   await queryInterface.createTable(CUSTOMER_USER_TABLE, CustomerUserSchema);
   await queryInterface.createTable(MODULE_TABLE, ModuleSchema);
   await queryInterface.createTable(USER_APP_TABLE, UserAppSchema);
+  await queryInterface.createTable(FUNCIONARIO_TABLE, FuncionarioSchema);
 
   await queryInterface.createTable(
     CUSTOMER_HAS_BANK_TABLE,
     CustomerHasBankSchema
   );
 }
+
 export async function down(queryInterface: QueryInterface) {
   await queryInterface.dropTable(CUSTOMER_TABLE);
   await queryInterface.dropTable(BANK_TABLE);
@@ -39,6 +43,7 @@ export async function down(queryInterface: QueryInterface) {
   await queryInterface.dropTable(CUSTOMER_USER_TABLE);
   await queryInterface.dropTable(MODULE_TABLE);
   await queryInterface.dropTable(USER_APP_TABLE);
+  await queryInterface.dropTable(FUNCIONARIO_TABLE);
 
   await queryInterface.dropTable(CUSTOMER_HAS_BANK_TABLE);
 }

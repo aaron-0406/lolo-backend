@@ -7,6 +7,7 @@ import cityModel from "./city.model";
 import clientModel from "./client.model";
 import userAppModel from "./user-app.model";
 import customerHasBank from "./many-to-many/customer-has-bank.model";
+import funcionarioModel from "./funcionario.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Bank, BankSchema } = banksModel;
@@ -15,6 +16,7 @@ const { CustomerUser, CustomerUserSchema } = customerUserModel;
 const { City, CitySchema } = cityModel;
 const { Client, ClientSchema } = clientModel;
 const { UserApp, UserAppSchema } = userAppModel;
+const { Funcionario, FuncionarioSchema } = funcionarioModel;
 
 const { CustomerHasBank, CustomerHasBankSchema } = customerHasBank;
 
@@ -26,6 +28,7 @@ export const setupModels = (sequelize: Sequelize) => {
   City.init(CitySchema, City.config(sequelize));
   Client.init(ClientSchema, Client.config(sequelize));
   UserApp.init(UserAppSchema, UserApp.config(sequelize));
+  Funcionario.init(FuncionarioSchema, Funcionario.config(sequelize));
 
   CustomerHasBank.init(
     CustomerHasBankSchema,
@@ -34,4 +37,6 @@ export const setupModels = (sequelize: Sequelize) => {
 
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
+  Bank.associate(sequelize.models);
+  Funcionario.associate(sequelize.models);
 };
