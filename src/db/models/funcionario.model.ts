@@ -44,7 +44,7 @@ const FuncionarioSchema: ModelAttributes<Funcionario, FuncionarioType> = {
 
 class Funcionario extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
-    this.belongsTo(models.FUNCIONARIO, { as: "bank" });
+    this.belongsTo(models.FUNCIONARIO, { as: "funcionario" });
   }
 
   static config(sequelize: Sequelize) {
