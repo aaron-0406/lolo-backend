@@ -13,7 +13,6 @@ const CustomerSchema: ModelAttributes<Customer, CustomerType> = {
   id: {
     primaryKey: true,
     allowNull: false,
-    autoIncrement: true,
     field: "id_customer",
     type: DataTypes.INTEGER,
   },
@@ -48,7 +47,7 @@ class Customer extends Model {
     this.hasMany(models.CUSTOMER, {
       as: "customer-users",
       foreignKey: "customerID",
-    }); 
+    });
 
     this.belongsToMany(models.BANK, {
       as: "customer-banks",

@@ -69,7 +69,7 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
       key: "id_customer",
     },
     onUpdate: "CASCADE",
-    onDelete: "SET NULL",
+    onDelete: "NO ACTION",
   },
 };
 
