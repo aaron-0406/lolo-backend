@@ -15,8 +15,8 @@ class CustomerHasBankService {
   async findOne(idCustomer: string, idBank: string) {
     const customerBank = await models.CUSTOMER_HAS_BANK.findOne({
       where: {
-        id_customer: idCustomer,
-        id_bank: idBank,
+        customer_id_customer: idCustomer,
+        bank_id_bank: idBank,
       },
     });
 
