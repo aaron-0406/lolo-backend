@@ -4,4 +4,6 @@ export type GuarantorType = {
   phone: string;
   email: string;
   createdAt: Date;
+  customerID: number;
+  bankID: number;
 };
