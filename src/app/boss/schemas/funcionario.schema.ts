@@ -6,15 +6,24 @@ const name = Joi.string().min(1).max(150);
 const createAt = Joi.date();
 const bankID = Joi.number();
 
-const createFuncionarioSchema = Joi.object<FuncionarioType, true>({
-  id: id.required(),
+const createFuncionarioSchema = Joi.object<Omit<FuncionarioType, "id">, true>({
   name: name.required(),
   createdAt: createAt.optional(),
   bankID: bankID.required(),
+});
+
+const updateFuncionarioSchema = Joi.object<Omit<FuncionarioType, "id">, true>({
+  name: name,
+  createdAt: createAt,
+  bankID: bankID,
 });
 
 const getFuncionarioSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
 
-export default { createFuncionarioSchema, getFuncionarioSchema };
+export default {
+  createFuncionarioSchema,
+  updateFuncionarioSchema,
+  getFuncionarioSchema,
+};
