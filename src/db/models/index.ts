@@ -10,6 +10,7 @@ import customerHasBank from "./many-to-many/customer-has-bank.model";
 import funcionarioModel from "./funcionario.model";
 import directionModel from "./direction.model";
 import guarantorModel from "./guarantor.model";
+import commentModel from "./comment.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Bank, BankSchema } = banksModel;
@@ -21,6 +22,7 @@ const { UserApp, UserAppSchema } = userAppModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
 const { Direction, DirectionSchema } = directionModel;
 const { Guarantor, GuarantorSchema } = guarantorModel;
+const { Comment, CommentSchema } = commentModel;
 
 const { CustomerHasBank, CustomerHasBankSchema } = customerHasBank;
 
@@ -35,6 +37,7 @@ export const setupModels = (sequelize: Sequelize) => {
   Funcionario.init(FuncionarioSchema, Funcionario.config(sequelize));
   Direction.init(DirectionSchema, Direction.config(sequelize));
   Guarantor.init(GuarantorSchema, Guarantor.config(sequelize));
+  Comment.init(CommentSchema, Comment.config(sequelize));
 
   CustomerHasBank.init(
     CustomerHasBankSchema,
@@ -44,5 +47,10 @@ export const setupModels = (sequelize: Sequelize) => {
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
   Bank.associate(sequelize.models);
+  City.associate(sequelize.models);
+  Client.associate(sequelize.models);
   Funcionario.associate(sequelize.models);
+  Comment.associate(sequelize.models);
+  Direction.associate(sequelize.models);
+  Guarantor.associate(sequelize.models);
 };
