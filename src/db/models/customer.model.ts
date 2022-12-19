@@ -26,6 +26,11 @@ const CustomerSchema: ModelAttributes<Customer, CustomerType> = {
     field: "company_name",
     type: DataTypes.STRING(150),
   },
+  urlIdentifier: {
+    allowNull: false,
+    field: "url_identifier",
+    type: DataTypes.STRING(100),
+  },
   description: {
     allowNull: false,
     type: DataTypes.TEXT("tiny"),

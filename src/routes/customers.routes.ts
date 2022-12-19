@@ -1,11 +1,11 @@
 import express from "express";
 import validatorHandler from "../middlewares/validator.handler";
-import CustomersService from "../app/customers/services/customer.service";
+import CustomerService from "../app/customers/services/customer.service";
 import customerSchemas from "../app/customers/schemas/customer.schema";
 
 const { getCustomerSchema, createCustomerSchema } = customerSchemas;
 const router = express.Router();
-const service = new CustomersService();
+const service = new CustomerService();
 
 router.get("/", async (req, res, next) => {
   try {
