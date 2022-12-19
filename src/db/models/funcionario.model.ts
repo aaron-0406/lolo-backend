@@ -29,7 +29,7 @@ const FuncionarioSchema: ModelAttributes<Funcionario, FuncionarioType> = {
     defaultValue: DataTypes.NOW,
     type: DataTypes.DATE,
   },
-  bankID: {
+  bankId: {
     allowNull: false,
     field: "bank_id_bank",
     type: DataTypes.INTEGER,

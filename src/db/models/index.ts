@@ -45,9 +45,9 @@ export const setupModels = (sequelize: Sequelize) => {
   );
 
   Customer.associate(sequelize.models);
-  Funcionario.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
   Bank.associate(sequelize.models);
+  Funcionario.associate(sequelize.models);
   City.associate(sequelize.models);
   Client.associate(sequelize.models);
   Comment.associate(sequelize.models);

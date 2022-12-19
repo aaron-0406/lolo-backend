@@ -42,7 +42,7 @@ class Bank extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.hasMany(models.FUNCIONARIO, {
       as: "funcionario",
-      foreignKey: "bankID",
+      foreignKey: "bankId",
     });
   }
 
