@@ -35,7 +35,7 @@ const FuncionarioSchema: ModelAttributes<Funcionario, FuncionarioType> = {
     type: DataTypes.INTEGER,
     references: {
       model: bankModel.BANK_TABLE,
-      key: "id_BANK",
+      key: "id_bank",
     },
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
