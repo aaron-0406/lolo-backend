@@ -13,22 +13,40 @@ const state = Joi.boolean();
 const createAt = Joi.date();
 const customerID = Joi.number();
 
-const createCustomerUserSchema = Joi.object<CustomerUserType, true>({
-  id: id.required(),
+const createCustomerUserSchema = Joi.object<Omit<CustomerUserType, "id">, true>(
+  {
+    name: name.required(),
+    lastName: lastName.required(),
+    phone: phone.required(),
+    dni: dni.optional(),
+    email: email.required(),
+    password: password.required(),
+    privilege: privilege.required(),
+    state: state.required(),
+    createdAt: createAt.optional(),
+    customerID: customerID.required(),
+  }
+);
+
+const updateCustomerUserSchema = Joi.object<
+  Omit<CustomerUserType, "id" | "email" | "password" | "customerID">,
+  true
+>({
   name: name.required(),
   lastName: lastName.required(),
   phone: phone.required(),
   dni: dni.optional(),
-  email: email.required(),
-  password: password.required(),
   privilege: privilege.required(),
   state: state.required(),
   createdAt: createAt.optional(),
-  customerID: customerID.required(),
 });
 
 const getCustomerUserSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
 
-export default { createCustomerUserSchema, getCustomerUserSchema };
+export default {
+  createCustomerUserSchema,
+  updateCustomerUserSchema,
+  getCustomerUserSchema,
+};

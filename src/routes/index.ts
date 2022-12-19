@@ -5,6 +5,8 @@ import bankRouter from "./bank.routes";
 import customerHasBankRouter from "./customer-has-bank.routes";
 import funcionarioRouter from "./funcionario.routes";
 import cityRouter from "./city.routes";
+import customerUserRouter from "./customer-user.routes";
+import clientRouter from "./client.routes";
 
 const routerApi = (app: Express) => {
   const router = express.Router();
@@ -15,6 +17,8 @@ const routerApi = (app: Express) => {
   router.use("/customer-bank", customerHasBankRouter);
   router.use("/funcionario", funcionarioRouter);
   router.use("/city", cityRouter);
+  router.use("customer-user", customerUserRouter);
+  router.use("/client", clientRouter);
 };
 
 export default routerApi;
