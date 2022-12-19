@@ -13,13 +13,13 @@ import guarantorModel from "./guarantor.model";
 import commentModel from "./comment.model";
 
 const { Customer, CustomerSchema } = customerModel;
+const { Funcionario, FuncionarioSchema } = funcionarioModel;
 const { Bank, BankSchema } = banksModel;
 const { Module, ModuleSchema } = moduleModel;
 const { CustomerUser, CustomerUserSchema } = customerUserModel;
 const { City, CitySchema } = cityModel;
 const { Client, ClientSchema } = clientModel;
 const { UserApp, UserAppSchema } = userAppModel;
-const { Funcionario, FuncionarioSchema } = funcionarioModel;
 const { Direction, DirectionSchema } = directionModel;
 const { Guarantor, GuarantorSchema } = guarantorModel;
 const { Comment, CommentSchema } = commentModel;
@@ -28,13 +28,13 @@ const { CustomerHasBank, CustomerHasBankSchema } = customerHasBank;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));
+  Funcionario.init(FuncionarioSchema, Funcionario.config(sequelize));
   Bank.init(BankSchema, Bank.config(sequelize));
   Module.init(ModuleSchema, Module.config(sequelize));
   CustomerUser.init(CustomerUserSchema, CustomerUser.config(sequelize));
   City.init(CitySchema, City.config(sequelize));
   Client.init(ClientSchema, Client.config(sequelize));
   UserApp.init(UserAppSchema, UserApp.config(sequelize));
-  Funcionario.init(FuncionarioSchema, Funcionario.config(sequelize));
   Direction.init(DirectionSchema, Direction.config(sequelize));
   Guarantor.init(GuarantorSchema, Guarantor.config(sequelize));
   Comment.init(CommentSchema, Comment.config(sequelize));
@@ -45,11 +45,11 @@ export const setupModels = (sequelize: Sequelize) => {
   );
 
   Customer.associate(sequelize.models);
+  Funcionario.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
   Bank.associate(sequelize.models);
   City.associate(sequelize.models);
   Client.associate(sequelize.models);
-  Funcionario.associate(sequelize.models);
   Comment.associate(sequelize.models);
   Direction.associate(sequelize.models);
   Guarantor.associate(sequelize.models);
