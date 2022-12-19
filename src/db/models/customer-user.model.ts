@@ -81,6 +81,11 @@ class CustomerUser extends Model {
       as: "client",
       foreignKey: "customerUserID",
     });
+
+    this.hasMany(models.COMMENT, {
+      as: "comment",
+      foreignKey: "customerUserID",
+    });
   }
 
   static config(sequelize: Sequelize) {
