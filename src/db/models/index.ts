@@ -8,6 +8,8 @@ import clientModel from "./client.model";
 import userAppModel from "./user-app.model";
 import customerHasBank from "./many-to-many/customer-has-bank.model";
 import funcionarioModel from "./funcionario.model";
+import directionModel from "./direction.model";
+import guarantorModel from "./guarantor.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Bank, BankSchema } = banksModel;
@@ -17,6 +19,8 @@ const { City, CitySchema } = cityModel;
 const { Client, ClientSchema } = clientModel;
 const { UserApp, UserAppSchema } = userAppModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
+const { Direction, DirectionSchema } = directionModel;
+const { Guarantor, GuarantorSchema } = guarantorModel;
 
 const { CustomerHasBank, CustomerHasBankSchema } = customerHasBank;
 
@@ -29,6 +33,8 @@ export const setupModels = (sequelize: Sequelize) => {
   Client.init(ClientSchema, Client.config(sequelize));
   UserApp.init(UserAppSchema, UserApp.config(sequelize));
   Funcionario.init(FuncionarioSchema, Funcionario.config(sequelize));
+  Direction.init(DirectionSchema, Direction.config(sequelize));
+  Guarantor.init(GuarantorSchema, Guarantor.config(sequelize));
 
   CustomerHasBank.init(
     CustomerHasBankSchema,
