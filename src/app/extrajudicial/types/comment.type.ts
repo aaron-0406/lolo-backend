@@ -5,6 +5,5 @@ export type CommentType = {
   date: Date;
   hour: Date;
   customerUserID: number;
-  customerID: number;
-  bankID: number;
+  clientID: number;
 };

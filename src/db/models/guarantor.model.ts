@@ -1,5 +1,12 @@
-import { Model, DataTypes, Sequelize, ModelAttributes } from "sequelize";
+import {
+  Model,
+  DataTypes,
+  Sequelize,
+  ModelAttributes,
+  ModelCtor,
+} from "sequelize";
 import { GuarantorType } from "../../app/extrajudicial/types/guarantor.type";
+import clientModel from "./client.model";
 
 const GUARANTOR_TABLE = "GUARANTOR";
 
@@ -29,11 +36,22 @@ const GuarantorSchema: ModelAttributes<Guarantor, GuarantorType> = {
     defaultValue: DataTypes.NOW,
     type: DataTypes.DATE,
   },
+  clientID: {
+    allowNull: false,
+    field: "client_id_client",
+    type: DataTypes.INTEGER,
+    references: {
+      model: clientModel.CLIENT_TABLE,
+      key: "id_client",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
 };
 
 class Guarantor extends Model {
-  static associate() {
-    //associate
+  static associate(models: { [key: string]: ModelCtor<Model> }) {
+    this.belongsTo(models.CLIENT, { as: "client" });
   }
 
   static config(sequelize: Sequelize) {

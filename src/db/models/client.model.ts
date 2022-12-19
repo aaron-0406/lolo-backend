@@ -1,5 +1,15 @@
-import { Model, DataTypes, Sequelize, ModelAttributes } from "sequelize";
+import {
+  Model,
+  DataTypes,
+  Sequelize,
+  ModelAttributes,
+  ModelCtor,
+} from "sequelize";
 import { ClientType } from "../../app/extrajudicial/types/client.type";
+import cityModel from "./city.model";
+import funcionarioModel from "./funcionario.model";
+import customerUserModel from "./customer-user.model";
+import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 
 const CLIENT_TABLE = "CLIENT";
 
@@ -8,12 +18,36 @@ const ClientSchema: ModelAttributes<Client, ClientType> = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    field: "id_city",
+    field: "id_client",
     type: DataTypes.INTEGER,
   },
   code: {
     allowNull: false,
     type: DataTypes.STRING(50),
+  },
+  state: {
+    allowNull: false,
+    type: DataTypes.STRING(60),
+  },
+  dniOrRuc: {
+    allowNull: false,
+    type: DataTypes.STRING(20),
+  },
+  name: {
+    allowNull: false,
+    type: DataTypes.STRING(200),
+  },
+  salePerimeter: {
+    allowNull: false,
+    type: DataTypes.TEXT("tiny"),
+  },
+  phone: {
+    allowNull: false,
+    type: DataTypes.TEXT("tiny"),
+  },
+  email: {
+    allowNull: false,
+    type: DataTypes.TEXT("tiny"),
   },
   createdAt: {
     allowNull: false,
@@ -21,11 +55,82 @@ const ClientSchema: ModelAttributes<Client, ClientType> = {
     defaultValue: DataTypes.NOW,
     type: DataTypes.DATE,
   },
+  cityID: {
+    allowNull: false,
+    field: "city_id_city",
+    type: DataTypes.INTEGER,
+    references: {
+      model: cityModel.CITY_TABLE,
+      key: "id_city",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
+  funcionarioID: {
+    allowNull: false,
+    field: "funcionario_id_funcionario",
+    type: DataTypes.INTEGER,
+    references: {
+      model: funcionarioModel.FUNCIONARIO_TABLE,
+      key: "id_funcionario",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
+  customerUserID: {
+    allowNull: false,
+    field: "customer_user_id_customer_user",
+    type: DataTypes.INTEGER,
+    references: {
+      model: customerUserModel.CUSTOMER_USER_TABLE,
+      key: "id_customer_user",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
+  customerID: {
+    allowNull: false,
+    field: "customer_id_customer",
+    type: DataTypes.INTEGER,
+    references: {
+      model: customerHasBankModel.CUSTOMER_HAS_BANK_TABLE,
+      key: "customer_id_customer",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
+  bankID: {
+    allowNull: false,
+    field: "bank_id_bank",
+    type: DataTypes.INTEGER,
+    references: {
+      model: customerHasBankModel.CUSTOMER_HAS_BANK_TABLE,
+      key: "bank_id_bank",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
 };
 
 class Client extends Model {
-  static associate() {
-    //associate
+  static associate(models: { [key: string]: ModelCtor<Model> }) {
+    this.belongsTo(models.CITY, { as: "city" });
+
+    this.belongsTo(models.FUNCIONARIO, { as: "funcionario" });
+
+    this.belongsTo(models.CUSTOMER_USER, { as: "customer_user" });
+
+    this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customer_has_bank" });
+
+    this.hasMany(models.GUARANTOR, {
+      as: "guarantor",
+      foreignKey: "clientID",
+    });
+
+    this.hasMany(models.DIRECTION, {
+      as: "direction",
+      foreignKey: "clientID",
+    });
   }
 
   static config(sequelize: Sequelize) {

@@ -1,4 +1,10 @@
-import { Model, DataTypes, Sequelize, ModelAttributes } from "sequelize";
+import {
+  Model,
+  DataTypes,
+  Sequelize,
+  ModelAttributes,
+  ModelCtor,
+} from "sequelize";
 import { CityType } from "../../app/boss/types/city.type";
 
 const CITY_TABLE = "CITY";
@@ -19,8 +25,11 @@ const CitySchema: ModelAttributes<City, CityType> = {
 };
 
 class City extends Model {
-  static associate() {
-    //associate
+  static associate(models: { [key: string]: ModelCtor<Model> }) {
+    this.hasMany(models.CLIENT, {
+      as: "client",
+      foreignKey: "cityID",
+    });
   }
 
   static config(sequelize: Sequelize) {

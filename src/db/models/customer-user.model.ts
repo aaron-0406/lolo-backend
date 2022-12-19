@@ -76,6 +76,11 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
 class CustomerUser extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER, { as: "customer" });
+
+    this.hasMany(models.CLIENT, {
+      as: "client",
+      foreignKey: "customerUserID",
+    });
   }
 
   static config(sequelize: Sequelize) {

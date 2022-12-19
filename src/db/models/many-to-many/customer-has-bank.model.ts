@@ -51,7 +51,15 @@ const CustomerHasBankSchema: ModelAttributes<
 
 class CustomerHasBank extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
-    //ASOCCIATE
+    this.hasMany(models.CLIENT, {
+      as: "client",
+      foreignKey: "customerID",
+    });
+
+    this.hasMany(models.CLIENT, {
+      as: "client",
+      foreignKey: "bankID",
+    });
   }
 
   static config(sequelize: Sequelize) {

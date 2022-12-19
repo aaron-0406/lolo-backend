@@ -7,8 +7,7 @@ const negotiation = Joi.string().min(1).max(100);
 const date = Joi.date();
 const hour = Joi.date();
 const customerUserID = Joi.number();
-const customerID = Joi.number();
-const bankID = Joi.number();
+const clientID = Joi.number();
 
 const createCommentSchema = Joi.object<CommentType, true>({
   id: id.required(),
@@ -17,8 +16,7 @@ const createCommentSchema = Joi.object<CommentType, true>({
   date: date.required(),
   hour: hour.required(),
   customerUserID: customerUserID.required(),
-  customerID: customerID.required(),
-  bankID: bankID.required(),
+  clientID: clientID.required(),
 });
 
 const getCommentSchema = Joi.object<{ id: number }, true>({
