@@ -1,5 +1,5 @@
 import { Model, DataTypes, Sequelize, ModelAttributes } from "sequelize";
-import { ClientType } from "../../app/boss/types/client.type";
+import { ClientType } from "../../app/extrajudicial/types/client.type";
 
 const CLIENT_TABLE = "CLIENT";
 
