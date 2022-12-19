@@ -12,10 +12,15 @@ class CustomerService {
     return rta;
   }
 
-  async findOne(id: string) {
-    const customer = await models.CUSTOMER.findByPk(id);
+  async findOne(urlIdentifier: string) {
+    const customer = await models.CUSTOMER.findOne({
+      where: {
+        url_identifier: urlIdentifier,
+      },
+    });
+
     if (!customer) {
-      throw boom.notFound("customer not found");
+      throw boom.notFound("Cliente no encontrado");
     }
     return customer;
   }

@@ -9,8 +9,7 @@ const description = Joi.string();
 const state = Joi.boolean();
 const createAt = Joi.date();
 
-const createCustomerSchema = Joi.object<CustomerType, true>({
-  id: id.required(),
+const createCustomerSchema = Joi.object<Omit<CustomerType, "id">, true>({
   ruc: ruc.required(),
   companyName: companyName.required(),
   urlIdentifier: urlIdentifier.required(),
@@ -19,8 +18,8 @@ const createCustomerSchema = Joi.object<CustomerType, true>({
   createdAt: createAt.optional(),
 });
 
-const getCustomerSchema = Joi.object<{ id: number }, true>({
-  id: id.required(),
+const getCustomerByUrlSchema = Joi.object<{ urlIdentifier: string }, true>({
+  urlIdentifier: urlIdentifier.required(),
 });
 
-export default { createCustomerSchema, getCustomerSchema };
+export default { createCustomerSchema, getCustomerByUrlSchema };

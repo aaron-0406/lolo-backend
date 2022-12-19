@@ -13,6 +13,7 @@ const CustomerSchema: ModelAttributes<Customer, CustomerType> = {
   id: {
     primaryKey: true,
     allowNull: false,
+    autoIncrement: true,
     field: "id_customer",
     type: DataTypes.INTEGER,
   },
@@ -28,6 +29,7 @@ const CustomerSchema: ModelAttributes<Customer, CustomerType> = {
   },
   urlIdentifier: {
     allowNull: false,
+    unique: true,
     field: "url_identifier",
     type: DataTypes.STRING(100),
   },
