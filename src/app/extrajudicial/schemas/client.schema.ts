@@ -1,7 +1,6 @@
 import Joi from "joi";
 import { ClientType } from "../types/client.type";
 
-const id = Joi.number();
 const code = Joi.string().min(1).max(50);
 const state = Joi.string().min(1).max(60);
 const dniOrRuc = Joi.string().min(1).max(20);
@@ -16,8 +15,7 @@ const customerUserID = Joi.number();
 const customerID = Joi.number();
 const bankID = Joi.number();
 
-const createClientSchema = Joi.object<ClientType, true>({
-  id: id.required(),
+const createClientSchema = Joi.object<Omit<ClientType, "id">, true>({
   code: code.required(),
   state: state.required(),
   dniOrRuc: dniOrRuc.required(),
@@ -33,8 +31,27 @@ const createClientSchema = Joi.object<ClientType, true>({
   bankID: bankID.required(),
 });
 
-const getClientSchema = Joi.object<{ id: number }, true>({
-  id: id.required(),
+const updateClientSchema = Joi.object<Omit<ClientType, "id" | "code">, true>({
+  state: state,
+  dniOrRuc: dniOrRuc,
+  name: name,
+  salePerimeter: salePerimeter,
+  phone: phone,
+  email: email,
+  createdAt: createdAt,
+  cityID: cityID,
+  funcionarioID: funcionarioID,
+  customerUserID: customerUserID,
+  customerID: customerID,
+  bankID: bankID,
 });
 
-export default { createClientSchema, getClientSchema };
+const getClientByCodeSchema = Joi.object<{ code: string }, true>({
+  code: code.required(),
+});
+
+export default {
+  createClientSchema,
+  updateClientSchema,
+  getClientByCodeSchema,
+};
