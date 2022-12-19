@@ -48,7 +48,7 @@ router.post(
   }
 );
 
-router.put(
+router.patch(
   "/:id",
   validatorHandler(getCustomerUserSchema, "params"),
   validatorHandler(updateCustomerUserSchema, "body"),

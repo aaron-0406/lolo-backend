@@ -17,7 +17,7 @@ const routerApi = (app: Express) => {
   router.use("/customer-bank", customerHasBankRouter);
   router.use("/funcionario", funcionarioRouter);
   router.use("/city", cityRouter);
-  router.use("customer-user", customerUserRouter);
+  router.use("/customer-user", customerUserRouter);
   router.use("/client", clientRouter);
 };
 

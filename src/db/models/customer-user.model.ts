@@ -60,7 +60,7 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
     field: "created_at",
     type: DataTypes.DATE,
   },
-  customerID: {
+  customerId: {
     allowNull: false,
     field: "customer_id_customer",
     type: DataTypes.INTEGER,

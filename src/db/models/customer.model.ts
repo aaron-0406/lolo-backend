@@ -53,7 +53,7 @@ class Customer extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.hasMany(models.CUSTOMER_USER, {
       as: "customer-user",
-      foreignKey: "customerID",
+      foreignKey: "customerId",
     });
 
     this.belongsToMany(models.BANK, {

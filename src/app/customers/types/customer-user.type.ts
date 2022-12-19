@@ -9,5 +9,5 @@ export type CustomerUserType = {
   privilege: string;
   state: boolean;
   createdAt: Date;
-  customerID?: number;
+  customerId: number;
 };
