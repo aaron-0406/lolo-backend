@@ -45,7 +45,7 @@ router.post(
   }
 );
 
-router.put(
+router.patch(
   "/:code",
   validatorHandler(getClientByCodeSchema, "params"),
   validatorHandler(updateClientSchema, "body"),

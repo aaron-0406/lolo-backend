@@ -79,7 +79,7 @@ class CustomerUser extends Model {
 
     this.hasMany(models.CLIENT, {
       as: "client",
-      foreignKey: "customerUserID",
+      foreignKey: "customerUserId",
     });
 
     this.hasMany(models.COMMENT, {

@@ -9,9 +9,9 @@ const salePerimeter = Joi.string();
 const phone = Joi.string().min(1).max(300);
 const email = Joi.string().min(1).max(300);
 const createdAt = Joi.date();
-const cityID = Joi.number();
-const funcionarioID = Joi.number();
-const customerUserID = Joi.number();
+const cityId = Joi.number();
+const funcionarioId = Joi.number();
+const customerUserId = Joi.number();
 const customerID = Joi.number();
 const bankID = Joi.number();
 
@@ -24,9 +24,9 @@ const createClientSchema = Joi.object<Omit<ClientType, "id">, true>({
   phone: phone.optional(),
   email: email.optional(),
   createdAt: createdAt.optional(),
-  cityID: cityID.required(),
-  funcionarioID: funcionarioID.required(),
-  customerUserID: customerUserID.required(),
+  cityId: cityId.required(),
+  funcionarioId: funcionarioId.required(),
+  customerUserId: customerUserId.required(),
   customerID: customerID.required(),
   bankID: bankID.required(),
 });
@@ -34,7 +34,7 @@ const createClientSchema = Joi.object<Omit<ClientType, "id">, true>({
 const updateClientSchema = Joi.object<
   Omit<
     ClientType,
-    "id" | "code" | "cityID" | "funcionarioID" | "customerID" | "bankID"
+    "id" | "code" | "cityId" | "funcionarioId" | "customerID" | "bankID"
   >,
   true
 >({
@@ -45,7 +45,7 @@ const updateClientSchema = Joi.object<
   phone: phone,
   email: email,
   createdAt: createdAt,
-  customerUserID: customerUserID,
+  customerUserId: customerUserId,
 });
 
 const getClientByCodeSchema = Joi.object<{ code: string }, true>({

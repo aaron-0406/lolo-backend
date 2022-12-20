@@ -8,9 +8,9 @@ export type ClientType = {
   phone?: string;
   email?: string;
   createdAt: Date;
-  cityID: number;
-  funcionarioID: number;
-  customerUserID: number;
+  cityId: number;
+  funcionarioId: number;
+  customerUserId: number;
   customerID: number;
   bankID: number;
 };

@@ -56,7 +56,7 @@ const ClientSchema: ModelAttributes<Client, ClientType> = {
     defaultValue: DataTypes.NOW,
     type: DataTypes.DATE,
   },
-  cityID: {
+  cityId: {
     allowNull: false,
     field: "city_id_city",
     type: DataTypes.INTEGER,
@@ -67,7 +67,7 @@ const ClientSchema: ModelAttributes<Client, ClientType> = {
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
-  funcionarioID: {
+  funcionarioId: {
     allowNull: false,
     field: "funcionario_id_funcionario",
     type: DataTypes.INTEGER,
@@ -78,7 +78,7 @@ const ClientSchema: ModelAttributes<Client, ClientType> = {
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
-  customerUserID: {
+  customerUserId: {
     allowNull: false,
     field: "customer_user_id_customer_user",
     type: DataTypes.INTEGER,

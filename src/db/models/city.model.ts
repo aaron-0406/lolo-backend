@@ -28,7 +28,7 @@ class City extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.hasMany(models.CLIENT, {
       as: "client",
-      foreignKey: "cityID",
+      foreignKey: "cityId",
     });
   }
 

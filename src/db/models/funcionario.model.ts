@@ -48,7 +48,7 @@ class Funcionario extends Model {
 
     this.hasMany(models.CLIENT, {
       as: "client",
-      foreignKey: "funcionarioID",
+      foreignKey: "funcionarioId",
     });
   }
 
