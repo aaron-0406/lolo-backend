@@ -24,12 +24,12 @@ const createCustomerUserSchema = Joi.object<Omit<CustomerUserType, "id">, true>(
     privilege: privilege.required(),
     state: state.required(),
     createdAt: createAt.optional(),
-    customerID: customerID.required(),
+    customerId: customerID.required(),
   }
 );
 
 const updateCustomerUserSchema = Joi.object<
-  Omit<CustomerUserType, "id" | "email" | "password" | "customerID">,
+  Omit<CustomerUserType, "id" | "email" | "password" | "customerId">,
   true
 >({
   name: name.required(),
