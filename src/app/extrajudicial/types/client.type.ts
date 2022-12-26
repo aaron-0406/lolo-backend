@@ -11,5 +11,5 @@ export type ClientType = {
   cityId: number;
   funcionarioId: number;
   customerUserId: number;
-  customerHasBankID: number;
+  customerHasBankId: number;
 };

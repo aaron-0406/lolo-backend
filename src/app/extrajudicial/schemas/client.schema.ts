@@ -12,8 +12,7 @@ const createdAt = Joi.date();
 const cityId = Joi.number();
 const funcionarioId = Joi.number();
 const customerUserId = Joi.number();
-const customerID = Joi.number();
-const bankID = Joi.number();
+const customerHasBankId = Joi.number();
 
 const createClientSchema = Joi.object<Omit<ClientType, "id">, true>({
   code: code.required(),
@@ -27,14 +26,13 @@ const createClientSchema = Joi.object<Omit<ClientType, "id">, true>({
   cityId: cityId.required(),
   funcionarioId: funcionarioId.required(),
   customerUserId: customerUserId.required(),
-  customerID: customerID.required(),
-  bankID: bankID.required(),
+  customerHasBankId: customerHasBankId.required(),
 });
 
 const updateClientSchema = Joi.object<
   Omit<
     ClientType,
-    "id" | "code" | "cityId" | "funcionarioId" | "customerID" | "bankID"
+    "id" | "code" | "cityId" | "funcionarioId" | "customerHasBankId"
   >,
   true
 >({
@@ -48,12 +46,18 @@ const updateClientSchema = Joi.object<
   customerUserId: customerUserId,
 });
 
-const getClientByCodeSchema = Joi.object<{ code: string }, true>({
+const getClientByCodeSchema = Joi.object<{ code: string; chb: number }, true>({
   code: code.required(),
+  chb: customerHasBankId.required(),
+});
+
+const getClientByCHBSchema = Joi.object<{ chb: number }, true>({
+  chb: customerHasBankId.required(),
 });
 
 export default {
   createClientSchema,
   updateClientSchema,
+  getClientByCHBSchema,
   getClientByCodeSchema,
 };

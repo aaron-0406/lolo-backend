@@ -12,6 +12,15 @@ class CustomerHasBankService {
     return rta;
   }
 
+  async findAllCustomer(idCustomer: string) {
+    const rta = await models.CUSTOMER_HAS_BANK.findAll({
+      where: {
+        customer_id_customer: idCustomer,
+      },
+    });
+    return rta;
+  }
+
   async findOne(idCustomer: string, idBank: string) {
     const customerBank = await models.CUSTOMER_HAS_BANK.findOne({
       where: {
@@ -27,8 +36,19 @@ class CustomerHasBankService {
   }
 
   async assign(data: CustomerHasBankType) {
-    const newCustomerBank = await models.CUSTOMER_HAS_BANK.create(data);
-    return newCustomerBank;
+    const customerBank = await models.CUSTOMER_HAS_BANK.findOne({
+      where: {
+        customer_id_customer: data.idCustomer,
+        bank_id_bank: data.idBank,
+      },
+    });
+
+    if (!customerBank) {
+      const newCustomerBank = await models.CUSTOMER_HAS_BANK.create(data);
+      return newCustomerBank;
+    }
+
+    throw boom.notFound("Datos ya registrados");
   }
 
   async delete(idCustomer: string, idBank: string) {

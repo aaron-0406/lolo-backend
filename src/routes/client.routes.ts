@@ -3,8 +3,12 @@ import validatorHandler from "../middlewares/validator.handler";
 import clientSchema from "../app/extrajudicial/schemas/client.schema";
 import ClientService from "../app/extrajudicial/services/client.service";
 
-const { getClientByCodeSchema, createClientSchema, updateClientSchema } =
-  clientSchema;
+const {
+  getClientByCHBSchema,
+  getClientByCodeSchema,
+  createClientSchema,
+  updateClientSchema,
+} = clientSchema;
 const router = express.Router();
 const service = new ClientService();
 
@@ -18,12 +22,26 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get(
-  "/:code",
+  "/:chb",
+  validatorHandler(getClientByCHBSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const { chb } = req.params;
+      const clients = await service.findAllCHB(chb);
+      res.json(clients);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.get(
+  "/:code/:chb",
   validatorHandler(getClientByCodeSchema, "params"),
   async (req, res, next) => {
     try {
-      const { code } = req.params;
-      const client = await service.findCode(code);
+      const { code, chb } = req.params;
+      const client = await service.findCode(code, chb);
       res.json(client);
     } catch (error) {
       next(error);
@@ -46,14 +64,14 @@ router.post(
 );
 
 router.patch(
-  "/:code",
+  "/:code/:chb",
   validatorHandler(getClientByCodeSchema, "params"),
   validatorHandler(updateClientSchema, "body"),
   async (req, res, next) => {
     try {
-      const { code } = req.params;
+      const { code, chb } = req.params;
       const body = req.body;
-      const client = await service.update(code, body);
+      const client = await service.update(code, chb, body);
       res.json(client);
     } catch (error) {
       next(error);
@@ -62,13 +80,13 @@ router.patch(
 );
 
 router.delete(
-  "/:code",
+  "/:code/:chb",
   validatorHandler(getClientByCodeSchema, "params"),
   async (req, res, next) => {
     try {
-      const { code } = req.params;
-      await service.delete(code);
-      res.status(201).json({ code });
+      const { code, chb } = req.params;
+      await service.delete(code, chb);
+      res.status(201).json({ code, chb });
     } catch (error) {
       next(error);
     }

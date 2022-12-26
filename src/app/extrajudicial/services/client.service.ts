@@ -12,10 +12,20 @@ class ClientService {
     return rta;
   }
 
-  async findCode(code: string) {
+  async findAllCHB(chb: string) {
+    const rta = await models.CLIENT.findAll({
+      where: {
+        customer_has_bank_id_customer_has_bank: chb,
+      },
+    });
+    return rta;
+  }
+
+  async findCode(code: string, chb: string) {
     const client = await models.CLIENT.findOne({
       where: {
         code: code,
+        customer_has_bank_id_customer_has_bank: chb,
       },
     });
 
@@ -30,15 +40,15 @@ class ClientService {
     return newClient;
   }
 
-  async update(code: string, changes: ClientType) {
-    const client = await this.findCode(code);
+  async update(code: string, chb: string, changes: ClientType) {
+    const client = await this.findCode(code, chb);
     const rta = await client.update(changes);
 
     return rta;
   }
 
-  async delete(code: string) {
-    const client = await this.findCode(code);
+  async delete(code: string, chb: string) {
+    const client = await this.findCode(code, chb);
     await client.destroy();
 
     return { code };

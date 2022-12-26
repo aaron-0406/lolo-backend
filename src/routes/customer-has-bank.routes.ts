@@ -3,8 +3,12 @@ import validatorHandler from "../middlewares/validator.handler";
 import customerHasBankSchema from "../app/customers/schemas/customer-has-bank.schema";
 import CustomerHasBankService from "../app/customers/services/customer-has-bank.service";
 
-const { getCustomerHasBankSchema, createCustomerHasBankSchema } =
-  customerHasBankSchema;
+const {
+  getCustomerSchema,
+  getCustomerHasBankSchema,
+  createCustomerHasBankSchema,
+} = customerHasBankSchema;
+
 const router = express.Router();
 const service = new CustomerHasBankService();
 
@@ -16,6 +20,20 @@ router.get("/", async (req, res, next) => {
     next(error);
   }
 });
+
+router.get(
+  "/:idCustomer",
+  validatorHandler(getCustomerSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const { idCustomer } = req.params;
+      const customers = await service.findAllCustomer(idCustomer);
+      res.json(customers);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 router.get(
   "/:idCustomer/:idBank",

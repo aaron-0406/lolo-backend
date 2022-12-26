@@ -89,7 +89,7 @@ const ClientSchema: ModelAttributes<Client, ClientType> = {
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
-  customerHasBankID: {
+  customerHasBankId: {
     allowNull: false,
     field: "customer_has_bank_id_customer_has_bank",
     type: DataTypes.INTEGER,
