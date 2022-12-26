@@ -12,7 +12,7 @@ class GuarantorService {
     return rta;
   }
 
-  async findAllClient(clientID: string) {
+  async findAllByClient(clientID: string) {
     const rta = await models.GUARANTOR.findAll({
       where: {
         client_id_client: clientID,
@@ -21,7 +21,7 @@ class GuarantorService {
     return rta;
   }
 
-  async findID(id: string) {
+  async findByID(id: string) {
     const guarantor = await models.GUARANTOR.findOne({
       where: {
         id_guarantor: id,
@@ -40,14 +40,14 @@ class GuarantorService {
   }
 
   async update(id: string, changes: GuarantorType) {
-    const guarantor = await this.findID(id);
+    const guarantor = await this.findByID(id);
     const rta = await guarantor.update(changes);
 
     return rta;
   }
 
   async delete(id: string) {
-    const client = await this.findID(id);
+    const client = await this.findByID(id);
     await client.destroy();
 
     return { id };
