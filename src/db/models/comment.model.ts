@@ -36,7 +36,7 @@ const CommentSchema: ModelAttributes<Comment, CommentType> = {
     defaultValue: DataTypes.NOW,
     type: DataTypes.DATE,
   },
-  customerUserID: {
+  customerUserId: {
     allowNull: false,
     field: "customer_user_id_customer_user",
     type: DataTypes.INTEGER,
@@ -47,7 +47,7 @@ const CommentSchema: ModelAttributes<Comment, CommentType> = {
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
-  clientID: {
+  clientId: {
     allowNull: false,
     field: "client_id_client",
     type: DataTypes.INTEGER,

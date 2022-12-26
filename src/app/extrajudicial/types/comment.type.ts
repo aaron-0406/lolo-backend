@@ -4,6 +4,6 @@ export type CommentType = {
   negotiation: string;
   date: Date;
   hour: Date;
-  customerUserID: number;
-  clientID: number;
+  customerUserId: number;
+  clientId: number;
 };
