@@ -8,6 +8,7 @@ import cityRouter from "./city.routes";
 import customerUserRouter from "./customer-user.routes";
 import clientRouter from "./client.routes";
 import guarantorRouter from "./guarantor.routes";
+import directionRouter from "./direction.routes";
 
 const routerApi = (app: Express) => {
   const router = express.Router();
@@ -21,6 +22,7 @@ const routerApi = (app: Express) => {
   router.use("/customer-user", customerUserRouter);
   router.use("/client", clientRouter);
   router.use("/guarantor", guarantorRouter);
+  router.use("/direction", directionRouter);
 };
 
 export default routerApi;

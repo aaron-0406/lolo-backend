@@ -29,7 +29,7 @@ class GuarantorService {
     });
 
     if (!guarantor) {
-      throw boom.notFound("Guarantor no encontrado");
+      throw boom.notFound("Fiador no encontrado");
     }
     return guarantor;
   }

@@ -1,22 +1,22 @@
 import express from "express";
 import validatorHandler from "../middlewares/validator.handler";
-import guarantorSchema from "../app/extrajudicial/schemas/guarantor.schema";
-import GuarantorService from "../app/extrajudicial/services/guarantor.service";
+import directionSchema from "../app/extrajudicial/schemas/direction.schema";
+import DirectionService from "../app/extrajudicial/services/direction.service";
 
 const {
-  getGuarantorByClientIDSchema,
-  getGuarantorByIDSchema,
-  createGuarantorSchema,
-  updateGuarantorSchema,
-} = guarantorSchema;
+  createDirectionSchema,
+  updateDirectionSchema,
+  getDirectionByClientIDSchema,
+  getDirectionByIDSchema,
+} = directionSchema;
 
 const router = express.Router();
-const service = new GuarantorService();
+const service = new DirectionService();
 
 router.get("/", async (req, res, next) => {
   try {
-    const guarantors = await service.findAll();
-    res.json(guarantors);
+    const directions = await service.findAll();
+    res.json(directions);
   } catch (error) {
     next(error);
   }
@@ -24,12 +24,12 @@ router.get("/", async (req, res, next) => {
 
 router.get(
   "/all-client/:clientId",
-  validatorHandler(getGuarantorByClientIDSchema, "params"),
+  validatorHandler(getDirectionByClientIDSchema, "params"),
   async (req, res, next) => {
     try {
       const { clientId } = req.params;
-      const guarantors = await service.findAllByClient(clientId);
-      res.json(guarantors);
+      const directions = await service.findAllByClient(clientId);
+      res.json(directions);
     } catch (error) {
       next(error);
     }
@@ -38,12 +38,12 @@ router.get(
 
 router.get(
   "/:id",
-  validatorHandler(getGuarantorByIDSchema, "params"),
+  validatorHandler(getDirectionByIDSchema, "params"),
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const guarantor = await service.findByID(id);
-      res.json(guarantor);
+      const direction = await service.findByID(id);
+      res.json(direction);
     } catch (error) {
       next(error);
     }
@@ -52,12 +52,12 @@ router.get(
 
 router.post(
   "/",
-  validatorHandler(createGuarantorSchema, "body"),
+  validatorHandler(createDirectionSchema, "body"),
   async (req, res, next) => {
     try {
       const body = req.body;
-      const newGuarantor = await service.create(body);
-      res.status(201).json(newGuarantor);
+      const newDirection = await service.create(body);
+      res.status(201).json(newDirection);
     } catch (error) {
       next(error);
     }
@@ -66,14 +66,14 @@ router.post(
 
 router.patch(
   "/:id",
-  validatorHandler(getGuarantorByIDSchema, "params"),
-  validatorHandler(updateGuarantorSchema, "body"),
+  validatorHandler(getDirectionByIDSchema, "params"),
+  validatorHandler(updateDirectionSchema, "body"),
   async (req, res, next) => {
     try {
       const { id } = req.params;
       const body = req.body;
-      const guarantor = await service.update(id, body);
-      res.json(guarantor);
+      const direction = await service.update(id, body);
+      res.json(direction);
     } catch (error) {
       next(error);
     }
@@ -82,7 +82,7 @@ router.patch(
 
 router.delete(
   "/:id",
-  validatorHandler(getGuarantorByIDSchema, "params"),
+  validatorHandler(getDirectionByIDSchema, "params"),
   async (req, res, next) => {
     try {
       const { id } = req.params;
