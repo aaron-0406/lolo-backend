@@ -89,24 +89,13 @@ const ClientSchema: ModelAttributes<Client, ClientType> = {
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
-  customerID: {
+  customerHasBankID: {
     allowNull: false,
-    field: "customer_id_customer",
+    field: "customer_has_bank_id_customer_has_bank",
     type: DataTypes.INTEGER,
     references: {
       model: customerHasBankModel.CUSTOMER_HAS_BANK_TABLE,
-      key: "customer_id_customer",
-    },
-    onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
-  },
-  bankID: {
-    allowNull: false,
-    field: "bank_id_bank",
-    type: DataTypes.INTEGER,
-    references: {
-      model: customerHasBankModel.CUSTOMER_HAS_BANK_TABLE,
-      key: "bank_id_bank",
+      key: "id_customer_has_bank",
     },
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",

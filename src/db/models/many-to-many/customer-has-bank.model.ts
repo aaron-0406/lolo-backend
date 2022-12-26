@@ -17,8 +17,14 @@ const CustomerHasBankSchema: ModelAttributes<
   CustomerHasBank,
   CustomerHasBankType
 > = {
-  idCustomer: {
+  id: {
     primaryKey: true,
+    allowNull: false,
+    autoIncrement: true,
+    field: "id_customer_has_bank",
+    type: DataTypes.INTEGER,
+  },
+  idCustomer: {
     allowNull: false,
     field: "customer_id_customer",
     type: DataTypes.INTEGER,
@@ -30,7 +36,6 @@ const CustomerHasBankSchema: ModelAttributes<
     onDelete: "NO ACTION",
   },
   idBank: {
-    primaryKey: true,
     allowNull: false,
     field: "bank_id_bank",
     type: DataTypes.INTEGER,
@@ -53,12 +58,7 @@ class CustomerHasBank extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.hasMany(models.CLIENT, {
       as: "client",
-      foreignKey: "customerID",
-    });
-
-    this.hasMany(models.CLIENT, {
-      as: "client",
-      foreignKey: "bankID",
+      foreignKey: "customerHasBankID",
     });
   }
 
