@@ -36,7 +36,7 @@ const GuarantorSchema: ModelAttributes<Guarantor, GuarantorType> = {
     defaultValue: DataTypes.NOW,
     type: DataTypes.DATE,
   },
-  clientID: {
+  clientId: {
     allowNull: false,
     field: "client_id_client",
     type: DataTypes.INTEGER,

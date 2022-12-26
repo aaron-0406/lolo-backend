@@ -6,18 +6,18 @@ const name = Joi.string().min(1).max(150);
 const phone = Joi.string().max(150);
 const email = Joi.string().max(150);
 const createdAt = Joi.date();
-const clientID = Joi.number();
+const clientId = Joi.number();
 
 const createGuarantorSchema = Joi.object<Omit<GuarantorType, "id">, true>({
   name: name.required(),
   phone: phone.optional(),
   email: email.optional(),
   createdAt: createdAt.optional(),
-  clientID: clientID.required(),
+  clientId: clientId.required(),
 });
 
 const updateGuarantorSchema = Joi.object<
-  Omit<GuarantorType, "id" | "clientID">,
+  Omit<GuarantorType, "id" | "clientId">,
   true
 >({
   name: name.required(),
@@ -26,8 +26,8 @@ const updateGuarantorSchema = Joi.object<
   createdAt: createdAt.optional(),
 });
 
-const getGuarantorByClientIDSchema = Joi.object<{ clientID: number }, true>({
-  clientID: clientID.required(),
+const getGuarantorByClientIDSchema = Joi.object<{ clientId: number }, true>({
+  clientId: clientId.required(),
 });
 
 const getGuarantorByIDSchema = Joi.object<{ id: number }, true>({

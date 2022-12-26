@@ -4,5 +4,5 @@ export type GuarantorType = {
   phone?: string;
   email?: string;
   createdAt: Date;
-  clientID: number;
+  clientId: number;
 };
