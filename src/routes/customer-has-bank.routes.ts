@@ -22,20 +22,6 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get(
-  "/:idCustomer",
-  validatorHandler(getCustomerSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { idCustomer } = req.params;
-      const customers = await service.findAllCustomer(idCustomer);
-      res.json(customers);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-router.get(
   "/:idCustomer/:idBank",
   validatorHandler(getCustomerHasBankSchema, "params"),
   async (req, res, next) => {

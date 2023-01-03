@@ -12,15 +12,6 @@ class CustomerHasBankService {
     return rta;
   }
 
-  async findAllCustomer(idCustomer: string) {
-    const rta = await models.CUSTOMER_HAS_BANK.findAll({
-      where: {
-        customer_id_customer: idCustomer,
-      },
-    });
-    return rta;
-  }
-
   async findOne(idCustomer: string, idBank: string) {
     const customerBank = await models.CUSTOMER_HAS_BANK.findOne({
       where: {
