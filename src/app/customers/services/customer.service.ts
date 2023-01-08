@@ -17,7 +17,7 @@ class CustomerService {
       where: {
         url_identifier: urlIdentifier,
       },
-      include: ["customer-banks"],
+      include: ["customerBanks"],
     });
 
     if (!customer) {
