@@ -2,6 +2,7 @@ import express from "express";
 import cors, { CorsOptions } from "cors";
 import routerApi from "./routes";
 import errorHandlerr from "./middlewares/error.handler";
+import morgan from 'morgan';
 
 const { logErrors, ormErrorHandler, boomErrorHandler, errorHandler } =
   errorHandlerr;
@@ -10,6 +11,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(express.json());
+app.use(morgan('dev'));
 
 //CORS
 const whitelist = [

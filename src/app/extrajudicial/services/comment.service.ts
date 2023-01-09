@@ -12,6 +12,7 @@ class CommentService {
       where: {
         client_id_client: clientID,
       },
+      order: [["id", "DESC"]],
     });
     return rta;
   }
