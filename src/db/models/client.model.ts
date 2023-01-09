@@ -23,7 +23,6 @@ const ClientSchema: ModelAttributes<Client, ClientType> = {
   },
   code: {
     allowNull: false,
-    unique: true,
     type: DataTypes.STRING(50),
   },
   state: {

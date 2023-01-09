@@ -36,6 +36,17 @@ class ClientService {
   }
 
   async create(data: ClientType) {
+    const client = await models.CLIENT.findOne({
+      where: {
+        code: data.code,
+        customer_has_bank_id_customer_has_bank: data.customerHasBankId,
+      },
+    });
+
+    if (client) {
+      throw boom.notFound("Ya existe un cliente con este código");
+    }
+
     const newClient = await models.CLIENT.create(data);
     return newClient;
   }
