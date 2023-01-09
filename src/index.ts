@@ -17,6 +17,7 @@ const whitelist = [
   "https://myapp.co",
   "http://localhost:3000",
   "http://192.168.1.56:3000",
+  "http://192.168.152.24:3000",
 ];
 const options: CorsOptions = {
   origin: (origin, callback) => {

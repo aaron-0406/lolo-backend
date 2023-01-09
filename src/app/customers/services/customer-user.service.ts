@@ -12,6 +12,15 @@ class CustomerUserService {
     return rta;
   }
 
+  async findAllByCustomerID(customerId: string) {
+    const rta = await models.CUSTOMER_USER.findAll({
+      where: {
+        customer_id_customer: customerId,
+      },
+    });
+    return rta;
+  }
+
   async findOne(id: string) {
     const user = await models.CUSTOMER_USER.findByPk(id);
 
