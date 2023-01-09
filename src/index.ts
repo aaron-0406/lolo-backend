@@ -11,6 +11,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 //CORS
 const whitelist = [
@@ -18,6 +19,7 @@ const whitelist = [
   "https://myapp.co",
   "http://localhost:3000",
   "http://192.168.1.56:3000",
+  "http://192.168.152.24:5000",
   "http://192.168.152.24:3000",
 ];
 const options: CorsOptions = {
@@ -34,6 +36,11 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.static(path.join(__dirname, "/public/build")));
 
 routerApi(app);
+
+// Todas las peticiones GET que no hayamos manejado en las líneas anteriores retornaran nuestro app React
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "/public/build", "index.html"));
+});
 
 app.use(logErrors);
 app.use(ormErrorHandler);
