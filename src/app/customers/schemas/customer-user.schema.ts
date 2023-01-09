@@ -11,7 +11,7 @@ const password = Joi.string().min(2).max(70);
 const privilege = Joi.string().max(6);
 const state = Joi.boolean();
 const createAt = Joi.date();
-const customerID = Joi.number();
+const customerId = Joi.number();
 
 const createCustomerUserSchema = Joi.object<Omit<CustomerUserType, "id">, true>(
   {
@@ -24,7 +24,7 @@ const createCustomerUserSchema = Joi.object<Omit<CustomerUserType, "id">, true>(
     privilege: privilege.required(),
     state: state.required(),
     createdAt: createAt.optional(),
-    customerId: customerID.required(),
+    customerId: customerId.required(),
   }
 );
 
@@ -45,8 +45,13 @@ const getCustomerUserSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
 
+const getCustomerUserByIdSchema = Joi.object<{ customerId: number }, true>({
+  customerId: customerId.required(),
+});
+
 export default {
   createCustomerUserSchema,
   updateCustomerUserSchema,
   getCustomerUserSchema,
+  getCustomerUserByIdSchema,
 };

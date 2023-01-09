@@ -5,6 +5,7 @@ import CustomerUserService from "../app/customers/services/customer-user.service
 
 const {
   getCustomerUserSchema,
+  getCustomerUserByIdSchema,
   createCustomerUserSchema,
   updateCustomerUserSchema,
 } = customerUserSchema;
@@ -19,6 +20,20 @@ router.get("/", async (req, res, next) => {
     next(error);
   }
 });
+
+router.get(
+  "/users/:customerId",
+  validatorHandler(getCustomerUserByIdSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const { customerId } = req.params;
+      const users = await service.findAllByCustomerID(customerId);
+      res.json(users);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 router.get(
   "/:id",
