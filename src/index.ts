@@ -12,11 +12,8 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(express.json());
-<<<<<<< HEAD
 app.use(morgan('dev'));
-=======
 app.use(express.urlencoded({ extended: false }));
->>>>>>> 4bc8f5bb4473fc11d125a733d5d36268a2e325fd
 
 //CORS
 const whitelist = [
