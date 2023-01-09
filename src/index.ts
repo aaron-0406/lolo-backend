@@ -2,6 +2,7 @@ import express from "express";
 import cors, { CorsOptions } from "cors";
 import routerApi from "./routes";
 import errorHandlerr from "./middlewares/error.handler";
+import path from "path";
 
 const { logErrors, ormErrorHandler, boomErrorHandler, errorHandler } =
   errorHandlerr;
@@ -29,6 +30,8 @@ const options: CorsOptions = {
   },
 };
 app.use(cors(options));
+app.use(express.static(path.join(__dirname, "/public")));
+app.use(express.static(path.join(__dirname, "/public/build")));
 
 routerApi(app);
 
