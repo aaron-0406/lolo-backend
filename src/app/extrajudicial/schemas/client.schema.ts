@@ -30,10 +30,7 @@ const createClientSchema = Joi.object<Omit<ClientType, "id">, true>({
 });
 
 const updateClientSchema = Joi.object<
-  Omit<
-    ClientType,
-    "id" | "code" | "cityId" | "funcionarioId" | "customerHasBankId"
-  >,
+  Omit<ClientType, "id" | "code" | "customerHasBankId">,
   true
 >({
   state: state,
@@ -44,6 +41,8 @@ const updateClientSchema = Joi.object<
   email: email,
   createdAt: createdAt,
   customerUserId: customerUserId,
+  cityId: cityId,
+  funcionarioId: funcionarioId,
 });
 
 const getClientByCodeSchema = Joi.object<{ code: string; chb: number }, true>({
