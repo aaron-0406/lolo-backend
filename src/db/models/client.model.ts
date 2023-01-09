@@ -108,9 +108,9 @@ class Client extends Model {
 
     this.belongsTo(models.FUNCIONARIO, { as: "funcionario" });
 
-    this.belongsTo(models.CUSTOMER_USER, { as: "customer_user" });
+    this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
 
-    this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customer_has_bank" });
+    this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
 
     this.hasMany(models.GUARANTOR, {
       as: "guarantor",

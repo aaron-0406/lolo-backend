@@ -52,12 +52,12 @@ const CustomerSchema: ModelAttributes<Customer, CustomerType> = {
 class Customer extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.hasMany(models.CUSTOMER_USER, {
-      as: "customer-user",
+      as: "customerUser",
       foreignKey: "customerId",
     });
 
     this.belongsToMany(models.BANK, {
-      as: "customer-banks",
+      as: "customerBanks",
       through: models.CUSTOMER_HAS_BANK,
       foreignKey: "idCustomer",
       otherKey: "idBank",

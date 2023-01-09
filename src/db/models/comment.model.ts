@@ -62,7 +62,7 @@ const CommentSchema: ModelAttributes<Comment, CommentType> = {
 
 class Comment extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
-    this.belongsTo(models.CUSTOMER_USER, { as: "customer_user" });
+    this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
 
     this.belongsTo(models.CLIENT, { as: "client" });
   }
