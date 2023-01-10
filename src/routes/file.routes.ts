@@ -10,7 +10,7 @@ const router = express.Router();
 const service = new FileService();
 
 const multerFile = (req: Request, res: Response, next: NextFunction) => {
-  archivos.single("file")(req, res, (err) => {
+  archivos.array("file")(req, res, (err) => {
     if (err) return next(boom.badRequest(err));
     return next();
   });
@@ -22,8 +22,8 @@ router.get(
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const file = await service.findOne(Number(id));
-      res.json(file);
+      const files = await service.find(Number(id));
+      res.json(files);
     } catch (error) {
       next(error);
     }
@@ -37,8 +37,8 @@ router.post(
   async (req, res, next) => {
     try {
       req.body.clientId = req.params.id;
+      req.body.files = req.files;
       const { body } = req;
-      await service.delete(Number(req.params.id));
       const newFile = await service.create(body);
       res.status(201).json(newFile);
     } catch (error) {
@@ -63,18 +63,18 @@ router.post(
 //   }
 // );
 
-// router.delete(
-//   "/:id",
-//   validatorHandler(getCitySchema, "params"),
-//   async (req, res, next) => {
-//     try {
-//       const { id } = req.params;
-//       await service.delete(id);
-//       res.status(201).json({ id });
-//     } catch (error) {
-//       next(error);
-//     }
-//   }
-// );
+router.delete(
+  "/:id",
+  validatorHandler(createFileSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      await service.delete(Number(id));
+      res.status(201).json({ id });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default router;

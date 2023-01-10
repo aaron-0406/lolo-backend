@@ -8,8 +8,12 @@ const { models } = sequelize;
 class FileService {
   constructor() {}
 
-  async find() {
-    const rta = await models.FILE.findAll();
+  async find(clientId: number) {
+    const rta = await models.FILE.findAll({
+      where: {
+        clientId,
+      },
+    });
     return rta;
   }
 
@@ -26,10 +30,19 @@ class FileService {
     return file;
   }
 
-  async create(data: FileType) {
-    const { name, originalName, clientId } = data;
-    const newFile = await models.FILE.create({ name, originalName, clientId });
-    return newFile;
+  async create(data: any) {
+    const clientId = data.clientId;
+    const filesAdded = [];
+    for (let i = 0; i < data.files.length; i++) {
+      const { filename, originalname } = data.files[i];
+      const newFile = await models.FILE.create({
+        name: filename,
+        originalName: originalname,
+        clientId,
+      });
+      filesAdded.push(newFile);
+    }
+    return filesAdded;
   }
 
   async update(id: number, changes: FileType) {
@@ -42,7 +55,7 @@ class FileService {
   async delete(id: number) {
     const file = await models.FILE.findOne({
       where: {
-        clientId: id,
+        id,
       },
     });
     if (!file) return -1;
