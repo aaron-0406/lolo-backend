@@ -11,6 +11,7 @@ import funcionarioModel from "../models/funcionario.model";
 import directionModel from "../models/direction.model";
 import guarantorModel from "../models/guarantor.model";
 import commentModel from "../models/comment.model";
+import fileModel from "../models/file.model";
 
 const { BankSchema, BANK_TABLE } = bankModel;
 const { FuncionarioSchema, FUNCIONARIO_TABLE } = funcionarioModel;
@@ -19,7 +20,9 @@ const { ClientSchema, CLIENT_TABLE } = clientModel;
 const { CustomerUserSchema, CUSTOMER_USER_TABLE } = customerUserModel;
 const { CustomerSchema, CUSTOMER_TABLE } = customerModel;
 const { ModuleSchema, MODULE_TABLE } = moduleModel;
+const { FileSchema, FILE_TABLE } = fileModel;
 const { UserAppSchema, USER_APP_TABLE } = userAppModel;
+
 const { CustomerHasBankSchema, CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 const { DirectionSchema, DIRECTION_TABLE } = directionModel;
 const { GuarantorSchema, GUARANTOR_TABLE } = guarantorModel;
@@ -36,6 +39,7 @@ export async function up(queryInterface: QueryInterface) {
     CustomerHasBankSchema
   );
   await queryInterface.createTable(CLIENT_TABLE, ClientSchema);
+  await queryInterface.createTable(FILE_TABLE, FileSchema);
   await queryInterface.createTable(MODULE_TABLE, ModuleSchema);
   await queryInterface.createTable(USER_APP_TABLE, UserAppSchema);
   await queryInterface.createTable(DIRECTION_TABLE, DirectionSchema);
@@ -51,6 +55,7 @@ export async function down(queryInterface: QueryInterface) {
   await queryInterface.dropTable(CLIENT_TABLE);
   await queryInterface.dropTable(CUSTOMER_USER_TABLE);
   await queryInterface.dropTable(MODULE_TABLE);
+  await queryInterface.createTable(FILE_TABLE, FileSchema);
   await queryInterface.dropTable(USER_APP_TABLE);
   await queryInterface.dropTable(DIRECTION_TABLE);
   await queryInterface.dropTable(GUARANTOR_TABLE);

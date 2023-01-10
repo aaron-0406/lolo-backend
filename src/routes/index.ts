@@ -10,6 +10,7 @@ import clientRouter from "./client.routes";
 import guarantorRouter from "./guarantor.routes";
 import directionRouter from "./direction.routes";
 import commentRouter from "./comment.routes";
+import fileRouter from "./file.routes";
 
 const routerApi = (app: Express) => {
   const router = express.Router();
@@ -25,6 +26,7 @@ const routerApi = (app: Express) => {
   router.use("/guarantor", guarantorRouter);
   router.use("/direction", directionRouter);
   router.use("/comment", commentRouter);
+  router.use("/file", fileRouter);
 };
 
 export default routerApi;
