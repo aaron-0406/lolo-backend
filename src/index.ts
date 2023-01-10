@@ -2,7 +2,7 @@ import express from "express";
 import cors, { CorsOptions } from "cors";
 import routerApi from "./routes";
 import errorHandlerr from "./middlewares/error.handler";
-import morgan from 'morgan';
+import morgan from "morgan";
 import path from "path";
 
 const { logErrors, ormErrorHandler, boomErrorHandler, errorHandler } =
@@ -12,7 +12,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(express.json());
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 
 //CORS
@@ -23,6 +23,8 @@ const whitelist = [
   "http://192.168.1.56:3000",
   "http://192.168.152.24:5000",
   "http://192.168.152.24:3000",
+  "http://18.223.203.146:5000",
+  "http://18.223.203.146:3000",
 ];
 const options: CorsOptions = {
   origin: (origin, callback) => {
