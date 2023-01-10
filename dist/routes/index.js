@@ -1,0 +1,33 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const customer_routes_1 = __importDefault(require("./customer.routes"));
+const bank_routes_1 = __importDefault(require("./bank.routes"));
+const customer_has_bank_routes_1 = __importDefault(require("./customer-has-bank.routes"));
+const funcionario_routes_1 = __importDefault(require("./funcionario.routes"));
+const city_routes_1 = __importDefault(require("./city.routes"));
+const customer_user_routes_1 = __importDefault(require("./customer-user.routes"));
+const client_routes_1 = __importDefault(require("./client.routes"));
+const guarantor_routes_1 = __importDefault(require("./guarantor.routes"));
+const direction_routes_1 = __importDefault(require("./direction.routes"));
+const comment_routes_1 = __importDefault(require("./comment.routes"));
+const file_routes_1 = __importDefault(require("./file.routes"));
+const routerApi = (app) => {
+    const router = express_1.default.Router();
+    app.use("/api/v1", router);
+    router.use("/customer", customer_routes_1.default);
+    router.use("/bank", bank_routes_1.default);
+    router.use("/customer-bank", customer_has_bank_routes_1.default);
+    router.use("/funcionario", funcionario_routes_1.default);
+    router.use("/city", city_routes_1.default);
+    router.use("/customer-user", customer_user_routes_1.default);
+    router.use("/client", client_routes_1.default);
+    router.use("/guarantor", guarantor_routes_1.default);
+    router.use("/direction", direction_routes_1.default);
+    router.use("/comment", comment_routes_1.default);
+    router.use("/file", file_routes_1.default);
+};
+exports.default = routerApi;
