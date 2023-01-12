@@ -14,5 +14,7 @@ const createFileSchema = joi_1.default.object({
 });
 const getFileSchema = joi_1.default.object({
     id,
+    idBank,
+    code,
 });
 exports.default = { createFileSchema, getFileSchema };

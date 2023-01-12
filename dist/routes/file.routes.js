@@ -28,10 +28,10 @@ const multerFile = (req, res, next) => {
         return next();
     });
 };
-router.get("/:id", (0, validator_handler_1.default)(getFileSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/:idBank/:code/:id", (0, validator_handler_1.default)(getFileSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
-        const files = yield service.find(Number(id));
+        const { id, idBank, code } = req.params;
+        const files = yield service.find(Number(id), Number(idBank), Number(code));
         res.json(files);
     }
     catch (error) {
@@ -46,7 +46,7 @@ router.post("/:idBank/:code/:id", (0, validator_handler_1.default)(createFileSch
         req.body.files = req.files;
         const { body } = req;
         const newFile = yield service.create(body);
-        res.status(201).json([]);
+        res.status(201).json(newFile);
     }
     catch (error) {
         console.log(error);
@@ -67,10 +67,10 @@ router.post("/:idBank/:code/:id", (0, validator_handler_1.default)(createFileSch
 //     }
 //   }
 // );
-router.delete("/:id", (0, validator_handler_1.default)(createFileSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete("/:idBank/:code/:id", (0, validator_handler_1.default)(createFileSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
-        yield service.delete(Number(id));
+        const { id, code, idBank } = req.params;
+        yield service.delete(Number(idBank), Number(code), Number(id));
         res.status(201).json({ id });
     }
     catch (error) {

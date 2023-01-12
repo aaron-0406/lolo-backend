@@ -20,16 +20,21 @@ const config_1 = __importDefault(require("../../../config/config"));
 const { models } = sequelize_1.default;
 class FileService {
     constructor() { }
-    find(clientId) {
+    find(clientId, idBank, code) {
         return __awaiter(this, void 0, void 0, function* () {
-            // const rta = await models.FILE.findAll({
-            //   where: {
-            //     clientId,
-            //   },
-            // });
-            const result = yield (0, aws_bucket_1.readFile)("Acta conformidad Proyecto.docx");
-            console.log(result);
-            return "rta";
+            const rta = yield models.FILE.findAll({
+                where: {
+                    clientId,
+                },
+            });
+            // for (let i = 0; i < rta.length; i++) {
+            //   const element = rta[i];
+            //   const result = await readFile(
+            //     `${config.AWS_BANK_PATH}${idBank}/${code}/${element.dataValues.name}`
+            //   );
+            //   console.log(result.Body);
+            // }
+            return rta;
         });
     }
     findOne(id) {
@@ -61,7 +66,7 @@ class FileService {
                 // UPLOAD TO AWS
                 yield (0, aws_bucket_1.uploadFile)(data.files[i], `${config_1.default.AWS_BANK_PATH}${idBank}/${code}`);
                 // DELETE TEMP FILE
-                yield (0, helpers_1.deleteFile)("../public/docs", originalname);
+                yield (0, helpers_1.deleteFile)("../public/docs", filename);
                 filesAdded.push(newFile);
             }
             return filesAdded;
@@ -74,7 +79,7 @@ class FileService {
             return rta;
         });
     }
-    delete(id) {
+    delete(idBank, code, id) {
         return __awaiter(this, void 0, void 0, function* () {
             const file = yield models.FILE.findOne({
                 where: {
@@ -84,8 +89,8 @@ class FileService {
             if (!file)
                 return -1;
             const newFile = JSON.parse(JSON.stringify(file));
-            yield (0, helpers_1.deleteFile)("../public/docs/", newFile.name);
             yield file.destroy();
+            yield (0, aws_bucket_1.deleteFileBucket)(`${config_1.default.AWS_BANK_PATH}${idBank}/${code}/${newFile.name}`);
             return { id };
         });
     }

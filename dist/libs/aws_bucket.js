@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createFolder = exports.readFile = exports.uploadFile = void 0;
+exports.deleteFileBucket = exports.createFolder = exports.readFile = exports.uploadFile = void 0;
 const client_s3_1 = require("@aws-sdk/client-s3");
 const fs_1 = __importDefault(require("fs"));
 const config_1 = __importDefault(require("../config/config"));
@@ -23,13 +23,14 @@ const client = new client_s3_1.S3Client({
     credentials: { accessKeyId: AWS_PUBLIC_KEY, secretAccessKey: AWS_SECRET_KEY },
 });
 const uploadFile = (file, pathname) => __awaiter(void 0, void 0, void 0, function* () {
+    // Reading File
     const stream = fs_1.default.createReadStream(path_1.default.join(__dirname, "../public/docs/", file.filename));
-    console.log(`${pathname}/${file.filename}`);
     const uploadParam = {
         Bucket: AWS_BUCKET_NAME,
         Key: `${pathname}/${file.filename}`,
         Body: stream,
     };
+    // UPLOAD TO AWS
     const command = new client_s3_1.PutObjectCommand(uploadParam);
     return yield client.send(command);
 });
@@ -37,7 +38,7 @@ exports.uploadFile = uploadFile;
 const readFile = (filename) => __awaiter(void 0, void 0, void 0, function* () {
     const getParam = {
         Bucket: AWS_BUCKET_NAME,
-        Key: "88e810cb-9a59-44d3-8f98-faaad01dc44bTesisV6_final.docx",
+        Key: filename,
     };
     const command = new client_s3_1.GetObjectCommand(getParam);
     return yield client.send(command);
@@ -52,3 +53,13 @@ const createFolder = (folderName) => __awaiter(void 0, void 0, void 0, function*
     return yield client.send(command);
 });
 exports.createFolder = createFolder;
+const deleteFileBucket = (fileName) => __awaiter(void 0, void 0, void 0, function* () {
+    const uploadParam = {
+        Bucket: AWS_BUCKET_NAME,
+        Key: fileName,
+    };
+    console.log(fileName);
+    const command = new client_s3_1.DeleteObjectCommand(uploadParam);
+    return yield client.send(command);
+});
+exports.deleteFileBucket = deleteFileBucket;

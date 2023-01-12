@@ -20,6 +20,8 @@ const deleteFile = (pathname, filename) => __awaiter(void 0, void 0, void 0, fun
     try {
         yield fs_extra_1.default.unlink(path_1.default.join(__dirname, pathname, filename));
     }
-    catch (error) { }
+    catch (error) {
+        console.log(error);
+    }
 });
 exports.deleteFile = deleteFile;

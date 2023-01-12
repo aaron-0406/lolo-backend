@@ -49,7 +49,7 @@ class ClientService {
             return client;
         });
     }
-    create(data) {
+    create(data, idBank) {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield models.CLIENT.findOne({
                 where: {
@@ -60,7 +60,8 @@ class ClientService {
             if (client)
                 throw boom_1.default.notFound("Ya existe un cliente con este código");
             const newClient = yield models.CLIENT.create(data);
-            yield (0, aws_bucket_1.createFolder)(`${config_1.default.AWS_BANK_PATH}${data.customerHasBankId}/${data.code}`);
+            // CREATE A FOLDER FOR CLIENT
+            yield (0, aws_bucket_1.createFolder)(`${config_1.default.AWS_BANK_PATH}${idBank}/${data.code}/`);
             return newClient;
         });
     }

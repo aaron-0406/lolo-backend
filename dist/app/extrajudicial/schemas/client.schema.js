@@ -16,6 +16,7 @@ const cityId = joi_1.default.number();
 const funcionarioId = joi_1.default.number();
 const customerUserId = joi_1.default.number();
 const customerHasBankId = joi_1.default.number();
+const idBank = joi_1.default.number();
 const createClientSchema = joi_1.default.object({
     code: code.required(),
     state: state.required(),
@@ -49,8 +50,12 @@ const getClientByCodeSchema = joi_1.default.object({
 const getClientByCHBSchema = joi_1.default.object({
     chb: customerHasBankId.required(),
 });
+const getClientByBank = joi_1.default.object({
+    idBank,
+});
 exports.default = {
     createClientSchema,
+    getClientByBank,
     updateClientSchema,
     getClientByCHBSchema,
     getClientByCodeSchema,
