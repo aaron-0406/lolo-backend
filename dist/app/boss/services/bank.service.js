@@ -14,6 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = __importDefault(require("../../../libs/sequelize"));
 const boom_1 = __importDefault(require("@hapi/boom"));
+const aws_bucket_1 = require("../../../libs/aws_bucket");
+const config_1 = __importDefault(require("../../../config/config"));
 const { models } = sequelize_1.default;
 class BankService {
     constructor() { }
@@ -35,6 +37,7 @@ class BankService {
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const newBank = yield models.BANK.create(data);
+            yield (0, aws_bucket_1.createFolder)(`${config_1.default.AWS_BANK_PATH}${newBank.dataValues.id}/`);
             return newBank;
         });
     }

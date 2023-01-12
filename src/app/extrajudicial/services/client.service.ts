@@ -1,6 +1,8 @@
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
 import { ClientType } from "../types/client.type";
+import config from "../../../config/config";
+import { createFolder } from "../../../libs/aws_bucket";
 
 const { models } = sequelize;
 
@@ -35,7 +37,7 @@ class ClientService {
     return client;
   }
 
-  async create(data: ClientType) {
+  async create(data: ClientType, idBank: number) {
     const client = await models.CLIENT.findOne({
       where: {
         code: data.code,
@@ -43,11 +45,14 @@ class ClientService {
       },
     });
 
-    if (client) {
-      throw boom.notFound("Ya existe un cliente con este código");
-    }
+    if (client) throw boom.notFound("Ya existe un cliente con este código");
 
     const newClient = await models.CLIENT.create(data);
+
+    // CREATE A FOLDER FOR CLIENT
+    await createFolder(
+      `${config.AWS_BANK_PATH}${idBank}/${data.code}/`
+    );
     return newClient;
   }
 

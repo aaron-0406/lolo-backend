@@ -22,7 +22,7 @@ const { createFileSchema, getFileSchema } = file_schema_1.default;
 const router = express_1.default.Router();
 const service = new file_service_1.default();
 const multerFile = (req, res, next) => {
-    multer_handler_1.archivos.single("file")(req, res, (err) => {
+    multer_handler_1.archivos.array("file")(req, res, (err) => {
         if (err)
             return next(boom_1.default.badRequest(err));
         return next();
@@ -31,20 +31,22 @@ const multerFile = (req, res, next) => {
 router.get("/:id", (0, validator_handler_1.default)(getFileSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
-        const file = yield service.findOne(Number(id));
-        res.json(file);
+        const files = yield service.find(Number(id));
+        res.json(files);
     }
     catch (error) {
         next(error);
     }
 }));
-router.post("/:id", (0, validator_handler_1.default)(createFileSchema, "params"), multerFile, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/:idBank/:code/:id", (0, validator_handler_1.default)(createFileSchema, "params"), multerFile, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        req.body.clientId = req.params.id;
+        req.body.clientId = Number(req.params.id);
+        req.body.idBank = Number(req.params.idBank);
+        req.body.code = Number(req.params.code);
+        req.body.files = req.files;
         const { body } = req;
-        yield service.delete(Number(req.params.id));
         const newFile = yield service.create(body);
-        res.status(201).json(newFile);
+        res.status(201).json([]);
     }
     catch (error) {
         console.log(error);
@@ -65,17 +67,14 @@ router.post("/:id", (0, validator_handler_1.default)(createFileSchema, "params")
 //     }
 //   }
 // );
-// router.delete(
-//   "/:id",
-//   validatorHandler(getCitySchema, "params"),
-//   async (req, res, next) => {
-//     try {
-//       const { id } = req.params;
-//       await service.delete(id);
-//       res.status(201).json({ id });
-//     } catch (error) {
-//       next(error);
-//     }
-//   }
-// );
+router.delete("/:id", (0, validator_handler_1.default)(createFileSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        yield service.delete(Number(id));
+        res.status(201).json({ id });
+    }
+    catch (error) {
+        next(error);
+    }
+}));
 exports.default = router;

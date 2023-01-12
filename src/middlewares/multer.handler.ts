@@ -7,9 +7,7 @@ const storageArchivos = multer.diskStorage({
   destination: path.join(__dirname, "../public/docs"),
   filename: (req, file, cb) => {
     const uuid = uuidv4();
-    req.body.originalName = file.originalname;
-    req.body.name = `${uuid}${file.originalname}`;
-    cb(null, req.body.name);
+    cb(null, `${uuid}${file.originalname}`);
   },
 });
 // Filter documents

@@ -14,6 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = __importDefault(require("../../../libs/sequelize"));
 const boom_1 = __importDefault(require("@hapi/boom"));
+const config_1 = __importDefault(require("../../../config/config"));
+const aws_bucket_1 = require("../../../libs/aws_bucket");
 const { models } = sequelize_1.default;
 class ClientService {
     constructor() { }
@@ -55,10 +57,10 @@ class ClientService {
                     customer_has_bank_id_customer_has_bank: data.customerHasBankId,
                 },
             });
-            if (client) {
+            if (client)
                 throw boom_1.default.notFound("Ya existe un cliente con este código");
-            }
             const newClient = yield models.CLIENT.create(data);
+            yield (0, aws_bucket_1.createFolder)(`${config_1.default.AWS_BANK_PATH}${data.customerHasBankId}/${data.code}`);
             return newClient;
         });
     }

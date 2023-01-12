@@ -8,6 +8,7 @@ const {
   getClientByCodeSchema,
   createClientSchema,
   updateClientSchema,
+  getClientByBank,
 } = clientSchema;
 const router = express.Router();
 const service = new ClientService();
@@ -50,12 +51,13 @@ router.get(
 );
 
 router.post(
-  "/",
+  "/:idBank",
+  validatorHandler(getClientByBank, "params"),
   validatorHandler(createClientSchema, "body"),
   async (req, res, next) => {
     try {
       const body = req.body;
-      const newClient = await service.create(body);
+      const newClient = await service.create(body, Number(req.params.idBank));
       res.status(201).json(newClient);
     } catch (error) {
       next(error);
