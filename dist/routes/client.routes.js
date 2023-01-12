@@ -16,7 +16,7 @@ const express_1 = __importDefault(require("express"));
 const validator_handler_1 = __importDefault(require("../middlewares/validator.handler"));
 const client_schema_1 = __importDefault(require("../app/extrajudicial/schemas/client.schema"));
 const client_service_1 = __importDefault(require("../app/extrajudicial/services/client.service"));
-const { getClientByCHBSchema, getClientByCodeSchema, createClientSchema, updateClientSchema, getClientByBank, } = client_schema_1.default;
+const { getClientByCHBSchema, getClientByCodeSchema, createClientSchema, updateClientSchema, getClientByBank, deleteClientByCodeSchema, } = client_schema_1.default;
 const router = express_1.default.Router();
 const service = new client_service_1.default();
 router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -69,10 +69,10 @@ router.patch("/:code/:chb", (0, validator_handler_1.default)(getClientByCodeSche
         next(error);
     }
 }));
-router.delete("/:code/:chb", (0, validator_handler_1.default)(getClientByCodeSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete("/:code/:chb/:idBank", (0, validator_handler_1.default)(deleteClientByCodeSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { code, chb } = req.params;
-        yield service.delete(code, chb);
+        const { code, chb, idBank } = req.params;
+        yield service.delete(code, chb, Number(idBank));
         res.status(201).json({ code, chb });
     }
     catch (error) {
