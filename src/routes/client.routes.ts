@@ -9,6 +9,7 @@ const {
   createClientSchema,
   updateClientSchema,
   getClientByBank,
+  deleteClientByCodeSchema,
 } = clientSchema;
 const router = express.Router();
 const service = new ClientService();
@@ -82,12 +83,12 @@ router.patch(
 );
 
 router.delete(
-  "/:code/:chb",
-  validatorHandler(getClientByCodeSchema, "params"),
+  "/:code/:chb/:idBank",
+  validatorHandler(deleteClientByCodeSchema, "params"),
   async (req, res, next) => {
     try {
-      const { code, chb } = req.params;
-      await service.delete(code, chb);
+      const { code, chb, idBank } = req.params;
+      await service.delete(code, chb, Number(idBank));
       res.status(201).json({ code, chb });
     } catch (error) {
       next(error);

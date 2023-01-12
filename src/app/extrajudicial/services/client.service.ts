@@ -2,7 +2,7 @@ import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
 import { ClientType } from "../types/client.type";
 import config from "../../../config/config";
-import { createFolder } from "../../../libs/aws_bucket";
+import { createFolder, deleteFileBucket } from "../../../libs/aws_bucket";
 
 const { models } = sequelize;
 
@@ -50,9 +50,7 @@ class ClientService {
     const newClient = await models.CLIENT.create(data);
 
     // CREATE A FOLDER FOR CLIENT
-    await createFolder(
-      `${config.AWS_BANK_PATH}${idBank}/${data.code}/`
-    );
+    await createFolder(`${config.AWS_BANK_PATH}${idBank}/${data.code}/`);
     return newClient;
   }
 
@@ -63,10 +61,12 @@ class ClientService {
     return rta;
   }
 
-  async delete(code: string, chb: string) {
+  async delete(code: string, chb: string, idBank: number) {
     const client = await this.findCode(code, chb);
     await client.destroy();
-
+    await deleteFileBucket(
+      `${config.AWS_BANK_PATH}${idBank}/${client.dataValues.code}/`
+    );
     return { code };
   }
 }

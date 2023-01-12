@@ -63,7 +63,6 @@ export const deleteFileBucket = async (fileName: string) => {
     Bucket: AWS_BUCKET_NAME,
     Key: fileName,
   };
-  console.log(fileName);
   const command = new DeleteObjectCommand(uploadParam);
   return await client.send(command);
 };

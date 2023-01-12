@@ -59,10 +59,20 @@ const getClientByBank = Joi.object<{ idBank: number }, true>({
   idBank,
 });
 
+const deleteClientByCodeSchema = Joi.object<
+  { code: string; chb: number; idBank: number },
+  true
+>({
+  code: code.required(),
+  chb: customerHasBankId.required(),
+  idBank,
+});
+
 export default {
   createClientSchema,
   getClientByBank,
   updateClientSchema,
   getClientByCHBSchema,
   getClientByCodeSchema,
+  deleteClientByCodeSchema,
 };
