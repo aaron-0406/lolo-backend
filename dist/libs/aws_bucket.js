@@ -58,7 +58,6 @@ const deleteFileBucket = (fileName) => __awaiter(void 0, void 0, void 0, functio
         Bucket: AWS_BUCKET_NAME,
         Key: fileName,
     };
-    console.log(fileName);
     const command = new client_s3_1.DeleteObjectCommand(uploadParam);
     return yield client.send(command);
 });

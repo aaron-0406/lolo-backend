@@ -72,10 +72,11 @@ class ClientService {
             return rta;
         });
     }
-    delete(code, chb) {
+    delete(code, chb, idBank) {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield this.findCode(code, chb);
             yield client.destroy();
+            yield (0, aws_bucket_1.deleteFileBucket)(`${config_1.default.AWS_BANK_PATH}${idBank}/${client.dataValues.code}/`);
             return { code };
         });
     }
