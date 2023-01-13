@@ -4,6 +4,10 @@ import routerApi from "./routes";
 import errorHandlerr from "./middlewares/error.handler";
 import morgan from "morgan";
 import path from "path";
+import fs from "fs";
+import {
+  deleteDownloadFolderTask,
+} from "./libs/cron_jobs";
 
 const { logErrors, ormErrorHandler, boomErrorHandler, errorHandler } =
   errorHandlerr;
@@ -52,5 +56,7 @@ app.use(boomErrorHandler);
 app.use(errorHandler);
 
 app.listen(port, () => {
+  fs.mkdir(path.join(__dirname, "./public/download"), () => {});
+  deleteDownloadFolderTask();
   console.log("My port: " + port);
 });

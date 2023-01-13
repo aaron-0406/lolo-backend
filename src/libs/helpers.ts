@@ -9,3 +9,8 @@ export const deleteFile = async (pathname: string, filename: string) => {
     console.log(error);
   }
 };
+
+export const isFileStoredIn = (dirname: string, filename: string) => {
+  const files = fs.readdirSync(dirname);
+  return files.some((file) => file === filename);
+};

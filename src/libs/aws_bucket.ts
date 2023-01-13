@@ -10,6 +10,7 @@ import {
 import fs from "fs";
 import config from "../config/config";
 import path from "path";
+import { Readable } from "stream";
 
 const { AWS_BUCKET_REGION, AWS_BUCKET_NAME, AWS_PUBLIC_KEY, AWS_SECRET_KEY } =
   config;
@@ -45,8 +46,22 @@ export const readFile = async (filename: string) => {
     Bucket: AWS_BUCKET_NAME,
     Key: filename,
   };
+  const pathName = filename.split("/");
   const command = new GetObjectCommand(getParam);
-  return await client.send(command);
+  const result = await client.send(command);
+  if (result.Body) {
+    const stream = result.Body as Readable;
+    const newFile = fs.createWriteStream(
+      path.join(__dirname, "../public/download", pathName[pathName.length - 1])
+    );
+    stream.pipe(newFile);
+    let end = new Promise(function (resolve, reject) {
+      stream.on("end", () => resolve(stream.read()));
+      stream.on("error", reject); // or something like that. might need to close `hash`
+    });
+    await end;
+    return 
+  }
 };
 
 export const createFolder = async (folderName: string) => {

@@ -17,17 +17,30 @@ const multerFile = (req: Request, res: Response, next: NextFunction) => {
 };
 
 router.get(
-  "/:idBank/:code/:id",
+  "/:id",
+  validatorHandler(getFileSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const files = await service.find(Number(id));
+      res.json(files);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+router.get(
+  "/single/:idBank/:code/:id",
   validatorHandler(getFileSchema, "params"),
   async (req, res, next) => {
     try {
       const { id, idBank, code } = req.params;
-      const files = await service.find(
+      const file = await service.findOne(
         Number(id),
         Number(idBank),
         Number(code)
       );
-      res.json(files);
+      res.json(file);
     } catch (error) {
       next(error);
     }

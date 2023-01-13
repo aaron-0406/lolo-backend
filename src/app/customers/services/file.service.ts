@@ -1,13 +1,14 @@
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
 import { FileType } from "../types/file.type";
-import { deleteFile } from "../../../libs/helpers";
+import { deleteFile, isFileStoredIn } from "../../../libs/helpers";
 import {
   deleteFileBucket,
   readFile,
   uploadFile,
 } from "../../../libs/aws_bucket";
 import config from "../../../config/config";
+import path from "path";
 
 const { models } = sequelize;
 
@@ -21,31 +22,35 @@ type CreateParam = {
 class FileService {
   constructor() {}
 
-  async find(clientId: number, idBank: number, code: number) {
+  async find(clientId: number) {
     const rta = await models.FILE.findAll({
       where: {
         clientId,
       },
     });
-    // for (let i = 0; i < rta.length; i++) {
-    //   const element = rta[i];
-    //   const result = await readFile(
-    //     `${config.AWS_BANK_PATH}${idBank}/${code}/${element.dataValues.name}`
-    //   );
-    //   console.log(result.Body);
-    // }
     return rta;
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, idBank: number, code: number) {
     const file = await models.FILE.findOne({
       where: {
-        clientId: id,
+        id,
       },
     });
 
     if (!file) {
       throw boom.notFound("Archivo no encontrado");
+    }
+
+    const isStored = isFileStoredIn(
+      path.join(__dirname, "../../../public/download"),
+      file.dataValues.name
+    );
+
+    if (!isStored) {
+      await readFile(
+        `${config.AWS_BANK_PATH}${idBank}/${code}/${file.dataValues.name}`
+      );
     }
     return file;
   }
@@ -75,13 +80,6 @@ class FileService {
       filesAdded.push(newFile);
     }
     return filesAdded;
-  }
-
-  async update(id: number, changes: FileType) {
-    const file = await this.findOne(id);
-    const rta = await file.update(changes);
-
-    return rta;
   }
 
   async delete(idBank: number, code: number, id: number) {
