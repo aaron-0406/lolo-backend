@@ -23,11 +23,11 @@ const GuarantorSchema: ModelAttributes<Guarantor, GuarantorType> = {
     type: DataTypes.STRING(150),
   },
   phone: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.STRING(150),
   },
   email: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.STRING(150),
   },
   createdAt: {

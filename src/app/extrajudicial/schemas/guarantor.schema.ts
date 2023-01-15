@@ -10,8 +10,8 @@ const clientId = Joi.number();
 
 const createGuarantorSchema = Joi.object<Omit<GuarantorType, "id">, true>({
   name: name.required(),
-  phone: phone.optional(),
-  email: email.optional(),
+  phone: phone.optional().empty("").allow(""),
+  email: email.optional().empty("").allow(""),
   createdAt: createdAt.optional(),
   clientId: clientId.required(),
 });
@@ -21,8 +21,8 @@ const updateGuarantorSchema = Joi.object<
   true
 >({
   name: name.required(),
-  phone: phone.optional(),
-  email: email.optional(),
+  phone: phone.optional().empty("").allow(""),
+  email: email.optional().empty("").allow(""),
   createdAt: createdAt.optional(),
 });
 
