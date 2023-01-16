@@ -12,6 +12,7 @@ import directionModel from "./direction.model";
 import guarantorModel from "./guarantor.model";
 import commentModel from "./comment.model";
 import fileModel from "./file.model";
+import negotiationModel from "./negotiation.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
@@ -25,6 +26,7 @@ const { Direction, DirectionSchema } = directionModel;
 const { Guarantor, GuarantorSchema } = guarantorModel;
 const { Comment, CommentSchema } = commentModel;
 const { File, FileSchema } = fileModel;
+const { Negotiation, NegotiationSchema } = negotiationModel;
 
 const { CustomerHasBank, CustomerHasBankSchema } = customerHasBank;
 
@@ -41,6 +43,7 @@ export const setupModels = (sequelize: Sequelize) => {
   Direction.init(DirectionSchema, Direction.config(sequelize));
   Guarantor.init(GuarantorSchema, Guarantor.config(sequelize));
   Comment.init(CommentSchema, Comment.config(sequelize));
+  Negotiation.init(NegotiationSchema, Negotiation.config(sequelize));
   CustomerHasBank.init(
     CustomerHasBankSchema,
     CustomerHasBank.config(sequelize)

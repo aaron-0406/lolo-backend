@@ -1,6 +1,7 @@
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
 import { CustomerUserType } from "../types/customer-user.type";
+import { encryptPassword } from "../../../libs/bcrypt";
 
 const { models } = sequelize;
 
@@ -31,6 +32,7 @@ class CustomerUserService {
   }
 
   async create(data: CustomerUserType) {
+    data.password = await encryptPassword(data.password)
     const newUser = await models.CUSTOMER_USER.create(data);
     return newUser;
   }

@@ -12,6 +12,7 @@ import directionModel from "../models/direction.model";
 import guarantorModel from "../models/guarantor.model";
 import commentModel from "../models/comment.model";
 import fileModel from "../models/file.model";
+import negotiationModel from "../models/negotiation.model";
 
 const { BankSchema, BANK_TABLE } = bankModel;
 const { FuncionarioSchema, FUNCIONARIO_TABLE } = funcionarioModel;
@@ -27,6 +28,7 @@ const { CustomerHasBankSchema, CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 const { DirectionSchema, DIRECTION_TABLE } = directionModel;
 const { GuarantorSchema, GUARANTOR_TABLE } = guarantorModel;
 const { CommentSchema, COMMENT_TABLE } = commentModel;
+const { NegotiationSchema, NEGOTIATION_TABLE } = negotiationModel;
 
 export async function up(queryInterface: QueryInterface) {
   await queryInterface.createTable(CUSTOMER_TABLE, CustomerSchema);
@@ -45,6 +47,84 @@ export async function up(queryInterface: QueryInterface) {
   await queryInterface.createTable(DIRECTION_TABLE, DirectionSchema);
   await queryInterface.createTable(GUARANTOR_TABLE, GuarantorSchema);
   await queryInterface.createTable(COMMENT_TABLE, CommentSchema);
+  await queryInterface.createTable(NEGOTIATION_TABLE, NegotiationSchema);
+  await queryInterface.bulkInsert(NEGOTIATION_TABLE, [
+    {
+      id_negotiation: 1,
+      name: "Venta de inmueble",
+      created_at: new Date(),
+    },
+    {
+      id_negotiation: 2,
+      name: "Dacion en Pago",
+      created_at: new Date(),
+    },
+    {
+      id_negotiation: 3,
+      name: "Adjudicacion en Pago",
+      created_at: new Date(),
+    },
+    {
+      id_negotiation: 4,
+      name: "Cesion de Derechos",
+      created_at: new Date(),
+    },
+    {
+      id_negotiation: 5,
+      name: "Convenio de Pago",
+      created_at: new Date(),
+    },
+    {
+      id_negotiation: 6,
+      name: "Incumplimiento de propuesta",
+      created_at: new Date(),
+    },
+    {
+      id_negotiation: 7,
+      name: "Reversión",
+      created_at: new Date(),
+    },
+    {
+      id_negotiation: 8,
+      name: "Refinanciamiento",
+      created_at: new Date(),
+    },
+    {
+      id_negotiation: 9,
+      name: "Amortizacion",
+      created_at: new Date(),
+    },
+    {
+      id_negotiation: 10,
+      name: "Renuente al pago",
+      created_at: new Date(),
+    },
+    {
+      id_negotiation: 11,
+      name: "Cliente inubicable",
+      created_at: new Date(),
+    },
+    {
+      id_negotiation: 12,
+      name: "Con voluntad de pago, perdon sin capacidad",
+      created_at: new Date(),
+    },
+    {
+      id_negotiation: 13,
+      name: "Sucesión intestada",
+      created_at: new Date(),
+    },
+    {
+      id_negotiation: 14,
+      name: "Deuda cancelada",
+      created_at: new Date(),
+    },
+    {
+      id_negotiation: 15,
+      name: "Cliente fallecido",
+      created_at: new Date(),
+    },
+  ]);
 }
 
 export async function down(queryInterface: QueryInterface) {
@@ -55,11 +135,11 @@ export async function down(queryInterface: QueryInterface) {
   await queryInterface.dropTable(CLIENT_TABLE);
   await queryInterface.dropTable(CUSTOMER_USER_TABLE);
   await queryInterface.dropTable(MODULE_TABLE);
-  await queryInterface.createTable(FILE_TABLE, FileSchema);
+  await queryInterface.dropTable(FILE_TABLE);
   await queryInterface.dropTable(USER_APP_TABLE);
   await queryInterface.dropTable(DIRECTION_TABLE);
   await queryInterface.dropTable(GUARANTOR_TABLE);
   await queryInterface.dropTable(COMMENT_TABLE);
-
+  await queryInterface.dropTable(NEGOTIATION_TABLE);
   await queryInterface.dropTable(CUSTOMER_HAS_BANK_TABLE);
 }

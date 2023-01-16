@@ -19,11 +19,11 @@ const GuarantorSchema = {
         type: sequelize_1.DataTypes.STRING(150),
     },
     phone: {
-        allowNull: false,
+        allowNull: true,
         type: sequelize_1.DataTypes.STRING(150),
     },
     email: {
-        allowNull: false,
+        allowNull: true,
         type: sequelize_1.DataTypes.STRING(150),
     },
     createdAt: {

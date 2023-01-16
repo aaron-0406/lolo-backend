@@ -28,11 +28,21 @@ const multerFile = (req, res, next) => {
         return next();
     });
 };
-router.get("/:idBank/:code/:id", (0, validator_handler_1.default)(getFileSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/:id", (0, validator_handler_1.default)(getFileSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const files = yield service.find(Number(id));
+        res.json(files);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+router.get("/single/:idBank/:code/:id", (0, validator_handler_1.default)(getFileSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id, idBank, code } = req.params;
-        const files = yield service.find(Number(id), Number(idBank), Number(code));
-        res.json(files);
+        const file = yield service.findOne(Number(id), Number(idBank), Number(code));
+        res.json(file);
     }
     catch (error) {
         next(error);

@@ -9,6 +9,8 @@ const routes_1 = __importDefault(require("./routes"));
 const error_handler_1 = __importDefault(require("./middlewares/error.handler"));
 const morgan_1 = __importDefault(require("morgan"));
 const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
+const cron_jobs_1 = require("./libs/cron_jobs");
 const { logErrors, ormErrorHandler, boomErrorHandler, errorHandler } = error_handler_1.default;
 const app = (0, express_1.default)();
 const port = process.env.PORT || 5000;
@@ -49,5 +51,7 @@ app.use(ormErrorHandler);
 app.use(boomErrorHandler);
 app.use(errorHandler);
 app.listen(port, () => {
+    fs_1.default.mkdir(path_1.default.join(__dirname, "./public/download"), () => { });
+    (0, cron_jobs_1.deleteDownloadFolderTask)();
     console.log("My port: " + port);
 });

@@ -17,6 +17,7 @@ const direction_model_1 = __importDefault(require("./direction.model"));
 const guarantor_model_1 = __importDefault(require("./guarantor.model"));
 const comment_model_1 = __importDefault(require("./comment.model"));
 const file_model_1 = __importDefault(require("./file.model"));
+const negotiation_model_1 = __importDefault(require("./negotiation.model"));
 const { Customer, CustomerSchema } = customer_model_1.default;
 const { Funcionario, FuncionarioSchema } = funcionario_model_1.default;
 const { Bank, BankSchema } = bank_model_1.default;
@@ -29,6 +30,7 @@ const { Direction, DirectionSchema } = direction_model_1.default;
 const { Guarantor, GuarantorSchema } = guarantor_model_1.default;
 const { Comment, CommentSchema } = comment_model_1.default;
 const { File, FileSchema } = file_model_1.default;
+const { Negotiation, NegotiationSchema } = negotiation_model_1.default;
 const { CustomerHasBank, CustomerHasBankSchema } = customer_has_bank_model_1.default;
 const setupModels = (sequelize) => {
     Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -43,6 +45,7 @@ const setupModels = (sequelize) => {
     Direction.init(DirectionSchema, Direction.config(sequelize));
     Guarantor.init(GuarantorSchema, Guarantor.config(sequelize));
     Comment.init(CommentSchema, Comment.config(sequelize));
+    Negotiation.init(NegotiationSchema, Negotiation.config(sequelize));
     CustomerHasBank.init(CustomerHasBankSchema, CustomerHasBank.config(sequelize));
     Customer.associate(sequelize.models);
     CustomerUser.associate(sequelize.models);

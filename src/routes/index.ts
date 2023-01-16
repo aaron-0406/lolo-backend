@@ -11,6 +11,7 @@ import guarantorRouter from "./guarantor.routes";
 import directionRouter from "./direction.routes";
 import commentRouter from "./comment.routes";
 import fileRouter from "./file.routes";
+import authRouter from "./auth.routes";
 
 const routerApi = (app: Express) => {
   const router = express.Router();
@@ -27,6 +28,7 @@ const routerApi = (app: Express) => {
   router.use("/direction", directionRouter);
   router.use("/comment", commentRouter);
   router.use("/file", fileRouter);
+  router.use("/auth", authRouter);
 };
 
 export default routerApi;

@@ -5,16 +5,14 @@ import errorHandlerr from "./middlewares/error.handler";
 import morgan from "morgan";
 import path from "path";
 import fs from "fs";
-import {
-  deleteDownloadFolderTask,
-} from "./libs/cron_jobs";
+import { deleteDownloadFolderTask } from "./libs/cron_jobs";
 
 const { logErrors, ormErrorHandler, boomErrorHandler, errorHandler } =
   errorHandlerr;
 
 const app = express();
 const port = process.env.PORT || 5000;
-
+import "./libs/passport";
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
@@ -28,7 +26,7 @@ const whitelist = [
   "http://192.168.152.24:5000",
   "http://192.168.152.24:3000",
   "http://3.138.143.208:5000",
-  "http://3.138.143.208:3000"
+  "http://3.138.143.208:3000",
 ];
 const options: CorsOptions = {
   origin: (origin, callback) => {

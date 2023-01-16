@@ -12,15 +12,15 @@ const createdAt = joi_1.default.date();
 const clientId = joi_1.default.number();
 const createGuarantorSchema = joi_1.default.object({
     name: name.required(),
-    phone: phone.optional(),
-    email: email.optional(),
+    phone: phone.optional().empty("").allow(""),
+    email: email.optional().empty("").allow(""),
     createdAt: createdAt.optional(),
     clientId: clientId.required(),
 });
 const updateGuarantorSchema = joi_1.default.object({
     name: name.required(),
-    phone: phone.optional(),
-    email: email.optional(),
+    phone: phone.optional().empty("").allow(""),
+    email: email.optional().empty("").allow(""),
     createdAt: createdAt.optional(),
 });
 const getGuarantorByClientIDSchema = joi_1.default.object({

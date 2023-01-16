@@ -17,35 +17,33 @@ const boom_1 = __importDefault(require("@hapi/boom"));
 const helpers_1 = require("../../../libs/helpers");
 const aws_bucket_1 = require("../../../libs/aws_bucket");
 const config_1 = __importDefault(require("../../../config/config"));
+const path_1 = __importDefault(require("path"));
 const { models } = sequelize_1.default;
 class FileService {
     constructor() { }
-    find(clientId, idBank, code) {
+    find(clientId) {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.FILE.findAll({
                 where: {
                     clientId,
                 },
             });
-            // for (let i = 0; i < rta.length; i++) {
-            //   const element = rta[i];
-            //   const result = await readFile(
-            //     `${config.AWS_BANK_PATH}${idBank}/${code}/${element.dataValues.name}`
-            //   );
-            //   console.log(result.Body);
-            // }
             return rta;
         });
     }
-    findOne(id) {
+    findOne(id, idBank, code) {
         return __awaiter(this, void 0, void 0, function* () {
             const file = yield models.FILE.findOne({
                 where: {
-                    clientId: id,
+                    id,
                 },
             });
             if (!file) {
                 throw boom_1.default.notFound("Archivo no encontrado");
+            }
+            const isStored = (0, helpers_1.isFileStoredIn)(path_1.default.join(__dirname, "../../../public/download"), file.dataValues.name);
+            if (!isStored) {
+                yield (0, aws_bucket_1.readFile)(`${config_1.default.AWS_BANK_PATH}${idBank}/${code}/${file.dataValues.name}`);
             }
             return file;
         });
@@ -70,13 +68,6 @@ class FileService {
                 filesAdded.push(newFile);
             }
             return filesAdded;
-        });
-    }
-    update(id, changes) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const file = yield this.findOne(id);
-            const rta = yield file.update(changes);
-            return rta;
         });
     }
     delete(idBank, code, id) {

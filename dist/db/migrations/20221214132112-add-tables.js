@@ -26,6 +26,7 @@ const direction_model_1 = __importDefault(require("../models/direction.model"));
 const guarantor_model_1 = __importDefault(require("../models/guarantor.model"));
 const comment_model_1 = __importDefault(require("../models/comment.model"));
 const file_model_1 = __importDefault(require("../models/file.model"));
+const negotiation_model_1 = __importDefault(require("../models/negotiation.model"));
 const { BankSchema, BANK_TABLE } = bank_model_1.default;
 const { FuncionarioSchema, FUNCIONARIO_TABLE } = funcionario_model_1.default;
 const { CitySchema, CITY_TABLE } = city_model_1.default;
@@ -39,6 +40,7 @@ const { CustomerHasBankSchema, CUSTOMER_HAS_BANK_TABLE } = customer_has_bank_mod
 const { DirectionSchema, DIRECTION_TABLE } = direction_model_1.default;
 const { GuarantorSchema, GUARANTOR_TABLE } = guarantor_model_1.default;
 const { CommentSchema, COMMENT_TABLE } = comment_model_1.default;
+const { NegotiationSchema, NEGOTIATION_TABLE } = negotiation_model_1.default;
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
         yield queryInterface.createTable(CUSTOMER_TABLE, CustomerSchema);
@@ -54,6 +56,84 @@ function up(queryInterface) {
         yield queryInterface.createTable(DIRECTION_TABLE, DirectionSchema);
         yield queryInterface.createTable(GUARANTOR_TABLE, GuarantorSchema);
         yield queryInterface.createTable(COMMENT_TABLE, CommentSchema);
+        yield queryInterface.createTable(NEGOTIATION_TABLE, NegotiationSchema);
+        yield queryInterface.bulkInsert(NEGOTIATION_TABLE, [
+            {
+                id_negotiation: 1,
+                name: "Venta de inmueble",
+                created_at: new Date(),
+            },
+            {
+                id_negotiation: 2,
+                name: "Dacion en Pago",
+                created_at: new Date(),
+            },
+            {
+                id_negotiation: 3,
+                name: "Adjudicacion en Pago",
+                created_at: new Date(),
+            },
+            {
+                id_negotiation: 4,
+                name: "Cesion de Derechos",
+                created_at: new Date(),
+            },
+            {
+                id_negotiation: 5,
+                name: "Convenio de Pago",
+                created_at: new Date(),
+            },
+            {
+                id_negotiation: 6,
+                name: "Incumplimiento de propuesta",
+                created_at: new Date(),
+            },
+            {
+                id_negotiation: 7,
+                name: "Reversión",
+                created_at: new Date(),
+            },
+            {
+                id_negotiation: 8,
+                name: "Refinanciamiento",
+                created_at: new Date(),
+            },
+            {
+                id_negotiation: 9,
+                name: "Amortizacion",
+                created_at: new Date(),
+            },
+            {
+                id_negotiation: 10,
+                name: "Renuente al pago",
+                created_at: new Date(),
+            },
+            {
+                id_negotiation: 11,
+                name: "Cliente inubicable",
+                created_at: new Date(),
+            },
+            {
+                id_negotiation: 12,
+                name: "Con voluntad de pago, perdon sin capacidad",
+                created_at: new Date(),
+            },
+            {
+                id_negotiation: 13,
+                name: "Sucesión intestada",
+                created_at: new Date(),
+            },
+            {
+                id_negotiation: 14,
+                name: "Deuda cancelada",
+                created_at: new Date(),
+            },
+            {
+                id_negotiation: 15,
+                name: "Cliente fallecido",
+                created_at: new Date(),
+            },
+        ]);
     });
 }
 exports.up = up;
@@ -66,11 +146,12 @@ function down(queryInterface) {
         yield queryInterface.dropTable(CLIENT_TABLE);
         yield queryInterface.dropTable(CUSTOMER_USER_TABLE);
         yield queryInterface.dropTable(MODULE_TABLE);
-        yield queryInterface.createTable(FILE_TABLE, FileSchema);
+        yield queryInterface.dropTable(FILE_TABLE);
         yield queryInterface.dropTable(USER_APP_TABLE);
         yield queryInterface.dropTable(DIRECTION_TABLE);
         yield queryInterface.dropTable(GUARANTOR_TABLE);
         yield queryInterface.dropTable(COMMENT_TABLE);
+        yield queryInterface.dropTable(NEGOTIATION_TABLE);
         yield queryInterface.dropTable(CUSTOMER_HAS_BANK_TABLE);
     });
 }

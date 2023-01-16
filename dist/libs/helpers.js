@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteFile = void 0;
+exports.isFileStoredIn = exports.deleteFile = void 0;
 const fs_extra_1 = __importDefault(require("fs-extra"));
 const path_1 = __importDefault(require("path"));
 // Delete file function
@@ -25,3 +25,8 @@ const deleteFile = (pathname, filename) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.deleteFile = deleteFile;
+const isFileStoredIn = (dirname, filename) => {
+    const files = fs_extra_1.default.readdirSync(dirname);
+    return files.some((file) => file === filename);
+};
+exports.isFileStoredIn = isFileStoredIn;

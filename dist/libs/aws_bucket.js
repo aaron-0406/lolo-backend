@@ -40,8 +40,20 @@ const readFile = (filename) => __awaiter(void 0, void 0, void 0, function* () {
         Bucket: AWS_BUCKET_NAME,
         Key: filename,
     };
+    const pathName = filename.split("/");
     const command = new client_s3_1.GetObjectCommand(getParam);
-    return yield client.send(command);
+    const result = yield client.send(command);
+    if (result.Body) {
+        const stream = result.Body;
+        const newFile = fs_1.default.createWriteStream(path_1.default.join(__dirname, "../public/download", pathName[pathName.length - 1]));
+        stream.pipe(newFile);
+        let end = new Promise(function (resolve, reject) {
+            stream.on("end", () => resolve(stream.read()));
+            stream.on("error", reject); // or something like that. might need to close `hash`
+        });
+        yield end;
+        return;
+    }
 });
 exports.readFile = readFile;
 const createFolder = (folderName) => __awaiter(void 0, void 0, void 0, function* () {
