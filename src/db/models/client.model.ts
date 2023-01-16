@@ -26,9 +26,9 @@ const ClientSchema: ModelAttributes<Client, ClientType> = {
     allowNull: false,
     type: DataTypes.STRING(50),
   },
-  state: {
+  negotiationId: {
     allowNull: false,
-    field: "state",
+    field: "negotiation_id_negotiation",
     type: DataTypes.INTEGER,
     references: {
       model: negotiationModel.NEGOTIATION_TABLE,

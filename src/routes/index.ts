@@ -12,6 +12,7 @@ import directionRouter from "./direction.routes";
 import commentRouter from "./comment.routes";
 import fileRouter from "./file.routes";
 import authRouter from "./auth.routes";
+import negotiationRouter from "./negotiation.routes";
 
 const routerApi = (app: Express) => {
   const router = express.Router();
@@ -29,6 +30,7 @@ const routerApi = (app: Express) => {
   router.use("/comment", commentRouter);
   router.use("/file", fileRouter);
   router.use("/auth", authRouter);
+  router.use("/negotiation", negotiationRouter);
 };
 
 export default routerApi;

@@ -2,7 +2,7 @@ import Joi from "joi";
 import { ClientType } from "../types/client.type";
 
 const code = Joi.string().min(1).max(50);
-const state = Joi.string().min(1).max(60);
+const negotiationId = Joi.number().required();
 const dniOrRuc = Joi.string().min(1).max(20);
 const name = Joi.string().min(1).max(200);
 const salePerimeter = Joi.string();
@@ -17,7 +17,7 @@ const idBank = Joi.number();
 
 const createClientSchema = Joi.object<Omit<ClientType, "id">, true>({
   code: code.required(),
-  state: state.required(),
+  negotiationId,
   dniOrRuc: dniOrRuc.required(),
   name: name.required(),
   salePerimeter: salePerimeter.optional(),
@@ -34,7 +34,7 @@ const updateClientSchema = Joi.object<
   Omit<ClientType, "id" | "code" | "customerHasBankId">,
   true
 >({
-  state: state,
+  negotiationId,
   dniOrRuc: dniOrRuc,
   name: name,
   salePerimeter: salePerimeter,

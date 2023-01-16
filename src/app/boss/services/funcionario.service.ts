@@ -8,12 +8,16 @@ class FuncionarioService {
   constructor() {}
 
   async findAll() {
-    const rta = await models.FUNCIONARIO.findAll();
+    const rta = await models.FUNCIONARIO.findAll({
+      attributes: { exclude: ["bankId"] },
+    });
     return rta;
   }
 
   async findOne(id: string) {
-    const funcionario = await models.FUNCIONARIO.findByPk(id);
+    const funcionario = await models.FUNCIONARIO.findByPk(id, {
+      attributes: { exclude: ["bankId"] },
+    });
 
     if (!funcionario) {
       throw boom.notFound("Funcionario no encontrado");

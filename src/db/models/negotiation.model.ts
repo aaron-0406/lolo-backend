@@ -5,7 +5,7 @@ import {
     ModelAttributes,
     ModelCtor,
   } from "sequelize";
-  import { NegotiationType } from "../../app/extrajudicial/types/negotiation.type";
+  import { NegotiationType } from "../../app/boss/types/negotiation.type";
   
   const NEGOTIATION_TABLE = "NEGOTIATION";
   

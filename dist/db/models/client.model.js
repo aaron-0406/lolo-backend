@@ -22,9 +22,9 @@ const ClientSchema = {
         allowNull: false,
         type: sequelize_1.DataTypes.STRING(50),
     },
-    state: {
+    negotiationId: {
         allowNull: false,
-        field: "state",
+        field: "negotiation_id_negotiation",
         type: sequelize_1.DataTypes.INTEGER,
         references: {
             model: negotiation_model_1.default.NEGOTIATION_TABLE,

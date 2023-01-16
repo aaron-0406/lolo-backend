@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const joi_1 = __importDefault(require("joi"));
 const code = joi_1.default.string().min(1).max(50);
-const state = joi_1.default.string().min(1).max(60);
+const negotiationId = joi_1.default.number().required();
 const dniOrRuc = joi_1.default.string().min(1).max(20);
 const name = joi_1.default.string().min(1).max(200);
 const salePerimeter = joi_1.default.string();
@@ -19,7 +19,7 @@ const customerHasBankId = joi_1.default.number();
 const idBank = joi_1.default.number();
 const createClientSchema = joi_1.default.object({
     code: code.required(),
-    state: state.required(),
+    negotiationId,
     dniOrRuc: dniOrRuc.required(),
     name: name.required(),
     salePerimeter: salePerimeter.optional(),
@@ -32,7 +32,7 @@ const createClientSchema = joi_1.default.object({
     customerHasBankId: customerHasBankId.required(),
 });
 const updateClientSchema = joi_1.default.object({
-    state: state,
+    negotiationId,
     dniOrRuc: dniOrRuc,
     name: name,
     salePerimeter: salePerimeter,

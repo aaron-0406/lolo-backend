@@ -1,7 +1,7 @@
 export type ClientType = {
   id: number;
   code: string;
-  state: string;
+  negotiationId: number;
   dniOrRuc?: string;
   name: string;
   salePerimeter?: string;
