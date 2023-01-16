@@ -19,7 +19,7 @@ router.post(
         // Singing token with the user
         const { password, ...rest } = user.dataValues as CustomerUserType;
         const token = signToken(rest, `${process.env.JWT_SECRET}`);
-        return res.json({ success: "Sesión Iniciada", rest, token });
+        return res.json({ success: "Sesión Iniciada", user: rest, token });
       })(req, res, next);
     } catch (error) {
       next(error);

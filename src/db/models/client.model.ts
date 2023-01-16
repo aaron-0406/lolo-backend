@@ -9,6 +9,7 @@ import { ClientType } from "../../app/extrajudicial/types/client.type";
 import cityModel from "./city.model";
 import funcionarioModel from "./funcionario.model";
 import customerUserModel from "./customer-user.model";
+import negotiationModel from "./negotiation.model";
 import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 
 const CLIENT_TABLE = "CLIENT";
@@ -27,7 +28,14 @@ const ClientSchema: ModelAttributes<Client, ClientType> = {
   },
   state: {
     allowNull: false,
-    type: DataTypes.STRING(60),
+    field: "state",
+    type: DataTypes.INTEGER,
+    references: {
+      model: negotiationModel.NEGOTIATION_TABLE,
+      key: "id_negotiation",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
   },
   dniOrRuc: {
     allowNull: false,
@@ -106,6 +114,8 @@ class Client extends Model {
     this.belongsTo(models.CITY, { as: "city" });
 
     this.belongsTo(models.FUNCIONARIO, { as: "funcionario" });
+
+    this.belongsTo(models.NEGOTIATION, { as: "negotiation" });
 
     this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
 

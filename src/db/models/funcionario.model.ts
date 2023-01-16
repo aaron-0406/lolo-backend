@@ -6,9 +6,10 @@ import {
   ModelCtor,
 } from "sequelize";
 import { FuncionarioType } from "../../app/boss/types/funcionario.type";
-import bankModel from "./bank.model";
+import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 
 const FUNCIONARIO_TABLE = "FUNCIONARIO";
+const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 
 const FuncionarioSchema: ModelAttributes<Funcionario, FuncionarioType> = {
   id: {
@@ -29,13 +30,13 @@ const FuncionarioSchema: ModelAttributes<Funcionario, FuncionarioType> = {
     defaultValue: DataTypes.NOW,
     type: DataTypes.DATE,
   },
-  bankId: {
+  customerHasBankId: {
     allowNull: false,
-    field: "bank_id_bank",
+    field: "customer_has_bank_id_customer_has_bank",
     type: DataTypes.INTEGER,
     references: {
-      model: bankModel.BANK_TABLE,
-      key: "id_bank",
+      model: CUSTOMER_HAS_BANK_TABLE,
+      key: "id_customer_has_bank",
     },
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
@@ -44,8 +45,7 @@ const FuncionarioSchema: ModelAttributes<Funcionario, FuncionarioType> = {
 
 class Funcionario extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
-    this.belongsTo(models.BANK, { as: "bank" });
-
+    this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
     this.hasMany(models.CLIENT, {
       as: "client",
       foreignKey: "funcionarioId",

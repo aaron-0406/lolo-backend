@@ -31,8 +31,8 @@ const { Negotiation, NegotiationSchema } = negotiationModel;
 const { CustomerHasBank, CustomerHasBankSchema } = customerHasBank;
 
 export const setupModels = (sequelize: Sequelize) => {
+  Negotiation.init(NegotiationSchema, Negotiation.config(sequelize));
   Customer.init(CustomerSchema, Customer.config(sequelize));
-  Funcionario.init(FuncionarioSchema, Funcionario.config(sequelize));
   Bank.init(BankSchema, Bank.config(sequelize));
   Module.init(ModuleSchema, Module.config(sequelize));
   CustomerUser.init(CustomerUserSchema, CustomerUser.config(sequelize));
@@ -43,20 +43,20 @@ export const setupModels = (sequelize: Sequelize) => {
   Direction.init(DirectionSchema, Direction.config(sequelize));
   Guarantor.init(GuarantorSchema, Guarantor.config(sequelize));
   Comment.init(CommentSchema, Comment.config(sequelize));
-  Negotiation.init(NegotiationSchema, Negotiation.config(sequelize));
   CustomerHasBank.init(
     CustomerHasBankSchema,
     CustomerHasBank.config(sequelize)
   );
+  Funcionario.init(FuncionarioSchema, Funcionario.config(sequelize));
 
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
   Bank.associate(sequelize.models);
-  Funcionario.associate(sequelize.models);
   City.associate(sequelize.models);
   Client.associate(sequelize.models);
   File.associate(sequelize.models);
   Comment.associate(sequelize.models);
   Direction.associate(sequelize.models);
   Guarantor.associate(sequelize.models);
+  Funcionario.associate(sequelize.models);
 };

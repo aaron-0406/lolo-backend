@@ -4,17 +4,17 @@ import { FuncionarioType } from "../types/funcionario.type";
 const id = Joi.number();
 const name = Joi.string().min(1).max(150);
 const createAt = Joi.date();
-const bankId = Joi.number();
+const customerHasBankId = Joi.number();
 
 const createFuncionarioSchema = Joi.object<Omit<FuncionarioType, "id">, true>({
   name: name.required(),
   createdAt: createAt.optional(),
-  bankId: bankId.required(),
+  customerHasBankId: customerHasBankId.required(),
 });
 
 const updateFuncionarioSchema = Joi.object<Omit<FuncionarioType, "id">, true>({
   name: name,
-  bankId: bankId,
+  customerHasBankId: customerHasBankId,
   createdAt: createAt,
 });
 

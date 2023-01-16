@@ -4,8 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
-const bank_model_1 = __importDefault(require("./bank.model"));
+const customer_has_bank_model_1 = __importDefault(require("./many-to-many/customer-has-bank.model"));
 const FUNCIONARIO_TABLE = "FUNCIONARIO";
+const { CUSTOMER_HAS_BANK_TABLE } = customer_has_bank_model_1.default;
 const FuncionarioSchema = {
     id: {
         primaryKey: true,
@@ -25,13 +26,13 @@ const FuncionarioSchema = {
         defaultValue: sequelize_1.DataTypes.NOW,
         type: sequelize_1.DataTypes.DATE,
     },
-    bankId: {
+    customerHasBankId: {
         allowNull: false,
-        field: "bank_id_bank",
+        field: "customer_has_bank_id_customer_has_bank",
         type: sequelize_1.DataTypes.INTEGER,
         references: {
-            model: bank_model_1.default.BANK_TABLE,
-            key: "id_bank",
+            model: CUSTOMER_HAS_BANK_TABLE,
+            key: "id_customer_has_bank",
         },
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
@@ -39,7 +40,7 @@ const FuncionarioSchema = {
 };
 class Funcionario extends sequelize_1.Model {
     static associate(models) {
-        this.belongsTo(models.BANK, { as: "bank" });
+        this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
         this.hasMany(models.CLIENT, {
             as: "client",
             foreignKey: "funcionarioId",

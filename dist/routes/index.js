@@ -15,6 +15,7 @@ const guarantor_routes_1 = __importDefault(require("./guarantor.routes"));
 const direction_routes_1 = __importDefault(require("./direction.routes"));
 const comment_routes_1 = __importDefault(require("./comment.routes"));
 const file_routes_1 = __importDefault(require("./file.routes"));
+const auth_routes_1 = __importDefault(require("./auth.routes"));
 const routerApi = (app) => {
     const router = express_1.default.Router();
     app.use("/api/v1", router);
@@ -29,5 +30,6 @@ const routerApi = (app) => {
     router.use("/direction", direction_routes_1.default);
     router.use("/comment", comment_routes_1.default);
     router.use("/file", file_routes_1.default);
+    router.use("/auth", auth_routes_1.default);
 };
 exports.default = routerApi;

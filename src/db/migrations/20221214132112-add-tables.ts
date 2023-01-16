@@ -31,22 +31,6 @@ const { CommentSchema, COMMENT_TABLE } = commentModel;
 const { NegotiationSchema, NEGOTIATION_TABLE } = negotiationModel;
 
 export async function up(queryInterface: QueryInterface) {
-  await queryInterface.createTable(CUSTOMER_TABLE, CustomerSchema);
-  await queryInterface.createTable(CUSTOMER_USER_TABLE, CustomerUserSchema);
-  await queryInterface.createTable(BANK_TABLE, BankSchema);
-  await queryInterface.createTable(FUNCIONARIO_TABLE, FuncionarioSchema);
-  await queryInterface.createTable(CITY_TABLE, CitySchema);
-  await queryInterface.createTable(
-    CUSTOMER_HAS_BANK_TABLE,
-    CustomerHasBankSchema
-  );
-  await queryInterface.createTable(CLIENT_TABLE, ClientSchema);
-  await queryInterface.createTable(FILE_TABLE, FileSchema);
-  await queryInterface.createTable(MODULE_TABLE, ModuleSchema);
-  await queryInterface.createTable(USER_APP_TABLE, UserAppSchema);
-  await queryInterface.createTable(DIRECTION_TABLE, DirectionSchema);
-  await queryInterface.createTable(GUARANTOR_TABLE, GuarantorSchema);
-  await queryInterface.createTable(COMMENT_TABLE, CommentSchema);
   await queryInterface.createTable(NEGOTIATION_TABLE, NegotiationSchema);
   await queryInterface.bulkInsert(NEGOTIATION_TABLE, [
     {
@@ -125,9 +109,26 @@ export async function up(queryInterface: QueryInterface) {
       created_at: new Date(),
     },
   ]);
+  await queryInterface.createTable(CUSTOMER_TABLE, CustomerSchema);
+  await queryInterface.createTable(CUSTOMER_USER_TABLE, CustomerUserSchema);
+  await queryInterface.createTable(BANK_TABLE, BankSchema);
+  await queryInterface.createTable(CITY_TABLE, CitySchema);
+  await queryInterface.createTable(
+    CUSTOMER_HAS_BANK_TABLE,
+    CustomerHasBankSchema
+  );
+  await queryInterface.createTable(FUNCIONARIO_TABLE, FuncionarioSchema);
+  await queryInterface.createTable(CLIENT_TABLE, ClientSchema);
+  await queryInterface.createTable(FILE_TABLE, FileSchema); 
+  await queryInterface.createTable(MODULE_TABLE, ModuleSchema);
+  await queryInterface.createTable(USER_APP_TABLE, UserAppSchema);
+  await queryInterface.createTable(DIRECTION_TABLE, DirectionSchema);
+  await queryInterface.createTable(GUARANTOR_TABLE, GuarantorSchema);
+  await queryInterface.createTable(COMMENT_TABLE, CommentSchema);
 }
 
 export async function down(queryInterface: QueryInterface) {
+  await queryInterface.dropTable(NEGOTIATION_TABLE);
   await queryInterface.dropTable(CUSTOMER_TABLE);
   await queryInterface.dropTable(FUNCIONARIO_TABLE);
   await queryInterface.dropTable(BANK_TABLE);
@@ -140,6 +141,5 @@ export async function down(queryInterface: QueryInterface) {
   await queryInterface.dropTable(DIRECTION_TABLE);
   await queryInterface.dropTable(GUARANTOR_TABLE);
   await queryInterface.dropTable(COMMENT_TABLE);
-  await queryInterface.dropTable(NEGOTIATION_TABLE);
   await queryInterface.dropTable(CUSTOMER_HAS_BANK_TABLE);
 }

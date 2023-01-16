@@ -14,6 +14,7 @@ const cron_jobs_1 = require("./libs/cron_jobs");
 const { logErrors, ormErrorHandler, boomErrorHandler, errorHandler } = error_handler_1.default;
 const app = (0, express_1.default)();
 const port = process.env.PORT || 5000;
+require("./libs/passport");
 app.use(express_1.default.json());
 app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.urlencoded({ extended: false }));
@@ -26,7 +27,7 @@ const whitelist = [
     "http://192.168.152.24:5000",
     "http://192.168.152.24:3000",
     "http://3.138.143.208:5000",
-    "http://3.138.143.208:3000"
+    "http://3.138.143.208:3000",
 ];
 const options = {
     origin: (origin, callback) => {

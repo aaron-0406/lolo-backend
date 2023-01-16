@@ -7,6 +7,7 @@ const sequelize_1 = require("sequelize");
 const city_model_1 = __importDefault(require("./city.model"));
 const funcionario_model_1 = __importDefault(require("./funcionario.model"));
 const customer_user_model_1 = __importDefault(require("./customer-user.model"));
+const negotiation_model_1 = __importDefault(require("./negotiation.model"));
 const customer_has_bank_model_1 = __importDefault(require("./many-to-many/customer-has-bank.model"));
 const CLIENT_TABLE = "CLIENT";
 const ClientSchema = {
@@ -23,7 +24,14 @@ const ClientSchema = {
     },
     state: {
         allowNull: false,
-        type: sequelize_1.DataTypes.STRING(60),
+        field: "state",
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: negotiation_model_1.default.NEGOTIATION_TABLE,
+            key: "id_negotiation",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
     },
     dniOrRuc: {
         allowNull: false,
@@ -100,6 +108,7 @@ class Client extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.CITY, { as: "city" });
         this.belongsTo(models.FUNCIONARIO, { as: "funcionario" });
+        this.belongsTo(models.NEGOTIATION, { as: "negotiation" });
         this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
         this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
         this.hasMany(models.GUARANTOR, {
