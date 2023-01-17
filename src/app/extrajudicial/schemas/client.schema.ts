@@ -18,7 +18,7 @@ const idBank = Joi.number();
 const createClientSchema = Joi.object<Omit<ClientType, "id">, true>({
   code: code.required(),
   negotiationId,
-  dniOrRuc: dniOrRuc.required(),
+  dniOrRuc: dniOrRuc.optional().empty("").allow(""),
   name: name.required(),
   salePerimeter: salePerimeter.optional().empty("").allow(""),
   phone: phone.optional().empty("").allow(""),

@@ -38,7 +38,7 @@ const ClientSchema: ModelAttributes<Client, ClientType> = {
     onDelete: "NO ACTION",
   },
   dniOrRuc: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.STRING(20),
   },
   name: {
