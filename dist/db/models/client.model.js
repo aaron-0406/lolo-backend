@@ -42,15 +42,15 @@ const ClientSchema = {
         type: sequelize_1.DataTypes.STRING(200),
     },
     salePerimeter: {
-        allowNull: false,
+        allowNull: true,
         type: sequelize_1.DataTypes.TEXT("tiny"),
     },
     phone: {
-        allowNull: false,
+        allowNull: true,
         type: sequelize_1.DataTypes.TEXT("tiny"),
     },
     email: {
-        allowNull: false,
+        allowNull: true,
         type: sequelize_1.DataTypes.TEXT("tiny"),
     },
     createdAt: {

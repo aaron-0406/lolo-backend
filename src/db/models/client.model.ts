@@ -46,15 +46,15 @@ const ClientSchema: ModelAttributes<Client, ClientType> = {
     type: DataTypes.STRING(200),
   },
   salePerimeter: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.TEXT("tiny"),
   },
   phone: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.TEXT("tiny"),
   },
   email: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.TEXT("tiny"),
   },
   createdAt: {

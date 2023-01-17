@@ -15,46 +15,42 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = __importDefault(require("../../../libs/sequelize"));
 const boom_1 = __importDefault(require("@hapi/boom"));
 const { models } = sequelize_1.default;
-class FuncionarioService {
+class NegotiationService {
     constructor() { }
     findAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.FUNCIONARIO.findAll({
-                attributes: { exclude: ["bankId"] },
-            });
+            const rta = yield models.NEGOTIATION.findAll();
             return rta;
         });
     }
     findOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const funcionario = yield models.FUNCIONARIO.findByPk(id, {
-                attributes: { exclude: ["bankId"] },
-            });
-            if (!funcionario) {
-                throw boom_1.default.notFound("Funcionario no encontrado");
+            const bank = yield models.NEGOTIATION.findByPk(id);
+            if (!bank) {
+                throw boom_1.default.notFound("Negociación no encontrada");
             }
-            return funcionario;
+            return bank;
         });
     }
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const newFuncionario = yield models.FUNCIONARIO.create(data);
-            return newFuncionario;
+            const newNegotiation = yield models.NEGOTIATION.create(data);
+            return newNegotiation;
         });
     }
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
-            const funcionario = yield this.findOne(id);
-            const rta = yield funcionario.update(changes);
+            const bank = yield this.findOne(id);
+            const rta = yield bank.update(changes);
             return rta;
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const funcionario = yield this.findOne(id);
-            yield funcionario.destroy();
+            const bank = yield this.findOne(id);
+            yield bank.destroy();
             return { id };
         });
     }
 }
-exports.default = FuncionarioService;
+exports.default = NegotiationService;
