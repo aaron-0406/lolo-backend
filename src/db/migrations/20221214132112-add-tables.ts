@@ -31,7 +31,6 @@ const { CommentSchema, COMMENT_TABLE } = commentModel;
 const { NegotiationSchema, NEGOTIATION_TABLE } = negotiationModel;
 
 export async function up(queryInterface: QueryInterface) {
-  await queryInterface.createTable(NEGOTIATION_TABLE, NegotiationSchema);
   await queryInterface.createTable(CUSTOMER_TABLE, CustomerSchema);
   await queryInterface.createTable(CUSTOMER_USER_TABLE, CustomerUserSchema);
   await queryInterface.createTable(BANK_TABLE, BankSchema);
@@ -41,6 +40,7 @@ export async function up(queryInterface: QueryInterface) {
     CustomerHasBankSchema
   );
   await queryInterface.createTable(FUNCIONARIO_TABLE, FuncionarioSchema);
+  await queryInterface.createTable(NEGOTIATION_TABLE, NegotiationSchema);
   await queryInterface.createTable(CLIENT_TABLE, ClientSchema);
   await queryInterface.createTable(FILE_TABLE, FileSchema);
   await queryInterface.createTable(MODULE_TABLE, ModuleSchema);
@@ -51,9 +51,9 @@ export async function up(queryInterface: QueryInterface) {
 }
 
 export async function down(queryInterface: QueryInterface) {
-  await queryInterface.dropTable(NEGOTIATION_TABLE);
   await queryInterface.dropTable(CUSTOMER_TABLE);
   await queryInterface.dropTable(FUNCIONARIO_TABLE);
+  await queryInterface.dropTable(NEGOTIATION_TABLE);
   await queryInterface.dropTable(BANK_TABLE);
   await queryInterface.dropTable(CITY_TABLE);
   await queryInterface.dropTable(CLIENT_TABLE);

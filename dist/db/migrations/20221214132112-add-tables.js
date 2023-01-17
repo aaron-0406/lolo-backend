@@ -43,13 +43,13 @@ const { CommentSchema, COMMENT_TABLE } = comment_model_1.default;
 const { NegotiationSchema, NEGOTIATION_TABLE } = negotiation_model_1.default;
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield queryInterface.createTable(NEGOTIATION_TABLE, NegotiationSchema);
         yield queryInterface.createTable(CUSTOMER_TABLE, CustomerSchema);
         yield queryInterface.createTable(CUSTOMER_USER_TABLE, CustomerUserSchema);
         yield queryInterface.createTable(BANK_TABLE, BankSchema);
         yield queryInterface.createTable(CITY_TABLE, CitySchema);
         yield queryInterface.createTable(CUSTOMER_HAS_BANK_TABLE, CustomerHasBankSchema);
         yield queryInterface.createTable(FUNCIONARIO_TABLE, FuncionarioSchema);
+        yield queryInterface.createTable(NEGOTIATION_TABLE, NegotiationSchema);
         yield queryInterface.createTable(CLIENT_TABLE, ClientSchema);
         yield queryInterface.createTable(FILE_TABLE, FileSchema);
         yield queryInterface.createTable(MODULE_TABLE, ModuleSchema);
@@ -62,9 +62,9 @@ function up(queryInterface) {
 exports.up = up;
 function down(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield queryInterface.dropTable(NEGOTIATION_TABLE);
         yield queryInterface.dropTable(CUSTOMER_TABLE);
         yield queryInterface.dropTable(FUNCIONARIO_TABLE);
+        yield queryInterface.dropTable(NEGOTIATION_TABLE);
         yield queryInterface.dropTable(BANK_TABLE);
         yield queryInterface.dropTable(CITY_TABLE);
         yield queryInterface.dropTable(CLIENT_TABLE);

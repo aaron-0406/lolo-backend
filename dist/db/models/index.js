@@ -33,7 +33,6 @@ const { File, FileSchema } = file_model_1.default;
 const { Negotiation, NegotiationSchema } = negotiation_model_1.default;
 const { CustomerHasBank, CustomerHasBankSchema } = customer_has_bank_model_1.default;
 const setupModels = (sequelize) => {
-    Negotiation.init(NegotiationSchema, Negotiation.config(sequelize));
     Customer.init(CustomerSchema, Customer.config(sequelize));
     Bank.init(BankSchema, Bank.config(sequelize));
     Module.init(ModuleSchema, Module.config(sequelize));
@@ -47,6 +46,7 @@ const setupModels = (sequelize) => {
     Comment.init(CommentSchema, Comment.config(sequelize));
     CustomerHasBank.init(CustomerHasBankSchema, CustomerHasBank.config(sequelize));
     Funcionario.init(FuncionarioSchema, Funcionario.config(sequelize));
+    Negotiation.init(NegotiationSchema, Negotiation.config(sequelize));
     Customer.associate(sequelize.models);
     CustomerUser.associate(sequelize.models);
     Bank.associate(sequelize.models);
@@ -57,5 +57,6 @@ const setupModels = (sequelize) => {
     Direction.associate(sequelize.models);
     Guarantor.associate(sequelize.models);
     Funcionario.associate(sequelize.models);
+    Negotiation.associate(sequelize.models);
 };
 exports.setupModels = setupModels;
