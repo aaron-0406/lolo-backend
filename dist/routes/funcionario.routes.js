@@ -16,13 +16,23 @@ const express_1 = __importDefault(require("express"));
 const validator_handler_1 = __importDefault(require("../middlewares/validator.handler"));
 const funcionario_schema_1 = __importDefault(require("../app/boss/schemas/funcionario.schema"));
 const funcionario_service_1 = __importDefault(require("../app/boss/services/funcionario.service"));
-const { getFuncionarioSchema, createFuncionarioSchema, updateFuncionarioSchema, } = funcionario_schema_1.default;
+const { getFuncionarioSchema, getFuncionarioByCHBSchema, createFuncionarioSchema, updateFuncionarioSchema, } = funcionario_schema_1.default;
 const router = express_1.default.Router();
 const service = new funcionario_service_1.default();
 router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const funcionarios = yield service.findAll();
         res.json(funcionarios);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+router.get("/all/:chb", (0, validator_handler_1.default)(getFuncionarioByCHBSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { chb } = req.params;
+        const funcionario = yield service.findAllByCHB(chb);
+        res.json(funcionario);
     }
     catch (error) {
         next(error);

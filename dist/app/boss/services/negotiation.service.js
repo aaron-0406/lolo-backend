@@ -23,6 +23,16 @@ class NegotiationService {
             return rta;
         });
     }
+    findAllByCHB(chb) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rta = yield models.NEGOTIATION.findAll({
+                where: {
+                    customer_has_bank_id_customer_has_bank: chb,
+                },
+            });
+            return rta;
+        });
+    }
     findOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const bank = yield models.NEGOTIATION.findByPk(id);

@@ -34,7 +34,7 @@ const ClientSchema = {
         onDelete: "NO ACTION",
     },
     dniOrRuc: {
-        allowNull: false,
+        allowNull: true,
         type: sequelize_1.DataTypes.STRING(20),
     },
     name: {

@@ -16,12 +16,22 @@ const express_1 = __importDefault(require("express"));
 const validator_handler_1 = __importDefault(require("../middlewares/validator.handler"));
 const negotiation_schema_1 = __importDefault(require("../app/boss/schemas/negotiation.schema"));
 const negotiation_service_1 = __importDefault(require("../app/boss/services/negotiation.service"));
-const { getNegotiationSchema, createNegotiationSchema, updateNegotiationSchema } = negotiation_schema_1.default;
+const { getNegotiationSchema, getNegotiationByCHBSchema, createNegotiationSchema, updateNegotiationSchema, } = negotiation_schema_1.default;
 const router = express_1.default.Router();
 const service = new negotiation_service_1.default();
 router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const negotiations = yield service.findAll();
+        res.json(negotiations);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+router.get("/all/:chb", (0, validator_handler_1.default)(getNegotiationByCHBSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { chb } = req.params;
+        const negotiations = yield service.findAllByCHB(chb);
         res.json(negotiations);
     }
     catch (error) {

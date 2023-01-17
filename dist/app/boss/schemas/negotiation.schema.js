@@ -21,8 +21,12 @@ const updateNegotiationSchema = joi_1.default.object({
 const getNegotiationSchema = joi_1.default.object({
     id: id.required(),
 });
+const getNegotiationByCHBSchema = joi_1.default.object({
+    chb: id.required(),
+});
 exports.default = {
     createNegotiationSchema,
     updateNegotiationSchema,
     getNegotiationSchema,
+    getNegotiationByCHBSchema,
 };

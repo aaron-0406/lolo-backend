@@ -20,7 +20,7 @@ const idBank = joi_1.default.number();
 const createClientSchema = joi_1.default.object({
     code: code.required(),
     negotiationId,
-    dniOrRuc: dniOrRuc.required(),
+    dniOrRuc: dniOrRuc.optional().empty("").allow(""),
     name: name.required(),
     salePerimeter: salePerimeter.optional().empty("").allow(""),
     phone: phone.optional().empty("").allow(""),

@@ -21,8 +21,12 @@ const updateFuncionarioSchema = joi_1.default.object({
 const getFuncionarioSchema = joi_1.default.object({
     id: id.required(),
 });
+const getFuncionarioByCHBSchema = joi_1.default.object({
+    chb: id.required(),
+});
 exports.default = {
     createFuncionarioSchema,
     updateFuncionarioSchema,
     getFuncionarioSchema,
+    getFuncionarioByCHBSchema,
 };

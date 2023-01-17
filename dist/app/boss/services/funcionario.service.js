@@ -25,6 +25,17 @@ class FuncionarioService {
             return rta;
         });
     }
+    findAllByCHB(chb) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rta = yield models.FUNCIONARIO.findAll({
+                attributes: { exclude: ["bankId"] },
+                where: {
+                    customer_has_bank_id_customer_has_bank: chb,
+                },
+            });
+            return rta;
+        });
+    }
     findOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const funcionario = yield models.FUNCIONARIO.findByPk(id, {
