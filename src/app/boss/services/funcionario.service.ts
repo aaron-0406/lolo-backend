@@ -16,6 +16,7 @@ class FuncionarioService {
 
   async findAllByCHB(chb: string) {
     const rta = await models.FUNCIONARIO.findAll({
+      attributes: { exclude: ["bankId"] },
       where: {
         customer_has_bank_id_customer_has_bank: chb,
       },
