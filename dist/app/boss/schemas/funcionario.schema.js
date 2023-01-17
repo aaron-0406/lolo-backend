@@ -15,7 +15,7 @@ const createFuncionarioSchema = joi_1.default.object({
 });
 const updateFuncionarioSchema = joi_1.default.object({
     name: name,
-    customerHasBankId: customerHasBankId,
+    customerHasBankId: customerHasBankId.required(),
     createdAt: createAt,
 });
 const getFuncionarioSchema = joi_1.default.object({
