@@ -32,83 +32,6 @@ const { NegotiationSchema, NEGOTIATION_TABLE } = negotiationModel;
 
 export async function up(queryInterface: QueryInterface) {
   await queryInterface.createTable(NEGOTIATION_TABLE, NegotiationSchema);
-  await queryInterface.bulkInsert(NEGOTIATION_TABLE, [
-    {
-      id_negotiation: 1,
-      name: "Venta de inmueble",
-      created_at: new Date(),
-    },
-    {
-      id_negotiation: 2,
-      name: "Dacion en Pago",
-      created_at: new Date(),
-    },
-    {
-      id_negotiation: 3,
-      name: "Adjudicacion en Pago",
-      created_at: new Date(),
-    },
-    {
-      id_negotiation: 4,
-      name: "Cesion de Derechos",
-      created_at: new Date(),
-    },
-    {
-      id_negotiation: 5,
-      name: "Convenio de Pago",
-      created_at: new Date(),
-    },
-    {
-      id_negotiation: 6,
-      name: "Incumplimiento de propuesta",
-      created_at: new Date(),
-    },
-    {
-      id_negotiation: 7,
-      name: "Reversión",
-      created_at: new Date(),
-    },
-    {
-      id_negotiation: 8,
-      name: "Refinanciamiento",
-      created_at: new Date(),
-    },
-    {
-      id_negotiation: 9,
-      name: "Amortizacion",
-      created_at: new Date(),
-    },
-    {
-      id_negotiation: 10,
-      name: "Renuente al pago",
-      created_at: new Date(),
-    },
-    {
-      id_negotiation: 11,
-      name: "Cliente inubicable",
-      created_at: new Date(),
-    },
-    {
-      id_negotiation: 12,
-      name: "Con voluntad de pago, perdon sin capacidad",
-      created_at: new Date(),
-    },
-    {
-      id_negotiation: 13,
-      name: "Sucesión intestada",
-      created_at: new Date(),
-    },
-    {
-      id_negotiation: 14,
-      name: "Deuda cancelada",
-      created_at: new Date(),
-    },
-    {
-      id_negotiation: 15,
-      name: "Cliente fallecido",
-      created_at: new Date(),
-    },
-  ]);
   await queryInterface.createTable(CUSTOMER_TABLE, CustomerSchema);
   await queryInterface.createTable(CUSTOMER_USER_TABLE, CustomerUserSchema);
   await queryInterface.createTable(BANK_TABLE, BankSchema);
@@ -119,7 +42,7 @@ export async function up(queryInterface: QueryInterface) {
   );
   await queryInterface.createTable(FUNCIONARIO_TABLE, FuncionarioSchema);
   await queryInterface.createTable(CLIENT_TABLE, ClientSchema);
-  await queryInterface.createTable(FILE_TABLE, FileSchema); 
+  await queryInterface.createTable(FILE_TABLE, FileSchema);
   await queryInterface.createTable(MODULE_TABLE, ModuleSchema);
   await queryInterface.createTable(USER_APP_TABLE, UserAppSchema);
   await queryInterface.createTable(DIRECTION_TABLE, DirectionSchema);

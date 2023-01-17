@@ -14,7 +14,7 @@ const createFuncionarioSchema = Joi.object<Omit<FuncionarioType, "id">, true>({
 
 const updateFuncionarioSchema = Joi.object<Omit<FuncionarioType, "id">, true>({
   name: name,
-  customerHasBankId: customerHasBankId,
+  customerHasBankId: customerHasBankId.required(),
   createdAt: createAt,
 });
 
