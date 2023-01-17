@@ -22,8 +22,13 @@ const getFuncionarioSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
 
+const getFuncionarioByCHBSchema = Joi.object<{ chb: number }, true>({
+  chb: id.required(),
+});
+
 export default {
   createFuncionarioSchema,
   updateFuncionarioSchema,
   getFuncionarioSchema,
+  getFuncionarioByCHBSchema,
 };

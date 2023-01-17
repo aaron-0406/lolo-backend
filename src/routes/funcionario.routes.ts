@@ -5,6 +5,7 @@ import FuncionarioService from "../app/boss/services/funcionario.service";
 
 const {
   getFuncionarioSchema,
+  getFuncionarioByCHBSchema,
   createFuncionarioSchema,
   updateFuncionarioSchema,
 } = funcionarioSchema;
@@ -19,6 +20,20 @@ router.get("/", async (req, res, next) => {
     next(error);
   }
 });
+
+router.get(
+  "/all/:chb",
+  validatorHandler(getFuncionarioByCHBSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const { chb } = req.params;
+      const funcionario = await service.findAllByCHB(chb);
+      res.json(funcionario);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 router.get(
   "/:id",

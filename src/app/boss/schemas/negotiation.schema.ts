@@ -22,8 +22,13 @@ const getNegotiationSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
 
+const getNegotiationByCHBSchema = Joi.object<{ chb: number }, true>({
+  chb: id.required(),
+});
+
 export default {
   createNegotiationSchema,
   updateNegotiationSchema,
   getNegotiationSchema,
+  getNegotiationByCHBSchema,
 };

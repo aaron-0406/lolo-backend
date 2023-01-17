@@ -12,6 +12,15 @@ class NegotiationService {
     return rta;
   }
 
+  async findAllByCHB(chb: string) {
+    const rta = await models.NEGOTIATION.findAll({
+      where: {
+        customer_has_bank_id_customer_has_bank: chb,
+      },
+    });
+    return rta;
+  }
+
   async findOne(id: string) {
     const bank = await models.NEGOTIATION.findByPk(id);
 

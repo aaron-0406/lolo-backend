@@ -14,6 +14,15 @@ class FuncionarioService {
     return rta;
   }
 
+  async findAllByCHB(chb: string) {
+    const rta = await models.FUNCIONARIO.findAll({
+      where: {
+        customer_has_bank_id_customer_has_bank: chb,
+      },
+    });
+    return rta;
+  }
+
   async findOne(id: string) {
     const funcionario = await models.FUNCIONARIO.findByPk(id, {
       attributes: { exclude: ["bankId"] },
