@@ -22,6 +22,10 @@ const DirectionSchema: ModelAttributes<Direction, DirectionType> = {
     allowNull: false,
     type: DataTypes.STRING(200),
   },
+  type: {
+    allowNull: false,
+    type: DataTypes.STRING(200),
+  },
   createdAt: {
     allowNull: false,
     field: "created_at",

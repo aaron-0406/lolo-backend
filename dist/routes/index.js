@@ -17,6 +17,11 @@ const comment_routes_1 = __importDefault(require("./comment.routes"));
 const file_routes_1 = __importDefault(require("./file.routes"));
 const auth_routes_1 = __importDefault(require("./auth.routes"));
 const negotiation_routes_1 = __importDefault(require("./negotiation.routes"));
+const document_routes_1 = __importDefault(require("./document.routes"));
+const template_has_values_routes_1 = __importDefault(require("./template-has-values.routes"));
+const ecampo_routes_1 = __importDefault(require("./ecampo.routes"));
+const template_routes_1 = __importDefault(require("./template.routes"));
+const values_routes_1 = __importDefault(require("./values.routes"));
 const routerApi = (app) => {
     const router = express_1.default.Router();
     app.use("/api/v1", router);
@@ -33,5 +38,10 @@ const routerApi = (app) => {
     router.use("/file", file_routes_1.default);
     router.use("/auth", auth_routes_1.default);
     router.use("/negotiation", negotiation_routes_1.default);
+    router.use("/doc", document_routes_1.default);
+    router.use("/template-has-values", template_has_values_routes_1.default);
+    router.use("/ecampo", ecampo_routes_1.default);
+    router.use("/template", template_routes_1.default);
+    router.use("/values", values_routes_1.default);
 };
 exports.default = routerApi;

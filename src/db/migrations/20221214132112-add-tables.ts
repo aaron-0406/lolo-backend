@@ -13,6 +13,10 @@ import guarantorModel from "../models/guarantor.model";
 import commentModel from "../models/comment.model";
 import fileModel from "../models/file.model";
 import negotiationModel from "../models/negotiation.model";
+import templateModel from "../models/template.model";
+import ecampoModel from "../models/ecampo.model";
+import templateHasValuesModel from "../models/many-to-many/template-has-values.model";
+import valuesModel from "../models/values.model";
 
 const { BankSchema, BANK_TABLE } = bankModel;
 const { FuncionarioSchema, FUNCIONARIO_TABLE } = funcionarioModel;
@@ -29,6 +33,10 @@ const { DirectionSchema, DIRECTION_TABLE } = directionModel;
 const { GuarantorSchema, GUARANTOR_TABLE } = guarantorModel;
 const { CommentSchema, COMMENT_TABLE } = commentModel;
 const { NegotiationSchema, NEGOTIATION_TABLE } = negotiationModel;
+const { TemplateSchema, TEMPLATE_TABLE } = templateModel;
+const { ECampoSchema, ECAMPO_TABLE } = ecampoModel;
+const { TemplateHasValuesSchema, TEMPLATE_HAS_VALUES_TABLE } = templateHasValuesModel;
+const { ValuesSchema, VALUES_TABLE } = valuesModel;
 
 export async function up(queryInterface: QueryInterface) {
   await queryInterface.createTable(CUSTOMER_TABLE, CustomerSchema);
@@ -48,6 +56,10 @@ export async function up(queryInterface: QueryInterface) {
   await queryInterface.createTable(DIRECTION_TABLE, DirectionSchema);
   await queryInterface.createTable(GUARANTOR_TABLE, GuarantorSchema);
   await queryInterface.createTable(COMMENT_TABLE, CommentSchema);
+  await queryInterface.createTable(TEMPLATE_TABLE, TemplateSchema);
+  await queryInterface.createTable(ECAMPO_TABLE, ECampoSchema);
+  await queryInterface.createTable(TEMPLATE_HAS_VALUES_TABLE, TemplateHasValuesSchema);
+  await queryInterface.createTable(VALUES_TABLE, ValuesSchema);
 }
 
 export async function down(queryInterface: QueryInterface) {
@@ -65,4 +77,8 @@ export async function down(queryInterface: QueryInterface) {
   await queryInterface.dropTable(GUARANTOR_TABLE);
   await queryInterface.dropTable(COMMENT_TABLE);
   await queryInterface.dropTable(CUSTOMER_HAS_BANK_TABLE);
+  await queryInterface.dropTable(TEMPLATE_HAS_VALUES_TABLE);
+  await queryInterface.dropTable(TEMPLATE_TABLE);
+  await queryInterface.dropTable(ECAMPO_TABLE);
+  await queryInterface.dropTable(VALUES_TABLE);
 }

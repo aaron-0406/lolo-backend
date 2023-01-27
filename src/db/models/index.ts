@@ -13,6 +13,10 @@ import guarantorModel from "./guarantor.model";
 import commentModel from "./comment.model";
 import fileModel from "./file.model";
 import negotiationModel from "./negotiation.model";
+import templateModel from "./template.model";
+import templateDataModel from "./many-to-many/template-has-values.model";
+import ecampoModel from "./ecampo.model";
+import valuesModel from "./values.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
@@ -27,6 +31,10 @@ const { Guarantor, GuarantorSchema } = guarantorModel;
 const { Comment, CommentSchema } = commentModel;
 const { File, FileSchema } = fileModel;
 const { Negotiation, NegotiationSchema } = negotiationModel;
+const { Template, TemplateSchema } = templateModel;
+const { ECampo, ECampoSchema } = ecampoModel;
+const { TemplateHasValues, TemplateHasValuesSchema } = templateDataModel;
+const { Values, ValuesSchema } = valuesModel;
 
 const { CustomerHasBank, CustomerHasBankSchema } = customerHasBank;
 
@@ -48,6 +56,10 @@ export const setupModels = (sequelize: Sequelize) => {
   );
   Funcionario.init(FuncionarioSchema, Funcionario.config(sequelize));
   Negotiation.init(NegotiationSchema, Negotiation.config(sequelize));
+  Template.init(TemplateSchema, Template.config(sequelize));
+  ECampo.init(ECampoSchema, ECampo.config(sequelize));
+  TemplateHasValues.init(TemplateHasValuesSchema, TemplateHasValues.config(sequelize));
+  Values.init(ValuesSchema, Values.config(sequelize));
 
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
@@ -60,4 +72,8 @@ export const setupModels = (sequelize: Sequelize) => {
   Guarantor.associate(sequelize.models);
   Funcionario.associate(sequelize.models);
   Negotiation.associate(sequelize.models);
+  Template.associate(sequelize.models);
+  ECampo.associate(sequelize.models);
+  TemplateHasValues.associate(sequelize.models);
+  Values.associate(sequelize.models);
 };

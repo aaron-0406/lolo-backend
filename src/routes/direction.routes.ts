@@ -57,6 +57,7 @@ router.post(
     try {
       const body = req.body;
       const newDirection = await service.create(body);
+      console.log(newDirection)
       res.status(201).json(newDirection);
     } catch (error) {
       next(error);

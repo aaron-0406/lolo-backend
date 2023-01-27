@@ -13,6 +13,11 @@ import commentRouter from "./comment.routes";
 import fileRouter from "./file.routes";
 import authRouter from "./auth.routes";
 import negotiationRouter from "./negotiation.routes";
+import docRouter from "./document.routes";
+import templateHasValuesRouter from "./template-has-values.routes";
+import ecampoRouter from "./ecampo.routes";
+import templateRouter from "./template.routes";
+import valuesRouter from "./values.routes";
 
 const routerApi = (app: Express) => {
   const router = express.Router();
@@ -31,6 +36,11 @@ const routerApi = (app: Express) => {
   router.use("/file", fileRouter);
   router.use("/auth", authRouter);
   router.use("/negotiation", negotiationRouter);
+  router.use("/doc", docRouter);
+  router.use("/template-has-values", templateHasValuesRouter);
+  router.use("/ecampo", ecampoRouter);
+  router.use("/template", templateRouter);
+  router.use("/values", valuesRouter);
 };
 
 export default routerApi;

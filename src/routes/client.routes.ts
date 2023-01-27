@@ -38,6 +38,20 @@ router.get(
 );
 
 router.get(
+  "/:chb/details",
+  validatorHandler(getClientByCHBSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const { chb } = req.params;
+      const clients = await service.findAllCHBDetails(chb);
+      res.json(clients);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.get(
   "/:code/:chb",
   validatorHandler(getClientByCodeSchema, "params"),
   async (req, res, next) => {

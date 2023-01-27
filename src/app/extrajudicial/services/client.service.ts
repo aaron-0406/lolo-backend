@@ -1,4 +1,5 @@
 import sequelize from "../../../libs/sequelize";
+import { Op } from "sequelize";
 import boom from "@hapi/boom";
 import { ClientType } from "../types/client.type";
 import config from "../../../config/config";
@@ -18,6 +19,45 @@ class ClientService {
     const rta = await models.CLIENT.findAll({
       where: {
         customer_has_bank_id_customer_has_bank: chb,
+      },
+    });
+    return rta;
+  }
+  async findAllCHBDetails(chb: string) {
+    const rta = await models.CLIENT.findAll({
+      include: [
+        {
+          model: models.DIRECTION,
+          as: "direction",
+        },
+        {
+          model: models.GUARANTOR,
+          as: "guarantor",
+        },
+      ],
+      where: {
+        customer_has_bank_id_customer_has_bank: chb,
+      },
+    });
+    return rta;
+  }
+
+  async findAllBDetailsAndClientsId(ids: number[]) {
+    const rta = await models.CLIENT.findAll({
+      include: [
+        {
+          model: models.DIRECTION,
+          as: "direction",
+        },
+        {
+          model: models.GUARANTOR,
+          as: "guarantor",
+        },
+      ],
+      where: {
+        id: {
+          [Op.in]: ids,
+        },
       },
     });
     return rta;

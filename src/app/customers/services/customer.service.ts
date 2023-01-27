@@ -1,6 +1,8 @@
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
 import { CustomerType } from "../types/customer.type";
+import { createFolder } from "../../../libs/aws_bucket";
+import config from "../../../config/config";
 
 const { models } = sequelize;
 
@@ -28,6 +30,7 @@ class CustomerService {
 
   async create(data: CustomerType) {
     const newCustomer = await models.CUSTOMER.create(data);
+    await createFolder(`${config.AWS_PLANTILLA_PATH}${newCustomer.dataValues.id}/`);
     return newCustomer;
   }
 
