@@ -52,6 +52,7 @@ router.post("/", (0, validator_handler_1.default)(createDirectionSchema, "body")
     try {
         const body = req.body;
         const newDirection = yield service.create(body);
+        console.log(newDirection);
         res.status(201).json(newDirection);
     }
     catch (error) {

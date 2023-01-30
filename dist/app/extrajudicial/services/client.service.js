@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = __importDefault(require("../../../libs/sequelize"));
+const sequelize_2 = require("sequelize");
 const boom_1 = __importDefault(require("@hapi/boom"));
 const config_1 = __importDefault(require("../../../config/config"));
 const aws_bucket_1 = require("../../../libs/aws_bucket");
@@ -30,6 +31,48 @@ class ClientService {
             const rta = yield models.CLIENT.findAll({
                 where: {
                     customer_has_bank_id_customer_has_bank: chb,
+                },
+            });
+            return rta;
+        });
+    }
+    findAllCHBDetails(chb) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rta = yield models.CLIENT.findAll({
+                include: [
+                    {
+                        model: models.DIRECTION,
+                        as: "direction",
+                    },
+                    {
+                        model: models.GUARANTOR,
+                        as: "guarantor",
+                    },
+                ],
+                where: {
+                    customer_has_bank_id_customer_has_bank: chb,
+                },
+            });
+            return rta;
+        });
+    }
+    findAllBDetailsAndClientsId(ids) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rta = yield models.CLIENT.findAll({
+                include: [
+                    {
+                        model: models.DIRECTION,
+                        as: "direction",
+                    },
+                    {
+                        model: models.GUARANTOR,
+                        as: "guarantor",
+                    },
+                ],
+                where: {
+                    id: {
+                        [sequelize_2.Op.in]: ids,
+                    },
                 },
             });
             return rta;

@@ -38,6 +38,16 @@ router.get("/:chb", (0, validator_handler_1.default)(getClientByCHBSchema, "para
         next(error);
     }
 }));
+router.get("/:chb/details", (0, validator_handler_1.default)(getClientByCHBSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { chb } = req.params;
+        const clients = yield service.findAllCHBDetails(chb);
+        res.json(clients);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
 router.get("/:code/:chb", (0, validator_handler_1.default)(getClientByCodeSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { code, chb } = req.params;

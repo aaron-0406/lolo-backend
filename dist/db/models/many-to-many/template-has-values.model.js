@@ -45,6 +45,12 @@ class TemplateHasValues extends sequelize_1.Model {
             onDelete: "CASCADE",
             onUpdate: "CASCADE",
         });
+        this.hasMany(models.VALUES, {
+            as: "values",
+            foreignKey: "templateHasValuesId",
+            onDelete: "CASCADE",
+            onUpdate: "CASCADE",
+        });
     }
     static config(sequelize) {
         return {

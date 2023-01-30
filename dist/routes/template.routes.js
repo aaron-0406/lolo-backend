@@ -19,11 +19,21 @@ const template_service_1 = __importDefault(require("../app/customers/services/te
 const { getTemplateByCustomerIdSchema } = template_schema_1.default;
 const router = express_1.default.Router();
 const service = new template_service_1.default();
+router.get("/customer/:id", (0, validator_handler_1.default)(getTemplateByCustomerIdSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const template = yield service.findAllByCustomerId(id);
+        res.json(template);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
 router.get("/:id", (0, validator_handler_1.default)(getTemplateByCustomerIdSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
-        const Template = yield service.findAllByCustomerId(id);
-        res.json(Template);
+        const template = yield service.findOne(id);
+        res.json(template);
     }
     catch (error) {
         next(error);

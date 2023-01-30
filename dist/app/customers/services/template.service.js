@@ -13,23 +13,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = __importDefault(require("../../../libs/sequelize"));
+const boom_1 = __importDefault(require("@hapi/boom"));
+const helpers_1 = require("../../../libs/helpers");
+const path_1 = __importDefault(require("path"));
+const aws_bucket_1 = require("../../../libs/aws_bucket");
+const config_1 = __importDefault(require("../../../config/config"));
 const { models } = sequelize_1.default;
 class TemplateService {
     constructor() { }
     findAllByCustomerId(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.TEMPLATE.findAll({
-                include: [
-                    {
-                        model: models.TEMPLATE_HAS_VALUES,
-                        as: "template_has_values",
-                        // attributes: { exclude: ["id_template"] },
-                        // on: { attribute: { TEMPLATEId: "templateId" } },
-                    },
-                ],
                 where: { customerId: id },
             });
             return rta;
+        });
+    }
+    findOne(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const template = yield models.TEMPLATE.findOne({ where: { id } });
+            if (!template)
+                throw boom_1.default.notFound("Plantilla no encontrada");
+            try {
+                if (template.dataValues.templateJson !== "") {
+                    const isStored = (0, helpers_1.isFileStoredIn)(path_1.default.join(__dirname, "../../../public/download"), template.dataValues.templateJson);
+                    if (!isStored) {
+                        yield (0, aws_bucket_1.readFile)(`${config_1.default.AWS_PLANTILLA_PATH}${template.dataValues.customerId}/${template.dataValues.templateJson}`);
+                    }
+                }
+                if (template.dataValues.templatePhoto !== "") {
+                    const isStored = (0, helpers_1.isFileStoredIn)(path_1.default.join(__dirname, "../../../public/download"), template.dataValues.templatePhoto);
+                    if (!isStored) {
+                        yield (0, aws_bucket_1.readFile)(`${config_1.default.AWS_PLANTILLA_PATH}${template.dataValues.customerId}/${template.dataValues.templatePhoto}`);
+                    }
+                }
+            }
+            catch (error) { }
+            return template;
         });
     }
 }

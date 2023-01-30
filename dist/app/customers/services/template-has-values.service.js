@@ -29,17 +29,33 @@ class TemplateHasValuesService {
             return { templates, fields };
         });
     }
-    finOneByIdAndTemplateId(id, templateId) {
+    findByCustomerId(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const templateHasValues = yield models.TEMPLATE_HAS_VALUES.findAll({
+                include: {
+                    model: models.TEMPLATE,
+                    where: { customerId: id },
+                    as: "template",
+                },
+            });
+            return templateHasValues;
+        });
+    }
+    findOneWidthTemplate(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const templateHasValues = yield models.TEMPLATE_HAS_VALUES.findOne({
-                where: {
-                    id,
-                    templateId,
-                },
+                include: [{
+                        model: models.TEMPLATE,
+                        as: "template",
+                    }, {
+                        model: models.VALUES,
+                        as: "values",
+                    }],
+                where: { id },
             });
             if (!templateHasValues)
                 throw boom_1.default.notFound("Plantilla no encontrada");
-            return templateHasValues;
+            return JSON.parse(JSON.stringify(templateHasValues));
         });
     }
     findOne(id) {
@@ -54,24 +70,16 @@ class TemplateHasValuesService {
             return templateHasValues;
         });
     }
-    create(data, values) {
+    create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const newTemplateHasValues = yield models.TEMPLATE_HAS_VALUES.create(data);
-            const { id } = newTemplateHasValues.dataValues;
-            const valuesSaved = [];
-            for (let i = 0; i < values.length; i++) {
-                const element = values[i];
-                element.templateHasValuesId = id;
-                const newValue = yield models.VALUES.create(element);
-                valuesSaved.push(newValue);
-            }
-            return { newTemplateHasValues, valuesSaved };
+            return newTemplateHasValues;
         });
     }
-    update(id, changes) {
+    update(id, name) {
         return __awaiter(this, void 0, void 0, function* () {
             const templateHasValues = yield this.findOne(id);
-            const rta = yield templateHasValues.update(changes);
+            const rta = yield templateHasValues.update({ name });
             return rta;
         });
     }

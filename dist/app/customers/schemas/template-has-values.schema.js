@@ -13,10 +13,15 @@ const createTemplateHasValuesSchema = joi_1.default.object({
     templateId,
     values,
 });
+const updateTemplateHasValuesSchema = joi_1.default.object({
+    name,
+    values,
+});
 const getTemplateHasValuesByIdSchema = joi_1.default.object({
     id,
 });
 exports.default = {
     createTemplateHasValuesSchema,
+    updateTemplateHasValuesSchema,
     getTemplateHasValuesByIdSchema,
 };

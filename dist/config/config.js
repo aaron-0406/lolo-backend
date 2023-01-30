@@ -18,5 +18,6 @@ const config = {
     AWS_PUBLIC_KEY: `${process.env.AWS_PUBLIC_KEY}`,
     AWS_SECRET_KEY: `${process.env.AWS_SECRET_KEY}`,
     AWS_BANK_PATH: "BANCOS/",
+    AWS_PLANTILLA_PATH: "PLANTILLAS/",
 };
 exports.default = config;
