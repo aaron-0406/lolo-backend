@@ -18,10 +18,6 @@ const DirectionSchema = {
         allowNull: false,
         type: sequelize_1.DataTypes.STRING(200),
     },
-    type: {
-        allowNull: false,
-        type: sequelize_1.DataTypes.STRING(200),
-    },
     createdAt: {
         allowNull: false,
         field: "created_at",

@@ -27,10 +27,6 @@ const guarantor_model_1 = __importDefault(require("../models/guarantor.model"));
 const comment_model_1 = __importDefault(require("../models/comment.model"));
 const file_model_1 = __importDefault(require("../models/file.model"));
 const negotiation_model_1 = __importDefault(require("../models/negotiation.model"));
-const template_model_1 = __importDefault(require("../models/template.model"));
-const ecampo_model_1 = __importDefault(require("../models/ecampo.model"));
-const template_has_values_model_1 = __importDefault(require("../models/many-to-many/template-has-values.model"));
-const values_model_1 = __importDefault(require("../models/values.model"));
 const { BankSchema, BANK_TABLE } = bank_model_1.default;
 const { FuncionarioSchema, FUNCIONARIO_TABLE } = funcionario_model_1.default;
 const { CitySchema, CITY_TABLE } = city_model_1.default;
@@ -45,10 +41,6 @@ const { DirectionSchema, DIRECTION_TABLE } = direction_model_1.default;
 const { GuarantorSchema, GUARANTOR_TABLE } = guarantor_model_1.default;
 const { CommentSchema, COMMENT_TABLE } = comment_model_1.default;
 const { NegotiationSchema, NEGOTIATION_TABLE } = negotiation_model_1.default;
-const { TemplateSchema, TEMPLATE_TABLE } = template_model_1.default;
-const { ECampoSchema, ECAMPO_TABLE } = ecampo_model_1.default;
-const { TemplateHasValuesSchema, TEMPLATE_HAS_VALUES_TABLE } = template_has_values_model_1.default;
-const { ValuesSchema, VALUES_TABLE } = values_model_1.default;
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
         yield queryInterface.createTable(CUSTOMER_TABLE, CustomerSchema);
@@ -65,10 +57,6 @@ function up(queryInterface) {
         yield queryInterface.createTable(DIRECTION_TABLE, DirectionSchema);
         yield queryInterface.createTable(GUARANTOR_TABLE, GuarantorSchema);
         yield queryInterface.createTable(COMMENT_TABLE, CommentSchema);
-        yield queryInterface.createTable(TEMPLATE_TABLE, TemplateSchema);
-        yield queryInterface.createTable(ECAMPO_TABLE, ECampoSchema);
-        yield queryInterface.createTable(TEMPLATE_HAS_VALUES_TABLE, TemplateHasValuesSchema);
-        yield queryInterface.createTable(VALUES_TABLE, ValuesSchema);
     });
 }
 exports.up = up;
@@ -88,10 +76,6 @@ function down(queryInterface) {
         yield queryInterface.dropTable(GUARANTOR_TABLE);
         yield queryInterface.dropTable(COMMENT_TABLE);
         yield queryInterface.dropTable(CUSTOMER_HAS_BANK_TABLE);
-        yield queryInterface.dropTable(TEMPLATE_HAS_VALUES_TABLE);
-        yield queryInterface.dropTable(TEMPLATE_TABLE);
-        yield queryInterface.dropTable(ECAMPO_TABLE);
-        yield queryInterface.dropTable(VALUES_TABLE);
     });
 }
 exports.down = down;
