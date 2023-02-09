@@ -17,6 +17,20 @@ const funcionarioId = joi_1.default.number();
 const customerUserId = joi_1.default.number();
 const customerHasBankId = joi_1.default.number();
 const idBank = joi_1.default.number();
+const page = joi_1.default.number().required().messages({
+    "number.base": "El campo page es inválido",
+    "any.required": "El campo page es requerido.",
+});
+const limit = joi_1.default.number().required().messages({
+    "number.base": "El campo limit es inválido",
+    "any.required": "El campo limit es requerido.",
+});
+const filter = joi_1.default.string().optional().min(3).messages({
+    "string.base": "El campo filter es inválido",
+    "any.required": "El campo filter es requerido.",
+    "string.min": "El campo debe ser de mínimo 3 caracteres",
+    "string.empty": "El campo filter no puede estar vácio",
+});
 const createClientSchema = joi_1.default.object({
     code: code.required(),
     negotiationId,
@@ -50,6 +64,11 @@ const getClientByCodeSchema = joi_1.default.object({
 const getClientByCHBSchema = joi_1.default.object({
     chb: customerHasBankId.required(),
 });
+const getClientByCHBSchemaQuery = joi_1.default.object({
+    page,
+    filter,
+    limit,
+}).options({ abortEarly: true });
 const getClientByBank = joi_1.default.object({
     idBank,
 });
@@ -65,4 +84,5 @@ exports.default = {
     getClientByCHBSchema,
     getClientByCodeSchema,
     deleteClientByCodeSchema,
+    getClientByCHBSchemaQuery,
 };

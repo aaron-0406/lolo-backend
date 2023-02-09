@@ -43,7 +43,7 @@ class DocumentService {
                 if (!isStored) {
                     yield (0, aws_bucket_1.readFile)(`${config_1.default.AWS_PLANTILLA_PATH}${templateHasValues.template.customerId}/${templateHasValues.template.templatePhoto}`);
                 }
-                // IMAGEN
+                // IMAGEN FONDO
                 image = new docx_1.ImageRun({
                     floating: {
                         horizontalPosition: {
@@ -60,6 +60,15 @@ class DocumentService {
                     },
                 });
             }
+            // Imagenes de la plantilla
+            for (let i = 0; i < templateHasValues.template.template_imgs.length; i++) {
+                const element = templateHasValues.template.template_imgs[i];
+                const isStored = (0, helpers_1.isFileStoredIn)(path_1.default.join(__dirname, "../../../public/download"), element.img);
+                // Por si no están guardadas, descargarlas de aws
+                if (!isStored) {
+                    yield (0, aws_bucket_1.readFile)(`${config_1.default.AWS_PLANTILLA_PATH}${templateHasValues.template.customerId}/${element.img}`);
+                }
+            }
             // Reading the template json file
             const readFileAsync = util_1.default.promisify(fs_1.default.readFile);
             const jsonFile = yield readFileAsync(path_1.default.join(__dirname, "../../../public/download", templateHasValues.template.templateJson), "utf8");
@@ -67,10 +76,12 @@ class DocumentService {
             let parrafos = [];
             // Parrafos por cada cliente
             for (let i = 0; i < clients.length; i++) {
+                // Copy
                 const newPlantilla = JSON.parse(JSON.stringify(plantilla));
                 const element = clients[i];
-                const texts = this.makeTexts([...newPlantilla.parrafos], templateHasValues.values, element);
+                const texts = this.makeTexts([...newPlantilla.parrafos], templateHasValues.values, templateHasValues.template.template_imgs, element);
                 parrafos = [...parrafos, ...texts];
+                // Salto de pagina
                 if (clients.length !== 1 && i < clients.length - 1) {
                     parrafos.push((0, docx_2.createParagraph)([], true));
                 }
@@ -119,7 +130,7 @@ class DocumentService {
         });
         return doc;
     }
-    makeTexts(parrafos, values, client) {
+    makeTexts(parrafos, values, templateImg, client) {
         var _a, _b;
         const paragraphs = [];
         for (let i = 0; i < parrafos.length; i++) {
@@ -127,6 +138,7 @@ class DocumentService {
             element.texts = (_a = element.texts) === null || _a === void 0 ? void 0 : _a.map((item) => {
                 return Object.assign(Object.assign({}, item), { text: this.transformText(item.text, values, client) });
             });
+            // Fiadores
             if (element.texts && element.texts.length > 0) {
                 if ((_b = element.texts[0].text) === null || _b === void 0 ? void 0 : _b.includes("[guarantor]")) {
                     for (let j = 0; j < client.guarantor.length; j++) {
@@ -137,6 +149,7 @@ class DocumentService {
                     continue;
                 }
             }
+            // Direcciones
             if (element.texts && element.texts.length > 0) {
                 if (element.texts.some((item) => { var _a; return (_a = item.text) === null || _a === void 0 ? void 0 : _a.includes("direction"); })) {
                     for (let k = 0; k < client.direction.length; k++) {
@@ -148,6 +161,22 @@ class DocumentService {
                         });
                         const parrafo = (0, docx_2.createParagraph)(newElement, false, element.options);
                         paragraphs.push(parrafo);
+                    }
+                    continue;
+                }
+            }
+            // Imagenes
+            if (element.texts && element.texts.length > 0) {
+                if (element.texts.some((text) => text.img)) {
+                    for (let l = 0; l < element.texts.length; l++) {
+                        const element2 = element.texts[l];
+                        if (element2.img) {
+                            const filter = templateImg.filter((item) => { var _a; return (_a = element2.img) === null || _a === void 0 ? void 0 : _a.includes(item.img); });
+                            if (filter[0]) {
+                                const newImg = (0, docx_2.createImgRun)(filter[0].img, filter[0].size, element.options);
+                                paragraphs.push(newImg);
+                            }
+                        }
                     }
                     continue;
                 }

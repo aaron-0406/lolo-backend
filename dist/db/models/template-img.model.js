@@ -4,25 +4,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
-const customer_model_1 = __importDefault(require("./customer.model"));
-const TEMPLATE_TABLE = "TEMPLATE";
-const TemplateSchema = {
+const template_model_1 = __importDefault(require("./template.model"));
+const TEMPLATE_IMG_TABLE = "TEMPLATE_IMG";
+const TemplateImgSchema = {
     id: {
         primaryKey: true,
         allowNull: false,
         autoIncrement: true,
-        field: "id_template",
+        field: "id_template_img",
         type: sequelize_1.DataTypes.INTEGER,
     },
-    name: {
+    img: {
         allowNull: false,
         type: sequelize_1.DataTypes.STRING(150),
     },
-    templateJson: {
-        allowNull: false,
-        type: sequelize_1.DataTypes.STRING(150),
-    },
-    templatePhoto: {
+    size: {
         allowNull: false,
         type: sequelize_1.DataTypes.STRING(150),
     },
@@ -32,30 +28,24 @@ const TemplateSchema = {
         defaultValue: sequelize_1.DataTypes.NOW,
         type: sequelize_1.DataTypes.DATE,
     },
-    customerId: {
+    templateId: {
         allowNull: false,
-        field: "customer_id_customer",
+        field: "template_id_template",
         type: sequelize_1.DataTypes.INTEGER,
         references: {
-            model: customer_model_1.default.CUSTOMER_TABLE,
-            key: "id_customer",
+            model: template_model_1.default.TEMPLATE_TABLE,
+            key: "id_template",
         },
         onUpdate: "CASCADE",
-        onDelete: "NO ACTION",
+        onDelete: "CASCADE",
     },
 };
-class Template extends sequelize_1.Model {
+class TemplateImg extends sequelize_1.Model {
     static associate(models) {
-        this.belongsTo(models.CUSTOMER, { as: "customer" });
-        this.hasMany(models.TEMPLATE_HAS_VALUES, {
-            as: "template_has_values",
+        this.belongsTo(models.TEMPLATE, {
+            as: "template",
             foreignKey: "templateId",
-            onDelete: "CASCADE",
-            onUpdate: "CASCADE",
-        });
-        this.hasMany(models.TEMPLATE_IMG, {
-            as: "template_imgs",
-            foreignKey: "templateId",
+            targetKey: "id",
             onDelete: "CASCADE",
             onUpdate: "CASCADE",
         });
@@ -63,10 +53,14 @@ class Template extends sequelize_1.Model {
     static config(sequelize) {
         return {
             sequelize,
-            tableName: TEMPLATE_TABLE,
-            modelName: TEMPLATE_TABLE,
+            tableName: TEMPLATE_IMG_TABLE,
+            modelName: TEMPLATE_IMG_TABLE,
             timestamps: false,
         };
     }
 }
-exports.default = { TEMPLATE_TABLE, TemplateSchema, Template };
+exports.default = {
+    TEMPLATE_IMG_TABLE,
+    TemplateImgSchema,
+    TemplateImg,
+};

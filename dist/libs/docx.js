@@ -1,7 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createParagraph = void 0;
+exports.createImgRun = exports.createParagraph = void 0;
 const docx_1 = require("docx");
+const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
 const createParagraph = (texts, pageBreak, options) => {
     const textRuns = [];
     for (let i = 0; i < texts.length; i++) {
@@ -28,3 +33,23 @@ const createParagraph = (texts, pageBreak, options) => {
     return parrafo;
 };
 exports.createParagraph = createParagraph;
+const createImgRun = (imgName, size, options) => {
+    const file = fs_1.default.readFileSync(path_1.default.join(__dirname, "../public/download", imgName));
+    const image = new docx_1.ImageRun({
+        data: file,
+        transformation: {
+            width: Number(size.split("x")[0]),
+            height: Number(size.split("x")[1]),
+        },
+    });
+    return new docx_1.Paragraph({
+        alignment: (options === null || options === void 0 ? void 0 : options.align) ? options === null || options === void 0 ? void 0 : options.align : docx_1.AlignmentType.JUSTIFIED,
+        spacing: {
+            after: (options === null || options === void 0 ? void 0 : options.spacingAfter)
+                ? (options === null || options === void 0 ? void 0 : options.spacingAfter) * 20
+                : options === null || options === void 0 ? void 0 : options.spacingAfter,
+        },
+        children: [image],
+    });
+};
+exports.createImgRun = createImgRun;

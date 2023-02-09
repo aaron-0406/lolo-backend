@@ -44,13 +44,17 @@ class TemplateHasValuesService {
     findOneWidthTemplate(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const templateHasValues = yield models.TEMPLATE_HAS_VALUES.findOne({
-                include: [{
+                include: [
+                    {
                         model: models.TEMPLATE,
                         as: "template",
-                    }, {
+                        include: [{ model: models.TEMPLATE_IMG, as: "template_imgs" }],
+                    },
+                    {
                         model: models.VALUES,
                         as: "values",
-                    }],
+                    },
+                ],
                 where: { id },
             });
             if (!templateHasValues)

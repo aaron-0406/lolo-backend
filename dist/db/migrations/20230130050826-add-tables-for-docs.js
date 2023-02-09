@@ -26,10 +26,13 @@ const { TemplateHasValuesSchema, TEMPLATE_HAS_VALUES_TABLE } = template_has_valu
 const { ValuesSchema, VALUES_TABLE } = values_model_1.default;
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield queryInterface.addColumn(DIRECTION_TABLE, "type", {
-            allowNull: false,
-            type: sequelize_1.DataTypes.STRING(200),
-        });
+        try {
+            yield queryInterface.addColumn(DIRECTION_TABLE, "type", {
+                allowNull: false,
+                type: sequelize_1.DataTypes.STRING(200),
+            });
+        }
+        catch (error) { }
         yield queryInterface.createTable(TEMPLATE_TABLE, TemplateSchema);
         yield queryInterface.createTable(ECAMPO_TABLE, ECampoSchema);
         yield queryInterface.createTable(TEMPLATE_HAS_VALUES_TABLE, TemplateHasValuesSchema);

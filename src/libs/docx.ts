@@ -1,8 +1,10 @@
-import { Paragraph, TextRun, AlignmentType } from "docx";
-import { ValuesType } from "../app/customers/types/values.type";
+import { Paragraph, TextRun, AlignmentType, ImageRun } from "docx";
+import path from "path";
+import fs from "fs";
 
 type TextOptionsType = {
   text?: string;
+  img?: string;
   bold?: boolean;
   italic?: boolean;
   fontFamily?: string;
@@ -51,4 +53,30 @@ export const createParagraph = (
     children: textRuns,
   });
   return parrafo;
+};
+
+export const createImgRun = (
+  imgName: string,
+  size: string,
+  options?: ParagraphOptionsType
+) => {
+  const file = fs.readFileSync(
+    path.join(__dirname, "../public/download", imgName)
+  );
+  const image = new ImageRun({
+    data: file,
+    transformation: {
+      width: Number(size.split("x")[0]),
+      height: Number(size.split("x")[1]),
+    },
+  });
+  return new Paragraph({
+    alignment: options?.align ? options?.align : AlignmentType.JUSTIFIED,
+    spacing: {
+      after: options?.spacingAfter
+        ? options?.spacingAfter * 20
+        : options?.spacingAfter,
+    },
+    children: [image],
+  });
 };

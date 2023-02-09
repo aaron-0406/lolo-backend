@@ -6,9 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const joi_1 = __importDefault(require("joi"));
 const email = joi_1.default.string().email().required();
 const password = joi_1.default.string().required();
+const customerId = joi_1.default.number().required().min(1);
 const loginSchema = joi_1.default.object({
     email,
     password,
+    customerId,
 }).options({ abortEarly: true });
-;
 exports.default = { loginSchema };

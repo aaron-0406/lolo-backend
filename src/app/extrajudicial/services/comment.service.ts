@@ -12,6 +12,13 @@ class CommentService {
       where: {
         client_id_client: clientID,
       },
+      include: [
+        {
+          model: models.CUSTOMER_USER,
+          as: "customerUser",
+          attributes: ["name"],
+        },
+      ],
       order: [["id", "DESC"]],
     });
     return rta;
@@ -22,6 +29,13 @@ class CommentService {
       where: {
         id_comment: id,
       },
+      include: [
+        {
+          model: models.CUSTOMER_USER,
+          as: "customerUser",
+          attributes: ["name"],
+        },
+      ],
     });
 
     if (!comment) {
@@ -32,14 +46,15 @@ class CommentService {
 
   async create(data: CommentType) {
     const newComment = await models.COMMENT.create(data);
-    return newComment;
+    const commentFound = await this.findByID(newComment.dataValues.id);
+    return commentFound;
   }
 
   async update(id: string, changes: CommentType) {
     const comment = await this.findByID(id);
     const rta = await comment.update(changes);
-
-    return rta;
+    const commentFound = await this.findByID(rta.dataValues.id);
+    return commentFound;
   }
 
   async delete(id: string) {

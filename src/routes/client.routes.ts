@@ -10,6 +10,7 @@ const {
   updateClientSchema,
   getClientByBank,
   deleteClientByCodeSchema,
+  getClientByCHBSchemaQuery,
 } = clientSchema;
 const router = express.Router();
 const service = new ClientService();
@@ -26,11 +27,12 @@ router.get("/", async (req, res, next) => {
 router.get(
   "/:chb",
   validatorHandler(getClientByCHBSchema, "params"),
+  validatorHandler(getClientByCHBSchemaQuery, "query"),
   async (req, res, next) => {
     try {
       const { chb } = req.params;
-      const clients = await service.findAllCHB(chb);
-      res.json(clients);
+      const { clients, quantity } = await service.findAllCHB(chb, req.query);
+      res.json({ clients, quantity });
     } catch (error) {
       next(error);
     }

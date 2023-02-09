@@ -13,10 +13,12 @@ const { TemplateHasValuesSchema, TEMPLATE_HAS_VALUES_TABLE } =
 const { ValuesSchema, VALUES_TABLE } = valuesModel;
 
 export async function up(queryInterface: QueryInterface) {
-  await queryInterface.addColumn(DIRECTION_TABLE, "type", {
-    allowNull: false,
-    type: DataTypes.STRING(200),
-  });
+  try {
+    await queryInterface.addColumn(DIRECTION_TABLE, "type", {
+      allowNull: false,
+      type: DataTypes.STRING(200),
+    });
+  } catch (error) {}
 
   await queryInterface.createTable(TEMPLATE_TABLE, TemplateSchema);
   await queryInterface.createTable(ECAMPO_TABLE, ECampoSchema);

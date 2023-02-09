@@ -44,7 +44,7 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
   password: {
     allowNull: false,
     unique: true,
-    type: DataTypes.STRING(70),
+    type: DataTypes.TEXT,
   },
   privilege: {
     allowNull: false,

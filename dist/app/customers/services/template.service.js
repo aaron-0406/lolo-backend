@@ -31,7 +31,10 @@ class TemplateService {
     }
     findOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const template = yield models.TEMPLATE.findOne({ where: { id } });
+            const template = yield models.TEMPLATE.findOne({
+                where: { id },
+                include: { model: models.TEMPLATE_IMG, as: "template_imgs" },
+            });
             if (!template)
                 throw boom_1.default.notFound("Plantilla no encontrada");
             try {
@@ -46,6 +49,10 @@ class TemplateService {
                     if (!isStored) {
                         yield (0, aws_bucket_1.readFile)(`${config_1.default.AWS_PLANTILLA_PATH}${template.dataValues.customerId}/${template.dataValues.templatePhoto}`);
                     }
+                }
+                for (let i = 0; i < template.dataValues.template_imgs.length; i++) {
+                    const element = template.dataValues.template_imgs[i];
+                    yield (0, aws_bucket_1.readFile)(`${config_1.default.AWS_PLANTILLA_PATH}${template.dataValues.customerId}/${element.img}`);
                 }
             }
             catch (error) { }

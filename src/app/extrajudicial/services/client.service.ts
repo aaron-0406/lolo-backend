@@ -15,13 +15,49 @@ class ClientService {
     return rta;
   }
 
-  async findAllCHB(chb: string) {
-    const rta = await models.CLIENT.findAll({
+  async findAllCHB(chb: string, query:any) {
+    //Filter
+    const { limit, page, filter } = query;
+
+    const limite = parseInt(limit, 10);
+    const pagina = parseInt(page, 10);
+    const filtro = filter as string;
+    
+    if (filter !== "" && filter !== undefined) {
+      const quantity = await models.CLIENT.count({
+        where: {
+          [Op.or]: [{ name: { [Op.substring]: filtro } }],
+          customer_has_bank_id_customer_has_bank: chb,
+        },
+      });
+
+      const clients = await models.CLIENT.findAll({
+        include: [{ model: models.NEGOTIATION, as: "negotiation" }],
+        order: [["name", "DESC"]],
+        limit:limite,
+        offset: (pagina - 1) * limite,
+        where: {
+          [Op.or]: [{ name: { [Op.substring]: filtro } }],
+          customer_has_bank_id_customer_has_bank: chb,
+        },
+      });
+      return { clients, quantity };
+    }
+    const quantity = await models.CLIENT.count({
       where: {
         customer_has_bank_id_customer_has_bank: chb,
       },
     });
-    return rta;
+    const clients = await models.CLIENT.findAll({
+      include: [{ model: models.NEGOTIATION, as: "negotiation" }],
+      order: [["name", "DESC"]],
+      limit:limite,
+      offset: (pagina - 1) * limite,
+      where: {
+        customer_has_bank_id_customer_has_bank: chb,
+      },
+    });
+    return { clients, quantity };
   }
   async findAllCHBDetails(chb: string) {
     const rta = await models.CLIENT.findAll({

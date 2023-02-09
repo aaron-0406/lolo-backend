@@ -7,9 +7,9 @@ const { models } = sequelize;
 class AuthService {
   constructor() {}
   async login(data: LoginType) {
-    const { email, password } = data;
+    const { email, password, customerId } = data;
     const userCustomer = await models.CUSTOMER_USER.findOne({
-      where: { email },
+      where: { email, customerId },
     });
     if (!userCustomer) throw boom.notFound("Correo o contraseña incorrectos");
     if (!(await matchPassword(password, userCustomer.dataValues.password)))

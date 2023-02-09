@@ -40,9 +40,8 @@ class DirectionService {
                     id_direction: id,
                 },
             });
-            if (!direction) {
+            if (!direction)
                 throw boom_1.default.notFound("Dirección no encontrada");
-            }
             return direction;
         });
     }

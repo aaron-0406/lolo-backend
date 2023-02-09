@@ -33,13 +33,17 @@ class TemplateHasValuesService {
 
   async findOneWidthTemplate(id: string) {
     const templateHasValues = await models.TEMPLATE_HAS_VALUES.findOne({
-      include: [{
-        model: models.TEMPLATE,
-        as: "template",
-      },{
-        model: models.VALUES,
-        as: "values",
-      }],
+      include: [
+        {
+          model: models.TEMPLATE,
+          as: "template",
+          include: [{ model: models.TEMPLATE_IMG, as: "template_imgs" }],
+        },
+        {
+          model: models.VALUES,
+          as: "values",
+        },
+      ],
       where: { id },
     });
     if (!templateHasValues) throw boom.notFound("Plantilla no encontrada");

@@ -58,6 +58,12 @@ class Template extends Model {
       onDelete: "CASCADE",
       onUpdate: "CASCADE",
     });
+    this.hasMany(models.TEMPLATE_IMG, {
+      as: "template_imgs",
+      foreignKey: "templateId",
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
+    });
   }
 
   static config(sequelize: Sequelize) {

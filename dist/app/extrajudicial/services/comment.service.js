@@ -23,6 +23,13 @@ class CommentService {
                 where: {
                     client_id_client: clientID,
                 },
+                include: [
+                    {
+                        model: models.CUSTOMER_USER,
+                        as: "customerUser",
+                        attributes: ["name"],
+                    },
+                ],
                 order: [["id", "DESC"]],
             });
             return rta;
@@ -34,6 +41,13 @@ class CommentService {
                 where: {
                     id_comment: id,
                 },
+                include: [
+                    {
+                        model: models.CUSTOMER_USER,
+                        as: "customerUser",
+                        attributes: ["name"],
+                    },
+                ],
             });
             if (!comment) {
                 throw boom_1.default.notFound("Comment no encontrado");
@@ -44,14 +58,16 @@ class CommentService {
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const newComment = yield models.COMMENT.create(data);
-            return newComment;
+            const commentFound = yield this.findByID(newComment.dataValues.id);
+            return commentFound;
         });
     }
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const comment = yield this.findByID(id);
             const rta = yield comment.update(changes);
-            return rta;
+            const commentFound = yield this.findByID(rta.dataValues.id);
+            return commentFound;
         });
     }
     delete(id) {

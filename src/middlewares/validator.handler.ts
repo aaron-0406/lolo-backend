@@ -5,7 +5,7 @@ import boom from "@hapi/boom";
 
 const validatorHandler = (
   schema: Joi.ObjectSchema,
-  property: "params" | "body"
+  property: "params" | "body" | "query"
 ) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const data = req[property];

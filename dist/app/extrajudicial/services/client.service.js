@@ -26,14 +26,47 @@ class ClientService {
             return rta;
         });
     }
-    findAllCHB(chb) {
+    findAllCHB(chb, query) {
         return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.CLIENT.findAll({
+            //Filter
+            const { limit, page, filter } = query;
+            const limite = parseInt(limit, 10);
+            const pagina = parseInt(page, 10);
+            const filtro = filter;
+            if (filter !== "" && filter !== undefined) {
+                const quantity = yield models.CLIENT.count({
+                    where: {
+                        [sequelize_2.Op.or]: [{ name: { [sequelize_2.Op.substring]: filtro } }],
+                        customer_has_bank_id_customer_has_bank: chb,
+                    },
+                });
+                const clients = yield models.CLIENT.findAll({
+                    include: [{ model: models.NEGOTIATION, as: "negotiation" }],
+                    order: [["name", "DESC"]],
+                    limit: limite,
+                    offset: (pagina - 1) * limite,
+                    where: {
+                        [sequelize_2.Op.or]: [{ name: { [sequelize_2.Op.substring]: filtro } }],
+                        customer_has_bank_id_customer_has_bank: chb,
+                    },
+                });
+                return { clients, quantity };
+            }
+            const quantity = yield models.CLIENT.count({
                 where: {
                     customer_has_bank_id_customer_has_bank: chb,
                 },
             });
-            return rta;
+            const clients = yield models.CLIENT.findAll({
+                include: [{ model: models.NEGOTIATION, as: "negotiation" }],
+                order: [["name", "DESC"]],
+                limit: limite,
+                offset: (pagina - 1) * limite,
+                where: {
+                    customer_has_bank_id_customer_has_bank: chb,
+                },
+            });
+            return { clients, quantity };
         });
     }
     findAllCHBDetails(chb) {

@@ -12,24 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const passport_1 = __importDefault(require("passport"));
-const passport_local_1 = require("passport-local");
-const auth_service_1 = __importDefault(require("../app/customers/services/auth.service"));
-const boom_1 = __importDefault(require("@hapi/boom"));
-const service = new auth_service_1.default();
-// LOGIN
-passport_1.default.use("local.signin", new passport_local_1.Strategy({
-    usernameField: "email",
-    passwordField: "password",
-    passReqToCallback: true,
-}, (req, email, password, done) => __awaiter(void 0, void 0, void 0, function* () {
-    const { customerId } = req.body;
-    try {
-        const user = yield service.login({ email, password, customerId });
-        return done(null, user);
-    }
-    catch (error) {
-        console.log(error);
-        return done(boom_1.default.badRequest(error), false);
-    }
-})));
+exports.down = exports.up = void 0;
+const template_img_model_1 = __importDefault(require("../models/template-img.model"));
+const { TemplateImgSchema, TEMPLATE_IMG_TABLE } = template_img_model_1.default;
+function up(queryInterface) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield queryInterface.createTable(TEMPLATE_IMG_TABLE, TemplateImgSchema);
+    });
+}
+exports.up = up;
+function down(queryInterface) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield queryInterface.dropTable(TEMPLATE_IMG_TABLE);
+    });
+}
+exports.down = down;

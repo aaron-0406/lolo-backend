@@ -16,7 +16,7 @@ const express_1 = __importDefault(require("express"));
 const validator_handler_1 = __importDefault(require("../middlewares/validator.handler"));
 const client_schema_1 = __importDefault(require("../app/extrajudicial/schemas/client.schema"));
 const client_service_1 = __importDefault(require("../app/extrajudicial/services/client.service"));
-const { getClientByCHBSchema, getClientByCodeSchema, createClientSchema, updateClientSchema, getClientByBank, deleteClientByCodeSchema, } = client_schema_1.default;
+const { getClientByCHBSchema, getClientByCodeSchema, createClientSchema, updateClientSchema, getClientByBank, deleteClientByCodeSchema, getClientByCHBSchemaQuery, } = client_schema_1.default;
 const router = express_1.default.Router();
 const service = new client_service_1.default();
 router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -28,11 +28,11 @@ router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
         next(error);
     }
 }));
-router.get("/:chb", (0, validator_handler_1.default)(getClientByCHBSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/:chb", (0, validator_handler_1.default)(getClientByCHBSchema, "params"), (0, validator_handler_1.default)(getClientByCHBSchemaQuery, "query"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { chb } = req.params;
-        const clients = yield service.findAllCHB(chb);
-        res.json(clients);
+        const { clients, quantity } = yield service.findAllCHB(chb, req.query);
+        res.json({ clients, quantity });
     }
     catch (error) {
         next(error);

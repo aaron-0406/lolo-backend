@@ -28,9 +28,7 @@ class DirectionService {
       },
     });
 
-    if (!direction) {
-      throw boom.notFound("Dirección no encontrada");
-    }
+    if (!direction) throw boom.notFound("Dirección no encontrada");
     return direction;
   }
 

@@ -20,9 +20,9 @@ class AuthService {
     constructor() { }
     login(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { email, password } = data;
+            const { email, password, customerId } = data;
             const userCustomer = yield models.CUSTOMER_USER.findOne({
-                where: { email },
+                where: { email, customerId },
             });
             if (!userCustomer)
                 throw boom_1.default.notFound("Correo o contraseña incorrectos");

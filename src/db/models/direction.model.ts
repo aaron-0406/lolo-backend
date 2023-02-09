@@ -10,10 +10,7 @@ import clientModel from "./client.model";
 
 const DIRECTION_TABLE = "DIRECTION";
 
-const DirectionSchema: ModelAttributes<
-  Direction,
-  Omit<DirectionType, "type">
-> = {
+const DirectionSchema: ModelAttributes<Direction, DirectionType> = {
   id: {
     primaryKey: true,
     allowNull: false,
@@ -22,6 +19,10 @@ const DirectionSchema: ModelAttributes<
     type: DataTypes.INTEGER,
   },
   direction: {
+    allowNull: false,
+    type: DataTypes.STRING(200),
+  },
+  type: {
     allowNull: false,
     type: DataTypes.STRING(200),
   },

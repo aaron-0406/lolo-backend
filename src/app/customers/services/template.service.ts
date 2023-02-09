@@ -18,7 +18,10 @@ class TemplateService {
   }
 
   async findOne(id: string) {
-    const template = await models.TEMPLATE.findOne({ where: { id } });
+    const template = await models.TEMPLATE.findOne({
+      where: { id },
+      include: { model: models.TEMPLATE_IMG, as: "template_imgs" },
+    });
     if (!template) throw boom.notFound("Plantilla no encontrada");
     try {
       if (template.dataValues.templateJson !== "") {
@@ -42,6 +45,12 @@ class TemplateService {
             `${config.AWS_PLANTILLA_PATH}${template.dataValues.customerId}/${template.dataValues.templatePhoto}`
           );
         }
+      }
+      for (let i = 0; i < template.dataValues.template_imgs.length; i++) {
+        const element = template.dataValues.template_imgs[i];
+        await readFile(
+          `${config.AWS_PLANTILLA_PATH}${template.dataValues.customerId}/${element.img}`
+        );
       }
     } catch (error) {}
     return template;

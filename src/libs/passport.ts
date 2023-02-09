@@ -14,8 +14,9 @@ passport.use(
       passReqToCallback: true,
     },
     async (req, email, password, done) => {
+      const { customerId } = req.body;
       try {
-        const user = await service.login({ email, password });
+        const user = await service.login({ email, password, customerId });
 
         return done(null, user);
       } catch (error: any) {

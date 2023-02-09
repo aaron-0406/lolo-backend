@@ -40,7 +40,7 @@ const CustomerUserSchema = {
     password: {
         allowNull: false,
         unique: true,
-        type: sequelize_1.DataTypes.STRING(70),
+        type: sequelize_1.DataTypes.TEXT,
     },
     privilege: {
         allowNull: false,

@@ -18,14 +18,19 @@ import {
   AlignmentType,
 } from "docx";
 import fs from "fs";
-import { createParagraph, TemplateDocument } from "../../../libs/docx";
+import {
+  createImgRun,
+  createParagraph,
+  TemplateDocument,
+} from "../../../libs/docx";
 import { ValuesType } from "../types/values.type";
 import { GuarantorType } from "../../extrajudicial/types/guarantor.type";
 import { DirectionType } from "../../extrajudicial/types/direction.type";
 import { ClientType } from "../../extrajudicial/types/client.type";
+import { TemplateImgType } from "../types/template-img.type";
 
 type TemplateHasValues = TemplateHasValuesType & {
-  template: TemplateType;
+  template: TemplateType & { template_imgs: TemplateImgType[] };
   values: ValuesType[];
 };
 
@@ -69,7 +74,7 @@ class DocumentService {
           `${config.AWS_PLANTILLA_PATH}${templateHasValues.template.customerId}/${templateHasValues.template.templatePhoto}`
         );
       }
-      // IMAGEN
+      // IMAGEN FONDO
       image = new ImageRun({
         floating: {
           horizontalPosition: {
@@ -93,6 +98,21 @@ class DocumentService {
       });
     }
 
+    // Imagenes de la plantilla
+    for (let i = 0; i < templateHasValues.template.template_imgs.length; i++) {
+      const element = templateHasValues.template.template_imgs[i];
+      const isStored = isFileStoredIn(
+        path.join(__dirname, "../../../public/download"),
+        element.img
+      );
+      // Por si no están guardadas, descargarlas de aws
+      if (!isStored) {
+        await readFile(
+          `${config.AWS_PLANTILLA_PATH}${templateHasValues.template.customerId}/${element.img}`
+        );
+      }
+    }
+
     // Reading the template json file
     const readFileAsync = util.promisify(fs.readFile);
 
@@ -109,6 +129,7 @@ class DocumentService {
     let parrafos: Paragraph[] = [];
     // Parrafos por cada cliente
     for (let i = 0; i < clients.length; i++) {
+      // Copy
       const newPlantilla = JSON.parse(JSON.stringify(plantilla)) as {
         parrafos: TemplateDocument[];
       };
@@ -116,9 +137,11 @@ class DocumentService {
       const texts = this.makeTexts(
         [...newPlantilla.parrafos],
         templateHasValues.values,
+        templateHasValues.template.template_imgs,
         element
       );
       parrafos = [...parrafos, ...texts];
+      // Salto de pagina
       if (clients.length !== 1 && i < clients.length - 1) {
         parrafos.push(createParagraph([], true));
       }
@@ -176,6 +199,7 @@ class DocumentService {
   private makeTexts(
     parrafos: TemplateDocument[],
     values: ValuesType[],
+    templateImg: TemplateImgType[],
     client: ClientTypeDoc
   ) {
     const paragraphs = [];
@@ -188,6 +212,7 @@ class DocumentService {
         };
       });
 
+      // Fiadores
       if (element.texts && element.texts.length > 0) {
         if (element.texts[0].text?.includes("[guarantor]")) {
           for (let j = 0; j < client.guarantor.length; j++) {
@@ -203,6 +228,7 @@ class DocumentService {
         }
       }
 
+      // Direcciones
       if (element.texts && element.texts.length > 0) {
         if (element.texts.some((item) => item.text?.includes("direction"))) {
           for (let k = 0; k < client.direction.length; k++) {
@@ -219,6 +245,29 @@ class DocumentService {
 
             const parrafo = createParagraph(newElement, false, element.options);
             paragraphs.push(parrafo);
+          }
+          continue;
+        }
+      }
+
+      // Imagenes
+      if (element.texts && element.texts.length > 0) {
+        if (element.texts.some((text) => text.img)) {
+          for (let l = 0; l < element.texts.length; l++) {
+            const element2 = element.texts[l];
+            if (element2.img) {
+              const filter = templateImg.filter((item) =>
+                element2.img?.includes(item.img)
+              );
+              if (filter[0]) {
+                const newImg = createImgRun(
+                  filter[0].img,
+                  filter[0].size,
+                  element.options
+                );
+                paragraphs.push(newImg);
+              }
+            }
           }
           continue;
         }
