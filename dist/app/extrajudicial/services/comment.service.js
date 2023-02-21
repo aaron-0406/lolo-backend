@@ -14,6 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = __importDefault(require("../../../libs/sequelize"));
 const boom_1 = __importDefault(require("@hapi/boom"));
+const helpers_1 = require("../../../libs/helpers");
+const sequelize_2 = require("sequelize");
 const { models } = sequelize_1.default;
 class CommentService {
     constructor() { }
@@ -33,6 +35,27 @@ class CommentService {
                 order: [["id", "DESC"]],
             });
             return rta;
+        });
+    }
+    chart(clientID) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const hoy = new Date();
+            const primerDia = (0, helpers_1.formatDate)(new Date(hoy.setDate(hoy.getDate() - hoy.getDay() + 1)));
+            const ultimoDia = (0, helpers_1.formatDate)(new Date(hoy.setDate(hoy.getDate() - hoy.getDay() + 7)));
+            const rta = yield models.COMMENT.findAll({
+                attributes: [
+                    [sequelize_1.default.literal("DATE(date)"), "fecha"],
+                    [sequelize_1.default.fn("COUNT", sequelize_1.default.col("date")), "cantidad"],
+                ],
+                group: ["date"],
+                where: {
+                    client_id_client: clientID,
+                    date: {
+                        [sequelize_2.Op.between]: [primerDia, ultimoDia],
+                    },
+                },
+            });
+            return JSON.parse(JSON.stringify(rta));
         });
     }
     findByID(id) {

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isFileStoredIn = exports.deleteFile = void 0;
+exports.formatDate = exports.isFileStoredIn = exports.deleteFile = void 0;
 const fs_extra_1 = __importDefault(require("fs-extra"));
 const path_1 = __importDefault(require("path"));
 // Delete file function
@@ -30,3 +30,10 @@ const isFileStoredIn = (dirname, filename) => {
     return files.some((file) => file === filename);
 };
 exports.isFileStoredIn = isFileStoredIn;
+const formatDate = (date) => {
+    const anio = date.getFullYear(); // Obtener el año (YYYY)
+    const mes = (date.getMonth() + 1).toString().padStart(2, "0"); // Obtener el mes (0-11) y sumarle 1 para obtener el mes en formato (01-12)
+    const dia = date.getDate().toString().padStart(2, "0"); // Obtener el día del mes (1-31) en formato (01-31)
+    return `${anio}-${mes}-${dia}`; // Formatear la fecha como "YYYY-MM-DD"
+};
+exports.formatDate = formatDate;
