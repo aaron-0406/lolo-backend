@@ -28,6 +28,54 @@ router.get(
 );
 
 router.get(
+  "/chart/:clientId",
+  validatorHandler(getCommentByClientIDSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const { clientId } = req.params;
+      const comments: { fecha: string; cantidad: number }[] =
+        await service.chart(clientId);
+
+      const hoy = new Date();
+      const primerDia = new Date(hoy.setDate(hoy.getDate() - hoy.getDay() + 1));
+      const ultimoDia = new Date(hoy.setDate(hoy.getDate() - hoy.getDay() + 7));
+
+      const fechaInicio = new Date(primerDia);
+      const fechaFin = new Date(ultimoDia);
+
+      const diasSemana = [];
+
+      while (fechaInicio <= fechaFin) {
+        diasSemana.push({
+          fecha: fechaInicio.toISOString().slice(0, 10),
+          cantidad: 0,
+        });
+        fechaInicio.setDate(fechaInicio.getDate() + 1);
+      }
+      const diasFaltantes = diasSemana.filter(
+        (dia) => !comments.some((r) => r.fecha === dia.fecha)
+      );
+      const resultadosFinales = [...comments, ...diasFaltantes];
+
+      resultadosFinales.sort((a, b) => {
+        const dateA = Date.parse(a.fecha);
+        const dateB = Date.parse(b.fecha);
+        if (dateA < dateB) {
+          return -1;
+        } else if (dateA > dateB) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+      res.json(resultadosFinales.map(objeto => objeto.cantidad));
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.get(
   "/:id",
   validatorHandler(getCommentByIDSchema, "params"),
   async (req, res, next) => {

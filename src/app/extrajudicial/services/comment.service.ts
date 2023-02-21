@@ -1,6 +1,8 @@
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
 import { CommentType } from "../types/comment.type";
+import { formatDate } from "../../../libs/helpers";
+import { Op } from "sequelize";
 
 const { models } = sequelize;
 
@@ -22,6 +24,32 @@ class CommentService {
       order: [["id", "DESC"]],
     });
     return rta;
+  }
+  async chart(clientID: string) {
+    const hoy = new Date();
+
+    const primerDia = formatDate(
+      new Date(hoy.setDate(hoy.getDate() - hoy.getDay() + 1))
+    );
+
+    const ultimoDia = formatDate(
+      new Date(hoy.setDate(hoy.getDate() - hoy.getDay() + 7))
+    );
+
+    const rta = await models.COMMENT.findAll({
+      attributes: [
+        [sequelize.literal("DATE(date)"), "fecha"],
+        [sequelize.fn("COUNT", sequelize.col("date")), "cantidad"],
+      ],
+      group: ["date"],
+      where: {
+        client_id_client: clientID,
+        date: {
+          [Op.between]: [primerDia, ultimoDia],
+        },
+      },
+    });
+    return JSON.parse(JSON.stringify(rta));
   }
 
   async findByID(id: string) {
