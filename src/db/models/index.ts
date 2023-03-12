@@ -18,6 +18,7 @@ import templateDataModel from "./many-to-many/template-has-values.model";
 import ecampoModel from "./ecampo.model";
 import valuesModel from "./values.model";
 import templateImgModel from "./template-img.model";
+import productModel from "./product.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
@@ -38,6 +39,7 @@ const { TemplateHasValues, TemplateHasValuesSchema } = templateDataModel;
 const { Values, ValuesSchema } = valuesModel;
 const { CustomerHasBank, CustomerHasBankSchema } = customerHasBank;
 const { TemplateImg, TemplateImgSchema } = templateImgModel;
+const { Product, ProductSchema } = productModel;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -59,9 +61,13 @@ export const setupModels = (sequelize: Sequelize) => {
   Negotiation.init(NegotiationSchema, Negotiation.config(sequelize));
   Template.init(TemplateSchema, Template.config(sequelize));
   ECampo.init(ECampoSchema, ECampo.config(sequelize));
-  TemplateHasValues.init(TemplateHasValuesSchema, TemplateHasValues.config(sequelize));
+  TemplateHasValues.init(
+    TemplateHasValuesSchema,
+    TemplateHasValues.config(sequelize)
+  );
   Values.init(ValuesSchema, Values.config(sequelize));
   TemplateImg.init(TemplateImgSchema, TemplateImg.config(sequelize));
+  Product.init(ProductSchema, Product.config(sequelize));
 
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
@@ -79,4 +85,5 @@ export const setupModels = (sequelize: Sequelize) => {
   TemplateHasValues.associate(sequelize.models);
   Values.associate(sequelize.models);
   TemplateImg.associate(sequelize.models);
+  Product.associate(sequelize.models);
 };

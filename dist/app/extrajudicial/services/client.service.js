@@ -42,7 +42,7 @@ class ClientService {
                 });
                 const clients = yield models.CLIENT.findAll({
                     include: [{ model: models.NEGOTIATION, as: "negotiation" }],
-                    order: [["name", "DESC"]],
+                    order: [["name", "ASC"]],
                     limit: limite,
                     offset: (pagina - 1) * limite,
                     where: {
@@ -59,7 +59,7 @@ class ClientService {
             });
             const clients = yield models.CLIENT.findAll({
                 include: [{ model: models.NEGOTIATION, as: "negotiation" }],
-                order: [["name", "DESC"]],
+                order: [["name", "ASC"]],
                 limit: limite,
                 offset: (pagina - 1) * limite,
                 where: {

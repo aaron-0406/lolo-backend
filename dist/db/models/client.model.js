@@ -20,7 +20,8 @@ const ClientSchema = {
     },
     code: {
         allowNull: false,
-        type: sequelize_1.DataTypes.STRING(50),
+        unique: true,
+        type: sequelize_1.DataTypes.STRING(150),
     },
     negotiationId: {
         allowNull: false,

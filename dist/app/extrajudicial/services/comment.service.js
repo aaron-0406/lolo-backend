@@ -49,7 +49,7 @@ class CommentService {
                 ],
                 group: ["date"],
                 where: {
-                    client_id_client: clientID,
+                    customer_user_id_customer_user: clientID,
                     date: {
                         [sequelize_2.Op.between]: [primerDia, ultimoDia],
                     },

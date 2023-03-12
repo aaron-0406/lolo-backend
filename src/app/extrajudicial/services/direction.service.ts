@@ -37,10 +37,11 @@ class DirectionService {
     return newDirection;
   }
 
+  
+
   async update(id: string, changes: DirectionType) {
     const direction = await this.findByID(id);
     const rta = await direction.update(changes);
-
     return rta;
   }
 

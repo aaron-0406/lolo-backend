@@ -24,7 +24,8 @@ const ClientSchema: ModelAttributes<Client, ClientType> = {
   },
   code: {
     allowNull: false,
-    type: DataTypes.STRING(50),
+    unique:true,
+    type: DataTypes.STRING(150),
   },
   negotiationId: {
     allowNull: false,

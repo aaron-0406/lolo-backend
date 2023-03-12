@@ -18,6 +18,8 @@ import templateHasValuesRouter from "./template-has-values.routes";
 import ecampoRouter from "./ecampo.routes";
 import templateRouter from "./template.routes";
 import valuesRouter from "./values.routes";
+import dashboardRouter from "./dashboard.routes";
+import productRouter from "./product.routes";
 
 const routerApi = (app: Express) => {
   const router = express.Router();
@@ -41,6 +43,8 @@ const routerApi = (app: Express) => {
   router.use("/ecampo", ecampoRouter);
   router.use("/template", templateRouter);
   router.use("/values", valuesRouter);
+  router.use("/dashboard", dashboardRouter);
+  router.use("/product", productRouter);
 };
 
 export default routerApi;

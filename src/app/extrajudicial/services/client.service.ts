@@ -15,14 +15,27 @@ class ClientService {
     return rta;
   }
 
-  async findAllCHB(chb: string, query:any) {
+  async findAllByCustomerId(customerId: number): Promise<ClientType[]> {
+    const rta = await models.CLIENT.findAll({
+      include: [
+        {
+          model: models.CUSTOMER_HAS_BANK,
+          as: "customerHasBank",
+          where: { idCustomer: customerId },
+        },
+      ],
+    });
+    return JSON.parse(JSON.stringify(rta));
+  }
+
+  async findAllCHB(chb: string, query: any) {
     //Filter
     const { limit, page, filter } = query;
 
     const limite = parseInt(limit, 10);
     const pagina = parseInt(page, 10);
     const filtro = filter as string;
-    
+
     if (filter !== "" && filter !== undefined) {
       const quantity = await models.CLIENT.count({
         where: {
@@ -33,8 +46,8 @@ class ClientService {
 
       const clients = await models.CLIENT.findAll({
         include: [{ model: models.NEGOTIATION, as: "negotiation" }],
-        order: [["name", "DESC"]],
-        limit:limite,
+        order: [["name", "ASC"]],
+        limit: limite,
         offset: (pagina - 1) * limite,
         where: {
           [Op.or]: [{ name: { [Op.substring]: filtro } }],
@@ -50,8 +63,8 @@ class ClientService {
     });
     const clients = await models.CLIENT.findAll({
       include: [{ model: models.NEGOTIATION, as: "negotiation" }],
-      order: [["name", "DESC"]],
-      limit:limite,
+      order: [["name", "ASC"]],
+      limit: limite,
       offset: (pagina - 1) * limite,
       where: {
         customer_has_bank_id_customer_has_bank: chb,
@@ -59,6 +72,7 @@ class ClientService {
     });
     return { clients, quantity };
   }
+
   async findAllCHBDetails(chb: string) {
     const rta = await models.CLIENT.findAll({
       include: [

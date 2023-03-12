@@ -19,8 +19,31 @@ const filterDocuments = async (req: any, file: any, cb: any) => {
   if (mimetype && extname) return cb(null, true);
   cb("Archivo debe ser un documento docx,xlsx,pptx,pdf.");
 };
+
+// *EXCEL FILES
+// Middleware for files
+const storageExcelArchivos = multer.diskStorage({
+  destination: path.join(__dirname, "../docs"),
+  filename: (req, file, cb) => {
+    req.body.file = file.originalname;
+    cb(null, `${file.originalname}`);
+  },
+});
+// Filter documents
+const filterExcelDocuments = async (req: any, file: any, cb: any) => {
+  const filetypes = /xls|XLS|XLSX|xlsx|vnd.ms-excel/;
+  const mimetype = filetypes.test(file.mimetype);
+  const extname = filetypes.test(path.extname(file.originalname));
+  if (mimetype || extname) return cb(null, true);
+  cb("Archivo debe ser un documento excel");
+};
+
 export const archivos = multer({
   storage: storageArchivos,
   fileFilter: filterDocuments,
 });
 
+export const archivosExcel = multer({
+  storage: storageExcelArchivos,
+  fileFilter: filterExcelDocuments,
+});

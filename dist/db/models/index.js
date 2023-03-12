@@ -23,6 +23,7 @@ const template_has_values_model_1 = __importDefault(require("./many-to-many/temp
 const ecampo_model_1 = __importDefault(require("./ecampo.model"));
 const values_model_1 = __importDefault(require("./values.model"));
 const template_img_model_1 = __importDefault(require("./template-img.model"));
+const product_model_1 = __importDefault(require("./product.model"));
 const { Customer, CustomerSchema } = customer_model_1.default;
 const { Funcionario, FuncionarioSchema } = funcionario_model_1.default;
 const { Bank, BankSchema } = bank_model_1.default;
@@ -42,6 +43,7 @@ const { TemplateHasValues, TemplateHasValuesSchema } = template_has_values_model
 const { Values, ValuesSchema } = values_model_1.default;
 const { CustomerHasBank, CustomerHasBankSchema } = customer_has_bank_model_1.default;
 const { TemplateImg, TemplateImgSchema } = template_img_model_1.default;
+const { Product, ProductSchema } = product_model_1.default;
 const setupModels = (sequelize) => {
     Customer.init(CustomerSchema, Customer.config(sequelize));
     Bank.init(BankSchema, Bank.config(sequelize));
@@ -62,6 +64,7 @@ const setupModels = (sequelize) => {
     TemplateHasValues.init(TemplateHasValuesSchema, TemplateHasValues.config(sequelize));
     Values.init(ValuesSchema, Values.config(sequelize));
     TemplateImg.init(TemplateImgSchema, TemplateImg.config(sequelize));
+    Product.init(ProductSchema, Product.config(sequelize));
     Customer.associate(sequelize.models);
     CustomerUser.associate(sequelize.models);
     Bank.associate(sequelize.models);
@@ -78,5 +81,6 @@ const setupModels = (sequelize) => {
     TemplateHasValues.associate(sequelize.models);
     Values.associate(sequelize.models);
     TemplateImg.associate(sequelize.models);
+    Product.associate(sequelize.models);
 };
 exports.setupModels = setupModels;
