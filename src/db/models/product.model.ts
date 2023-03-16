@@ -27,6 +27,10 @@ const ProductSchema: ModelAttributes<Product, ProductType> = {
     allowNull: false,
     type: DataTypes.STRING(150),
   },
+  name: {
+    allowNull: false,
+    type: DataTypes.STRING(150),
+  },
   clientCode: {
     allowNull: false,
     field: "client_code_client",
@@ -36,7 +40,7 @@ const ProductSchema: ModelAttributes<Product, ProductType> = {
       key: "code",
     },
     onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
+    onDelete: "CASCADE",
   },
   customerId: {
     allowNull: false,
@@ -47,7 +51,7 @@ const ProductSchema: ModelAttributes<Product, ProductType> = {
       key: "id_customer",
     },
     onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
+    onDelete: "CASCADE",
   },
 };
 

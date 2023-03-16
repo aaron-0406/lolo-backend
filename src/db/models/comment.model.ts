@@ -45,7 +45,7 @@ const CommentSchema: ModelAttributes<Comment, CommentType> = {
       key: "id_customer_user",
     },
     onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
+    onDelete: "CASCADE",
   },
   clientId: {
     allowNull: false,
@@ -56,7 +56,7 @@ const CommentSchema: ModelAttributes<Comment, CommentType> = {
       key: "id_client",
     },
     onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
+    onDelete: "CASCADE",
   },
 };
 

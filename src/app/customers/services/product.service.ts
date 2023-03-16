@@ -23,7 +23,7 @@ class ProductService {
         code,
       },
     });
-    if (!product) throw boom.notFound("Producto no encontrado");
+    // if (!product) throw boom.notFound("Producto no encontrado");
     return product;
   }
 
@@ -46,7 +46,7 @@ class ProductService {
     return JSON.parse(JSON.stringify(rta));
   }
 
-  async create(product: ProductType) {
+  async create(product: Omit<ProductType, "id">) {
     const newProduct = await models.PRODUCT.create(product);
     return newProduct;
   }
@@ -68,6 +68,12 @@ class ProductService {
     const product = await this.getByProductId(id);
     await product.destroy();
     return Number(id);
+  }
+
+  async deleteByCode(code: string) {
+    const product = await this.getByProductCode(code);
+    if (product) await product.destroy();
+    return Number(code);
   }
 }
 

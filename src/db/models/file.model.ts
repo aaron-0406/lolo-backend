@@ -43,7 +43,7 @@ const FileSchema: ModelAttributes<File, FileType> = {
       key: "id_client",
     },
     onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
+    onDelete: "CASCADE",
   },
 };
 

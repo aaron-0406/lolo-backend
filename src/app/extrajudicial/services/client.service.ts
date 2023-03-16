@@ -15,6 +15,22 @@ class ClientService {
     return rta;
   }
 
+  async findByCustomerIdAndCode(customerId: number, code: string) {
+    const rta = await models.CLIENT.findOne({
+      where: {
+        code,
+      },
+      include: [
+        {
+          model: models.CUSTOMER_HAS_BANK,
+          as: "customerHasBank",
+          where: { idCustomer: customerId },
+        },
+      ],
+    });
+    return rta;
+  }
+
   async findAllByCustomerId(customerId: number): Promise<ClientType[]> {
     const rta = await models.CLIENT.findAll({
       include: [
@@ -127,7 +143,7 @@ class ClientService {
     return client;
   }
 
-  async create(data: ClientType, idBank: number) {
+  async create(data: Omit<ClientType, "id" | "createdAt">, idBank: number) {
     const client = await models.CLIENT.findOne({
       where: {
         code: data.code,
@@ -140,7 +156,7 @@ class ClientService {
     const newClient = await models.CLIENT.create(data);
 
     // CREATE A FOLDER FOR CLIENT
-    await createFolder(`${config.AWS_BANK_PATH}${idBank}/${data.code}/`);
+    // await createFolder(`${config.AWS_BANK_PATH}${idBank}/${data.code}/`);
     return newClient;
   }
 
@@ -154,9 +170,9 @@ class ClientService {
   async delete(code: string, chb: string, idBank: number) {
     const client = await this.findCode(code, chb);
     await client.destroy();
-    await deleteFileBucket(
-      `${config.AWS_BANK_PATH}${idBank}/${client.dataValues.code}/`
-    );
+    // await deleteFileBucket(
+    //   `${config.AWS_BANK_PATH}${idBank}/${client.dataValues.code}/`
+    // );
     return { code };
   }
 }

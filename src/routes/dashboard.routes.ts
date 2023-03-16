@@ -3,7 +3,13 @@ import path from "path";
 import boom from "@hapi/boom";
 import { archivosExcel } from "../middlewares/multer.handler";
 import validatorHandler from "../middlewares/validator.handler";
-import { excelFileSchema } from "../app/boss/schemas/dashboard.schema";
+import {
+  createClientsSchema,
+  createProductSchema,
+  deleteClientsSchema,
+  deleteProductSchema,
+  excelFileSchema,
+} from "../app/boss/schemas/dashboard.schema";
 import DashboardService from "../app/boss/services/dashboard.service";
 import ProductService from "../app/customers/services/product.service";
 import {
@@ -37,7 +43,7 @@ router.post(
       const products = await productService.getAllByCustomerId(customerId);
       const clients = await clientService.findAllByCustomerId(customerId);
 
-      let clientsAdded: ProductTypeName[] = productsXlsx
+      const clientsAdded: ProductTypeName[] = productsXlsx
         .filter(
           (product) => !clients.some((c) => c.code === product.clientCode)
         )
@@ -47,21 +53,23 @@ router.post(
         )
         .sort((a, b) => a.clientName.localeCompare(b.clientName));
 
-      let clientsDeleted: ClientType[] = clients
-        .filter((client) => !productsXlsx.some((c) => c.code === client.code))
+      const clientsDeleted: ClientType[] = clients
+        .filter(
+          (client) => !productsXlsx.some((c) => c.clientCode === client.code)
+        )
         .sort((a, b) => a.name.localeCompare(b.name));
 
-      let productsAdded: ProductTypeName[] = productsXlsx
+      const productsAdded: ProductTypeName[] = productsXlsx
         .filter((product) => !products.some((p) => p.code === product.code))
         .sort((a, b) => a.clientName.localeCompare(b.clientName));
 
-      let productsDeleted: ProductType[] = products
+      const productsDeleted: ProductType[] = products
         .filter((product) => !productsXlsx.some((p) => p.code === product.code))
         .sort((a, b) =>
           String(a.clientCode).localeCompare(String(b.clientCode))
         );
 
-      let productsCastigo: ProductType[] = products
+      const productsCastigo: ProductType[] = products
         .filter((product) => {
           const productFound = productsXlsx.find(
             (obj) => obj.code === product.code
@@ -80,6 +88,106 @@ router.post(
         productsDeleted,
         productsCastigo,
       });
+    } catch (error: any) {
+      next(boom.badRequest(error.message));
+    }
+  }
+);
+
+router.post(
+  "/clients",
+  validatorHandler(createClientsSchema, "body"),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { clients, customerUserId, customerHasBankId, idBank } = req.body;
+      for await (const client of clients) {
+        await clientService.create(
+          {
+            code: client.code,
+            cityId: 1,
+            name: client.name,
+            funcionarioId: 1,
+            customerUserId,
+            negotiationId: 1,
+            customerHasBankId,
+          },
+          idBank
+        );
+      }
+      res.json({ success: "Cliente agregado" });
+    } catch (error: any) {
+      next(boom.badRequest(error.message));
+    }
+  }
+);
+
+router.post(
+  "/delete-clients",
+  validatorHandler(deleteClientsSchema, "body"),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { clients, customerHasBankId, idBank } = req.body;
+      for await (const code of clients) {
+        await clientService.delete(code, customerHasBankId, idBank);
+      }
+      res.json({ success: "Cliente eliminado" });
+    } catch (error: any) {
+      next(boom.badRequest(error.message));
+    }
+  }
+);
+
+router.post(
+  "/products",
+  validatorHandler(createProductSchema, "body"),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { products, customerUserId, customerHasBankId, idBank } = req.body;
+      for await (const product of products) {
+        const client = await clientService.findByCustomerIdAndCode(
+          product.customerId,
+          product.clientCode
+        );
+        if (!client) {
+          await clientService.create(
+            {
+              code: product.clientCode,
+              cityId: 1,
+              name: product.clientName,
+              funcionarioId: 1,
+              customerUserId,
+              negotiationId: 1,
+              customerHasBankId,
+            },
+            idBank
+          );
+        }
+        await productService.create({
+          code: product.code,
+          clientCode: product.clientCode,
+          customerId: product.customerId,
+          name: product.name,
+          state: product.state,
+        });
+      }
+      res.json({ success: "Producto agregado" });
+    } catch (error: any) {
+      next(boom.badRequest(error.message));
+    }
+  }
+);
+
+router.post(
+  "/delete-products",
+  validatorHandler(deleteProductSchema, "body"),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { products } = req.body;
+      console.log(products);
+      for await (const code of products) {
+        await productService.deleteByCode(code);
+      }
+      res.json({ success: "Producto eliminado" });
     } catch (error: any) {
       next(boom.badRequest(error.message));
     }
