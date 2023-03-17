@@ -41,7 +41,7 @@ const GuarantorSchema = {
             key: "id_client",
         },
         onUpdate: "CASCADE",
-        onDelete: "NO ACTION",
+        onDelete: "CASCADE",
     },
 };
 class Guarantor extends sequelize_1.Model {

@@ -23,6 +23,7 @@ const ecampo_routes_1 = __importDefault(require("./ecampo.routes"));
 const template_routes_1 = __importDefault(require("./template.routes"));
 const values_routes_1 = __importDefault(require("./values.routes"));
 const dashboard_routes_1 = __importDefault(require("./dashboard.routes"));
+const product_routes_1 = __importDefault(require("./product.routes"));
 const routerApi = (app) => {
     const router = express_1.default.Router();
     app.use("/api/v1", router);
@@ -45,5 +46,6 @@ const routerApi = (app) => {
     router.use("/template", template_routes_1.default);
     router.use("/values", values_routes_1.default);
     router.use("/dashboard", dashboard_routes_1.default);
+    router.use("/product", product_routes_1.default);
 };
 exports.default = routerApi;

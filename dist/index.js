@@ -21,7 +21,7 @@ app.use(express_1.default.urlencoded({ extended: false }));
 //CORS
 const whitelist = [
     "http://localhost:3000",
-    "http://192.168.1.34:3000",
+    "http://192.168.1.24:3000",
     "http://lolobank.com",
 ];
 const options = {

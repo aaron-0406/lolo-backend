@@ -15,9 +15,8 @@ class DashboardService {
         return __awaiter(this, void 0, void 0, function* () {
             const workbook = new exceljs_1.Workbook();
             yield workbook.xlsx.readFile(file);
-            if (workbook.worksheets.length < 1) {
+            if (workbook.worksheets.length < 1)
                 throw new Error("No se encontraron hojas de trabajo en el archivo Excel");
-            }
             let sheetIds = [];
             workbook.eachSheet((sheet, id) => (sheetIds = [...sheetIds, id]));
             const worksheet = workbook.getWorksheet(sheetIds[0]);
@@ -31,10 +30,13 @@ class DashboardService {
                 products = [
                     ...products,
                     {
-                        id: `${file[1]}`,
+                        id: -1,
+                        clientCode: `${file[1]}`,
+                        name: `${file[37]}`,
                         code: `${file[2]}`,
-                        name: `${file[3]}`,
+                        clientName: `${file[3]}`,
                         state: `${file[8]}`,
+                        customerId: -1,
                     },
                 ];
             });

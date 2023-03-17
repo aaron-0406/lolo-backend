@@ -37,7 +37,7 @@ const DirectionSchema = {
             key: "id_client",
         },
         onUpdate: "CASCADE",
-        onDelete: "NO ACTION",
+        onDelete: "CASCADE",
     },
 };
 class Direction extends sequelize_1.Model {

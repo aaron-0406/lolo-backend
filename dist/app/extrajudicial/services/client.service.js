@@ -26,6 +26,37 @@ class ClientService {
             return rta;
         });
     }
+    findByCustomerIdAndCode(customerId, code) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rta = yield models.CLIENT.findOne({
+                where: {
+                    code,
+                },
+                include: [
+                    {
+                        model: models.CUSTOMER_HAS_BANK,
+                        as: "customerHasBank",
+                        where: { idCustomer: customerId },
+                    },
+                ],
+            });
+            return rta;
+        });
+    }
+    findAllByCustomerId(customerId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rta = yield models.CLIENT.findAll({
+                include: [
+                    {
+                        model: models.CUSTOMER_HAS_BANK,
+                        as: "customerHasBank",
+                        where: { idCustomer: customerId },
+                    },
+                ],
+            });
+            return JSON.parse(JSON.stringify(rta));
+        });
+    }
     findAllCHB(chb, query) {
         return __awaiter(this, void 0, void 0, function* () {
             //Filter

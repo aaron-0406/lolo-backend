@@ -39,7 +39,7 @@ const FileSchema = {
             key: "id_client",
         },
         onUpdate: "CASCADE",
-        onDelete: "NO ACTION",
+        onDelete: "CASCADE",
     },
 };
 class File extends sequelize_1.Model {
