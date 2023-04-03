@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -24,13 +47,18 @@ const path_1 = __importDefault(require("path"));
 const boom_1 = __importDefault(require("@hapi/boom"));
 const multer_handler_1 = require("../middlewares/multer.handler");
 const validator_handler_1 = __importDefault(require("../middlewares/validator.handler"));
+const nodemailer = __importStar(require("nodemailer"));
 const dashboard_schema_1 = require("../app/boss/schemas/dashboard.schema");
 const dashboard_service_1 = __importDefault(require("../app/boss/services/dashboard.service"));
 const product_service_1 = __importDefault(require("../app/customers/services/product.service"));
 const client_service_1 = __importDefault(require("../app/extrajudicial/services/client.service"));
+const config_1 = __importDefault(require("../config/config"));
+const fs = __importStar(require("fs"));
+const customer_user_service_1 = __importDefault(require("../app/customers/services/customer-user.service"));
 const router = (0, express_1.Router)();
 const productService = new product_service_1.default();
 const clientService = new client_service_1.default();
+const customerUserService = new customer_user_service_1.default();
 const multerFile = (req, res, next) => {
     multer_handler_1.archivosExcel.single("file")(req, res, (err) => {
         if (err)
@@ -93,7 +121,7 @@ router.post("/clients", (0, validator_handler_1.default)(dashboard_schema_1.crea
                         name: client.name,
                         funcionarioId: 1,
                         customerUserId,
-                        negotiationId: 1,
+                        negotiationId: 17,
                         customerHasBankId,
                     }, idBank);
                 }
@@ -163,7 +191,7 @@ router.post("/products", (0, validator_handler_1.default)(dashboard_schema_1.cre
                             name: product.clientName,
                             funcionarioId: 1,
                             customerUserId,
-                            negotiationId: 1,
+                            negotiationId: 17,
                             customerHasBankId,
                         }, idBank);
                     }
@@ -219,6 +247,100 @@ router.post("/delete-products", (0, validator_handler_1.default)(dashboard_schem
             finally { if (e_4) throw e_4.error; }
         }
         res.json({ success: "Producto eliminado" });
+    }
+    catch (error) {
+        next(boom_1.default.badRequest(error.message));
+    }
+}));
+router.post("/send-xslx", (0, validator_handler_1.default)(dashboard_schema_1.sendXlsxEmail, "body"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { usersId, clientsAdded, clientsDeleted, productsAdded, productsCastigo, productsDeleted, } = req.body;
+        const configExcel = [
+            {
+                rowTitles: ["CODIGO CLIENTE", "NOMBRE"],
+                workSheetName: "CLIENTES AGREGADOS",
+                rowData: clientsAdded.map((item) => {
+                    return [item.clientCode, item.clientName];
+                }),
+            },
+            {
+                rowTitles: ["CODIGO CLIENTE", "NOMBRE"],
+                workSheetName: "CLIENTES ELIMINADOS",
+                rowData: clientsDeleted.map((item) => {
+                    return [item.code, item.name];
+                }),
+            },
+            {
+                rowTitles: [
+                    "CODIGO CLIENTE",
+                    "NOMBRE CLIENTE",
+                    "CÓDIGO PRODUCTO",
+                    "NOMBRE PRODUCTO",
+                    "ESTADO",
+                ],
+                workSheetName: "PRODUCTOS AGREGADOS",
+                rowData: productsAdded.map((item) => {
+                    return [
+                        item.clientCode,
+                        item.clientName,
+                        item.code,
+                        item.name,
+                        item.state,
+                    ];
+                }),
+            },
+            {
+                rowTitles: ["CODIGO CLIENTE", "CODIGO PRODUCTO", "NOMBRE PRODUCTO"],
+                workSheetName: "PRODUCTOS ELIMINADOS",
+                rowData: productsDeleted.map((item) => {
+                    return [item.clientCode, item.code, item.name];
+                }),
+            },
+            {
+                rowTitles: [
+                    "CODIGO CLIENTE",
+                    "CODIGO PRODUCTO",
+                    "NOMBRE PRODUCTO",
+                    "ESTADO",
+                ],
+                workSheetName: "PRODUCTOS CASTIGO",
+                rowData: productsCastigo.map((item) => {
+                    return [item.clientCode, item.code, item.name, item.state];
+                }),
+            },
+        ];
+        const excel = yield dashboard_service_1.default.createExcel(configExcel);
+        const fileContent = fs.readFileSync(excel);
+        const transport = nodemailer.createTransport({
+            host: config_1.default.AWS_EMAIL_HOST,
+            port: 465,
+            secure: true,
+            auth: {
+                user: config_1.default.AWS_EMAIL_USER,
+                pass: config_1.default.AWS_EMAIL_PASSWORD,
+            },
+        });
+        for (const id of usersId) {
+            const user = yield customerUserService.findOne(id);
+            const message = {
+                from: config_1.default.AWS_EMAIL,
+                to: user.dataValues.email,
+                subject: "Reporte Excel",
+                text: "Archivo Excel",
+                attachments: [
+                    {
+                        filename: "Archivo.xlsx",
+                        content: fileContent,
+                        contentType: "application/vnd.ms-excel",
+                    },
+                ],
+            };
+            transport.sendMail(message, (error, info) => {
+                console.log(error);
+                console.log(info);
+            });
+        }
+        return res.json({ success: "Email enviado" });
     }
     catch (error) {
         next(boom_1.default.badRequest(error.message));

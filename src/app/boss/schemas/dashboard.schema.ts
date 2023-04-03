@@ -1,4 +1,9 @@
 import Joi from "joi";
+import {
+  ProductType,
+  ProductTypeName,
+} from "../../customers/types/product.tyoe";
+import { ClientType } from "../../extrajudicial/types/client.type";
 
 const file = Joi.string().required().messages({
   "any.required": "Se debe mandar un archivo",
@@ -85,4 +90,23 @@ export const createProductSchema = Joi.object<
 
 export const deleteProductSchema = Joi.object<{ products: string[] }, true>({
   products: Joi.array().items(Joi.string()),
+});
+
+export const sendXlsxEmail = Joi.object<
+  {
+    usersId: number[];
+    clientsAdded: ProductTypeName[];
+    clientsDeleted: ClientType[];
+    productsAdded: ProductTypeName[];
+    productsDeleted: ProductType[];
+    productsCastigo: ProductType[];
+  },
+  true
+>({
+  usersId: Joi.array().items(Joi.number()),
+  clientsAdded: Joi.array().items(Joi.object<ProductTypeName>()),
+  clientsDeleted: Joi.array().items(Joi.object<ClientType>()),
+  productsAdded: Joi.array().items(Joi.object<ProductTypeName>()),
+  productsCastigo: Joi.array().items(Joi.object<ProductType>()),
+  productsDeleted: Joi.array().items(Joi.object<ProductType>()),
 });

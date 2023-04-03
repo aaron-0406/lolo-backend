@@ -16,6 +16,10 @@ const config = {
   AWS_SECRET_KEY: `${process.env.AWS_SECRET_KEY}`,
   AWS_BANK_PATH: "BANCOS/",
   AWS_PLANTILLA_PATH: "PLANTILLAS/",
+  AWS_EMAIL: `${process.env.AWS_EMAIL}`,
+  AWS_EMAIL_USER: `${process.env.AWS_EMAIL_USER}`,
+  AWS_EMAIL_HOST: `${process.env.AWS_EMAIL_HOST}`,
+  AWS_EMAIL_PASSWORD: `${process.env.AWS_EMAIL_PASSWORD}`,
 };
 
 export default config;

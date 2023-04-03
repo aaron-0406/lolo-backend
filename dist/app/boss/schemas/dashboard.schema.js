@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProductSchema = exports.createProductSchema = exports.deleteClientsSchema = exports.createClientsSchema = exports.excelFileSchema = void 0;
+exports.sendXlsxEmail = exports.deleteProductSchema = exports.createProductSchema = exports.deleteClientsSchema = exports.createClientsSchema = exports.excelFileSchema = void 0;
 const joi_1 = __importDefault(require("joi"));
 const file = joi_1.default.string().required().messages({
     "any.required": "Se debe mandar un archivo",
@@ -46,4 +46,12 @@ exports.createProductSchema = joi_1.default.object({
 });
 exports.deleteProductSchema = joi_1.default.object({
     products: joi_1.default.array().items(joi_1.default.string()),
+});
+exports.sendXlsxEmail = joi_1.default.object({
+    usersId: joi_1.default.array().items(joi_1.default.number()),
+    clientsAdded: joi_1.default.array().items(joi_1.default.object()),
+    clientsDeleted: joi_1.default.array().items(joi_1.default.object()),
+    productsAdded: joi_1.default.array().items(joi_1.default.object()),
+    productsCastigo: joi_1.default.array().items(joi_1.default.object()),
+    productsDeleted: joi_1.default.array().items(joi_1.default.object()),
 });

@@ -3,14 +3,19 @@ import path from "path";
 import boom from "@hapi/boom";
 import { archivosExcel } from "../middlewares/multer.handler";
 import validatorHandler from "../middlewares/validator.handler";
+import * as nodemailer from "nodemailer";
+
 import {
   createClientsSchema,
   createProductSchema,
   deleteClientsSchema,
   deleteProductSchema,
   excelFileSchema,
+  sendXlsxEmail,
 } from "../app/boss/schemas/dashboard.schema";
-import DashboardService from "../app/boss/services/dashboard.service";
+import DashboardService, {
+  CreateExcelType,
+} from "../app/boss/services/dashboard.service";
 import ProductService from "../app/customers/services/product.service";
 import {
   ProductType,
@@ -18,10 +23,14 @@ import {
 } from "../app/customers/types/product.tyoe";
 import ClientService from "../app/extrajudicial/services/client.service";
 import { ClientType } from "../app/extrajudicial/types/client.type";
+import config from "../config/config";
+import * as fs from "fs";
+import CustomerUserService from "../app/customers/services/customer-user.service";
 
 const router = Router();
 const productService = new ProductService();
 const clientService = new ClientService();
+const customerUserService = new CustomerUserService();
 
 const multerFile = (req: Request, res: Response, next: NextFunction) => {
   archivosExcel.single("file")(req, res, (err) => {
@@ -108,7 +117,7 @@ router.post(
             name: client.name,
             funcionarioId: 1,
             customerUserId,
-            negotiationId: 1,
+            negotiationId: 17,
             customerHasBankId,
           },
           idBank
@@ -156,7 +165,7 @@ router.post(
               name: product.clientName,
               funcionarioId: 1,
               customerUserId,
-              negotiationId: 1,
+              negotiationId: 17,
               customerHasBankId,
             },
             idBank
@@ -188,6 +197,113 @@ router.post(
         await productService.deleteByCode(code);
       }
       res.json({ success: "Producto eliminado" });
+    } catch (error: any) {
+      next(boom.badRequest(error.message));
+    }
+  }
+);
+
+router.post(
+  "/send-xslx",
+  validatorHandler(sendXlsxEmail, "body"),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const {
+        usersId,
+        clientsAdded,
+        clientsDeleted,
+        productsAdded,
+        productsCastigo,
+        productsDeleted,
+      } = req.body;
+
+      const configExcel: CreateExcelType[] = [
+        {
+          rowTitles: ["CODIGO CLIENTE", "NOMBRE"],
+          workSheetName: "CLIENTES AGREGADOS",
+          rowData: clientsAdded.map((item: ProductTypeName) => {
+            return [item.clientCode, item.clientName];
+          }),
+        },
+        {
+          rowTitles: ["CODIGO CLIENTE", "NOMBRE"],
+          workSheetName: "CLIENTES ELIMINADOS",
+          rowData: clientsDeleted.map((item: ClientType) => {
+            return [item.code, item.name];
+          }),
+        },
+        {
+          rowTitles: [
+            "CODIGO CLIENTE",
+            "NOMBRE CLIENTE",
+            "CÓDIGO PRODUCTO",
+            "NOMBRE PRODUCTO",
+            "ESTADO",
+          ],
+          workSheetName: "PRODUCTOS AGREGADOS",
+          rowData: productsAdded.map((item: ProductTypeName) => {
+            return [
+              item.clientCode,
+              item.clientName,
+              item.code,
+              item.name,
+              item.state,
+            ];
+          }),
+        },
+        {
+          rowTitles: ["CODIGO CLIENTE", "CODIGO PRODUCTO", "NOMBRE PRODUCTO"],
+          workSheetName: "PRODUCTOS ELIMINADOS",
+          rowData: productsDeleted.map((item: ProductType) => {
+            return [item.clientCode, item.code, item.name];
+          }),
+        },
+        {
+          rowTitles: [
+            "CODIGO CLIENTE",
+            "CODIGO PRODUCTO",
+            "NOMBRE PRODUCTO",
+            "ESTADO",
+          ],
+          workSheetName: "PRODUCTOS CASTIGO",
+          rowData: productsCastigo.map((item: ProductType) => {
+            return [item.clientCode, item.code, item.name, item.state];
+          }),
+        },
+      ];
+      const excel = await DashboardService.createExcel(configExcel);
+      const fileContent = fs.readFileSync(excel);
+      const transport = nodemailer.createTransport({
+        host: config.AWS_EMAIL_HOST,
+        port: 465,
+        secure: true,
+        auth: {
+          user: config.AWS_EMAIL_USER,
+          pass: config.AWS_EMAIL_PASSWORD,
+        },
+      });
+
+      for (const id of usersId) {
+        const user = await customerUserService.findOne(id);
+        const message = {
+          from: config.AWS_EMAIL,
+          to: user.dataValues.email,
+          subject: "Reporte Excel",
+          text: "Archivo Excel",
+          attachments: [
+            {
+              filename: "Archivo.xlsx",
+              content: fileContent,
+              contentType: "application/vnd.ms-excel",
+            },
+          ],
+        };
+        transport.sendMail(message, (error, info) => {
+          console.log(error);
+          console.log(info);
+        });
+      }
+      return res.json({ success: "Email enviado" });
     } catch (error: any) {
       next(boom.badRequest(error.message));
     }
