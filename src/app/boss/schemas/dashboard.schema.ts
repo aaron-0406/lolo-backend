@@ -24,6 +24,8 @@ export const excelFileSchema = Joi.object<
 interface Client {
   name: string;
   code: string;
+  funcionarioId: number;
+  cityId: number;
 }
 
 interface Product {
@@ -38,6 +40,8 @@ interface Product {
 const clientSchema = Joi.object<Client, true>({
   name: Joi.string().required(),
   code: Joi.string().required(),
+  funcionarioId: Joi.number().required(),
+  cityId: Joi.number().required(),
 });
 
 const productSchema = Joi.object<Product, true>({

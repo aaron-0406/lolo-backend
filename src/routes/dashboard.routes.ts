@@ -113,9 +113,9 @@ router.post(
         await clientService.create(
           {
             code: client.code,
-            cityId: 1,
+            cityId: client.cityId,
             name: client.name,
-            funcionarioId: 1,
+            funcionarioId: client.funcionarioId,
             customerUserId,
             negotiationId: 17,
             customerHasBankId,
@@ -161,9 +161,9 @@ router.post(
           await clientService.create(
             {
               code: product.clientCode,
-              cityId: 1,
+              cityId: product.cityId,
               name: product.clientName,
-              funcionarioId: 1,
+              funcionarioId: product.funcionarioId,
               customerUserId,
               negotiationId: 17,
               customerHasBankId,

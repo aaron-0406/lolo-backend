@@ -15,8 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = __importDefault(require("../../../libs/sequelize"));
 const sequelize_2 = require("sequelize");
 const boom_1 = __importDefault(require("@hapi/boom"));
-const config_1 = __importDefault(require("../../../config/config"));
-const aws_bucket_1 = require("../../../libs/aws_bucket");
 const { models } = sequelize_1.default;
 class ClientService {
     constructor() { }
@@ -168,7 +166,7 @@ class ClientService {
                 throw boom_1.default.notFound("Ya existe un cliente con este código");
             const newClient = yield models.CLIENT.create(data);
             // CREATE A FOLDER FOR CLIENT
-            yield (0, aws_bucket_1.createFolder)(`${config_1.default.AWS_BANK_PATH}${idBank}/${data.code}/`);
+            // await createFolder(`${config.AWS_BANK_PATH}${idBank}/${data.code}/`);
             return newClient;
         });
     }
@@ -183,7 +181,9 @@ class ClientService {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield this.findCode(code, chb);
             yield client.destroy();
-            yield (0, aws_bucket_1.deleteFileBucket)(`${config_1.default.AWS_BANK_PATH}${idBank}/${client.dataValues.code}/`);
+            // await deleteFileBucket(
+            //   `${config.AWS_BANK_PATH}${idBank}/${client.dataValues.code}/`
+            // );
             return { code };
         });
     }

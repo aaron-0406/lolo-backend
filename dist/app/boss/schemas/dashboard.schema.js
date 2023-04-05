@@ -18,6 +18,8 @@ exports.excelFileSchema = joi_1.default.object({
 const clientSchema = joi_1.default.object({
     name: joi_1.default.string().required(),
     code: joi_1.default.string().required(),
+    funcionarioId: joi_1.default.number().required(),
+    cityId: joi_1.default.number().required(),
 });
 const productSchema = joi_1.default.object({
     name: joi_1.default.string().required(),

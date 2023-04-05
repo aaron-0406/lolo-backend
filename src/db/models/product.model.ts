@@ -11,7 +11,10 @@ import customerModel from "./customer.model";
 
 const PRODUCT_TABLE = "PRODUCT";
 
-const ProductSchema: ModelAttributes<Product, ProductType> = {
+const ProductSchema: ModelAttributes<
+  Product,
+  Omit<ProductType, "funcionarioId" | "cityId">
+> = {
   id: {
     primaryKey: true,
     allowNull: false,

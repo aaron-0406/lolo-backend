@@ -117,9 +117,9 @@ router.post("/clients", (0, validator_handler_1.default)(dashboard_schema_1.crea
                     const client = _c;
                     yield clientService.create({
                         code: client.code,
-                        cityId: 1,
+                        cityId: client.cityId,
                         name: client.name,
-                        funcionarioId: 1,
+                        funcionarioId: client.funcionarioId,
                         customerUserId,
                         negotiationId: 17,
                         customerHasBankId,
@@ -187,9 +187,9 @@ router.post("/products", (0, validator_handler_1.default)(dashboard_schema_1.cre
                     if (!client) {
                         yield clientService.create({
                             code: product.clientCode,
-                            cityId: 1,
+                            cityId: product.cityId,
                             name: product.clientName,
-                            funcionarioId: 1,
+                            funcionarioId: product.funcionarioId,
                             customerUserId,
                             negotiationId: 17,
                             customerHasBankId,

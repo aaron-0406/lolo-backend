@@ -46,7 +46,7 @@ class ProductService {
     return JSON.parse(JSON.stringify(rta));
   }
 
-  async create(product: Omit<ProductType, "id">) {
+  async create(product: Omit<ProductType, "id" | "funcionarioId" | "cityId">) {
     const newProduct = await models.PRODUCT.create(product);
     return newProduct;
   }

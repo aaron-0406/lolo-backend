@@ -29,6 +29,8 @@ class DashboardService {
           id: -1,
           clientCode: `${file[1]}`,
           name: `${file[37]}`,
+          funcionarioId: `${file[29]}`,
+          cityId: `${file[32]}`,
           code: `${file[2]}`,
           clientName: `${file[3]}`,
           state: `${file[8]}`,

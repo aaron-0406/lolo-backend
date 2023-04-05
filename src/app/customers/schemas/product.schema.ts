@@ -28,7 +28,10 @@ export const getProductsByCustomerIdSchema = Joi.object<
   customerId,
 });
 
-export const createProductSchema = Joi.object<Omit<ProductType, "id">, true>({
+export const createProductSchema = Joi.object<
+  Omit<ProductType, "id" | "cityId" | "funcionarioId">,
+  true
+>({
   code,
   state,
   clientCode: code,
@@ -37,7 +40,10 @@ export const createProductSchema = Joi.object<Omit<ProductType, "id">, true>({
 });
 
 export const updateProductSchema = Joi.object<
-  Omit<ProductType, "customerId" | "clientCode" | "code" | "id">,
+  Omit<
+    ProductType,
+    "customerId" | "clientCode" | "code" | "id" | "cityId" | "funcionarioId"
+  >,
   true
 >({
   state,
@@ -45,7 +51,10 @@ export const updateProductSchema = Joi.object<
 });
 
 export const changeProductSchema = Joi.object<
-  Omit<ProductType, "customerId" | "clientCode" | "code" | "id">,
+  Omit<
+    ProductType,
+    "customerId" | "clientCode" | "code" | "id" | "cityId" | "funcionarioId"
+  >,
   true
 >({
   state: state.optional(),
