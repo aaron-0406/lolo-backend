@@ -1,4 +1,13 @@
-import { Paragraph, TextRun, AlignmentType, ImageRun } from "docx";
+import {
+  Paragraph,
+  TextRun,
+  AlignmentType,
+  ImageRun,
+  WidthType,
+  TableCell,
+  TableRow,
+  Table,
+} from "docx";
 import path from "path";
 import fs from "fs";
 
@@ -17,9 +26,26 @@ type ParagraphOptionsType = {
   align?: AlignmentType;
 };
 
+type TableCellOptionsType = {
+  width: {
+    size: number;
+    type: WidthType;
+  };
+  children: Array<TemplateDocument>;
+};
+
+type TableRowOptionsType = {
+  children: Array<TableCellOptionsType>;
+};
+
+type TableOptionsType = {
+  rows: Array<TableRowOptionsType>;
+};
+
 export type TemplateDocument = {
   texts: TextOptionsType[];
   options?: ParagraphOptionsType;
+  tablets?: TableOptionsType;
 };
 
 export const createParagraph = (
@@ -79,4 +105,40 @@ export const createImgRun = (
     },
     children: [image],
   });
+};
+
+const createTableCell = (paragraphs: Array<Paragraph>) => {
+  const tableCell = new TableCell({
+    children: paragraphs,
+  });
+
+  return tableCell;
+};
+
+const createTableRow = (tableCells: Array<TableCell>) => {
+  const tableRow = new TableRow({
+    children: tableCells,
+  });
+
+  return tableRow;
+};
+
+export const createTable = (rows: Array<TableRowOptionsType>) => {
+  const tableRows = rows.map((row) => {
+    return createTableRow(
+      row.children.map((cell) => {
+        return createTableCell(
+          cell.children.map((paragraph) => {
+            return createParagraph(paragraph.texts, false, paragraph.options);
+          })
+        );
+      })
+    );
+  });
+
+  const table = new Table({
+    rows: tableRows,
+  });
+
+  return table;
 };
