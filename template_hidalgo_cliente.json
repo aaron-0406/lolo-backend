@@ -145,6 +145,58 @@
                   {
                     "texts": [
                       {
+                        "text": "  ID  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  NOMBRE  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  TELÉFONO  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  CORREO  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
                         "text": "[guarantor.id]",
                         "bold": true
                       }
@@ -200,6 +252,46 @@
                   {
                     "texts": [
                       {
+                        "text": "  ID  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  TIPO  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  DIRECCIÓN  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
                         "text": "[direction.id]",
                         "bold": true
                       }
@@ -237,6 +329,58 @@
     {
       "tablets": {
         "rows": [
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  ID  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  CÓDIGO  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  NOMBRE  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  ESTADO  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
           {
             "children": [
               {
@@ -292,6 +436,70 @@
     {
       "tablets": {
         "rows": [
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  ID  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  COMENTARIO  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  NEGOCIACIÓN  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  FECHA  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  HORA  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
           {
             "children": [
               {

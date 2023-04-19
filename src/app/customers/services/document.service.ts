@@ -242,157 +242,199 @@ class DocumentService {
         element.tablets.rows?.length > 0
       ) {
         if (
-          element.tablets.rows[0].children[0].children[0].texts.some((item) =>
+          element.tablets.rows[1].children[0].children[0].texts.some((item) =>
             item.text?.includes("guarantor")
           ) &&
           !!client.guarantor
         ) {
+          const headerRow = JSON.parse(JSON.stringify(element.tablets.rows))[0];
+          let newElement = [
+            JSON.parse(JSON.stringify(element.tablets.rows))[1],
+          ];
+
+          let rows = [];
+
           for (let k = 0; k < client.guarantor.length; k++) {
             const guarantor = client.guarantor[k];
-            let newElement = JSON.parse(JSON.stringify(element.tablets.rows));
-            newElement = newElement.map((row: any) => {
-              return {
-                children: row.children.map((cell: any) => {
-                  return {
-                    children: cell.children.map((paragraph: any) => {
-                      return {
-                        texts: paragraph.texts.map((item: any) => {
-                          return {
-                            ...item,
-                            text: item.text
-                              ?.replace("[guarantor.id]", guarantor.id)
-                              ?.replace("[guarantor.name]", guarantor.name)
-                              ?.replace("[guarantor.phone]", guarantor.phone)
-                              ?.replace("[guarantor.email]", guarantor.email),
-                          };
-                        }),
-                      };
-                    }),
-                  };
-                }),
-              };
-            });
 
-            const table = createTable(newElement);
-            paragraphs.push(table);
+            rows.push(
+              ...newElement.map((row: any) => {
+                return {
+                  children: row.children.map((cell: any) => {
+                    return {
+                      children: cell.children.map((paragraph: any) => {
+                        return {
+                          texts: paragraph.texts.map((item: any) => {
+                            return {
+                              ...item,
+                              text: item.text
+                                ?.replace("[guarantor.id]", guarantor.id)
+                                ?.replace("[guarantor.name]", guarantor.name)
+                                ?.replace("[guarantor.phone]", guarantor.phone)
+                                ?.replace("[guarantor.email]", guarantor.email),
+                            };
+                          }),
+                        };
+                      }),
+                    };
+                  }),
+                };
+              })
+            );
           }
+
+          const table = createTable([headerRow, ...rows]);
+          paragraphs.push(table);
         }
 
         if (
-          element.tablets.rows[0].children[0].children[0].texts.some((item) =>
+          element.tablets.rows[1].children[0].children[0].texts.some((item) =>
             item.text?.includes("direction")
           ) &&
           !!client.direction
         ) {
+          const headerRow = JSON.parse(JSON.stringify(element.tablets.rows))[0];
+          let newElement = [
+            JSON.parse(JSON.stringify(element.tablets.rows))[1],
+          ];
+
+          let rows = [];
+
           for (let k = 0; k < client.direction.length; k++) {
             const direction = client.direction[k];
-            let newElement = JSON.parse(JSON.stringify(element.tablets.rows));
-            newElement = newElement.map((row: any) => {
-              return {
-                children: row.children.map((cell: any) => {
-                  return {
-                    children: cell.children.map((paragraph: any) => {
-                      return {
-                        texts: paragraph.texts.map((item: any) => {
-                          return {
-                            ...item,
-                            text: item.text
-                              ?.replace("[direction.id]", direction.id)
-                              ?.replace("[direction.type]", direction.type)
-                              ?.replace(
-                                "[direction.direction]",
-                                direction.direction
-                              ),
-                          };
-                        }),
-                      };
-                    }),
-                  };
-                }),
-              };
-            });
 
-            const table = createTable(newElement);
-            paragraphs.push(table);
+            rows.push(
+              ...newElement.map((row: any) => {
+                return {
+                  children: row.children.map((cell: any) => {
+                    return {
+                      children: cell.children.map((paragraph: any) => {
+                        return {
+                          texts: paragraph.texts.map((item: any) => {
+                            return {
+                              ...item,
+                              text: item.text
+                                ?.replace("[direction.id]", direction.id)
+                                ?.replace("[direction.type]", direction.type)
+                                ?.replace(
+                                  "[direction.direction]",
+                                  direction.direction
+                                ),
+                            };
+                          }),
+                        };
+                      }),
+                    };
+                  }),
+                };
+              })
+            );
           }
+
+          const table = createTable([headerRow, ...rows]);
+          paragraphs.push(table);
         }
 
         if (
-          element.tablets.rows[0].children[0].children[0].texts.some((item) =>
+          element.tablets.rows[1].children[0].children[0].texts.some((item) =>
             item.text?.includes("product")
           ) &&
           !!client.product
         ) {
+          const headerRow = JSON.parse(JSON.stringify(element.tablets.rows))[0];
+          let newElement = [
+            JSON.parse(JSON.stringify(element.tablets.rows))[1],
+          ];
+
+          let rows = [];
+
           for (let k = 0; k < client.product.length; k++) {
             const product = client.product[k];
-            let newElement = JSON.parse(JSON.stringify(element.tablets.rows));
-            newElement = newElement.map((row: any) => {
-              return {
-                children: row.children.map((cell: any) => {
-                  return {
-                    children: cell.children.map((paragraph: any) => {
-                      return {
-                        texts: paragraph.texts.map((item: any) => {
-                          return {
-                            ...item,
-                            text: item.text
-                              ?.replace("[product.id]", product.id)
-                              ?.replace("[product.code]", product.code)
-                              ?.replace("[product.name]", product.name)
-                              ?.replace("[product.state]", product.state),
-                          };
-                        }),
-                      };
-                    }),
-                  };
-                }),
-              };
-            });
 
-            const table = createTable(newElement);
-            paragraphs.push(table);
+            rows.push(
+              ...newElement.map((row: any) => {
+                return {
+                  children: row.children.map((cell: any) => {
+                    return {
+                      children: cell.children.map((paragraph: any) => {
+                        return {
+                          texts: paragraph.texts.map((item: any) => {
+                            return {
+                              ...item,
+                              text: item.text
+                                ?.replace("[product.id]", product.id)
+                                ?.replace("[product.code]", product.code)
+                                ?.replace("[product.name]", product.name)
+                                ?.replace("[product.state]", product.state),
+                            };
+                          }),
+                        };
+                      }),
+                    };
+                  }),
+                };
+              })
+            );
           }
+
+          const table = createTable([headerRow, ...rows]);
+          paragraphs.push(table);
         }
 
         if (
-          element.tablets.rows[0].children[0].children[0].texts.some((item) =>
+          element.tablets.rows[1].children[0].children[0].texts.some((item) =>
             item.text?.includes("comment")
           ) &&
           !!client.comment
         ) {
+          const headerRow = JSON.parse(JSON.stringify(element.tablets.rows))[0];
+          let newElement = [
+            JSON.parse(JSON.stringify(element.tablets.rows))[1],
+          ];
+
+          let rows = [];
+
           for (let k = 0; k < client.comment.length; k++) {
             const comment = client.comment[k];
-            let newElement = JSON.parse(JSON.stringify(element.tablets.rows));
-            newElement = newElement.map((row: any) => {
-              return {
-                children: row.children.map((cell: any) => {
-                  return {
-                    children: cell.children.map((paragraph: any) => {
-                      return {
-                        texts: paragraph.texts.map((item: any) => {
-                          return {
-                            ...item,
-                            text: item.text
-                              ?.replace("[comment.id]", comment.id)
-                              ?.replace("[comment.comment]", comment.comment)
-                              ?.replace(
-                                "[comment.negotiation]",
-                                comment.negotiation
-                              )
-                              ?.replace("[comment.date]", comment.date)
-                              ?.replace("[comment.hour]", comment.hour),
-                          };
-                        }),
-                      };
-                    }),
-                  };
-                }),
-              };
-            });
 
-            const table = createTable(newElement);
-            paragraphs.push(table);
+            rows.push(
+              ...newElement.map((row: any) => {
+                return {
+                  children: row.children.map((cell: any) => {
+                    return {
+                      children: cell.children.map((paragraph: any) => {
+                        return {
+                          texts: paragraph.texts.map((item: any) => {
+                            return {
+                              ...item,
+                              text: item.text
+                                ?.replace("[comment.id]", comment.id)
+                                ?.replace("[comment.comment]", comment.comment)
+                                ?.replace(
+                                  "[comment.negotiation]",
+                                  comment.negotiation
+                                )
+                                ?.replace("[comment.date]", comment.date)
+                                ?.replace(
+                                  "[comment.hour]",
+                                  new Date(comment.hour).toLocaleTimeString(
+                                    "es-PE",
+                                    { hour12: false }
+                                  )
+                                ),
+                            };
+                          }),
+                        };
+                      }),
+                    };
+                  }),
+                };
+              })
+            );
           }
+
+          const table = createTable([headerRow, ...rows]);
+          paragraphs.push(table);
         }
       }
 
