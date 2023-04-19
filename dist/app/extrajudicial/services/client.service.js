@@ -125,12 +125,44 @@ class ClientService {
             const rta = yield models.CLIENT.findAll({
                 include: [
                     {
+                        model: models.CUSTOMER_USER,
+                        as: "customerUser",
+                        foreignKey: "customerUserId",
+                        identifier: "id",
+                        attributes: ["name", "lastName"],
+                    },
+                    {
+                        model: models.FUNCIONARIO,
+                        as: "funcionario",
+                        foreignKey: "funcionarioId",
+                        identifier: "id",
+                        attributes: ["name"],
+                    },
+                    {
+                        model: models.CITY,
+                        as: "city",
+                        foreignKey: "cityId",
+                        identifier: "id",
+                        attributes: ["name"],
+                    },
+                    {
+                        model: models.NEGOTIATION,
+                        as: "negotiation",
+                        foreignKey: "negotiationId",
+                        identifier: "id",
+                        attributes: ["name"],
+                    },
+                    {
                         model: models.DIRECTION,
                         as: "direction",
                     },
                     {
                         model: models.GUARANTOR,
                         as: "guarantor",
+                    },
+                    {
+                        model: models.COMMENT,
+                        as: "comment",
                     },
                 ],
                 where: {
