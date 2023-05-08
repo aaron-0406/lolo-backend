@@ -3,7 +3,7 @@ import { Op } from "sequelize";
 import boom from "@hapi/boom";
 import { ClientType } from "../types/client.type";
 import config from "../../../config/config";
-import { createFolder, deleteFileBucket } from "../../../libs/aws_bucket";
+import { createFolder } from "../../../libs/aws_bucket";
 
 const { models } = sequelize;
 
@@ -175,7 +175,7 @@ class ClientService {
     return client;
   }
 
-  async create(data: Omit<ClientType, "id" | "createdAt">, idBank: number) {
+  async create(data: Omit<ClientType, "id" | "createdAt">, idCustomer: number) {
     const client = await models.CLIENT.findOne({
       where: {
         code: data.code,
@@ -188,7 +188,9 @@ class ClientService {
     const newClient = await models.CLIENT.create(data);
 
     // CREATE A FOLDER FOR CLIENT
-    await createFolder(`${config.AWS_BANK_PATH}${idBank}/${data.code}/`);
+    await createFolder(
+      `${config.AWS_CHB_PATH}${idCustomer}/${data.customerHasBankId}/${data.code}/`
+    );
     return newClient;
   }
 
@@ -199,12 +201,9 @@ class ClientService {
     return rta;
   }
 
-  async delete(code: string, chb: string, idBank: number) {
+  async delete(code: string, chb: string, idCustomer: number) {
     const client = await this.findCode(code, chb);
     await client.destroy();
-    await deleteFileBucket(
-      `${config.AWS_BANK_PATH}${idBank}/${client.dataValues.code}/`
-    );
     return { code };
   }
 }

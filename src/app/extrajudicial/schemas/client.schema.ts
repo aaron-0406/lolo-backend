@@ -13,7 +13,7 @@ const cityId = Joi.number();
 const funcionarioId = Joi.number();
 const customerUserId = Joi.number();
 const customerHasBankId = Joi.number();
-const idBank = Joi.number();
+const idCustomer = Joi.number();
 
 const page = Joi.number().required().messages({
   "number.base": "El campo page es inválido",
@@ -78,22 +78,22 @@ const getClientByCHBSchemaQuery = Joi.object({
   limit,
 }).options({ abortEarly: true });
 
-const getClientByBank = Joi.object<{ idBank: number }, true>({
-  idBank,
+const getClientByCustomer = Joi.object<{ idCustomer: number }, true>({
+  idCustomer,
 });
 
 const deleteClientByCodeSchema = Joi.object<
-  { code: string; chb: number; idBank: number },
+  { code: string; chb: number; idCustomer: number },
   true
 >({
   code: code.required(),
   chb: customerHasBankId.required(),
-  idBank,
+  idCustomer,
 });
 
 export default {
   createClientSchema,
-  getClientByBank,
+  getClientByCustomer,
   updateClientSchema,
   getClientByCHBSchema,
   getClientByCodeSchema,
