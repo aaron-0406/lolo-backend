@@ -38,21 +38,22 @@ router.get("/:id", (0, validator_handler_1.default)(getFileSchema, "params"), (r
         next(error);
     }
 }));
-router.get("/single/:idBank/:code/:id", (0, validator_handler_1.default)(getFileSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/single/:idCustomer/:chb/:code/:id", (0, validator_handler_1.default)(getFileSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id, idBank, code } = req.params;
-        const file = yield service.findOne(Number(id), Number(idBank), Number(code));
+        const { id, idCustomer, code, chb } = req.params;
+        const file = yield service.findOne(Number(idCustomer), Number(chb), Number(code), Number(id));
         res.json(file);
     }
     catch (error) {
         next(error);
     }
 }));
-router.post("/:idBank/:code/:id", (0, validator_handler_1.default)(createFileSchema, "params"), multerFile, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/:idCustomer/:chb/:code/:id", (0, validator_handler_1.default)(createFileSchema, "params"), multerFile, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         req.body.clientId = Number(req.params.id);
-        req.body.idBank = Number(req.params.idBank);
+        req.body.idCustomer = Number(req.params.idCustomer);
         req.body.code = Number(req.params.code);
+        req.body.chb = Number(req.params.chb);
         req.body.files = req.files;
         const { body } = req;
         const newFile = yield service.create(body);
@@ -77,10 +78,10 @@ router.post("/:idBank/:code/:id", (0, validator_handler_1.default)(createFileSch
 //     }
 //   }
 // );
-router.delete("/:idBank/:code/:id", (0, validator_handler_1.default)(createFileSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete("/:idCustomer/:chb/:code/:id", (0, validator_handler_1.default)(createFileSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id, code, idBank } = req.params;
-        yield service.delete(Number(idBank), Number(code), Number(id));
+        const { id, code, idCustomer, chb } = req.params;
+        yield service.delete(Number(idCustomer), Number(chb), Number(code), Number(id));
         res.status(201).json({ id });
     }
     catch (error) {

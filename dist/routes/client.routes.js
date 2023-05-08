@@ -16,7 +16,7 @@ const express_1 = __importDefault(require("express"));
 const validator_handler_1 = __importDefault(require("../middlewares/validator.handler"));
 const client_schema_1 = __importDefault(require("../app/extrajudicial/schemas/client.schema"));
 const client_service_1 = __importDefault(require("../app/extrajudicial/services/client.service"));
-const { getClientByCHBSchema, getClientByCodeSchema, createClientSchema, updateClientSchema, getClientByBank, deleteClientByCodeSchema, getClientByCHBSchemaQuery, } = client_schema_1.default;
+const { getClientByCHBSchema, getClientByCodeSchema, createClientSchema, updateClientSchema, getClientByCustomer, deleteClientByCodeSchema, getClientByCHBSchemaQuery, } = client_schema_1.default;
 const router = express_1.default.Router();
 const service = new client_service_1.default();
 router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -58,10 +58,10 @@ router.get("/:code/:chb", (0, validator_handler_1.default)(getClientByCodeSchema
         next(error);
     }
 }));
-router.post("/:idBank", (0, validator_handler_1.default)(getClientByBank, "params"), (0, validator_handler_1.default)(createClientSchema, "body"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/:idCustomer", (0, validator_handler_1.default)(getClientByCustomer, "params"), (0, validator_handler_1.default)(createClientSchema, "body"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const body = req.body;
-        const newClient = yield service.create(body, Number(req.params.idBank));
+        const newClient = yield service.create(body, Number(req.params.idCustomer));
         res.status(201).json(newClient);
     }
     catch (error) {
@@ -79,10 +79,10 @@ router.patch("/:code/:chb", (0, validator_handler_1.default)(getClientByCodeSche
         next(error);
     }
 }));
-router.delete("/:code/:chb/:idBank", (0, validator_handler_1.default)(deleteClientByCodeSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete("/:code/:chb/:idCustomer", (0, validator_handler_1.default)(deleteClientByCodeSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { code, chb, idBank } = req.params;
-        yield service.delete(code, chb, Number(idBank));
+        const { code, chb, idCustomer } = req.params;
+        yield service.delete(code, chb, Number(idCustomer));
         res.status(201).json({ code, chb });
     }
     catch (error) {
