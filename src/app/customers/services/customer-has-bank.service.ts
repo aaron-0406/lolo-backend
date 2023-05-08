@@ -1,6 +1,8 @@
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
 import { CustomerHasBankType } from "../types/customer-has-bank";
+import { createFolder } from "../../../libs/aws_bucket";
+import config from "../../../config/config";
 
 const { models } = sequelize;
 
@@ -36,6 +38,9 @@ class CustomerHasBankService {
 
     if (!customerBank) {
       const newCustomerBank = await models.CUSTOMER_HAS_BANK.create(data);
+      await createFolder(
+        `${config.AWS_CHB_PATH}${newCustomerBank.dataValues.idCustomer}/${newCustomerBank.dataValues.id}/`
+      );
       return newCustomerBank;
     }
 

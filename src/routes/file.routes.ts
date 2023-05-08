@@ -30,15 +30,16 @@ router.get(
   }
 );
 router.get(
-  "/single/:idBank/:code/:id",
+  "/single/:idCustomer/:chb/:code/:id",
   validatorHandler(getFileSchema, "params"),
   async (req, res, next) => {
     try {
-      const { id, idBank, code } = req.params;
+      const { id, idCustomer, code, chb } = req.params;
       const file = await service.findOne(
-        Number(id),
-        Number(idBank),
-        Number(code)
+        Number(idCustomer),
+        Number(chb),
+        Number(code),
+        Number(id)
       );
       res.json(file);
     } catch (error) {
@@ -48,14 +49,15 @@ router.get(
 );
 
 router.post(
-  "/:idBank/:code/:id",
+  "/:idCustomer/:chb/:code/:id",
   validatorHandler(createFileSchema, "params"),
   multerFile,
   async (req, res, next) => {
     try {
       req.body.clientId = Number(req.params.id);
-      req.body.idBank = Number(req.params.idBank);
+      req.body.idCustomer = Number(req.params.idCustomer);
       req.body.code = Number(req.params.code);
+      req.body.chb = Number(req.params.chb);
       req.body.files = req.files;
       const { body } = req;
       const newFile = await service.create(body);
@@ -83,12 +85,17 @@ router.post(
 // );
 
 router.delete(
-  "/:idBank/:code/:id",
+  "/:idCustomer/:chb/:code/:id",
   validatorHandler(createFileSchema, "params"),
   async (req, res, next) => {
     try {
-      const { id, code, idBank } = req.params;
-      await service.delete(Number(idBank), Number(code), Number(id));
+      const { id, code, idCustomer, chb } = req.params;
+      await service.delete(
+        Number(idCustomer),
+        Number(chb),
+        Number(code),
+        Number(id)
+      );
       res.status(201).json({ id });
     } catch (error) {
       next(error);

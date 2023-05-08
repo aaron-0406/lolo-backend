@@ -8,7 +8,7 @@ const {
   getClientByCodeSchema,
   createClientSchema,
   updateClientSchema,
-  getClientByBank,
+  getClientByCustomer,
   deleteClientByCodeSchema,
   getClientByCHBSchemaQuery,
 } = clientSchema;
@@ -68,13 +68,16 @@ router.get(
 );
 
 router.post(
-  "/:idBank",
-  validatorHandler(getClientByBank, "params"),
+  "/:idCustomer",
+  validatorHandler(getClientByCustomer, "params"),
   validatorHandler(createClientSchema, "body"),
   async (req, res, next) => {
     try {
       const body = req.body;
-      const newClient = await service.create(body, Number(req.params.idBank));
+      const newClient = await service.create(
+        body,
+        Number(req.params.idCustomer)
+      );
       res.status(201).json(newClient);
     } catch (error) {
       next(error);
@@ -99,12 +102,12 @@ router.patch(
 );
 
 router.delete(
-  "/:code/:chb/:idBank",
+  "/:code/:chb/:idCustomer",
   validatorHandler(deleteClientByCodeSchema, "params"),
   async (req, res, next) => {
     try {
-      const { code, chb, idBank } = req.params;
-      await service.delete(code, chb, Number(idBank));
+      const { code, chb, idCustomer } = req.params;
+      await service.delete(code, chb, Number(idCustomer));
       res.status(201).json({ code, chb });
     } catch (error) {
       next(error);

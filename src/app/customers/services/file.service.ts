@@ -15,7 +15,8 @@ const { models } = sequelize;
 type CreateParam = {
   clientId: number;
   code: number;
-  idBank: number;
+  idCustomer: number;
+  chb: number;
   files: Express.Multer.File[];
 };
 
@@ -31,7 +32,7 @@ class FileService {
     return rta;
   }
 
-  async findOne(id: number, idBank: number, code: number) {
+  async findOne(idCustomer: number, chb: number, code: number, id: number) {
     const file = await models.FILE.findOne({
       where: {
         id,
@@ -49,14 +50,14 @@ class FileService {
 
     if (!isStored) {
       await readFile(
-        `${config.AWS_BANK_PATH}${idBank}/${code}/${file.dataValues.name}`
+        `${config.AWS_CHB_PATH}${idCustomer}/${chb}/${code}/${file.dataValues.name}`
       );
     }
     return file;
   }
 
   async create(data: CreateParam) {
-    const { clientId, code, idBank } = data;
+    const { clientId, code, idCustomer, chb } = data;
     // console.log(data);
     const filesAdded = [];
     for (let i = 0; i < data.files.length; i++) {
@@ -72,7 +73,7 @@ class FileService {
       // UPLOAD TO AWS
       await uploadFile(
         data.files[i],
-        `${config.AWS_BANK_PATH}${idBank}/${code}`
+        `${config.AWS_CHB_PATH}${idCustomer}/${chb}/${code}`
       );
 
       // DELETE TEMP FILE
@@ -82,7 +83,7 @@ class FileService {
     return filesAdded;
   }
 
-  async delete(idBank: number, code: number, id: number) {
+  async delete(idCustomer: number, chb: number, code: number, id: number) {
     const file = await models.FILE.findOne({
       where: {
         id,
@@ -92,7 +93,7 @@ class FileService {
     const newFile: FileType = JSON.parse(JSON.stringify(file));
     await file.destroy();
     await deleteFileBucket(
-      `${config.AWS_BANK_PATH}${idBank}/${code}/${newFile.name}`
+      `${config.AWS_CHB_PATH}${idCustomer}/${chb}/${code}/${newFile.name}`
     );
     return { id };
   }

@@ -2,18 +2,21 @@ import Joi from "joi";
 
 const id = Joi.number();
 const code = Joi.number();
-const idBank = Joi.number();
+const idCustomer = Joi.number();
+const chb = Joi.number();
 
 const createFileSchema = Joi.object({
-  id,
+  idCustomer,
+  chb,
   code,
-  idBank,
+  id,
 });
 
 const getFileSchema = Joi.object({
-  id,
-  idBank,
+  idCustomer,
+  chb,
   code,
+  id,
 });
 
 export default { createFileSchema, getFileSchema };
