@@ -31,6 +31,10 @@ const filter = joi_1.default.string().optional().min(3).messages({
     "string.min": "El campo debe ser de mínimo 3 caracteres",
     "string.empty": "El campo filter no puede estar vácio",
 });
+const negotiations = joi_1.default.string().required();
+const funcionarios = joi_1.default.string().required();
+const users = joi_1.default.string().required();
+const cities = joi_1.default.string().required();
 const createClientSchema = joi_1.default.object({
     code: code.required(),
     negotiationId,
@@ -68,6 +72,10 @@ const getClientByCHBSchemaQuery = joi_1.default.object({
     page,
     filter,
     limit,
+    negotiations,
+    funcionarios,
+    users,
+    cities,
 }).options({ abortEarly: true });
 const getClientByCustomer = joi_1.default.object({
     idCustomer,
