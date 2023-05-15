@@ -32,6 +32,11 @@ const filter = Joi.string().optional().min(3).messages({
   "string.empty": "El campo filter no puede estar vácio",
 });
 
+const negotiations = Joi.string().required();
+const funcionarios = Joi.string().required();
+const users = Joi.string().required();
+const cities = Joi.string().required();
+
 const createClientSchema = Joi.object<Omit<ClientType, "id">, true>({
   code: code.required(),
   negotiationId,
@@ -76,6 +81,10 @@ const getClientByCHBSchemaQuery = Joi.object({
   page,
   filter,
   limit,
+  negotiations,
+  funcionarios,
+  users,
+  cities,
 }).options({ abortEarly: true });
 
 const getClientByCustomer = Joi.object<{ idCustomer: number }, true>({

@@ -45,47 +45,71 @@ class ClientService {
   }
 
   async findAllCHB(chb: string, query: any) {
-    //Filter
-    const { limit, page, filter } = query;
+    const { limit, page, filter, negotiations, funcionarios, users, cities } =
+      query;
 
     const limite = parseInt(limit, 10);
     const pagina = parseInt(page, 10);
     const filtro = filter as string;
+    const listNegotiations = JSON.parse(negotiations);
+    const listFuncionarios = JSON.parse(funcionarios);
+    const listUsers = JSON.parse(users);
+    const listCities = JSON.parse(cities);
 
+    const filters: any = {};
     if (filter !== "" && filter !== undefined) {
-      const quantity = await models.CLIENT.count({
-        where: {
-          [Op.or]: [{ name: { [Op.substring]: filtro } }],
-          customer_has_bank_id_customer_has_bank: chb,
-        },
-      });
-
-      const clients = await models.CLIENT.findAll({
-        include: [{ model: models.NEGOTIATION, as: "negotiation" }],
-        order: [["name", "ASC"]],
-        limit: limite,
-        offset: (pagina - 1) * limite,
-        where: {
-          [Op.or]: [{ name: { [Op.substring]: filtro } }],
-          customer_has_bank_id_customer_has_bank: chb,
-        },
-      });
-      return { clients, quantity };
+      filters.name = { [Op.substring]: filtro };
     }
-    const quantity = await models.CLIENT.count({
-      where: {
+    if (listNegotiations.length) {
+      filters.negotiation_id_negotiation = { [Op.in]: listNegotiations };
+    }
+    if (listFuncionarios.length) {
+      filters.funcionario_id_funcionario = { [Op.in]: listFuncionarios };
+    }
+    if (listUsers.length) {
+      filters.customer_user_id_customer_user = { [Op.in]: listUsers };
+    }
+    if (listCities.length) {
+      filters.city_id_city = { [Op.in]: listCities };
+    }
+
+    let filtersWhere: any = {
+      customer_has_bank_id_customer_has_bank: chb,
+    };
+    if (Object.keys(filters).length > 0) {
+      filtersWhere = {
+        [Op.or]: [filters],
         customer_has_bank_id_customer_has_bank: chb,
-      },
+      };
+    }
+
+    const quantity = await models.CLIENT.count({
+      where: filtersWhere,
     });
+
     const clients = await models.CLIENT.findAll({
-      include: [{ model: models.NEGOTIATION, as: "negotiation" }],
+      include: [
+        { model: models.NEGOTIATION, as: "negotiation" },
+        {
+          model: models.FUNCIONARIO,
+          as: "funcionario",
+          attributes: { exclude: ["bankId"] },
+        },
+        {
+          model: models.CUSTOMER_USER,
+          as: "customerUser",
+        },
+        {
+          model: models.CITY,
+          as: "city",
+        },
+      ],
       order: [["name", "ASC"]],
       limit: limite,
       offset: (pagina - 1) * limite,
-      where: {
-        customer_has_bank_id_customer_has_bank: chb,
-      },
+      where: filtersWhere,
     });
+
     return { clients, quantity };
   }
 
