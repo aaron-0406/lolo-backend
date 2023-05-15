@@ -45,7 +45,8 @@ class ClientService {
   }
 
   async findAllCHB(chb: string, query: any) {
-    const { limit, page, filter, negotiations, funcionarios, users } = query;
+    const { limit, page, filter, negotiations, funcionarios, users, cities } =
+      query;
 
     const limite = parseInt(limit, 10);
     const pagina = parseInt(page, 10);
@@ -53,6 +54,7 @@ class ClientService {
     const listNegotiations = JSON.parse(negotiations);
     const listFuncionarios = JSON.parse(funcionarios);
     const listUsers = JSON.parse(users);
+    const listCities = JSON.parse(cities);
 
     const filters: any = {};
     if (filter !== "" && filter !== undefined) {
@@ -66,6 +68,9 @@ class ClientService {
     }
     if (listUsers.length) {
       filters.customer_user_id_customer_user = { [Op.in]: listUsers };
+    }
+    if (listCities.length) {
+      filters.city_id_city = { [Op.in]: listCities };
     }
 
     let filtersWhere: any = {
@@ -93,6 +98,10 @@ class ClientService {
         {
           model: models.CUSTOMER_USER,
           as: "customerUser",
+        },
+        {
+          model: models.CITY,
+          as: "city",
         },
       ],
       order: [["name", "ASC"]],
