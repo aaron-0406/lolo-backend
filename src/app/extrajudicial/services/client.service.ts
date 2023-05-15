@@ -45,12 +45,13 @@ class ClientService {
   }
 
   async findAllCHB(chb: string, query: any) {
-    const { limit, page, filter, negotiations } = query;
+    const { limit, page, filter, negotiations, funcionarios } = query;
 
     const limite = parseInt(limit, 10);
     const pagina = parseInt(page, 10);
     const filtro = filter as string;
     const listNegotiations = JSON.parse(negotiations);
+    const listFuncionarios = JSON.parse(funcionarios);
 
     const filters: any = {};
     if (filter !== "" && filter !== undefined) {
@@ -58,6 +59,9 @@ class ClientService {
     }
     if (listNegotiations.length) {
       filters.negotiation_id_negotiation = { [Op.in]: listNegotiations };
+    }
+    if (listFuncionarios.length) {
+      filters.funcionario_id_funcionario = { [Op.in]: listFuncionarios };
     }
 
     let filtersWhere: any = {
@@ -75,7 +79,14 @@ class ClientService {
     });
 
     const clients = await models.CLIENT.findAll({
-      include: [{ model: models.NEGOTIATION, as: "negotiation" }],
+      include: [
+        { model: models.NEGOTIATION, as: "negotiation" },
+        {
+          model: models.FUNCIONARIO,
+          as: "funcionario",
+          attributes: { exclude: ["bankId"] },
+        },
+      ],
       order: [["name", "ASC"]],
       limit: limite,
       offset: (pagina - 1) * limite,

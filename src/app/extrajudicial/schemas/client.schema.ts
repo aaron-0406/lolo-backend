@@ -33,6 +33,7 @@ const filter = Joi.string().optional().min(3).messages({
 });
 
 const negotiations = Joi.string().required();
+const funcionarios = Joi.string().required();
 
 const createClientSchema = Joi.object<Omit<ClientType, "id">, true>({
   code: code.required(),
@@ -79,6 +80,7 @@ const getClientByCHBSchemaQuery = Joi.object({
   filter,
   limit,
   negotiations,
+  funcionarios,
 }).options({ abortEarly: true });
 
 const getClientByCustomer = Joi.object<{ idCustomer: number }, true>({
