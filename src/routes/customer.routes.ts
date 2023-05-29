@@ -3,7 +3,13 @@ import validatorHandler from "../middlewares/validator.handler";
 import CustomerService from "../app/customers/services/customer.service";
 import customerSchemas from "../app/customers/schemas/customer.schema";
 
-const { getCustomerByUrlSchema, createCustomerSchema } = customerSchemas;
+const {
+  getCustomerByUrlSchema,
+  createCustomerSchema,
+  getCustomerByID,
+  updateCustomerSchema,
+  updateStateCustomerSchema,
+} = customerSchemas;
 const router = express.Router();
 const service = new CustomerService();
 
@@ -38,6 +44,38 @@ router.post(
       const body = req.body;
       const newCustomer = await service.create(body);
       res.status(201).json(newCustomer);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.put(
+  "/:id",
+  validatorHandler(getCustomerByID, "params"),
+  validatorHandler(updateCustomerSchema, "body"),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const customer = await service.update(id, body);
+      res.json(customer);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.put(
+  "/state/:id",
+  validatorHandler(getCustomerByID, "params"),
+  validatorHandler(updateStateCustomerSchema, "body"),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const customer = await service.updateState(id, body.state);
+      res.json(customer);
     } catch (error) {
       next(error);
     }

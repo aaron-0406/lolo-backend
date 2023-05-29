@@ -28,21 +28,43 @@ class CustomerService {
     return customer;
   }
 
+  async findOneByID(id: string) {
+    const customer = await models.CUSTOMER.findOne({
+      where: {
+        id_customer: id,
+      },
+    });
+
+    if (!customer) {
+      throw boom.notFound("Cliente no encontrado");
+    }
+    return customer;
+  }
+
   async create(data: CustomerType) {
     const newCustomer = await models.CUSTOMER.create(data);
-    await createFolder(`${config.AWS_PLANTILLA_PATH}${newCustomer.dataValues.id}/`);
+    await createFolder(
+      `${config.AWS_PLANTILLA_PATH}${newCustomer.dataValues.id}/`
+    );
     return newCustomer;
   }
 
   async update(id: string, changes: CustomerType) {
-    const customer = await this.findOne(id);
+    const customer = await this.findOneByID(id);
     const rta = await customer.update(changes);
 
     return rta;
   }
 
+  async updateState(id: string, state: boolean) {
+    const customer = await this.findOneByID(id);
+    const rta = await customer.update({ ...customer, state });
+
+    return rta;
+  }
+
   async delete(id: string) {
-    const customer = await this.findOne(id);
+    const customer = await this.findOneByID(id);
     await customer.destroy();
 
     return { id };
