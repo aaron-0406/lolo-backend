@@ -4,8 +4,11 @@ import boom from "@hapi/boom";
 import { ClientType } from "../types/client.type";
 import config from "../../../config/config";
 import { createFolder } from "../../../libs/aws_bucket";
-import { Workbook, CellValue } from "exceljs";
+import { Workbook } from "exceljs";
 import path from "path";
+import CommentService from "./comment.service";
+import ProductService from "../../customers/services/product.service";
+import moment from "moment";
 
 const { models } = sequelize;
 
@@ -249,8 +252,51 @@ class ClientService {
     const worksheet = workbook.getWorksheet("GESTIONES");
 
     //Logic to update the file
-    worksheet.getCell("A2").value = "AARON";
-    worksheet.getCell("B2").value = 123;
+    const commentService = new CommentService();
+    const productService = new ProductService();
+
+    const comments = await commentService.findAllByDate(new Date());
+    const commentsWithProducts = await Promise.all(
+      comments.map(async (comment: any) => {
+        const products = await productService.getByClientCode(
+          comment.client.code
+        );
+
+        return {
+          ...comment,
+          client: {
+            ...comment.client,
+            products: products.map((product) => {
+              return {
+                code: product.code,
+              };
+            }),
+          },
+        };
+      })
+    );
+
+    const data: any = [];
+    commentsWithProducts.forEach((comment) => {
+      comment.client.products.forEach((product: any) => {
+        data.push({ productCode: product.code, ...comment });
+      });
+    });
+
+    for (let index = 0; index < data.length; index++) {
+      worksheet.getCell(`A${index + 2}`).value = data[index].productCode;
+      worksheet.getCell(`B${index + 2}`).value = data[index].client.code;
+      worksheet.getCell(`C${index + 2}`).value = data[index].client.name;
+      worksheet.getCell(`D${index + 2}`).value = new Date(data[index].date);
+      worksheet.getCell(`D${index + 2}`).numFmt = "dd/MM/yy";
+      worksheet.getCell(`E${index + 2}`).value = moment(
+        new Date(data[index].hour),
+        "HH:mm"
+      ).format("HH:mm:00");
+      worksheet.getCell(`E${index + 2}`).alignment = { horizontal: "right" };
+    }
+
+    //Telefónica, Campo
 
     const pathname = path.join(
       __dirname,

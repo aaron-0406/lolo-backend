@@ -25,6 +25,21 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.get("/download-excel-daily-management", async (req, res, next) => {
+  try {
+    const filePath = await service.readAndUpdateExcelFile();
+    res.sendFile(filePath, (err) => {
+      if (err) {
+        next(err);
+      } else {
+        fs.unlinkSync(filePath);
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get(
   "/:chb",
   validatorHandler(getClientByCHBSchema, "params"),
@@ -67,21 +82,6 @@ router.get(
     }
   }
 );
-
-router.post("/download-excel-daily-management", async (req, res, next) => {
-  try {
-    const filePath = await service.readAndUpdateExcelFile();
-    res.sendFile(filePath, (err) => {
-      if (err) {
-        next(err);
-      } else {
-        fs.unlinkSync(filePath);
-      }
-    });
-  } catch (error) {
-    next(error);
-  }
-});
 
 router.post(
   "/:idCustomer",
