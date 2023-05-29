@@ -4,6 +4,8 @@ import boom from "@hapi/boom";
 import { ClientType } from "../types/client.type";
 import config from "../../../config/config";
 import { createFolder } from "../../../libs/aws_bucket";
+import { Workbook, CellValue } from "exceljs";
+import path from "path";
 
 const { models } = sequelize;
 
@@ -229,6 +231,33 @@ class ClientService {
     const client = await this.findCode(code, chb);
     await client.destroy();
     return { code };
+  }
+
+  async readAndUpdateExcelFile() {
+    const workbook = new Workbook();
+    await workbook.xlsx.readFile(
+      path.join(
+        __dirname,
+        "../../../docs/staticDocs/collection_management_excel.xlsx"
+      )
+    );
+
+    if (workbook.worksheets.length < 1) {
+      throw new Error("No se encontraron hojas de trabajo en el archivo Excel");
+    }
+
+    const worksheet = workbook.getWorksheet("GESTIONES");
+
+    //Logic to update the file
+    worksheet.getCell("A2").value = "AARON";
+    worksheet.getCell("B2").value = 123;
+
+    const pathname = path.join(
+      __dirname,
+      "../../../docs/1collection_management_excel.xlsx"
+    );
+    await workbook.xlsx.writeFile(pathname);
+    return pathname;
   }
 }
 

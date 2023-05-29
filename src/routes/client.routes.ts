@@ -1,4 +1,5 @@
 import express from "express";
+import * as fs from "fs";
 import validatorHandler from "../middlewares/validator.handler";
 import clientSchema from "../app/extrajudicial/schemas/client.schema";
 import ClientService from "../app/extrajudicial/services/client.service";
@@ -66,6 +67,21 @@ router.get(
     }
   }
 );
+
+router.post("/download-excel-daily-management", async (req, res, next) => {
+  try {
+    const filePath = await service.readAndUpdateExcelFile();
+    res.sendFile(filePath, (err) => {
+      if (err) {
+        next(err);
+      } else {
+        fs.unlinkSync(filePath);
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.post(
   "/:idCustomer",
