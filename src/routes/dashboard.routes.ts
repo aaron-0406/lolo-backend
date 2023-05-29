@@ -288,8 +288,8 @@ router.post(
         const message = {
           from: config.AWS_EMAIL,
           to: user.dataValues.email,
-          subject: "Reporte Excel",
-          text: "Archivo Excel",
+          subject: "Reporte en Excel sobre el portafolio de clientes",
+          text: "El archivo en excel adjuntado contiene información relevante sobre la gestión para los clientes.",
           attachments: [
             {
               filename: "Archivo.xlsx",
