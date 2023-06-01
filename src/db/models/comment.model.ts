@@ -8,6 +8,7 @@ import {
 import { CommentType } from "../../app/extrajudicial/types/comment.type";
 import clientModel from "./client.model";
 import customerUserModel from "./customer-user.model";
+import managementActionModel from "./management-action.model";
 
 const COMMENT_TABLE = "COMMENT";
 
@@ -22,6 +23,17 @@ const CommentSchema: ModelAttributes<Comment, CommentType> = {
   comment: {
     allowNull: false,
     type: DataTypes.STRING(400),
+  },
+  managementActionId: {
+    allowNull: false,
+    field: "management_action_id_management_action",
+    type: DataTypes.INTEGER,
+    references: {
+      model: managementActionModel.MANAGEMENT_ACTION_TABLE,
+      key: "id_management_action",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE",
   },
   negotiation: {
     allowNull: false,
@@ -65,6 +77,8 @@ class Comment extends Model {
     this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
 
     this.belongsTo(models.CLIENT, { as: "client" });
+
+    this.belongsTo(models.MANAGEMENT_ACTION, { as: "managementAction" });
   }
 
   static config(sequelize: Sequelize) {
