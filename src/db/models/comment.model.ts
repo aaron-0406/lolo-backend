@@ -33,7 +33,7 @@ const CommentSchema: ModelAttributes<Comment, CommentType> = {
       key: "id_management_action",
     },
     onUpdate: "CASCADE",
-    onDelete: "CASCADE",
+    onDelete: "NO ACTION",
   },
   negotiation: {
     allowNull: false,

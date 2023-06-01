@@ -4,6 +4,7 @@ import { CommentType } from "../types/comment.type";
 const id = Joi.number();
 const comment = Joi.string().min(1).max(400);
 const negotiation = Joi.string().min(1).max(100);
+const managementActionId = Joi.number();
 const date = Joi.date();
 const hour = Joi.date();
 const customerUserId = Joi.number();
@@ -12,6 +13,7 @@ const clientId = Joi.number();
 const createCommentSchema = Joi.object<Omit<CommentType, "id">, true>({
   comment: comment.required(),
   negotiation: negotiation.required(),
+  managementActionId: managementActionId.optional().empty("").allow(""),
   date: date.required(),
   hour: hour.optional(),
   customerUserId: customerUserId.required(),
@@ -24,6 +26,7 @@ const updateCommentSchema = Joi.object<
 >({
   comment: comment.required(),
   negotiation: negotiation.required(),
+  managementActionId: managementActionId.optional().empty("").allow(""),
   date: date.required(),
   hour: hour.optional(),
   customerUserId: customerUserId.required(),
