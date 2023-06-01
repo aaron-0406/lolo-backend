@@ -287,16 +287,30 @@ class ClientService {
       worksheet.getCell(`A${index + 2}`).value = data[index].productCode;
       worksheet.getCell(`B${index + 2}`).value = data[index].client.code;
       worksheet.getCell(`C${index + 2}`).value = data[index].client.name;
+
       worksheet.getCell(`D${index + 2}`).value = new Date(data[index].date);
       worksheet.getCell(`D${index + 2}`).numFmt = "dd/MM/yy";
+
       worksheet.getCell(`E${index + 2}`).value = moment(
         new Date(data[index].hour),
         "HH:mm"
       ).format("HH:mm:00");
       worksheet.getCell(`E${index + 2}`).alignment = { horizontal: "right" };
-    }
 
-    //Telefónica, Campo
+      if (data[index].negotiation === "LLAMADA") {
+        worksheet.getCell(`F${index + 2}`).value = "Telefónica";
+      } else if (data[index].negotiation === "VISITA") {
+        worksheet.getCell(`F${index + 2}`).value = "Campo";
+      } else {
+        //ADD MORE
+        worksheet.getCell(`F${index + 2}`).value = "";
+      }
+
+      //SECTION TO ADD ACCION
+
+      worksheet.getCell(`I${index + 2}`).value =
+        data[index].comment.toLowerCase();
+    }
 
     const pathname = path.join(
       __dirname,
