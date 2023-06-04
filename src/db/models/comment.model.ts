@@ -25,7 +25,7 @@ const CommentSchema: ModelAttributes<Comment, CommentType> = {
     type: DataTypes.STRING(400),
   },
   managementActionId: {
-    allowNull: false,
+    allowNull: true,
     field: "management_action_id_management_action",
     type: DataTypes.INTEGER,
     references: {
