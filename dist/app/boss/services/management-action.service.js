@@ -23,6 +23,16 @@ class ManagementActionService {
             return rta;
         });
     }
+    findAllByCHB(chb) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rta = yield models.MANAGEMENT_ACTION.findAll({
+                where: {
+                    customer_has_bank_id_customer_has_bank: chb,
+                },
+            });
+            return rta;
+        });
+    }
     findOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const managementAction = yield models.MANAGEMENT_ACTION.findByPk(id);

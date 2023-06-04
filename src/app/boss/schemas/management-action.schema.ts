@@ -31,8 +31,13 @@ const getManagementActionSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
 
+const getManagementActionByCHBSchema = Joi.object<{ chb: number }, true>({
+  chb: id.required(),
+});
+
 export default {
   createManagementActionSchema,
   updateManagementActionSchema,
   getManagementActionSchema,
+  getManagementActionByCHBSchema,
 };

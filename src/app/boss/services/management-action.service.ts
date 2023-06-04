@@ -12,6 +12,15 @@ class ManagementActionService {
     return rta;
   }
 
+  async findAllByCHB(chb: string) {
+    const rta = await models.MANAGEMENT_ACTION.findAll({
+      where: {
+        customer_has_bank_id_customer_has_bank: chb,
+      },
+    });
+    return rta;
+  }
+
   async findOne(id: string) {
     const managementAction = await models.MANAGEMENT_ACTION.findByPk(id);
 

@@ -5,6 +5,7 @@ import ManagementActionService from "../app/boss/services/management-action.serv
 
 const {
   getManagementActionSchema,
+  getManagementActionByCHBSchema,
   createManagementActionSchema,
   updateManagementActionSchema,
 } = managementActionSchema;
@@ -19,6 +20,20 @@ router.get("/", async (req, res, next) => {
     next(error);
   }
 });
+
+router.get(
+  "/all/:chb",
+  validatorHandler(getManagementActionByCHBSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const { chb } = req.params;
+      const managementActions = await service.findAllByCHB(chb);
+      res.json(managementActions);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 router.get(
   "/:id",

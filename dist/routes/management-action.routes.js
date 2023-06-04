@@ -16,12 +16,22 @@ const express_1 = __importDefault(require("express"));
 const validator_handler_1 = __importDefault(require("../middlewares/validator.handler"));
 const management_action_schema_1 = __importDefault(require("../app/boss/schemas/management-action.schema"));
 const management_action_service_1 = __importDefault(require("../app/boss/services/management-action.service"));
-const { getManagementActionSchema, createManagementActionSchema, updateManagementActionSchema, } = management_action_schema_1.default;
+const { getManagementActionSchema, getManagementActionByCHBSchema, createManagementActionSchema, updateManagementActionSchema, } = management_action_schema_1.default;
 const router = express_1.default.Router();
 const service = new management_action_service_1.default();
 router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const managementActions = yield service.findAll();
+        res.json(managementActions);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+router.get("/all/:chb", (0, validator_handler_1.default)(getManagementActionByCHBSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { chb } = req.params;
+        const managementActions = yield service.findAllByCHB(chb);
         res.json(managementActions);
     }
     catch (error) {

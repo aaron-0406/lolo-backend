@@ -24,8 +24,12 @@ const updateManagementActionSchema = joi_1.default.object({
 const getManagementActionSchema = joi_1.default.object({
     id: id.required(),
 });
+const getManagementActionByCHBSchema = joi_1.default.object({
+    chb: id.required(),
+});
 exports.default = {
     createManagementActionSchema,
     updateManagementActionSchema,
     getManagementActionSchema,
+    getManagementActionByCHBSchema,
 };
