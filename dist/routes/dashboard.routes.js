@@ -325,8 +325,8 @@ router.post("/send-xslx", (0, validator_handler_1.default)(dashboard_schema_1.se
             const message = {
                 from: config_1.default.AWS_EMAIL,
                 to: user.dataValues.email,
-                subject: "Reporte Excel",
-                text: "Archivo Excel",
+                subject: "Reporte en Excel sobre el portafolio de clientes",
+                text: "El archivo en excel adjuntado contiene información relevante sobre la gestión para los clientes.",
                 attachments: [
                     {
                         filename: "Archivo.xlsx",

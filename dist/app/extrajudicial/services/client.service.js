@@ -17,6 +17,11 @@ const sequelize_2 = require("sequelize");
 const boom_1 = __importDefault(require("@hapi/boom"));
 const config_1 = __importDefault(require("../../../config/config"));
 const aws_bucket_1 = require("../../../libs/aws_bucket");
+const exceljs_1 = require("exceljs");
+const path_1 = __importDefault(require("path"));
+const comment_service_1 = __importDefault(require("./comment.service"));
+const product_service_1 = __importDefault(require("../../customers/services/product.service"));
+const moment_1 = __importDefault(require("moment"));
 const { models } = sequelize_1.default;
 class ClientService {
     constructor() { }
@@ -236,6 +241,59 @@ class ClientService {
             const client = yield this.findCode(code, chb);
             yield client.destroy();
             return { code };
+        });
+    }
+    readAndUpdateExcelFile() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const workbook = new exceljs_1.Workbook();
+            yield workbook.xlsx.readFile(path_1.default.join(__dirname, "../../../docs/staticDocs/collection_management_excel.xlsx"));
+            if (workbook.worksheets.length < 1) {
+                throw new Error("No se encontraron hojas de trabajo en el archivo Excel");
+            }
+            const worksheet = workbook.getWorksheet("GESTIONES");
+            //Logic to update the file
+            const commentService = new comment_service_1.default();
+            const productService = new product_service_1.default();
+            const comments = yield commentService.findAllByDate(new Date());
+            const commentsWithProducts = yield Promise.all(comments.map((comment) => __awaiter(this, void 0, void 0, function* () {
+                const products = yield productService.getByClientCode(comment.client.code);
+                return Object.assign(Object.assign({}, comment), { client: Object.assign(Object.assign({}, comment.client), { products: products.map((product) => {
+                            return {
+                                code: product.code,
+                            };
+                        }) }) });
+            })));
+            const data = [];
+            commentsWithProducts.forEach((comment) => {
+                comment.client.products.forEach((product) => {
+                    data.push(Object.assign({ productCode: product.code }, comment));
+                });
+            });
+            for (let index = 0; index < data.length; index++) {
+                worksheet.getCell(`A${index + 2}`).value = data[index].productCode;
+                worksheet.getCell(`B${index + 2}`).value = data[index].client.code;
+                worksheet.getCell(`C${index + 2}`).value = data[index].client.name;
+                worksheet.getCell(`D${index + 2}`).value = new Date(data[index].date);
+                worksheet.getCell(`D${index + 2}`).numFmt = "dd/MM/yy";
+                worksheet.getCell(`E${index + 2}`).value = (0, moment_1.default)(new Date(data[index].hour), "HH:mm").format("HH:mm:00");
+                worksheet.getCell(`E${index + 2}`).alignment = { horizontal: "right" };
+                if (data[index].negotiation === "LLAMADA") {
+                    worksheet.getCell(`F${index + 2}`).value = "Telefónica";
+                }
+                else if (data[index].negotiation === "VISITA") {
+                    worksheet.getCell(`F${index + 2}`).value = "Campo";
+                }
+                else {
+                    //ADD MORE
+                    worksheet.getCell(`F${index + 2}`).value = "";
+                }
+                //SECTION TO ADD ACCION
+                worksheet.getCell(`I${index + 2}`).value =
+                    data[index].comment.toLowerCase();
+            }
+            const pathname = path_1.default.join(__dirname, "../../../docs/1collection_management_excel.xlsx");
+            yield workbook.xlsx.writeFile(pathname);
+            return pathname;
         });
     }
 }

@@ -15,52 +15,42 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = __importDefault(require("../../../libs/sequelize"));
 const boom_1 = __importDefault(require("@hapi/boom"));
 const { models } = sequelize_1.default;
-class NegotiationService {
+class ManagementActionService {
     constructor() { }
     findAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.NEGOTIATION.findAll();
-            return rta;
-        });
-    }
-    findAllByCHB(chb) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.NEGOTIATION.findAll({
-                where: {
-                    customer_has_bank_id_customer_has_bank: chb,
-                },
-            });
+            const rta = yield models.MANAGEMENT_ACTION.findAll();
             return rta;
         });
     }
     findOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const negotiation = yield models.NEGOTIATION.findByPk(id);
-            if (!negotiation) {
-                throw boom_1.default.notFound("Negociación no encontrada");
+            const managementAction = yield models.MANAGEMENT_ACTION.findByPk(id);
+            if (!managementAction) {
+                throw boom_1.default.notFound("Acción no encontrada");
             }
-            return negotiation;
+            return managementAction;
         });
     }
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const newNegotiation = yield models.NEGOTIATION.create(data);
-            return newNegotiation;
+            const newManagementAction = yield models.MANAGEMENT_ACTION.create(data);
+            return newManagementAction;
         });
     }
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
-            const negotiation = yield this.findOne(id);
-            const rta = yield negotiation.update(changes);
+            const managementAction = yield this.findOne(id);
+            const rta = yield managementAction.update(changes);
             return rta;
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const negotiation = yield this.findOne(id);
-            yield negotiation.destroy();
+            const managementAction = yield this.findOne(id);
+            yield managementAction.destroy();
             return { id };
         });
     }
 }
-exports.default = NegotiationService;
+exports.default = ManagementActionService;

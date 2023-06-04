@@ -19,7 +19,25 @@ const createCustomerSchema = joi_1.default.object({
     state: state.required(),
     createdAt: createAt.optional(),
 });
+const updateCustomerSchema = joi_1.default.object({
+    ruc: ruc.required(),
+    companyName: companyName.required(),
+    urlIdentifier: urlIdentifier.required(),
+    description: description.optional(),
+});
+const updateStateCustomerSchema = joi_1.default.object({
+    state: state.required(),
+});
 const getCustomerByUrlSchema = joi_1.default.object({
     urlIdentifier: urlIdentifier.required(),
 });
-exports.default = { createCustomerSchema, getCustomerByUrlSchema };
+const getCustomerByID = joi_1.default.object({
+    id: id.required(),
+});
+exports.default = {
+    createCustomerSchema,
+    updateCustomerSchema,
+    updateStateCustomerSchema,
+    getCustomerByUrlSchema,
+    getCustomerByID,
+};

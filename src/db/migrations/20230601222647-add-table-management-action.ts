@@ -45,12 +45,12 @@ export async function up(queryInterface: QueryInterface) {
   });
 
   await queryInterface.addConstraint(MANAGEMENT_ACTION_TABLE, {
-    fields: ["customerHasBankId"],
+    fields: ["customer_has_bank_id_customer_has_bank"],
     type: "foreign key",
     name: "fk_management_action_customer_has_bank",
     references: {
       table: CUSTOMER_HAS_BANK_TABLE,
-      field: "id",
+      field: "id_customer_has_bank",
     },
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
@@ -70,12 +70,12 @@ export async function up(queryInterface: QueryInterface) {
   );
 
   await queryInterface.addConstraint(COMMENT_TABLE, {
-    fields: ["managementActionId"],
+    fields: ["management_action_id_management_action"],
     type: "foreign key",
     name: "fk_comment_management_action",
     references: {
       table: MANAGEMENT_ACTION_TABLE,
-      field: "id",
+      field: "id_management_action",
     },
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",

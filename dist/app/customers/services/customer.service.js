@@ -39,6 +39,19 @@ class CustomerService {
             return customer;
         });
     }
+    findOneByID(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const customer = yield models.CUSTOMER.findOne({
+                where: {
+                    id_customer: id,
+                },
+            });
+            if (!customer) {
+                throw boom_1.default.notFound("Cliente no encontrado");
+            }
+            return customer;
+        });
+    }
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const newCustomer = yield models.CUSTOMER.create(data);
@@ -48,14 +61,21 @@ class CustomerService {
     }
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
-            const customer = yield this.findOne(id);
+            const customer = yield this.findOneByID(id);
             const rta = yield customer.update(changes);
+            return rta;
+        });
+    }
+    updateState(id, state) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const customer = yield this.findOneByID(id);
+            const rta = yield customer.update(Object.assign(Object.assign({}, customer), { state }));
             return rta;
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const customer = yield this.findOne(id);
+            const customer = yield this.findOneByID(id);
             yield customer.destroy();
             return { id };
         });

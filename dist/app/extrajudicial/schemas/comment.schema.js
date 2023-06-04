@@ -7,6 +7,7 @@ const joi_1 = __importDefault(require("joi"));
 const id = joi_1.default.number();
 const comment = joi_1.default.string().min(1).max(400);
 const negotiation = joi_1.default.string().min(1).max(100);
+const managementActionId = joi_1.default.number();
 const date = joi_1.default.date();
 const hour = joi_1.default.date();
 const customerUserId = joi_1.default.number();
@@ -14,6 +15,7 @@ const clientId = joi_1.default.number();
 const createCommentSchema = joi_1.default.object({
     comment: comment.required(),
     negotiation: negotiation.required(),
+    managementActionId: managementActionId.optional().empty("").allow(""),
     date: date.required(),
     hour: hour.optional(),
     customerUserId: customerUserId.required(),
@@ -22,6 +24,7 @@ const createCommentSchema = joi_1.default.object({
 const updateCommentSchema = joi_1.default.object({
     comment: comment.required(),
     negotiation: negotiation.required(),
+    managementActionId: managementActionId.optional().empty("").allow(""),
     date: date.required(),
     hour: hour.optional(),
     customerUserId: customerUserId.required(),

@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const client_model_1 = __importDefault(require("./client.model"));
 const customer_user_model_1 = __importDefault(require("./customer-user.model"));
+const management_action_model_1 = __importDefault(require("./management-action.model"));
 const COMMENT_TABLE = "COMMENT";
 const CommentSchema = {
     id: {
@@ -18,6 +19,17 @@ const CommentSchema = {
     comment: {
         allowNull: false,
         type: sequelize_1.DataTypes.STRING(400),
+    },
+    managementActionId: {
+        allowNull: false,
+        field: "management_action_id_management_action",
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: management_action_model_1.default.MANAGEMENT_ACTION_TABLE,
+            key: "id_management_action",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
     },
     negotiation: {
         allowNull: false,
@@ -59,6 +71,7 @@ class Comment extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
         this.belongsTo(models.CLIENT, { as: "client" });
+        this.belongsTo(models.MANAGEMENT_ACTION, { as: "managementAction" });
     }
     static config(sequelize) {
         return {

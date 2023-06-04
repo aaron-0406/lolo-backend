@@ -15,6 +15,7 @@ const customer_has_bank_model_1 = __importDefault(require("./many-to-many/custom
 const funcionario_model_1 = __importDefault(require("./funcionario.model"));
 const direction_model_1 = __importDefault(require("./direction.model"));
 const guarantor_model_1 = __importDefault(require("./guarantor.model"));
+const management_action_model_1 = __importDefault(require("./management-action.model"));
 const comment_model_1 = __importDefault(require("./comment.model"));
 const file_model_1 = __importDefault(require("./file.model"));
 const negotiation_model_1 = __importDefault(require("./negotiation.model"));
@@ -34,6 +35,7 @@ const { Client, ClientSchema } = client_model_1.default;
 const { UserApp, UserAppSchema } = user_app_model_1.default;
 const { Direction, DirectionSchema } = direction_model_1.default;
 const { Guarantor, GuarantorSchema } = guarantor_model_1.default;
+const { ManagementAction, ManagementActionSchema } = management_action_model_1.default;
 const { Comment, CommentSchema } = comment_model_1.default;
 const { File, FileSchema } = file_model_1.default;
 const { Negotiation, NegotiationSchema } = negotiation_model_1.default;
@@ -55,6 +57,7 @@ const setupModels = (sequelize) => {
     UserApp.init(UserAppSchema, UserApp.config(sequelize));
     Direction.init(DirectionSchema, Direction.config(sequelize));
     Guarantor.init(GuarantorSchema, Guarantor.config(sequelize));
+    ManagementAction.init(ManagementActionSchema, ManagementAction.config(sequelize));
     Comment.init(CommentSchema, Comment.config(sequelize));
     CustomerHasBank.init(CustomerHasBankSchema, CustomerHasBank.config(sequelize));
     Funcionario.init(FuncionarioSchema, Funcionario.config(sequelize));
@@ -71,6 +74,7 @@ const setupModels = (sequelize) => {
     City.associate(sequelize.models);
     Client.associate(sequelize.models);
     File.associate(sequelize.models);
+    ManagementAction.associate(sequelize.models);
     Comment.associate(sequelize.models);
     Direction.associate(sequelize.models);
     Guarantor.associate(sequelize.models);
