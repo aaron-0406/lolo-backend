@@ -24,7 +24,7 @@ export async function up(queryInterface: QueryInterface) {
     nameAction: {
       allowNull: false,
       field: "name_action",
-      type: DataTypes.STRING(20),
+      type: DataTypes.STRING(150),
     },
     codeSubTypeManagement: {
       allowNull: false,
