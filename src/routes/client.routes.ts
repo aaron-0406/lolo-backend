@@ -12,6 +12,7 @@ const {
   getClientByCustomer,
   deleteClientByCodeSchema,
   getClientByCHBSchemaQuery,
+  getDateSchema,
 } = clientSchema;
 const router = express.Router();
 const service = new ClientService();
@@ -25,20 +26,27 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/download-excel-daily-management", async (req, res, next) => {
-  try {
-    const filePath = await service.readAndUpdateExcelFile();
-    res.sendFile(filePath, (err) => {
-      if (err) {
-        next(err);
-      } else {
-        fs.unlinkSync(filePath);
-      }
-    });
-  } catch (error) {
-    next(error);
+router.get(
+  "/download-excel-daily-management",
+  validatorHandler(getDateSchema, "query"),
+  async (req, res, next) => {
+    try {
+      const { date } = req.query;
+      const newDate: any = date;
+
+      const filePath = await service.readAndUpdateExcelFile(newDate);
+      res.sendFile(filePath, (err) => {
+        if (err) {
+          next(err);
+        } else {
+          fs.unlinkSync(filePath);
+        }
+      });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 router.get(
   "/:chb",

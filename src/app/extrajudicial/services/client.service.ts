@@ -236,7 +236,7 @@ class ClientService {
     return { code };
   }
 
-  async readAndUpdateExcelFile() {
+  async readAndUpdateExcelFile(date: Date) {
     const workbook = new Workbook();
     await workbook.xlsx.readFile(
       path.join(
@@ -259,7 +259,7 @@ class ClientService {
     const commentService = new CommentService();
     const productService = new ProductService();
 
-    const comments = await commentService.findAllByDate(new Date("06/04/2023"));
+    const comments = await commentService.findAllByDate(date);
     const commentsWithProducts = await Promise.all(
       comments.map(async (comment: any) => {
         const products = await productService.getByClientCode(
@@ -288,6 +288,10 @@ class ClientService {
         });
       }
     });
+
+    if (data.length < 2) {
+      throw new Error("No se encontraron suficientes gestiones para exportar");
+    }
 
     worksheet.duplicateRow(2, data.length - 1, true);
 
