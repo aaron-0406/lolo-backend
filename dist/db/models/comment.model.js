@@ -21,7 +21,7 @@ const CommentSchema = {
         type: sequelize_1.DataTypes.STRING(400),
     },
     managementActionId: {
-        allowNull: false,
+        allowNull: true,
         field: "management_action_id_management_action",
         type: sequelize_1.DataTypes.INTEGER,
         references: {

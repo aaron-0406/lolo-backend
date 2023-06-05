@@ -243,7 +243,7 @@ class ClientService {
             return { code };
         });
     }
-    readAndUpdateExcelFile() {
+    readAndUpdateExcelFile(date) {
         return __awaiter(this, void 0, void 0, function* () {
             const workbook = new exceljs_1.Workbook();
             yield workbook.xlsx.readFile(path_1.default.join(__dirname, "../../../docs/staticDocs/collection_management_excel.xlsx"));
@@ -251,10 +251,13 @@ class ClientService {
                 throw new Error("No se encontraron hojas de trabajo en el archivo Excel");
             }
             const worksheet = workbook.getWorksheet("GESTIONES");
+            const detailsWorksheet = workbook.getWorksheet("DETALLE");
+            const columnA = detailsWorksheet.getColumn("A");
+            const actionDropdownList = columnA.values.slice(2, 36);
             //Logic to update the file
             const commentService = new comment_service_1.default();
             const productService = new product_service_1.default();
-            const comments = yield commentService.findAllByDate(new Date());
+            const comments = yield commentService.findAllByDate(date);
             const commentsWithProducts = yield Promise.all(comments.map((comment) => __awaiter(this, void 0, void 0, function* () {
                 const products = yield productService.getByClientCode(comment.client.code);
                 return Object.assign(Object.assign({}, comment), { client: Object.assign(Object.assign({}, comment.client), { products: products.map((product) => {
@@ -265,10 +268,16 @@ class ClientService {
             })));
             const data = [];
             commentsWithProducts.forEach((comment) => {
-                comment.client.products.forEach((product) => {
-                    data.push(Object.assign({ productCode: product.code }, comment));
-                });
+                if (!!comment.managementAction) {
+                    comment.client.products.forEach((product) => {
+                        data.push(Object.assign({ productCode: product.code }, comment));
+                    });
+                }
             });
+            if (data.length < 2) {
+                throw new Error("No se encontraron suficientes gestiones para exportar");
+            }
+            worksheet.duplicateRow(2, data.length - 1, true);
             for (let index = 0; index < data.length; index++) {
                 worksheet.getCell(`A${index + 2}`).value = data[index].productCode;
                 worksheet.getCell(`B${index + 2}`).value = data[index].client.code;
@@ -277,6 +286,7 @@ class ClientService {
                 worksheet.getCell(`D${index + 2}`).numFmt = "dd/MM/yy";
                 worksheet.getCell(`E${index + 2}`).value = (0, moment_1.default)(new Date(data[index].hour), "HH:mm").format("HH:mm:00");
                 worksheet.getCell(`E${index + 2}`).alignment = { horizontal: "right" };
+                //MANAGEMENT ACTIONS
                 if (data[index].negotiation === "LLAMADA") {
                     worksheet.getCell(`F${index + 2}`).value = "Telefónica";
                 }
@@ -287,7 +297,18 @@ class ClientService {
                     //ADD MORE
                     worksheet.getCell(`F${index + 2}`).value = "";
                 }
-                //SECTION TO ADD ACCION
+                //MANAGEMENT ACTIONS - ACTIONS
+                worksheet.getCell(`G${index + 2}`).value = actionDropdownList.find((action) => (action === null || action === void 0 ? void 0 : action.toString().trim()) ===
+                    data[index].managementAction.codeAction.trim());
+                worksheet.getCell(`G${index + 2}`).dataValidation = {
+                    type: "list",
+                    formulae: [`DETALLE!$A$2:$A$35`],
+                };
+                worksheet.getCell(`H${index + 2}`).value = {
+                    formula: `=IF(G${index + 2}="","",VLOOKUP(G${index + 2},DETALLE!$A:$B,2,0))`,
+                    result: undefined,
+                    date1904: false,
+                };
                 worksheet.getCell(`I${index + 2}`).value =
                     data[index].comment.toLowerCase();
             }

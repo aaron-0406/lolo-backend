@@ -40,7 +40,7 @@ const fs = __importStar(require("fs"));
 const validator_handler_1 = __importDefault(require("../middlewares/validator.handler"));
 const client_schema_1 = __importDefault(require("../app/extrajudicial/schemas/client.schema"));
 const client_service_1 = __importDefault(require("../app/extrajudicial/services/client.service"));
-const { getClientByCHBSchema, getClientByCodeSchema, createClientSchema, updateClientSchema, getClientByCustomer, deleteClientByCodeSchema, getClientByCHBSchemaQuery, } = client_schema_1.default;
+const { getClientByCHBSchema, getClientByCodeSchema, createClientSchema, updateClientSchema, getClientByCustomer, deleteClientByCodeSchema, getClientByCHBSchemaQuery, getDateSchema, } = client_schema_1.default;
 const router = express_1.default.Router();
 const service = new client_service_1.default();
 router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -52,9 +52,11 @@ router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
         next(error);
     }
 }));
-router.get("/download-excel-daily-management", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/download-excel-daily-management", (0, validator_handler_1.default)(getDateSchema, "query"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const filePath = yield service.readAndUpdateExcelFile();
+        const { date } = req.query;
+        const newDate = date;
+        const filePath = yield service.readAndUpdateExcelFile(newDate);
         res.sendFile(filePath, (err) => {
             if (err) {
                 next(err);

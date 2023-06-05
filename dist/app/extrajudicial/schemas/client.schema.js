@@ -85,6 +85,9 @@ const deleteClientByCodeSchema = joi_1.default.object({
     chb: customerHasBankId.required(),
     idCustomer,
 });
+const getDateSchema = joi_1.default.object({
+    date: joi_1.default.date().required(),
+});
 exports.default = {
     createClientSchema,
     getClientByCustomer,
@@ -93,4 +96,5 @@ exports.default = {
     getClientByCodeSchema,
     deleteClientByCodeSchema,
     getClientByCHBSchemaQuery,
+    getDateSchema,
 };
