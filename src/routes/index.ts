@@ -20,6 +20,7 @@ import templateRouter from "./template.routes";
 import valuesRouter from "./values.routes";
 import dashboardRouter from "./dashboard.routes";
 import productRouter from "./product.routes";
+import managementActionRouter from "./management-action.routes";
 
 const routerApi = (app: Express) => {
   const router = express.Router();
@@ -45,6 +46,7 @@ const routerApi = (app: Express) => {
   router.use("/values", valuesRouter);
   router.use("/dashboard", dashboardRouter);
   router.use("/product", productRouter);
+  router.use("/management-action", managementActionRouter);
 };
 
 export default routerApi;

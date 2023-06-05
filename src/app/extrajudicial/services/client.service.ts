@@ -4,6 +4,11 @@ import boom from "@hapi/boom";
 import { ClientType } from "../types/client.type";
 import config from "../../../config/config";
 import { createFolder } from "../../../libs/aws_bucket";
+import { Workbook } from "exceljs";
+import path from "path";
+import CommentService from "./comment.service";
+import ProductService from "../../customers/services/product.service";
+import moment from "moment";
 
 const { models } = sequelize;
 
@@ -229,6 +234,120 @@ class ClientService {
     const client = await this.findCode(code, chb);
     await client.destroy();
     return { code };
+  }
+
+  async readAndUpdateExcelFile(date: Date) {
+    const workbook = new Workbook();
+    await workbook.xlsx.readFile(
+      path.join(
+        __dirname,
+        "../../../docs/staticDocs/collection_management_excel.xlsx"
+      )
+    );
+
+    if (workbook.worksheets.length < 1) {
+      throw new Error("No se encontraron hojas de trabajo en el archivo Excel");
+    }
+
+    const worksheet = workbook.getWorksheet("GESTIONES");
+    const detailsWorksheet = workbook.getWorksheet("DETALLE");
+
+    const columnA = detailsWorksheet.getColumn("A");
+    const actionDropdownList = columnA.values.slice(2, 36);
+
+    //Logic to update the file
+    const commentService = new CommentService();
+    const productService = new ProductService();
+
+    const comments = await commentService.findAllByDate(date);
+    const commentsWithProducts = await Promise.all(
+      comments.map(async (comment: any) => {
+        const products = await productService.getByClientCode(
+          comment.client.code
+        );
+
+        return {
+          ...comment,
+          client: {
+            ...comment.client,
+            products: products.map((product) => {
+              return {
+                code: product.code,
+              };
+            }),
+          },
+        };
+      })
+    );
+
+    const data: any = [];
+    commentsWithProducts.forEach((comment) => {
+      if (!!comment.managementAction) {
+        comment.client.products.forEach((product: any) => {
+          data.push({ productCode: product.code, ...comment });
+        });
+      }
+    });
+
+    if (data.length < 2) {
+      throw new Error("No se encontraron suficientes gestiones para exportar");
+    }
+
+    worksheet.duplicateRow(2, data.length - 1, true);
+
+    for (let index = 0; index < data.length; index++) {
+      worksheet.getCell(`A${index + 2}`).value = data[index].productCode;
+      worksheet.getCell(`B${index + 2}`).value = data[index].client.code;
+      worksheet.getCell(`C${index + 2}`).value = data[index].client.name;
+
+      worksheet.getCell(`D${index + 2}`).value = new Date(data[index].date);
+      worksheet.getCell(`D${index + 2}`).numFmt = "dd/MM/yy";
+
+      worksheet.getCell(`E${index + 2}`).value = moment(
+        new Date(data[index].hour),
+        "HH:mm"
+      ).format("HH:mm:00");
+      worksheet.getCell(`E${index + 2}`).alignment = { horizontal: "right" };
+
+      //MANAGEMENT ACTIONS
+      if (data[index].negotiation === "LLAMADA") {
+        worksheet.getCell(`F${index + 2}`).value = "Telefónica";
+      } else if (data[index].negotiation === "VISITA") {
+        worksheet.getCell(`F${index + 2}`).value = "Campo";
+      } else {
+        //ADD MORE
+        worksheet.getCell(`F${index + 2}`).value = "";
+      }
+
+      //MANAGEMENT ACTIONS - ACTIONS
+      worksheet.getCell(`G${index + 2}`).value = actionDropdownList.find(
+        (action) =>
+          action?.toString().trim() ===
+          data[index].managementAction.codeAction.trim()
+      );
+      worksheet.getCell(`G${index + 2}`).dataValidation = {
+        type: "list",
+        formulae: [`DETALLE!$A$2:$A$35`],
+      };
+
+      worksheet.getCell(`H${index + 2}`).value = {
+        formula: `=IF(G${index + 2}="","",VLOOKUP(G${
+          index + 2
+        },DETALLE!$A:$B,2,0))`,
+        result: undefined,
+        date1904: false,
+      };
+
+      worksheet.getCell(`I${index + 2}`).value =
+        data[index].comment.toLowerCase();
+    }
+
+    const pathname = path.join(
+      __dirname,
+      "../../../docs/1collection_management_excel.xlsx"
+    );
+    await workbook.xlsx.writeFile(pathname);
+    return pathname;
   }
 }
 

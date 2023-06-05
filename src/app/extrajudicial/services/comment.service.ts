@@ -25,6 +25,28 @@ class CommentService {
     });
     return rta;
   }
+
+  async findAllByDate(date: Date) {
+    const rta = await models.COMMENT.findAll({
+      where: {
+        date,
+      },
+      include: [
+        {
+          model: models.CLIENT,
+          as: "client",
+          attributes: ["code", "name"],
+        },
+        {
+          model: models.MANAGEMENT_ACTION,
+          as: "managementAction",
+          attributes: ["id", "codeAction", "nameAction"],
+        },
+      ],
+    });
+    return JSON.parse(JSON.stringify(rta));
+  }
+
   async chart(clientID: string) {
     const hoy = new Date();
 

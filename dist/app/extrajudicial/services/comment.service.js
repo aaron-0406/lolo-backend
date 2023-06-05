@@ -37,6 +37,28 @@ class CommentService {
             return rta;
         });
     }
+    findAllByDate(date) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rta = yield models.COMMENT.findAll({
+                where: {
+                    date,
+                },
+                include: [
+                    {
+                        model: models.CLIENT,
+                        as: "client",
+                        attributes: ["code", "name"],
+                    },
+                    {
+                        model: models.MANAGEMENT_ACTION,
+                        as: "managementAction",
+                        attributes: ["id", "codeAction", "nameAction"],
+                    },
+                ],
+            });
+            return JSON.parse(JSON.stringify(rta));
+        });
+    }
     chart(clientID) {
         return __awaiter(this, void 0, void 0, function* () {
             const hoy = new Date();

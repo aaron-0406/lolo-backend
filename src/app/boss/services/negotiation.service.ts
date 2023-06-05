@@ -22,12 +22,12 @@ class NegotiationService {
   }
 
   async findOne(id: string) {
-    const bank = await models.NEGOTIATION.findByPk(id);
+    const negotiation = await models.NEGOTIATION.findByPk(id);
 
-    if (!bank) {
+    if (!negotiation) {
       throw boom.notFound("Negociación no encontrada");
     }
-    return bank;
+    return negotiation;
   }
 
   async create(data: NegotiationType) {
@@ -36,15 +36,15 @@ class NegotiationService {
   }
 
   async update(id: string, changes: NegotiationType) {
-    const bank = await this.findOne(id);
-    const rta = await bank.update(changes);
+    const negotiation = await this.findOne(id);
+    const rta = await negotiation.update(changes);
 
     return rta;
   }
 
   async delete(id: string) {
-    const bank = await this.findOne(id);
-    await bank.destroy();
+    const negotiation = await this.findOne(id);
+    await negotiation.destroy();
 
     return { id };
   }

@@ -18,8 +18,32 @@ const createCustomerSchema = Joi.object<Omit<CustomerType, "id">, true>({
   createdAt: createAt.optional(),
 });
 
+const updateCustomerSchema = Joi.object<
+  Omit<CustomerType, "id" | "createdAt" | "state">,
+  true
+>({
+  ruc: ruc.required(),
+  companyName: companyName.required(),
+  urlIdentifier: urlIdentifier.required(),
+  description: description.optional(),
+});
+
+const updateStateCustomerSchema = Joi.object<{ state: boolean }>({
+  state: state.required(),
+});
+
 const getCustomerByUrlSchema = Joi.object<{ urlIdentifier: string }, true>({
   urlIdentifier: urlIdentifier.required(),
 });
 
-export default { createCustomerSchema, getCustomerByUrlSchema };
+const getCustomerByID = Joi.object<{ id: number }, true>({
+  id: id.required(),
+});
+
+export default {
+  createCustomerSchema,
+  updateCustomerSchema,
+  updateStateCustomerSchema,
+  getCustomerByUrlSchema,
+  getCustomerByID,
+};

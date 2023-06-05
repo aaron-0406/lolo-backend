@@ -1,4 +1,5 @@
 import express from "express";
+import * as fs from "fs";
 import validatorHandler from "../middlewares/validator.handler";
 import clientSchema from "../app/extrajudicial/schemas/client.schema";
 import ClientService from "../app/extrajudicial/services/client.service";
@@ -11,6 +12,7 @@ const {
   getClientByCustomer,
   deleteClientByCodeSchema,
   getClientByCHBSchemaQuery,
+  getDateSchema,
 } = clientSchema;
 const router = express.Router();
 const service = new ClientService();
@@ -23,6 +25,28 @@ router.get("/", async (req, res, next) => {
     next(error);
   }
 });
+
+router.get(
+  "/download-excel-daily-management",
+  validatorHandler(getDateSchema, "query"),
+  async (req, res, next) => {
+    try {
+      const { date } = req.query;
+      const newDate: any = date;
+
+      const filePath = await service.readAndUpdateExcelFile(newDate);
+      res.sendFile(filePath, (err) => {
+        if (err) {
+          next(err);
+        } else {
+          fs.unlinkSync(filePath);
+        }
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 router.get(
   "/:chb",

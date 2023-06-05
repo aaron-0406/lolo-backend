@@ -35,11 +35,11 @@ class NegotiationService {
     }
     findOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const bank = yield models.NEGOTIATION.findByPk(id);
-            if (!bank) {
+            const negotiation = yield models.NEGOTIATION.findByPk(id);
+            if (!negotiation) {
                 throw boom_1.default.notFound("Negociación no encontrada");
             }
-            return bank;
+            return negotiation;
         });
     }
     create(data) {
@@ -50,15 +50,15 @@ class NegotiationService {
     }
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
-            const bank = yield this.findOne(id);
-            const rta = yield bank.update(changes);
+            const negotiation = yield this.findOne(id);
+            const rta = yield negotiation.update(changes);
             return rta;
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const bank = yield this.findOne(id);
-            yield bank.destroy();
+            const negotiation = yield this.findOne(id);
+            yield negotiation.destroy();
             return { id };
         });
     }

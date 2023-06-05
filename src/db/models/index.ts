@@ -10,6 +10,7 @@ import customerHasBank from "./many-to-many/customer-has-bank.model";
 import funcionarioModel from "./funcionario.model";
 import directionModel from "./direction.model";
 import guarantorModel from "./guarantor.model";
+import managementActionModel from "./management-action.model";
 import commentModel from "./comment.model";
 import fileModel from "./file.model";
 import negotiationModel from "./negotiation.model";
@@ -30,6 +31,7 @@ const { Client, ClientSchema } = clientModel;
 const { UserApp, UserAppSchema } = userAppModel;
 const { Direction, DirectionSchema } = directionModel;
 const { Guarantor, GuarantorSchema } = guarantorModel;
+const { ManagementAction, ManagementActionSchema } = managementActionModel;
 const { Comment, CommentSchema } = commentModel;
 const { File, FileSchema } = fileModel;
 const { Negotiation, NegotiationSchema } = negotiationModel;
@@ -52,6 +54,10 @@ export const setupModels = (sequelize: Sequelize) => {
   UserApp.init(UserAppSchema, UserApp.config(sequelize));
   Direction.init(DirectionSchema, Direction.config(sequelize));
   Guarantor.init(GuarantorSchema, Guarantor.config(sequelize));
+  ManagementAction.init(
+    ManagementActionSchema,
+    ManagementAction.config(sequelize)
+  );
   Comment.init(CommentSchema, Comment.config(sequelize));
   CustomerHasBank.init(
     CustomerHasBankSchema,
@@ -75,6 +81,7 @@ export const setupModels = (sequelize: Sequelize) => {
   City.associate(sequelize.models);
   Client.associate(sequelize.models);
   File.associate(sequelize.models);
+  ManagementAction.associate(sequelize.models);
   Comment.associate(sequelize.models);
   Direction.associate(sequelize.models);
   Guarantor.associate(sequelize.models);
