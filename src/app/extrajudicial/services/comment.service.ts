@@ -37,6 +37,11 @@ class CommentService {
           as: "client",
           attributes: ["code", "name"],
         },
+        {
+          model: models.MANAGEMENT_ACTION,
+          as: "managementAction",
+          attributes: ["id", "codeAction", "nameAction"],
+        },
       ],
     });
     return JSON.parse(JSON.stringify(rta));

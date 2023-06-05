@@ -250,6 +250,10 @@ class ClientService {
     }
 
     const worksheet = workbook.getWorksheet("GESTIONES");
+    const detailsWorksheet = workbook.getWorksheet("DETALLE");
+
+    const columnA = detailsWorksheet.getColumn("A");
+    const actionDropdownList = columnA.values.slice(2, 36);
 
     //Logic to update the file
     const commentService = new CommentService();
@@ -278,9 +282,11 @@ class ClientService {
 
     const data: any = [];
     commentsWithProducts.forEach((comment) => {
-      comment.client.products.forEach((product: any) => {
-        data.push({ productCode: product.code, ...comment });
-      });
+      if (!!comment.managementAction) {
+        comment.client.products.forEach((product: any) => {
+          data.push({ productCode: product.code, ...comment });
+        });
+      }
     });
 
     for (let index = 0; index < data.length; index++) {
@@ -297,6 +303,7 @@ class ClientService {
       ).format("HH:mm:00");
       worksheet.getCell(`E${index + 2}`).alignment = { horizontal: "right" };
 
+      //MANAGEMENT ACTIONS
       if (data[index].negotiation === "LLAMADA") {
         worksheet.getCell(`F${index + 2}`).value = "Telefónica";
       } else if (data[index].negotiation === "VISITA") {
@@ -306,7 +313,23 @@ class ClientService {
         worksheet.getCell(`F${index + 2}`).value = "";
       }
 
-      //SECTION TO ADD ACCION
+      //MANAGEMENT ACTIONS - ACTIONS
+      worksheet.getCell(`G${index + 2}`).value = actionDropdownList.find(
+        (action) =>
+          action?.toString().trim() ===
+          data[index].managementAction.codeAction.trim()
+      );
+      worksheet.getCell(`G${index + 2}`).dataValidation = {
+        type: "list",
+        formulae: [`DETALLE!$A$2:$A$35`],
+      };
+
+      worksheet.getCell(`H${index + 2}`).dataValidation = {
+        type: "custom",
+        formulae: [
+          `=IF(G${index + 2}="","",VLOOKUP(G${index + 2},DETALLE!$A:$B,2,0))`,
+        ],
+      };
 
       worksheet.getCell(`I${index + 2}`).value =
         data[index].comment.toLowerCase();
