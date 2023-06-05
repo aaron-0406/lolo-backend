@@ -259,7 +259,7 @@ class ClientService {
     const commentService = new CommentService();
     const productService = new ProductService();
 
-    const comments = await commentService.findAllByDate(new Date());
+    const comments = await commentService.findAllByDate(new Date("06/04/2023"));
     const commentsWithProducts = await Promise.all(
       comments.map(async (comment: any) => {
         const products = await productService.getByClientCode(
@@ -288,6 +288,8 @@ class ClientService {
         });
       }
     });
+
+    worksheet.duplicateRow(2, data.length - 1, true);
 
     for (let index = 0; index < data.length; index++) {
       worksheet.getCell(`A${index + 2}`).value = data[index].productCode;
@@ -324,11 +326,12 @@ class ClientService {
         formulae: [`DETALLE!$A$2:$A$35`],
       };
 
-      worksheet.getCell(`H${index + 2}`).dataValidation = {
-        type: "custom",
-        formulae: [
-          `=IF(G${index + 2}="","",VLOOKUP(G${index + 2},DETALLE!$A:$B,2,0))`,
-        ],
+      worksheet.getCell(`H${index + 2}`).value = {
+        formula: `=IF(G${index + 2}="","",VLOOKUP(G${
+          index + 2
+        },DETALLE!$A:$B,2,0))`,
+        result: undefined,
+        date1904: false,
       };
 
       worksheet.getCell(`I${index + 2}`).value =
