@@ -100,8 +100,9 @@ const deleteClientByCodeSchema = Joi.object<
   idCustomer,
 });
 
-const getDateSchema = Joi.object<{ date: Date }, true>({
+const getDateSchema = Joi.object<{ date: Date; cityId: number }, true>({
   date: Joi.date().required(),
+  cityId: cityId.required(),
 });
 
 export default {

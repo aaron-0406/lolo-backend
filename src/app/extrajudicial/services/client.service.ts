@@ -236,7 +236,7 @@ class ClientService {
     return { code };
   }
 
-  async readAndUpdateExcelFile(date: Date) {
+  async readAndUpdateExcelFile(date: Date, cityId: number) {
     const workbook = new Workbook();
     await workbook.xlsx.readFile(
       path.join(
@@ -282,10 +282,12 @@ class ClientService {
 
     const data: any = [];
     commentsWithProducts.forEach((comment) => {
-      if (!!comment.managementAction) {
-        comment.client.products.forEach((product: any) => {
-          data.push({ productCode: product.code, ...comment });
-        });
+      if (comment.client.cityId == cityId) {
+        if (!!comment.managementAction) {
+          comment.client.products.forEach((product: any) => {
+            data.push({ productCode: product.code, ...comment });
+          });
+        }
       }
     });
 
@@ -303,10 +305,10 @@ class ClientService {
       worksheet.getCell(`D${index + 2}`).value = new Date(data[index].date);
       worksheet.getCell(`D${index + 2}`).numFmt = "dd/MM/yy";
 
-      worksheet.getCell(`E${index + 2}`).value = moment(
-        new Date(data[index].hour),
-        "HH:mm"
-      ).format("HH:mm:00");
+      const hour = moment.utc(data[index].hour).toDate();
+      worksheet.getCell(`E${index + 2}`).value = moment(hour)
+        .utcOffset("-05:00")
+        .format("HH:mm:00");
       worksheet.getCell(`E${index + 2}`).alignment = { horizontal: "right" };
 
       //MANAGEMENT ACTIONS
