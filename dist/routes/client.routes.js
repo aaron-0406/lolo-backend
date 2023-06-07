@@ -54,9 +54,10 @@ router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
 }));
 router.get("/download-excel-daily-management", (0, validator_handler_1.default)(getDateSchema, "query"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { date } = req.query;
+        const { date, cityId } = req.query;
         const newDate = date;
-        const filePath = yield service.readAndUpdateExcelFile(newDate);
+        const newCityId = cityId;
+        const filePath = yield service.readAndUpdateExcelFile(newDate, newCityId);
         res.sendFile(filePath, (err) => {
             if (err) {
                 next(err);

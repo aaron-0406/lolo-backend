@@ -243,7 +243,7 @@ class ClientService {
             return { code };
         });
     }
-    readAndUpdateExcelFile(date) {
+    readAndUpdateExcelFile(date, cityId) {
         return __awaiter(this, void 0, void 0, function* () {
             const workbook = new exceljs_1.Workbook();
             yield workbook.xlsx.readFile(path_1.default.join(__dirname, "../../../docs/staticDocs/collection_management_excel.xlsx"));
@@ -268,10 +268,12 @@ class ClientService {
             })));
             const data = [];
             commentsWithProducts.forEach((comment) => {
-                if (!!comment.managementAction) {
-                    comment.client.products.forEach((product) => {
-                        data.push(Object.assign({ productCode: product.code }, comment));
-                    });
+                if (comment.client.cityId == cityId) {
+                    if (!!comment.managementAction) {
+                        comment.client.products.forEach((product) => {
+                            data.push(Object.assign({ productCode: product.code }, comment));
+                        });
+                    }
                 }
             });
             if (data.length < 2) {
@@ -284,7 +286,10 @@ class ClientService {
                 worksheet.getCell(`C${index + 2}`).value = data[index].client.name;
                 worksheet.getCell(`D${index + 2}`).value = new Date(data[index].date);
                 worksheet.getCell(`D${index + 2}`).numFmt = "dd/MM/yy";
-                worksheet.getCell(`E${index + 2}`).value = (0, moment_1.default)(new Date(data[index].hour), "HH:mm").format("HH:mm:00");
+                const hour = moment_1.default.utc(data[index].hour).toDate();
+                worksheet.getCell(`E${index + 2}`).value = (0, moment_1.default)(hour)
+                    .utcOffset("-05:00")
+                    .format("HH:mm:00");
                 worksheet.getCell(`E${index + 2}`).alignment = { horizontal: "right" };
                 //MANAGEMENT ACTIONS
                 if (data[index].negotiation === "LLAMADA") {
