@@ -35,7 +35,7 @@ class CommentService {
         {
           model: models.CLIENT,
           as: "client",
-          attributes: ["code", "name"],
+          attributes: ["code", "name", "cityId"],
         },
         {
           model: models.MANAGEMENT_ACTION,

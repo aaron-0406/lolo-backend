@@ -31,10 +31,11 @@ router.get(
   validatorHandler(getDateSchema, "query"),
   async (req, res, next) => {
     try {
-      const { date } = req.query;
+      const { date, cityId } = req.query;
       const newDate: any = date;
+      const newCityId: any = cityId;
 
-      const filePath = await service.readAndUpdateExcelFile(newDate);
+      const filePath = await service.readAndUpdateExcelFile(newDate, newCityId);
       res.sendFile(filePath, (err) => {
         if (err) {
           next(err);

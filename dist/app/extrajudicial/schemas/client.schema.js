@@ -87,6 +87,7 @@ const deleteClientByCodeSchema = joi_1.default.object({
 });
 const getDateSchema = joi_1.default.object({
     date: joi_1.default.date().required(),
+    cityId: cityId.required(),
 });
 exports.default = {
     createClientSchema,
