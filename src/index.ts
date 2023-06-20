@@ -5,7 +5,7 @@ import errorHandlerr from "./middlewares/error.handler";
 import morgan from "morgan";
 import path from "path";
 import fs from "fs";
-import { deleteDownloadFolderTask } from "./libs/cron_jobs";
+import { deleteDownloadFolderTask, sendWeeklyReportsByEmail } from "./libs/cron_jobs";
 
 const { logErrors, ormErrorHandler, boomErrorHandler, errorHandler } =
   errorHandlerr;
@@ -52,5 +52,6 @@ app.use(errorHandler);
 app.listen(port, () => {
   fs.mkdir(path.join(__dirname, "./public/download"), () => {});
   deleteDownloadFolderTask();
+  sendWeeklyReportsByEmail();
   console.log("My port: " + port);
 });
