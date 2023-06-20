@@ -7,6 +7,9 @@ import {
   TableCell,
   TableRow,
   Table,
+  ITableOptions,
+  ITableRowOptions,
+  ITableCellOptions,
 } from "docx";
 import path from "path";
 import fs from "fs";
@@ -107,38 +110,45 @@ export const createImgRun = (
   });
 };
 
-const createTableCell = (paragraphs: Array<Paragraph>) => {
-  const tableCell = new TableCell({
-    children: paragraphs,
-  });
+const createTableCell = (
+  paragraphs: Array<Paragraph>,
+  options?: Omit<ITableCellOptions, "children">
+) => {
+  const tableCell = new TableCell({ ...options, children: paragraphs });
 
   return tableCell;
 };
 
-const createTableRow = (tableCells: Array<TableCell>) => {
-  const tableRow = new TableRow({
-    children: tableCells,
-  });
+const createTableRow = (
+  tableCells: Array<TableCell>,
+  options?: Omit<ITableRowOptions, "children">
+) => {
+  const tableRow = new TableRow({ ...options, children: tableCells });
 
   return tableRow;
 };
 
-export const createTable = (rows: Array<TableRowOptionsType>) => {
+export const createTable = (
+  rows: Array<TableRowOptionsType>,
+  options?: Omit<ITableOptions, "rows">,
+  optionsRow?: Omit<ITableRowOptions, "children">,
+  optionsCells?: Omit<ITableCellOptions, "children">
+) => {
   const tableRows = rows.map((row) => {
     return createTableRow(
       row.children.map((cell) => {
         return createTableCell(
           cell.children.map((paragraph) => {
             return createParagraph(paragraph.texts, false, paragraph.options);
-          })
+          }),
+          optionsCells
         );
-      })
+      }),
+      optionsRow
     );
   });
 
-  const table = new Table({
-    rows: tableRows,
-  });
+  const table = new Table({ ...options, rows: tableRows });
 
   return table;
 };
