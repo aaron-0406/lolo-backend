@@ -1,9 +1,7 @@
 import { Packer } from "docx";
 import fs from "fs-extra";
 import path from "path";
-import {
-  Document,
-} from "docx";
+import { Document } from "docx";
 
 // Delete file function
 export const deleteFile = async (pathname: string, filename: string) => {
@@ -20,11 +18,14 @@ export const isFileStoredIn = (dirname: string, filename: string) => {
 };
 
 export const formatDate = (date: Date, format: string = "YYYY-MM-DD") => {
-  const anio = date.getFullYear(); // Obtener el año (YYYY)
-  const mes = (date.getMonth() + 1).toString().padStart(2, "0"); // Obtener el mes (0-11) y sumarle 1 para obtener el mes en formato (01-12)
-  const dia = date.getDate().toString().padStart(2, "0"); // Obtener el día del mes (1-31) en formato (01-31)
-  if (format === "DD/MM/YYYY") return `${dia}/${mes}/${anio}`;
-  return `${anio}-${mes}-${dia}`; // Formatear la fecha como "YYYY-MM-DD"
+  const year: number = date.getFullYear();
+  const month: number = date.getMonth() + 1; // Obtener el mes (0-11) y sumarle 1 para obtener el mes en formato (01-12)
+  const day: number = date.getDate(); // Obtener el día del mes (1-31) en formato (01-31)
+  const formattedMonth: string = month < 10 ? `0${month}` : `${month}`;
+  const formattedDay: string = day < 10 ? `0${day}` : `${day}`;
+  if (format === "DD/MM/YYYY")
+    return `${formattedDay}/${formattedMonth}/${year}`;
+  return `${year}-${formattedMonth}-${formattedDay}`; // Formatear la fecha como "YYYY-MM-DD"
 };
 
 export const sortDaysByDate = (array: any[], field: string) => {

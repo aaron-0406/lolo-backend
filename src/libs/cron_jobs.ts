@@ -29,7 +29,7 @@ export const deleteDownloadFolderTask = () => {
 
 export const sendWeeklyReportsByEmail = () => {
   cron.schedule(
-    "0 8 * * 1",
+    "*/10 * * * * *",
     async () => {
       const customers = await serviceCustomer.find();
       customers.map(async (customer: any) => {
@@ -94,10 +94,10 @@ export const sendWeeklyReportsByEmail = () => {
               };
 
               //Enviar email
-              transport.sendMail(message, (error, info) => {
-                console.log(error);
-                console.log(info);
-              });
+              // transport.sendMail(message, (error, info) => {
+              //   console.log(error);
+              //   console.log(info);
+              // });
             });
           customersUser
             .filter(
@@ -144,10 +144,10 @@ export const sendWeeklyReportsByEmail = () => {
               };
 
               //Enviar email
-              transport.sendMail(message, (error, info) => {
-                console.log(error);
-                console.log(info);
-              });
+              // transport.sendMail(message, (error, info) => {
+              //   console.log(error);
+              //   console.log(info);
+              // });
             });
         }
       });

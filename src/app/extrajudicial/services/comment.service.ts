@@ -122,12 +122,18 @@ class CommentService {
     const query = `
         SELECT fecha.dia, COALESCE(COUNT(C.id_comment), 0) AS cantidad
         FROM (
-          SELECT DATE('${primerDiaSemanaPasada.toISOString()}') + INTERVAL (days.number) DAY AS dia
+          SELECT DATE('${formatDate(
+            primerDiaSemanaPasada
+          )}') + INTERVAL (days.number) DAY AS dia
           FROM (
             SELECT 0 AS number UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
             UNION ALL SELECT 5 UNION ALL SELECT 6
           ) AS days
-          WHERE DATE('${primerDiaSemanaPasada.toISOString()}') + INTERVAL (days.number) DAY <= DATE('${ultimoDiaSemanaPasada.toISOString()}')
+          WHERE DATE('${formatDate(
+            primerDiaSemanaPasada
+          )}') + INTERVAL (days.number) DAY <= DATE('${formatDate(
+      ultimoDiaSemanaPasada
+    )}')
         ) AS fecha
         LEFT JOIN COMMENT C ON DATE(C.date) = fecha.dia
         INNER JOIN CUSTOMER_USER CU ON CU.id_customer_user = C.customer_user_id_customer_user
@@ -140,13 +146,13 @@ class CommentService {
     const diasSemana = [];
     while (primerDiaSemanaPasada <= ultimoDiaSemanaPasada) {
       diasSemana.push({
-        dia: primerDiaSemanaPasada.toISOString().slice(0, 10),
+        dia: formatDate(primerDiaSemanaPasada),
         cantidad: 0,
       });
       primerDiaSemanaPasada.setDate(primerDiaSemanaPasada.getDate() + 1);
     }
     const diasFaltantes = diasSemana.filter(
-      (dia) => !comentariosPorDia[0].some((r: any) => r.fecha === dia.dia)
+      (dia) => !comentariosPorDia[0].some((r: any) => r.dia === dia.dia)
     );
     const resultadosFinales = [...comentariosPorDia[0], ...diasFaltantes];
     return sortDaysByDate(resultadosFinales, "dia");
@@ -163,7 +169,9 @@ class CommentService {
         INNER JOIN CUSTOMER_USER CU ON CU.id_customer_user = C.customer_user_id_customer_user
         INNER JOIN CUSTOMER CUS ON CUS.id_customer = CU.customer_id_customer
       WHERE CUS.id_customer=${customerId} AND
-            C.date BETWEEN DATE('${primerDiaSemanaPasada.toISOString()}') AND DATE('${ultimoDiaSemanaPasada.toISOString()}')
+            C.date BETWEEN DATE('${formatDate(
+              primerDiaSemanaPasada
+            )}') AND DATE('${formatDate(ultimoDiaSemanaPasada)}')
       GROUP BY CU.id_customer_user
     `;
     const comentariosPorUsuario = await sequelize.query(query);
@@ -204,7 +212,9 @@ class CommentService {
         INNER JOIN CUSTOMER_HAS_BANK CHB ON CLI.customer_has_bank_id_customer_has_bank = CHB.id_customer_has_bank
         INNER JOIN BANK B ON B.id_bank = CHB.bank_id_bank
       WHERE CHB.customer_id_customer=${customerId} 
-            AND C.date BETWEEN DATE('${primerDiaSemanaPasada.toISOString()}') AND DATE('${ultimoDiaSemanaPasada.toISOString()}')
+            AND C.date BETWEEN DATE('${formatDate(
+              primerDiaSemanaPasada
+            )}') AND DATE('${formatDate(ultimoDiaSemanaPasada)}')
       GROUP BY B.id_bank
     `;
     const queryBank = `
@@ -249,12 +259,18 @@ class CommentService {
     const query = `
         SELECT fecha.dia, COALESCE(COUNT(C.id_comment), 0) AS cantidad
         FROM (
-          SELECT DATE('${primerDiaSemanaPasada.toISOString()}') + INTERVAL (days.number) DAY AS dia
+          SELECT DATE('${formatDate(
+            primerDiaSemanaPasada
+          )}') + INTERVAL (days.number) DAY AS dia
           FROM (
             SELECT 0 AS number UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
             UNION ALL SELECT 5 UNION ALL SELECT 6
           ) AS days
-          WHERE DATE('${primerDiaSemanaPasada.toISOString()}') + INTERVAL (days.number) DAY <= DATE('${ultimoDiaSemanaPasada.toISOString()}')
+          WHERE DATE('${formatDate(
+            primerDiaSemanaPasada
+          )}') + INTERVAL (days.number) DAY <= DATE('${formatDate(
+      ultimoDiaSemanaPasada
+    )}')
         ) AS fecha
         LEFT JOIN COMMENT C ON DATE(C.date) = fecha.dia
         INNER JOIN CUSTOMER_USER CU ON CU.id_customer_user = C.customer_user_id_customer_user
@@ -267,13 +283,14 @@ class CommentService {
     const diasSemana = [];
     while (primerDiaSemanaPasada <= ultimoDiaSemanaPasada) {
       diasSemana.push({
-        dia: primerDiaSemanaPasada.toISOString().slice(0, 10),
+        dia: formatDate(primerDiaSemanaPasada),
         cantidad: 0,
       });
       primerDiaSemanaPasada.setDate(primerDiaSemanaPasada.getDate() + 1);
     }
+
     const diasFaltantes = diasSemana.filter(
-      (dia) => !comentariosPorDia[0].some((r: any) => r.fecha === dia.dia)
+      (dia) => !comentariosPorDia[0].some((r: any) => r.dia === dia.dia)
     );
     const resultadosFinales = [...comentariosPorDia[0], ...diasFaltantes];
     return sortDaysByDate(resultadosFinales, "dia");
@@ -293,13 +310,15 @@ class CommentService {
         INNER JOIN CUSTOMER_USER CU ON CU.id_customer_user = C.customer_user_id_customer_user
         INNER JOIN CUSTOMER CUS ON CUS.id_customer = CU.customer_id_customer
       WHERE CUS.id_customer=${customerId} AND CU.id_customer_user = ${customerUserId} AND
-            C.date BETWEEN DATE('${primerDiaSemanaPasada.toISOString()}') AND DATE('${ultimoDiaSemanaPasada.toISOString()}')
+            C.date BETWEEN DATE('${formatDate(
+              primerDiaSemanaPasada
+            )}') AND DATE('${formatDate(ultimoDiaSemanaPasada)}')
       GROUP BY CU.id_customer_user
     `;
     const comentariosPorUsuario = await sequelize.query(query);
 
     const gestores = await models.CUSTOMER_USER.findAll({
-      where: { customerId,id:customerUserId },
+      where: { customerId, id: customerUserId },
     });
 
     const newGestores = gestores.map((gestor) => {
@@ -340,7 +359,9 @@ class CommentService {
         INNER JOIN CUSTOMER_USER CU ON CU.id_customer_user = C.customer_user_id_customer_user
       WHERE CHB.customer_id_customer=${customerId} 
             AND CU.id_customer_user = ${customerUserId}
-            AND C.date BETWEEN DATE('${primerDiaSemanaPasada.toISOString()}') AND DATE('${ultimoDiaSemanaPasada.toISOString()}')
+            AND C.date BETWEEN DATE('${formatDate(
+              primerDiaSemanaPasada
+            )}') AND DATE('${formatDate(ultimoDiaSemanaPasada)}')
       GROUP BY B.id_bank
     `;
     const queryBank = `

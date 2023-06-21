@@ -248,7 +248,6 @@ class DocumentService {
             template.customerId,
             customerUserId
           );
-
     const commentsByUserWeekly =
       customerUserId === -1
         ? await commentService.getCommentsGroupByGestorWeekly(
@@ -915,17 +914,19 @@ class DocumentService {
 
   private obtenerNombreDia(fecha: string): string {
     const diasSemana = [
+      "Domingo",
       "Lunes",
       "Martes",
       "Miércoles",
       "Jueves",
       "Viernes",
       "Sábado",
-      "Domingo",
     ];
-    const fechaObj = new Date(fecha);
-    const indiceDia = fechaObj.getDay();
-
+    const tempDate = new Date();
+    tempDate.setFullYear(Number(fecha.split("-")[0]));
+    tempDate.setMonth(Number(fecha.split("-")[1]) - 1);
+    tempDate.setDate(Number(fecha.split("-")[2]));
+    const indiceDia = tempDate.getDay();
     const nombreDia = diasSemana[indiceDia];
     return (
       nombreDia +
