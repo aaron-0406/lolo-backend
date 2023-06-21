@@ -29,7 +29,7 @@ export const deleteDownloadFolderTask = () => {
 
 export const sendWeeklyReportsByEmail = () => {
   cron.schedule(
-    "*/10 * * * * *",
+    "0 8 * * 1",
     async () => {
       const customers = await serviceCustomer.find();
       customers.map(async (customer: any) => {
