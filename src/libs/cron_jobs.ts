@@ -94,10 +94,10 @@ export const sendWeeklyReportsByEmail = () => {
               };
 
               //Enviar email
-              // transport.sendMail(message, (error, info) => {
-              //   console.log(error);
-              //   console.log(info);
-              // });
+              transport.sendMail(message, (error, info) => {
+                console.log(error);
+                console.log(info);
+              });
             });
           customersUser
             .filter(
@@ -144,10 +144,10 @@ export const sendWeeklyReportsByEmail = () => {
               };
 
               //Enviar email
-              // transport.sendMail(message, (error, info) => {
-              //   console.log(error);
-              //   console.log(info);
-              // });
+              transport.sendMail(message, (error, info) => {
+                console.log(error);
+                console.log(info);
+              });
             });
         }
       });
