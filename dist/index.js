@@ -50,5 +50,6 @@ app.use(errorHandler);
 app.listen(port, () => {
     fs_1.default.mkdir(path_1.default.join(__dirname, "./public/download"), () => { });
     (0, cron_jobs_1.deleteDownloadFolderTask)();
+    (0, cron_jobs_1.sendWeeklyReportsByEmail)();
     console.log("My port: " + port);
 });

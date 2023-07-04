@@ -21,6 +21,9 @@ const util_1 = __importDefault(require("util"));
 const docx_1 = require("docx");
 const fs_1 = __importDefault(require("fs"));
 const docx_2 = require("../../../libs/docx");
+const comment_service_1 = __importDefault(require("../../extrajudicial/services/comment.service"));
+const customer_service_1 = __importDefault(require("./customer.service"));
+const commentService = new comment_service_1.default();
 class DocumentService {
     constructor() { }
     generateDocument(templateHasValues, clients) {
@@ -90,6 +93,69 @@ class DocumentService {
             const document = this.makeDocument(parrafos, image);
             return document;
             // Configuración del documento
+        });
+    }
+    generateReport(template, customerUserId = -1) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Si no hay una plantilla configurada en bd
+            let image;
+            if (template.templateJson === "")
+                throw boom_1.default.badRequest("No hay una plantilla configurada");
+            // Si la plantilla ya fue descargada
+            const isStored = (0, helpers_1.isFileStoredIn)(path_1.default.join(__dirname, "../../../public/download"), template.templateJson);
+            // Si la plantilla no está guardada, descargarla de aws
+            if (!isStored) {
+                yield (0, aws_bucket_1.readFile)(`${config_1.default.AWS_PLANTILLA_PATH}${template.customerId}/${template.templateJson}`);
+            }
+            // Si hay una imagen como fondo
+            if (template.templatePhoto !== "") {
+                // Si ya está descargada
+                const isStored = (0, helpers_1.isFileStoredIn)(path_1.default.join(__dirname, "../../../public/download"), template.templatePhoto);
+                // Si no lo está la descarga
+                if (!isStored) {
+                    yield (0, aws_bucket_1.readFile)(`${config_1.default.AWS_PLANTILLA_PATH}${template.customerId}/${template.templatePhoto}`);
+                }
+                // IMAGEN FONDO
+                image = new docx_1.ImageRun({
+                    floating: {
+                        horizontalPosition: {
+                            offset: 0,
+                        },
+                        verticalPosition: {
+                            offset: -340000,
+                        },
+                    },
+                    data: fs_1.default.readFileSync(path_1.default.join(__dirname, "../../../public/download", template.templatePhoto)),
+                    transformation: {
+                        width: 793,
+                        height: 1177,
+                    },
+                });
+            }
+            const readFileAsync = util_1.default.promisify(fs_1.default.readFile);
+            const jsonFile = yield readFileAsync(path_1.default.join(__dirname, "../../../public/download", template.templateJson), "utf8");
+            const plantilla = JSON.parse(jsonFile);
+            let parrafos = [];
+            const commentsWeekly = customerUserId === -1
+                ? yield commentService.getCommentsGroupByDayWeekly(template.customerId)
+                : yield commentService.getCommentsGroupByDayWeeklyUser(template.customerId, customerUserId);
+            const commentsByUserWeekly = customerUserId === -1
+                ? yield commentService.getCommentsGroupByGestorWeekly(template.customerId)
+                : yield commentService.getCommentsGroupByGestorWeeklyUser(template.customerId, customerUserId);
+            const commentsByBanksWeekly = customerUserId === -1
+                ? yield commentService.getCommentsGroupByBanks(template.customerId)
+                : yield commentService.getCommentsGroupByBanksUser(template.customerId, customerUserId);
+            const customer = yield new customer_service_1.default().findOneByID(template.customerId + "");
+            const report = {
+                Banks: commentsByBanksWeekly,
+                companyName: customer.dataValues.companyName,
+                Gestores: commentsByUserWeekly,
+                Weeks: commentsWeekly,
+            };
+            const texts = this.makeTextsReport([...plantilla.parrafos], report);
+            parrafos = [...parrafos, ...texts];
+            const document = this.makeDocument(parrafos, image);
+            return document;
         });
     }
     transformText(text, values, client) {
@@ -337,6 +403,169 @@ class DocumentService {
             paragraphs.push(parrafo);
         }
         return paragraphs;
+    }
+    makeTextsReport(parrafos, reportType) {
+        var _a, _b;
+        const paragraphs = [];
+        for (let i = 0; i < parrafos.length; i++) {
+            const element = parrafos[i];
+            element.texts = (_a = element.texts) === null || _a === void 0 ? void 0 : _a.map((item) => {
+                return Object.assign(Object.assign({}, item), { text: this.transformTextReport(item.text, reportType) });
+            });
+            //Tablas
+            if (element.tablets &&
+                element.tablets.rows &&
+                ((_b = element.tablets.rows) === null || _b === void 0 ? void 0 : _b.length) > 0) {
+                if (element.tablets.rows[1].children[0].children[0].texts.some((item) => { var _a; return (_a = item.text) === null || _a === void 0 ? void 0 : _a.includes("day"); }) &&
+                    !!reportType.Weeks) {
+                    const headerRow = JSON.parse(JSON.stringify(element.tablets.rows))[0];
+                    let newElement = [
+                        JSON.parse(JSON.stringify(element.tablets.rows))[1],
+                    ];
+                    let rows = [];
+                    // Week
+                    for (let k = 0; k < reportType.Weeks.length; k++) {
+                        const week = reportType.Weeks[k];
+                        rows.push(...newElement.map((row) => {
+                            return {
+                                children: row.children.map((cell) => {
+                                    return {
+                                        children: cell.children.map((paragraph) => {
+                                            return {
+                                                texts: paragraph.texts.map((item) => {
+                                                    var _a, _b;
+                                                    return Object.assign(Object.assign({}, item), { text: (_b = (_a = item.text) === null || _a === void 0 ? void 0 : _a.replace("[day.name]", this.obtenerNombreDia(week.dia))) === null || _b === void 0 ? void 0 : _b.replace("[day.quantity_comments]", week.cantidad) });
+                                                }),
+                                            };
+                                        }),
+                                    };
+                                }),
+                            };
+                        }));
+                    }
+                    const table = (0, docx_2.createTable)([headerRow, ...rows], {
+                        alignment: docx_1.AlignmentType.CENTER,
+                        width: { size: "16cm" },
+                    }, {
+                        height: { value: "1cm", rule: docx_1.HeightRule.EXACT },
+                    }, {
+                        verticalAlign: docx_1.VerticalAlign.CENTER,
+                    });
+                    paragraphs.push(table);
+                }
+                if (element.tablets.rows[1].children[0].children[0].texts.some((item) => { var _a; return (_a = item.text) === null || _a === void 0 ? void 0 : _a.includes("gestor"); }) &&
+                    !!reportType.Gestores) {
+                    const headerRow = JSON.parse(JSON.stringify(element.tablets.rows))[0];
+                    let newElement = [
+                        JSON.parse(JSON.stringify(element.tablets.rows))[1],
+                    ];
+                    let rows = [];
+                    // Gestores
+                    for (let k = 0; k < reportType.Gestores.length; k++) {
+                        const gestor = reportType.Gestores[k];
+                        rows.push(...newElement.map((row) => {
+                            return {
+                                children: row.children.map((cell) => {
+                                    return {
+                                        children: cell.children.map((paragraph) => {
+                                            return {
+                                                texts: paragraph.texts.map((item) => {
+                                                    var _a, _b, _c;
+                                                    return Object.assign(Object.assign({}, item), { text: (_c = (_b = (_a = item.text) === null || _a === void 0 ? void 0 : _a.replace("[gestor.id]", gestor.id)) === null || _b === void 0 ? void 0 : _b.replace("[gestor.name]", gestor.name)) === null || _c === void 0 ? void 0 : _c.replace("[gestor.quantity_comments]", gestor.cantidad) });
+                                                }),
+                                            };
+                                        }),
+                                    };
+                                }),
+                            };
+                        }));
+                    }
+                    const table = (0, docx_2.createTable)([headerRow, ...rows], {
+                        alignment: docx_1.AlignmentType.CENTER,
+                        width: { size: "16cm" },
+                    }, {
+                        height: { value: "1cm", rule: docx_1.HeightRule.EXACT },
+                    }, {
+                        verticalAlign: docx_1.VerticalAlign.CENTER,
+                    });
+                    paragraphs.push(table);
+                }
+                if (element.tablets.rows[1].children[0].children[0].texts.some((item) => { var _a; return (_a = item.text) === null || _a === void 0 ? void 0 : _a.includes("bank"); }) &&
+                    !!reportType.Gestores) {
+                    const headerRow = JSON.parse(JSON.stringify(element.tablets.rows))[0];
+                    let newElement = [
+                        JSON.parse(JSON.stringify(element.tablets.rows))[1],
+                    ];
+                    let rows = [];
+                    // Bancos
+                    for (let k = 0; k < reportType.Banks.length; k++) {
+                        const bank = reportType.Banks[k];
+                        rows.push(...newElement.map((row) => {
+                            return {
+                                children: row.children.map((cell) => {
+                                    return {
+                                        children: cell.children.map((paragraph) => {
+                                            return {
+                                                texts: paragraph.texts.map((item) => {
+                                                    var _a, _b, _c;
+                                                    return Object.assign(Object.assign({}, item), { text: (_c = (_b = (_a = item.text) === null || _a === void 0 ? void 0 : _a.replace("[bank.id]", bank.id)) === null || _b === void 0 ? void 0 : _b.replace("[bank.name]", bank.name)) === null || _c === void 0 ? void 0 : _c.replace("[bank.quantity_comments]", bank.cantidad) });
+                                                }),
+                                            };
+                                        }),
+                                    };
+                                }),
+                            };
+                        }));
+                    }
+                    const table = (0, docx_2.createTable)([headerRow, ...rows], {
+                        alignment: docx_1.AlignmentType.CENTER,
+                        width: { size: "16cm" },
+                    }, {
+                        height: { value: "1cm", rule: docx_1.HeightRule.EXACT },
+                    }, {
+                        verticalAlign: docx_1.VerticalAlign.CENTER,
+                    });
+                    paragraphs.push(table);
+                }
+            }
+            const parrafo = (0, docx_2.createParagraph)(element.texts ? element.texts : [], false, element.options);
+            paragraphs.push(parrafo);
+        }
+        return paragraphs;
+    }
+    transformTextReport(text, reportType) {
+        if (text === undefined)
+            return "";
+        const hoy = new Date();
+        const primerDia = new Date(hoy.setDate(hoy.getDate() - hoy.getDay() + 1));
+        const ultimoDia = new Date(hoy.setDate(hoy.getDate() - hoy.getDay() + 7));
+        const milPrimerDia = primerDia.getTime();
+        const milUltimoDia = ultimoDia.getTime();
+        const primerDiaSemanaPasada = (0, helpers_1.formatDate)(new Date(milPrimerDia - 24 * 60 * 60 * 1000 * 7), "DD/MM/YYYY");
+        const ultimoDiaSemanaPasada = (0, helpers_1.formatDate)(new Date(milUltimoDia - 24 * 60 * 60 * 1000 * 7), "DD/MM/YYYY");
+        text = text.replace(`[date]`, `${primerDiaSemanaPasada} - ${ultimoDiaSemanaPasada}`);
+        text = text.replace(`[customer.name]`, String(reportType.companyName));
+        return text;
+    }
+    obtenerNombreDia(fecha) {
+        const diasSemana = [
+            "Domingo",
+            "Lunes",
+            "Martes",
+            "Miércoles",
+            "Jueves",
+            "Viernes",
+            "Sábado",
+        ];
+        const tempDate = new Date();
+        tempDate.setFullYear(Number(fecha.split("-")[0]));
+        tempDate.setMonth(Number(fecha.split("-")[1]) - 1);
+        tempDate.setDate(Number(fecha.split("-")[2]));
+        const indiceDia = tempDate.getDay();
+        const nombreDia = diasSemana[indiceDia];
+        return (nombreDia +
+            " " +
+            `${fecha.split("-")[2]}/${fecha.split("-")[1]}/${fecha.split("-")[0]}`);
     }
 }
 exports.default = DocumentService;
