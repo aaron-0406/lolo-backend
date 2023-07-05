@@ -12,6 +12,7 @@ import directionRouter from "./direction.routes";
 import commentRouter from "./comment.routes";
 import fileRouter from "./file.routes";
 import authRouter from "./auth.routes";
+import authDashRouter from "./dash/auth.routes";
 import negotiationRouter from "./negotiation.routes";
 import docRouter from "./document.routes";
 import templateHasValuesRouter from "./template-has-values.routes";
@@ -47,6 +48,8 @@ const routerApi = (app: Express) => {
   router.use("/dashboard", dashboardRouter);
   router.use("/product", productRouter);
   router.use("/management-action", managementActionRouter);
+
+  router.use("/dash/auth", authDashRouter);
 };
 
 export default routerApi;
