@@ -57,9 +57,23 @@ export const restarDias = (date: Date, quantityDays: number) => {
   return new Date(day - 24 * 60 * 60 * 1000 * quantityDays);
 };
 
+export const sumarDias = (date: Date, quantityDays: number) => {
+  const day = date.getTime();
+  return new Date(day + 24 * 60 * 60 * 1000 * quantityDays);
+};
+
 export const saveWordDocument = async (doc: Document, templateName: string) => {
   const docName = `${new Date().getTime()} - ${templateName}.docx`;
   const buffer = await Packer.toBuffer(doc);
   fs.writeFileSync(path.join(__dirname, "../public/download", docName), buffer);
   return docName;
+};
+
+export const extractDate = (date: string) => {
+  const splited = date.split("-");
+  return {
+    day: Number(splited[2]),
+    month: Number(splited[1]) - 1,
+    year: Number(splited[0]),
+  };
 };

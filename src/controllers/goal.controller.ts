@@ -9,8 +9,11 @@ export const createGoalController = async (
   next: NextFunction
 ) => {
   try {
-    const goals = await goalService.findAll(Number(req.user?.customerId));
-    return res.json(goals);
+    const goal = await goalService.create({
+      ...req.body,
+      customerId: Number(req.user?.customerId),
+    });
+    return res.json(goal);
   } catch (error) {
     next(error);
   }
@@ -22,11 +25,8 @@ export const getGoalController = async (
   next: NextFunction
 ) => {
   try {
-    const goal = await goalService.findByID(
-      Number(req.params.id),
-      Number(req.user?.customerId)
-    );
-    return res.json(goal);
+    const goals = await goalService.findAll(Number(req.user?.customerId));
+    return res.json(goals);
   } catch (error) {
     next(error);
   }
@@ -38,7 +38,10 @@ export const getGoalByIdController = async (
   next: NextFunction
 ) => {
   try {
-    const goal = await goalService.create(req.body);
+    const goal = await goalService.findByID(
+      Number(req.params.id),
+      Number(req.user?.customerId)
+    );
     return res.json(goal);
   } catch (error) {
     next(error);

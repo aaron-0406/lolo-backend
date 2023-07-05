@@ -20,6 +20,8 @@ import ecampoModel from "./ecampo.model";
 import valuesModel from "./values.model";
 import templateImgModel from "./template-img.model";
 import productModel from "./product.model";
+import goalModel from "./goal.model";
+import goalUserModel from "./goal-user.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
@@ -42,6 +44,8 @@ const { Values, ValuesSchema } = valuesModel;
 const { CustomerHasBank, CustomerHasBankSchema } = customerHasBank;
 const { TemplateImg, TemplateImgSchema } = templateImgModel;
 const { Product, ProductSchema } = productModel;
+const { Goal, GoalSchema } = goalModel;
+const { GoalUser, GoalUserSchema } = goalUserModel;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -74,6 +78,8 @@ export const setupModels = (sequelize: Sequelize) => {
   Values.init(ValuesSchema, Values.config(sequelize));
   TemplateImg.init(TemplateImgSchema, TemplateImg.config(sequelize));
   Product.init(ProductSchema, Product.config(sequelize));
+  Goal.init(GoalSchema, Goal.config(sequelize));
+  GoalUser.init(GoalUserSchema, GoalUser.config(sequelize));
 
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
@@ -93,4 +99,6 @@ export const setupModels = (sequelize: Sequelize) => {
   Values.associate(sequelize.models);
   TemplateImg.associate(sequelize.models);
   Product.associate(sequelize.models);
+  Goal.associate(sequelize.models);
+  GoalUser.associate(sequelize.models);
 };

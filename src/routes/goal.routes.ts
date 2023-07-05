@@ -25,12 +25,14 @@ router.get(
 
 router.post(
   "/",
+  JWTAuth,
   validatorHandler(createGoalSchema, "body"),
   createGoalController
 );
 
 router.patch(
   "/:id",
+  JWTAuth,
   validatorHandler(getGoalByIdSchema, "params"),
   validatorHandler(updateGoalSchema, "body"),
   updateGoalController
@@ -38,6 +40,7 @@ router.patch(
 
 router.delete(
   "/:id",
+  JWTAuth,
   validatorHandler(getGoalByIdSchema, "params"),
   deleteGoalController
 );

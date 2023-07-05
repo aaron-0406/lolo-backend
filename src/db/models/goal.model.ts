@@ -21,6 +21,7 @@ const GoalSchema: ModelAttributes<Goal, GoalType> = {
   },
   startDate: {
     allowNull: false,
+    field: "start_date",
     type: DataTypes.DATE,
   },
   week: {
@@ -28,6 +29,7 @@ const GoalSchema: ModelAttributes<Goal, GoalType> = {
     type: DataTypes.INTEGER,
   },
   endDate: {
+    field: "end_date",
     allowNull: true,
     type: DataTypes.DATE,
   },
@@ -37,7 +39,7 @@ const GoalSchema: ModelAttributes<Goal, GoalType> = {
     type: DataTypes.INTEGER,
     references: {
       model: CUSTOMER_TABLE,
-      key: "id_customer_",
+      key: "id_customer",
     },
     onUpdate: "CASCADE",
     onDelete: "CASCADE",
