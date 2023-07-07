@@ -13,7 +13,7 @@ router.post(
   validatorHandler(loginSchema, "body"),
   async (req, res, next) => {
     try {
-      passport.authenticate("local.signin", { session: false }, (err, user) => {
+      passport.authenticate("local.signinDash", { session: false }, (err, user) => {
         if (err) return next(err);
         const { password, ...rest } = user.dataValues as UserAppType;
         const token = signToken(rest, `${process.env.JWT_SECRET}`);

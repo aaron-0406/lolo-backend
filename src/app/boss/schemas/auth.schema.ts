@@ -3,12 +3,12 @@ import { LoginType } from "../types/auth.type";
 
 const email = Joi.string().email().required();
 const password = Joi.string().required();
-const userId = Joi.number().required().min(1);
+const id = Joi.number().required().min(1);
 
 const loginSchema = Joi.object<LoginType>({
   email,
   password,
-  userId,
-}).options({ abortEarly: true });
+  id,
+})
 
 export default { loginSchema };
