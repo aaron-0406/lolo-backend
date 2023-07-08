@@ -11,15 +11,29 @@ import {
 
 const { models } = sequelize;
 
+type QuerySearch = {
+  limit: number;
+  page: number;
+};
+
 class GoalService {
   constructor() {}
-  async findAll(customerId: number) {
-    const rta = await models.GOAL.findAll({
+  async findAll(customerId: number, opts: QuerySearch) {
+    const { limit, page } = opts;
+
+    const rtaCount = await models.GOAL.count({
       where: {
         customerId,
       },
     });
-    return rta;
+    const rta = await models.GOAL.findAll({
+      where: {
+        customerId,
+      },
+      limit,
+      offset: (page - 1) * limit,
+    });
+    return { goals: rta, quantity: rtaCount };
   }
 
   async findByID(goalId: number, customerId: number) {

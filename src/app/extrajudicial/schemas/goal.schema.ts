@@ -5,6 +5,14 @@ const id = Joi.number().required();
 const week = Joi.number();
 const startDate = Joi.date();
 
+const limit = Joi.number().required();
+const page = Joi.number().required();
+
+const getGoalQuerySchema = Joi.object({
+  limit,
+  page,
+}).options({ abortEarly: true });
+
 const createGoalSchema = Joi.object<
   Omit<GoalType, "id" | "createdAt" | "endDate" | "customerId">,
   true
@@ -29,4 +37,5 @@ export default {
   createGoalSchema,
   getGoalByIdSchema,
   updateGoalSchema,
+  getGoalQuerySchema,
 };

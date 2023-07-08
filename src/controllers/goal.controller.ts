@@ -25,7 +25,15 @@ export const getGoalController = async (
   next: NextFunction
 ) => {
   try {
-    const goals = await goalService.findAll(Number(req.user?.customerId));
+    const { limit, page } = req.query;
+    const limite = Number(limit);
+    const pagina = Number(page);
+
+    const goals = await goalService.findAll(Number(req.user?.customerId), {
+      limit: limite,
+      page: pagina,
+    });
+
     return res.json(goals);
   } catch (error) {
     next(error);

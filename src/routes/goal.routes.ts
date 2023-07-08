@@ -12,9 +12,19 @@ import {
 import { JWTAuth } from "../middlewares/auth.handler";
 
 const router = Router();
-const { getGoalByIdSchema, createGoalSchema, updateGoalSchema } = goalSchema;
+const {
+  getGoalByIdSchema,
+  createGoalSchema,
+  updateGoalSchema,
+  getGoalQuerySchema,
+} = goalSchema;
 
-router.get("/", JWTAuth, getGoalController);
+router.get(
+  "/",
+  JWTAuth,
+  validatorHandler(getGoalQuerySchema, "query"),
+  getGoalController
+);
 
 router.get(
   "/:id",
