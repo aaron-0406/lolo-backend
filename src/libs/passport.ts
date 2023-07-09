@@ -38,9 +38,8 @@ passport.use(
       passReqToCallback: true,
     },
     async (req, email, password, done) => {
-      const { id } = req.body;
       try {
-        const user = await serviceDash.login({ email, password, id });
+        const user = await serviceDash.login({ email, password});
 
         return done(null, user);
       } catch (error: any) {
