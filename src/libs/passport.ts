@@ -22,7 +22,6 @@ passport.use(
 
         return done(null, user);
       } catch (error: any) {
-        console.log(error);
         return done(boom.badRequest(error), false);
       }
     }
@@ -43,7 +42,6 @@ passport.use(
 
         return done(null, user);
       } catch (error: any) {
-        console.log(error);
         return done(boom.badRequest(error), false);
       }
     }
