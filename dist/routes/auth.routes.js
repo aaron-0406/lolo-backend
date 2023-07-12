@@ -36,7 +36,7 @@ router.post("/signin", (0, validator_handler_1.default)(loginSchema, "body"), (r
             if (err)
                 return next(err);
             // Singing token with the user
-            const _a = user.dataValues, { password } = _a, rest = __rest(_a, ["password"]);
+            const _a = user, { password } = _a, rest = __rest(_a, ["password"]);
             const token = (0, jwt_1.signToken)(rest, `${process.env.JWT_SECRET}`);
             return res.json({ success: "Sesión Iniciada", user: rest, token });
         })(req, res, next);

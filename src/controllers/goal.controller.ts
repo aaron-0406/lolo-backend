@@ -79,10 +79,7 @@ export const deleteGoalController = async (
   next: NextFunction
 ) => {
   try {
-    const goal = await goalService.delete(
-      Number(req.params.id),
-      Number(req.user?.customerId)
-    );
+    const goal = await goalService.delete(Number(req.params.id));
     return res.json(goal);
   } catch (error) {
     next(error);

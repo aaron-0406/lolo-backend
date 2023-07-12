@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveWordDocument = exports.restarDias = exports.getLastDayOfWeek = exports.getFirstDayOfWeek = exports.sortDaysByDate = exports.formatDate = exports.isFileStoredIn = exports.deleteFile = void 0;
+exports.extractDate = exports.saveWordDocument = exports.sumarDias = exports.restarDias = exports.getLastDayOfWeek = exports.getFirstDayOfWeek = exports.sortDaysByDate = exports.formatDate = exports.isFileStoredIn = exports.deleteFile = void 0;
 const docx_1 = require("docx");
 const fs_extra_1 = __importDefault(require("fs-extra"));
 const path_1 = __importDefault(require("path"));
@@ -73,6 +73,11 @@ const restarDias = (date, quantityDays) => {
     return new Date(day - 24 * 60 * 60 * 1000 * quantityDays);
 };
 exports.restarDias = restarDias;
+const sumarDias = (date, quantityDays) => {
+    const day = date.getTime();
+    return new Date(day + 24 * 60 * 60 * 1000 * quantityDays);
+};
+exports.sumarDias = sumarDias;
 const saveWordDocument = (doc, templateName) => __awaiter(void 0, void 0, void 0, function* () {
     const docName = `${new Date().getTime()} - ${templateName}.docx`;
     const buffer = yield docx_1.Packer.toBuffer(doc);
@@ -80,3 +85,12 @@ const saveWordDocument = (doc, templateName) => __awaiter(void 0, void 0, void 0
     return docName;
 });
 exports.saveWordDocument = saveWordDocument;
+const extractDate = (date) => {
+    const splited = date.split("-");
+    return {
+        day: Number(splited[2]),
+        month: Number(splited[1]) - 1,
+        year: Number(splited[0]),
+    };
+};
+exports.extractDate = extractDate;

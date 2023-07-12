@@ -2,7 +2,7 @@ import Joi from "joi";
 import { GoalType } from "../types/goal.type";
 
 const id = Joi.number().required();
-const week = Joi.number();
+const week = Joi.number().positive();
 const startDate = Joi.date();
 
 const limit = Joi.number().required();

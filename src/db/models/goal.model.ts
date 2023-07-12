@@ -22,7 +22,7 @@ const GoalSchema: ModelAttributes<Goal, GoalType> = {
   startDate: {
     allowNull: false,
     field: "start_date",
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY,
   },
   week: {
     allowNull: false,
@@ -31,7 +31,7 @@ const GoalSchema: ModelAttributes<Goal, GoalType> = {
   endDate: {
     field: "end_date",
     allowNull: true,
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY,
   },
   customerId: {
     allowNull: false,

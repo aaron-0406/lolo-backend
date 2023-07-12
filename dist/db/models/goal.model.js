@@ -17,15 +17,17 @@ const GoalSchema = {
     },
     startDate: {
         allowNull: false,
-        type: sequelize_1.DataTypes.DATE,
+        field: "start_date",
+        type: sequelize_1.DataTypes.DATEONLY,
     },
     week: {
         allowNull: false,
         type: sequelize_1.DataTypes.INTEGER,
     },
     endDate: {
+        field: "end_date",
         allowNull: true,
-        type: sequelize_1.DataTypes.DATE,
+        type: sequelize_1.DataTypes.DATEONLY,
     },
     customerId: {
         allowNull: false,
@@ -33,7 +35,7 @@ const GoalSchema = {
         type: sequelize_1.DataTypes.INTEGER,
         references: {
             model: CUSTOMER_TABLE,
-            key: "id_customer_",
+            key: "id_customer",
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",

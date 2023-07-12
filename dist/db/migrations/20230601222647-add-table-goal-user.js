@@ -35,12 +35,12 @@ function up(queryInterface) {
             startDate: {
                 allowNull: false,
                 field: "start_date",
-                type: sequelize_1.DataTypes.DATE,
+                type: sequelize_1.DataTypes.DATEONLY,
             },
             endDate: {
                 allowNull: false,
                 field: "end_date",
-                type: sequelize_1.DataTypes.DATE,
+                type: sequelize_1.DataTypes.DATEONLY,
             },
             week: {
                 allowNull: false,

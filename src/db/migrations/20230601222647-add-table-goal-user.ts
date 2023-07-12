@@ -21,12 +21,12 @@ export async function up(queryInterface: QueryInterface) {
     startDate: {
       allowNull: false,
       field: "start_date",
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
     },
     endDate: {
       allowNull: false,
       field: "end_date",
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
     },
     week: {
       allowNull: false,

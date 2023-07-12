@@ -42,8 +42,7 @@ export const sortDaysByDate = (array: any[], field: string) => {
   });
 };
 
-export const getFirstDayOfWeek = () => {
-  const today = new Date();
+export const getFirstDayOfWeek = (today: Date = new Date()) => {
   return new Date(today.setDate(today.getDate() - today.getDay() + 1));
 };
 
