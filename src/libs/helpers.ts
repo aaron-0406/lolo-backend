@@ -46,8 +46,7 @@ export const getFirstDayOfWeek = (today: Date = new Date()) => {
   return new Date(today.setDate(today.getDate() - today.getDay() + 1));
 };
 
-export const getLastDayOfWeek = () => {
-  const today = new Date();
+export const getLastDayOfWeek = (today: Date = new Date()) => {
   return new Date(today.setDate(today.getDate() - today.getDay() + 7));
 };
 

@@ -8,6 +8,10 @@ import {
   getGoalByIdController,
   getGoalController,
   updateGoalController,
+  getCustomerUsersGoals,
+  updateCustomerUserGoals,
+  getCustomerUserGoal as getPersonalGoal,
+  getGoalGlobalController,
 } from "../controllers/goal.controller";
 import { JWTAuth } from "../middlewares/auth.handler";
 
@@ -26,12 +30,17 @@ router.get(
   getGoalController
 );
 
+router.get("/personal-goal", JWTAuth, getPersonalGoal);
+router.get("/global-goal", JWTAuth, getGoalGlobalController);
 router.get(
   "/:id",
   JWTAuth,
   validatorHandler(getGoalByIdSchema, "params"),
   getGoalByIdController
 );
+
+router.get("/:goalId/customer-user", JWTAuth, getCustomerUsersGoals);
+router.put("/:goalId/customer-user", JWTAuth, updateCustomerUserGoals);
 
 router.post(
   "/",

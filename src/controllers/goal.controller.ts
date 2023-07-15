@@ -1,7 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import GoalService from "../app/extrajudicial/services/goal.service";
+import GoalUserService from "../app/extrajudicial/services/goal-user.service";
 
 const goalService = new GoalService();
+const goalUserService = new GoalUserService();
 
 export const createGoalController = async (
   req: Request,
@@ -51,6 +53,70 @@ export const getGoalByIdController = async (
       Number(req.user?.customerId)
     );
     return res.json(goal);
+  } catch (error) {
+    next(error);
+  }
+};
+export const getGoalGlobalController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const goal = await goalService.finGlobalGoal(
+      Number(req.user?.customerId)
+    );
+    return res.json(goal);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getCustomerUsersGoals = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const customerUsers = await goalService.findCustomerUserByGoalId(
+      Number(req.params.goalId)
+    );
+    return res.json(customerUsers);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getCustomerUserGoal = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const customerGoal = await goalService.findGoalUserByCustomerId(
+      Number(req.user?.id)
+    );
+    return res.json(customerGoal);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateCustomerUserGoals = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    for (let i = 0; i < req.body.length; i++) {
+      const element = req.body[i];
+      await goalUserService.updateGoalUser(element.id, element.quantity);
+    }
+    const goal = await goalService.findByID(
+      Number(req.params.goalId),
+      Number(req.user?.customerId)
+    );
+    res.json(goal);
   } catch (error) {
     next(error);
   }

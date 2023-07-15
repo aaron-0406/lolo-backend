@@ -8,6 +8,7 @@ import {
   getLastDayOfWeek,
   sumarDias,
 } from "../../../libs/helpers";
+import { Op } from "sequelize";
 
 const { models } = sequelize;
 
@@ -33,7 +34,7 @@ class GoalService {
         end_date as endDate,
         week,
         customer_id_customer as customerId,
-        (SELECT COUNT(*) FROM comment c WHERE c.customer_user_id_customer_user IN (SELECT id_customer FROM Customer WHERE id_customer = g.customer_id_customer) AND c.date BETWEEN g.start_date AND g.end_date) as total,
+        (SELECT COUNT(*) FROM comment c WHERE c.customer_user_id_customer_user IN (SELECT id_customer_user FROM Customer_User WHERE customer_id_customer = ${customerId}) AND c.date BETWEEN g.start_date AND g.end_date) as total,
         CAST(IFNULL((SELECT SUM(quantity) FROM goal_user gu WHERE gu.goal_id_goal = g.id_goal),0) AS UNSIGNED) AS totalMeta
       FROM Goal g 
       WHERE customer_id_customer = ${customerId} 
@@ -52,7 +53,7 @@ class GoalService {
         end_date as endDate,
         week,
         customer_id_customer as customerId,
-        (SELECT COUNT(*) FROM comment c WHERE c.customer_user_id_customer_user IN (SELECT id_customer FROM Customer WHERE id_customer = g.customer_id_customer) AND c.date BETWEEN g.start_date AND g.end_date) as total,
+        (SELECT COUNT(*) FROM comment c WHERE c.customer_user_id_customer_user IN (SELECT id_customer_user FROM Customer_User WHERE customer_id_customer = ${customerId}) AND c.date BETWEEN g.start_date AND g.end_date) as total,
         CAST(IFNULL((SELECT SUM(quantity) FROM goal_user gu WHERE gu.goal_id_goal = g.id_goal),0) AS UNSIGNED) AS totalMeta
       FROM Goal g 
       WHERE customer_id_customer = ${customerId} AND g.id_goal = ${goalId}
@@ -61,6 +62,115 @@ class GoalService {
 
     if (!goals[0][0]) throw boom.notFound("Meta no encontrada");
     return goals[0][0];
+  }
+
+  async finGlobalGoal(customerId: number) {
+    const result = await models.GOAL.findOne({
+      attributes: [
+        "id_goal",
+        ["start_date", "startDate"],
+        ["end_date", "endDate"],
+        "week",
+        ["customer_id_customer", "customerId"],
+        [
+          sequelize.literal(`
+        (SELECT COUNT(*)
+        FROM comment c
+        WHERE c.customer_user_id_customer_user IN
+          (SELECT id_customer_user
+          FROM Customer_User
+          WHERE customer_id_customer = ${customerId})
+        AND c.date BETWEEN Goal.start_date AND Goal.end_date)
+      `),
+          "total",
+        ],
+        [
+          sequelize.literal(`
+        CAST(IFNULL((SELECT SUM(quantity) FROM goal_user gu WHERE gu.goal_id_goal = Goal.id_goal),0) AS UNSIGNED)
+      `),
+          "totalMeta",
+        ],
+      ],
+      where: {
+        customer_id_customer: customerId,
+        start_date: { [Op.lte]: new Date() },
+      },
+    });
+    if (!result) throw boom.notFound("Meta no encontrada");
+    return result;
+  }
+
+  async findCustomerUserByGoalId(goalId: number) {
+    const result = await sequelize.models.GOAL_USER.findAll({
+      attributes: [
+        ["id_goal_user", "id"],
+        "quantity",
+        [
+          sequelize.literal(`
+            (SELECT COUNT(c.id_comment)
+            FROM comment c
+            INNER JOIN customer_user cu ON cu.id_customer_user = c.customer_user_id_customer_user
+            WHERE c.date BETWEEN (SELECT start_date FROM goal g WHERE g.id_goal = ${goalId}) AND (SELECT end_date FROM goal g WHERE g.id_goal = ${goalId}) 
+            AND c.customer_user_id_customer_user = \`customerUser\`.\`id_customer_user\`)
+          `),
+          "totalRealizados",
+        ],
+        ["goal_id_goal", "goalId"],
+        ["customer_user_id_customer_user", "customerUserId"],
+      ],
+      include: {
+        model: sequelize.models.CUSTOMER_USER,
+        as: "customerUser",
+        attributes: [
+          ["id_customer_user", "id"],
+          "name",
+          ["last_name", "lastName"],
+          ["customer_id_customer", "customerId"],
+        ],
+      },
+      where: {
+        goal_id_goal: goalId,
+      },
+    });
+
+    return result;
+  }
+
+  async findGoalUserByCustomerId(customerUserId: number) {
+    const result = await models.GOAL.findAll({
+      attributes: {
+        include: [
+          [
+            sequelize.literal(`(
+              SELECT COUNT(c.id_comment)
+              FROM comment c
+              WHERE c.customer_user_id_customer_user = ${customerUserId}
+              AND c.date BETWEEN goal.start_date AND goal.end_date
+            )`),
+            "total",
+          ],
+          [
+            sequelize.literal(
+              `CAST(IFNULL((SELECT SUM(quantity) FROM goal_user gu WHERE gu.goal_id_goal = GOAL.id_goal AND gu.customer_user_id_customer_user=${customerUserId}),0) AS UNSIGNED)`
+            ),
+            "totalMeta",
+          ],
+        ],
+      },
+      include: [
+        {
+          model: models.GOAL_USER,
+          where: { customerUserId },
+          as: "goalUser",
+          attributes: [],
+        },
+      ],
+      where: {
+        start_date: { [Op.lte]: new Date() },
+      },
+    });
+    if (!result[0]) throw boom.notFound("Meta no encontrada");
+    return result[0];
   }
 
   async create(data: GoalType) {
@@ -76,7 +186,7 @@ class GoalService {
         "La fecha de inicio de no puede ser menor a la semana actual"
       );
     const newStartDate = getFirstDayOfWeek(new Date(startDate));
-    const lastDay = getLastDayOfWeek();
+    const lastDay = getLastDayOfWeek(new Date(startDate));
     const lastDayWeeks = sumarDias(lastDay, (week - 1) * 7);
     const newGoal = await models.GOAL.create({
       ...data,
@@ -118,7 +228,7 @@ class GoalService {
         "La fecha de inicio de no puede ser menor a la semana actual"
       );
     const newStartDate = getFirstDayOfWeek(new Date(startDate));
-    const lastDay = getLastDayOfWeek();
+    const lastDay = getLastDayOfWeek(new Date(startDate));
     const lastDayWeeks = sumarDias(lastDay, (week - 1) * 7);
     const goal = await sequelize.models.GOAL.findByPk(id);
     if (!goal) throw boom.notFound("Meta no encontrada");

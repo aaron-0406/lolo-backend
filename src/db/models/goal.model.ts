@@ -53,7 +53,9 @@ const GoalSchema: ModelAttributes<Goal, GoalType> = {
 };
 
 class Goal extends Model {
-  static associate(models: { [key: string]: ModelCtor<Model> }) {}
+  static associate(models: { [key: string]: ModelCtor<Model> }) {
+    this.hasMany(models.GOAL_USER, { as: "goalUser", foreignKey: "goalId" });
+  }
   static config(sequelize: Sequelize) {
     return {
       sequelize,
