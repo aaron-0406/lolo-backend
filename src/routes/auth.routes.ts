@@ -17,7 +17,7 @@ router.post(
       passport.authenticate("local.signin", { session: false }, (err, user) => {
         if (err) return next(err);
         // Singing token with the user
-        const { password, ...rest } = user.dataValues as CustomerUserType;
+        const { password, ...rest } = user as CustomerUserType;
         const token = signToken(rest, `${process.env.JWT_SECRET}`);
         return res.json({ success: "Sesión Iniciada", user: rest, token });
       })(req, res, next);

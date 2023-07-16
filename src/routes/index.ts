@@ -21,6 +21,7 @@ import valuesRouter from "./values.routes";
 import dashboardRouter from "./dashboard.routes";
 import productRouter from "./product.routes";
 import managementActionRouter from "./management-action.routes";
+import goalRouter from "./goal.routes";
 
 const routerApi = (app: Express) => {
   const router = express.Router();
@@ -46,6 +47,7 @@ const routerApi = (app: Express) => {
   router.use("/values", valuesRouter);
   router.use("/dashboard", dashboardRouter);
   router.use("/product", productRouter);
+  router.use("/goal", goalRouter);
   router.use("/management-action", managementActionRouter);
 };
 

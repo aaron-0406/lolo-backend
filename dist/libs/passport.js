@@ -16,6 +16,8 @@ const passport_1 = __importDefault(require("passport"));
 const passport_local_1 = require("passport-local");
 const auth_service_1 = __importDefault(require("../app/customers/services/auth.service"));
 const boom_1 = __importDefault(require("@hapi/boom"));
+const passport_jwt_1 = require("passport-jwt");
+const config_1 = __importDefault(require("../config/config"));
 const service = new auth_service_1.default();
 // LOGIN
 passport_1.default.use("local.signin", new passport_local_1.Strategy({
@@ -26,10 +28,23 @@ passport_1.default.use("local.signin", new passport_local_1.Strategy({
     const { customerId } = req.body;
     try {
         const user = yield service.login({ email, password, customerId });
-        return done(null, user);
+        return done(null, user.dataValues);
     }
     catch (error) {
         console.log(error);
         return done(boom_1.default.badRequest(error), false);
+    }
+})));
+// Passport con JWT
+passport_1.default.use("jwt", new passport_jwt_1.Strategy({
+    jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: config_1.default.jwtSecret,
+}, (payload, done) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        return done(null, payload);
+    }
+    catch (error) {
+        console.log(error);
+        return done(error, payload);
     }
 })));

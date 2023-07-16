@@ -13,28 +13,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const docx_1 = require("docx");
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
 const template_has_values_service_1 = __importDefault(require("../app/customers/services/template-has-values.service"));
 const document_service_1 = __importDefault(require("../app/customers/services/document.service"));
 const document_schema_1 = __importDefault(require("../app/customers/schemas/document.schema"));
 const client_service_1 = __importDefault(require("../app/extrajudicial/services/client.service"));
 const validator_handler_1 = __importDefault(require("../middlewares/validator.handler"));
+const helpers_1 = require("../libs/helpers");
 const { createDocumentSchema } = document_schema_1.default;
 const router = express_1.default.Router();
-const serviceTemplate = new template_has_values_service_1.default();
+const serviceTemplateHasValues = new template_has_values_service_1.default();
 const serviceClient = new client_service_1.default();
 const service = new document_service_1.default();
 router.post("/", (0, validator_handler_1.default)(createDocumentSchema, "body"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { body: { templateHasValuesId, usersId }, } = req;
-        const templateHasValues = yield serviceTemplate.findOneWidthTemplate(templateHasValuesId);
+        const templateHasValues = yield serviceTemplateHasValues.findOneWidthTemplate(templateHasValuesId);
         const clients = yield serviceClient.findAllBDetailsAndClientsId(usersId);
         const doc = yield service.generateDocument(templateHasValues, clients);
-        const docName = `${new Date().getTime()} - ${templateHasValues.name}.docx`;
-        const buffer = yield docx_1.Packer.toBuffer(doc);
-        fs_1.default.writeFileSync(path_1.default.join(__dirname, "../public/download", docName), buffer);
+        const docName = yield (0, helpers_1.saveWordDocument)(doc, templateHasValues.name);
         res.json({ docName });
     }
     catch (error) {

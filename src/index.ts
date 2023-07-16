@@ -5,7 +5,28 @@ import errorHandlerr from "./middlewares/error.handler";
 import morgan from "morgan";
 import path from "path";
 import fs from "fs";
-import { deleteDownloadFolderTask, sendWeeklyReportsByEmail } from "./libs/cron_jobs";
+import {
+  deleteDownloadFolderTask,
+  sendWeeklyReportsByEmail,
+} from "./libs/cron_jobs";
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Express {
+    interface User {
+      id: number;
+      name: string;
+      lastName: string;
+      phone: string;
+      dni: string;
+      email: string;
+      privilege: string;
+      state: boolean;
+      createdAt: Date;
+      customerId: number;
+    }
+  }
+}
 
 const { logErrors, ormErrorHandler, boomErrorHandler, errorHandler } =
   errorHandlerr;
