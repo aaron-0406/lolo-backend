@@ -58,13 +58,11 @@ const sortDaysByDate = (array, field) => {
     });
 };
 exports.sortDaysByDate = sortDaysByDate;
-const getFirstDayOfWeek = () => {
-    const today = new Date();
+const getFirstDayOfWeek = (today = new Date()) => {
     return new Date(today.setDate(today.getDate() - today.getDay() + 1));
 };
 exports.getFirstDayOfWeek = getFirstDayOfWeek;
-const getLastDayOfWeek = () => {
-    const today = new Date();
+const getLastDayOfWeek = (today = new Date()) => {
     return new Date(today.setDate(today.getDate() - today.getDay() + 7));
 };
 exports.getLastDayOfWeek = getLastDayOfWeek;

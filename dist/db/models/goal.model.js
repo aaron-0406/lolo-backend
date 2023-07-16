@@ -48,7 +48,9 @@ const GoalSchema = {
     },
 };
 class Goal extends sequelize_1.Model {
-    static associate(models) { }
+    static associate(models) {
+        this.hasMany(models.GOAL_USER, { as: "goalUser", foreignKey: "goalId" });
+    }
     static config(sequelize) {
         return {
             sequelize,
