@@ -28,7 +28,7 @@ class GoalService {
                 },
             });
             const query = `
-      SELECT 
+      SELECT
         id_goal as id,
         start_date as startDate,
         end_date as endDate,
@@ -36,10 +36,10 @@ class GoalService {
         customer_id_customer as customerId,
         (SELECT COUNT(*) FROM comment c WHERE c.customer_user_id_customer_user IN (SELECT id_customer_user FROM Customer_User WHERE customer_id_customer = ${customerId}) AND c.date BETWEEN g.start_date AND g.end_date) as total,
         CAST(IFNULL((SELECT SUM(quantity) FROM goal_user gu WHERE gu.goal_id_goal = g.id_goal),0) AS UNSIGNED) AS totalMeta
-      FROM Goal g 
-      WHERE customer_id_customer = ${customerId} 
-      ORDER BY g.id_goal DESC 
-      LIMIT ${(page - 1) * limit}, ${limit}  
+      FROM goal g
+      WHERE customer_id_customer = ${customerId}
+      ORDER BY g.id_goal DESC
+      LIMIT ${(page - 1) * limit}, ${limit}
     `;
             const goals = yield sequelize_1.default.query(query);
             return { goals: goals[0], quantity: rtaCount };
@@ -48,7 +48,7 @@ class GoalService {
     findByID(goalId, customerId) {
         return __awaiter(this, void 0, void 0, function* () {
             const query = `
-      SELECT 
+      SELECT
         id_goal as id,
         start_date as startDate,
         end_date as endDate,
@@ -56,7 +56,7 @@ class GoalService {
         customer_id_customer as customerId,
         (SELECT COUNT(*) FROM comment c WHERE c.customer_user_id_customer_user IN (SELECT id_customer_user FROM Customer_User WHERE customer_id_customer = ${customerId}) AND c.date BETWEEN g.start_date AND g.end_date) as total,
         CAST(IFNULL((SELECT SUM(quantity) FROM goal_user gu WHERE gu.goal_id_goal = g.id_goal),0) AS UNSIGNED) AS totalMeta
-      FROM Goal g 
+      FROM goal g
       WHERE customer_id_customer = ${customerId} AND g.id_goal = ${goalId}
     `;
             const goals = yield sequelize_1.default.query(query);
@@ -82,13 +82,13 @@ class GoalService {
           (SELECT id_customer_user
           FROM Customer_User
           WHERE customer_id_customer = ${customerId})
-        AND c.date BETWEEN Goal.start_date AND Goal.end_date)
+        AND c.date BETWEEN goal.start_date AND goal.end_date)
       `),
                         "total",
                     ],
                     [
                         sequelize_1.default.literal(`
-        CAST(IFNULL((SELECT SUM(quantity) FROM goal_user gu WHERE gu.goal_id_goal = Goal.id_goal),0) AS UNSIGNED)
+        CAST(IFNULL((SELECT SUM(quantity) FROM goal_user gu WHERE gu.goal_id_goal = goal.id_goal),0) AS UNSIGNED)
       `),
                         "totalMeta",
                     ],
@@ -114,7 +114,7 @@ class GoalService {
             (SELECT COUNT(c.id_comment)
             FROM comment c
             INNER JOIN customer_user cu ON cu.id_customer_user = c.customer_user_id_customer_user
-            WHERE c.date BETWEEN (SELECT start_date FROM goal g WHERE g.id_goal = ${goalId}) AND (SELECT end_date FROM goal g WHERE g.id_goal = ${goalId}) 
+            WHERE c.date BETWEEN (SELECT start_date FROM goal g WHERE g.id_goal = ${goalId}) AND (SELECT end_date FROM goal g WHERE g.id_goal = ${goalId})
             AND c.customer_user_id_customer_user = \`customerUser\`.\`id_customer_user\`)
           `),
                         "totalRealizados",
@@ -154,7 +154,7 @@ class GoalService {
                             "total",
                         ],
                         [
-                            sequelize_1.default.literal(`CAST(IFNULL((SELECT SUM(quantity) FROM goal_user gu WHERE gu.goal_id_goal = GOAL.id_goal AND gu.customer_user_id_customer_user=${customerUserId}),0) AS UNSIGNED)`),
+                            sequelize_1.default.literal(`CAST(IFNULL((SELECT SUM(quantity) FROM goal_user gu WHERE gu.goal_id_goal = goal.id_goal AND gu.customer_user_id_customer_user=${customerUserId}),0) AS UNSIGNED)`),
                             "totalMeta",
                         ],
                     ],
