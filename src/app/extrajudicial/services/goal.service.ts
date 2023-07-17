@@ -34,7 +34,7 @@ class GoalService {
         end_date as endDate,
         week,
         customer_id_customer as customerId,
-        (SELECT COUNT(*) FROM comment c WHERE c.customer_user_id_customer_user IN (SELECT id_customer_user FROM Customer_User WHERE customer_id_customer = ${customerId}) AND c.date BETWEEN g.start_date AND g.end_date) as total,
+        (SELECT COUNT(*) FROM COMMENT c WHERE c.customer_user_id_customer_user IN (SELECT id_customer_user FROM Customer_User WHERE customer_id_customer = ${customerId}) AND c.date BETWEEN g.start_date AND g.end_date) as total,
         CAST(IFNULL((SELECT SUM(quantity) FROM goal_user gu WHERE gu.goal_id_goal = g.id_goal),0) AS UNSIGNED) AS totalMeta
       FROM GOAL g
       WHERE customer_id_customer = ${customerId}
@@ -53,7 +53,7 @@ class GoalService {
         end_date as endDate,
         week,
         customer_id_customer as customerId,
-        (SELECT COUNT(*) FROM comment c WHERE c.customer_user_id_customer_user IN (SELECT id_customer_user FROM Customer_User WHERE customer_id_customer = ${customerId}) AND c.date BETWEEN g.start_date AND g.end_date) as total,
+        (SELECT COUNT(*) FROM COMMENT c WHERE c.customer_user_id_customer_user IN (SELECT id_customer_user FROM Customer_User WHERE customer_id_customer = ${customerId}) AND c.date BETWEEN g.start_date AND g.end_date) as total,
         CAST(IFNULL((SELECT SUM(quantity) FROM goal_user gu WHERE gu.goal_id_goal = g.id_goal),0) AS UNSIGNED) AS totalMeta
       FROM GOAL g
       WHERE customer_id_customer = ${customerId} AND g.id_goal = ${goalId}
@@ -75,7 +75,7 @@ class GoalService {
         [
           sequelize.literal(`
         (SELECT COUNT(*)
-        FROM comment c
+        FROM COMMENT c
         WHERE c.customer_user_id_customer_user IN
           (SELECT id_customer_user
           FROM Customer_User
@@ -108,7 +108,7 @@ class GoalService {
         [
           sequelize.literal(`
             (SELECT COUNT(c.id_comment)
-            FROM comment c
+            FROM COMMENT c
             INNER JOIN customer_user cu ON cu.id_customer_user = c.customer_user_id_customer_user
             WHERE c.date BETWEEN (SELECT start_date FROM GOAL g WHERE g.id_goal = ${goalId}) AND (SELECT end_date FROM GOAL g WHERE g.id_goal = ${goalId})
             AND c.customer_user_id_customer_user = \`customerUser\`.\`id_customer_user\`)
@@ -143,7 +143,7 @@ class GoalService {
           [
             sequelize.literal(`(
               SELECT COUNT(c.id_comment)
-              FROM comment c
+              FROM COMMENT c
               WHERE c.customer_user_id_customer_user = ${customerUserId}
               AND c.date BETWEEN GOAL.start_date AND GOAL.end_date
             )`),
