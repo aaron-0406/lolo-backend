@@ -35,7 +35,7 @@ class GoalService {
         week,
         customer_id_customer as customerId,
         (SELECT COUNT(*) FROM COMMENT c WHERE c.customer_user_id_customer_user IN (SELECT id_customer_user FROM CUSTOMER_USER WHERE customer_id_customer = ${customerId}) AND c.date BETWEEN g.start_date AND g.end_date) as total,
-        CAST(IFNULL((SELECT SUM(quantity) FROM goal_user gu WHERE gu.goal_id_goal = g.id_goal),0) AS UNSIGNED) AS totalMeta
+        CAST(IFNULL((SELECT SUM(quantity) FROM GOAL_USER gu WHERE gu.goal_id_goal = g.id_goal),0) AS UNSIGNED) AS totalMeta
       FROM GOAL g
       WHERE customer_id_customer = ${customerId}
       ORDER BY g.id_goal DESC
@@ -54,7 +54,7 @@ class GoalService {
         week,
         customer_id_customer as customerId,
         (SELECT COUNT(*) FROM COMMENT c WHERE c.customer_user_id_customer_user IN (SELECT id_customer_user FROM CUSTOMER_USER WHERE customer_id_customer = ${customerId}) AND c.date BETWEEN g.start_date AND g.end_date) as total,
-        CAST(IFNULL((SELECT SUM(quantity) FROM goal_user gu WHERE gu.goal_id_goal = g.id_goal),0) AS UNSIGNED) AS totalMeta
+        CAST(IFNULL((SELECT SUM(quantity) FROM GOAL_USER gu WHERE gu.goal_id_goal = g.id_goal),0) AS UNSIGNED) AS totalMeta
       FROM GOAL g
       WHERE customer_id_customer = ${customerId} AND g.id_goal = ${goalId}
     `;
@@ -86,7 +86,7 @@ class GoalService {
         ],
         [
           sequelize.literal(`
-        CAST(IFNULL((SELECT SUM(quantity) FROM goal_user gu WHERE gu.goal_id_goal = GOAL.id_goal),0) AS UNSIGNED)
+        CAST(IFNULL((SELECT SUM(quantity) FROM GOAL_USER gu WHERE gu.goal_id_goal = GOAL.id_goal),0) AS UNSIGNED)
       `),
           "totalMeta",
         ],
@@ -151,7 +151,7 @@ class GoalService {
           ],
           [
             sequelize.literal(
-              `CAST(IFNULL((SELECT SUM(quantity) FROM goal_user gu WHERE gu.goal_id_goal = GOAL.id_goal AND gu.customer_user_id_customer_user=${customerUserId}),0) AS UNSIGNED)`
+              `CAST(IFNULL((SELECT SUM(quantity) FROM GOAL_USER gu WHERE gu.goal_id_goal = GOAL.id_goal AND gu.customer_user_id_customer_user=${customerUserId}),0) AS UNSIGNED)`
             ),
             "totalMeta",
           ],
