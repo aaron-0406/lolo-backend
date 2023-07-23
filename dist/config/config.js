@@ -23,5 +23,6 @@ const config = {
     AWS_EMAIL_USER: `${process.env.AWS_EMAIL_USER}`,
     AWS_EMAIL_HOST: `${process.env.AWS_EMAIL_HOST}`,
     AWS_EMAIL_PASSWORD: `${process.env.AWS_EMAIL_PASSWORD}`,
+    jwtSecret: `${process.env.JWT_SECRET}`,
 };
 exports.default = config;

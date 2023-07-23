@@ -25,6 +25,7 @@ const values_routes_1 = __importDefault(require("./values.routes"));
 const dashboard_routes_1 = __importDefault(require("./dashboard.routes"));
 const product_routes_1 = __importDefault(require("./product.routes"));
 const management_action_routes_1 = __importDefault(require("./management-action.routes"));
+const goal_routes_1 = __importDefault(require("./goal.routes"));
 const routerApi = (app) => {
     const router = express_1.default.Router();
     app.use("/api/v1", router);
@@ -48,6 +49,7 @@ const routerApi = (app) => {
     router.use("/values", values_routes_1.default);
     router.use("/dashboard", dashboard_routes_1.default);
     router.use("/product", product_routes_1.default);
+    router.use("/goal", goal_routes_1.default);
     router.use("/management-action", management_action_routes_1.default);
 };
 exports.default = routerApi;
