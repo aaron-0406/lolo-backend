@@ -15,7 +15,7 @@ router.post(
     try {
       passport.authenticate("local.signinDash", { session: false }, (err, user) => {
         if (err) return next(err);
-        const { password, ...rest } = user.dataValues as UserAppType;
+        const { password, ...rest } = user as UserAppType;
         const token = signToken(rest, `${process.env.JWT_SECRET}`);
         return res.json({ success: "Sesión Iniciada", user: rest, token });
       })(req, res, next);
