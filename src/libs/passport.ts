@@ -41,7 +41,7 @@ passport.use(
       try {
         const user = await serviceDash.login({ email, password});
 
-        return done(null, user);
+        return done(null, user.dataValues);
       } catch (error: any) {
         return done(boom.badRequest(error), false);
       }
