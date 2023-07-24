@@ -37,8 +37,11 @@ import { NegotiationType } from "../../boss/types/negotiation.type";
 import { CommentType } from "../../extrajudicial/types/comment.type";
 import CommentService from "../../extrajudicial/services/comment.service";
 import CustomerService from "./customer.service";
+import GoalService from "../../extrajudicial/services/goal.service";
 
 const commentService = new CommentService();
+const goalService = new GoalService();
+
 type TemplateHasValues = TemplateHasValuesType & {
   template: TemplateType & { template_imgs: TemplateImgType[] };
   values: ValuesType[];
@@ -60,6 +63,15 @@ type ReportType = {
   Gestores: { id: number; name: string; cantidad: number }[];
   Banks: { id: number; name: string; cantidad: number }[];
   companyName: string;
+  goal?: {
+    dateGoalStart: Date;
+    dateGoalEnd: Date;
+    totalGoal: number;
+    totalCommentsGoal: number;
+    percentGoal: number;
+    weekNumber: number;
+    customerUsers: any[];
+  };
 };
 
 class DocumentService {
@@ -269,13 +281,60 @@ class DocumentService {
       template.customerId + ""
     );
 
+    const goal = await goalService.finGlobalGoal(template.customerId);
+
     const report: ReportType = {
       Banks: commentsByBanksWeekly,
       companyName: customer.dataValues.companyName,
       Gestores: commentsByUserWeekly,
       Weeks: commentsWeekly,
+      goal: goal
+        ? {
+            dateGoalEnd: goal.dataValues.endDate,
+            dateGoalStart: goal.dataValues.startDate,
+            weekNumber: goal.dataValues.week,
+            totalCommentsGoal: goal.dataValues.total,
+            totalGoal: goal.dataValues.totalMeta,
+            percentGoal:
+              goal.dataValues.totalMeta === 0
+                ? 0
+                : Number(
+                    (
+                      (Number(goal.dataValues.total) * 100) /
+                      Number(goal.dataValues.totalMeta)
+                    ).toFixed(2)
+                  ) >= 100
+                ? 100
+                : Number(
+                    (
+                      (Number(goal.dataValues.total) * 100) /
+                      Number(goal.dataValues.totalMeta)
+                    ).toFixed(2)
+                  ),
+            customerUsers:
+              customerUserId === -1
+                ? JSON.parse(
+                    JSON.stringify(
+                      await goalService.findCustomerUserByGoalId(
+                        goal.dataValues.id_goal
+                      )
+                    )
+                  )
+                : JSON.parse(
+                    JSON.stringify(
+                      (
+                        await goalService.findCustomerUserByGoalId(
+                          goal.dataValues.id_goal
+                        )
+                      ).filter(
+                        (item) =>
+                          item.dataValues.customerUserId === customerUserId
+                      )
+                    )
+                  ),
+          }
+        : undefined,
     };
-
     const texts = this.makeTextsReport([...plantilla.parrafos], report);
     parrafos = [...parrafos, ...texts];
     const document = this.makeDocument(parrafos, image);
@@ -674,7 +733,9 @@ class DocumentService {
     const paragraphs = [];
     for (let i = 0; i < parrafos.length; i++) {
       const element = parrafos[i];
-      element.texts = element.texts?.map((item) => {
+      //5 - 15 indices de reporte de metas
+      if (i >= 5 && i <= 15 && !reportType.goal) continue;
+      element.texts = element.texts?.map((item, i) => {
         return {
           ...item,
           text: this.transformTextReport(item.text, reportType),
@@ -687,6 +748,98 @@ class DocumentService {
         element.tablets.rows &&
         element.tablets.rows?.length > 0
       ) {
+        // Tabla metas
+        if (
+          element.tablets.rows[1].children[0].children[0].texts.some((item) =>
+            item.text?.includes("customerUser")
+          ) &&
+          !!reportType.goal?.customerUsers
+        ) {
+          const headerRow = JSON.parse(JSON.stringify(element.tablets.rows))[0];
+          let newElement = [
+            JSON.parse(JSON.stringify(element.tablets.rows))[1],
+          ];
+
+          let rows = [];
+
+          // Metas
+          for (let k = 0; k < reportType.goal?.customerUsers.length; k++) {
+            const customerUser = reportType.goal?.customerUsers[k];
+            rows.push(
+              ...newElement.map((row: any) => {
+                return {
+                  children: row.children.map((cell: any) => {
+                    return {
+                      children: cell.children.map((paragraph: any) => {
+                        return {
+                          texts: paragraph.texts.map((item: any) => {
+                            return {
+                              ...item,
+                              text: item.text
+                                ?.replace(
+                                  "[customerUser.id]",
+                                  customerUser.customerUser.id
+                                )
+                                ?.replace(
+                                  "[customerUser.name]",
+                                  customerUser.customerUser.name
+                                )
+                                ?.replace(
+                                  "[customerUser.quantity]",
+                                  customerUser.quantity
+                                )
+                                ?.replace(
+                                  "[customerUser.percent]",
+                                  customerUser.quantity === 0
+                                    ? 0
+                                    : Number(
+                                        (
+                                          (Number(
+                                            customerUser.totalRealizados
+                                          ) *
+                                            100) /
+                                          Number(customerUser.quantity)
+                                        ).toFixed(2)
+                                      ) >= 100
+                                    ? 100
+                                    : Number(
+                                        (
+                                          (Number(
+                                            customerUser.totalRealizados
+                                          ) *
+                                            100) /
+                                          Number(customerUser.quantity)
+                                        ).toFixed(2)
+                                      )
+                                ),
+                            };
+                          }),
+                        };
+                      }),
+                    };
+                  }),
+                };
+              })
+            );
+          }
+
+          const table = createTable(
+            [headerRow, ...rows],
+            {
+              alignment: AlignmentType.CENTER,
+              width: { size: "16cm" },
+            },
+            {
+              height: { value: "1cm", rule: HeightRule.EXACT },
+            },
+            {
+              verticalAlign: VerticalAlign.CENTER,
+            }
+          );
+          paragraphs.push(table);
+        }
+
+        // TABLA DIAS
         if (
           element.tablets.rows[1].children[0].children[0].texts.some((item) =>
             item.text?.includes("day")
@@ -750,6 +903,7 @@ class DocumentService {
           paragraphs.push(table);
         }
 
+        // GESTORES TABLE
         if (
           element.tablets.rows[1].children[0].children[0].texts.some((item) =>
             item.text?.includes("gestor")
@@ -811,6 +965,7 @@ class DocumentService {
           paragraphs.push(table);
         }
 
+        // BANKS TABLE
         if (
           element.tablets.rows[1].children[0].children[0].texts.some((item) =>
             item.text?.includes("bank")
@@ -909,6 +1064,21 @@ class DocumentService {
       `${primerDiaSemanaPasada} - ${ultimoDiaSemanaPasada}`
     );
     text = text.replace(`[customer.name]`, String(reportType.companyName));
+    if (reportType.goal) {
+      const dateStartSplited = String(reportType.goal.dateGoalStart).split("-");
+      const dateEndSplited = String(reportType.goal.dateGoalEnd).split("-");
+      const dateGoalStart = `${dateStartSplited[2]}/${dateStartSplited[1]}/${dateStartSplited[0]}`;
+      const dateGoalEnd = `${dateEndSplited[2]}/${dateEndSplited[1]}/${dateEndSplited[0]}`;
+      text = text.replace(`[dateGoalStart]`, dateGoalStart);
+      text = text.replace(`[dateGoalEnd]`, dateGoalEnd);
+      text = text.replace(`[totalGoal]`, String(reportType.goal.totalGoal));
+      text = text.replace(
+        `[totalCommentsGoal]`,
+        String(reportType.goal.totalCommentsGoal)
+      );
+      text = text.replace(`[percentGoal]`, String(reportType.goal.percentGoal));
+      text = text.replace(`[weekNumber]`, String(reportType.goal.weekNumber));
+    }
     return text;
   }
 
