@@ -96,7 +96,6 @@ class GoalService {
         start_date: { [Op.lte]: new Date() },
       },
     });
-    if (!result) throw boom.notFound("Meta no encontrada");
     return result;
   }
 
