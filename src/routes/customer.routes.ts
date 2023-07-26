@@ -51,22 +51,6 @@ router.post(
 );
 
 router.put(
-  "/:id",
-  validatorHandler(getCustomerByID, "params"),
-  validatorHandler(updateCustomerSchema, "body"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const body = req.body;
-      const customer = await service.update(id, body);
-      res.json(customer);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-router.put(
   "/state/:id",
   validatorHandler(getCustomerByID, "params"),
   validatorHandler(updateStateCustomerSchema, "body"),
@@ -75,6 +59,22 @@ router.put(
       const { id } = req.params;
       const body = req.body;
       const customer = await service.updateState(id, body.state);
+      res.json(customer);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.patch(
+  "/:id",
+  validatorHandler(getCustomerByID, "params"),
+  validatorHandler(updateCustomerSchema, "body"),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const customer = await service.update(id, body);
       res.json(customer);
     } catch (error) {
       next(error);

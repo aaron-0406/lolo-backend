@@ -6,12 +6,14 @@ import customerHasBankRouter from "./customer-has-bank.routes";
 import funcionarioRouter from "./funcionario.routes";
 import cityRouter from "./city.routes";
 import customerUserRouter from "./customer-user.routes";
+import userAppRouter from "./dash/user-app.routes";
 import clientRouter from "./client.routes";
 import guarantorRouter from "./guarantor.routes";
 import directionRouter from "./direction.routes";
 import commentRouter from "./comment.routes";
 import fileRouter from "./file.routes";
 import authRouter from "./auth.routes";
+import authDashRouter from "./dash/auth.routes";
 import negotiationRouter from "./negotiation.routes";
 import docRouter from "./document.routes";
 import templateHasValuesRouter from "./template-has-values.routes";
@@ -49,6 +51,8 @@ const routerApi = (app: Express) => {
   router.use("/product", productRouter);
   router.use("/goal", goalRouter);
   router.use("/management-action", managementActionRouter);
+
+  router.use("/dash/auth", authDashRouter);
 };
 
 export default routerApi;
