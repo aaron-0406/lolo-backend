@@ -52,7 +52,6 @@ const routerApi = (app: Express) => {
   router.use("/goal", goalRouter);
   router.use("/management-action", managementActionRouter);
 
-  
   router.use("/dash/auth", authDashRouter);
 };
 
