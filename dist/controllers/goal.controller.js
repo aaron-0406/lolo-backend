@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteGoalController = exports.updateGoalController = exports.updateCustomerUserGoals = exports.getCustomerUserGoal = exports.getCustomerUsersGoals = exports.getGoalGlobalController = exports.getGoalByIdController = exports.getGoalController = exports.createGoalController = void 0;
 const goal_service_1 = __importDefault(require("../app/extrajudicial/services/goal.service"));
 const goal_user_service_1 = __importDefault(require("../app/extrajudicial/services/goal-user.service"));
+const boom_1 = __importDefault(require("@hapi/boom"));
 const goalService = new goal_service_1.default();
 const goalUserService = new goal_user_service_1.default();
 const createGoalController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -60,6 +61,8 @@ const getGoalGlobalController = (req, res, next) => __awaiter(void 0, void 0, vo
     var _d;
     try {
         const goal = yield goalService.finGlobalGoal(Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.customerId));
+        if (!goal)
+            throw boom_1.default.notFound("Meta no encontrada");
         return res.json(goal);
     }
     catch (error) {
