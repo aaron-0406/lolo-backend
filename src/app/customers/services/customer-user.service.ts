@@ -19,6 +19,11 @@ class CustomerUserService {
         customer_id_customer: customerId,
       },
     });
+
+    if (!rta) {
+      throw boom.notFound("Cliente no encontrado");
+    }
+
     return rta;
   }
 
@@ -32,7 +37,7 @@ class CustomerUserService {
   }
 
   async create(data: CustomerUserType) {
-    data.password = await encryptPassword(data.password)
+    data.password = await encryptPassword(data.password);
     const newUser = await models.CUSTOMER_USER.create(data);
     return newUser;
   }
