@@ -44,6 +44,13 @@ class CustomerUserService {
     return rta;
   }
 
+  async updateState(id: string, state: boolean) {
+    const user = await this.findOne(id);
+    const rta = await user.update({ ...user, state });
+
+    return rta;
+  }
+
   async delete(id: string) {
     const user = await this.findOne(id);
     await user.destroy();
