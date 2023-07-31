@@ -12,6 +12,7 @@ class AuthService {
       where: { email, customerId },
     });
     if (!userCustomer) throw boom.notFound("Correo o contraseña incorrectos");
+    if(!userCustomer?.dataValues.state) throw boom.notFound("Usuario inhabilitado");
     if (!(await matchPassword(password, userCustomer.dataValues.password)))
       throw boom.notFound("Correo o contraseña incorrectos");
     return userCustomer;
