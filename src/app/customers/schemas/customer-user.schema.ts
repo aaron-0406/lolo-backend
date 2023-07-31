@@ -28,6 +28,10 @@ const createCustomerUserSchema = Joi.object<Omit<CustomerUserType, "id">, true>(
   }
 );
 
+const updateCustomerUserStateSchema = Joi.object<{ state: boolean }, true>({
+  state: state.required(),
+});
+
 const updateCustomerUserSchema = Joi.object<
   Omit<CustomerUserType, "id" | "email" | "password" | "customerId" | "createdAt">,
   true
@@ -53,4 +57,5 @@ export default {
   updateCustomerUserSchema,
   getCustomerUserSchema,
   getCustomerUserByIdSchema,
+  updateCustomerUserStateSchema,
 };
