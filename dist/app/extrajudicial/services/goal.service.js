@@ -98,8 +98,6 @@ class GoalService {
                     start_date: { [sequelize_2.Op.lte]: new Date() },
                 },
             });
-            if (!result)
-                throw boom_1.default.notFound("Meta no encontrada");
             return result;
         });
     }
