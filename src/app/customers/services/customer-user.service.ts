@@ -19,6 +19,11 @@ class CustomerUserService {
         customer_id_customer: customerId,
       },
     });
+
+    if (!rta) {
+      throw boom.notFound("Cliente no encontrado");
+    }
+
     return rta;
   }
 
@@ -32,7 +37,7 @@ class CustomerUserService {
   }
 
   async create(data: CustomerUserType) {
-    data.password = await encryptPassword(data.password)
+    data.password = await encryptPassword(data.password);
     const newUser = await models.CUSTOMER_USER.create(data);
     return newUser;
   }
@@ -40,6 +45,13 @@ class CustomerUserService {
   async update(id: string, changes: CustomerUserType) {
     const user = await this.findOne(id);
     const rta = await user.update(changes);
+
+    return rta;
+  }
+
+  async updateState(id: string, state: boolean) {
+    const user = await this.findOne(id);
+    const rta = await user.update({ ...user, state });
 
     return rta;
   }

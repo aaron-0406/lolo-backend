@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import GoalService from "../app/extrajudicial/services/goal.service";
 import GoalUserService from "../app/extrajudicial/services/goal-user.service";
+import boom from "@hapi/boom";
 
 const goalService = new GoalService();
 const goalUserService = new GoalUserService();
@@ -66,6 +67,7 @@ export const getGoalGlobalController = async (
     const goal = await goalService.finGlobalGoal(
       Number(req.user?.customerId)
     );
+    if (!goal) throw boom.notFound("Meta no encontrada");
     return res.json(goal);
   } catch (error) {
     next(error);

@@ -16,6 +16,7 @@ const direction_routes_1 = __importDefault(require("./direction.routes"));
 const comment_routes_1 = __importDefault(require("./comment.routes"));
 const file_routes_1 = __importDefault(require("./file.routes"));
 const auth_routes_1 = __importDefault(require("./auth.routes"));
+const auth_routes_2 = __importDefault(require("./dash/auth.routes"));
 const negotiation_routes_1 = __importDefault(require("./negotiation.routes"));
 const document_routes_1 = __importDefault(require("./document.routes"));
 const template_has_values_routes_1 = __importDefault(require("./template-has-values.routes"));
@@ -51,5 +52,6 @@ const routerApi = (app) => {
     router.use("/product", product_routes_1.default);
     router.use("/goal", goal_routes_1.default);
     router.use("/management-action", management_action_routes_1.default);
+    router.use("/dash/auth", auth_routes_2.default);
 };
 exports.default = routerApi;

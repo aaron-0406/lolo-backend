@@ -48,22 +48,22 @@ router.post("/", (0, validator_handler_1.default)(createCustomerSchema, "body"),
         next(error);
     }
 }));
-router.put("/:id", (0, validator_handler_1.default)(getCustomerByID, "params"), (0, validator_handler_1.default)(updateCustomerSchema, "body"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.put("/state/:id", (0, validator_handler_1.default)(getCustomerByID, "params"), (0, validator_handler_1.default)(updateStateCustomerSchema, "body"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
         const body = req.body;
-        const customer = yield service.update(id, body);
+        const customer = yield service.updateState(id, body.state);
         res.json(customer);
     }
     catch (error) {
         next(error);
     }
 }));
-router.put("/state/:id", (0, validator_handler_1.default)(getCustomerByID, "params"), (0, validator_handler_1.default)(updateStateCustomerSchema, "body"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.patch("/:id", (0, validator_handler_1.default)(getCustomerByID, "params"), (0, validator_handler_1.default)(updateCustomerSchema, "body"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
         const body = req.body;
-        const customer = yield service.updateState(id, body.state);
+        const customer = yield service.update(id, body);
         res.json(customer);
     }
     catch (error) {
