@@ -17,7 +17,16 @@ class ManagementActionService {
       where: {
         customer_has_bank_id_customer_has_bank: chb,
       },
+      include: [
+        {
+          model: models.CUSTOMER_HAS_BANK,
+          as: "customerHasBank",
+        },
+      ],
     });
+
+    if (!rta) throw boom.notFound("Acción no encontrada");
+
     return rta;
   }
 

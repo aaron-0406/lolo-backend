@@ -94,6 +94,7 @@ class GoalService {
       where: {
         customer_id_customer: customerId,
         start_date: { [Op.lte]: new Date() },
+        end_date: { [Op.gte]: new Date() },
       },
     });
     return result;
@@ -166,6 +167,7 @@ class GoalService {
       ],
       where: {
         start_date: { [Op.lte]: new Date() },
+        end_date: { [Op.gte]: new Date() },
       },
     });
     if (!result[0]) throw boom.notFound("Meta no encontrada");

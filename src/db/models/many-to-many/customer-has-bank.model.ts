@@ -60,6 +60,16 @@ class CustomerHasBank extends Model {
       as: "client",
       foreignKey: "customerHasBankId",
     });
+
+    this.hasMany(models.MANAGEMENT_ACTION, {
+      as: "managementAction",
+      foreignKey: "customerHasBankId",
+    });
+
+    this.hasMany(models.NEGOTIATION, {
+      as: "negotiation",
+      foreignKey: "customerHasBankId",
+    });
   }
 
   static config(sequelize: Sequelize) {
