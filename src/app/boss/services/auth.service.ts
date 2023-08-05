@@ -12,6 +12,7 @@ class AuthService {
     const userApp = await models.USER_APP.findOne({
       where: { email },
     });
+
     if (!userApp) throw boom.notFound("Correo o contraseña incorrectos");
     if(!userApp?.dataValues.state) throw boom.notFound("Usuario inhabilitado");
     if (!(await matchPassword(password, userApp.dataValues.password)))
