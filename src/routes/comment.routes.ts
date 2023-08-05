@@ -1,7 +1,14 @@
 import express from "express";
 import validatorHandler from "../middlewares/validator.handler";
 import commentSchema from "../app/extrajudicial/schemas/comment.schema";
-import CommentService from "../app/extrajudicial/services/comment.service";
+import {
+  createCommentController,
+  deleteCommentController,
+  getAllCommentsByClientController,
+  getChartByCustomerUserController,
+  getCommentByIdController,
+  updateCommentController,
+} from "../controllers/comment.controller";
 
 const {
   getCommentByClientIDSchema,
@@ -11,126 +18,42 @@ const {
 } = commentSchema;
 
 const router = express.Router();
-const service = new CommentService();
 
 router.get(
   "/all-client/:clientId",
   validatorHandler(getCommentByClientIDSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { clientId } = req.params;
-      const comments = await service.findAllByClient(clientId);
-      res.json(comments);
-    } catch (error) {
-      next(error);
-    }
-  }
+  getAllCommentsByClientController
 );
 
 router.get(
   "/chart/:clientId",
   validatorHandler(getCommentByClientIDSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { clientId } = req.params;
-      const comments: { fecha: string; cantidad: number }[] =
-        await service.chart(clientId);
-
-      const hoy = new Date();
-      const primerDia = new Date(hoy.setDate(hoy.getDate() - hoy.getDay() + 1));
-      const ultimoDia = new Date(hoy.setDate(hoy.getDate() - hoy.getDay() + 7));
-
-      const fechaInicio = new Date(primerDia);
-      const fechaFin = new Date(ultimoDia);
-
-      const diasSemana = [];
-
-      while (fechaInicio <= fechaFin) {
-        diasSemana.push({
-          fecha: fechaInicio.toISOString().slice(0, 10),
-          cantidad: 0,
-        });
-        fechaInicio.setDate(fechaInicio.getDate() + 1);
-      }
-      const diasFaltantes = diasSemana.filter(
-        (dia) => !comments.some((r) => r.fecha === dia.fecha)
-      );
-      const resultadosFinales = [...comments, ...diasFaltantes];
-
-      resultadosFinales.sort((a, b) => {
-        const dateA = Date.parse(a.fecha);
-        const dateB = Date.parse(b.fecha);
-        if (dateA < dateB) {
-          return -1;
-        } else if (dateA > dateB) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
-      res.json(resultadosFinales.map(objeto => objeto.cantidad));
-    } catch (error) {
-      next(error);
-    }
-  }
+  getChartByCustomerUserController
 );
 
 router.get(
   "/:id",
   validatorHandler(getCommentByIDSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const comment = await service.findByID(id);
-      res.json(comment);
-    } catch (error) {
-      next(error);
-    }
-  }
+  getCommentByIdController
 );
 
 router.post(
   "/",
   validatorHandler(createCommentSchema, "body"),
-  async (req, res, next) => {
-    try {
-      const body = req.body;
-      const newComment = await service.create(body);
-      res.status(201).json(newComment);
-    } catch (error) {
-      next(error);
-    }
-  }
+  createCommentController
 );
 
 router.patch(
   "/:id",
   validatorHandler(getCommentByIDSchema, "params"),
   validatorHandler(updateCommentSchema, "body"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const body = req.body;
-      const comment = await service.update(id, body);
-      res.json(comment);
-    } catch (error) {
-      next(error);
-    }
-  }
+  updateCommentController
 );
 
 router.delete(
   "/:id",
   validatorHandler(getCommentByIDSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      await service.delete(id);
-      res.status(201).json({ id });
-    } catch (error) {
-      next(error);
-    }
-  }
+  deleteCommentController
 );
 
 export default router;

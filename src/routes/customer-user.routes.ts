@@ -1,7 +1,15 @@
 import express from "express";
 import validatorHandler from "../middlewares/validator.handler";
 import customerUserSchema from "../app/customers/schemas/customer-user.schema";
-import CustomerUserService from "../app/customers/services/customer-user.service";
+import {
+  getCustomerUsersController,
+  getCustomerUserByCustomerIdController,
+  getCustomerUserByIdController,
+  createCustomerUserController,
+  updateCustomerUserStateController,
+  updateCustomerUserController,
+  deleteCustomerUserController,
+} from "../controllers/customer-user.controller";
 
 const {
   getCustomerUserSchema,
@@ -11,103 +19,45 @@ const {
   updateCustomerUserStateSchema,
 } = customerUserSchema;
 const router = express.Router();
-const service = new CustomerUserService();
 
-router.get("/", async (req, res, next) => {
-  try {
-    const users = await service.findAll();
-    res.json(users);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/", getCustomerUsersController);
 
 router.get(
   "/users/:customerId",
   validatorHandler(getCustomerUserByIdSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { customerId } = req.params;
-      const users = await service.findAllByCustomerID(customerId);
-      res.json(users);
-    } catch (error) {
-      next(error);
-    }
-  }
+  getCustomerUserByCustomerIdController
 );
 
 router.get(
   "/:id",
   validatorHandler(getCustomerUserSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const user = await service.findOne(id);
-      res.json(user);
-    } catch (error) {
-      next(error);
-    }
-  }
+  getCustomerUserByIdController
 );
 
 router.post(
   "/",
   validatorHandler(createCustomerUserSchema, "body"),
-  async (req, res, next) => {
-    try {
-      const body = req.body;
-      const newUser = await service.create(body);
-      res.status(201).json(newUser);
-    } catch (error) {
-      next(error);
-    }
-  }
+  createCustomerUserController
 );
 
 router.patch(
   "/state/:id",
   validatorHandler(getCustomerUserSchema, "params"),
   validatorHandler(updateCustomerUserStateSchema, "body"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const body = req.body;
-      const user = await service.updateState(id, body);
-      res.json(user);
-    } catch (error) {
-      next(error);
-    }
-  }
+  updateCustomerUserStateController
 );
 
 router.patch(
   "/:id",
   validatorHandler(getCustomerUserSchema, "params"),
   validatorHandler(updateCustomerUserSchema, "body"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const body = req.body;
-      const user = await service.update(id, body);
-      res.json(user);
-    } catch (error) {
-      next(error);
-    }
-  }
+  updateCustomerUserController
 );
 
 router.delete(
   "/:id",
   validatorHandler(getCustomerUserSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      await service.delete(id);
-      res.status(201).json({ id });
-    } catch (error) {
-      next(error);
-    }
-  }
+  deleteCustomerUserController
 );
 
 export default router;
