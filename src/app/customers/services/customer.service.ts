@@ -10,7 +10,9 @@ class CustomerService {
   constructor() {}
 
   async find() {
-    const rta = await models.CUSTOMER.findAll();
+    const rta = await models.CUSTOMER.findAll({
+      include: ["customerBanks"],
+    });
     return rta;
   }
 
