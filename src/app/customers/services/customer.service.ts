@@ -27,6 +27,9 @@ class CustomerService {
     if (!customer) {
       throw boom.notFound("Cliente no encontrado");
     }
+
+    if (!customer.dataValues.state) throw boom.notFound("Cliente inhabilitado");
+
     return customer;
   }
 
