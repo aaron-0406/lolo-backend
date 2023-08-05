@@ -9,7 +9,6 @@ import { ManagementActionType } from "../../app/boss/types/management-action.typ
 import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 
 const MANAGEMENT_ACTION_TABLE = "MANAGEMENT_ACTION";
-const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 
 const ManagementActionSchema: ModelAttributes<
   ManagementAction,
@@ -42,7 +41,7 @@ const ManagementActionSchema: ModelAttributes<
     field: "customer_has_bank_id_customer_has_bank",
     type: DataTypes.INTEGER,
     references: {
-      model: CUSTOMER_HAS_BANK_TABLE,
+      model: customerHasBankModel.CUSTOMER_HAS_BANK_TABLE,
       key: "id_customer_has_bank",
     },
     onUpdate: "CASCADE",
@@ -52,7 +51,9 @@ const ManagementActionSchema: ModelAttributes<
 
 class ManagementAction extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
+    
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
+
     this.hasMany(models.COMMENT, {
       as: "comment",
       foreignKey: "managementActionId",
