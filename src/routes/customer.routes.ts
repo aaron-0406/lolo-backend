@@ -66,7 +66,7 @@ router.put(
   }
 );
 
-router.patch(
+router.put(
   "/:id",
   validatorHandler(getCustomerByID, "params"),
   validatorHandler(updateCustomerSchema, "body"),
