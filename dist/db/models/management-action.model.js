@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const customer_has_bank_model_1 = __importDefault(require("./many-to-many/customer-has-bank.model"));
 const MANAGEMENT_ACTION_TABLE = "MANAGEMENT_ACTION";
-const { CUSTOMER_HAS_BANK_TABLE } = customer_has_bank_model_1.default;
 const ManagementActionSchema = {
     id: {
         primaryKey: true,
@@ -35,7 +34,7 @@ const ManagementActionSchema = {
         field: "customer_has_bank_id_customer_has_bank",
         type: sequelize_1.DataTypes.INTEGER,
         references: {
-            model: CUSTOMER_HAS_BANK_TABLE,
+            model: customer_has_bank_model_1.default.CUSTOMER_HAS_BANK_TABLE,
             key: "id_customer_has_bank",
         },
         onUpdate: "CASCADE",

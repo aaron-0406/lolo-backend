@@ -26,6 +26,8 @@ class AuthService {
             });
             if (!userCustomer)
                 throw boom_1.default.notFound("Correo o contraseña incorrectos");
+            if (!(userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.dataValues.state))
+                throw boom_1.default.notFound("Usuario inhabilitado");
             if (!(yield (0, bcrypt_1.matchPassword)(password, userCustomer.dataValues.password)))
                 throw boom_1.default.notFound("Correo o contraseña incorrectos");
             return userCustomer;

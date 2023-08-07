@@ -21,7 +21,9 @@ class CustomerService {
     constructor() { }
     find() {
         return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.CUSTOMER.findAll();
+            const rta = yield models.CUSTOMER.findAll({
+                include: ["customerBanks"],
+            });
             return rta;
         });
     }
@@ -36,6 +38,8 @@ class CustomerService {
             if (!customer) {
                 throw boom_1.default.notFound("Cliente no encontrado");
             }
+            if (!customer.dataValues.state)
+                throw boom_1.default.notFound("Cliente inhabilitado");
             return customer;
         });
     }
