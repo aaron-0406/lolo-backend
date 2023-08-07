@@ -10,6 +10,7 @@ import {
   updateCustomerUserController,
   deleteCustomerUserController,
 } from "../controllers/customer-user.controller";
+import { JWTAuth } from "../middlewares/auth.handler";
 
 const {
   getCustomerUserSchema,
@@ -24,24 +25,28 @@ router.get("/", getCustomerUsersController);
 
 router.get(
   "/users/:customerId",
+  JWTAuth,
   validatorHandler(getCustomerUserByIdSchema, "params"),
   getCustomerUserByCustomerIdController
 );
 
 router.get(
   "/:id",
+  JWTAuth,
   validatorHandler(getCustomerUserSchema, "params"),
   getCustomerUserByIdController
 );
 
 router.post(
   "/",
+  JWTAuth,
   validatorHandler(createCustomerUserSchema, "body"),
   createCustomerUserController
 );
 
 router.patch(
   "/state/:id",
+  JWTAuth,
   validatorHandler(getCustomerUserSchema, "params"),
   validatorHandler(updateCustomerUserStateSchema, "body"),
   updateCustomerUserStateController
@@ -49,6 +54,7 @@ router.patch(
 
 router.patch(
   "/:id",
+  JWTAuth,
   validatorHandler(getCustomerUserSchema, "params"),
   validatorHandler(updateCustomerUserSchema, "body"),
   updateCustomerUserController
@@ -56,6 +62,7 @@ router.patch(
 
 router.delete(
   "/:id",
+  JWTAuth,
   validatorHandler(getCustomerUserSchema, "params"),
   deleteCustomerUserController
 );

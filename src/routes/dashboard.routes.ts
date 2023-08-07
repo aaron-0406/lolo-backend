@@ -18,6 +18,7 @@ import {
   readXslxController,
   sendXslxController,
 } from "../controllers/dashboard.controller";
+import { JWTAuth } from "../middlewares/auth.handler";
 
 const router = Router();
 
@@ -30,6 +31,7 @@ const multerFile = (req: Request, res: Response, next: NextFunction) => {
 
 router.post(
   "/xslx",
+  JWTAuth,
   multerFile,
   validatorHandler(excelFileSchema, "body"),
   readXslxController
@@ -37,30 +39,35 @@ router.post(
 
 router.post(
   "/clients",
+  JWTAuth,
   validatorHandler(createClientsSchema, "body"),
   createClientsXslxController
 );
 
 router.post(
   "/delete-clients",
+  JWTAuth,
   validatorHandler(deleteClientsSchema, "body"),
   deleteClientsXslxController
 );
 
 router.post(
   "/products",
+  JWTAuth,
   validatorHandler(createProductSchema, "body"),
   createProductsXslxController
 );
 
 router.post(
   "/delete-products",
+  JWTAuth,
   validatorHandler(deleteProductSchema, "body"),
   deleteProductsXslxController
 );
 
 router.post(
   "/send-xslx",
+  JWTAuth,
   validatorHandler(sendXlsxEmail, "body"),
   sendXslxController
 );

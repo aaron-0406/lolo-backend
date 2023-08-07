@@ -9,6 +9,7 @@ import {
   findFileByClientIdController,
   findFileByIdController,
 } from "../controllers/file.controller";
+import { JWTAuth } from "../middlewares/auth.handler";
 
 const { createFileSchema, getFileSchema } = fileSchema;
 const router = express.Router();
@@ -22,18 +23,21 @@ const multerFile = (req: Request, res: Response, next: NextFunction) => {
 
 router.get(
   "/:id",
+  JWTAuth,
   validatorHandler(getFileSchema, "params"),
   findFileByClientIdController
 );
 
 router.get(
   "/single/:idCustomer/:chb/:code/:id",
+  JWTAuth,
   validatorHandler(getFileSchema, "params"),
   findFileByIdController
 );
 
 router.post(
   "/:idCustomer/:chb/:code/:id",
+  JWTAuth,
   validatorHandler(createFileSchema, "params"),
   multerFile,
   createFileController
@@ -56,6 +60,7 @@ router.post(
 
 router.delete(
   "/:idCustomer/:chb/:code/:id",
+  JWTAuth,
   validatorHandler(createFileSchema, "params"),
   deleteFileController
 );

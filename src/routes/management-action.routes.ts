@@ -9,6 +9,7 @@ import {
   getManagementActionsController,
   updateManagementActionController,
 } from "../controllers/management-action.controller";
+import { JWTAuth } from "../middlewares/auth.handler";
 
 const {
   getManagementActionSchema,
@@ -18,28 +19,32 @@ const {
 } = managementActionSchema;
 const router = express.Router();
 
-router.get("/", getManagementActionsController);
+router.get("/", JWTAuth, getManagementActionsController);
 
 router.get(
   "/all/:chb",
+  JWTAuth,
   validatorHandler(getManagementActionByCHBSchema, "params"),
   getManagementActionByCHBController
 );
 
 router.get(
   "/:id",
+  JWTAuth,
   validatorHandler(getManagementActionSchema, "params"),
   getManagementActionByIdController
 );
 
 router.post(
   "/",
+  JWTAuth,
   validatorHandler(createManagementActionSchema, "body"),
   createManagementActionController
 );
 
 router.put(
   "/:id",
+  JWTAuth,
   validatorHandler(getManagementActionSchema, "params"),
   validatorHandler(updateManagementActionSchema, "body"),
   updateManagementActionController
@@ -47,6 +52,7 @@ router.put(
 
 router.delete(
   "/:id",
+  JWTAuth,
   validatorHandler(getManagementActionSchema, "params"),
   deleteManagementActionController
 );

@@ -1,7 +1,6 @@
 import express from "express";
 import validatorHandler from "../middlewares/validator.handler";
 import citySchema from "../app/boss/schemas/city.schema";
-import CityService from "../app/boss/services/city.service";
 import {
   createCityController,
   deleteCityController,
@@ -9,6 +8,7 @@ import {
   getCityByIdController,
   updateCityController,
 } from "../controllers/city.controller";
+import { JWTAuth } from "../middlewares/auth.handler";
 
 const { getCitySchema, createCitySchema, updateCitySchema } = citySchema;
 const router = express.Router();
@@ -17,18 +17,21 @@ router.get("/", getAllCityController);
 
 router.get(
   "/:id",
+  JWTAuth,
   validatorHandler(getCitySchema, "params"),
   getCityByIdController
 );
 
 router.post(
   "/",
+  JWTAuth,
   validatorHandler(createCitySchema, "body"),
   createCityController
 );
 
 router.put(
   "/:id",
+  JWTAuth,
   validatorHandler(getCitySchema, "params"),
   validatorHandler(updateCitySchema, "body"),
   updateCityController
@@ -36,6 +39,7 @@ router.put(
 
 router.delete(
   "/:id",
+  JWTAuth,
   validatorHandler(getCitySchema, "params"),
   deleteCityController
 );

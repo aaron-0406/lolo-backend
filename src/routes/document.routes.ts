@@ -5,9 +5,11 @@ import { generateDocumentController } from "../controllers/document.controller";
 
 const { createDocumentSchema } = DocumentSchema;
 const router = express.Router();
+import { JWTAuth } from "../middlewares/auth.handler";
 
 router.post(
   "/",
+  JWTAuth,
   validatorHandler(createDocumentSchema, "body"),
   generateDocumentController
 );

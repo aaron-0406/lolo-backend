@@ -1,7 +1,6 @@
 import express from "express";
 import validatorHandler from "../middlewares/validator.handler";
 import guarantorSchema from "../app/extrajudicial/schemas/guarantor.schema";
-import GuarantorService from "../app/extrajudicial/services/guarantor.service";
 import {
   createGuarantorController,
   deleteGuarantorController,
@@ -10,6 +9,7 @@ import {
   getGuarantorController,
   updateGuarantorController,
 } from "../controllers/guarantor.controller";
+import { JWTAuth } from "../middlewares/auth.handler";
 
 const {
   getGuarantorByClientIDSchema,
@@ -19,30 +19,33 @@ const {
 } = guarantorSchema;
 
 const router = express.Router();
-const service = new GuarantorService();
 
-router.get("/", getGuarantorController);
+router.get("/", JWTAuth, getGuarantorController);
 
 router.get(
   "/all-client/:clientId",
+  JWTAuth,
   validatorHandler(getGuarantorByClientIDSchema, "params"),
   getGuarantorByClientIdController
 );
 
 router.get(
   "/:id",
+  JWTAuth,
   validatorHandler(getGuarantorByIDSchema, "params"),
   getGuarantorByIdController
 );
 
 router.post(
   "/",
+  JWTAuth,
   validatorHandler(createGuarantorSchema, "body"),
   createGuarantorController
 );
 
 router.patch(
   "/:id",
+  JWTAuth,
   validatorHandler(getGuarantorByIDSchema, "params"),
   validatorHandler(updateGuarantorSchema, "body"),
   updateGuarantorController
@@ -50,6 +53,7 @@ router.patch(
 
 router.delete(
   "/:id",
+  JWTAuth,
   validatorHandler(getGuarantorByIDSchema, "params"),
   deleteGuarantorController
 );

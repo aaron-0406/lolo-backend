@@ -9,6 +9,7 @@ import {
   getNegotiationsController,
   updateNegotiationController,
 } from "../controllers/negotiation.controller";
+import { JWTAuth } from "../middlewares/auth.handler";
 
 const {
   getNegotiationSchema,
@@ -18,28 +19,32 @@ const {
 } = negotiationSchema;
 const router = express.Router();
 
-router.get("/", getNegotiationsController);
+router.get("/", JWTAuth, getNegotiationsController);
 
 router.get(
   "/all/:chb",
+  JWTAuth,
   validatorHandler(getNegotiationByCHBSchema, "params"),
   getNegotiationsByCHBController
 );
 
 router.get(
   "/:id",
+  JWTAuth,
   validatorHandler(getNegotiationSchema, "params"),
   getNegotiationsByIdController
 );
 
 router.post(
   "/",
+  JWTAuth,
   validatorHandler(createNegotiationSchema, "body"),
   createNegotiationController
 );
 
 router.put(
   "/:id",
+  JWTAuth,
   validatorHandler(getNegotiationSchema, "params"),
   validatorHandler(updateNegotiationSchema, "body"),
   updateNegotiationController
@@ -47,6 +52,7 @@ router.put(
 
 router.delete(
   "/:id",
+  JWTAuth,
   validatorHandler(getNegotiationSchema, "params"),
   deleteNegotiationController
 );

@@ -8,6 +8,7 @@ import {
   updateCustomerController,
   updateCustomerStateController,
 } from "../controllers/customer.controller";
+import { JWTAuth } from "../middlewares/auth.handler";
 
 const {
   getCustomerByUrlSchema,
@@ -28,12 +29,14 @@ router.get(
 
 router.post(
   "/",
+  JWTAuth,
   validatorHandler(createCustomerSchema, "body"),
   createCustomerController
 );
 
 router.put(
   "/state/:id",
+  JWTAuth,
   validatorHandler(getCustomerByID, "params"),
   validatorHandler(updateStateCustomerSchema, "body"),
   updateCustomerStateController
@@ -41,6 +44,7 @@ router.put(
 
 router.patch(
   "/:id",
+  JWTAuth,
   validatorHandler(getCustomerByID, "params"),
   validatorHandler(updateCustomerSchema, "body"),
   updateCustomerController

@@ -1,7 +1,6 @@
 import express from "express";
 import validatorHandler from "../middlewares/validator.handler";
 import directionSchema from "../app/extrajudicial/schemas/direction.schema";
-import DirectionService from "../app/extrajudicial/services/direction.service";
 import {
   getDirectionByClientIdController,
   getAllDirectionsController,
@@ -10,6 +9,7 @@ import {
   updateDirectionController,
   deleteDirectionController,
 } from "../controllers/direction.controller";
+import { JWTAuth } from "../middlewares/auth.handler";
 
 const {
   createDirectionSchema,
@@ -19,30 +19,33 @@ const {
 } = directionSchema;
 
 const router = express.Router();
-const service = new DirectionService();
 
-router.get("/", getAllDirectionsController);
+router.get("/", JWTAuth, getAllDirectionsController);
 
 router.get(
   "/all-client/:clientId",
+  JWTAuth,
   validatorHandler(getDirectionByClientIDSchema, "params"),
   getDirectionByClientIdController
 );
 
 router.get(
   "/:id",
+  JWTAuth,
   validatorHandler(getDirectionByIDSchema, "params"),
   getDirectionByIdController
 );
 
 router.post(
   "/",
+  JWTAuth,
   validatorHandler(createDirectionSchema, "body"),
   createDirectionController
 );
 
 router.patch(
   "/:id",
+  JWTAuth,
   validatorHandler(getDirectionByIDSchema, "params"),
   validatorHandler(updateDirectionSchema, "body"),
   updateDirectionController
@@ -50,6 +53,7 @@ router.patch(
 
 router.delete(
   "/:id",
+  JWTAuth,
   validatorHandler(getDirectionByIDSchema, "params"),
   deleteDirectionController
 );

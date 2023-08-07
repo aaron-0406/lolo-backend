@@ -9,6 +9,7 @@ import {
   getFuncionariosController,
   updateFuncionarioController,
 } from "../controllers/funcionario.controller";
+import { JWTAuth } from "../middlewares/auth.handler";
 
 const {
   getFuncionarioSchema,
@@ -18,28 +19,32 @@ const {
 } = funcionarioSchema;
 const router = express.Router();
 
-router.get("/", getFuncionariosController);
+router.get("/", JWTAuth, getFuncionariosController);
 
 router.get(
   "/all/:chb",
+  JWTAuth,
   validatorHandler(getFuncionarioByCHBSchema, "params"),
   getFuncionariosByCHBController
 );
 
 router.get(
   "/:id",
+  JWTAuth,
   validatorHandler(getFuncionarioSchema, "params"),
   getFuncionarioByIdController
 );
 
 router.post(
   "/",
+  JWTAuth,
   validatorHandler(createFuncionarioSchema, "body"),
   createFuncionarioController
 );
 
 router.put(
   "/:id",
+  JWTAuth,
   validatorHandler(getFuncionarioSchema, "params"),
   validatorHandler(updateFuncionarioSchema, "body"),
   updateFuncionarioController
@@ -47,6 +52,7 @@ router.put(
 
 router.delete(
   "/:id",
+  JWTAuth,
   validatorHandler(getFuncionarioSchema, "params"),
   deleteFuncionarioController
 );

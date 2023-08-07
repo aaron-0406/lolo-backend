@@ -9,6 +9,7 @@ import {
   getCommentByIdController,
   updateCommentController,
 } from "../controllers/comment.controller";
+import { JWTAuth } from "../middlewares/auth.handler";
 
 const {
   getCommentByClientIDSchema,
@@ -21,30 +22,35 @@ const router = express.Router();
 
 router.get(
   "/all-client/:clientId",
+  JWTAuth,
   validatorHandler(getCommentByClientIDSchema, "params"),
   getAllCommentsByClientController
 );
 
 router.get(
   "/chart/:clientId",
+  JWTAuth,
   validatorHandler(getCommentByClientIDSchema, "params"),
   getChartByCustomerUserController
 );
 
 router.get(
   "/:id",
+  JWTAuth,
   validatorHandler(getCommentByIDSchema, "params"),
   getCommentByIdController
 );
 
 router.post(
   "/",
+  JWTAuth,
   validatorHandler(createCommentSchema, "body"),
   createCommentController
 );
 
 router.patch(
   "/:id",
+  JWTAuth,
   validatorHandler(getCommentByIDSchema, "params"),
   validatorHandler(updateCommentSchema, "body"),
   updateCommentController
@@ -52,6 +58,7 @@ router.patch(
 
 router.delete(
   "/:id",
+  JWTAuth,
   validatorHandler(getCommentByIDSchema, "params"),
   deleteCommentController
 );

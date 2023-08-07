@@ -7,12 +7,10 @@ import {
   getCustomerHasBankByIdController,
   getCustomerHasBankController,
 } from "../controllers/customer-has-bank.controller";
+import { JWTAuth } from "../middlewares/auth.handler";
 
-const {
-  getCustomerSchema,
-  getCustomerHasBankSchema,
-  createCustomerHasBankSchema,
-} = customerHasBankSchema;
+const { getCustomerHasBankSchema, createCustomerHasBankSchema } =
+  customerHasBankSchema;
 
 const router = express.Router();
 
@@ -20,18 +18,21 @@ router.get("/", getCustomerHasBankController);
 
 router.get(
   "/:idCustomer/:idBank",
+  JWTAuth,
   validatorHandler(getCustomerHasBankSchema, "params"),
   getCustomerHasBankByIdController
 );
 
 router.post(
   "/",
+  JWTAuth,
   validatorHandler(createCustomerHasBankSchema, "body"),
   createCustomerHasBankController
 );
 
 router.delete(
   "/:idCustomer/:idBank",
+  JWTAuth,
   validatorHandler(getCustomerHasBankSchema, "params"),
   deleteCustomerHasBankController
 );

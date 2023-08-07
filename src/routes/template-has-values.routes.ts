@@ -8,6 +8,7 @@ import {
   getTemplateHasValuesByTemplateIdController,
   updateTemplateHasValues,
 } from "../controllers/template-has-values.controller";
+import { JWTAuth } from "../middlewares/auth.handler";
 
 const {
   createTemplateHasValuesSchema,
@@ -18,24 +19,28 @@ const router = express.Router();
 
 router.get(
   "/:id",
+  JWTAuth,
   validatorHandler(getTemplateHasValuesByIdSchema, "params"),
   getTemplateHasValuesByTemplateIdController
 );
 
 router.get(
   "/customer/:id",
+  JWTAuth,
   validatorHandler(getTemplateHasValuesByIdSchema, "params"),
   getTemplateHasValuesByCustomerIdController
 );
 
 router.post(
   "/",
+  JWTAuth,
   validatorHandler(createTemplateHasValuesSchema, "body"),
   createTemplateHasValuesController
 );
 
 router.put(
   "/:id",
+  JWTAuth,
   validatorHandler(getTemplateHasValuesByIdSchema, "params"),
   validatorHandler(updateTemplateHasValuesSchema, "body"),
   updateTemplateHasValues
@@ -43,6 +48,7 @@ router.put(
 
 router.delete(
   "/:id",
+  JWTAuth,
   validatorHandler(getTemplateHasValuesByIdSchema, "params"),
   deleteTemplateHasValues
 );

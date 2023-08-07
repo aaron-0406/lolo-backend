@@ -11,6 +11,7 @@ import {
   getClientsByCHBDetailsController,
   updateClientController,
 } from "../controllers/client.controller";
+import { JWTAuth } from "../middlewares/auth.handler";
 
 const {
   getClientByCHBSchema,
@@ -28,12 +29,14 @@ router.get("/", getAllClientsController);
 
 router.get(
   "/download-excel-daily-management",
+  JWTAuth,
   validatorHandler(getDateSchema, "query"),
   downloadExcelDailyManagementController
 );
 
 router.get(
   "/:chb",
+  JWTAuth,
   validatorHandler(getClientByCHBSchema, "params"),
   validatorHandler(getClientByCHBSchemaQuery, "query"),
   getClientsByCHBController
@@ -41,18 +44,21 @@ router.get(
 
 router.get(
   "/:chb/details",
+  JWTAuth,
   validatorHandler(getClientByCHBSchema, "params"),
   getClientsByCHBDetailsController
 );
 
 router.get(
   "/:code/:chb",
+  JWTAuth,
   validatorHandler(getClientByCodeSchema, "params"),
   getClientByCodeCHBController
 );
 
 router.post(
   "/:idCustomer",
+  JWTAuth,
   validatorHandler(getClientByCustomer, "params"),
   validatorHandler(createClientSchema, "body"),
   createClientController
@@ -60,6 +66,7 @@ router.post(
 
 router.patch(
   "/:code/:chb",
+  JWTAuth,
   validatorHandler(getClientByCodeSchema, "params"),
   validatorHandler(updateClientSchema, "body"),
   updateClientController
@@ -67,6 +74,7 @@ router.patch(
 
 router.delete(
   "/:code/:chb/:idCustomer",
+  JWTAuth,
   validatorHandler(deleteClientByCodeSchema, "params"),
   deleteClientController
 );
