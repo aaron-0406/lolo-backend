@@ -1,0 +1,567 @@
+{
+  "parrafos": [
+    {
+      "options": { "spacingAfter": 8 },
+      "texts": [
+        {
+          "fontSize": 11
+        }
+      ]
+    },
+    {
+      "options": { "spacingAfter": 8 },
+      "texts": [
+        {
+          "fontSize": 11
+        }
+      ]
+    },
+    {
+      "options": { "spacingAfter": 8, "align": "end" },
+      "texts": [
+        {
+          "fontSize": 11,
+          "text": "CODIGO: [client.code]"
+        }
+      ]
+    },
+    {
+      "options": { "spacingAfter": 12 },
+      "texts": [
+        {
+          "text": "CLIENTE: ",
+          "bold": true
+        },
+        {
+          "text": "[client.name]",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "options": { "spacingAfter": 8 },
+      "texts": [
+        {
+          "text": "ESTADO: ",
+          "bold": true
+        },
+        {
+          "text": "[client.negotiationId]"
+        }
+      ]
+    },
+    {
+      "options": { "spacingAfter": 8 },
+      "texts": [
+        {
+          "text": "DNI: ",
+          "bold": true
+        },
+        {
+          "text": "[client.dniOrRuc]"
+        }
+      ]
+    },
+    {
+      "options": { "spacingAfter": 8 },
+      "texts": [
+        {
+          "text": "PERÍMETRO VENTA: ",
+          "bold": true
+        },
+        {
+          "text": "[client.salePerimeter]"
+        }
+      ]
+    },
+    {
+      "options": { "spacingAfter": 8 },
+      "texts": [
+        {
+          "text": "GESTOR: ",
+          "bold": true
+        },
+        {
+          "text": "[client.customerUserId]"
+        }
+      ]
+    },
+    {
+      "options": { "spacingAfter": 8 },
+      "texts": [
+        {
+          "text": "FUNCIONARIO: ",
+          "bold": true
+        },
+        {
+          "text": "[client.funcionarioId]"
+        }
+      ]
+    },
+    {
+      "options": { "spacingAfter": 8 },
+      "texts": [
+        {
+          "text": "JURISDICCIÓN: ",
+          "bold": true
+        },
+        {
+          "text": "[client.cityId]"
+        }
+      ]
+    },
+    {},
+    {
+      "options": { "spacingAfter": 8 },
+      "texts": [
+        {
+          "text": "TELÉFONO: ",
+          "bold": true
+        },
+        {
+          "text": "[client.phone]"
+        }
+      ]
+    },
+    {
+      "options": { "spacingAfter": 8 },
+      "texts": [
+        {
+          "text": "CORREO ELECTRÓNICO: ",
+          "bold": true
+        },
+        {
+          "text": "[client.email]"
+        }
+      ]
+    },
+    {
+      "tablets": {
+        "rows": [
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  ID  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  NOMBRE  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  TELÉFONO  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  CORREO  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "[guarantor.id]",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "[guarantor.name]"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "[guarantor.phone]"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "[guarantor.email]"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tablets": {
+        "rows": [
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  ID  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  TIPO  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  DIRECCIÓN  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "[direction.id]",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "[direction.type]"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "[direction.direction]"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tablets": {
+        "rows": [
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  ID  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  CÓDIGO  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  NOMBRE  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  ESTADO  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "[product.id]",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "[product.code]"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "[product.name]"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "[product.state]"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tablets": {
+        "rows": [
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  ID  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  COMENTARIO  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  NEGOCIACIÓN  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  FECHA  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "  HORA  ",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "[comment.id]",
+                        "bold": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "[comment.comment]"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "[comment.negotiation]"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "[comment.date]"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "children": [
+                  {
+                    "texts": [
+                      {
+                        "text": "[comment.hour]"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

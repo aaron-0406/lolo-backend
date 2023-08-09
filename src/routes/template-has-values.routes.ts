@@ -1,9 +1,14 @@
 import express from "express";
 import validatorHandler from "../middlewares/validator.handler";
 import templateHasValuesSchema from "../app/customers/schemas/template-has-values.schema";
-import TemplateHasValuesService from "../app/customers/services/template-has-values.service";
-import ValuesService from "../app/customers/services/values.service";
-import { ValuesType } from "../app/customers/types/values.type";
+import {
+  createTemplateHasValuesController,
+  deleteTemplateHasValues,
+  getTemplateHasValuesByCustomerIdController,
+  getTemplateHasValuesByTemplateIdController,
+  updateTemplateHasValues,
+} from "../controllers/template-has-values.controller";
+import { JWTAuth } from "../middlewares/auth.handler";
 
 const {
   createTemplateHasValuesSchema,
@@ -11,102 +16,41 @@ const {
   getTemplateHasValuesByIdSchema,
 } = templateHasValuesSchema;
 const router = express.Router();
-const service = new TemplateHasValuesService();
-const serviceValues = new ValuesService();
 
 router.get(
   "/:id",
+  JWTAuth,
   validatorHandler(getTemplateHasValuesByIdSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const templateHasValues = await service.findAll(id);
-      res.json(templateHasValues);
-    } catch (error) {
-      next(error);
-    }
-  }
+  getTemplateHasValuesByTemplateIdController
 );
 
 router.get(
   "/customer/:id",
+  JWTAuth,
   validatorHandler(getTemplateHasValuesByIdSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const tenpmateGasValues = await service.findByCustomerId(id);
-      res.json(tenpmateGasValues);
-    } catch (error) {
-      next(error);
-    }
-  }
+  getTemplateHasValuesByCustomerIdController
 );
 
 router.post(
   "/",
+  JWTAuth,
   validatorHandler(createTemplateHasValuesSchema, "body"),
-  async (req, res, next) => {
-    try {
-      const {
-        body: { name, templateId, values },
-      } = req;
-      const newTemplateHasValues = await service.create({ name, templateId });
-      const valuesSaved = [];
-
-      for (let i = 0; i < values.length; i++) {
-        const element = values[i] as ValuesType;
-        element.templateHasValuesId = newTemplateHasValues.dataValues.id;
-        const newValue = await serviceValues.createValue(element);
-        valuesSaved.push(newValue);
-      }
-
-      res.status(201).json({
-        template_has_values: newTemplateHasValues,
-        values: valuesSaved,
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
+  createTemplateHasValuesController
 );
 
 router.put(
   "/:id",
+  JWTAuth,
   validatorHandler(getTemplateHasValuesByIdSchema, "params"),
   validatorHandler(updateTemplateHasValuesSchema, "body"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const {
-        body: { name, values },
-      } = req;
-      const tenpmateHasValues = await service.update(id, name);
-      for (let i = 0; i < values.length; i++) {
-        const element = values[i] as ValuesType;
-        await serviceValues.update(element.id, element);
-      }
-      res.json({
-        template_has_values: tenpmateHasValues,
-        values: values,
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
+  updateTemplateHasValues
 );
 
 router.delete(
   "/:id",
+  JWTAuth,
   validatorHandler(getTemplateHasValuesByIdSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      await service.delete(id);
-      res.status(201).json({ id });
-    } catch (error) {
-      next(error);
-    }
-  }
+  deleteTemplateHasValues
 );
 
 export default router;

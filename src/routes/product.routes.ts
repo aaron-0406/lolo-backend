@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Router } from "express";
 import {
   changeProductSchema,
   createProductSchema,
@@ -9,110 +9,68 @@ import {
   updateProductSchema,
 } from "../app/customers/schemas/product.schema";
 import validatorHandler from "../middlewares/validator.handler";
-import boom from "@hapi/boom";
-import ProductService from "../app/customers/services/product.service";
+import {
+  changeProductController,
+  createProductController,
+  deleteProductController,
+  getProductByCodeController,
+  getProductsByClientCodeController,
+  getProductsByCustomerIdController,
+  updateProductController,
+} from "../controllers/product.controller";
+import { JWTAuth } from "../middlewares/auth.handler";
 
 const router = Router();
 
-const service = new ProductService();
-
 router.get(
   "/client/:code",
+  JWTAuth,
   validatorHandler(getProductsByClientCodeSchema, "params"),
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { code } = req.params;
-      const products = await service.getByClientCode(code);
-      res.json(products);
-    } catch (error: any) {
-      next(boom.badRequest(error.message));
-    }
-  }
+  getProductsByClientCodeController
 );
 
 router.get(
   "/single/:code",
+  JWTAuth,
   validatorHandler(getProductByCodeSchema, "params"),
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { code } = req.params;
-      const product = await service.getByProductCode(code);
-      res.json(product);
-    } catch (error: any) {
-      next(boom.badRequest(error.message));
-    }
-  }
+  getProductByCodeController
 );
 
 router.get(
   "/:customerId",
+  JWTAuth,
   validatorHandler(getProductsByCustomerIdSchema, "params"),
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { customerId } = req.params;
-      const products = await service.getAllByCustomerId(Number(customerId));
-      res.json(products);
-    } catch (error: any) {
-      next(boom.badRequest(error.message));
-    }
-  }
+  getProductsByCustomerIdController
 );
 
 router.post(
   "/",
+  JWTAuth,
   validatorHandler(createProductSchema, "body"),
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const product = await service.create(req.body);
-      res.json(product);
-    } catch (error: any) {
-      next(boom.badRequest(error.message));
-    }
-  }
+  createProductController
 );
 
 router.put(
   "/:id",
+  JWTAuth,
   validatorHandler(getProductByIdSchema, "params"),
   validatorHandler(updateProductSchema, "body"),
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { id } = req.params;
-      const product = await service.update(req.body, Number(id));
-      res.json(product);
-    } catch (error: any) {
-      next(boom.badRequest(error.message));
-    }
-  }
+  updateProductController
 );
 
 router.patch(
   "/:id",
+  JWTAuth,
   validatorHandler(getProductByIdSchema, "params"),
   validatorHandler(changeProductSchema, "body"),
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { id } = req.params;
-      const product = await service.change(req.body, Number(id));
-      res.json(product);
-    } catch (error: any) {
-      next(boom.badRequest(error.message));
-    }
-  }
+  changeProductController
 );
 
 router.delete(
   "/:id",
+  JWTAuth,
   validatorHandler(getProductByIdSchema, "params"),
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { id } = req.params;
-      await service.delete(Number(id));
-      res.json(Number(id));
-    } catch (error: any) {
-      next(boom.badRequest(error.message));
-    }
-  }
+  deleteProductController
 );
 
 export default router;

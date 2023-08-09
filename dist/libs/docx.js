@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createImgRun = exports.createParagraph = void 0;
+exports.createTable = exports.createImgRun = exports.createParagraph = void 0;
 const docx_1 = require("docx");
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
@@ -53,3 +53,23 @@ const createImgRun = (imgName, size, options) => {
     });
 };
 exports.createImgRun = createImgRun;
+const createTableCell = (paragraphs, options) => {
+    const tableCell = new docx_1.TableCell(Object.assign(Object.assign({}, options), { children: paragraphs }));
+    return tableCell;
+};
+const createTableRow = (tableCells, options) => {
+    const tableRow = new docx_1.TableRow(Object.assign(Object.assign({}, options), { children: tableCells }));
+    return tableRow;
+};
+const createTable = (rows, options, optionsRow, optionsCells) => {
+    const tableRows = rows.map((row) => {
+        return createTableRow(row.children.map((cell) => {
+            return createTableCell(cell.children.map((paragraph) => {
+                return (0, exports.createParagraph)(paragraph.texts, false, paragraph.options);
+            }), optionsCells);
+        }), optionsRow);
+    });
+    const table = new docx_1.Table(Object.assign(Object.assign({}, options), { rows: tableRows }));
+    return table;
+};
+exports.createTable = createTable;

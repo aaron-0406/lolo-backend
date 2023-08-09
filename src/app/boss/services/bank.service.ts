@@ -1,8 +1,6 @@
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
 import { BankType } from "../types/bank.type";
-import { createFolder } from "../../../libs/aws_bucket";
-import config from "../../../config/config";
 
 const { models } = sequelize;
 
@@ -25,7 +23,6 @@ class BankService {
 
   async create(data: BankType) {
     const newBank = await models.BANK.create(data);
-    await createFolder(`${config.AWS_BANK_PATH}${newBank.dataValues.id}/`);
     return newBank;
   }
 

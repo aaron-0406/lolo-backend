@@ -13,7 +13,7 @@ const cityId = Joi.number();
 const funcionarioId = Joi.number();
 const customerUserId = Joi.number();
 const customerHasBankId = Joi.number();
-const idBank = Joi.number();
+const idCustomer = Joi.number();
 
 const page = Joi.number().required().messages({
   "number.base": "El campo page es inválido",
@@ -31,6 +31,11 @@ const filter = Joi.string().optional().min(3).messages({
   "string.min": "El campo debe ser de mínimo 3 caracteres",
   "string.empty": "El campo filter no puede estar vácio",
 });
+
+const negotiations = Joi.string().required();
+const funcionarios = Joi.string().required();
+const users = Joi.string().required();
+const cities = Joi.string().required();
 
 const createClientSchema = Joi.object<Omit<ClientType, "id">, true>({
   code: code.required(),
@@ -76,27 +81,37 @@ const getClientByCHBSchemaQuery = Joi.object({
   page,
   filter,
   limit,
+  negotiations,
+  funcionarios,
+  users,
+  cities,
 }).options({ abortEarly: true });
 
-const getClientByBank = Joi.object<{ idBank: number }, true>({
-  idBank,
+const getClientByCustomer = Joi.object<{ idCustomer: number }, true>({
+  idCustomer,
 });
 
 const deleteClientByCodeSchema = Joi.object<
-  { code: string; chb: number; idBank: number },
+  { code: string; chb: number; idCustomer: number },
   true
 >({
   code: code.required(),
   chb: customerHasBankId.required(),
-  idBank,
+  idCustomer,
+});
+
+const getDateSchema = Joi.object<{ date: Date; cityId: number }, true>({
+  date: Joi.date().required(),
+  cityId: cityId.required(),
 });
 
 export default {
   createClientSchema,
-  getClientByBank,
+  getClientByCustomer,
   updateClientSchema,
   getClientByCHBSchema,
   getClientByCodeSchema,
   deleteClientByCodeSchema,
   getClientByCHBSchemaQuery,
+  getDateSchema,
 };

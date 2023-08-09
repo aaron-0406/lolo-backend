@@ -10,6 +10,7 @@ import customerHasBank from "./many-to-many/customer-has-bank.model";
 import funcionarioModel from "./funcionario.model";
 import directionModel from "./direction.model";
 import guarantorModel from "./guarantor.model";
+import managementActionModel from "./management-action.model";
 import commentModel from "./comment.model";
 import fileModel from "./file.model";
 import negotiationModel from "./negotiation.model";
@@ -19,6 +20,8 @@ import ecampoModel from "./ecampo.model";
 import valuesModel from "./values.model";
 import templateImgModel from "./template-img.model";
 import productModel from "./product.model";
+import goalModel from "./goal.model";
+import goalUserModel from "./goal-user.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
@@ -30,6 +33,7 @@ const { Client, ClientSchema } = clientModel;
 const { UserApp, UserAppSchema } = userAppModel;
 const { Direction, DirectionSchema } = directionModel;
 const { Guarantor, GuarantorSchema } = guarantorModel;
+const { ManagementAction, ManagementActionSchema } = managementActionModel;
 const { Comment, CommentSchema } = commentModel;
 const { File, FileSchema } = fileModel;
 const { Negotiation, NegotiationSchema } = negotiationModel;
@@ -40,6 +44,8 @@ const { Values, ValuesSchema } = valuesModel;
 const { CustomerHasBank, CustomerHasBankSchema } = customerHasBank;
 const { TemplateImg, TemplateImgSchema } = templateImgModel;
 const { Product, ProductSchema } = productModel;
+const { Goal, GoalSchema } = goalModel;
+const { GoalUser, GoalUserSchema } = goalUserModel;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -52,6 +58,10 @@ export const setupModels = (sequelize: Sequelize) => {
   UserApp.init(UserAppSchema, UserApp.config(sequelize));
   Direction.init(DirectionSchema, Direction.config(sequelize));
   Guarantor.init(GuarantorSchema, Guarantor.config(sequelize));
+  ManagementAction.init(
+    ManagementActionSchema,
+    ManagementAction.config(sequelize)
+  );
   Comment.init(CommentSchema, Comment.config(sequelize));
   CustomerHasBank.init(
     CustomerHasBankSchema,
@@ -68,6 +78,8 @@ export const setupModels = (sequelize: Sequelize) => {
   Values.init(ValuesSchema, Values.config(sequelize));
   TemplateImg.init(TemplateImgSchema, TemplateImg.config(sequelize));
   Product.init(ProductSchema, Product.config(sequelize));
+  Goal.init(GoalSchema, Goal.config(sequelize));
+  GoalUser.init(GoalUserSchema, GoalUser.config(sequelize));
 
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
@@ -75,6 +87,7 @@ export const setupModels = (sequelize: Sequelize) => {
   City.associate(sequelize.models);
   Client.associate(sequelize.models);
   File.associate(sequelize.models);
+  ManagementAction.associate(sequelize.models);
   Comment.associate(sequelize.models);
   Direction.associate(sequelize.models);
   Guarantor.associate(sequelize.models);
@@ -86,4 +99,6 @@ export const setupModels = (sequelize: Sequelize) => {
   Values.associate(sequelize.models);
   TemplateImg.associate(sequelize.models);
   Product.associate(sequelize.models);
+  Goal.associate(sequelize.models);
+  GoalUser.associate(sequelize.models);
 };

@@ -22,6 +22,7 @@ app.use(express_1.default.urlencoded({ extended: false }));
 const whitelist = [
     "http://localhost:3000",
     "http://192.168.1.24:3000",
+    "http://192.168.0.10:3000",
     "http://lolobank.com",
 ];
 const options = {
@@ -49,5 +50,6 @@ app.use(errorHandler);
 app.listen(port, () => {
     fs_1.default.mkdir(path_1.default.join(__dirname, "./public/download"), () => { });
     (0, cron_jobs_1.deleteDownloadFolderTask)();
+    (0, cron_jobs_1.sendWeeklyReportsByEmail)();
     console.log("My port: " + port);
 });

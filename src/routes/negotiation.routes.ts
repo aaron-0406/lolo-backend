@@ -1,7 +1,15 @@
 import express from "express";
 import validatorHandler from "../middlewares/validator.handler";
 import negotiationSchema from "../app/boss/schemas/negotiation.schema";
-import NegotiationService from "../app/boss/services/negotiation.service";
+import {
+  createNegotiationController,
+  deleteNegotiationController,
+  getNegotiationsByCHBController,
+  getNegotiationsByIdController,
+  getNegotiationsController,
+  updateNegotiationController,
+} from "../controllers/negotiation.controller";
+import { JWTAuth } from "../middlewares/auth.handler";
 
 const {
   getNegotiationSchema,
@@ -10,87 +18,43 @@ const {
   updateNegotiationSchema,
 } = negotiationSchema;
 const router = express.Router();
-const service = new NegotiationService();
 
-router.get("/", async (req, res, next) => {
-  try {
-    const negotiations = await service.findAll();
-    res.json(negotiations);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/", JWTAuth, getNegotiationsController);
 
 router.get(
   "/all/:chb",
+  JWTAuth,
   validatorHandler(getNegotiationByCHBSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { chb } = req.params;
-      const negotiations = await service.findAllByCHB(chb);
-      res.json(negotiations);
-    } catch (error) {
-      next(error);
-    }
-  }
+  getNegotiationsByCHBController
 );
 
 router.get(
   "/:id",
+  JWTAuth,
   validatorHandler(getNegotiationSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const negotiation = await service.findOne(id);
-      res.json(negotiation);
-    } catch (error) {
-      next(error);
-    }
-  }
+  getNegotiationsByIdController
 );
 
 router.post(
   "/",
+  JWTAuth,
   validatorHandler(createNegotiationSchema, "body"),
-  async (req, res, next) => {
-    try {
-      const body = req.body;
-      const newNegotiation = await service.create(body);
-      res.status(201).json(newNegotiation);
-    } catch (error) {
-      next(error);
-    }
-  }
+  createNegotiationController
 );
 
 router.put(
   "/:id",
+  JWTAuth,
   validatorHandler(getNegotiationSchema, "params"),
   validatorHandler(updateNegotiationSchema, "body"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const body = req.body;
-      const negotiation = await service.update(id, body);
-      res.json(negotiation);
-    } catch (error) {
-      next(error);
-    }
-  }
+  updateNegotiationController
 );
 
 router.delete(
   "/:id",
+  JWTAuth,
   validatorHandler(getNegotiationSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      await service.delete(id);
-      res.status(201).json({ id });
-    } catch (error) {
-      next(error);
-    }
-  }
+  deleteNegotiationController
 );
 
 export default router;

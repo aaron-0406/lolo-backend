@@ -31,7 +31,7 @@ class FileService {
             return rta;
         });
     }
-    findOne(id, idBank, code) {
+    findOne(idCustomer, chb, code, id) {
         return __awaiter(this, void 0, void 0, function* () {
             const file = yield models.FILE.findOne({
                 where: {
@@ -43,14 +43,14 @@ class FileService {
             }
             const isStored = (0, helpers_1.isFileStoredIn)(path_1.default.join(__dirname, "../../../public/download"), file.dataValues.name);
             if (!isStored) {
-                yield (0, aws_bucket_1.readFile)(`${config_1.default.AWS_BANK_PATH}${idBank}/${code}/${file.dataValues.name}`);
+                yield (0, aws_bucket_1.readFile)(`${config_1.default.AWS_CHB_PATH}${idCustomer}/${chb}/${code}/${file.dataValues.name}`);
             }
             return file;
         });
     }
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { clientId, code, idBank } = data;
+            const { clientId, code, idCustomer, chb } = data;
             // console.log(data);
             const filesAdded = [];
             for (let i = 0; i < data.files.length; i++) {
@@ -62,7 +62,7 @@ class FileService {
                     clientId,
                 });
                 // UPLOAD TO AWS
-                yield (0, aws_bucket_1.uploadFile)(data.files[i], `${config_1.default.AWS_BANK_PATH}${idBank}/${code}`);
+                yield (0, aws_bucket_1.uploadFile)(data.files[i], `${config_1.default.AWS_CHB_PATH}${idCustomer}/${chb}/${code}`);
                 // DELETE TEMP FILE
                 yield (0, helpers_1.deleteFile)("../public/docs", filename);
                 filesAdded.push(newFile);
@@ -70,7 +70,7 @@ class FileService {
             return filesAdded;
         });
     }
-    delete(idBank, code, id) {
+    delete(idCustomer, chb, code, id) {
         return __awaiter(this, void 0, void 0, function* () {
             const file = yield models.FILE.findOne({
                 where: {
@@ -81,7 +81,7 @@ class FileService {
                 return -1;
             const newFile = JSON.parse(JSON.stringify(file));
             yield file.destroy();
-            yield (0, aws_bucket_1.deleteFileBucket)(`${config_1.default.AWS_BANK_PATH}${idBank}/${code}/${newFile.name}`);
+            yield (0, aws_bucket_1.deleteFileBucket)(`${config_1.default.AWS_CHB_PATH}${idCustomer}/${chb}/${code}/${newFile.name}`);
             return { id };
         });
     }

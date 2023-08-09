@@ -6,15 +6,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const joi_1 = __importDefault(require("joi"));
 const id = joi_1.default.number();
 const code = joi_1.default.number();
-const idBank = joi_1.default.number();
+const idCustomer = joi_1.default.number();
+const chb = joi_1.default.number();
 const createFileSchema = joi_1.default.object({
-    id,
+    idCustomer,
+    chb,
     code,
-    idBank,
+    id,
 });
 const getFileSchema = joi_1.default.object({
-    id,
-    idBank,
+    idCustomer,
+    chb,
     code,
+    id,
 });
 exports.default = { createFileSchema, getFileSchema };

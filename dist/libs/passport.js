@@ -15,8 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const passport_1 = __importDefault(require("passport"));
 const passport_local_1 = require("passport-local");
 const auth_service_1 = __importDefault(require("../app/customers/services/auth.service"));
+const auth_service_2 = __importDefault(require("../app/boss/services/auth.service"));
 const boom_1 = __importDefault(require("@hapi/boom"));
+const passport_jwt_1 = require("passport-jwt");
+const config_1 = __importDefault(require("../config/config"));
 const service = new auth_service_1.default();
+const serviceDash = new auth_service_2.default();
 // LOGIN
 passport_1.default.use("local.signin", new passport_local_1.Strategy({
     usernameField: "email",
@@ -26,10 +30,35 @@ passport_1.default.use("local.signin", new passport_local_1.Strategy({
     const { customerId } = req.body;
     try {
         const user = yield service.login({ email, password, customerId });
-        return done(null, user);
+        return done(null, user.dataValues);
+    }
+    catch (error) {
+        return done(boom_1.default.badRequest(error), false);
+    }
+})));
+passport_1.default.use("local.signinDash", new passport_local_1.Strategy({
+    usernameField: "email",
+    passwordField: "password",
+    passReqToCallback: true,
+}, (req, email, password, done) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = yield serviceDash.login({ email, password });
+        return done(null, user.dataValues);
+    }
+    catch (error) {
+        return done(boom_1.default.badRequest(error), false);
+    }
+})));
+// Passport con JWT
+passport_1.default.use("jwt", new passport_jwt_1.Strategy({
+    jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: config_1.default.jwtSecret,
+}, (payload, done) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        return done(null, payload);
     }
     catch (error) {
         console.log(error);
-        return done(boom_1.default.badRequest(error), false);
+        return done(error, payload);
     }
 })));

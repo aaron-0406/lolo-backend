@@ -16,7 +16,7 @@ const express_1 = __importDefault(require("express"));
 const validator_handler_1 = __importDefault(require("../middlewares/validator.handler"));
 const customer_user_schema_1 = __importDefault(require("../app/customers/schemas/customer-user.schema"));
 const customer_user_service_1 = __importDefault(require("../app/customers/services/customer-user.service"));
-const { getCustomerUserSchema, getCustomerUserByIdSchema, createCustomerUserSchema, updateCustomerUserSchema, } = customer_user_schema_1.default;
+const { getCustomerUserSchema, getCustomerUserByIdSchema, createCustomerUserSchema, updateCustomerUserSchema, updateCustomerUserStateSchema, } = customer_user_schema_1.default;
 const router = express_1.default.Router();
 const service = new customer_user_service_1.default();
 router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -53,6 +53,17 @@ router.post("/", (0, validator_handler_1.default)(createCustomerUserSchema, "bod
         const body = req.body;
         const newUser = yield service.create(body);
         res.status(201).json(newUser);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+router.patch("/state/:id", (0, validator_handler_1.default)(getCustomerUserSchema, "params"), (0, validator_handler_1.default)(updateCustomerUserStateSchema, "body"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const body = req.body;
+        const user = yield service.updateState(id, body);
+        res.json(user);
     }
     catch (error) {
         next(error);
