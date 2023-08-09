@@ -19,7 +19,7 @@ const {
 } = customerSchemas;
 const router = express.Router();
 
-router.get("/", getAllCustomersController);
+router.get("/", JWTAuth, getAllCustomersController);
 
 router.get(
   "/:urlIdentifier",

@@ -9,7 +9,24 @@ export const JWTAuth = (req: Request, res: Response, next: NextFunction) => {
     "jwt",
     { session: false },
     (err, user, info: TokenExpiredError) => {
-      if (err || !user) return next(boom.unauthorized(info.message));
+      if (err) {
+        return next(err);
+      }
+
+      if (!user) {
+        let errorMessage = "Inautorizado";
+
+        if (info && info.name === "JsonWebTokenError") {
+          errorMessage = "Formato de token invalido!";
+        }
+
+        if (info && info.name === "TokenExpiredError") {
+          errorMessage = "El token ha expirado";
+        }
+
+        return next(boom.unauthorized(errorMessage));
+      }
+
       req.user = user;
       return next();
     }

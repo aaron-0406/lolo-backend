@@ -13,7 +13,7 @@ import { JWTAuth } from "../middlewares/auth.handler";
 const { getCitySchema, createCitySchema, updateCitySchema } = citySchema;
 const router = express.Router();
 
-router.get("/", getAllCityController);
+router.get("/", JWTAuth, getAllCityController);
 
 router.get(
   "/:id",

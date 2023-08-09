@@ -25,7 +25,7 @@ const {
 } = clientSchema;
 const router = express.Router();
 
-router.get("/", getAllClientsController);
+router.get("/", JWTAuth, getAllClientsController);
 
 router.get(
   "/download-excel-daily-management",

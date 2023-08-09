@@ -14,7 +14,7 @@ const { getCustomerHasBankSchema, createCustomerHasBankSchema } =
 
 const router = express.Router();
 
-router.get("/", getCustomerHasBankController);
+router.get("/", JWTAuth, getCustomerHasBankController);
 
 router.get(
   "/:idCustomer/:idBank",

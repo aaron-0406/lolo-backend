@@ -21,7 +21,7 @@ const {
 } = customerUserSchema;
 const router = express.Router();
 
-router.get("/", getCustomerUsersController);
+router.get("/", JWTAuth, getCustomerUsersController);
 
 router.get(
   "/users/:customerId",

@@ -7,26 +7,30 @@ import {
   getUserAppByIdController,
   updateUserAppController,
 } from "../../controllers/dash/user-app.controller";
+import { JWTAuth } from "../../middlewares/auth.handler";
 
 const { createUserSchema, updateUserSchema, getUserSchema } = UserAppSchema;
 const router = express.Router();
 
-router.get("/", getAllUserAppController);
+router.get("/", JWTAuth, getAllUserAppController);
 
 router.get(
   "/:id",
+  JWTAuth,
   validatorHandler(getUserSchema, "params"),
   getUserAppByIdController
 );
 
 router.post(
   "/",
+  JWTAuth,
   validatorHandler(createUserSchema, "body"),
   createUserAppController
 );
 
 router.patch(
   "/:id",
+  JWTAuth,
   validatorHandler(getUserSchema, "params"),
   validatorHandler(updateUserSchema, "body"),
   updateUserAppController
