@@ -13,6 +13,7 @@ import { JWTAuth } from "../middlewares/auth.handler";
 
 const {
   getNegotiationSchema,
+  getNegotiationSchemaQuery,
   getNegotiationByCHBSchema,
   createNegotiationSchema,
   updateNegotiationSchema,
@@ -20,6 +21,19 @@ const {
 const router = express.Router();
 
 router.get("/", JWTAuth, getNegotiationsController);
+
+router.get(
+  "/opts",
+  validatorHandler(getNegotiationSchemaQuery, "query"),
+  async (req, res, next) => {
+    try {
+      const {rta, quantity} = await service.findAllOpts(req.query);
+      res.json({rta, quantity});
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 router.get(
   "/all/:chb",

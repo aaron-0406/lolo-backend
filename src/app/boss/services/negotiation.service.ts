@@ -12,6 +12,22 @@ class NegotiationService {
     return rta;
   }
 
+  async findAllOpts(query: any) {
+    const { limit, page } = query;
+    const limite = parseInt(limit, 10);
+    const pagina = parseInt(page, 10);
+
+    const rta = await models.NEGOTIATION.findAll({
+      order: [["name", "ASC"]],
+      limit: limite,
+      offset: (pagina - 1) * limite,
+    });
+
+    const quantity = await models.NEGOTIATION.count({});
+
+    return { rta, quantity };
+  }
+
   async findAllByCHB(chb: string) {
     const rta = await models.NEGOTIATION.findAll({
       where: {
