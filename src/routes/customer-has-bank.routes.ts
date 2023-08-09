@@ -1,66 +1,40 @@
 import express from "express";
 import validatorHandler from "../middlewares/validator.handler";
 import customerHasBankSchema from "../app/customers/schemas/customer-has-bank.schema";
-import CustomerHasBankService from "../app/customers/services/customer-has-bank.service";
+import {
+  createCustomerHasBankController,
+  deleteCustomerHasBankController,
+  getCustomerHasBankByIdController,
+  getCustomerHasBankController,
+} from "../controllers/customer-has-bank.controller";
+import { JWTAuth } from "../middlewares/auth.handler";
 
-const {
-  getCustomerSchema,
-  getCustomerHasBankSchema,
-  createCustomerHasBankSchema,
-} = customerHasBankSchema;
+const { getCustomerHasBankSchema, createCustomerHasBankSchema } =
+  customerHasBankSchema;
 
 const router = express.Router();
-const service = new CustomerHasBankService();
 
-router.get("/", async (req, res, next) => {
-  try {
-    const customersBanks = await service.findAll();
-    res.json(customersBanks);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/", JWTAuth, getCustomerHasBankController);
 
 router.get(
   "/:idCustomer/:idBank",
+  JWTAuth,
   validatorHandler(getCustomerHasBankSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { idCustomer, idBank } = req.params;
-      const customerBank = await service.findOne(idCustomer, idBank);
-      res.json(customerBank);
-    } catch (error) {
-      next(error);
-    }
-  }
+  getCustomerHasBankByIdController
 );
 
 router.post(
   "/",
+  JWTAuth,
   validatorHandler(createCustomerHasBankSchema, "body"),
-  async (req, res, next) => {
-    try {
-      const body = req.body;
-      const newCustomerBank = await service.assign(body);
-      res.status(201).json(newCustomerBank);
-    } catch (error) {
-      next(error);
-    }
-  }
+  createCustomerHasBankController
 );
 
 router.delete(
   "/:idCustomer/:idBank",
+  JWTAuth,
   validatorHandler(getCustomerHasBankSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { idCustomer, idBank } = req.params;
-      await service.delete(idCustomer, idBank);
-      res.status(201).json({ idCustomer, idBank });
-    } catch (error) {
-      next(error);
-    }
-  }
+  deleteCustomerHasBankController
 );
 
 export default router;

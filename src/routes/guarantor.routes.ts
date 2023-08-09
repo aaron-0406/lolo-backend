@@ -1,7 +1,15 @@
 import express from "express";
 import validatorHandler from "../middlewares/validator.handler";
 import guarantorSchema from "../app/extrajudicial/schemas/guarantor.schema";
-import GuarantorService from "../app/extrajudicial/services/guarantor.service";
+import {
+  createGuarantorController,
+  deleteGuarantorController,
+  getGuarantorByClientIdController,
+  getGuarantorByIdController,
+  getGuarantorController,
+  updateGuarantorController,
+} from "../controllers/guarantor.controller";
+import { JWTAuth } from "../middlewares/auth.handler";
 
 const {
   getGuarantorByClientIDSchema,
@@ -11,87 +19,43 @@ const {
 } = guarantorSchema;
 
 const router = express.Router();
-const service = new GuarantorService();
 
-router.get("/", async (req, res, next) => {
-  try {
-    const guarantors = await service.findAll();
-    res.json(guarantors);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/", JWTAuth, getGuarantorController);
 
 router.get(
   "/all-client/:clientId",
+  JWTAuth,
   validatorHandler(getGuarantorByClientIDSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { clientId } = req.params;
-      const guarantors = await service.findAllByClient(clientId);
-      res.json(guarantors);
-    } catch (error) {
-      next(error);
-    }
-  }
+  getGuarantorByClientIdController
 );
 
 router.get(
   "/:id",
+  JWTAuth,
   validatorHandler(getGuarantorByIDSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const guarantor = await service.findByID(id);
-      res.json(guarantor);
-    } catch (error) {
-      next(error);
-    }
-  }
+  getGuarantorByIdController
 );
 
 router.post(
   "/",
+  JWTAuth,
   validatorHandler(createGuarantorSchema, "body"),
-  async (req, res, next) => {
-    try {
-      const body = req.body;
-      const newGuarantor = await service.create(body);
-      res.status(201).json(newGuarantor);
-    } catch (error) {
-      next(error);
-    }
-  }
+  createGuarantorController
 );
 
 router.patch(
   "/:id",
+  JWTAuth,
   validatorHandler(getGuarantorByIDSchema, "params"),
   validatorHandler(updateGuarantorSchema, "body"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const body = req.body;
-      const guarantor = await service.update(id, body);
-      res.json(guarantor);
-    } catch (error) {
-      next(error);
-    }
-  }
+  updateGuarantorController
 );
 
 router.delete(
   "/:id",
+  JWTAuth,
   validatorHandler(getGuarantorByIDSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      await service.delete(id);
-      res.status(201).json({ id });
-    } catch (error) {
-      next(error);
-    }
-  }
+  deleteGuarantorController
 );
 
 export default router;
