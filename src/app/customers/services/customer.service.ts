@@ -10,7 +10,9 @@ class CustomerService {
   constructor() {}
 
   async find() {
-    const rta = await models.CUSTOMER.findAll();
+    const rta = await models.CUSTOMER.findAll({
+      include: ["customerBanks"],
+    });
     return rta;
   }
 
@@ -25,6 +27,9 @@ class CustomerService {
     if (!customer) {
       throw boom.notFound("Cliente no encontrado");
     }
+
+    if (!customer.dataValues.state) throw boom.notFound("Cliente inhabilitado");
+
     return customer;
   }
 

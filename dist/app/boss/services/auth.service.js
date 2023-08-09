@@ -26,6 +26,8 @@ class AuthService {
             });
             if (!userApp)
                 throw boom_1.default.notFound("Correo o contraseña incorrectos");
+            if (!(userApp === null || userApp === void 0 ? void 0 : userApp.dataValues.state))
+                throw boom_1.default.notFound("Usuario inhabilitado");
             if (!(yield (0, bcrypt_1.matchPassword)(password, userApp.dataValues.password)))
                 throw boom_1.default.notFound("Correo o contraseña incorrectos");
             return userApp;

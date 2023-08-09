@@ -42,7 +42,7 @@ router.put(
   updateCustomerStateController
 );
 
-router.patch(
+router.put(
   "/:id",
   JWTAuth,
   validatorHandler(getCustomerByID, "params"),

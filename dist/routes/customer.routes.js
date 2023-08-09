@@ -59,7 +59,7 @@ router.put("/state/:id", (0, validator_handler_1.default)(getCustomerByID, "para
         next(error);
     }
 }));
-router.patch("/:id", (0, validator_handler_1.default)(getCustomerByID, "params"), (0, validator_handler_1.default)(updateCustomerSchema, "body"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.put("/:id", (0, validator_handler_1.default)(getCustomerByID, "params"), (0, validator_handler_1.default)(updateCustomerSchema, "body"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
         const body = req.body;

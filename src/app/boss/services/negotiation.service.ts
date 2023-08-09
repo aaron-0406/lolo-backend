@@ -17,6 +17,12 @@ class NegotiationService {
       where: {
         customer_has_bank_id_customer_has_bank: chb,
       },
+      include: [
+        {
+          model: models.CUSTOMER_HAS_BANK,
+          as: "customerHasBank",
+        },
+      ],
     });
     return rta;
   }

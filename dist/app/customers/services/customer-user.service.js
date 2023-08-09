@@ -31,6 +31,9 @@ class CustomerUserService {
                     customer_id_customer: customerId,
                 },
             });
+            if (!rta) {
+                throw boom_1.default.notFound("Cliente no encontrado");
+            }
             return rta;
         });
     }
@@ -54,6 +57,13 @@ class CustomerUserService {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield this.findOne(id);
             const rta = yield user.update(changes);
+            return rta;
+        });
+    }
+    updateState(id, state) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield this.findOne(id);
+            const rta = yield user.update(Object.assign(Object.assign({}, user), { state }));
             return rta;
         });
     }
