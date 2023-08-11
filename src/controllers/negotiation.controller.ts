@@ -15,6 +15,19 @@ export const getNegotiationsController = async (
   }
 };
 
+export const getNegotiationsQueryController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { rta, quantity } = await service.findAllOpts(req.query);
+    res.json({ rta, quantity });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getNegotiationsByCHBController = async (
   req: Request,
   res: Response,

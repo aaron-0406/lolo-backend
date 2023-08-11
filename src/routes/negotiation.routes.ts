@@ -7,6 +7,7 @@ import {
   getNegotiationsByCHBController,
   getNegotiationsByIdController,
   getNegotiationsController,
+  getNegotiationsQueryController,
   updateNegotiationController,
 } from "../controllers/negotiation.controller";
 import { JWTAuth } from "../middlewares/auth.handler";
@@ -25,14 +26,7 @@ router.get("/", JWTAuth, getNegotiationsController);
 router.get(
   "/opts",
   validatorHandler(getNegotiationSchemaQuery, "query"),
-  async (req, res, next) => {
-    try {
-      const {rta, quantity} = await service.findAllOpts(req.query);
-      res.json({rta, quantity});
-    } catch (error) {
-      next(error);
-    }
-  }
+  getNegotiationsQueryController
 );
 
 router.get(
