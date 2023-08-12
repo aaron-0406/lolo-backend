@@ -7,6 +7,7 @@ import {
 } from "sequelize";
 import { CustomerUserType } from "../../app/customers/types/customer-user.type";
 import customerModel from "./customer.model";
+import rolesModel from "./roles.model";
 
 const CUSTOMER_USER_TABLE = "CUSTOMER_USER";
 
@@ -59,6 +60,15 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
     defaultValue: DataTypes.NOW,
     field: "created_at",
     type: DataTypes.DATE,
+  },
+  roleId: {
+    allowNull: false,
+    field: "role_id_role",
+    type: DataTypes.INTEGER,
+    references: {
+      model: rolesModel.ROLE_TABLE,
+      key: "id_role",
+    },
   },
   customerId: {
     allowNull: false,

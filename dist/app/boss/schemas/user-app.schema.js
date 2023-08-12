@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const joi_1 = __importDefault(require("joi"));
 const id = joi_1.default.number();
+const roleId = joi_1.default.number();
 const code = joi_1.default.string().min(9).max(9);
 const dni = joi_1.default.string().max(8);
 const name = joi_1.default.string().min(2).max(100);
@@ -25,11 +26,13 @@ const createUserSchema = joi_1.default.object({
     email: email.required(),
     password: password.required(),
     state: state.required(),
+    roleId: roleId.required(),
     createdAt: createAt.optional(),
 });
 const updateUserSchema = joi_1.default.object({
     code: code.required(),
     name: name.required(),
+    roleId: roleId.required(),
     lastName: lastName.required(),
     phone: phone.required(),
     dni: dni.required(),

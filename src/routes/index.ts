@@ -24,6 +24,8 @@ import dashboardRouter from "./dashboard.routes";
 import productRouter from "./product.routes";
 import managementActionRouter from "./management-action.routes";
 import goalRouter from "./goal.routes";
+import roleRouter from "./dash/role.routes";
+import permissionRouter from "./dash/permission.routes";
 
 const routerApi = (app: Express) => {
   const router = express.Router();
@@ -53,6 +55,8 @@ const routerApi = (app: Express) => {
   router.use("/management-action", managementActionRouter);
 
   router.use("/dash/auth", authDashRouter);
+  router.use("/dash/role", roleRouter);
+  router.use("/dash/permission", permissionRouter);
 };
 
 export default routerApi;
