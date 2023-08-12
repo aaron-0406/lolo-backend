@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import PermissionService from "../../app/boss/services/permission.service";
+import { buildTree } from "../../libs/helpers";
+import { PermissionType } from "../../app/boss/types/permission.type";
 
 const service = new PermissionService();
 
@@ -9,8 +11,9 @@ export const getAllPermissionController = async (
   next: NextFunction
 ) => {
   try {
-    const permissions = await service.findAll();
-    res.json(permissions);
+    const permissions: PermissionType[] = await service.findAll();
+    const tree = buildTree(permissions, 3);
+    res.json(tree);
   } catch (error) {
     next(error);
   }

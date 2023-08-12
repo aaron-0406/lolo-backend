@@ -1,15 +1,44 @@
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
 import { PermissionType } from "../types/permission.type";
+import { Op } from "sequelize";
 
 const { models } = sequelize;
 
 class PermissionService {
   constructor() {}
 
-  async findAll() {
+  async findAll(): Promise<PermissionType[]> {
     const rta = await models.PERMISSION.findAll();
-    return rta;
+    return rta.map((permission) => ({
+      id: permission.dataValues.id,
+      name: permission.dataValues.name,
+      code: permission.dataValues.code,
+      icon: permission.dataValues.icon,
+    }));
+  }
+
+  async findAllByRoleId(roleId: number): Promise<PermissionType[]> {
+    const rtaRolePermission = await models.ROLE_PERMISSION.findAll({
+      where: {
+        roleId,
+      },
+    });
+    const permissionIds = rtaRolePermission.map((rolePermission) => {
+      return rolePermission.dataValues.permissionId;
+    });
+
+    const rta = await models.PERMISSION.findAll({
+      where: {
+        id: { [Op.in]: permissionIds },
+      },
+    });
+    return rta.map((permission) => ({
+      id: permission.dataValues.id,
+      name: permission.dataValues.name,
+      code: permission.dataValues.code,
+      icon: permission.dataValues.icon,
+    }));
   }
 
   async findOne(id: string) {
@@ -37,27 +66,6 @@ class PermissionService {
     await permission.destroy();
 
     return { id };
-  }
-  private buildTree(
-    permissions: PermissionType[],
-    codeLength: number
-  ): PermissionType[] {
-    const newPermissions = permissions
-      .map((item) => {
-        return {
-          ...item,
-          sons: permissions.filter(
-            (item2) =>
-              item2.code.startsWith(item.code) && item2.code !== item.code
-          ),
-        };
-      })
-      .filter((item) => item.code.length === codeLength)
-      .map((item) => {
-        return { ...item, sons: this.buildTree(item.sons, codeLength + 3) };
-      });
-
-    return newPermissions;
   }
 }
 

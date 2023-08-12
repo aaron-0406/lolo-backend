@@ -105,11 +105,11 @@ export async function up(queryInterface: QueryInterface) {
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   });
-  await queryInterface.addColumn(CUSTOMER_USER_TABLE, 'role_id', {
+  await queryInterface.addColumn(CUSTOMER_USER_TABLE, 'role_id_role', {
     type: DataTypes.INTEGER,
     allowNull: true,
   });
-  await queryInterface.addColumn(USER_APP_TABLE, 'role_id', {
+  await queryInterface.addColumn(USER_APP_TABLE, 'role_id_role', {
     type: DataTypes.INTEGER,
     allowNull: true,
   });
