@@ -15,6 +15,7 @@ const privilege = joi_1.default.string().max(6);
 const state = joi_1.default.boolean();
 const createAt = joi_1.default.date();
 const customerId = joi_1.default.number();
+const roleId = joi_1.default.number();
 const createCustomerUserSchema = joi_1.default.object({
     name: name.required(),
     lastName: lastName.required(),
@@ -26,6 +27,7 @@ const createCustomerUserSchema = joi_1.default.object({
     state: state.required(),
     createdAt: createAt.optional(),
     customerId: customerId.required(),
+    roleId: roleId.required(),
 });
 const updateCustomerUserStateSchema = joi_1.default.object({
     state: state.required(),
@@ -37,6 +39,7 @@ const updateCustomerUserSchema = joi_1.default.object({
     dni: dni.optional(),
     privilege: privilege.required(),
     state: state.required(),
+    roleId: roleId.required(),
 });
 const getCustomerUserSchema = joi_1.default.object({
     id: id.required(),

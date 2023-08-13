@@ -5,8 +5,10 @@ import AuthServiceDash from "../app/boss/services/auth.service";
 import boom from "@hapi/boom";
 import { ExtractJwt, Strategy as StrategyJWT } from "passport-jwt";
 import config from "../config/config";
+import PermissionService from "../app/boss/services/permission.service";
 
 const service = new AuthService();
+const servicePermission = new PermissionService();
 const serviceDash = new AuthServiceDash();
 // LOGIN
 passport.use(
@@ -21,7 +23,11 @@ passport.use(
       const { customerId } = req.body;
       try {
         const user = await service.login({ email, password, customerId });
-        return done(null, user.dataValues);
+        const permissions = await servicePermission.findAllByRoleId(
+          user.dataValues.roleId
+        );
+        const codes = permissions.map((permissions) => permissions.code);
+        return done(null, { ...user.dataValues, permissions: codes });
       } catch (error: any) {
         return done(boom.badRequest(error), false);
       }
@@ -39,9 +45,12 @@ passport.use(
     },
     async (req, email, password, done) => {
       try {
-        const user = await serviceDash.login({ email, password});
-
-        return done(null, user.dataValues);
+        const user = await serviceDash.login({ email, password });
+        const permissions = await servicePermission.findAllByRoleId(
+          user.dataValues.roleId
+        );
+        const codes = permissions.map((permissions) => permissions.code);
+        return done(null, { ...user.dataValues, permissions: codes });
       } catch (error: any) {
         return done(boom.badRequest(error), false);
       }

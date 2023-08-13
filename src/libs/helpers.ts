@@ -2,6 +2,7 @@ import { Packer } from "docx";
 import fs from "fs-extra";
 import path from "path";
 import { Document } from "docx";
+import { PermissionType } from "../app/boss/types/permission.type";
 
 // Delete file function
 export const deleteFile = async (pathname: string, filename: string) => {
@@ -74,4 +75,29 @@ export const extractDate = (date: string) => {
     month: Number(splited[1]) - 1,
     year: Number(splited[0]),
   };
+};
+
+export const buildTree = (
+  permissions: PermissionType[],
+  codeLength: number
+): PermissionType[] => {
+  const newPermissions = permissions
+    .map((item) => {
+      return {
+        ...item,
+        permissions: permissions.filter(
+          (item2) =>
+            item2.code.startsWith(item.code) && item2.code !== item.code
+        ),
+      };
+    })
+    .filter((item) => item.code.length === codeLength)
+    .map((item) => {
+      return {
+        ...item,
+        permissions: buildTree(item.permissions, codeLength + 3),
+      };
+    });
+
+  return newPermissions;
 };
