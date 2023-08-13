@@ -24,6 +24,8 @@ declare global {
       state: boolean;
       createdAt: Date;
       customerId: number;
+      roleId: number;
+      permissions: Array<String>;
     }
   }
 }

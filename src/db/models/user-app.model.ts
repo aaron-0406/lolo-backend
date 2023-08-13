@@ -1,5 +1,12 @@
-import { Model, DataTypes, Sequelize, ModelAttributes } from "sequelize";
+import {
+  Model,
+  DataTypes,
+  Sequelize,
+  ModelAttributes,
+  ModelStatic,
+} from "sequelize";
 import { UserAppType } from "../../app/boss/types/user-app";
+import rolesModel from "./roles.model";
 
 const USER_APP_TABLE = "USER_APP";
 
@@ -49,6 +56,15 @@ const UserAppSchema: ModelAttributes<UserApp, UserAppType> = {
     allowNull: false,
     type: DataTypes.TINYINT({ length: 1 }),
   },
+  roleId: {
+    allowNull: false,
+    field: "role_id_role",
+    type: DataTypes.INTEGER,
+    references: {
+      model: rolesModel.ROLE_TABLE,
+      key: "id_role",
+    },
+  },
   createdAt: {
     allowNull: false,
     field: "created_at",
@@ -58,8 +74,9 @@ const UserAppSchema: ModelAttributes<UserApp, UserAppType> = {
 };
 
 class UserApp extends Model {
-  static associate() {
+  static associate(models: { [key: string]: ModelStatic<Model> }) {
     //associate
+    this.belongsTo(models.ROLE, { as: "role" });
   }
 
   static config(sequelize: Sequelize) {

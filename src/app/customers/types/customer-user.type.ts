@@ -9,5 +9,7 @@ export type CustomerUserType = {
   privilege: string;
   state: boolean;
   createdAt: Date;
+  roleId: number;
+  permissions?: Array<String>;
   customerId: number;
 };

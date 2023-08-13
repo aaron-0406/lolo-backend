@@ -22,6 +22,9 @@ import templateImgModel from "./template-img.model";
 import productModel from "./product.model";
 import goalModel from "./goal.model";
 import goalUserModel from "./goal-user.model";
+import permissionModel from "./permission.model";
+import rolesModel from "./roles.model";
+import rolePermissionModel from "./many-to-many/role-permission.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
@@ -46,6 +49,9 @@ const { TemplateImg, TemplateImgSchema } = templateImgModel;
 const { Product, ProductSchema } = productModel;
 const { Goal, GoalSchema } = goalModel;
 const { GoalUser, GoalUserSchema } = goalUserModel;
+const { Role, RoleSchema } = rolesModel;
+const { Permission, PermissionSchema } = permissionModel;
+const { RolePermission, RolePermissionSchema } = rolePermissionModel;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -80,6 +86,9 @@ export const setupModels = (sequelize: Sequelize) => {
   Product.init(ProductSchema, Product.config(sequelize));
   Goal.init(GoalSchema, Goal.config(sequelize));
   GoalUser.init(GoalUserSchema, GoalUser.config(sequelize));
+  Role.init(RoleSchema, Role.config(sequelize));
+  Permission.init(PermissionSchema, Permission.config(sequelize));
+  RolePermission.init(RolePermissionSchema, RolePermission.config(sequelize));
 
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
@@ -101,4 +110,7 @@ export const setupModels = (sequelize: Sequelize) => {
   Product.associate(sequelize.models);
   Goal.associate(sequelize.models);
   GoalUser.associate(sequelize.models);
+  Role.associate(sequelize.models);
+  Permission.associate(sequelize.models);
+  RolePermission.associate(sequelize.models);
 };

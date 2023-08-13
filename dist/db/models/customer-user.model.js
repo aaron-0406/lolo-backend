@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const customer_model_1 = __importDefault(require("./customer.model"));
+const roles_model_1 = __importDefault(require("./roles.model"));
 const CUSTOMER_USER_TABLE = "CUSTOMER_USER";
 const CustomerUserSchema = {
     id: {
@@ -55,6 +56,15 @@ const CustomerUserSchema = {
         defaultValue: sequelize_1.DataTypes.NOW,
         field: "created_at",
         type: sequelize_1.DataTypes.DATE,
+    },
+    roleId: {
+        allowNull: false,
+        field: "role_id_role",
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: roles_model_1.default.ROLE_TABLE,
+            key: "id_role",
+        },
     },
     customerId: {
         allowNull: false,

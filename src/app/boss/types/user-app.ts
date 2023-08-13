@@ -10,4 +10,6 @@ export type UserAppType = {
   password: string;
   state: boolean;
   createdAt: Date;
+  roleId: number;
+  permissions?: Array<String>;
 };
