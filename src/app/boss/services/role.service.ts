@@ -7,7 +7,7 @@ const { models } = sequelize;
 class RoleService {
   constructor() {}
 
-  async findAll(customerId: number) {
+  async findAllByCustomerId(customerId: number) {
     const rta = await models.ROLE.findAll({
       where: {
         customerId,

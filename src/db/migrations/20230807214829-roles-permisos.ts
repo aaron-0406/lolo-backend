@@ -33,6 +33,7 @@ export async function up(queryInterface: QueryInterface) {
       },
     },
   });
+
   await queryInterface.addConstraint(ROLE_TABLE, {
     fields: ["customer_id_customer"],
     type: "foreign key",
@@ -44,6 +45,7 @@ export async function up(queryInterface: QueryInterface) {
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   });
+
   await queryInterface.createTable(PERMISSION_TABLE, {
     id: {
       primaryKey: true,
@@ -56,6 +58,7 @@ export async function up(queryInterface: QueryInterface) {
     code: { type: DataTypes.STRING(150), allowNull: false },
     icon: { type: DataTypes.STRING(150), allowNull: false },
   });
+
   await queryInterface.createTable(ROLE_PERMISSION_TABLE, {
     id: {
       primaryKey: true,
@@ -83,6 +86,7 @@ export async function up(queryInterface: QueryInterface) {
       },
     },
   });
+
   await queryInterface.addConstraint(ROLE_PERMISSION_TABLE, {
     fields: ["permission_id_permission"],
     type: "foreign key",
@@ -94,6 +98,7 @@ export async function up(queryInterface: QueryInterface) {
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   });
+
   await queryInterface.addConstraint(ROLE_PERMISSION_TABLE, {
     fields: ["role_id_role"],
     type: "foreign key",
@@ -105,11 +110,13 @@ export async function up(queryInterface: QueryInterface) {
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   });
-  await queryInterface.addColumn(CUSTOMER_USER_TABLE, 'role_id_role', {
+
+  await queryInterface.addColumn(CUSTOMER_USER_TABLE, "role_id_role", {
     type: DataTypes.INTEGER,
     allowNull: true,
   });
-  await queryInterface.addColumn(USER_APP_TABLE, 'role_id_role', {
+
+  await queryInterface.addColumn(USER_APP_TABLE, "role_id_role", {
     type: DataTypes.INTEGER,
     allowNull: true,
   });
@@ -117,9 +124,19 @@ export async function up(queryInterface: QueryInterface) {
 
 export async function down(queryInterface: QueryInterface) {
   await queryInterface.removeConstraint(ROLE_TABLE, "fk_role_customer");
-  await queryInterface.removeConstraint(ROLE_PERMISSION_TABLE, "fk_role_permission_permission");
-  await queryInterface.removeConstraint(ROLE_PERMISSION_TABLE, "fk_role_permission_role");
+  await queryInterface.removeConstraint(
+    ROLE_PERMISSION_TABLE,
+    "fk_role_permission_permission"
+  );
+  await queryInterface.removeConstraint(
+    ROLE_PERMISSION_TABLE,
+    "fk_role_permission_role"
+  );
+
   await queryInterface.dropTable(ROLE_TABLE);
   await queryInterface.dropTable(PERMISSION_TABLE);
   await queryInterface.dropTable(ROLE_PERMISSION_TABLE);
+
+  await queryInterface.removeColumn(CUSTOMER_USER_TABLE, "role_id_role");
+  await queryInterface.removeColumn(USER_APP_TABLE, "role_id_role");
 }

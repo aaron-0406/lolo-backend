@@ -10,20 +10,19 @@ import {
 } from "../../controllers/dash/permission.controller";
 import { JWTAuth } from "../../middlewares/auth.handler";
 
-const { getPermissionSchema, createPermissionSchema, updatePermissionSchema } =
-  permissionSchema;
+const {
+  getPermissionByIdSchema,
+  createPermissionSchema,
+  updatePermissionSchema,
+} = permissionSchema;
 const router = express.Router();
 
-router.get(
-  "/",
-  JWTAuth,
-  getAllPermissionController
-);
+router.get("/", JWTAuth, getAllPermissionController);
 
 router.get(
   "/:id",
   JWTAuth,
-  validatorHandler(getPermissionSchema, "params"),
+  validatorHandler(getPermissionByIdSchema, "params"),
   getPermissionByIdController
 );
 
@@ -37,7 +36,7 @@ router.post(
 router.put(
   "/:id",
   JWTAuth,
-  validatorHandler(getPermissionSchema, "params"),
+  validatorHandler(getPermissionByIdSchema, "params"),
   validatorHandler(updatePermissionSchema, "body"),
   updatePermissionController
 );
@@ -45,7 +44,7 @@ router.put(
 router.delete(
   "/:id",
   JWTAuth,
-  validatorHandler(getPermissionSchema, "params"),
+  validatorHandler(getPermissionByIdSchema, "params"),
   deletePermissionController
 );
 

@@ -3,13 +3,13 @@ import RoleService from "../../app/boss/services/role.service";
 
 const service = new RoleService();
 
-export const getAllRoleController = async (
+export const getAllRoleByCustomerIdController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const roles = await service.findAll(Number(req.query.customerId));
+    const roles = await service.findAllByCustomerId(Number(req.query.customerId));
     res.json(roles);
   } catch (error) {
     next(error);

@@ -4,27 +4,31 @@ import roleSchema from "../../app/boss/schemas/role.schema";
 import {
   createRoleController,
   deleteRoleController,
-  getAllRoleController,
+  getAllRoleByCustomerIdController,
   getRoleByIdController,
   updateRoleController,
 } from "../../controllers/dash/role.controller";
 import { JWTAuth } from "../../middlewares/auth.handler";
 
-const { getRoleSchema, createRoleSchema, updateRoleSchema, getAllRoleSchema } =
-  roleSchema;
+const {
+  getRoleByIdSchema,
+  createRoleSchema,
+  updateRoleSchema,
+  getAllRoleByCustomerIdSchema,
+} = roleSchema;
 const router = express.Router();
 
 router.get(
-  "/",
+  "/:customerId",
   JWTAuth,
-  validatorHandler(getAllRoleSchema, "params"),
-  getAllRoleController
+  validatorHandler(getAllRoleByCustomerIdSchema, "params"),
+  getAllRoleByCustomerIdController
 );
 
 router.get(
   "/:id",
   JWTAuth,
-  validatorHandler(getRoleSchema, "params"),
+  validatorHandler(getRoleByIdSchema, "params"),
   getRoleByIdController
 );
 
@@ -38,7 +42,7 @@ router.post(
 router.put(
   "/:id",
   JWTAuth,
-  validatorHandler(getRoleSchema, "params"),
+  validatorHandler(getRoleByIdSchema, "params"),
   validatorHandler(updateRoleSchema, "body"),
   updateRoleController
 );
@@ -46,7 +50,7 @@ router.put(
 router.delete(
   "/:id",
   JWTAuth,
-  validatorHandler(getRoleSchema, "params"),
+  validatorHandler(getRoleByIdSchema, "params"),
   deleteRoleController
 );
 

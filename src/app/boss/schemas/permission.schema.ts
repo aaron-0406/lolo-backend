@@ -15,12 +15,12 @@ const createPermissionSchema = Joi.object<
   icon: icon.required(),
 });
 
-const getPermissionSchema = Joi.object<{ id: number }, true>({
+const getPermissionByIdSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
 
 const updatePermissionSchema = Joi.object<
-  Omit<PermissionType, "id" | "customerId" | "permissions">,
+  Omit<PermissionType, "id" | "permissions">,
   true
 >({
   name,
@@ -31,5 +31,5 @@ const updatePermissionSchema = Joi.object<
 export default {
   createPermissionSchema,
   updatePermissionSchema,
-  getPermissionSchema,
+  getPermissionByIdSchema,
 };

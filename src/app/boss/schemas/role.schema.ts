@@ -15,10 +15,10 @@ const createRoleSchema = Joi.object<
   permissions: permissions.required(),
 });
 
-const getRoleSchema = Joi.object<{ id: number }, true>({
+const getRoleByIdSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
-const getAllRoleSchema = Joi.object<{ customerId: number }, true>({
+const getAllRoleByCustomerIdSchema = Joi.object<{ customerId: number }, true>({
   customerId: id.required(),
 });
 
@@ -31,8 +31,8 @@ const updateRoleSchema = Joi.object<
 });
 
 export default {
-  getAllRoleSchema,
+  getAllRoleByCustomerIdSchema,
   createRoleSchema,
   updateRoleSchema,
-  getRoleSchema,
+  getRoleByIdSchema,
 };
