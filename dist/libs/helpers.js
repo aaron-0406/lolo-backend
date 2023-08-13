@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.extractDate = exports.saveWordDocument = exports.sumarDias = exports.restarDias = exports.getLastDayOfWeek = exports.getFirstDayOfWeek = exports.sortDaysByDate = exports.formatDate = exports.isFileStoredIn = exports.deleteFile = void 0;
+exports.buildTree = exports.extractDate = exports.saveWordDocument = exports.sumarDias = exports.restarDias = exports.getLastDayOfWeek = exports.getFirstDayOfWeek = exports.sortDaysByDate = exports.formatDate = exports.isFileStoredIn = exports.deleteFile = void 0;
 const docx_1 = require("docx");
 const fs_extra_1 = __importDefault(require("fs-extra"));
 const path_1 = __importDefault(require("path"));
@@ -92,3 +92,15 @@ const extractDate = (date) => {
     };
 };
 exports.extractDate = extractDate;
+const buildTree = (permissions, codeLength) => {
+    const newPermissions = permissions
+        .map((item) => {
+        return Object.assign(Object.assign({}, item), { permissions: permissions.filter((item2) => item2.code.startsWith(item.code) && item2.code !== item.code) });
+    })
+        .filter((item) => item.code.length === codeLength)
+        .map((item) => {
+        return Object.assign(Object.assign({}, item), { permissions: (0, exports.buildTree)(item.permissions, codeLength + 3) });
+    });
+    return newPermissions;
+};
+exports.buildTree = buildTree;

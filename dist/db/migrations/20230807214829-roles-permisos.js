@@ -119,11 +119,11 @@ function up(queryInterface) {
             onUpdate: "CASCADE",
             onDelete: "NO ACTION",
         });
-        yield queryInterface.addColumn(CUSTOMER_USER_TABLE, 'role_id', {
+        yield queryInterface.addColumn(CUSTOMER_USER_TABLE, "role_id_role", {
             type: sequelize_1.DataTypes.INTEGER,
             allowNull: true,
         });
-        yield queryInterface.addColumn(USER_APP_TABLE, 'role_id', {
+        yield queryInterface.addColumn(USER_APP_TABLE, "role_id_role", {
             type: sequelize_1.DataTypes.INTEGER,
             allowNull: true,
         });
@@ -138,6 +138,8 @@ function down(queryInterface) {
         yield queryInterface.dropTable(ROLE_TABLE);
         yield queryInterface.dropTable(PERMISSION_TABLE);
         yield queryInterface.dropTable(ROLE_PERMISSION_TABLE);
+        yield queryInterface.removeColumn(CUSTOMER_USER_TABLE, "role_id_role");
+        yield queryInterface.removeColumn(USER_APP_TABLE, "role_id_role");
     });
 }
 exports.down = down;

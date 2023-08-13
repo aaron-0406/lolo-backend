@@ -19,7 +19,9 @@ const auth_service_2 = __importDefault(require("../app/boss/services/auth.servic
 const boom_1 = __importDefault(require("@hapi/boom"));
 const passport_jwt_1 = require("passport-jwt");
 const config_1 = __importDefault(require("../config/config"));
+const permission_service_1 = __importDefault(require("../app/boss/services/permission.service"));
 const service = new auth_service_1.default();
+const servicePermission = new permission_service_1.default();
 const serviceDash = new auth_service_2.default();
 // LOGIN
 passport_1.default.use("local.signin", new passport_local_1.Strategy({
@@ -30,7 +32,9 @@ passport_1.default.use("local.signin", new passport_local_1.Strategy({
     const { customerId } = req.body;
     try {
         const user = yield service.login({ email, password, customerId });
-        return done(null, user.dataValues);
+        const permissions = yield servicePermission.findAllByRoleId(user.dataValues.roleId);
+        const codes = permissions.map((permissions) => permissions.code);
+        return done(null, Object.assign(Object.assign({}, user.dataValues), { permissions: codes }));
     }
     catch (error) {
         return done(boom_1.default.badRequest(error), false);
@@ -43,7 +47,9 @@ passport_1.default.use("local.signinDash", new passport_local_1.Strategy({
 }, (req, email, password, done) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield serviceDash.login({ email, password });
-        return done(null, user.dataValues);
+        const permissions = yield servicePermission.findAllByRoleId(user.dataValues.roleId);
+        const codes = permissions.map((permissions) => permissions.code);
+        return done(null, Object.assign(Object.assign({}, user.dataValues), { permissions: codes }));
     }
     catch (error) {
         return done(boom_1.default.badRequest(error), false);
