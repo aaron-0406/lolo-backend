@@ -65,7 +65,7 @@ export const updateCustomerUserStateController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const user = await service.updateState(id, body);
+    const user = await service.updateState(id, body.this.state);
     res.json(user);
   } catch (error) {
     next(error);
