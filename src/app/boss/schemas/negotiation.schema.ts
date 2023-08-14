@@ -2,7 +2,7 @@ import Joi from "joi";
 import { NegotiationType } from "../types/negotiation.type";
 
 const id = Joi.number();
-const name = Joi.string().min(1).max(100);
+const name = Joi.string().min(1).max(200);
 const createAt = Joi.date();
 const customerHasBankId = Joi.number();
 
