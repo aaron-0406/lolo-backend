@@ -3,7 +3,9 @@ import passport from "passport";
 import { CustomerUserType } from "../app/customers/types/customer-user.type";
 import { signToken } from "../libs/jwt";
 import AuthService from "../app/customers/services/auth.service";
+
 const serviceAuth = new AuthService();
+
 export const loginController = async (
   req: Request,
   res: Response,
@@ -29,7 +31,6 @@ export const changePasswordController = async (
 ) => {
   try {
     const { newPassword, repeatPassword } = req.body;
-    console.log({ newPassword, repeatPassword }, req.user);
     await serviceAuth.changePassword(
       { newPassword, repeatPassword },
       Number(req.user?.id)

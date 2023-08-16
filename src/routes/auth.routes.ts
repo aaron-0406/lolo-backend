@@ -12,6 +12,7 @@ const { loginSchema, changePasswordSchema } = authSchema;
 const router = Router();
 
 router.post("/signin", validatorHandler(loginSchema, "body"), loginController);
+
 router.post(
   "/change-password",
   JWTAuth,
