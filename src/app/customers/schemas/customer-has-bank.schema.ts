@@ -27,8 +27,13 @@ const getCustomerHasBankSchema = Joi.object<
   idBank: idBank.required(),
 });
 
+const getCustomerHasBankByIdSchema = Joi.object<{ id: number }, true>({
+  id: id.required(),
+});
+
 export default {
   createCustomerHasBankSchema,
   getCustomerHasBankSchema,
   getCustomerSchema,
+  getCustomerHasBankByIdSchema
 };

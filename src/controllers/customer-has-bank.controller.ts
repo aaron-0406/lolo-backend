@@ -22,8 +22,22 @@ export const getCustomerHasBankByIdController = async (
   next: NextFunction
 ) => {
   try {
+    const { id } = req.params;
+    const customerBank = await service.findOneById(id);
+    res.json(customerBank);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getCustomerHasBankByCustomerAndBankController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
     const { idCustomer, idBank } = req.params;
-    const customerBank = await service.findOne(idCustomer, idBank);
+    const customerBank = await service.findOneByCustomerAndBank(idCustomer, idBank);
     res.json(customerBank);
   } catch (error) {
     next(error);

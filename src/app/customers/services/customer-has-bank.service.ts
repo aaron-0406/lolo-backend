@@ -14,7 +14,16 @@ class CustomerHasBankService {
     return rta;
   }
 
-  async findOne(idCustomer: string, idBank: string) {
+  async findOneById(id: string) {
+    const customerBank = await models.CUSTOMER_HAS_BANK.findByPk(id);
+
+    if (!customerBank) {
+      throw boom.notFound("Banco no encontrado");
+    }
+    return customerBank;
+  }
+
+  async findOneByCustomerAndBank(idCustomer: string, idBank: string) {
     const customerBank = await models.CUSTOMER_HAS_BANK.findOne({
       where: {
         customer_id_customer: idCustomer,
@@ -48,7 +57,7 @@ class CustomerHasBankService {
   }
 
   async delete(idCustomer: string, idBank: string) {
-    const customerBank = await this.findOne(idCustomer, idBank);
+    const customerBank = await this.findOneByCustomerAndBank(idCustomer, idBank);
     await customerBank.destroy();
 
     return { idCustomer, idBank };
