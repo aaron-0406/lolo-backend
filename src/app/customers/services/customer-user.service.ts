@@ -15,6 +15,9 @@ class CustomerUserService {
 
   async findAllByCustomerID(customerId: string) {
     const rta = await models.CUSTOMER_USER.findAll({
+      attributes: {
+        exclude: ["password"],
+      },
       where: {
         customer_id_customer: customerId,
       },
@@ -23,12 +26,13 @@ class CustomerUserService {
     if (!rta) {
       throw boom.notFound("Cliente no encontrado");
     }
-
     return rta;
   }
 
   async findOne(id: string) {
-    const user = await models.CUSTOMER_USER.findByPk(id);
+    const user = await models.CUSTOMER_USER.findByPk(id, {
+      attributes: { exclude: ["password"] },
+    });
 
     if (!user) {
       throw boom.notFound("Usuario no encontrado");
@@ -44,6 +48,8 @@ class CustomerUserService {
 
   async update(id: string, changes: CustomerUserType) {
     const user = await this.findOne(id);
+    if (changes.password)
+      changes.password = await encryptPassword(changes.password);
     const rta = await user.update(changes);
 
     return rta;
