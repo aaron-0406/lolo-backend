@@ -1,6 +1,6 @@
-import { matchPassword } from "../../../libs/bcrypt";
+import { encryptPassword, matchPassword } from "../../../libs/bcrypt";
 import sequelize from "../../../libs/sequelize";
-import { LoginType } from "../types/auth.type";
+import { ChangePasswordType, LoginType } from "../types/auth.type";
 import boom from "@hapi/boom";
 const { models } = sequelize;
 
@@ -20,6 +20,17 @@ class AuthService {
       throw boom.notFound("Correo o contraseña incorrectos");
 
     return userCustomer;
+  }
+
+  async changePassword(data: ChangePasswordType, customerUserId: number) {
+    const { repeatPassword, newPassword } = data;
+    if (repeatPassword !== newPassword)
+      throw boom.badData("Las contraseñas no coinciden");
+    const password = await encryptPassword(newPassword);
+    await models.CUSTOMER_USER.update(
+      { password },
+      { where: { id: customerUserId } }
+    );
   }
 }
 
