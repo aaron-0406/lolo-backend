@@ -1,6 +1,6 @@
 import express from "express";
-import validatorHandler from "../middlewares/validator.handler";
-import negotiationSchema from "../app/boss/schemas/negotiation.schema";
+import validatorHandler from "../../middlewares/validator.handler";
+import negotiationSchema from "../../app/boss/schemas/negotiation.schema";
 import {
   createNegotiationController,
   deleteNegotiationController,
@@ -8,8 +8,8 @@ import {
   getNegotiationsByIdController,
   getNegotiationsController,
   updateNegotiationController,
-} from "../controllers/negotiation.controller";
-import { JWTAuth } from "../middlewares/auth.handler";
+} from "../../controllers/negotiation.controller";
+import { JWTAuth } from "../../middlewares/auth.handler";
 
 const {
   getNegotiationSchema,

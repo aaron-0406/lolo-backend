@@ -1,6 +1,6 @@
 import express from "express";
-import validatorHandler from "../middlewares/validator.handler";
-import funcionarioSchema from "../app/boss/schemas/funcionario.schema";
+import validatorHandler from "../../middlewares/validator.handler";
+import funcionarioSchema from "../../app/boss/schemas/funcionario.schema";
 import {
   createFuncionarioController,
   deleteFuncionarioController,
@@ -8,8 +8,8 @@ import {
   getFuncionariosByCHBController,
   getFuncionariosController,
   updateFuncionarioController,
-} from "../controllers/funcionario.controller";
-import { JWTAuth } from "../middlewares/auth.handler";
+} from "../../controllers/funcionario.controller";
+import { JWTAuth } from "../../middlewares/auth.handler";
 
 const {
   getFuncionarioSchema,

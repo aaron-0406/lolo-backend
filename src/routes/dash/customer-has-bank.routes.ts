@@ -1,14 +1,14 @@
 import express from "express";
-import validatorHandler from "../middlewares/validator.handler";
-import customerHasBankSchema from "../app/customers/schemas/customer-has-bank.schema";
+import validatorHandler from "../../middlewares/validator.handler";
+import customerHasBankSchema from "../../app/customers/schemas/customer-has-bank.schema";
 import {
   createCustomerHasBankController,
   deleteCustomerHasBankController,
   getCustomerHasBankByIdController,
   getCustomerHasBankByCustomerAndBankController,
   getCustomerHasBankController,
-} from "../controllers/customer-has-bank.controller";
-import { JWTAuth } from "../middlewares/auth.handler";
+} from "../../controllers/customer-has-bank.controller";
+import { JWTAuth } from "../../middlewares/auth.handler";
 
 const {
   getCustomerHasBankSchema,

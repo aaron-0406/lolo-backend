@@ -1,6 +1,6 @@
 import express from "express";
-import validatorHandler from "../middlewares/validator.handler";
-import managementActionSchema from "../app/boss/schemas/management-action.schema";
+import validatorHandler from "../../middlewares/validator.handler";
+import managementActionSchema from "../../app/boss/schemas/management-action.schema";
 import {
   createManagementActionController,
   deleteManagementActionController,
@@ -8,8 +8,8 @@ import {
   getManagementActionByIdController,
   getManagementActionsController,
   updateManagementActionController,
-} from "../controllers/management-action.controller";
-import { JWTAuth } from "../middlewares/auth.handler";
+} from "../../controllers/management-action.controller";
+import { JWTAuth } from "../../middlewares/auth.handler";
 
 const {
   getManagementActionSchema,
