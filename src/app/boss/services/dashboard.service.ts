@@ -1,5 +1,5 @@
 import { Workbook, CellValue } from "exceljs";
-import { ProductTypeName } from "../../customers/types/product.tyoe";
+import { ProductTypeName } from "../../extrajudicial/types/product.tyoe";
 import path from "path";
 
 export type CreateExcelType = {

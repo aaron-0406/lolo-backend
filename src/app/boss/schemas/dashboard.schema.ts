@@ -2,7 +2,7 @@ import Joi from "joi";
 import {
   ProductType,
   ProductTypeName,
-} from "../../customers/types/product.tyoe";
+} from "../../extrajudicial/types/product.tyoe";
 import { ClientType } from "../../extrajudicial/types/client.type";
 
 const file = Joi.string().required().messages({

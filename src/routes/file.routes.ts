@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import validatorHandler from "../middlewares/validator.handler";
-import fileSchema from "../app/customers/schemas/file.schema";
+import fileSchema from "../app/extrajudicial/schemas/file.schema";
 import { archivos } from "../middlewares/multer.handler";
 import boom from "@hapi/boom";
 import {

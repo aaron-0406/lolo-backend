@@ -5,7 +5,6 @@ import { readFile } from "../../../libs/aws_bucket";
 import {
   formatDate,
   getFirstDayOfWeek,
-  getLastDayOfWeek,
   isFileStoredIn,
   restarDias,
 } from "../../../libs/helpers";

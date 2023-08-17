@@ -1,5 +1,5 @@
 import express from "express";
-import DocumentSchema from "../app/customers/schemas/document.schema";
+import DocumentSchema from "../app/extrajudicial/schemas/document.schema";
 import validatorHandler from "../middlewares/validator.handler";
 import { generateDocumentController } from "../controllers/document.controller";
 

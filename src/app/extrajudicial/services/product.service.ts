@@ -1,6 +1,5 @@
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
-import config from "../../../config/config";
 import { ProductType } from "../types/product.tyoe";
 
 const { models } = sequelize;

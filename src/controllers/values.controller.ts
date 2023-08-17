@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import ValuesService from "../app/customers/services/values.service";
+import ValuesService from "../app/extrajudicial/services/values.service";
 
 const service = new ValuesService();
 

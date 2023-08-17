@@ -1,6 +1,6 @@
 import express from "express";
 import validatorHandler from "../middlewares/validator.handler";
-import templateHasValuesSchema from "../app/customers/schemas/template-has-values.schema";
+import templateHasValuesSchema from "../app/extrajudicial/schemas/template-has-values.schema";
 import {
   createTemplateHasValuesController,
   deleteTemplateHasValues,

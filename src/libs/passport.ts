@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
-import AuthService from "../app/customers/services/auth.service";
+import AuthService from "../app/extrajudicial/services/auth.service";
 import AuthServiceDash from "../app/boss/services/auth.service";
 import boom from "@hapi/boom";
 import { ExtractJwt, Strategy as StrategyJWT } from "passport-jwt";

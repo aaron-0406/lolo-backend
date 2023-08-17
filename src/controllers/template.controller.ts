@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import TemplateService from "../app/customers/services/template.service";
+import TemplateService from "../app/extrajudicial/services/template.service";
 
 const service = new TemplateService();
 

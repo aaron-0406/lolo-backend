@@ -7,7 +7,7 @@ import {
   getProductsByClientCodeSchema,
   getProductsByCustomerIdSchema,
   updateProductSchema,
-} from "../app/customers/schemas/product.schema";
+} from "../app/extrajudicial/schemas/product.schema";
 import validatorHandler from "../middlewares/validator.handler";
 import {
   changeProductController,

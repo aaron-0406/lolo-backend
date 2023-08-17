@@ -5,7 +5,7 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { ValuesType } from "../../app/customers/types/values.type";
+import { ValuesType } from "../../app/extrajudicial/types/values.type";
 import templateHasValuesModel from "./many-to-many/template-has-values.model";
 import ecampoModel from "./ecampo.model";
 
