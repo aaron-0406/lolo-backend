@@ -1,9 +1,9 @@
 import cron from "node-cron";
 import fs from "fs";
 import path from "path";
-import DocumentService from "../app/customers/services/document.service";
+import DocumentService from "../app/extrajudicial/services/document.service";
 import CustomerService from "../app/boss/services/customer.service";
-import TemplateService from "../app/customers/services/template.service";
+import TemplateService from "../app/extrajudicial/services/template.service";
 import CustomerUserService from "../app/boss/services/customer-user.service";
 import { saveWordDocument } from "../libs/helpers";
 import * as nodemailer from "nodemailer";

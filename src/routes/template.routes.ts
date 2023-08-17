@@ -1,6 +1,6 @@
 import express from "express";
 import validatorHandler from "../middlewares/validator.handler";
-import TemplateSchema from "../app/customers/schemas/template.schema";
+import TemplateSchema from "../app/extrajudicial/schemas/template.schema";
 import {
   getTemplateByCustomerIdController,
   getTemplateByIdController,

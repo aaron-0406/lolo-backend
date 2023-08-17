@@ -5,7 +5,7 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { ProductType } from "../../app/customers/types/product.tyoe";
+import { ProductType } from "../../app/extrajudicial/types/product.tyoe";
 import clientModel from "./client.model";
 import customerModel from "./customer.model";
 

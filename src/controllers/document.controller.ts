@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import TemplateHasValuesService from "../app/customers/services/template-has-values.service";
-import DocumentService from "../app/customers/services/document.service";
+import TemplateHasValuesService from "../app/extrajudicial/services/template-has-values.service";
+import DocumentService from "../app/extrajudicial/services/document.service";
 import ClientService from "../app/extrajudicial/services/client.service";
 import { saveWordDocument } from "../libs/helpers";
 

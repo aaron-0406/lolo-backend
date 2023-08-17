@@ -1,6 +1,6 @@
 import { Router } from "express";
 import validatorHandler from "../middlewares/validator.handler";
-import authSchema from "../app/customers/schemas/auth.schema";
+import authSchema from "../app/extrajudicial/schemas/auth.schema";
 import {
   loginController,
   changePasswordController,

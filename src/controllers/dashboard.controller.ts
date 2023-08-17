@@ -8,7 +8,7 @@ import DashboardService, {
 } from "../app/boss/services/dashboard.service";
 import CustomerUserService from "../app/boss/services/customer-user.service";
 import ClientService from "../app/extrajudicial/services/client.service";
-import ProductService from "../app/customers/services/product.service";
+import ProductService from "../app/extrajudicial/services/product.service";
 import config from "../config/config";
 
 const productService = new ProductService();
@@ -18,7 +18,7 @@ const customerUserService = new CustomerUserService();
 import {
   ProductTypeName,
   ProductType,
-} from "../app/customers/types/product.tyoe";
+} from "../app/extrajudicial/types/product.tyoe";
 import { ClientType } from "../app/extrajudicial/types/client.type";
 
 export const readXslxController = async (

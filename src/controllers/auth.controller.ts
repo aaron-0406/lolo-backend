@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import passport from "passport";
 import { CustomerUserType } from "../app/boss/types/customer-user.type";
 import { signToken } from "../libs/jwt";
-import AuthService from "../app/customers/services/auth.service";
+import AuthService from "../app/extrajudicial/services/auth.service";
 
 const serviceAuth = new AuthService();
 

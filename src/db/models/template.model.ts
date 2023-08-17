@@ -5,7 +5,7 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { TemplateType } from "../../app/customers/types/template.type";
+import { TemplateType } from "../../app/extrajudicial/types/template.type";
 import customerModel from "./customer.model";
 
 const TEMPLATE_TABLE = "TEMPLATE";
