@@ -8,7 +8,7 @@ import {
   getFuncionariosByCHBController,
   getFuncionariosController,
   updateFuncionarioController,
-} from "../../controllers/funcionario.controller";
+} from "../../controllers/dash/funcionario.controller";
 import { JWTAuth } from "../../middlewares/auth.handler";
 
 const {

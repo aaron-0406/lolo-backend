@@ -6,7 +6,7 @@ import {
   deleteCustomerHasBankController,
   getCustomerHasBankByIdController,
   getCustomerHasBankController,
-} from "../../controllers/customer-has-bank.controller";
+} from "../../controllers/dash/customer-has-bank.controller";
 import { JWTAuth } from "../../middlewares/auth.handler";
 
 const { getCustomerHasBankSchema, createCustomerHasBankSchema } =

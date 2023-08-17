@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import FuncionarioService from "../app/boss/services/funcionario.service";
+import FuncionarioService from "../../app/boss/services/funcionario.service";
 
 const service = new FuncionarioService();
 

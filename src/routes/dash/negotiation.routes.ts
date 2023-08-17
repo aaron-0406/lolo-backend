@@ -8,7 +8,7 @@ import {
   getNegotiationsByIdController,
   getNegotiationsController,
   updateNegotiationController,
-} from "../../controllers/negotiation.controller";
+} from "../../controllers/dash/negotiation.controller";
 import { JWTAuth } from "../../middlewares/auth.handler";
 
 const {

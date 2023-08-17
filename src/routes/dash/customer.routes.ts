@@ -7,7 +7,7 @@ import {
   getCustomerByUrlIdentifierController,
   updateCustomerController,
   updateCustomerStateController,
-} from "../../controllers/customer.controller";
+} from "../../controllers/dash/customer.controller";
 import { JWTAuth } from "../../middlewares/auth.handler";
 
 const {

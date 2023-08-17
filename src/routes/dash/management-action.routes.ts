@@ -8,7 +8,7 @@ import {
   getManagementActionByIdController,
   getManagementActionsController,
   updateManagementActionController,
-} from "../../controllers/management-action.controller";
+} from "../../controllers/dash/management-action.controller";
 import { JWTAuth } from "../../middlewares/auth.handler";
 
 const {
