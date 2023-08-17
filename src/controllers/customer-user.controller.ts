@@ -80,6 +80,7 @@ export const updateCustomerUserController = async (
   try {
     const { id } = req.params;
     const body = req.body;
+    if (!req.body.password && req.body.password != "") delete req.body.password;
     const user = await service.update(id, body);
     res.json(user);
   } catch (error) {

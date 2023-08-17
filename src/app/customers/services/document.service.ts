@@ -2,7 +2,13 @@ import boom from "@hapi/boom";
 import path from "path";
 import config from "../../../config/config";
 import { readFile } from "../../../libs/aws_bucket";
-import { formatDate, isFileStoredIn } from "../../../libs/helpers";
+import {
+  formatDate,
+  getFirstDayOfWeek,
+  getLastDayOfWeek,
+  isFileStoredIn,
+  restarDias,
+} from "../../../libs/helpers";
 import { TemplateHasValuesType } from "../types/template-has-values.type";
 import { TemplateType } from "../types/template.type";
 import util from "util";
@@ -280,8 +286,12 @@ class DocumentService {
     const customer = await new CustomerService().findOneByID(
       template.customerId + ""
     );
-
-    const goal = await goalService.finGlobalGoal(template.customerId);
+    const primerDia = getFirstDayOfWeek();
+    const ultimoDiaSemanaPasada = restarDias(primerDia, 1);
+    const goal = await goalService.finGlobalGoal(
+      template.customerId,
+      ultimoDiaSemanaPasada
+    );
 
     const report: ReportType = {
       Banks: commentsByBanksWeekly,

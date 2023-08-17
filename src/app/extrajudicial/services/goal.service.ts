@@ -64,7 +64,7 @@ class GoalService {
     return goals[0][0];
   }
 
-  async finGlobalGoal(customerId: number) {
+  async finGlobalGoal(customerId: number, fecha: Date = new Date()) {
     const result = await models.GOAL.findOne({
       attributes: [
         "id_goal",
@@ -93,8 +93,8 @@ class GoalService {
       ],
       where: {
         customer_id_customer: customerId,
-        start_date: { [Op.lte]: new Date() },
-        end_date: { [Op.gte]: new Date() },
+        start_date: { [Op.lte]: fecha },
+        end_date: { [Op.gte]: fecha },
       },
     });
     return result;
@@ -136,7 +136,10 @@ class GoalService {
     return result;
   }
 
-  async findGoalUserByCustomerId(customerUserId: number) {
+  async findGoalUserByCustomerId(
+    customerUserId: number,
+    fecha: Date = new Date()
+  ) {
     const result = await models.GOAL.findAll({
       attributes: {
         include: [
@@ -166,8 +169,8 @@ class GoalService {
         },
       ],
       where: {
-        start_date: { [Op.lte]: new Date() },
-        end_date: { [Op.gte]: new Date() },
+        start_date: { [Op.lte]: fecha },
+        end_date: { [Op.gte]: fecha },
       },
     });
     if (!result[0]) throw boom.notFound("Meta no encontrada");

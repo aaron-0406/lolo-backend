@@ -3,3 +3,8 @@ export type LoginType = {
   password: string;
   customerId: number;
 };
+
+export type ChangePasswordType = {
+  newPassword: string;
+  repeatPassword: string;
+};
