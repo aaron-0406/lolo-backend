@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import ManagementActionService from "../app/boss/services/management-action.service";
+import ManagementActionService from "../../app/boss/services/management-action.service";
 const service = new ManagementActionService();
 
 export const getManagementActionsController = async (

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import CustomerUserService from "../app/customers/services/customer-user.service";
+import CustomerUserService from "../../app/customers/services/customer-user.service";
 const service = new CustomerUserService();
 
 export const getCustomerUsersController = async (

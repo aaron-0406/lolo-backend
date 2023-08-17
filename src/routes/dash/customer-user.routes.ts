@@ -9,7 +9,7 @@ import {
   updateCustomerUserStateController,
   updateCustomerUserController,
   deleteCustomerUserController,
-} from "../../controllers/customer-user.controller";
+} from "../../controllers/dash/customer-user.controller";
 import { JWTAuth } from "../../middlewares/auth.handler";
 
 const {
