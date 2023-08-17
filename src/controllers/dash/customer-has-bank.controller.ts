@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import CustomerHasBankService from "../../app/customers/services/customer-has-bank.service";
+import CustomerHasBankService from "../../app/boss/services/customer-has-bank.service";
 
 const service = new CustomerHasBankService();
 

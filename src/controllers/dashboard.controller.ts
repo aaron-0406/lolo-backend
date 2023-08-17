@@ -6,7 +6,7 @@ import path from "path";
 import DashboardService, {
   CreateExcelType,
 } from "../app/boss/services/dashboard.service";
-import CustomerUserService from "../app/customers/services/customer-user.service";
+import CustomerUserService from "../app/boss/services/customer-user.service";
 import ClientService from "../app/extrajudicial/services/client.service";
 import ProductService from "../app/customers/services/product.service";
 import config from "../config/config";

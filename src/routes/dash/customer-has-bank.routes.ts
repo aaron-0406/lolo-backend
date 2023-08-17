@@ -1,6 +1,6 @@
 import express from "express";
 import validatorHandler from "../../middlewares/validator.handler";
-import customerHasBankSchema from "../../app/customers/schemas/customer-has-bank.schema";
+import customerHasBankSchema from "../../app/boss/schemas/customer-has-bank.schema";
 import {
   createCustomerHasBankController,
   deleteCustomerHasBankController,

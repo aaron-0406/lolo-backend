@@ -1,6 +1,6 @@
 import express from "express";
 import validatorHandler from "../../middlewares/validator.handler";
-import customerUserSchema from "../../app/customers/schemas/customer-user.schema";
+import customerUserSchema from "../../app/boss/schemas/customer-user.schema";
 import {
   getCustomerUsersController,
   getCustomerUserByCustomerIdController,
