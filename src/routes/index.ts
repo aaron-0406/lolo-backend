@@ -1,10 +1,10 @@
 import express, { Express } from "express";
 
 import customerRouter from "./dash/customer.routes";
-import bankRouter from "./bank.routes";
+import bankRouter from "./dash/bank.routes";
 import customerHasBankRouter from "./dash/customer-has-bank.routes";
 import funcionarioRouter from "./dash/funcionario.routes";
-import cityRouter from "./city.routes";
+import cityRouter from "./dash/city.routes";
 import customerUserRouter from "./dash/customer-user.routes";
 import userAppRouter from "./dash/user-app.routes";
 import clientRouter from "./client.routes";
@@ -31,8 +31,6 @@ const routerApi = (app: Express) => {
   const router = express.Router();
   app.use("/api/v1", router);
 
-  router.use("/bank", bankRouter);
-  router.use("/city", cityRouter);
   router.use("/client", clientRouter);
   router.use("/guarantor", guarantorRouter);
   router.use("/direction", directionRouter);
@@ -57,6 +55,8 @@ const routerApi = (app: Express) => {
   router.use("/customer", customerRouter);
   router.use("/customer-user", customerUserRouter);
   router.use("/customer-bank", customerHasBankRouter);
+  router.use("/bank", bankRouter);
+  router.use("/city", cityRouter);
 };
 
 export default routerApi;

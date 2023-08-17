@@ -1,65 +1,65 @@
 import { Request, Response, NextFunction } from "express";
-import BankService from "../app/boss/services/bank.service";
+import CityService from "../../app/boss/services/city.service";
 
-const service = new BankService();
+const service = new CityService();
 
-export const getBanksController = async (
+export const getAllCityController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const banks = await service.findAll();
-    res.json(banks);
+    const cities = await service.findAll();
+    res.json(cities);
   } catch (error) {
     next(error);
   }
 };
 
-export const getBankByIdController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id } = req.params;
-    const bank = await service.findOne(id);
-    res.json(bank);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const createBankController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const body = req.body;
-    const newBank = await service.create(body);
-    res.status(201).json(newBank);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const updateBankController = async (
+export const getCityByIdController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { id } = req.params;
-    const body = req.body;
-    const bank = await service.update(id, body);
-    res.json(bank);
+    const city = await service.findOne(id);
+    res.json(city);
   } catch (error) {
     next(error);
   }
 };
 
-export const deleteBankController = async (
+export const createCityController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const body = req.body;
+    const newCity = await service.create(body);
+    res.status(201).json(newCity);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateCityController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const city = await service.update(id, body);
+    res.json(city);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteCityController = async (
   req: Request,
   res: Response,
   next: NextFunction
