@@ -1,14 +1,14 @@
 import express from "express";
-import validatorHandler from "../middlewares/validator.handler";
-import citySchema from "../app/boss/schemas/city.schema";
+import validatorHandler from "../../middlewares/validator.handler";
+import citySchema from "../../app/boss/schemas/city.schema";
 import {
   createCityController,
   deleteCityController,
   getAllCityController,
   getCityByIdController,
   updateCityController,
-} from "../controllers/city.controller";
-import { JWTAuth } from "../middlewares/auth.handler";
+} from "../../controllers/dash/city.controller";
+import { JWTAuth } from "../../middlewares/auth.handler";
 
 const { getCitySchema, createCitySchema, updateCitySchema } = citySchema;
 const router = express.Router();

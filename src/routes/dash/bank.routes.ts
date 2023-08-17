@@ -1,14 +1,14 @@
 import express from "express";
-import validatorHandler from "../middlewares/validator.handler";
-import bankSchema from "../app/boss/schemas/bank.schema";
+import validatorHandler from "../../middlewares/validator.handler";
+import bankSchema from "../../app/boss/schemas/bank.schema";
 import {
   createBankController,
   deleteBankController,
   getBankByIdController,
   getBanksController,
   updateBankController,
-} from "../controllers/bank.controller";
-import { JWTAuth } from "../middlewares/auth.handler";
+} from "../../controllers/dash/bank.controller";
+import { JWTAuth } from "../../middlewares/auth.handler";
 
 const { getBankSchema, createBankSchema, updateBankSchema } = bankSchema;
 const router = express.Router();
