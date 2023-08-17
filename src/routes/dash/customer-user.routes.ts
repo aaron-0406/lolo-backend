@@ -1,6 +1,6 @@
 import express from "express";
-import validatorHandler from "../middlewares/validator.handler";
-import customerUserSchema from "../app/customers/schemas/customer-user.schema";
+import validatorHandler from "../../middlewares/validator.handler";
+import customerUserSchema from "../../app/customers/schemas/customer-user.schema";
 import {
   getCustomerUsersController,
   getCustomerUserByCustomerIdController,
@@ -9,8 +9,8 @@ import {
   updateCustomerUserStateController,
   updateCustomerUserController,
   deleteCustomerUserController,
-} from "../controllers/customer-user.controller";
-import { JWTAuth } from "../middlewares/auth.handler";
+} from "../../controllers/customer-user.controller";
+import { JWTAuth } from "../../middlewares/auth.handler";
 
 const {
   getCustomerUserSchema,
