@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import passport from "passport";
-import { CustomerUserType } from "../app/customers/types/customer-user.type";
+import { CustomerUserType } from "../app/boss/types/customer-user.type";
 import { signToken } from "../libs/jwt";
 import AuthService from "../app/customers/services/auth.service";
 
