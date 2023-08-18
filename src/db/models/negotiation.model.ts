@@ -5,7 +5,7 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { NegotiationType } from "../../app/boss/types/negotiation.type";
+import { NegotiationType } from "../../app/dash/types/negotiation.type";
 import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 
 const NEGOTIATION_TABLE = "NEGOTIATION";

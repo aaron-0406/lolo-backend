@@ -5,7 +5,7 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { FuncionarioType } from "../../app/boss/types/funcionario.type";
+import { FuncionarioType } from "../../app/dash/types/funcionario.type";
 import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 
 const FUNCIONARIO_TABLE = "FUNCIONARIO";

@@ -5,7 +5,7 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { CustomerUserType } from "../../app/boss/types/customer-user.type";
+import { CustomerUserType } from "../../app/dash/types/customer-user.type";
 import customerModel from "./customer.model";
 import rolesModel from "./roles.model";
 

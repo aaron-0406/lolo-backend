@@ -2,7 +2,7 @@ import { Packer } from "docx";
 import fs from "fs-extra";
 import path from "path";
 import { Document } from "docx";
-import { PermissionType } from "../app/boss/types/permission.type";
+import { PermissionType } from "../app/dash/types/permission.type";
 
 // Delete file function
 export const deleteFile = async (pathname: string, filename: string) => {

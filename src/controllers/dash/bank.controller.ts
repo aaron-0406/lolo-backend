@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import BankService from "../../app/boss/services/bank.service";
+import BankService from "../../app/dash/services/bank.service";
 
 const service = new BankService();
 

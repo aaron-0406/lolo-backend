@@ -7,7 +7,7 @@ import {
 } from "sequelize";
 import customerModel from "./customer.model";
 
-import { RoleType } from "../../app/boss/types/role.type";
+import { RoleType } from "../../app/dash/types/role.type";
 
 const ROLE_TABLE = "ROLE";
 

@@ -1,6 +1,6 @@
 import express from "express";
 import validatorHandler from "../../middlewares/validator.handler";
-import roleSchema from "../../app/boss/schemas/role.schema";
+import roleSchema from "../../app/dash/schemas/role.schema";
 import {
   createRoleController,
   deleteRoleController,

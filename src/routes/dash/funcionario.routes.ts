@@ -1,6 +1,6 @@
 import express from "express";
 import validatorHandler from "../../middlewares/validator.handler";
-import funcionarioSchema from "../../app/boss/schemas/funcionario.schema";
+import funcionarioSchema from "../../app/dash/schemas/funcionario.schema";
 import {
   createFuncionarioController,
   deleteFuncionarioController,
