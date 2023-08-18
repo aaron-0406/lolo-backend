@@ -1,6 +1,6 @@
 import express from "express";
-import validatorHandler from "../middlewares/validator.handler";
-import guarantorSchema from "../app/extrajudicial/schemas/guarantor.schema";
+import validatorHandler from "../../middlewares/validator.handler";
+import guarantorSchema from "../../app/extrajudicial/schemas/guarantor.schema";
 import {
   createGuarantorController,
   deleteGuarantorController,
@@ -8,8 +8,8 @@ import {
   getGuarantorByIdController,
   getGuarantorController,
   updateGuarantorController,
-} from "../controllers/extrajudicial/guarantor.controller";
-import { JWTAuth } from "../middlewares/auth.handler";
+} from "../../controllers/extrajudicial/guarantor.controller";
+import { JWTAuth } from "../../middlewares/auth.handler";
 
 const {
   getGuarantorByClientIDSchema,

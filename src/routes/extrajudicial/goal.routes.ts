@@ -1,7 +1,7 @@
 import { Router } from "express";
 
-import goalSchema from "../app/extrajudicial/schemas/goal.schema";
-import validatorHandler from "../middlewares/validator.handler";
+import goalSchema from "../../app/extrajudicial/schemas/goal.schema";
+import validatorHandler from "../../middlewares/validator.handler";
 import {
   createGoalController,
   deleteGoalController,
@@ -12,8 +12,8 @@ import {
   updateCustomerUserGoals,
   getCustomerUserGoal as getPersonalGoal,
   getGoalGlobalController,
-} from "../controllers/extrajudicial/goal.controller";
-import { JWTAuth } from "../middlewares/auth.handler";
+} from "../../controllers/extrajudicial/goal.controller";
+import { JWTAuth } from "../../middlewares/auth.handler";
 
 const router = Router();
 const {

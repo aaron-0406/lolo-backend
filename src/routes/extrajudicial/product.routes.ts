@@ -7,8 +7,8 @@ import {
   getProductsByClientCodeSchema,
   getProductsByCustomerIdSchema,
   updateProductSchema,
-} from "../app/extrajudicial/schemas/product.schema";
-import validatorHandler from "../middlewares/validator.handler";
+} from "../../app/extrajudicial/schemas/product.schema";
+import validatorHandler from "../../middlewares/validator.handler";
 import {
   changeProductController,
   createProductController,
@@ -17,8 +17,8 @@ import {
   getProductsByClientCodeController,
   getProductsByCustomerIdController,
   updateProductController,
-} from "../controllers/extrajudicial/product.controller";
-import { JWTAuth } from "../middlewares/auth.handler";
+} from "../../controllers/extrajudicial/product.controller";
+import { JWTAuth } from "../../middlewares/auth.handler";
 
 const router = Router();
 

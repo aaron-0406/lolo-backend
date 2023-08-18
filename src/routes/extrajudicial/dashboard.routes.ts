@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import boom from "@hapi/boom";
-import { archivosExcel } from "../middlewares/multer.handler";
-import validatorHandler from "../middlewares/validator.handler";
+import { archivosExcel } from "../../middlewares/multer.handler";
+import validatorHandler from "../../middlewares/validator.handler";
 import {
   createClientsSchema,
   createProductSchema,
@@ -9,7 +9,7 @@ import {
   deleteProductSchema,
   excelFileSchema,
   sendXlsxEmail,
-} from "../app/dash/schemas/dashboard.schema";
+} from "../../app/dash/schemas/dashboard.schema";
 import {
   createClientsXslxController,
   createProductsXslxController,
@@ -17,8 +17,8 @@ import {
   deleteProductsXslxController,
   readXslxController,
   sendXslxController,
-} from "../controllers/extrajudicial/dashboard.controller";
-import { JWTAuth } from "../middlewares/auth.handler";
+} from "../../controllers/extrajudicial/dashboard.controller";
+import { JWTAuth } from "../../middlewares/auth.handler";
 
 const router = Router();
 
