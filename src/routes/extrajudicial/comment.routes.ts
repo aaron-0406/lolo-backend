@@ -1,6 +1,6 @@
 import express from "express";
-import validatorHandler from "../middlewares/validator.handler";
-import commentSchema from "../app/extrajudicial/schemas/comment.schema";
+import validatorHandler from "../../middlewares/validator.handler";
+import commentSchema from "../../app/extrajudicial/schemas/comment.schema";
 import {
   createCommentController,
   deleteCommentController,
@@ -8,8 +8,8 @@ import {
   getChartByCustomerUserController,
   getCommentByIdController,
   updateCommentController,
-} from "../controllers/extrajudicial/comment.controller";
-import { JWTAuth } from "../middlewares/auth.handler";
+} from "../../controllers/extrajudicial/comment.controller";
+import { JWTAuth } from "../../middlewares/auth.handler";
 
 const {
   getCommentByClientIDSchema,

@@ -1,15 +1,15 @@
 import express, { Request, Response, NextFunction } from "express";
-import validatorHandler from "../middlewares/validator.handler";
-import fileSchema from "../app/extrajudicial/schemas/file.schema";
-import { archivos } from "../middlewares/multer.handler";
+import validatorHandler from "../../middlewares/validator.handler";
+import fileSchema from "../../app/extrajudicial/schemas/file.schema";
+import { archivos } from "../../middlewares/multer.handler";
 import boom from "@hapi/boom";
 import {
   createFileController,
   deleteFileController,
   findFileByClientIdController,
   findFileByIdController,
-} from "../controllers/extrajudicial/file.controller";
-import { JWTAuth } from "../middlewares/auth.handler";
+} from "../../controllers/extrajudicial/file.controller";
+import { JWTAuth } from "../../middlewares/auth.handler";
 
 const { createFileSchema, getFileSchema } = fileSchema;
 const router = express.Router();

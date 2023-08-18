@@ -1,6 +1,6 @@
 import express from "express";
-import validatorHandler from "../middlewares/validator.handler";
-import clientSchema from "../app/extrajudicial/schemas/client.schema";
+import validatorHandler from "../../middlewares/validator.handler";
+import clientSchema from "../../app/extrajudicial/schemas/client.schema";
 import {
   createClientController,
   deleteClientController,
@@ -10,8 +10,8 @@ import {
   getClientsByCHBController,
   getClientsByCHBDetailsController,
   updateClientController,
-} from "../controllers/extrajudicial/client.controller";
-import { JWTAuth } from "../middlewares/auth.handler";
+} from "../../controllers/extrajudicial/client.controller";
+import { JWTAuth } from "../../middlewares/auth.handler";
 
 const {
   getClientByCHBSchema,

@@ -1,6 +1,6 @@
 import express from "express";
-import validatorHandler from "../middlewares/validator.handler";
-import directionSchema from "../app/extrajudicial/schemas/direction.schema";
+import validatorHandler from "../../middlewares/validator.handler";
+import directionSchema from "../../app/extrajudicial/schemas/direction.schema";
 import {
   getDirectionByClientIdController,
   getAllDirectionsController,
@@ -8,8 +8,8 @@ import {
   createDirectionController,
   updateDirectionController,
   deleteDirectionController,
-} from "../controllers/extrajudicial/direction.controller";
-import { JWTAuth } from "../middlewares/auth.handler";
+} from "../../controllers/extrajudicial/direction.controller";
+import { JWTAuth } from "../../middlewares/auth.handler";
 
 const {
   createDirectionSchema,
