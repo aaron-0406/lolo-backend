@@ -1,6 +1,6 @@
 import express from "express";
 import validatorHandler from "../../middlewares/validator.handler";
-import negotiationSchema from "../../app/boss/schemas/negotiation.schema";
+import negotiationSchema from "../../app/dash/schemas/negotiation.schema";
 import {
   createNegotiationController,
   deleteNegotiationController,

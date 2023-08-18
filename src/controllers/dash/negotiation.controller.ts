@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import NegotiationService from "../../app/boss/services/negotiation.service";
+import NegotiationService from "../../app/dash/services/negotiation.service";
 const service = new NegotiationService();
 
 export const getNegotiationsController = async (

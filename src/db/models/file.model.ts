@@ -5,7 +5,7 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { FileType } from "../../app/boss/types/file.type";
+import { FileType } from "../../app/dash/types/file.type";
 import clientModel from "./client.model";
 
 const FILE_TABLE = "FILE";

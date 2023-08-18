@@ -35,13 +35,13 @@ import { DirectionType } from "../../extrajudicial/types/direction.type";
 import { ClientType } from "../../extrajudicial/types/client.type";
 import { TemplateImgType } from "../types/template-img.type";
 import { ProductType } from "../types/product.tyoe";
-import { CustomerUserType } from "../../boss/types/customer-user.type";
-import { FuncionarioType } from "../../boss/types/funcionario.type";
-import { CityType } from "../../boss/types/city.type";
-import { NegotiationType } from "../../boss/types/negotiation.type";
+import { CustomerUserType } from "../../dash/types/customer-user.type";
+import { FuncionarioType } from "../../dash/types/funcionario.type";
+import { CityType } from "../../dash/types/city.type";
+import { NegotiationType } from "../../dash/types/negotiation.type";
 import { CommentType } from "../../extrajudicial/types/comment.type";
 import CommentService from "../../extrajudicial/services/comment.service";
-import CustomerService from "../../boss/services/customer.service";
+import CustomerService from "../../dash/services/customer.service";
 import GoalService from "../../extrajudicial/services/goal.service";
 
 const commentService = new CommentService();

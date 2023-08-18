@@ -1,6 +1,6 @@
 import express from "express";
 import validatorHandler from "../../middlewares/validator.handler";
-import UserAppSchema from "../../app/boss/schemas/user-app.schema";
+import UserAppSchema from "../../app/dash/schemas/user-app.schema";
 import {
   createUserAppController,
   getAllUserAppController,

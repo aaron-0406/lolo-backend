@@ -1,6 +1,6 @@
 import express from "express";
 import validatorHandler from "../../middlewares/validator.handler";
-import citySchema from "../../app/boss/schemas/city.schema";
+import citySchema from "../../app/dash/schemas/city.schema";
 import {
   createCityController,
   deleteCityController,

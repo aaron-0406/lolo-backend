@@ -6,7 +6,7 @@ import {
   ModelStatic,
 } from "sequelize";
 
-import { RolePermissionType } from "../../../app/boss/types/role-permission.type";
+import { RolePermissionType } from "../../../app/dash/types/role-permission.type";
 import permissionModel from "../permission.model";
 import rolesModel from "../roles.model";
 

@@ -5,8 +5,8 @@ import * as fs from "fs";
 import path from "path";
 import DashboardService, {
   CreateExcelType,
-} from "../../app/boss/services/dashboard.service";
-import CustomerUserService from "../../app/boss/services/customer-user.service";
+} from "../../app/dash/services/dashboard.service";
+import CustomerUserService from "../../app/dash/services/customer-user.service";
 import ClientService from "../../app/extrajudicial/services/client.service";
 import ProductService from "../../app/extrajudicial/services/product.service";
 import config from "../../config/config";
@@ -29,7 +29,7 @@ export const readXslxController = async (
   try {
     const { file, customerId } = req.body;
     const productsXlsx = await DashboardService.readExcel(
-      path.join(__dirname, "../docs", `${file}`)
+      path.join(__dirname, "../../docs", `${file}`)
     );
     const products = await productService.getAllByCustomerId(customerId);
     const clients = await clientService.findAllByCustomerId(customerId);

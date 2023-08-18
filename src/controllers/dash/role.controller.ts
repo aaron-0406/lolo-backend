@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import RoleService from "../../app/boss/services/role.service";
+import RoleService from "../../app/dash/services/role.service";
 
 const service = new RoleService();
 
@@ -9,7 +9,9 @@ export const getAllRoleByCustomerIdController = async (
   next: NextFunction
 ) => {
   try {
-    const roles = await service.findAllByCustomerId(Number(req.query.customerId));
+    const roles = await service.findAllByCustomerId(
+      Number(req.query.customerId)
+    );
     res.json(roles);
   } catch (error) {
     next(error);

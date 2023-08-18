@@ -5,7 +5,7 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { ManagementActionType } from "../../app/boss/types/management-action.type";
+import { ManagementActionType } from "../../app/dash/types/management-action.type";
 import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 
 const MANAGEMENT_ACTION_TABLE = "MANAGEMENT_ACTION";
@@ -51,7 +51,6 @@ const ManagementActionSchema: ModelAttributes<
 
 class ManagementAction extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
-    
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
 
     this.hasMany(models.COMMENT, {

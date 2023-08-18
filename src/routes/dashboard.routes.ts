@@ -9,7 +9,7 @@ import {
   deleteProductSchema,
   excelFileSchema,
   sendXlsxEmail,
-} from "../app/boss/schemas/dashboard.schema";
+} from "../app/dash/schemas/dashboard.schema";
 import {
   createClientsXslxController,
   createProductsXslxController,

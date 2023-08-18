@@ -1,6 +1,6 @@
 import express from "express";
 import validatorHandler from "../../middlewares/validator.handler";
-import managementActionSchema from "../../app/boss/schemas/management-action.schema";
+import managementActionSchema from "../../app/dash/schemas/management-action.schema";
 import {
   createManagementActionController,
   deleteManagementActionController,

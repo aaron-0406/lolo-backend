@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import CityService from "../../app/boss/services/city.service";
+import CityService from "../../app/dash/services/city.service";
 
 const service = new CityService();
 

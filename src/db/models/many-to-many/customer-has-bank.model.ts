@@ -5,7 +5,7 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { CustomerHasBankType } from "../../../app/boss/types/customer-has-bank";
+import { CustomerHasBankType } from "../../../app/dash/types/customer-has-bank";
 import customerModel from "../customer.model";
 import bankModel from "../bank.model";
 

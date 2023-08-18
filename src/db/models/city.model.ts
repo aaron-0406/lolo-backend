@@ -5,7 +5,7 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { CityType } from "../../app/boss/types/city.type";
+import { CityType } from "../../app/dash/types/city.type";
 
 const CITY_TABLE = "CITY";
 

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import UserAppService from "../../app/boss/services/user-app.service";
+import UserAppService from "../../app/dash/services/user-app.service";
 const service = new UserAppService();
 
 export const getAllUserAppController = async (

@@ -6,7 +6,7 @@ import {
   ModelCtor,
 } from "sequelize";
 
-import { PermissionType } from "../../app/boss/types/permission.type";
+import { PermissionType } from "../../app/dash/types/permission.type";
 
 const PERMISSION_TABLE = "PERMISSION";
 
@@ -24,8 +24,7 @@ const PermissionSchema: ModelAttributes<Permission, PermissionType> = {
 };
 
 class Permission extends Model {
-  static associate(models: { [key: string]: ModelCtor<Model> }) {
-  }
+  static associate(models: { [key: string]: ModelCtor<Model> }) {}
 
   static config(sequelize: Sequelize) {
     return {
