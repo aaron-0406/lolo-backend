@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import boom from "@hapi/boom";
-import ProductService from "../app/extrajudicial/services/product.service";
+import ProductService from "../../app/extrajudicial/services/product.service";
 
 const service = new ProductService();
 

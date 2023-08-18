@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import TemplateHasValuesService from "../app/extrajudicial/services/template-has-values.service";
-import DocumentService from "../app/extrajudicial/services/document.service";
-import ClientService from "../app/extrajudicial/services/client.service";
-import { saveWordDocument } from "../libs/helpers";
+import TemplateHasValuesService from "../../app/extrajudicial/services/template-has-values.service";
+import DocumentService from "../../app/extrajudicial/services/document.service";
+import ClientService from "../../app/extrajudicial/services/client.service";
+import { saveWordDocument } from "../../libs/helpers";
 
 const serviceTemplateHasValues = new TemplateHasValuesService();
 const serviceClient = new ClientService();

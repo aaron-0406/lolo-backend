@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import CommentService from "../app/extrajudicial/services/comment.service";
+import CommentService from "../../app/extrajudicial/services/comment.service";
 
 const service = new CommentService();
 

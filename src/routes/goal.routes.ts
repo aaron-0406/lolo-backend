@@ -12,7 +12,7 @@ import {
   updateCustomerUserGoals,
   getCustomerUserGoal as getPersonalGoal,
   getGoalGlobalController,
-} from "../controllers/goal.controller";
+} from "../controllers/extrajudicial/goal.controller";
 import { JWTAuth } from "../middlewares/auth.handler";
 
 const router = Router();

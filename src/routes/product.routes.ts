@@ -17,7 +17,7 @@ import {
   getProductsByClientCodeController,
   getProductsByCustomerIdController,
   updateProductController,
-} from "../controllers/product.controller";
+} from "../controllers/extrajudicial/product.controller";
 import { JWTAuth } from "../middlewares/auth.handler";
 
 const router = Router();

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import ClientService from "../app/extrajudicial/services/client.service";
+import ClientService from "../../app/extrajudicial/services/client.service";
 import * as fs from "fs";
 
 const service = new ClientService();

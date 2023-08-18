@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import FileService from "../app/extrajudicial/services/file.service";
+import FileService from "../../app/extrajudicial/services/file.service";
 
 const service = new FileService();
 

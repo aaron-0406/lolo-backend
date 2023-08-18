@@ -8,7 +8,7 @@ import {
   getGuarantorByIdController,
   getGuarantorController,
   updateGuarantorController,
-} from "../controllers/guarantor.controller";
+} from "../controllers/extrajudicial/guarantor.controller";
 import { JWTAuth } from "../middlewares/auth.handler";
 
 const {

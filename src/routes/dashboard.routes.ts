@@ -17,7 +17,7 @@ import {
   deleteProductsXslxController,
   readXslxController,
   sendXslxController,
-} from "../controllers/dashboard.controller";
+} from "../controllers/extrajudicial/dashboard.controller";
 import { JWTAuth } from "../middlewares/auth.handler";
 
 const router = Router();

@@ -8,7 +8,7 @@ import {
   deleteFileController,
   findFileByClientIdController,
   findFileByIdController,
-} from "../controllers/file.controller";
+} from "../controllers/extrajudicial/file.controller";
 import { JWTAuth } from "../middlewares/auth.handler";
 
 const { createFileSchema, getFileSchema } = fileSchema;

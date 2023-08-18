@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import ECampoService from "../app/extrajudicial/services/ecampo.service";
+import ECampoService from "../../app/extrajudicial/services/ecampo.service";
 
 const service = new ECampoService();
 

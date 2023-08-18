@@ -1,7 +1,7 @@
 import express from "express";
 import validatorHandler from "../middlewares/validator.handler";
 import ECampoSchema from "../app/extrajudicial/schemas/ecampo.schema";
-import { findECampoByTemplateIdController } from "../controllers/ecampo.controllr";
+import { findECampoByTemplateIdController } from "../controllers/extrajudicial/ecampo.controllr";
 
 const { getECampoByIdSchema } = ECampoSchema;
 const router = express.Router();

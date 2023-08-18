@@ -4,7 +4,7 @@ import TemplateSchema from "../app/extrajudicial/schemas/template.schema";
 import {
   getTemplateByCustomerIdController,
   getTemplateByIdController,
-} from "../controllers/template.controller";
+} from "../controllers/extrajudicial/template.controller";
 import { JWTAuth } from "../middlewares/auth.handler";
 
 const { getTemplateByCustomerIdSchema } = TemplateSchema;

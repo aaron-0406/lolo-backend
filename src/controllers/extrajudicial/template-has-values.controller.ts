@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import TemplateHasValuesService from "../app/extrajudicial/services/template-has-values.service";
-import ValuesService from "../app/extrajudicial/services/values.service";
-import { ValuesType } from "../app/extrajudicial/types/values.type";
+import TemplateHasValuesService from "../../app/extrajudicial/services/template-has-values.service";
+import ValuesService from "../../app/extrajudicial/services/values.service";
+import { ValuesType } from "../../app/extrajudicial/types/values.type";
 
 const service = new TemplateHasValuesService();
 const serviceValues = new ValuesService();
