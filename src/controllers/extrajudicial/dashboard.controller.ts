@@ -5,11 +5,11 @@ import * as fs from "fs";
 import path from "path";
 import DashboardService, {
   CreateExcelType,
-} from "../app/boss/services/dashboard.service";
-import CustomerUserService from "../app/boss/services/customer-user.service";
-import ClientService from "../app/extrajudicial/services/client.service";
-import ProductService from "../app/extrajudicial/services/product.service";
-import config from "../config/config";
+} from "../../app/boss/services/dashboard.service";
+import CustomerUserService from "../../app/boss/services/customer-user.service";
+import ClientService from "../../app/extrajudicial/services/client.service";
+import ProductService from "../../app/extrajudicial/services/product.service";
+import config from "../../config/config";
 
 const productService = new ProductService();
 const clientService = new ClientService();
@@ -18,8 +18,8 @@ const customerUserService = new CustomerUserService();
 import {
   ProductTypeName,
   ProductType,
-} from "../app/extrajudicial/types/product.tyoe";
-import { ClientType } from "../app/extrajudicial/types/client.type";
+} from "../../app/extrajudicial/types/product.tyoe";
+import { ClientType } from "../../app/extrajudicial/types/client.type";
 
 export const readXslxController = async (
   req: Request,

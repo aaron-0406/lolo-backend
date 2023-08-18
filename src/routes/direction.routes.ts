@@ -8,7 +8,7 @@ import {
   createDirectionController,
   updateDirectionController,
   deleteDirectionController,
-} from "../controllers/direction.controller";
+} from "../controllers/extrajudicial/direction.controller";
 import { JWTAuth } from "../middlewares/auth.handler";
 
 const {

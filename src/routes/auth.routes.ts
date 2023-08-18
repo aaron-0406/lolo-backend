@@ -4,7 +4,7 @@ import authSchema from "../app/extrajudicial/schemas/auth.schema";
 import {
   loginController,
   changePasswordController,
-} from "../controllers/auth.controller";
+} from "../controllers/extrajudicial/auth.controller";
 import { JWTAuth } from "../middlewares/auth.handler";
 
 const { loginSchema, changePasswordSchema } = authSchema;

@@ -7,7 +7,7 @@ import {
   getTemplateHasValuesByCustomerIdController,
   getTemplateHasValuesByTemplateIdController,
   updateTemplateHasValues,
-} from "../controllers/template-has-values.controller";
+} from "../controllers/extrajudicial/template-has-values.controller";
 import { JWTAuth } from "../middlewares/auth.handler";
 
 const {

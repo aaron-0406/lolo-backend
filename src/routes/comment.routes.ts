@@ -8,7 +8,7 @@ import {
   getChartByCustomerUserController,
   getCommentByIdController,
   updateCommentController,
-} from "../controllers/comment.controller";
+} from "../controllers/extrajudicial/comment.controller";
 import { JWTAuth } from "../middlewares/auth.handler";
 
 const {

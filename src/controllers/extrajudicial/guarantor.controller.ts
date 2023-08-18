@@ -1,63 +1,63 @@
 import { Request, Response, NextFunction } from "express";
-import DirectionService from "../app/extrajudicial/services/direction.service";
-const service = new DirectionService();
+import GuarantorService from "../../app/extrajudicial/services/guarantor.service";
+const service = new GuarantorService();
 
-export const getAllDirectionsController = async (
+export const getGuarantorController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const directions = await service.findAll();
-    res.json(directions);
+    const guarantors = await service.findAll();
+    res.json(guarantors);
   } catch (error) {
     next(error);
   }
 };
 
-export const getDirectionByClientIdController = async (
+export const getGuarantorByClientIdController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { clientId } = req.params;
-    const directions = await service.findAllByClient(clientId);
-    res.json(directions);
+    const guarantors = await service.findAllByClient(clientId);
+    res.json(guarantors);
   } catch (error) {
     next(error);
   }
 };
 
-export const getDirectionByIdController = async (
+export const getGuarantorByIdController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { id } = req.params;
-    const direction = await service.findByID(id);
-    res.json(direction);
+    const guarantor = await service.findByID(id);
+    res.json(guarantor);
   } catch (error) {
     next(error);
   }
 };
 
-export const createDirectionController = async (
+export const createGuarantorController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const body = req.body;
-    const newDirection = await service.create(body);
-    res.status(201).json(newDirection);
+    const newGuarantor = await service.create(body);
+    res.status(201).json(newGuarantor);
   } catch (error) {
     next(error);
   }
 };
 
-export const updateDirectionController = async (
+export const updateGuarantorController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -65,14 +65,14 @@ export const updateDirectionController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const direction = await service.update(id, body);
-    res.json(direction);
+    const guarantor = await service.update(id, body);
+    res.json(guarantor);
   } catch (error) {
     next(error);
   }
 };
 
-export const deleteDirectionController = async (
+export const deleteGuarantorController = async (
   req: Request,
   res: Response,
   next: NextFunction

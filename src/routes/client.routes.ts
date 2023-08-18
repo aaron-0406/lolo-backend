@@ -10,7 +10,7 @@ import {
   getClientsByCHBController,
   getClientsByCHBDetailsController,
   updateClientController,
-} from "../controllers/client.controller";
+} from "../controllers/extrajudicial/client.controller";
 import { JWTAuth } from "../middlewares/auth.handler";
 
 const {
