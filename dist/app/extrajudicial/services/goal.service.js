@@ -65,7 +65,7 @@ class GoalService {
             return goals[0][0];
         });
     }
-    finGlobalGoal(customerId) {
+    finGlobalGoal(customerId, fecha = new Date()) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield models.GOAL.findOne({
                 attributes: [
@@ -95,8 +95,8 @@ class GoalService {
                 ],
                 where: {
                     customer_id_customer: customerId,
-                    start_date: { [sequelize_2.Op.lte]: new Date() },
-                    end_date: { [sequelize_2.Op.gte]: new Date() },
+                    start_date: { [sequelize_2.Op.lte]: fecha },
+                    end_date: { [sequelize_2.Op.gte]: fecha },
                 },
             });
             return result;
@@ -138,7 +138,7 @@ class GoalService {
             return result;
         });
     }
-    findGoalUserByCustomerId(customerUserId) {
+    findGoalUserByCustomerId(customerUserId, fecha = new Date()) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield models.GOAL.findAll({
                 attributes: {
@@ -167,8 +167,8 @@ class GoalService {
                     },
                 ],
                 where: {
-                    start_date: { [sequelize_2.Op.lte]: new Date() },
-                    end_date: { [sequelize_2.Op.gte]: new Date() },
+                    start_date: { [sequelize_2.Op.lte]: fecha },
+                    end_date: { [sequelize_2.Op.gte]: fecha },
                 },
             });
             if (!result[0])

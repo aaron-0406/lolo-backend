@@ -20,7 +20,7 @@ const aws_bucket_1 = require("../../../libs/aws_bucket");
 const exceljs_1 = require("exceljs");
 const path_1 = __importDefault(require("path"));
 const comment_service_1 = __importDefault(require("./comment.service"));
-const product_service_1 = __importDefault(require("../../customers/services/product.service"));
+const product_service_1 = __importDefault(require("../../extrajudicial/services/product.service"));
 const moment_1 = __importDefault(require("moment"));
 const { models } = sequelize_1.default;
 class ClientService {

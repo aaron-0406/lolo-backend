@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUserAppController = exports.createUserAppController = exports.getUserAppByIdController = exports.getAllUserAppController = void 0;
-const user_app_service_1 = __importDefault(require("../../app/boss/services/user-app.service"));
+const user_app_service_1 = __importDefault(require("../../app/dash/services/user-app.service"));
 const service = new user_app_service_1.default();
 const getAllUserAppController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {

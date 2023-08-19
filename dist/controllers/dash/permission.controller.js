@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deletePermissionController = exports.updatePermissionController = exports.createPermissionController = exports.getPermissionByIdController = exports.getAllPermissionController = void 0;
-const permission_service_1 = __importDefault(require("../../app/boss/services/permission.service"));
+const permission_service_1 = __importDefault(require("../../app/dash/services/permission.service"));
 const helpers_1 = require("../../libs/helpers");
 const service = new permission_service_1.default();
 const getAllPermissionController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {

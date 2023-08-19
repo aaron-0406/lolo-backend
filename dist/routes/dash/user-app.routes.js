@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const validator_handler_1 = __importDefault(require("../../middlewares/validator.handler"));
-const user_app_schema_1 = __importDefault(require("../../app/boss/schemas/user-app.schema"));
+const user_app_schema_1 = __importDefault(require("../../app/dash/schemas/user-app.schema"));
 const user_app_controller_1 = require("../../controllers/dash/user-app.controller");
 const auth_handler_1 = require("../../middlewares/auth.handler");
 const { createUserSchema, updateUserSchema, getUserSchema } = user_app_schema_1.default;
