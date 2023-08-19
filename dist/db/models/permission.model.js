@@ -15,8 +15,7 @@ const PermissionSchema = {
     icon: { type: sequelize_1.DataTypes.STRING(150), allowNull: false },
 };
 class Permission extends sequelize_1.Model {
-    static associate(models) {
-    }
+    static associate(models) { }
     static config(sequelize) {
         return {
             sequelize,

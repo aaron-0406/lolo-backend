@@ -14,12 +14,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const passport_1 = __importDefault(require("passport"));
 const passport_local_1 = require("passport-local");
-const auth_service_1 = __importDefault(require("../app/customers/services/auth.service"));
-const auth_service_2 = __importDefault(require("../app/boss/services/auth.service"));
+const auth_service_1 = __importDefault(require("../app/extrajudicial/services/auth.service"));
+const auth_service_2 = __importDefault(require("../app/dash/services/auth.service"));
 const boom_1 = __importDefault(require("@hapi/boom"));
 const passport_jwt_1 = require("passport-jwt");
 const config_1 = __importDefault(require("../config/config"));
-const permission_service_1 = __importDefault(require("../app/boss/services/permission.service"));
+const permission_service_1 = __importDefault(require("../app/dash/services/permission.service"));
 const service = new auth_service_1.default();
 const servicePermission = new permission_service_1.default();
 const serviceDash = new auth_service_2.default();

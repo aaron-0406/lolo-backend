@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const validator_handler_1 = __importDefault(require("../../middlewares/validator.handler"));
-const role_schema_1 = __importDefault(require("../../app/boss/schemas/role.schema"));
+const role_schema_1 = __importDefault(require("../../app/dash/schemas/role.schema"));
 const role_controller_1 = require("../../controllers/dash/role.controller");
 const auth_handler_1 = require("../../middlewares/auth.handler");
 const { getRoleByIdSchema, createRoleSchema, updateRoleSchema, getAllRoleByCustomerIdSchema, } = role_schema_1.default;

@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteRoleController = exports.updateRoleController = exports.createRoleController = exports.getRoleByIdController = exports.getAllRoleByCustomerIdController = void 0;
-const role_service_1 = __importDefault(require("../../app/boss/services/role.service"));
+const role_service_1 = __importDefault(require("../../app/dash/services/role.service"));
 const service = new role_service_1.default();
 const getAllRoleByCustomerIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
