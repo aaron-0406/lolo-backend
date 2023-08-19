@@ -5,7 +5,7 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { BankType } from "../../app/boss/types/bank.type";
+import { BankType } from "../../app/dash/types/bank.type";
 
 const BANK_TABLE = "BANK";
 

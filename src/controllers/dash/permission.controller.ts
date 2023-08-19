@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import PermissionService from "../../app/boss/services/permission.service";
+import PermissionService from "../../app/dash/services/permission.service";
 import { buildTree } from "../../libs/helpers";
-import { PermissionType } from "../../app/boss/types/permission.type";
+import { PermissionType } from "../../app/dash/types/permission.type";
 
 const service = new PermissionService();
 

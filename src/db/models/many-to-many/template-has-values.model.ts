@@ -5,7 +5,7 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { TemplateHasValuesType } from "../../../app/customers/types/template-has-values.type";
+import { TemplateHasValuesType } from "../../../app/extrajudicial/types/template-has-values.type";
 import templateModel from "../template.model";
 
 const TEMPLATE_HAS_VALUES_TABLE = "TEMPLATE_HAS_VALUES";

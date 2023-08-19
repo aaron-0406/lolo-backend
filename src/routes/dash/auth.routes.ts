@@ -1,6 +1,6 @@
 import { Router } from "express";
 import validatorHandler from "../../middlewares/validator.handler";
-import authSchema from "../../app/boss/schemas/auth.schema";
+import authSchema from "../../app/dash/schemas/auth.schema";
 import { loginDashController } from "../../controllers/dash/auth.controller";
 
 const { loginSchema } = authSchema;

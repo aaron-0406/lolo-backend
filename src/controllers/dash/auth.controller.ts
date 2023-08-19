@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import passport from "passport";
 import { signToken } from "../../libs/jwt";
-import { UserAppType } from "../../app/boss/types/user-app";
+import { UserAppType } from "../../app/dash/types/user-app";
 
 export const loginDashController = async (
   req: Request,

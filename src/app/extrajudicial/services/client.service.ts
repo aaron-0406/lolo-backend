@@ -7,7 +7,7 @@ import { createFolder } from "../../../libs/aws_bucket";
 import { Workbook } from "exceljs";
 import path from "path";
 import CommentService from "./comment.service";
-import ProductService from "../../customers/services/product.service";
+import ProductService from "../../extrajudicial/services/product.service";
 import moment from "moment";
 
 const { models } = sequelize;

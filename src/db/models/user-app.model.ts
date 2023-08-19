@@ -5,7 +5,7 @@ import {
   ModelAttributes,
   ModelStatic,
 } from "sequelize";
-import { UserAppType } from "../../app/boss/types/user-app";
+import { UserAppType } from "../../app/dash/types/user-app";
 import rolesModel from "./roles.model";
 
 const USER_APP_TABLE = "USER_APP";

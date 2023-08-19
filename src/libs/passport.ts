@@ -1,11 +1,11 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
-import AuthService from "../app/customers/services/auth.service";
-import AuthServiceDash from "../app/boss/services/auth.service";
+import AuthService from "../app/extrajudicial/services/auth.service";
+import AuthServiceDash from "../app/dash/services/auth.service";
 import boom from "@hapi/boom";
 import { ExtractJwt, Strategy as StrategyJWT } from "passport-jwt";
 import config from "../config/config";
-import PermissionService from "../app/boss/services/permission.service";
+import PermissionService from "../app/dash/services/permission.service";
 
 const service = new AuthService();
 const servicePermission = new PermissionService();

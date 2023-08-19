@@ -1,5 +1,5 @@
 import { Model, DataTypes, Sequelize, ModelAttributes } from "sequelize";
-import { ModuleType } from "../../app/boss/types/module.type";
+import { ModuleType } from "../../app/dash/types/module.type";
 
 const MODULE_TABLE = "MODULE";
 

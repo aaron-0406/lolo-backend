@@ -5,7 +5,7 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { CustomerType } from "../../app/customers/types/customer.type";
+import { CustomerType } from "../../app/dash/types/customer.type";
 
 const CUSTOMER_TABLE = "CUSTOMER";
 
