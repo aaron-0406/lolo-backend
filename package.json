@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "nodemon src/index.ts --exec ts-node",
     "lint": "eslint",
-    "production:build": "tsc",
+    "production:build": "tsc && npm run production:copy-docs",
+    "production:copy-docs": "npm run production:create-docs-dir && cp -R src/docs/* dist/docs",
+    "production:create-docs-dir": "mkdir -p dist/docs",
     "production:start": "node dist/index.js",
     "migrations:generate": "sequelize-cli  migration:generate --name",
     "migrations:run": "sequelize-cli db:migrate",
