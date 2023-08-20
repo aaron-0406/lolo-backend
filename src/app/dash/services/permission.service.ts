@@ -8,13 +8,20 @@ const { models } = sequelize;
 class PermissionService {
   constructor() {}
 
-  async findAll(): Promise<PermissionType[]> {
-    const rta = await models.PERMISSION.findAll();
+  async findAll(code?: string): Promise<PermissionType[]> {
+    const rta = await models.PERMISSION.findAll({
+      where: {
+        code: {
+          [Op.like]: code ? `${code}%` : "%",
+        },
+      },
+    });
     return rta.map((permission) => ({
       id: permission.dataValues.id,
       name: permission.dataValues.name,
       code: permission.dataValues.code,
       icon: permission.dataValues.icon,
+      link: permission.dataValues.link,
     }));
   }
 
@@ -38,6 +45,7 @@ class PermissionService {
       name: permission.dataValues.name,
       code: permission.dataValues.code,
       icon: permission.dataValues.icon,
+      link: permission.dataValues.link,
     }));
   }
 

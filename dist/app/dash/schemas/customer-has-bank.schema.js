@@ -13,15 +13,14 @@ const createCustomerHasBankSchema = joi_1.default.object({
     idBank: idBank.required(),
     createdAt: createAt.optional(),
 });
-const getCustomerSchema = joi_1.default.object({
+const getCustomerHasBankByCustomerIdSchema = joi_1.default.object({
     idCustomer: idCustomer.required(),
 });
-const getCustomerHasBankSchema = joi_1.default.object({
-    idCustomer: idCustomer.required(),
-    idBank: idBank.required(),
+const getCustomerHasBankByIdSchema = joi_1.default.object({
+    id: id.required(),
 });
 exports.default = {
     createCustomerHasBankSchema,
-    getCustomerHasBankSchema,
-    getCustomerSchema,
+    getCustomerHasBankByCustomerIdSchema,
+    getCustomerHasBankByIdSchema,
 };

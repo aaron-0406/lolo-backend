@@ -26,6 +26,7 @@ class PermissionService {
                 name: permission.dataValues.name,
                 code: permission.dataValues.code,
                 icon: permission.dataValues.icon,
+                link: permission.dataValues.link,
             }));
         });
     }
@@ -49,6 +50,7 @@ class PermissionService {
                 name: permission.dataValues.name,
                 code: permission.dataValues.code,
                 icon: permission.dataValues.icon,
+                link: permission.dataValues.link,
             }));
         });
     }
