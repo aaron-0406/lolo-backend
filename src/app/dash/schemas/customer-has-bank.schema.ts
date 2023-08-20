@@ -15,16 +15,11 @@ const createCustomerHasBankSchema = Joi.object<
   createdAt: createAt.optional(),
 });
 
-const getCustomerSchema = Joi.object<{ idCustomer: number }, true>({
-  idCustomer: idCustomer.required(),
-});
-
-const getCustomerHasBankSchema = Joi.object<
-  { idCustomer: number; idBank: number },
+const getCustomerHasBankByCustomerIdSchema = Joi.object<
+  { idCustomer: number },
   true
 >({
   idCustomer: idCustomer.required(),
-  idBank: idBank.required(),
 });
 
 const getCustomerHasBankByIdSchema = Joi.object<{ id: number }, true>({
@@ -33,7 +28,6 @@ const getCustomerHasBankByIdSchema = Joi.object<{ id: number }, true>({
 
 export default {
   createCustomerHasBankSchema,
-  getCustomerHasBankSchema,
-  getCustomerSchema,
-  getCustomerHasBankByIdSchema
+  getCustomerHasBankByCustomerIdSchema,
+  getCustomerHasBankByIdSchema,
 };

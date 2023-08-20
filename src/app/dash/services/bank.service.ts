@@ -22,18 +22,8 @@ class BankService {
   }
 
   async create(data: BankType) {
-    const bank = await models.BANK.findOne({
-      where: {
-        name: data.name,
-      },
-    });
-
-    if (!bank) {
-      const newBank = await models.BANK.create(data);
-      return newBank;
-    }
-
-    throw boom.notFound("Nombre ya registrado");
+    const newBank = await models.BANK.create(data);
+    return newBank;
   }
 
   async update(id: string, changes: BankType) {

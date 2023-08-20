@@ -4,15 +4,15 @@ import customerHasBankSchema from "../../app/dash/schemas/customer-has-bank.sche
 import {
   createCustomerHasBankController,
   deleteCustomerHasBankController,
+  getCustomerHasBankByCustomerIdController,
   getCustomerHasBankByIdController,
-  getCustomerHasBankByCustomerAndBankController,
   getCustomerHasBankController,
 } from "../../controllers/dash/customer-has-bank.controller";
 import { JWTAuth } from "../../middlewares/auth.handler";
 
 const {
-  getCustomerHasBankSchema,
   createCustomerHasBankSchema,
+  getCustomerHasBankByCustomerIdSchema,
   getCustomerHasBankByIdSchema,
 } = customerHasBankSchema;
 
@@ -21,17 +21,17 @@ const router = express.Router();
 router.get("/", JWTAuth, getCustomerHasBankController);
 
 router.get(
-  "/chb/:id",
+  "/:id",
   JWTAuth,
   validatorHandler(getCustomerHasBankByIdSchema, "params"),
   getCustomerHasBankByIdController
 );
 
 router.get(
-  "/:idCustomer/:idBank",
+  "customer/:idCustomer",
   JWTAuth,
-  validatorHandler(getCustomerHasBankSchema, "params"),
-  getCustomerHasBankByCustomerAndBankController
+  validatorHandler(getCustomerHasBankByCustomerIdSchema, "params"),
+  getCustomerHasBankByCustomerIdController
 );
 
 router.post(
@@ -42,9 +42,9 @@ router.post(
 );
 
 router.delete(
-  "/:idCustomer/:idBank",
+  "/:id",
   JWTAuth,
-  validatorHandler(getCustomerHasBankSchema, "params"),
+  validatorHandler(getCustomerHasBankByIdSchema, "params"),
   deleteCustomerHasBankController
 );
 

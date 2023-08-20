@@ -18,23 +18,24 @@ class CustomerHasBankService {
     const customerBank = await models.CUSTOMER_HAS_BANK.findByPk(id);
 
     if (!customerBank) {
-      throw boom.notFound("Banco no encontrado");
+      throw boom.notFound("CHB no encontrado");
     }
+
     return customerBank;
   }
 
-  async findOneByCustomerAndBank(idCustomer: string, idBank: string) {
-    const customerBank = await models.CUSTOMER_HAS_BANK.findOne({
+  async findAllByCustomerId(customerId: string) {
+    const rta = await models.CUSTOMER_HAS_BANK.findAll({
       where: {
-        customer_id_customer: idCustomer,
-        bank_id_bank: idBank,
+        customer_id_customer: customerId,
       },
     });
 
-    if (!customerBank) {
-      throw boom.notFound("Cliente o Banco no encontrado");
+    if (!rta) {
+      throw boom.notFound("El cliente no tiene bancos asignados");
     }
-    return customerBank;
+
+    return rta;
   }
 
   async assign(data: CustomerHasBankType) {
@@ -53,14 +54,17 @@ class CustomerHasBankService {
       return newCustomerBank;
     }
 
-    throw boom.notFound("Datos ya registrados");
+    throw boom.notFound("Banco ya asignado");
   }
 
-  async delete(idCustomer: string, idBank: string) {
-    const customerBank = await this.findOneByCustomerAndBank(idCustomer, idBank);
+  async revoke(id: string) {
+    const customerBank = await this.findOneById(id);
+
+    //TODO: Remove folder of AWS
+
     await customerBank.destroy();
 
-    return { idCustomer, idBank };
+    return { id };
   }
 }
 
