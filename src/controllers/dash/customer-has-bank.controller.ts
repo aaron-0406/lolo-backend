@@ -22,8 +22,22 @@ export const getCustomerHasBankByIdController = async (
   next: NextFunction
 ) => {
   try {
-    const { idCustomer, idBank } = req.params;
-    const customerBank = await service.findOne(idCustomer, idBank);
+    const { id } = req.params;
+    const customerBank = await service.findOneById(id);
+    res.json(customerBank);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getCustomerHasBankByCustomerIdController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { idCustomer } = req.params;
+    const customerBank = await service.findAllByCustomerId(idCustomer);
     res.json(customerBank);
   } catch (error) {
     next(error);
@@ -50,9 +64,9 @@ export const deleteCustomerHasBankController = async (
   next: NextFunction
 ) => {
   try {
-    const { idCustomer, idBank } = req.params;
-    await service.delete(idCustomer, idBank);
-    res.status(201).json({ idCustomer, idBank });
+    const { id } = req.params;
+    await service.revoke(id);
+    res.status(201).json({ id });
   } catch (error) {
     next(error);
   }
