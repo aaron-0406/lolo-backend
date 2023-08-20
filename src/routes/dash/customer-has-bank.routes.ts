@@ -21,17 +21,17 @@ const router = express.Router();
 router.get("/", JWTAuth, getCustomerHasBankController);
 
 router.get(
-  "/:id",
-  JWTAuth,
-  validatorHandler(getCustomerHasBankByIdSchema, "params"),
-  getCustomerHasBankByIdController
-);
-
-router.get(
   "customer/:idCustomer",
   JWTAuth,
   validatorHandler(getCustomerHasBankByCustomerIdSchema, "params"),
   getCustomerHasBankByCustomerIdController
+);
+
+router.get(
+  "/:id",
+  JWTAuth,
+  validatorHandler(getCustomerHasBankByIdSchema, "params"),
+  getCustomerHasBankByIdController
 );
 
 router.post(
