@@ -21,7 +21,7 @@ const router = express.Router();
 router.get("/", JWTAuth, getCustomerHasBankController);
 
 router.get(
-  "customer/:idCustomer",
+  "/customer/:idCustomer",
   JWTAuth,
   validatorHandler(getCustomerHasBankByCustomerIdSchema, "params"),
   getCustomerHasBankByCustomerIdController
