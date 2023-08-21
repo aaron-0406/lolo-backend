@@ -29,6 +29,7 @@ class CustomerHasBankService {
       where: {
         customer_id_customer: customerId,
       },
+      include: ["bank"],
     });
 
     if (!rta) {
