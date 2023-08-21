@@ -7,6 +7,7 @@ export async function up(queryInterface: QueryInterface) {
   await queryInterface.addColumn(PERMISSION_TABLE, "link", {
     type: DataTypes.STRING(150),
     allowNull: true,
+    defaultValue: "#",
   });
 }
 
