@@ -70,6 +70,8 @@ class CustomerHasBank extends Model {
       as: "negotiation",
       foreignKey: "customerHasBankId",
     });
+
+    this.belongsTo(models.BANK, { as: "bank", foreignKey: "idBank" });
   }
 
   static config(sequelize: Sequelize) {
