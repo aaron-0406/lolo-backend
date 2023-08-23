@@ -25,18 +25,27 @@ class CustomerHasBankService {
             return rta;
         });
     }
-    findOne(idCustomer, idBank) {
+    findOneById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const customerBank = yield models.CUSTOMER_HAS_BANK.findOne({
-                where: {
-                    customer_id_customer: idCustomer,
-                    bank_id_bank: idBank,
-                },
-            });
+            const customerBank = yield models.CUSTOMER_HAS_BANK.findByPk(id);
             if (!customerBank) {
-                throw boom_1.default.notFound("Cliente o Banco no encontrado");
+                throw boom_1.default.notFound("CHB no encontrado");
             }
             return customerBank;
+        });
+    }
+    findAllByCustomerId(customerId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rta = yield models.CUSTOMER_HAS_BANK.findAll({
+                where: {
+                    customer_id_customer: customerId,
+                },
+                include: ["bank"],
+            });
+            if (!rta) {
+                throw boom_1.default.notFound("El cliente no tiene bancos asignados");
+            }
+            return rta;
         });
     }
     assign(data) {
@@ -52,14 +61,15 @@ class CustomerHasBankService {
                 yield (0, aws_bucket_1.createFolder)(`${config_1.default.AWS_CHB_PATH}${newCustomerBank.dataValues.idCustomer}/${newCustomerBank.dataValues.id}/`);
                 return newCustomerBank;
             }
-            throw boom_1.default.notFound("Datos ya registrados");
+            throw boom_1.default.notFound("Banco ya asignado");
         });
     }
-    delete(idCustomer, idBank) {
+    revoke(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const customerBank = yield this.findOne(idCustomer, idBank);
+            const customerBank = yield this.findOneById(id);
+            //TODO: Remove folder of AWS
             yield customerBank.destroy();
-            return { idCustomer, idBank };
+            return { id };
         });
     }
 }

@@ -18,7 +18,7 @@ const CommentSchema = {
     },
     comment: {
         allowNull: false,
-        type: sequelize_1.DataTypes.STRING(400),
+        type: sequelize_1.DataTypes.TEXT("long"),
     },
     managementActionId: {
         allowNull: true,

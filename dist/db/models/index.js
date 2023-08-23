@@ -91,6 +91,7 @@ const setupModels = (sequelize) => {
     File.associate(sequelize.models);
     ManagementAction.associate(sequelize.models);
     Comment.associate(sequelize.models);
+    CustomerHasBank.associate(sequelize.models);
     Direction.associate(sequelize.models);
     Guarantor.associate(sequelize.models);
     Funcionario.associate(sequelize.models);
