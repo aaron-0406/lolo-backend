@@ -2,10 +2,10 @@ import Joi from "joi";
 import { PermissionType } from "../types/permission.type";
 
 const id = Joi.number();
-const name = Joi.string().min(1).max(100);
-const code = Joi.string().min(1).max(100);
-const icon = Joi.string().min(1).max(100);
-const link = Joi.string().min(1).max(100);
+const name = Joi.string().min(1).max(150);
+const code = Joi.string().min(1).max(150);
+const icon = Joi.string().min(1).max(150);
+const link = Joi.string().min(1).max(150);
 
 const createPermissionSchema = Joi.object<
   Omit<PermissionType, "id" | "permissions">,
@@ -39,5 +39,5 @@ export default {
   createPermissionSchema,
   updatePermissionSchema,
   getPermissionByIdSchema,
-  getPermissionsSchema
+  getPermissionsSchema,
 };
