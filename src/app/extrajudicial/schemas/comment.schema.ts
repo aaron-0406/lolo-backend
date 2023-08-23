@@ -2,7 +2,7 @@ import Joi from "joi";
 import { CommentType } from "../types/comment.type";
 
 const id = Joi.number();
-const comment = Joi.string().min(1).max(400);
+const comment = Joi.string().min(1);
 const negotiation = Joi.string().min(1).max(100);
 const managementActionId = Joi.number();
 const date = Joi.date();

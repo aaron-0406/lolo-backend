@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCustomerHasBankController = exports.createCustomerHasBankController = exports.getCustomerHasBankByIdController = exports.getCustomerHasBankController = void 0;
+exports.deleteCustomerHasBankController = exports.createCustomerHasBankController = exports.getCustomerHasBankByCustomerIdController = exports.getCustomerHasBankByIdController = exports.getCustomerHasBankController = void 0;
 const customer_has_bank_service_1 = __importDefault(require("../../app/dash/services/customer-has-bank.service"));
 const service = new customer_has_bank_service_1.default();
 const getCustomerHasBankController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -27,8 +27,8 @@ const getCustomerHasBankController = (req, res, next) => __awaiter(void 0, void 
 exports.getCustomerHasBankController = getCustomerHasBankController;
 const getCustomerHasBankByIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { idCustomer, idBank } = req.params;
-        const customerBank = yield service.findOne(idCustomer, idBank);
+        const { id } = req.params;
+        const customerBank = yield service.findOneById(id);
         res.json(customerBank);
     }
     catch (error) {
@@ -36,6 +36,17 @@ const getCustomerHasBankByIdController = (req, res, next) => __awaiter(void 0, v
     }
 });
 exports.getCustomerHasBankByIdController = getCustomerHasBankByIdController;
+const getCustomerHasBankByCustomerIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { idCustomer } = req.params;
+        const customerBank = yield service.findAllByCustomerId(idCustomer);
+        res.json(customerBank);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.getCustomerHasBankByCustomerIdController = getCustomerHasBankByCustomerIdController;
 const createCustomerHasBankController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const body = req.body;
@@ -49,9 +60,9 @@ const createCustomerHasBankController = (req, res, next) => __awaiter(void 0, vo
 exports.createCustomerHasBankController = createCustomerHasBankController;
 const deleteCustomerHasBankController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { idCustomer, idBank } = req.params;
-        yield service.delete(idCustomer, idBank);
-        res.status(201).json({ idCustomer, idBank });
+        const { id } = req.params;
+        yield service.revoke(id);
+        res.status(201).json({ id });
     }
     catch (error) {
         next(error);

@@ -22,7 +22,7 @@ const CommentSchema: ModelAttributes<Comment, CommentType> = {
   },
   comment: {
     allowNull: false,
-    type: DataTypes.STRING(400),
+    type: DataTypes.TEXT("long"),
   },
   managementActionId: {
     allowNull: true,
