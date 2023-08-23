@@ -14,10 +14,16 @@ const {
   getPermissionByIdSchema,
   createPermissionSchema,
   updatePermissionSchema,
+  getPermissionsSchema,
 } = permissionSchema;
 const router = express.Router();
 
-router.get("/", JWTAuth, getAllPermissionController);
+router.get(
+  "/",
+  JWTAuth,
+  validatorHandler(getPermissionsSchema, "query"),
+  getAllPermissionController
+);
 
 router.get(
   "/:id",

@@ -21,6 +21,7 @@ const PermissionSchema: ModelAttributes<Permission, PermissionType> = {
   name: { type: DataTypes.STRING(150), allowNull: false },
   code: { type: DataTypes.STRING(150), allowNull: false },
   icon: { type: DataTypes.STRING(150), allowNull: false },
+  link: { type: DataTypes.STRING(150), allowNull: false, defaultValue: "#" },
 };
 
 class Permission extends Model {

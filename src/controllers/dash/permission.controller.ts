@@ -11,9 +11,17 @@ export const getAllPermissionController = async (
   next: NextFunction
 ) => {
   try {
-    const permissions: PermissionType[] = await service.findAll();
-    const tree = buildTree(permissions, 3);
-    res.json(tree);
+    const { code } = req.query;
+    const permissions: PermissionType[] = await service.findAll(
+      code ? String(code) : undefined
+    );
+
+    const tree = buildTree(permissions, code ? String(code).length : 3);
+    if (code) {
+      res.json(tree[0].permissions);
+    } else {
+      res.json(tree);
+    }
   } catch (error) {
     next(error);
   }
