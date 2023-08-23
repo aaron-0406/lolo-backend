@@ -40,6 +40,7 @@ class CustomerHasBankService {
                 where: {
                     customer_id_customer: customerId,
                 },
+                include: ["bank"],
             });
             if (!rta) {
                 throw boom_1.default.notFound("El cliente no tiene bancos asignados");

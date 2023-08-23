@@ -11,7 +11,7 @@ const auth_handler_1 = require("../../middlewares/auth.handler");
 const { createCustomerHasBankSchema, getCustomerHasBankByCustomerIdSchema, getCustomerHasBankByIdSchema, } = customer_has_bank_schema_1.default;
 const router = express_1.default.Router();
 router.get("/", auth_handler_1.JWTAuth, customer_has_bank_controller_1.getCustomerHasBankController);
-router.get("customer/:idCustomer", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getCustomerHasBankByCustomerIdSchema, "params"), customer_has_bank_controller_1.getCustomerHasBankByCustomerIdController);
+router.get("/customer/:idCustomer", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getCustomerHasBankByCustomerIdSchema, "params"), customer_has_bank_controller_1.getCustomerHasBankByCustomerIdController);
 router.get("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getCustomerHasBankByIdSchema, "params"), customer_has_bank_controller_1.getCustomerHasBankByIdController);
 router.post("/", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(createCustomerHasBankSchema, "body"), customer_has_bank_controller_1.createCustomerHasBankController);
 router.delete("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getCustomerHasBankByIdSchema, "params"), customer_has_bank_controller_1.deleteCustomerHasBankController);
