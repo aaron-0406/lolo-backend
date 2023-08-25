@@ -61,8 +61,10 @@ class RoleService {
 
   async delete(id: string) {
     const role = await this.findOne(id);
+    await models.ROLE_PERMISSION.destroy({
+      where: { roleId: id },
+    });
     await role.destroy();
-
     return { id };
   }
 }
