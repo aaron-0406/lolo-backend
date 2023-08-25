@@ -10,7 +10,7 @@ export const getAllRoleByCustomerIdController = async (
 ) => {
   try {
     const roles = await service.findAllByCustomerId(
-      Number(req.query.customerId)
+      Number(req.params.customerId)
     );
     res.json(roles);
   } catch (error) {
