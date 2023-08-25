@@ -1,10 +1,14 @@
 import Joi from "joi";
-import { ChangePasswordType, LoginType } from "../types/auth.type";
+import { ChangeCredentialsType, ChangePasswordType, LoginType } from "../types/auth.type";
 
 const email = Joi.string().email().required();
 const password = Joi.string().required();
 const newPassword = Joi.string().required();
 const repeatPassword = Joi.string().required();
+const name = Joi.string().required();
+const lastname = Joi.string().required();
+const dni = Joi.string().required().max(8);
+const phone = Joi.string().required();
 const customerId = Joi.number().required().min(1);
 
 const loginSchema = Joi.object<LoginType>({
@@ -18,4 +22,11 @@ const changePasswordSchema = Joi.object<ChangePasswordType>({
   repeatPassword,
 }).options({ abortEarly: true });
 
-export default { loginSchema, changePasswordSchema };
+const changeCredentialsSchema = Joi.object<ChangeCredentialsType>({
+  name,
+  lastname,
+  dni,
+  phone,
+}).options({ abortEarly: true });
+
+export default { loginSchema, changePasswordSchema, changeCredentialsSchema };

@@ -1,6 +1,10 @@
 import { encryptPassword, matchPassword } from "../../../libs/bcrypt";
 import sequelize from "../../../libs/sequelize";
-import { ChangePasswordType, LoginType } from "../types/auth.type";
+import {
+  ChangeCredentialsType,
+  ChangePasswordType,
+  LoginType,
+} from "../types/auth.type";
 import boom from "@hapi/boom";
 const { models } = sequelize;
 
@@ -29,6 +33,14 @@ class AuthService {
     const password = await encryptPassword(newPassword);
     await models.CUSTOMER_USER.update(
       { password },
+      { where: { id: customerUserId } }
+    );
+  }
+
+  async changeCredentials(data: ChangeCredentialsType, customerUserId: number) {
+    const { dni, lastname, name, phone } = data;
+    await models.CUSTOMER_USER.update(
+      { dni, lastName:lastname, name, phone },
       { where: { id: customerUserId } }
     );
   }
