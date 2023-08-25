@@ -27,10 +27,11 @@ export const getRoleByIdController = async (
 ) => {
   try {
     const { id } = req.params;
-    const role = await service.findOne(id);
+    const roleModel = await service.findOne(id);
+    const { dataValues } = roleModel;
     const permissions = await servicePermission.findAllByRoleId(Number(id));
     const permissionsIds = permissions.map((item) => item.id);
-    res.json({ ...role, permissions: permissionsIds });
+    res.json({ ...dataValues, permissions: permissionsIds });
   } catch (error) {
     next(error);
   }
