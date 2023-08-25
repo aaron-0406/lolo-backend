@@ -22,7 +22,7 @@ class RoleService {
     if (!role) {
       throw boom.notFound("Rol no encontrado");
     }
-    return role;
+    return role.dataValues;
   }
 
   async create(data: RoleType, permissions: Array<number>) {

@@ -1,7 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import RoleService from "../../app/dash/services/role.service";
+import PermissionService from "../../app/dash/services/permission.service";
 
 const service = new RoleService();
+const servicePermission = new PermissionService();
 
 export const getAllRoleByCustomerIdController = async (
   req: Request,
@@ -26,7 +28,9 @@ export const getRoleByIdController = async (
   try {
     const { id } = req.params;
     const role = await service.findOne(id);
-    res.json(role);
+    const permissions = await servicePermission.findAllByRoleId(Number(id));
+    const permissionsIds = permissions.map((item) => item.id);
+    res.json({ ...role, permissions: permissionsIds });
   } catch (error) {
     next(error);
   }
