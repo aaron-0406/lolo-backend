@@ -19,7 +19,7 @@ const {
 const router = express.Router();
 
 router.get(
-  "/:customerId",
+  "/customer/:customerId",
   JWTAuth,
   validatorHandler(getAllRoleByCustomerIdSchema, "params"),
   getAllRoleByCustomerIdController
