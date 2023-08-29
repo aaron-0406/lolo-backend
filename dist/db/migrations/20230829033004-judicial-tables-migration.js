@@ -19,8 +19,10 @@ const judicial_subject_model_1 = __importDefault(require("../models/judicial-sub
 const judicial_court_model_1 = __importDefault(require("../models/judicial-court.model"));
 const judicial_procedural_way_model_1 = __importDefault(require("../models/judicial-procedural-way.model"));
 const client_model_1 = __importDefault(require("../models/client.model"));
+const customer_user_model_1 = __importDefault(require("../models/customer-user.model"));
 const { JUDICIAL_CASE_FILE_TABLE } = judicial_case_file_model_1.default;
 const { CLIENT_TABLE } = client_model_1.default;
+const { CUSTOMER_USER_TABLE } = customer_user_model_1.default;
 const { JUDICIAL_SUBJECT_TABLE } = judicial_subject_model_1.default;
 const { JUDICIAL_COURT_TABLE } = judicial_court_model_1.default;
 const { JUDICIAL_PROCEDURAL_WAY_TABLE } = judicial_procedural_way_model_1.default;
@@ -132,6 +134,15 @@ function up(queryInterface) {
                     key: "id_client",
                 },
             },
+            customerUserId: {
+                allowNull: false,
+                field: "customer_user_id_customer_user",
+                type: sequelize_1.DataTypes.INTEGER,
+                references: {
+                    model: CUSTOMER_USER_TABLE,
+                    key: "id_customer_user",
+                },
+            },
             judicialCourtId: {
                 allowNull: false,
                 field: "judicial_court_id_judicial_court",
@@ -167,6 +178,17 @@ function up(queryInterface) {
             references: {
                 table: CLIENT_TABLE,
                 field: "id_client",
+            },
+            onUpdate: "CASCADE",
+            onDelete: "NO ACTION",
+        });
+        yield queryInterface.addConstraint(JUDICIAL_CASE_FILE_TABLE, {
+            fields: ["customer_user_id_customer_user"],
+            type: "foreign key",
+            name: "fk_judicial_case_file_customer_user",
+            references: {
+                table: CUSTOMER_USER_TABLE,
+                field: "id_customer_user",
             },
             onUpdate: "CASCADE",
             onDelete: "NO ACTION",
@@ -210,6 +232,7 @@ exports.up = up;
 function down(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
         yield queryInterface.removeConstraint(JUDICIAL_CASE_FILE_TABLE, "fk_judicial_case_file_client");
+        yield queryInterface.removeConstraint(JUDICIAL_CASE_FILE_TABLE, "fk_judicial_case_file_customer_user");
         yield queryInterface.removeConstraint(JUDICIAL_CASE_FILE_TABLE, "fk_judicial_court_judicial_case_file");
         yield queryInterface.removeConstraint(JUDICIAL_CASE_FILE_TABLE, "fk_judicial_subject_judicial_case_file");
         yield queryInterface.removeConstraint(JUDICIAL_CASE_FILE_TABLE, "fk_judicial_procedural_way_judicial_case_file");

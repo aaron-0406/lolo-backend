@@ -2,11 +2,9 @@ import Joi from "joi";
 import { JudicialCaseFileType } from "../types/judicial-case-file.type";
 
 const id = Joi.number();
-const name = Joi.string().min(1).max(150);
-const phone = Joi.string().max(150);
-const email = Joi.string().max(150);
 const createdAt = Joi.date();
 const clientId = Joi.number();
+const customerUserId = Joi.number();
 
 const numberCaseFile = Joi.number();
 const judgmentNumber = Joi.number();
@@ -20,6 +18,7 @@ const demandDate = Joi.date();
 const judicialCourtId = Joi.number().positive();
 const judicialSubjectId = Joi.number().positive();
 const judicialProceduralWayId = Joi.number().positive();
+const amountDemandedDollars = Joi.number().positive();
 
 const createJudicialCaseFileSchema = Joi.object<
   Omit<JudicialCaseFileType, "id">,
@@ -29,6 +28,7 @@ const createJudicialCaseFileSchema = Joi.object<
   judgmentNumber: judgmentNumber.required(),
   secretary: secretary.required(),
   amountDemandedSoles: amountDemandedSoles.required(),
+  amountDemandedDollars: amountDemandedSoles.required(),
   cautionaryCode: cautionaryCode.required(),
   errandCode: errandCode.required(),
   judicialVenue: judicialVenue.required(),
@@ -39,6 +39,7 @@ const createJudicialCaseFileSchema = Joi.object<
   judicialProceduralWayId: judicialProceduralWayId.required(),
   createdAt: createdAt.optional(),
   clientId: clientId.required(),
+  customerUserId: customerUserId.required(),
 });
 
 const updateJudicialCaseFileSchema = Joi.object<
@@ -49,10 +50,12 @@ const updateJudicialCaseFileSchema = Joi.object<
   judgmentNumber: judgmentNumber.required(),
   secretary: secretary.required(),
   amountDemandedSoles: amountDemandedSoles.required(),
+  amountDemandedDollars: amountDemandedDollars.required(),
   cautionaryCode: cautionaryCode.required(),
   errandCode: errandCode.required(),
   judicialVenue: judicialVenue.required(),
   judge: judge.required(),
+  customerUserId: customerUserId.required(),
   demandDate: demandDate.required(),
   judicialCourtId: judicialCourtId.required(),
   judicialSubjectId: judicialSubjectId.required(),

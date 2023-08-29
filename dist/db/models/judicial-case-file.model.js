@@ -8,6 +8,7 @@ const client_model_1 = __importDefault(require("./client.model"));
 const judicial_court_model_1 = __importDefault(require("./judicial-court.model"));
 const judicial_procedural_way_model_1 = __importDefault(require("./judicial-procedural-way.model"));
 const judicial_subject_model_1 = __importDefault(require("./judicial-subject.model"));
+const customer_user_model_1 = __importDefault(require("./customer-user.model"));
 const JUDICIAL_CASE_FILE_TABLE = "JUDICIAL_CASE_FILE";
 const JudicialCaseFileSchema = {
     id: {
@@ -34,6 +35,11 @@ const JudicialCaseFileSchema = {
     amountDemandedSoles: {
         allowNull: true,
         field: "amount_demanded_soles",
+        type: sequelize_1.DataTypes.DECIMAL(10, 3),
+    },
+    amountDemandedDollars: {
+        allowNull: true,
+        field: "amount_demanded_dollars",
         type: sequelize_1.DataTypes.DECIMAL(10, 3),
     },
     cautionaryCode: {
@@ -73,6 +79,15 @@ const JudicialCaseFileSchema = {
         references: {
             model: client_model_1.default.CLIENT_TABLE,
             key: "id_client",
+        },
+    },
+    customerUserId: {
+        allowNull: false,
+        field: "customer_user_id_customer_user",
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: customer_user_model_1.default.CUSTOMER_USER_TABLE,
+            key: "id_customer_user",
         },
     },
     judicialCourtId: {

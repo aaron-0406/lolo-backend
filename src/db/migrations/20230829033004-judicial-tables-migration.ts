@@ -4,9 +4,11 @@ import judicialSubjectModel from "../models/judicial-subject.model";
 import judicialCourtModel from "../models/judicial-court.model";
 import judicialProceduralWayModel from "../models/judicial-procedural-way.model";
 import clientModel from "../models/client.model";
+import customerUserModel from "../models/customer-user.model";
 
 const { JUDICIAL_CASE_FILE_TABLE } = judicialCaseFileModel;
 const { CLIENT_TABLE } = clientModel;
+const { CUSTOMER_USER_TABLE } = customerUserModel;
 const { JUDICIAL_SUBJECT_TABLE } = judicialSubjectModel;
 const { JUDICIAL_COURT_TABLE } = judicialCourtModel;
 const { JUDICIAL_PROCEDURAL_WAY_TABLE } = judicialProceduralWayModel;
@@ -118,6 +120,15 @@ export async function up(queryInterface: QueryInterface) {
         key: "id_client",
       },
     },
+    customerUserId: {
+      allowNull: false,
+      field: "customer_user_id_customer_user",
+      type: DataTypes.INTEGER,
+      references: {
+        model: CUSTOMER_USER_TABLE,
+        key: "id_customer_user",
+      },
+    },
     judicialCourtId: {
       allowNull: false,
       field: "judicial_court_id_judicial_court",
@@ -153,6 +164,17 @@ export async function up(queryInterface: QueryInterface) {
     references: {
       table: CLIENT_TABLE,
       field: "id_client",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  });
+  await queryInterface.addConstraint(JUDICIAL_CASE_FILE_TABLE, {
+    fields: ["customer_user_id_customer_user"],
+    type: "foreign key",
+    name: "fk_judicial_case_file_customer_user",
+    references: {
+      table: CUSTOMER_USER_TABLE,
+      field: "id_customer_user",
     },
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
@@ -196,6 +218,10 @@ export async function down(queryInterface: QueryInterface) {
   await queryInterface.removeConstraint(
     JUDICIAL_CASE_FILE_TABLE,
     "fk_judicial_case_file_client"
+  );
+  await queryInterface.removeConstraint(
+    JUDICIAL_CASE_FILE_TABLE,
+    "fk_judicial_case_file_customer_user"
   );
   await queryInterface.removeConstraint(
     JUDICIAL_CASE_FILE_TABLE,

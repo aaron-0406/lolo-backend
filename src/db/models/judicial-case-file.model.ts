@@ -10,6 +10,7 @@ import clientModel from "./client.model";
 import judicialCourtModel from "./judicial-court.model";
 import judicialProceduralWayModel from "./judicial-procedural-way.model";
 import judicialSubjectModel from "./judicial-subject.model";
+import customerUserModel from "./customer-user.model";
 
 const JUDICIAL_CASE_FILE_TABLE = "JUDICIAL_CASE_FILE";
 
@@ -41,6 +42,11 @@ const JudicialCaseFileSchema: ModelAttributes<
   amountDemandedSoles: {
     allowNull: true,
     field: "amount_demanded_soles",
+    type: DataTypes.DECIMAL(10, 3),
+  },
+  amountDemandedDollars: {
+    allowNull: true,
+    field: "amount_demanded_dollars",
     type: DataTypes.DECIMAL(10, 3),
   },
   cautionaryCode: {
@@ -80,6 +86,15 @@ const JudicialCaseFileSchema: ModelAttributes<
     references: {
       model: clientModel.CLIENT_TABLE,
       key: "id_client",
+    },
+  },
+  customerUserId: {
+    allowNull: false,
+    field: "customer_user_id_customer_user",
+    type: DataTypes.INTEGER,
+    references: {
+      model: customerUserModel.CUSTOMER_USER_TABLE,
+      key: "id_customer_user",
     },
   },
   judicialCourtId: {
