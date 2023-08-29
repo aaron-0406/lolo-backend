@@ -30,6 +30,41 @@ class ManagementActionService {
     return rta;
   }
 
+  async findAllByCHBPaginated(chb: string, query: any) {
+    const { limit, page } = query;
+
+    const limite = parseInt(limit, 10);
+    const pagina = parseInt(page, 10);
+
+    const quantity = await models.CLIENT.count({
+      where: {
+        customer_has_bank_id_customer_has_bank: chb,
+      },
+    });
+
+    const pages = limit / quantity;
+    //agregar lógica para que no retorne un decimal, si no un número entero
+
+    const data = await models.MANAGEMENT_ACTION.findAll({
+      where: {
+        customer_has_bank_id_customer_has_bank: chb,
+      },
+      include: [
+        {
+          model: models.CUSTOMER_HAS_BANK,
+          as: "customerHasBank",
+        },
+      ],
+      order: [["id", "DES"]],
+      limit: limite,
+      offset: (pagina - 1) * limite,
+    });
+
+    if (!data) throw boom.notFound("Acción no encontrada");
+
+    return { data, quantity, pages };
+  }
+
   async findOne(id: string) {
     const managementAction = await models.MANAGEMENT_ACTION.findByPk(id);
 

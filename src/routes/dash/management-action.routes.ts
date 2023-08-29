@@ -8,6 +8,7 @@ import {
   getManagementActionByIdController,
   getManagementActionsController,
   updateManagementActionController,
+  getManagementActionByCHBControllerPaginated,
 } from "../../controllers/dash/management-action.controller";
 import { JWTAuth } from "../../middlewares/auth.handler";
 
@@ -16,10 +17,19 @@ const {
   getManagementActionByCHBSchema,
   createManagementActionSchema,
   updateManagementActionSchema,
+  getManagementActionByCHBSchemaQuery,
 } = managementActionSchema;
 const router = express.Router();
 
 router.get("/", JWTAuth, getManagementActionsController);
+
+router.get(
+  "/paginated/:chb",
+  JWTAuth,
+  validatorHandler(getManagementActionByCHBSchema, "params"),
+  validatorHandler(getManagementActionByCHBSchemaQuery, "query"),
+  getManagementActionByCHBControllerPaginated
+);
 
 router.get(
   "/all/:chb",
