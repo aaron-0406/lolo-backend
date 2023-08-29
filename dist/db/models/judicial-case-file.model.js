@@ -74,8 +74,6 @@ const JudicialCaseFileSchema = {
             model: client_model_1.default.CLIENT_TABLE,
             key: "id_client",
         },
-        onUpdate: "CASCADE",
-        onDelete: "NO ACTION",
     },
     judicialCourtId: {
         allowNull: false,
@@ -85,8 +83,6 @@ const JudicialCaseFileSchema = {
             model: judicial_court_model_1.default.JUDICIAL_COURT_TABLE,
             key: "id_judicial_court",
         },
-        onUpdate: "CASCADE",
-        onDelete: "NO ACTION",
     },
     judicialSubjectId: {
         allowNull: false,
@@ -96,19 +92,15 @@ const JudicialCaseFileSchema = {
             model: judicial_subject_model_1.default.JUDICIAL_SUBJECT_TABLE,
             key: "id_judicial_subject",
         },
-        onUpdate: "CASCADE",
-        onDelete: "NO ACTION",
     },
     judicialProceduralWayId: {
         allowNull: false,
-        field: "judicial_procedure_way_id_judicial_procedure_way",
+        field: "judicial_procedural_way_id_judicial_procedural_way",
         type: sequelize_1.DataTypes.INTEGER,
         references: {
             model: judicial_procedural_way_model_1.default.JUDICIAL_PROCEDURAL_WAY_TABLE,
-            key: "id_judicial_procedure_way",
+            key: "id_judicial_procedural_way",
         },
-        onUpdate: "CASCADE",
-        onDelete: "NO ACTION",
     },
 };
 class JudicialCaseFile extends sequelize_1.Model {

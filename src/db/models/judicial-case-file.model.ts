@@ -81,8 +81,6 @@ const JudicialCaseFileSchema: ModelAttributes<
       model: clientModel.CLIENT_TABLE,
       key: "id_client",
     },
-    onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
   },
   judicialCourtId: {
     allowNull: false,
@@ -92,8 +90,6 @@ const JudicialCaseFileSchema: ModelAttributes<
       model: judicialCourtModel.JUDICIAL_COURT_TABLE,
       key: "id_judicial_court",
     },
-    onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
   },
   judicialSubjectId: {
     allowNull: false,
@@ -103,19 +99,15 @@ const JudicialCaseFileSchema: ModelAttributes<
       model: judicialSubjectModel.JUDICIAL_SUBJECT_TABLE,
       key: "id_judicial_subject",
     },
-    onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
   },
   judicialProceduralWayId: {
     allowNull: false,
-    field: "judicial_procedure_way_id_judicial_procedure_way",
+    field: "judicial_procedural_way_id_judicial_procedural_way",
     type: DataTypes.INTEGER,
     references: {
       model: judicialProceduralWayModel.JUDICIAL_PROCEDURAL_WAY_TABLE,
-      key: "id_judicial_procedure_way",
+      key: "id_judicial_procedural_way",
     },
-    onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
   },
 };
 

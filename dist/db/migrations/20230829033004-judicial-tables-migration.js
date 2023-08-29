@@ -131,8 +131,6 @@ function up(queryInterface) {
                     model: CLIENT_TABLE,
                     key: "id_client",
                 },
-                onUpdate: "CASCADE",
-                onDelete: "NO ACTION",
             },
             judicialCourtId: {
                 allowNull: false,
@@ -142,8 +140,6 @@ function up(queryInterface) {
                     model: JUDICIAL_COURT_TABLE,
                     key: "id_judicial_court",
                 },
-                onUpdate: "CASCADE",
-                onDelete: "NO ACTION",
             },
             judicialSubjectId: {
                 allowNull: false,
@@ -153,25 +149,21 @@ function up(queryInterface) {
                     model: JUDICIAL_SUBJECT_TABLE,
                     key: "id_judicial_subject",
                 },
-                onUpdate: "CASCADE",
-                onDelete: "NO ACTION",
             },
             judicialProceduralWayId: {
                 allowNull: false,
-                field: "judicial_procedure_way_id_judicial_procedure_way",
+                field: "judicial_procedural_way_id_judicial_procedural_way",
                 type: sequelize_1.DataTypes.INTEGER,
                 references: {
                     model: JUDICIAL_PROCEDURAL_WAY_TABLE,
-                    key: "id_judicial_procedure_way",
+                    key: "id_judicial_procedural_way",
                 },
-                onUpdate: "CASCADE",
-                onDelete: "NO ACTION",
             },
         });
         yield queryInterface.addConstraint(JUDICIAL_CASE_FILE_TABLE, {
             fields: ["client_id_client"],
             type: "foreign key",
-            name: "fk_client_id_client",
+            name: "fk_judicial_case_file_client",
             references: {
                 table: CLIENT_TABLE,
                 field: "id_client",
@@ -182,7 +174,7 @@ function up(queryInterface) {
         yield queryInterface.addConstraint(JUDICIAL_CASE_FILE_TABLE, {
             fields: ["judicial_court_id_judicial_court"],
             type: "foreign key",
-            name: "fk_judicial_court_id_judicial_court",
+            name: "fk_judicial_court_judicial_case_file",
             references: {
                 table: JUDICIAL_COURT_TABLE,
                 field: "id_judicial_court",
@@ -193,7 +185,7 @@ function up(queryInterface) {
         yield queryInterface.addConstraint(JUDICIAL_CASE_FILE_TABLE, {
             fields: ["judicial_subject_id_judicial_subject"],
             type: "foreign key",
-            name: "fk_judicial_subject_id_judicial_subject",
+            name: "fk_judicial_subject_judicial_case_file",
             references: {
                 table: JUDICIAL_SUBJECT_TABLE,
                 field: "id_judicial_subject",
@@ -204,7 +196,7 @@ function up(queryInterface) {
         yield queryInterface.addConstraint(JUDICIAL_CASE_FILE_TABLE, {
             fields: ["judicial_procedural_way_id_judicial_procedural_way"],
             type: "foreign key",
-            name: "fk_judicial_procedural_way_id_judicial_procedural_way",
+            name: "fk_judicial_procedural_way_judicial_case_file",
             references: {
                 table: JUDICIAL_PROCEDURAL_WAY_TABLE,
                 field: "id_judicial_procedural_way",
@@ -217,10 +209,10 @@ function up(queryInterface) {
 exports.up = up;
 function down(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield queryInterface.removeConstraint(JUDICIAL_CASE_FILE_TABLE, "fk_client_id_client");
-        yield queryInterface.removeConstraint(JUDICIAL_CASE_FILE_TABLE, "fk_judicial_court_id_judicial_court");
-        yield queryInterface.removeConstraint(JUDICIAL_CASE_FILE_TABLE, "fk_judicial_subject_id_judicial_subject");
-        yield queryInterface.removeConstraint(JUDICIAL_CASE_FILE_TABLE, "fk_judicial_procedural_way_id_judicial_procedural_way");
+        yield queryInterface.removeConstraint(JUDICIAL_CASE_FILE_TABLE, "fk_judicial_case_file_client");
+        yield queryInterface.removeConstraint(JUDICIAL_CASE_FILE_TABLE, "fk_judicial_court_judicial_case_file");
+        yield queryInterface.removeConstraint(JUDICIAL_CASE_FILE_TABLE, "fk_judicial_subject_judicial_case_file");
+        yield queryInterface.removeConstraint(JUDICIAL_CASE_FILE_TABLE, "fk_judicial_procedural_way_judicial_case_file");
         yield queryInterface.dropTable(JUDICIAL_SUBJECT_TABLE);
         yield queryInterface.dropTable(JUDICIAL_PROCEDURAL_WAY_TABLE);
         yield queryInterface.dropTable(JUDICIAL_COURT_TABLE);

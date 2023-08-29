@@ -117,8 +117,6 @@ export async function up(queryInterface: QueryInterface) {
         model: CLIENT_TABLE,
         key: "id_client",
       },
-      onUpdate: "CASCADE",
-      onDelete: "NO ACTION",
     },
     judicialCourtId: {
       allowNull: false,
@@ -128,8 +126,6 @@ export async function up(queryInterface: QueryInterface) {
         model: JUDICIAL_COURT_TABLE,
         key: "id_judicial_court",
       },
-      onUpdate: "CASCADE",
-      onDelete: "NO ACTION",
     },
     judicialSubjectId: {
       allowNull: false,
@@ -139,25 +135,21 @@ export async function up(queryInterface: QueryInterface) {
         model: JUDICIAL_SUBJECT_TABLE,
         key: "id_judicial_subject",
       },
-      onUpdate: "CASCADE",
-      onDelete: "NO ACTION",
     },
     judicialProceduralWayId: {
       allowNull: false,
-      field: "judicial_procedure_way_id_judicial_procedure_way",
+      field: "judicial_procedural_way_id_judicial_procedural_way",
       type: DataTypes.INTEGER,
       references: {
         model: JUDICIAL_PROCEDURAL_WAY_TABLE,
-        key: "id_judicial_procedure_way",
+        key: "id_judicial_procedural_way",
       },
-      onUpdate: "CASCADE",
-      onDelete: "NO ACTION",
     },
   });
   await queryInterface.addConstraint(JUDICIAL_CASE_FILE_TABLE, {
     fields: ["client_id_client"],
     type: "foreign key",
-    name: "fk_client_id_client",
+    name: "fk_judicial_case_file_client",
     references: {
       table: CLIENT_TABLE,
       field: "id_client",
@@ -168,7 +160,7 @@ export async function up(queryInterface: QueryInterface) {
   await queryInterface.addConstraint(JUDICIAL_CASE_FILE_TABLE, {
     fields: ["judicial_court_id_judicial_court"],
     type: "foreign key",
-    name: "fk_judicial_court_id_judicial_court",
+    name: "fk_judicial_court_judicial_case_file",
     references: {
       table: JUDICIAL_COURT_TABLE,
       field: "id_judicial_court",
@@ -179,7 +171,7 @@ export async function up(queryInterface: QueryInterface) {
   await queryInterface.addConstraint(JUDICIAL_CASE_FILE_TABLE, {
     fields: ["judicial_subject_id_judicial_subject"],
     type: "foreign key",
-    name: "fk_judicial_subject_id_judicial_subject",
+    name: "fk_judicial_subject_judicial_case_file",
     references: {
       table: JUDICIAL_SUBJECT_TABLE,
       field: "id_judicial_subject",
@@ -190,7 +182,7 @@ export async function up(queryInterface: QueryInterface) {
   await queryInterface.addConstraint(JUDICIAL_CASE_FILE_TABLE, {
     fields: ["judicial_procedural_way_id_judicial_procedural_way"],
     type: "foreign key",
-    name: "fk_judicial_procedural_way_id_judicial_procedural_way",
+    name: "fk_judicial_procedural_way_judicial_case_file",
     references: {
       table: JUDICIAL_PROCEDURAL_WAY_TABLE,
       field: "id_judicial_procedural_way",
@@ -203,19 +195,19 @@ export async function up(queryInterface: QueryInterface) {
 export async function down(queryInterface: QueryInterface) {
   await queryInterface.removeConstraint(
     JUDICIAL_CASE_FILE_TABLE,
-    "fk_client_id_client"
+    "fk_judicial_case_file_client"
   );
   await queryInterface.removeConstraint(
     JUDICIAL_CASE_FILE_TABLE,
-    "fk_judicial_court_id_judicial_court"
+    "fk_judicial_court_judicial_case_file"
   );
   await queryInterface.removeConstraint(
     JUDICIAL_CASE_FILE_TABLE,
-    "fk_judicial_subject_id_judicial_subject"
+    "fk_judicial_subject_judicial_case_file"
   );
   await queryInterface.removeConstraint(
     JUDICIAL_CASE_FILE_TABLE,
-    "fk_judicial_procedural_way_id_judicial_procedural_way"
+    "fk_judicial_procedural_way_judicial_case_file"
   );
   await queryInterface.dropTable(JUDICIAL_SUBJECT_TABLE);
   await queryInterface.dropTable(JUDICIAL_PROCEDURAL_WAY_TABLE);
