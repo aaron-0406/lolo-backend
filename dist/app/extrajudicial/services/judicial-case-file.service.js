@@ -15,68 +15,56 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = __importDefault(require("../../../libs/sequelize"));
 const boom_1 = __importDefault(require("@hapi/boom"));
 const { models } = sequelize_1.default;
-class RoleService {
+class JudicialCaseFileService {
     constructor() { }
-    findAllByCustomerId(customerId) {
+    findAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.ROLE.findAll({
+            const rta = yield models.JUDICIAL_CASE_FILE.findAll();
+            return rta;
+        });
+    }
+    findAllByClient(clientId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rta = yield models.JUDICIAL_CASE_FILE.findAll({
                 where: {
-                    customerId,
+                    clientId,
                 },
             });
             return rta;
         });
     }
-    findOne(id) {
+    findByID(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const role = yield models.ROLE.findByPk(id);
-            if (!role) {
-                throw boom_1.default.notFound("Rol no encontrado");
-            }
-            return role;
-        });
-    }
-    create(data, permissions) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const newRole = yield models.ROLE.create(data);
-            for (let i = 0; i < permissions.length; i++) {
-                const element = permissions[i];
-                yield models.ROLE_PERMISSION.create({
-                    roleId: newRole.dataValues.id,
-                    permissionId: element,
-                });
-            }
-            return newRole;
-        });
-    }
-    update(id, changes, permissions) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const role = yield this.findOne(id);
-            const rta = yield role.update(changes);
-            yield models.ROLE_PERMISSION.destroy({
+            const judicialCaseFile = yield models.JUDICIAL_CASE_FILE.findOne({
                 where: {
-                    roleId: role.dataValues.id,
+                    id,
                 },
             });
-            for (let i = 0; i < permissions.length; i++) {
-                const element = permissions[i];
-                yield models.ROLE_PERMISSION.create({
-                    roleId: role.dataValues.id,
-                    permissionId: element,
-                });
+            if (!judicialCaseFile) {
+                throw boom_1.default.notFound("Expediente no encontrado");
             }
+            return judicialCaseFile;
+        });
+    }
+    create(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const newJudicialCaseFile = yield models.JUDICIAL_CASE_FILE.create(data);
+            return newJudicialCaseFile;
+        });
+    }
+    update(id, changes) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const judicialCaseFile = yield this.findByID(id);
+            const rta = yield judicialCaseFile.update(changes);
             return rta;
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const role = yield this.findOne(id);
-            yield models.ROLE_PERMISSION.destroy({
-                where: { roleId: id },
-            });
-            yield role.destroy();
+            const client = yield this.findByID(id);
+            yield client.destroy();
             return { id };
         });
     }
 }
-exports.default = RoleService;
+exports.default = JudicialCaseFileService;

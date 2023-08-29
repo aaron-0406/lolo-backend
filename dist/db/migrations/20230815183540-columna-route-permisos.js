@@ -21,6 +21,7 @@ function up(queryInterface) {
         yield queryInterface.addColumn(PERMISSION_TABLE, "link", {
             type: sequelize_1.DataTypes.STRING(150),
             allowNull: true,
+            defaultValue: "#",
         });
     });
 }

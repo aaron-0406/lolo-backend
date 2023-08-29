@@ -18,9 +18,15 @@ const helpers_1 = require("../../libs/helpers");
 const service = new permission_service_1.default();
 const getAllPermissionController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const permissions = yield service.findAll();
-        const tree = (0, helpers_1.buildTree)(permissions, 3);
-        res.json(tree);
+        const { code } = req.query;
+        const permissions = yield service.findAll(code ? String(code) : undefined);
+        const tree = (0, helpers_1.buildTree)(permissions, code ? String(code).length : 3);
+        if (code) {
+            res.json(tree[0].permissions);
+        }
+        else {
+            res.json(tree);
+        }
     }
     catch (error) {
         next(error);
