@@ -8,8 +8,8 @@ export const getJudicialCaseFileController = async (
   next: NextFunction
 ) => {
   try {
-    const guarantors = await service.findAll();
-    res.json(guarantors);
+    const caseFiles = await service.findAll();
+    res.json(caseFiles);
   } catch (error) {
     next(error);
   }
@@ -22,8 +22,22 @@ export const getJudicialCaseFileByClientIdController = async (
 ) => {
   try {
     const { clientId } = req.params;
-    const guarantors = await service.findAllByClient(clientId);
-    res.json(guarantors);
+    const caseFiles = await service.findAllByClient(clientId);
+    res.json(caseFiles);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getJudicialCaseFileByNumberCaseFileController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { code } = req.params;
+    const caseFile = await service.findByNumberCaseFile(code);
+    res.json(caseFile);
   } catch (error) {
     next(error);
   }
@@ -36,8 +50,8 @@ export const getJudicialCaseFileByIdController = async (
 ) => {
   try {
     const { id } = req.params;
-    const guarantor = await service.findByID(id);
-    res.json(guarantor);
+    const caseFile = await service.findByID(id);
+    res.json(caseFile);
   } catch (error) {
     next(error);
   }
@@ -65,8 +79,8 @@ export const updateJudicialCaseFileController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const guarantor = await service.update(id, body);
-    res.json(guarantor);
+    const caseFile = await service.update(id, body);
+    res.json(caseFile);
   } catch (error) {
     next(error);
   }

@@ -14,6 +14,7 @@ import { JWTAuth } from "../../middlewares/auth.handler";
 const {
   getJudicialCaseFileByClientIDSchema,
   getJudicialCaseFileByIDSchema,
+  getJudicialCaseFileByNumberCaseFileSchema,
   createJudicialCaseFileSchema,
   updateJudicialCaseFileSchema,
 } = judicialCaseFileSchema;
@@ -27,6 +28,13 @@ router.get(
   JWTAuth,
   validatorHandler(getJudicialCaseFileByClientIDSchema, "params"),
   getJudicialCaseFileByClientIdController
+);
+
+router.get(
+  "/case-file/:id",
+  JWTAuth,
+  validatorHandler(getJudicialCaseFileByNumberCaseFileSchema, "params"),
+  getJudicialCaseFileByIdController
 );
 
 router.get(

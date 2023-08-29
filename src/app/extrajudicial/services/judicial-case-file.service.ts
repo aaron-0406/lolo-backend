@@ -34,6 +34,19 @@ class JudicialCaseFileService {
     return judicialCaseFile;
   }
 
+  async findByNumberCaseFile(numberCaseFile: string) {
+    const judicialCaseFile = await models.JUDICIAL_CASE_FILE.findOne({
+      where: {
+        numberCaseFile,
+      },
+    });
+
+    if (!judicialCaseFile) {
+      throw boom.notFound("Expediente no encontrado");
+    }
+    return judicialCaseFile;
+  }
+
   async create(data: JudicialCaseFileType) {
     const newJudicialCaseFile = await models.JUDICIAL_CASE_FILE.create(data);
     return newJudicialCaseFile;
