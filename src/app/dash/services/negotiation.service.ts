@@ -27,6 +27,40 @@ class NegotiationService {
     return rta;
   }
 
+  async findAllByCHBPaginated(chb: string, query: any) {
+    const { limit, page } = query;
+
+    const limite = parseInt(limit, 10);
+    const pagina = parseInt(page, 10);
+
+    const quantity = await models.NEGOTIATION.count({
+      where: {
+        customer_has_bank_id_customer_has_bank: chb,
+      },
+    });
+
+    const numberPages = Math.ceil(quantity / limit);
+
+    const data = await models.NEGOTIATION.findAll({
+      where: {
+        customer_has_bank_id_customer_has_bank: chb,
+      },
+      include: [
+        {
+          model: models.CUSTOMER_HAS_BANK,
+          as: "customerHasBank",
+        },
+      ],
+      order: [["id", "DESC"]],
+      limit: limite,
+      offset: (pagina - 1) * limite,
+    });
+
+    if (!data) throw boom.notFound("Negociación no encontrada");
+
+    return { data, quantity, numberPages };
+  }
+
   async findOne(id: string) {
     const negotiation = await models.NEGOTIATION.findByPk(id);
 

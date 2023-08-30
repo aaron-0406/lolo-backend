@@ -22,11 +22,11 @@ export const getManagementActionByCHBControllerPaginated = async (
 ) => {
   try {
     const { chb } = req.params;
-    const { data, quantity, pages } = await service.findAllByCHBPaginated(
+    const { data, quantity, numberPages } = await service.findAllByCHBPaginated(
       chb,
       req.query
     );
-    res.json({ data, quantity, pages });
+    res.json({ data, quantity, numberPages });
   } catch (error) {
     next(error);
   }

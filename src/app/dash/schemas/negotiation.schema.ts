@@ -6,6 +6,16 @@ const name = Joi.string().min(1).max(200);
 const createAt = Joi.date();
 const customerHasBankId = Joi.number();
 
+const page = Joi.number().required().messages({
+  "number.base": "El campo page es inválido",
+  "any.required": "El campo page es requerido.",
+});
+
+const limit = Joi.number().required().messages({
+  "number.base": "El campo limit es inválido",
+  "any.required": "El campo limit es requerido.",
+});
+
 const createNegotiationSchema = Joi.object<Omit<NegotiationType, "id">, true>({
   name: name.required(),
   createdAt: createAt.optional(),
@@ -26,9 +36,15 @@ const getNegotiationByCHBSchema = Joi.object<{ chb: number }, true>({
   chb: id.required(),
 });
 
+const getNegotiationByCHBSchemaQuery = Joi.object({
+  page,
+  limit,
+}).options({ abortEarly: true });
+
 export default {
   createNegotiationSchema,
   updateNegotiationSchema,
   getNegotiationSchema,
   getNegotiationByCHBSchema,
+  getNegotiationByCHBSchemaQuery
 };

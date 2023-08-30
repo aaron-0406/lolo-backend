@@ -36,14 +36,13 @@ class ManagementActionService {
     const limite = parseInt(limit, 10);
     const pagina = parseInt(page, 10);
 
-    const quantity = await models.CLIENT.count({
+    const quantity = await models.MANAGEMENT_ACTION.count({
       where: {
         customer_has_bank_id_customer_has_bank: chb,
       },
     });
 
-    const pages = limit / quantity;
-    //agregar lógica para que no retorne un decimal, si no un número entero
+    const numberPages = Math.ceil(quantity / limit);
 
     const data = await models.MANAGEMENT_ACTION.findAll({
       where: {
@@ -55,14 +54,14 @@ class ManagementActionService {
           as: "customerHasBank",
         },
       ],
-      order: [["id", "DES"]],
+      order: [["id", "DESC"]],
       limit: limite,
       offset: (pagina - 1) * limite,
     });
 
     if (!data) throw boom.notFound("Acción no encontrada");
 
-    return { data, quantity, pages };
+    return { data, quantity, numberPages };
   }
 
   async findOne(id: string) {

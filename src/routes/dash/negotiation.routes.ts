@@ -7,6 +7,7 @@ import {
   getNegotiationsByCHBController,
   getNegotiationsByIdController,
   getNegotiationsController,
+  getNegotiationsByCHBControllerPaginated,
   updateNegotiationController,
 } from "../../controllers/dash/negotiation.controller";
 import { JWTAuth } from "../../middlewares/auth.handler";
@@ -16,10 +17,19 @@ const {
   getNegotiationByCHBSchema,
   createNegotiationSchema,
   updateNegotiationSchema,
+  getNegotiationByCHBSchemaQuery,
 } = negotiationSchema;
 const router = express.Router();
 
 router.get("/", JWTAuth, getNegotiationsController);
+
+router.get(
+  "/paginated/:chb",
+  JWTAuth,
+  validatorHandler(getNegotiationByCHBSchema, "params"),
+  validatorHandler(getNegotiationByCHBSchemaQuery, "query"),
+  getNegotiationsByCHBControllerPaginated
+);
 
 router.get(
   "/all/:chb",
