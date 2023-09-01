@@ -5,7 +5,7 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { JudicialCaseFileType } from "../../app/extrajudicial/types/judicial-case-file.type";
+import { JudicialCaseFileType } from "../../app/judicial/types/judicial-case-file.type";
 import clientModel from "./client.model";
 import judicialCourtModel from "./judicial-court.model";
 import judicialProceduralWayModel from "./judicial-procedural-way.model";

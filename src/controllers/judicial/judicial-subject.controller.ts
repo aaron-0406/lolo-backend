@@ -1,64 +1,65 @@
 import { Request, Response, NextFunction } from "express";
-import JudicialCourtService from "../../app/extrajudicial/services/judicial-court.service";
-const service = new JudicialCourtService();
+import JudicialSubjectService from "../../app/judicial/services/judicial-subject.service";
+const service = new JudicialSubjectService();
 
-export const getJudicialCourtController = async (
+export const getJudicialSubjectController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const judicialCourts = await service.findAll();
-    res.json(judicialCourts);
+    const judicialSubjects = await service.findAll();
+    res.json(judicialSubjects);
   } catch (error) {
     next(error);
   }
 };
 
-export const getJudicialCourtByIdController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id } = req.params;
-    const judicialCourt = await service.findByID(id);
-    res.json(judicialCourt);
-  } catch (error) {
-    next(error);
-  }
-};
 
-export const createJudicialCourtController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const body = req.body;
-    const newJudicialCourt = await service.create(body);
-    res.status(201).json(newJudicialCourt);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const updateJudicialCourtController = async (
+export const getJudicialSubjectByIdController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { id } = req.params;
-    const body = req.body;
-    const judicialCourt = await service.update(id, body);
-    res.json(judicialCourt);
+    const judicialSubject = await service.findByID(id);
+    res.json(judicialSubject);
   } catch (error) {
     next(error);
   }
 };
 
-export const deleteJudicialCourtController = async (
+export const createJudicialSubjectController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const body = req.body;
+    const newJudicialSubject = await service.create(body);
+    res.status(201).json(newJudicialSubject);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateJudicialSubjectController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const judicialSubject = await service.update(id, body);
+    res.json(judicialSubject);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteJudicialSubjectController = async (
   req: Request,
   res: Response,
   next: NextFunction

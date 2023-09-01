@@ -1,13 +1,13 @@
 import express from "express";
 import validatorHandler from "../../middlewares/validator.handler";
-import judicialCourtSchema from "../../app/extrajudicial/schemas/judicial-court.schema";
+import judicialCourtSchema from "../../app/judicial/schemas/judicial-court.schema";
 import {
   createJudicialCourtController,
   deleteJudicialCourtController,
   getJudicialCourtByIdController,
   getJudicialCourtController,
   updateJudicialCourtController,
-} from "../../controllers/extrajudicial/judicial-court.controller";
+} from "../../controllers/judicial/judicial-court.controller";
 import { JWTAuth } from "../../middlewares/auth.handler";
 
 const {

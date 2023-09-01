@@ -1,13 +1,13 @@
 import express from "express";
 import validatorHandler from "../../middlewares/validator.handler";
-import judicialProceduralWaySchema from "../../app/extrajudicial/schemas/judicial-procedural-way.schema";
+import judicialProceduralWaySchema from "../../app/judicial/schemas/judicial-procedural-way.schema";
 import {
   createJudicialProceduralWayController,
   deleteJudicialProceduralWayController,
   getJudicialProceduralWayByIdController,
   getJudicialProceduralWayController,
   updateJudicialProceduralWayController,
-} from "../../controllers/extrajudicial/judicial-procedural-way.controller";
+} from "../../controllers/judicial/judicial-procedural-way.controller";
 import { JWTAuth } from "../../middlewares/auth.handler";
 
 const {

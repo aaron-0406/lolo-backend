@@ -5,7 +5,7 @@ import {
     ModelAttributes,
     ModelCtor,
   } from "sequelize";
-  import { JudicialProceduralWayType } from "../../app/extrajudicial/types/judicial-procedural-way.type";
+  import { JudicialProceduralWayType } from "../../app/judicial/types/judicial-procedural-way.type";
   
   const JUDICIAL_PROCEDURAL_WAY_TABLE = "JUDICIAL_PROCEDURAL_WAY";
   

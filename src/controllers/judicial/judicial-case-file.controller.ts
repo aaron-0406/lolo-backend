@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import JudicialCaseFileService from "../../app/extrajudicial/services/judicial-case-file.service";
+import JudicialCaseFileService from "../../app/judicial/services/judicial-case-file.service";
 const service = new JudicialCaseFileService();
 
 export const getJudicialCaseFileController = async (

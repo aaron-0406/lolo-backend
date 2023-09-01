@@ -5,7 +5,7 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { JudicialCourtType } from "../../app/extrajudicial/types/judicial-court.type";
+import { JudicialCourtType } from "../../app/judicial/types/judicial-court.type";
 
 const JUDICIAL_COURT_TABLE = "JUDICIAL_COURT";
 
