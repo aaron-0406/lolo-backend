@@ -11,6 +11,12 @@ class JudicialCourtService {
     const rta = await models.JUDICIAL_COURT.findAll();
     return rta;
   }
+  async findAllByCHB(chb: number) {
+    const rta = await models.JUDICIAL_COURT.findAll({
+      where: { customerHasBankId: { chb } },
+    });
+    return rta;
+  }
 
   async findByID(id: string) {
     const judicialCourt = await models.JUDICIAL_COURT.findOne({

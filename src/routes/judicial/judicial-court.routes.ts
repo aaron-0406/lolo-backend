@@ -4,6 +4,7 @@ import judicialCourtSchema from "../../app/judicial/schemas/judicial-court.schem
 import {
   createJudicialCourtController,
   deleteJudicialCourtController,
+  getJudicialCourtByCHBController,
   getJudicialCourtByIdController,
   getJudicialCourtController,
   updateJudicialCourtController,
@@ -14,11 +15,18 @@ const {
   getJudicialCourtByIDSchema,
   createJudicialCourtSchema,
   updateJudicialCourtSchema,
+  getJudicialCourtByCHBSchema,
 } = judicialCourtSchema;
 
 const router = express.Router();
 
-router.get("/", JWTAuth, getJudicialCourtController);
+// router.get("/", JWTAuth, getJudicialCourtController);
+router.get(
+  "/",
+  JWTAuth,
+  validatorHandler(getJudicialCourtByCHBSchema, "query"),
+  getJudicialCourtByCHBController
+);
 
 router.get(
   "/:id",

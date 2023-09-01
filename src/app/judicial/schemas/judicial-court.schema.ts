@@ -24,8 +24,13 @@ const getJudicialCourtByIDSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
 
+const getJudicialCourtByCHBSchema = Joi.object<{ chb: number }, true>({
+  chb: id.required(),
+});
+
 export default {
   createJudicialCourtSchema,
   updateJudicialCourtSchema,
+  getJudicialCourtByCHBSchema,
   getJudicialCourtByIDSchema,
 };

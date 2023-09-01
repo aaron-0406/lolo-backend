@@ -14,6 +14,18 @@ export const getJudicialCourtController = async (
     next(error);
   }
 };
+export const getJudicialCourtByCHBController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const judicialCourts = await service.findAllByCHB(Number(req.query.chb));
+    res.json(judicialCourts);
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const getJudicialCourtByIdController = async (
   req: Request,

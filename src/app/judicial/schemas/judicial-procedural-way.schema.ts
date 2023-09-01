@@ -24,7 +24,12 @@ const getJudicialProceduralWayByIDSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
 
+const getJudicialProcedurakWayByCHBSchema = Joi.object<{ chb: number }, true>({
+  chb: id.required(),
+});
+
 export default {
+  getJudicialProcedurakWayByCHBSchema,
   createJudicialProceduralWaySchema,
   updateJudicialProceduralWaySchema,
   getJudicialProceduralWayByIDSchema,

@@ -4,6 +4,7 @@ import judicialProceduralWaySchema from "../../app/judicial/schemas/judicial-pro
 import {
   createJudicialProceduralWayController,
   deleteJudicialProceduralWayController,
+  getJudicialProceduralWayByCHBController,
   getJudicialProceduralWayByIdController,
   getJudicialProceduralWayController,
   updateJudicialProceduralWayController,
@@ -14,11 +15,18 @@ const {
   getJudicialProceduralWayByIDSchema,
   createJudicialProceduralWaySchema,
   updateJudicialProceduralWaySchema,
+  getJudicialProcedurakWayByCHBSchema,
 } = judicialProceduralWaySchema;
 
 const router = express.Router();
 
-router.get("/", JWTAuth, getJudicialProceduralWayController);
+// router.get("/", JWTAuth, getJudicialProceduralWayController);
+router.get(
+  "/",
+  JWTAuth,
+  validatorHandler(getJudicialProcedurakWayByCHBSchema, "query"),
+  getJudicialProceduralWayByCHBController
+);
 
 router.get(
   "/:id",

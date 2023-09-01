@@ -11,6 +11,12 @@ class JudicialProceduralWayService {
     const rta = await models.JUDICIAL_PROCEDURAL_WAY.findAll();
     return rta;
   }
+  async findAllByCHB(chb: number) {
+    const rta = await models.JUDICIAL_PROCEDURAL_WAY.findAll({
+      where: { customerHasBankId: { chb } },
+    });
+    return rta;
+  }
 
   async findByID(id: string) {
     const judicialProceduralWay = await models.JUDICIAL_PROCEDURAL_WAY.findOne({

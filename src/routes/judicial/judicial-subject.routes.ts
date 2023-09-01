@@ -14,11 +14,18 @@ const {
   getJudicialSubjectByIDSchema,
   createJudicialSubjectSchema,
   updateJudicialSubjectSchema,
+  getJudicialSubjectByCHBSchema,
 } = judicialSubjectSchema;
 
 const router = express.Router();
 
-router.get("/", JWTAuth, getJudicialSubjectController);
+// router.get("/", JWTAuth, getJudicialSubjectController);
+router.get(
+  "/",
+  JWTAuth,
+  validatorHandler(getJudicialSubjectByCHBSchema, "query"),
+  getJudicialSubjectController
+);
 
 router.get(
   "/:id",

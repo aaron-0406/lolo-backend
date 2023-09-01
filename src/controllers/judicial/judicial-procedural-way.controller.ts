@@ -14,6 +14,20 @@ export const getJudicialProceduralWayController = async (
     next(error);
   }
 };
+export const getJudicialProceduralWayByCHBController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const judicialProceduralWays = await service.findAllByCHB(
+      Number(req.query.chb)
+    );
+    res.json(judicialProceduralWays);
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const getJudicialProceduralWayByIdController = async (
   req: Request,
