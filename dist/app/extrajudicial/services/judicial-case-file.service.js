@@ -46,6 +46,19 @@ class JudicialCaseFileService {
             return judicialCaseFile;
         });
     }
+    findByNumberCaseFile(numberCaseFile) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const judicialCaseFile = yield models.JUDICIAL_CASE_FILE.findOne({
+                where: {
+                    numberCaseFile,
+                },
+            });
+            if (!judicialCaseFile) {
+                throw boom_1.default.notFound("Expediente no encontrado");
+            }
+            return judicialCaseFile;
+        });
+    }
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const newJudicialCaseFile = yield models.JUDICIAL_CASE_FILE.create(data);

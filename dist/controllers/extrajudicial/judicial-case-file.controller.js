@@ -12,13 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteJudicialCaseFileController = exports.updateJudicialCaseFileController = exports.createJudicialCaseFileController = exports.getJudicialCaseFileByIdController = exports.getJudicialCaseFileByClientIdController = exports.getJudicialCaseFileController = void 0;
+exports.deleteJudicialCaseFileController = exports.updateJudicialCaseFileController = exports.createJudicialCaseFileController = exports.getJudicialCaseFileByIdController = exports.getJudicialCaseFileByNumberCaseFileController = exports.getJudicialCaseFileByClientIdController = exports.getJudicialCaseFileController = void 0;
 const judicial_case_file_service_1 = __importDefault(require("../../app/extrajudicial/services/judicial-case-file.service"));
 const service = new judicial_case_file_service_1.default();
 const getJudicialCaseFileController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const guarantors = yield service.findAll();
-        res.json(guarantors);
+        const caseFiles = yield service.findAll();
+        res.json(caseFiles);
     }
     catch (error) {
         next(error);
@@ -28,19 +28,30 @@ exports.getJudicialCaseFileController = getJudicialCaseFileController;
 const getJudicialCaseFileByClientIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { clientId } = req.params;
-        const guarantors = yield service.findAllByClient(clientId);
-        res.json(guarantors);
+        const caseFiles = yield service.findAllByClient(clientId);
+        res.json(caseFiles);
     }
     catch (error) {
         next(error);
     }
 });
 exports.getJudicialCaseFileByClientIdController = getJudicialCaseFileByClientIdController;
+const getJudicialCaseFileByNumberCaseFileController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { code } = req.params;
+        const caseFile = yield service.findByNumberCaseFile(code);
+        res.json(caseFile);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.getJudicialCaseFileByNumberCaseFileController = getJudicialCaseFileByNumberCaseFileController;
 const getJudicialCaseFileByIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
-        const guarantor = yield service.findByID(id);
-        res.json(guarantor);
+        const caseFile = yield service.findByID(id);
+        res.json(caseFile);
     }
     catch (error) {
         next(error);
@@ -62,8 +73,8 @@ const updateJudicialCaseFileController = (req, res, next) => __awaiter(void 0, v
     try {
         const { id } = req.params;
         const body = req.body;
-        const guarantor = yield service.update(id, body);
-        res.json(guarantor);
+        const caseFile = yield service.update(id, body);
+        res.json(caseFile);
     }
     catch (error) {
         next(error);
