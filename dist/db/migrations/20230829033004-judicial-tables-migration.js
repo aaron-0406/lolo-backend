@@ -20,12 +20,14 @@ const judicial_court_model_1 = __importDefault(require("../models/judicial-court
 const judicial_procedural_way_model_1 = __importDefault(require("../models/judicial-procedural-way.model"));
 const client_model_1 = __importDefault(require("../models/client.model"));
 const customer_user_model_1 = __importDefault(require("../models/customer-user.model"));
+const customer_has_bank_model_1 = __importDefault(require("../models/many-to-many/customer-has-bank.model"));
 const { JUDICIAL_CASE_FILE_TABLE } = judicial_case_file_model_1.default;
 const { CLIENT_TABLE } = client_model_1.default;
 const { CUSTOMER_USER_TABLE } = customer_user_model_1.default;
 const { JUDICIAL_SUBJECT_TABLE } = judicial_subject_model_1.default;
 const { JUDICIAL_COURT_TABLE } = judicial_court_model_1.default;
 const { JUDICIAL_PROCEDURAL_WAY_TABLE } = judicial_procedural_way_model_1.default;
+const { CUSTOMER_HAS_BANK_TABLE } = customer_has_bank_model_1.default;
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
         yield queryInterface.createTable(JUDICIAL_SUBJECT_TABLE, {
@@ -40,6 +42,17 @@ function up(queryInterface) {
                 allowNull: false,
                 type: sequelize_1.DataTypes.STRING(150),
             },
+            customerHasBankId: {
+                allowNull: false,
+                field: "customer_has_bank_id_customer_has_bank",
+                type: sequelize_1.DataTypes.INTEGER,
+                references: {
+                    model: CUSTOMER_HAS_BANK_TABLE,
+                    key: "id_customer_has_bank",
+                },
+                onUpdate: "CASCADE",
+                onDelete: "NO ACTION",
+            },
         });
         yield queryInterface.createTable(JUDICIAL_COURT_TABLE, {
             id: {
@@ -52,6 +65,17 @@ function up(queryInterface) {
             court: {
                 allowNull: false,
                 type: sequelize_1.DataTypes.STRING(150),
+            },
+            customerHasBankId: {
+                allowNull: false,
+                field: "customer_has_bank_id_customer_has_bank",
+                type: sequelize_1.DataTypes.INTEGER,
+                references: {
+                    model: CUSTOMER_HAS_BANK_TABLE,
+                    key: "id_customer_has_bank",
+                },
+                onUpdate: "CASCADE",
+                onDelete: "NO ACTION",
             },
         });
         yield queryInterface.createTable(JUDICIAL_PROCEDURAL_WAY_TABLE, {
@@ -66,6 +90,17 @@ function up(queryInterface) {
                 allowNull: false,
                 field: "procedural_way",
                 type: sequelize_1.DataTypes.STRING(150),
+            },
+            customerHasBankId: {
+                allowNull: false,
+                field: "customer_has_bank_id_customer_has_bank",
+                type: sequelize_1.DataTypes.INTEGER,
+                references: {
+                    model: CUSTOMER_HAS_BANK_TABLE,
+                    key: "id_customer_has_bank",
+                },
+                onUpdate: "CASCADE",
+                onDelete: "NO ACTION",
             },
         });
         yield queryInterface.createTable(JUDICIAL_CASE_FILE_TABLE, {
@@ -226,6 +261,39 @@ function up(queryInterface) {
             onUpdate: "CASCADE",
             onDelete: "NO ACTION",
         });
+        yield queryInterface.addConstraint(JUDICIAL_PROCEDURAL_WAY_TABLE, {
+            fields: ["customer_has_bank_id_customer_has_bank"],
+            type: "foreign key",
+            name: "fk_judicial_procedural_way_customer_has_bank",
+            references: {
+                table: CUSTOMER_HAS_BANK_TABLE,
+                field: "id_customer_has_bank",
+            },
+            onUpdate: "CASCADE",
+            onDelete: "NO ACTION",
+        });
+        yield queryInterface.addConstraint(JUDICIAL_COURT_TABLE, {
+            fields: ["customer_has_bank_id_customer_has_bank"],
+            type: "foreign key",
+            name: "fk_judicial_court_customer_has_bank",
+            references: {
+                table: CUSTOMER_HAS_BANK_TABLE,
+                field: "id_customer_has_bank",
+            },
+            onUpdate: "CASCADE",
+            onDelete: "NO ACTION",
+        });
+        yield queryInterface.addConstraint(JUDICIAL_SUBJECT_TABLE, {
+            fields: ["customer_has_bank_id_customer_has_bank"],
+            type: "foreign key",
+            name: "fk_judicial_subject_customer_has_bank",
+            references: {
+                table: CUSTOMER_HAS_BANK_TABLE,
+                field: "id_customer_has_bank",
+            },
+            onUpdate: "CASCADE",
+            onDelete: "NO ACTION",
+        });
     });
 }
 exports.up = up;
@@ -235,7 +303,10 @@ function down(queryInterface) {
         yield queryInterface.removeConstraint(JUDICIAL_CASE_FILE_TABLE, "fk_judicial_case_file_customer_user");
         yield queryInterface.removeConstraint(JUDICIAL_CASE_FILE_TABLE, "fk_judicial_court_judicial_case_file");
         yield queryInterface.removeConstraint(JUDICIAL_CASE_FILE_TABLE, "fk_judicial_subject_judicial_case_file");
-        yield queryInterface.removeConstraint(JUDICIAL_CASE_FILE_TABLE, "fk_judicial_procedural_way_judicial_case_file");
+        yield queryInterface.removeConstraint(JUDICIAL_CASE_FILE_TABLE, "fk_judicial_subject_judicial_case_file");
+        yield queryInterface.removeConstraint(JUDICIAL_SUBJECT_TABLE, "fk_judicial_subject_customer_has_bank");
+        yield queryInterface.removeConstraint(JUDICIAL_COURT_TABLE, "fk_judicial_court_customer_has_bank");
+        yield queryInterface.removeConstraint(JUDICIAL_PROCEDURAL_WAY_TABLE, "fk_judicial_procedural_way_customer_has_bank");
         yield queryInterface.dropTable(JUDICIAL_SUBJECT_TABLE);
         yield queryInterface.dropTable(JUDICIAL_PROCEDURAL_WAY_TABLE);
         yield queryInterface.dropTable(JUDICIAL_COURT_TABLE);
