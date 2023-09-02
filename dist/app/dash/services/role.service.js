@@ -71,6 +71,9 @@ class RoleService {
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const role = yield this.findOne(id);
+            yield models.ROLE_PERMISSION.destroy({
+                where: { roleId: id },
+            });
             yield role.destroy();
             return { id };
         });

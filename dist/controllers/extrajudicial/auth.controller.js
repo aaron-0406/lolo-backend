@@ -23,11 +23,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.changePasswordController = exports.loginController = void 0;
+exports.changeCredentialsController = exports.changePasswordController = exports.loginController = void 0;
 const passport_1 = __importDefault(require("passport"));
 const jwt_1 = require("../../libs/jwt");
 const auth_service_1 = __importDefault(require("../../app/extrajudicial/services/auth.service"));
+const permission_service_1 = __importDefault(require("../../app/dash/services/permission.service"));
+const customer_user_service_1 = __importDefault(require("../../app/dash/services/customer-user.service"));
 const serviceAuth = new auth_service_1.default();
+const servicePermission = new permission_service_1.default();
+const serviceCustomerUser = new customer_user_service_1.default();
 const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         passport_1.default.authenticate("local.signin", { session: false }, (err, user) => {
@@ -56,3 +60,22 @@ const changePasswordController = (req, res, next) => __awaiter(void 0, void 0, v
     }
 });
 exports.changePasswordController = changePasswordController;
+const changeCredentialsController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b, _c;
+    try {
+        yield serviceAuth.changeCredentials(req.body, Number((_b = req.user) === null || _b === void 0 ? void 0 : _b.id));
+        const user = yield serviceCustomerUser.findOne(String((_c = req.user) === null || _c === void 0 ? void 0 : _c.id));
+        const permissions = yield servicePermission.findAllByRoleId(user.dataValues.roleId);
+        const codes = permissions.map((permissions) => permissions.code);
+        const customerUser = Object.assign(Object.assign({}, user.dataValues), { permissions: codes });
+        const token = (0, jwt_1.signToken)(customerUser, `${process.env.JWT_SECRET}`);
+        return res.json({
+            user: customerUser,
+            token,
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.changeCredentialsController = changeCredentialsController;

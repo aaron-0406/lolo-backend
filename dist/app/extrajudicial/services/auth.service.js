@@ -42,5 +42,11 @@ class AuthService {
             yield models.CUSTOMER_USER.update({ password }, { where: { id: customerUserId } });
         });
     }
+    changeCredentials(data, customerUserId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { dni, lastname, name, phone } = data;
+            yield models.CUSTOMER_USER.update({ dni, lastName: lastname, name, phone }, { where: { id: customerUserId } });
+        });
+    }
 }
 exports.default = AuthService;

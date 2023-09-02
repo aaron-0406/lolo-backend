@@ -18,17 +18,21 @@ const permission_model_1 = __importDefault(require("../models/permission.model")
 const { PERMISSION_TABLE } = permission_model_1.default;
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield queryInterface.addColumn(PERMISSION_TABLE, "link", {
+        yield queryInterface.changeColumn(PERMISSION_TABLE, "code", {
             type: sequelize_1.DataTypes.STRING(150),
-            allowNull: true,
-            defaultValue: "#",
+            unique: true,
+            allowNull: false,
         });
     });
 }
 exports.up = up;
 function down(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield queryInterface.removeColumn(PERMISSION_TABLE, "link");
+        yield queryInterface.changeColumn(PERMISSION_TABLE, "code", {
+            type: sequelize_1.DataTypes.STRING(150),
+            unique: false,
+            allowNull: false,
+        });
     });
 }
 exports.down = down;
