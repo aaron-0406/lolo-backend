@@ -24,14 +24,14 @@ const router = express.Router();
 router.get("/", JWTAuth, getJudicialCaseFileController);
 
 router.get(
-  "/all-client/:clientId",
+  "/client/:clientId",
   JWTAuth,
   validatorHandler(getJudicialCaseFileByClientIDSchema, "params"),
   getJudicialCaseFileByClientIdController
 );
 
 router.get(
-  "/case-file/:id",
+  "/number-case/:id",
   JWTAuth,
   validatorHandler(getJudicialCaseFileByNumberCaseFileSchema, "params"),
   getJudicialCaseFileByIdController
