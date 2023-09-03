@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteJudicialSubjectController = exports.updateJudicialSubjectController = exports.createJudicialSubjectController = exports.getJudicialSubjectByIdController = exports.getJudicialSubjectController = void 0;
+exports.deleteJudicialSubjectController = exports.updateJudicialSubjectController = exports.createJudicialSubjectController = exports.getJudicialSubjectByIdController = exports.getJudicialSubjectByCHBController = exports.getJudicialSubjectController = void 0;
 const judicial_subject_service_1 = __importDefault(require("../../app/judicial/services/judicial-subject.service"));
 const service = new judicial_subject_service_1.default();
 const getJudicialSubjectController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -25,6 +25,16 @@ const getJudicialSubjectController = (req, res, next) => __awaiter(void 0, void 
     }
 });
 exports.getJudicialSubjectController = getJudicialSubjectController;
+const getJudicialSubjectByCHBController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const judicialSubjects = yield service.findAllByCHB(Number(req.query.chb));
+        res.json(judicialSubjects);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.getJudicialSubjectByCHBController = getJudicialSubjectByCHBController;
 const getJudicialSubjectByIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;

@@ -91,10 +91,10 @@ const setupModels = (sequelize) => {
     Role.init(RoleSchema, Role.config(sequelize));
     Permission.init(PermissionSchema, Permission.config(sequelize));
     RolePermission.init(RolePermissionSchema, RolePermission.config(sequelize));
-    RolePermission.init(JudicialCaseFileSchema, JudicialCaseFile.config(sequelize));
-    RolePermission.init(JudicialSubjectSchema, JudicialSubject.config(sequelize));
-    RolePermission.init(JudicialCourtSchema, JudicialCourt.config(sequelize));
-    RolePermission.init(JudicialProceduralWaySchema, JudicialProceduralWay.config(sequelize));
+    JudicialCaseFile.init(JudicialCaseFileSchema, JudicialCaseFile.config(sequelize));
+    JudicialSubject.init(JudicialSubjectSchema, JudicialSubject.config(sequelize));
+    JudicialCourt.init(JudicialCourtSchema, JudicialCourt.config(sequelize));
+    JudicialProceduralWay.init(JudicialProceduralWaySchema, JudicialProceduralWay.config(sequelize));
     Customer.associate(sequelize.models);
     CustomerUser.associate(sequelize.models);
     Bank.associate(sequelize.models);
@@ -120,5 +120,8 @@ const setupModels = (sequelize) => {
     Permission.associate(sequelize.models);
     RolePermission.associate(sequelize.models);
     JudicialCaseFile.associate(sequelize.models);
+    JudicialCourt.associate(sequelize.models);
+    JudicialSubject.associate(sequelize.models);
+    JudicialProceduralWay.associate(sequelize.models);
 };
 exports.setupModels = setupModels;

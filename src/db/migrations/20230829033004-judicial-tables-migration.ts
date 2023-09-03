@@ -116,6 +116,11 @@ export async function up(queryInterface: QueryInterface) {
       field: "amount_demanded_soles",
       type: DataTypes.DECIMAL(10, 3),
     },
+    amountDemandedDollars: {
+      allowNull: true,
+      field: "amount_demanded_dollars",
+      type: DataTypes.DECIMAL(10, 3),
+    },
     cautionaryCode: {
       allowNull: true,
       field: "cautionary_code",

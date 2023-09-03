@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteJudicialProceduralWayController = exports.updateJudicialProceduralWayController = exports.createJudicialProceduralWayController = exports.getJudicialProceduralWayByIdController = exports.getJudicialProceduralWayController = void 0;
+exports.deleteJudicialProceduralWayController = exports.updateJudicialProceduralWayController = exports.createJudicialProceduralWayController = exports.getJudicialProceduralWayByIdController = exports.getJudicialProceduralWayByCHBController = exports.getJudicialProceduralWayController = void 0;
 const judicial_procedural_way_service_1 = __importDefault(require("../../app/judicial/services/judicial-procedural-way.service"));
 const service = new judicial_procedural_way_service_1.default();
 const getJudicialProceduralWayController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -25,6 +25,16 @@ const getJudicialProceduralWayController = (req, res, next) => __awaiter(void 0,
     }
 });
 exports.getJudicialProceduralWayController = getJudicialProceduralWayController;
+const getJudicialProceduralWayByCHBController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const judicialProceduralWays = yield service.findAllByCHB(Number(req.query.chb));
+        res.json(judicialProceduralWays);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.getJudicialProceduralWayByCHBController = getJudicialProceduralWayByCHBController;
 const getJudicialProceduralWayByIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;

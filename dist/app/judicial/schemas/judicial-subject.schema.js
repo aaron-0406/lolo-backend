@@ -17,7 +17,11 @@ const updateJudicialSubjectSchema = joi_1.default.object({
 const getJudicialSubjectByIDSchema = joi_1.default.object({
     id: id.required(),
 });
+const getJudicialSubjectByCHBSchema = joi_1.default.object({
+    chb: id.required(),
+});
 exports.default = {
+    getJudicialSubjectByCHBSchema,
     createJudicialSubjectSchema,
     updateJudicialSubjectSchema,
     getJudicialSubjectByIDSchema,

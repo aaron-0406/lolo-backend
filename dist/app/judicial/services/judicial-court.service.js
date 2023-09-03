@@ -23,6 +23,14 @@ class JudicialCourtService {
             return rta;
         });
     }
+    findAllByCHB(chb) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rta = yield models.JUDICIAL_COURT.findAll({
+                where: { customerHasBankId: { chb } },
+            });
+            return rta;
+        });
+    }
     findByID(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialCourt = yield models.JUDICIAL_COURT.findOne({

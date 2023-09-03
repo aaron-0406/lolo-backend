@@ -130,6 +130,11 @@ function up(queryInterface) {
                 field: "amount_demanded_soles",
                 type: sequelize_1.DataTypes.DECIMAL(10, 3),
             },
+            amountDemandedDollars: {
+                allowNull: true,
+                field: "amount_demanded_dollars",
+                type: sequelize_1.DataTypes.DECIMAL(10, 3),
+            },
             cautionaryCode: {
                 allowNull: true,
                 field: "cautionary_code",

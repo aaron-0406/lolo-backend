@@ -17,7 +17,11 @@ const updateJudicialProceduralWaySchema = joi_1.default.object({
 const getJudicialProceduralWayByIDSchema = joi_1.default.object({
     id: id.required(),
 });
+const getJudicialProcedurakWayByCHBSchema = joi_1.default.object({
+    chb: id.required(),
+});
 exports.default = {
+    getJudicialProcedurakWayByCHBSchema,
     createJudicialProceduralWaySchema,
     updateJudicialProceduralWaySchema,
     getJudicialProceduralWayByIDSchema,
