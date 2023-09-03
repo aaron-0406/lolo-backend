@@ -15,7 +15,7 @@ const customerId = Joi.number();
 const roleId = Joi.number();
 
 const createCustomerUserSchema = Joi.object<
-  Omit<CustomerUserType, "id" | "permissions" | "roleId">,
+  Omit<CustomerUserType, "id" | "permissions">,
   true
 >({
   name: name.required(),
@@ -28,6 +28,7 @@ const createCustomerUserSchema = Joi.object<
   state: state.required(),
   createdAt: createAt.optional(),
   customerId: customerId.required(),
+  roleId: roleId.required(),
 });
 
 const updateCustomerUserStateSchema = Joi.object<{ state: boolean }, true>({
@@ -37,7 +38,7 @@ const updateCustomerUserStateSchema = Joi.object<{ state: boolean }, true>({
 const updateCustomerUserSchema = Joi.object<
   Omit<
     CustomerUserType,
-    "id" | "email" | "customerId" | "createdAt" | "permissions" | "roleId"
+    "id" | "email" | "customerId" | "createdAt" | "permissions"
   >,
   true
 >({
@@ -48,6 +49,7 @@ const updateCustomerUserSchema = Joi.object<
   privilege: privilege.required(),
   state: state.required(),
   password: password.optional(),
+  roleId: roleId.required(),
 });
 
 const getCustomerUserSchema = Joi.object<{ id: number }, true>({
