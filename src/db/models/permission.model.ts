@@ -19,7 +19,7 @@ const PermissionSchema: ModelAttributes<Permission, PermissionType> = {
     type: DataTypes.INTEGER,
   },
   name: { type: DataTypes.STRING(150), allowNull: false },
-  code: { type: DataTypes.STRING(150), allowNull: false },
+  code: { type: DataTypes.STRING(150), unique: true, allowNull: false },
   icon: { type: DataTypes.STRING(150), allowNull: false },
   link: { type: DataTypes.STRING(150), allowNull: false, defaultValue: "#" },
 };

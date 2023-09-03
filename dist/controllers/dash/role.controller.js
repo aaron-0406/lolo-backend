@@ -14,10 +14,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteRoleController = exports.updateRoleController = exports.createRoleController = exports.getRoleByIdController = exports.getAllRoleByCustomerIdController = void 0;
 const role_service_1 = __importDefault(require("../../app/dash/services/role.service"));
+const permission_service_1 = __importDefault(require("../../app/dash/services/permission.service"));
 const service = new role_service_1.default();
+const servicePermission = new permission_service_1.default();
 const getAllRoleByCustomerIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const roles = yield service.findAllByCustomerId(Number(req.query.customerId));
+        const roles = yield service.findAllByCustomerId(Number(req.params.customerId));
         res.json(roles);
     }
     catch (error) {
@@ -28,8 +30,11 @@ exports.getAllRoleByCustomerIdController = getAllRoleByCustomerIdController;
 const getRoleByIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
-        const role = yield service.findOne(id);
-        res.json(role);
+        const roleModel = yield service.findOne(id);
+        const { dataValues } = roleModel;
+        const permissions = yield servicePermission.findAllByRoleId(Number(id));
+        const permissionsIds = permissions.map((item) => item.id);
+        res.json(Object.assign(Object.assign({}, dataValues), { permissions: permissionsIds }));
     }
     catch (error) {
         next(error);

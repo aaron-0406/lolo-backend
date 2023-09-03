@@ -18,9 +18,15 @@ const sequelize_2 = require("sequelize");
 const { models } = sequelize_1.default;
 class PermissionService {
     constructor() { }
-    findAll() {
+    findAll(code) {
         return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.PERMISSION.findAll();
+            const rta = yield models.PERMISSION.findAll({
+                where: {
+                    code: {
+                        [sequelize_2.Op.like]: code ? `${code}%` : "%",
+                    },
+                },
+            });
             return rta.map((permission) => ({
                 id: permission.dataValues.id,
                 name: permission.dataValues.name,
