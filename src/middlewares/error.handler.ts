@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { ValidationError } from "sequelize";
 import { Boom } from "@hapi/boom";
+import errorHandlers from "./utils/errorHandlers";
 
 const logErrors = (
   err: Error,
@@ -42,12 +42,10 @@ const ormErrorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  if (err instanceof ValidationError) {
-    return res.status(409).json({
-      statusCode: 409,
-      message: err.name,
-      errors: err.errors,
-    });
+  const errorHandler = errorHandlers[err.constructor.name];
+  if (errorHandler) {
+    const { status, message, errors } = errorHandler(err);
+    return res.status(status).json({ statusCode: status, message, errors });
   }
   next(err);
 };

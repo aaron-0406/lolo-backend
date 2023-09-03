@@ -26,14 +26,6 @@ export const JWTAuth = (req: Request, res: Response, next: NextFunction) => {
   )(req, res, next);
 };
 
-export const Permission = (req: Request, res: Response, next: NextFunction) => {
-  return next(
-    boom.unauthorized(
-      "No tiene los permisos necesarios para realizar esta acción"
-    )
-  );
-};
-
 export const checkPermissions = (...permissions: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const user = req.user;
