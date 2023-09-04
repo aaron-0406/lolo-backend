@@ -25,7 +25,7 @@ const getJudicialSubjectByIDSchema = Joi.object<{ id: number }, true>({
 });
 
 const getJudicialSubjectByCHBSchema = Joi.object<{ chb: number }, true>({
-  chb: id.required(),
+  chb: customerHasBankId.required(),
 });
 
 export default {

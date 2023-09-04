@@ -17,7 +17,7 @@ const updateJudicialProceduralWaySchema = Joi.object<
   Omit<JudicialProceduralWayType, "id" | "customerHasBankId">,
   true
 >({
-  proceduralWay: proceduralWay.optional(),
+  proceduralWay: proceduralWay.required(),
 });
 
 const getJudicialProceduralWayByIDSchema = Joi.object<{ id: number }, true>({
@@ -25,7 +25,7 @@ const getJudicialProceduralWayByIDSchema = Joi.object<{ id: number }, true>({
 });
 
 const getJudicialProcedurakWayByCHBSchema = Joi.object<{ chb: number }, true>({
-  chb: id.required(),
+  chb: customerHasBankId.required(),
 });
 
 export default {

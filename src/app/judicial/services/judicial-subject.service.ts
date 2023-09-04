@@ -28,6 +28,7 @@ class JudicialSubjectService {
     if (!judicialSubject) {
       throw boom.notFound("Asunto no encontrado");
     }
+
     return judicialSubject;
   }
 

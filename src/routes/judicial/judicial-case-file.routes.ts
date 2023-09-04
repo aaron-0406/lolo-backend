@@ -32,7 +32,7 @@ router.get(
 );
 
 router.get(
-  "/number-case/:id",
+  "/number-case/:code",
   JWTAuth,
   validatorHandler(getJudicialCaseFileByNumberCaseFileSchema, "params"),
   getJudicialCaseFileByNumberCaseFileController

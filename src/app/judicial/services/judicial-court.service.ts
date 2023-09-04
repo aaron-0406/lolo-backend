@@ -28,6 +28,7 @@ class JudicialCourtService {
     if (!judicialCourt) {
       throw boom.notFound("Corte no encontrado");
     }
+    
     return judicialCourt;
   }
 

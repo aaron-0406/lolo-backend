@@ -14,13 +14,15 @@ export const getJudicialSubjectController = async (
     next(error);
   }
 };
+
 export const getJudicialSubjectByCHBController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const judicialSubjects = await service.findAllByCHB(Number(req.query.chb));
+    const { chb } = req.params;
+    const judicialSubjects = await service.findAllByCHB(Number(chb));
     res.json(judicialSubjects);
   } catch (error) {
     next(error);

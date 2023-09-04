@@ -14,15 +14,15 @@ export const getJudicialProceduralWayController = async (
     next(error);
   }
 };
+
 export const getJudicialProceduralWayByCHBController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const judicialProceduralWays = await service.findAllByCHB(
-      Number(req.query.chb)
-    );
+    const { chb } = req.params;
+    const judicialProceduralWays = await service.findAllByCHB(Number(chb));
     res.json(judicialProceduralWays);
   } catch (error) {
     next(error);

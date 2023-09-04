@@ -20,11 +20,12 @@ const {
 
 const router = express.Router();
 
-// router.get("/", JWTAuth, getJudicialCourtController);
+router.get("/", JWTAuth, getJudicialCourtController);
+
 router.get(
-  "/",
+  "/chb/:chb",
   JWTAuth,
-  validatorHandler(getJudicialCourtByCHBSchema, "query"),
+  validatorHandler(getJudicialCourtByCHBSchema, "params"),
   getJudicialCourtByCHBController
 );
 

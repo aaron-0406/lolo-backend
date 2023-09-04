@@ -74,8 +74,8 @@ const getJudicialCaseFileByIDSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
 
-const getJudicialCaseFileByNumberCaseFileSchema = Joi.object<{ id: number }, true>({
-  id: id.required(),
+const getJudicialCaseFileByNumberCaseFileSchema = Joi.object<{ numberCaseFile: number }, true>({
+  numberCaseFile: numberCaseFile.required(),
 });
 
 export default {

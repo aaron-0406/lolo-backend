@@ -17,7 +17,7 @@ const updateJudicialCourtSchema = Joi.object<
   Omit<JudicialCourtType, "id" | "customerHasBankId">,
   true
 >({
-  court: court.optional(),
+  court: court.required(),
 });
 
 const getJudicialCourtByIDSchema = Joi.object<{ id: number }, true>({
@@ -25,7 +25,7 @@ const getJudicialCourtByIDSchema = Joi.object<{ id: number }, true>({
 });
 
 const getJudicialCourtByCHBSchema = Joi.object<{ chb: number }, true>({
-  chb: id.required(),
+  chb: customerHasBankId.required(),
 });
 
 export default {

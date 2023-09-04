@@ -13,12 +13,17 @@ class JudicialCaseFileService {
   }
 
   async findAllByClient(clientId: string) {
-    const rta = await models.JUDICIAL_CASE_FILE.findAll({
+    const judicialCaseFile = await models.JUDICIAL_CASE_FILE.findAll({
       where: {
         clientId,
       },
     });
-    return rta;
+
+    if (!judicialCaseFile) {
+      throw boom.notFound("Expediente no encontrado");
+    }
+
+    return judicialCaseFile;
   }
 
   async findByID(id: string) {
@@ -31,6 +36,7 @@ class JudicialCaseFileService {
     if (!judicialCaseFile) {
       throw boom.notFound("Expediente no encontrado");
     }
+
     return judicialCaseFile;
   }
 
