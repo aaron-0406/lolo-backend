@@ -31,6 +31,7 @@ passport.use(
             code: permissions.code,
             link: permissions.link,
             icon: permissions.icon,
+            name: permissions.name,
           };
         });
         return done(null, {
