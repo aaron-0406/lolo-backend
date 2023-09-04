@@ -26,8 +26,17 @@ passport.use(
         const permissions = await servicePermission.findAllByRoleId(
           user.dataValues.roleId
         );
-        const codes = permissions.map((permissions) => permissions.code);
-        return done(null, { ...user.dataValues, permissions: codes });
+        const permissionsObject = permissions.map((permissions) => {
+          return {
+            code: permissions.code,
+            link: permissions.link,
+            icon: permissions.icon,
+          };
+        });
+        return done(null, {
+          ...user.dataValues,
+          permissions: permissionsObject,
+        });
       } catch (error: any) {
         return done(boom.badRequest(error), false);
       }

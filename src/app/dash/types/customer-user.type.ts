@@ -10,6 +10,6 @@ export type CustomerUserType = {
   state: boolean;
   createdAt: Date;
   roleId: number;
-  permissions?: Array<String>;
+  permissions?: Array<{ code: string; link: string; icon: string }>;
   customerId: number;
 };
