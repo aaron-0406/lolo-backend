@@ -22,6 +22,10 @@ import templateRouter from "./extrajudicial/template.routes";
 import valuesRouter from "./extrajudicial/values.routes";
 import dashboardRouter from "./extrajudicial/dashboard.routes";
 import productRouter from "./extrajudicial/product.routes";
+import judicialCaseFileRouter from "./judicial/judicial-case-file.routes";
+import judicialCourtRouter from "./judicial/judicial-court.routes";
+import judicialProceduralWayRouter from "./judicial/judicial-procedural-way.routes";
+import judicialSubjectRouter from "./judicial/judicial-subject.routes";
 import managementActionRouter from "./dash/management-action.routes";
 import goalRouter from "./extrajudicial/goal.routes";
 import roleRouter from "./dash/role.routes";
@@ -45,6 +49,11 @@ const routerApi = (app: Express) => {
   router.use("/cobranza/dashboard", dashboardRouter);
   router.use("/cobranza/product", productRouter);
   router.use("/cobranza/goal", goalRouter);
+  
+  router.use("/judicial/case-file", judicialCaseFileRouter);
+  router.use("/judicial/court", judicialCourtRouter);
+  router.use("/judicial/procedural-way", judicialProceduralWayRouter);
+  router.use("/judicial/subject", judicialSubjectRouter);
 
   router.use("/dash/auth", authDashRouter);
   router.use("/dash/role", roleRouter);

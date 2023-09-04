@@ -25,6 +25,10 @@ import goalUserModel from "./goal-user.model";
 import permissionModel from "./permission.model";
 import rolesModel from "./roles.model";
 import rolePermissionModel from "./many-to-many/role-permission.model";
+import judicialCaseFileModel from "./judicial-case-file.model";
+import judicialSubjectModel from "./judicial-subject.model";
+import judicialCourtModel from "./judicial-court.model";
+import judicialProceduralWayModel from "./judicial-procedural-way.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
@@ -52,6 +56,11 @@ const { GoalUser, GoalUserSchema } = goalUserModel;
 const { Role, RoleSchema } = rolesModel;
 const { Permission, PermissionSchema } = permissionModel;
 const { RolePermission, RolePermissionSchema } = rolePermissionModel;
+const { JudicialCaseFile, JudicialCaseFileSchema } = judicialCaseFileModel;
+const { JudicialSubject, JudicialSubjectSchema } = judicialSubjectModel;
+const { JudicialCourt, JudicialCourtSchema } = judicialCourtModel;
+const { JudicialProceduralWay, JudicialProceduralWaySchema } =
+  judicialProceduralWayModel;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -89,6 +98,16 @@ export const setupModels = (sequelize: Sequelize) => {
   Role.init(RoleSchema, Role.config(sequelize));
   Permission.init(PermissionSchema, Permission.config(sequelize));
   RolePermission.init(RolePermissionSchema, RolePermission.config(sequelize));
+  JudicialCaseFile.init(
+    JudicialCaseFileSchema,
+    JudicialCaseFile.config(sequelize)
+  );
+  JudicialSubject.init(JudicialSubjectSchema, JudicialSubject.config(sequelize));
+  JudicialCourt.init(JudicialCourtSchema, JudicialCourt.config(sequelize));
+  JudicialProceduralWay.init(
+    JudicialProceduralWaySchema,
+    JudicialProceduralWay.config(sequelize)
+  );
 
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
@@ -114,4 +133,8 @@ export const setupModels = (sequelize: Sequelize) => {
   Role.associate(sequelize.models);
   Permission.associate(sequelize.models);
   RolePermission.associate(sequelize.models);
+  JudicialCaseFile.associate(sequelize.models);
+  JudicialCourt.associate(sequelize.models);
+  JudicialSubject.associate(sequelize.models);
+  JudicialProceduralWay.associate(sequelize.models);
 };
