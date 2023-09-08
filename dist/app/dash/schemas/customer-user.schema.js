@@ -27,6 +27,7 @@ const createCustomerUserSchema = joi_1.default.object({
     state: state.required(),
     createdAt: createAt.optional(),
     customerId: customerId.required(),
+    roleId: roleId.required(),
 });
 const updateCustomerUserStateSchema = joi_1.default.object({
     state: state.required(),
@@ -39,6 +40,7 @@ const updateCustomerUserSchema = joi_1.default.object({
     privilege: privilege.required(),
     state: state.required(),
     password: password.optional(),
+    roleId: roleId.required(),
 });
 const getCustomerUserSchema = joi_1.default.object({
     id: id.required(),

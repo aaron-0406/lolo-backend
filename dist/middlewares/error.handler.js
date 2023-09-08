@@ -1,6 +1,9 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const sequelize_1 = require("sequelize");
+const errorHandlers_1 = __importDefault(require("./utils/errorHandlers"));
 const logErrors = (err, req, res, next) => {
     next(err);
 };
@@ -18,12 +21,10 @@ const boomErrorHandler = (err, req, res, next) => {
     next(err);
 };
 const ormErrorHandler = (err, req, res, next) => {
-    if (err instanceof sequelize_1.ValidationError) {
-        return res.status(409).json({
-            statusCode: 409,
-            message: err.name,
-            errors: err.errors,
-        });
+    const errorHandler = errorHandlers_1.default[err.constructor.name];
+    if (errorHandler) {
+        const { status, message, errors } = errorHandler(err);
+        return res.status(status).json({ statusCode: status, message, errors });
     }
     next(err);
 };
