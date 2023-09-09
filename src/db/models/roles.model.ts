@@ -34,6 +34,11 @@ const RoleSchema: ModelAttributes<Role, RoleType> = {
 class Role extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER, { as: "customer" });
+
+    this.hasMany(models.CUSTOMER_USER, {
+      as: "customerUser",
+      foreignKey: "roleId",
+    });
   }
 
   static config(sequelize: Sequelize) {

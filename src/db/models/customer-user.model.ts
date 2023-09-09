@@ -69,6 +69,8 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
       model: rolesModel.ROLE_TABLE,
       key: "id_role",
     },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
   },
   customerId: {
     allowNull: false,
@@ -86,6 +88,8 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
 class CustomerUser extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER, { as: "customer" });
+
+    this.belongsTo(models.ROLE, { as: "role" });
 
     this.hasMany(models.CLIENT, {
       as: "client",

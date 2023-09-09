@@ -12,7 +12,7 @@ const privilege = Joi.string().max(6);
 const state = Joi.boolean();
 const createAt = Joi.date();
 const customerId = Joi.number();
-const roleId = Joi.number();
+const roleId = Joi.number().integer().min(1);
 
 const createCustomerUserSchema = Joi.object<
   Omit<CustomerUserType, "id" | "permissions">,

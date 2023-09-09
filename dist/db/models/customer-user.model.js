@@ -65,6 +65,8 @@ const CustomerUserSchema = {
             model: roles_model_1.default.ROLE_TABLE,
             key: "id_role",
         },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
     },
     customerId: {
         allowNull: false,
@@ -81,6 +83,7 @@ const CustomerUserSchema = {
 class CustomerUser extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.CUSTOMER, { as: "customer" });
+        this.belongsTo(models.ROLE, { as: "role" });
         this.hasMany(models.CLIENT, {
             as: "client",
             foreignKey: "customerUserId",
