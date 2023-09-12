@@ -13,7 +13,7 @@ class JudicialCourtService {
   }
   async findAllByCHB(chb: number) {
     const rta = await models.JUDICIAL_COURT.findAll({
-      where: { customerHasBankId: { chb } },
+      where: { customerHasBankId: chb },
     });
     return rta;
   }
@@ -28,7 +28,7 @@ class JudicialCourtService {
     if (!judicialCourt) {
       throw boom.notFound("Corte no encontrado");
     }
-    
+
     return judicialCourt;
   }
 

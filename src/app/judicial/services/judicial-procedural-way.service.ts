@@ -13,7 +13,7 @@ class JudicialProceduralWayService {
   }
   async findAllByCHB(chb: number) {
     const rta = await models.JUDICIAL_PROCEDURAL_WAY.findAll({
-      where: { customerHasBankId: { chb } },
+      where: { customerHasBankId: chb },
     });
     return rta;
   }

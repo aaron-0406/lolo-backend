@@ -54,6 +54,20 @@ export const getClientsByCHBController = async (
   }
 };
 
+export const getClientsByNameController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { chb } = req.params;
+    const clients = await service.findByName(chb, req.query);
+    res.json(clients);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getClientsByCHBDetailsController = async (
   req: Request,
   res: Response,
