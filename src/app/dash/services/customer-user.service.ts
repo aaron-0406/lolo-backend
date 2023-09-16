@@ -15,6 +15,7 @@ class CustomerUserService {
 
   async findAllByCustomerID(customerId: string) {
     const rta = await models.CUSTOMER_USER.findAll({
+      include: ["role"],
       attributes: {
         exclude: ["password"],
       },
