@@ -47,10 +47,6 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
     unique: true,
     type: DataTypes.TEXT,
   },
-  privilege: {
-    allowNull: false,
-    type: DataTypes.STRING(6),
-  },
   state: {
     allowNull: false,
     type: DataTypes.TINYINT({ length: 1 }),

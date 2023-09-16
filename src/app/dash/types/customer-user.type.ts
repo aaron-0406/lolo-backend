@@ -6,7 +6,6 @@ export type CustomerUserType = {
   dni: string;
   email: string;
   password: string;
-  privilege: string;
   state: boolean;
   createdAt: Date;
   roleId: number;

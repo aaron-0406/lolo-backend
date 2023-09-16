@@ -43,10 +43,6 @@ const CustomerUserSchema = {
         unique: true,
         type: sequelize_1.DataTypes.TEXT,
     },
-    privilege: {
-        allowNull: false,
-        type: sequelize_1.DataTypes.STRING(6),
-    },
     state: {
         allowNull: false,
         type: sequelize_1.DataTypes.TINYINT({ length: 1 }),

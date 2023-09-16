@@ -44,8 +44,8 @@ app.get("*", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "/public/build", "index.html"));
 });
 app.use(logErrors);
-app.use(ormErrorHandler);
 app.use(boomErrorHandler);
+app.use(ormErrorHandler);
 app.use(errorHandler);
 app.listen(port, () => {
     fs_1.default.mkdir(path_1.default.join(__dirname, "./public/download"), () => { });
