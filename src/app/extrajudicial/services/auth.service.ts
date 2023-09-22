@@ -5,8 +5,11 @@ import {
   ChangePasswordType,
   LoginType,
 } from "../types/auth.type";
+import CustomerUserService from "../../dash/services/customer-user.service";
 import boom from "@hapi/boom";
 const { models } = sequelize;
+
+const service = new CustomerUserService();
 
 class AuthService {
   constructor() {}
@@ -20,9 +23,18 @@ class AuthService {
     if (!userCustomer) throw boom.notFound("Correo o contraseña incorrectos");
     if (!userCustomer?.dataValues.state)
       throw boom.notFound("Usuario inhabilitado");
-    if (!(await matchPassword(password, userCustomer.dataValues.password)))
+    if (!(await matchPassword(password, userCustomer.dataValues.password))) {
+      if (userCustomer?.dataValues.loginAttempts >= 2) {
+        service.updateState(String(customerId), false);
+        throw boom.notFound(
+          "Alcanzó el máximo número de intentos fallidos, inténtelo más tarde"
+        );
+      }
+      service.failedAttemptsCounter(String(customerId), false);
       throw boom.notFound("Correo o contraseña incorrectos");
+    }
 
+    service.failedAttemptsCounter(String(customerId), true);
     return userCustomer;
   }
 
@@ -40,7 +52,7 @@ class AuthService {
   async changeCredentials(data: ChangeCredentialsType, customerUserId: number) {
     const { dni, lastname, name, phone } = data;
     await models.CUSTOMER_USER.update(
-      { dni, lastName:lastname, name, phone },
+      { dni, lastName: lastname, name, phone },
       { where: { id: customerUserId } }
     );
   }

@@ -16,4 +16,5 @@ export type CustomerUserType = {
     icon: string;
   }>;
   customerId: number;
+  loginAttempts?: number;
 };

@@ -14,7 +14,7 @@ const customerId = Joi.number();
 const roleId = Joi.number().integer().min(1);
 
 const createCustomerUserSchema = Joi.object<
-  Omit<CustomerUserType, "id" | "permissions">,
+  Omit<CustomerUserType, "id" | "permissions" | "loginAttempts">,
   true
 >({
   name: name.required(),
@@ -36,7 +36,7 @@ const updateCustomerUserStateSchema = Joi.object<{ state: boolean }, true>({
 const updateCustomerUserSchema = Joi.object<
   Omit<
     CustomerUserType,
-    "id" | "email" | "customerId" | "createdAt" | "permissions"
+    "id" | "email" | "customerId" | "createdAt" | "permissions" | "loginAttempts"
   >,
   true
 >({
