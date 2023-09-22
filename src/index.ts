@@ -45,7 +45,7 @@ const whitelist = [
   "http://localhost:3000",
   "http://192.168.1.24:3000",
   "http://192.168.0.10:3000",
-  "http://lolobank.com",
+  "https://lolobank.com",
 ];
 const options: CorsOptions = {
   origin: (origin, callback) => {
