@@ -15,16 +15,7 @@ const newPassword = Joi.string()
     "string.pattern.base":
       "El campo debe contener al menos una letra minúscula y mayúscula, un número, junto a un caracter.",
   })
-  .required();
-const repeatPassword = Joi.string()
-  .min(12)
-  .max(70)
-  .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_])(?=.*[0-9])/)
-  .messages({
-    "string.pattern.base":
-      "El campo debe contener al menos una letra minúscula y mayúscula, un número, junto a un caracter.",
-  })
-  .required();
+  .required();  
 const name = Joi.string().required();
 const lastname = Joi.string().required();
 const dni = Joi.string().required().max(8);
@@ -39,7 +30,7 @@ const loginSchema = Joi.object<LoginType>({
 
 const changePasswordSchema = Joi.object<ChangePasswordType>({
   newPassword,
-  repeatPassword,
+  repeatPassword: newPassword,
 }).options({ abortEarly: true });
 
 const changeCredentialsSchema = Joi.object<ChangeCredentialsType>({

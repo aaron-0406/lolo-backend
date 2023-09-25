@@ -27,7 +27,7 @@ class AuthService {
       if (userCustomer?.dataValues.loginAttempts >= 2) {
         service.updateState(String(customerId), false);
         throw boom.notFound(
-          "Alcanzó el máximo número de intentos fallidos, inténtelo más tarde"
+          "Alcanzó el máximo número de intentos fallidos, su cuenta fue bloqueada."
         );
       }
       service.failedAttemptsCounter(String(customerId), false);

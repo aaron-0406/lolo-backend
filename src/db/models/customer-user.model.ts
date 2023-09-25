@@ -80,11 +80,9 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
     onDelete: "NO ACTION",
   },
   loginAttempts: {
-    allowNull: false,
-    field: "login-attempts",
     type: DataTypes.INTEGER,
-    onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
+    allowNull: false,
+    field: "login_attempts",
   },
 };
 
