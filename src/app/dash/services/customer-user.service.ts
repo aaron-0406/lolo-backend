@@ -64,6 +64,8 @@ class CustomerUserService {
   }
 
   async updateState(id: string, state: boolean) {
+    state ?? this.failedAttemptsCounter(id, true);
+
     const user = await this.findOne(id);
     const rta = await user.update({ ...user, state });
 
