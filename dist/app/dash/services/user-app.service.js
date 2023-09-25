@@ -21,7 +21,6 @@ class CustomerUserService {
     findAll() {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.USER_APP.findAll();
-            throw boom_1.default.notFound("wtf amigo estas reloco");
             return rta;
         });
     }

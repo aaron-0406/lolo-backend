@@ -52,6 +52,13 @@ class CustomerUserService {
             return user;
         });
     }
+    failedAttemptsCounter(id, logged) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield this.findOne(id);
+            const loginAttempts = logged ? 0 : user.dataValues.loginAttempts + 1;
+            user.update(Object.assign(Object.assign({}, user), { loginAttempts }));
+        });
+    }
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             data.password = yield (0, bcrypt_1.encryptPassword)(data.password);
@@ -70,6 +77,7 @@ class CustomerUserService {
     }
     updateState(id, state) {
         return __awaiter(this, void 0, void 0, function* () {
+            state !== null && state !== void 0 ? state : this.failedAttemptsCounter(id, true);
             const user = yield this.findOne(id);
             const rta = yield user.update(Object.assign(Object.assign({}, user), { state }));
             return rta;

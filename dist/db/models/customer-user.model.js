@@ -75,6 +75,12 @@ const CustomerUserSchema = {
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
     },
+    loginAttempts: {
+        type: sequelize_1.DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: false,
+        field: "login_attempts",
+    },
 };
 class CustomerUser extends sequelize_1.Model {
     static associate(models) {

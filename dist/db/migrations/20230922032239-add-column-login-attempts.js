@@ -18,16 +18,18 @@ const customer_user_model_1 = __importDefault(require("../models/customer-user.m
 const { CUSTOMER_USER_TABLE } = customer_user_model_1.default;
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield queryInterface.addColumn(CUSTOMER_USER_TABLE, "login-attempts", {
+        yield queryInterface.addColumn(CUSTOMER_USER_TABLE, "login_attempts", {
             type: sequelize_1.DataTypes.INTEGER,
             defaultValue: 0,
+            allowNull: false,
+            field: "login_attempts"
         });
     });
 }
 exports.up = up;
 function down(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield queryInterface.removeColumn(CUSTOMER_USER_TABLE, "login-attempts");
+        yield queryInterface.removeColumn(CUSTOMER_USER_TABLE, "login_attempts");
     });
 }
 exports.down = down;
