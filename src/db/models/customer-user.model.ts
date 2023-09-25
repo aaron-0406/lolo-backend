@@ -81,6 +81,7 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
   },
   loginAttempts: {
     type: DataTypes.INTEGER,
+    defaultValue: 0,
     allowNull: false,
     field: "login_attempts",
   },
