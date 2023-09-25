@@ -1,10 +1,21 @@
 import Joi from "joi";
-import { ChangeCredentialsType, ChangePasswordType, LoginType } from "../types/auth.type";
+import {
+  ChangeCredentialsType,
+  ChangePasswordType,
+  LoginType,
+} from "../types/auth.type";
 
 const email = Joi.string().email().required();
 const password = Joi.string().required();
-const newPassword = Joi.string().required();
-const repeatPassword = Joi.string().required();
+const newPassword = Joi.string()
+  .min(12)
+  .max(70)
+  .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_])(?=.*[0-9])/)
+  .messages({
+    "string.pattern.base":
+      "El campo debe contener al menos una letra minúscula y mayúscula, un número, junto a un caracter.",
+  })
+  .required();  
 const name = Joi.string().required();
 const lastname = Joi.string().required();
 const dni = Joi.string().required().max(8);
@@ -19,7 +30,7 @@ const loginSchema = Joi.object<LoginType>({
 
 const changePasswordSchema = Joi.object<ChangePasswordType>({
   newPassword,
-  repeatPassword,
+  repeatPassword: newPassword,
 }).options({ abortEarly: true });
 
 const changeCredentialsSchema = Joi.object<ChangeCredentialsType>({

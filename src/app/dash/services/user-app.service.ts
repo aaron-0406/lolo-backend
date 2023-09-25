@@ -10,7 +10,6 @@ class CustomerUserService {
 
   async findAll() {
     const rta = await models.USER_APP.findAll();
-    throw boom.notFound("wtf amigo estas reloco")
 
     return rta;
   }

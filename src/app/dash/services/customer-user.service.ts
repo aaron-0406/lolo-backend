@@ -41,6 +41,13 @@ class CustomerUserService {
     return user;
   }
 
+  async failedAttemptsCounter(id: string, logged: boolean) {
+    const user = await this.findOne(id);
+
+    const loginAttempts = logged ? 0 : user.dataValues.loginAttempts + 1;
+    user.update({ ...user, loginAttempts });
+  }
+
   async create(data: CustomerUserType) {
     data.password = await encryptPassword(data.password);
     const newUser = await models.CUSTOMER_USER.create(data);
@@ -57,6 +64,8 @@ class CustomerUserService {
   }
 
   async updateState(id: string, state: boolean) {
+    state ?? this.failedAttemptsCounter(id, true);
+
     const user = await this.findOne(id);
     const rta = await user.update({ ...user, state });
 

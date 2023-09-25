@@ -79,6 +79,12 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
+  loginAttempts: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    allowNull: false,
+    field: "login_attempts",
+  },
 };
 
 class CustomerUser extends Model {
