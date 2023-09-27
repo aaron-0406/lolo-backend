@@ -9,7 +9,7 @@ import {
   getManagementActionsController,
   updateManagementActionController,
 } from "../../controllers/dash/management-action.controller";
-import { JWTAuth } from "../../middlewares/auth.handler";
+import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
 const {
   getManagementActionSchema,
@@ -38,6 +38,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
+  checkPermissions("P07-01"),
   validatorHandler(createManagementActionSchema, "body"),
   createManagementActionController
 );
@@ -45,6 +46,7 @@ router.post(
 router.put(
   "/:id",
   JWTAuth,
+  checkPermissions("P07-02"),
   validatorHandler(getManagementActionSchema, "params"),
   validatorHandler(updateManagementActionSchema, "body"),
   updateManagementActionController
@@ -53,6 +55,7 @@ router.put(
 router.delete(
   "/:id",
   JWTAuth,
+  checkPermissions("P07-03"),
   validatorHandler(getManagementActionSchema, "params"),
   deleteManagementActionController
 );

@@ -5,11 +5,12 @@ import { generateDocumentController } from "../../controllers/extrajudicial/docu
 
 const { createDocumentSchema } = DocumentSchema;
 const router = express.Router();
-import { JWTAuth } from "../../middlewares/auth.handler";
+import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
 router.post(
   "/",
   JWTAuth,
+  checkPermissions("P03-05"),
   validatorHandler(createDocumentSchema, "body"),
   generateDocumentController
 );

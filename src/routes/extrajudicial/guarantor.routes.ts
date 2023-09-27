@@ -9,7 +9,7 @@ import {
   getGuarantorController,
   updateGuarantorController,
 } from "../../controllers/extrajudicial/guarantor.controller";
-import { JWTAuth } from "../../middlewares/auth.handler";
+import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
 const {
   getGuarantorByClientIDSchema,
@@ -39,6 +39,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
+  checkPermissions("P03-07-01"),
   validatorHandler(createGuarantorSchema, "body"),
   createGuarantorController
 );
@@ -46,6 +47,7 @@ router.post(
 router.patch(
   "/:id",
   JWTAuth,
+  checkPermissions("P03-07-02"),
   validatorHandler(getGuarantorByIDSchema, "params"),
   validatorHandler(updateGuarantorSchema, "body"),
   updateGuarantorController
@@ -54,6 +56,7 @@ router.patch(
 router.delete(
   "/:id",
   JWTAuth,
+  checkPermissions("P03-07-03"),
   validatorHandler(getGuarantorByIDSchema, "params"),
   deleteGuarantorController
 );

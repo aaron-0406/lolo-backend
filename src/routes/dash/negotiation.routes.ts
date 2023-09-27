@@ -9,7 +9,7 @@ import {
   getNegotiationsController,
   updateNegotiationController,
 } from "../../controllers/dash/negotiation.controller";
-import { JWTAuth } from "../../middlewares/auth.handler";
+import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
 const {
   getNegotiationSchema,
@@ -38,6 +38,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
+  checkPermissions("P09-01"),
   validatorHandler(createNegotiationSchema, "body"),
   createNegotiationController
 );
@@ -45,6 +46,7 @@ router.post(
 router.put(
   "/:id",
   JWTAuth,
+  checkPermissions("P09-02"),
   validatorHandler(getNegotiationSchema, "params"),
   validatorHandler(updateNegotiationSchema, "body"),
   updateNegotiationController
@@ -53,6 +55,7 @@ router.put(
 router.delete(
   "/:id",
   JWTAuth,
+  checkPermissions("P09-03"),
   validatorHandler(getNegotiationSchema, "params"),
   deleteNegotiationController
 );

@@ -18,7 +18,7 @@ import {
   getProductsByCustomerIdController,
   updateProductController,
 } from "../../controllers/extrajudicial/product.controller";
-import { JWTAuth } from "../../middlewares/auth.handler";
+import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
 const router = Router();
 
@@ -46,6 +46,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
+  checkPermissions("P03-09-01"),
   validatorHandler(createProductSchema, "body"),
   createProductController
 );
@@ -53,6 +54,7 @@ router.post(
 router.put(
   "/:id",
   JWTAuth,
+  checkPermissions("P03-09-02"),
   validatorHandler(getProductByIdSchema, "params"),
   validatorHandler(updateProductSchema, "body"),
   updateProductController
@@ -69,6 +71,7 @@ router.patch(
 router.delete(
   "/:id",
   JWTAuth,
+  checkPermissions("P03-09-03"),
   validatorHandler(getProductByIdSchema, "params"),
   deleteProductController
 );
