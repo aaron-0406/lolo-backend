@@ -30,6 +30,7 @@ const goal_user_model_1 = __importDefault(require("./goal-user.model"));
 const permission_model_1 = __importDefault(require("./permission.model"));
 const roles_model_1 = __importDefault(require("./roles.model"));
 const role_permission_model_1 = __importDefault(require("./many-to-many/role-permission.model"));
+const user_log_model_1 = __importDefault(require("./user-log.model"));
 const { Customer, CustomerSchema } = customer_model_1.default;
 const { Funcionario, FuncionarioSchema } = funcionario_model_1.default;
 const { Bank, BankSchema } = bank_model_1.default;
@@ -56,6 +57,7 @@ const { GoalUser, GoalUserSchema } = goal_user_model_1.default;
 const { Role, RoleSchema } = roles_model_1.default;
 const { Permission, PermissionSchema } = permission_model_1.default;
 const { RolePermission, RolePermissionSchema } = role_permission_model_1.default;
+const { UserLog, UserLogSchema } = user_log_model_1.default;
 const setupModels = (sequelize) => {
     Customer.init(CustomerSchema, Customer.config(sequelize));
     Bank.init(BankSchema, Bank.config(sequelize));
@@ -83,6 +85,7 @@ const setupModels = (sequelize) => {
     Role.init(RoleSchema, Role.config(sequelize));
     Permission.init(PermissionSchema, Permission.config(sequelize));
     RolePermission.init(RolePermissionSchema, RolePermission.config(sequelize));
+    UserLog.init(UserLogSchema, UserLog.config(sequelize));
     Customer.associate(sequelize.models);
     CustomerUser.associate(sequelize.models);
     Bank.associate(sequelize.models);
@@ -107,5 +110,6 @@ const setupModels = (sequelize) => {
     Role.associate(sequelize.models);
     Permission.associate(sequelize.models);
     RolePermission.associate(sequelize.models);
+    UserLog.associate(sequelize.models);
 };
 exports.setupModels = setupModels;

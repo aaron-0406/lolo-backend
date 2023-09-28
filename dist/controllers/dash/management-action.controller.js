@@ -14,7 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteManagementActionController = exports.updateManagementActionController = exports.createManagementActionController = exports.getManagementActionByIdController = exports.getManagementActionByCHBController = exports.getManagementActionsController = void 0;
 const management_action_service_1 = __importDefault(require("../../app/dash/services/management-action.service"));
+const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
+const management_action_model_1 = __importDefault(require("../../db/models/management-action.model"));
 const service = new management_action_service_1.default();
+const serviceUserLog = new user_log_service_1.default();
+const { MANAGEMENT_ACTION_TABLE } = management_action_model_1.default;
 const getManagementActionsController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const managementActions = yield service.findAll();
@@ -48,9 +52,18 @@ const getManagementActionByIdController = (req, res, next) => __awaiter(void 0, 
 });
 exports.getManagementActionByIdController = getManagementActionByIdController;
 const createManagementActionController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     try {
         const body = req.body;
         const newManagementAction = yield service.create(body);
+        yield serviceUserLog.create({
+            customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
+            codeAction: "P07-01",
+            entity: MANAGEMENT_ACTION_TABLE,
+            entityId: Number(newManagementAction.dataValues.id),
+            ip: req.ip,
+            customerId: Number((_b = req.user) === null || _b === void 0 ? void 0 : _b.customerId),
+        });
         res.status(201).json(newManagementAction);
     }
     catch (error) {
@@ -59,10 +72,19 @@ const createManagementActionController = (req, res, next) => __awaiter(void 0, v
 });
 exports.createManagementActionController = createManagementActionController;
 const updateManagementActionController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c, _d;
     try {
         const { id } = req.params;
         const body = req.body;
         const managementAction = yield service.update(id, body);
+        yield serviceUserLog.create({
+            customerUserId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.id),
+            codeAction: "P07-02",
+            entity: MANAGEMENT_ACTION_TABLE,
+            entityId: Number(managementAction.dataValues.id),
+            ip: req.ip,
+            customerId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.customerId),
+        });
         res.json(managementAction);
     }
     catch (error) {
@@ -71,9 +93,18 @@ const updateManagementActionController = (req, res, next) => __awaiter(void 0, v
 });
 exports.updateManagementActionController = updateManagementActionController;
 const deleteManagementActionController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _e, _f;
     try {
         const { id } = req.params;
         yield service.delete(id);
+        yield serviceUserLog.create({
+            customerUserId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id),
+            codeAction: "P07-03",
+            entity: MANAGEMENT_ACTION_TABLE,
+            entityId: Number(id),
+            ip: req.ip,
+            customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+        });
         res.status(201).json({ id });
     }
     catch (error) {

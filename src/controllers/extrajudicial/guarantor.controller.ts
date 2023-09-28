@@ -1,6 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import GuarantorService from "../../app/extrajudicial/services/guarantor.service";
+import UserLogService from "../../app/dash/services/user-log.service";
+import guarantorModel from "../../db/models/guarantor.model";
+
 const service = new GuarantorService();
+const serviceUserLog = new UserLogService();
+
+const { GUARANTOR_TABLE } = guarantorModel;
 
 export const getGuarantorController = async (
   req: Request,
@@ -51,6 +57,16 @@ export const createGuarantorController = async (
   try {
     const body = req.body;
     const newGuarantor = await service.create(body);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P03-07-01",
+      entity: GUARANTOR_TABLE,
+      entityId: Number(newGuarantor.dataValues.id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     res.status(201).json(newGuarantor);
   } catch (error) {
     next(error);
@@ -66,6 +82,16 @@ export const updateGuarantorController = async (
     const { id } = req.params;
     const body = req.body;
     const guarantor = await service.update(id, body);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P03-07-02",
+      entity: GUARANTOR_TABLE,
+      entityId: Number(guarantor.dataValues.id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     res.json(guarantor);
   } catch (error) {
     next(error);
@@ -80,6 +106,16 @@ export const deleteGuarantorController = async (
   try {
     const { id } = req.params;
     await service.delete(id);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P03-07-03",
+      entity: GUARANTOR_TABLE,
+      entityId: Number(id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     res.status(201).json({ id });
   } catch (error) {
     next(error);

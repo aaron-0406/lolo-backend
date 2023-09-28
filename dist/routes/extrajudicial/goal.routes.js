@@ -15,8 +15,8 @@ router.get("/personal-goal", auth_handler_1.JWTAuth, goal_controller_1.getCustom
 router.get("/global-goal", auth_handler_1.JWTAuth, goal_controller_1.getGoalGlobalController);
 router.get("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getGoalByIdSchema, "params"), goal_controller_1.getGoalByIdController);
 router.get("/:goalId/customer-user", auth_handler_1.JWTAuth, goal_controller_1.getCustomerUsersGoals);
-router.put("/:goalId/customer-user", auth_handler_1.JWTAuth, goal_controller_1.updateCustomerUserGoals);
-router.post("/", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(createGoalSchema, "body"), goal_controller_1.createGoalController);
-router.patch("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getGoalByIdSchema, "params"), (0, validator_handler_1.default)(updateGoalSchema, "body"), goal_controller_1.updateGoalController);
-router.delete("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getGoalByIdSchema, "params"), goal_controller_1.deleteGoalController);
+router.put("/:goalId/customer-user", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P04-04"), goal_controller_1.updateCustomerUserGoals);
+router.post("/", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P04-01"), (0, validator_handler_1.default)(createGoalSchema, "body"), goal_controller_1.createGoalController);
+router.patch("/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P04-02"), (0, validator_handler_1.default)(getGoalByIdSchema, "params"), (0, validator_handler_1.default)(updateGoalSchema, "body"), goal_controller_1.updateGoalController);
+router.delete("/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P04-03"), (0, validator_handler_1.default)(getGoalByIdSchema, "params"), goal_controller_1.deleteGoalController);
 exports.default = router;

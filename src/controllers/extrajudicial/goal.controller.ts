@@ -2,9 +2,14 @@ import { NextFunction, Request, Response } from "express";
 import GoalService from "../../app/extrajudicial/services/goal.service";
 import GoalUserService from "../../app/extrajudicial/services/goal-user.service";
 import boom from "@hapi/boom";
+import UserLogService from "../../app/dash/services/user-log.service";
+import goalModel from "../../db/models/goal.model";
 
 const goalService = new GoalService();
 const goalUserService = new GoalUserService();
+const serviceUserLog = new UserLogService();
+
+const { GOAL_TABLE } = goalModel;
 
 export const createGoalController = async (
   req: Request,
@@ -16,6 +21,16 @@ export const createGoalController = async (
       ...req.body,
       customerId: Number(req.user?.customerId),
     });
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P04-01",
+      entity: GOAL_TABLE,
+      entityId: Number(goal.dataValues.id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     return res.json(goal);
   } catch (error) {
     next(error);
@@ -64,9 +79,7 @@ export const getGoalGlobalController = async (
   next: NextFunction
 ) => {
   try {
-    const goal = await goalService.finGlobalGoal(
-      Number(req.user?.customerId)
-    );
+    const goal = await goalService.finGlobalGoal(Number(req.user?.customerId));
     if (!goal) throw boom.notFound("Meta no encontrada");
     return res.json(goal);
   } catch (error) {
@@ -118,6 +131,16 @@ export const updateCustomerUserGoals = async (
       Number(req.params.goalId),
       Number(req.user?.customerId)
     );
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P04-04",
+      entity: GOAL_TABLE,
+      entityId: Number(goal.dataValues.id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     res.json(goal);
   } catch (error) {
     next(error);
@@ -135,6 +158,16 @@ export const updateGoalController = async (
       Number(req.user?.customerId),
       req.body
     );
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P04-02",
+      entity: GOAL_TABLE,
+      entityId: Number(goal.dataValues.id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     return res.json(goal);
   } catch (error) {
     next(error);
@@ -148,6 +181,16 @@ export const deleteGoalController = async (
 ) => {
   try {
     const goal = await goalService.delete(Number(req.params.id));
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P04-03",
+      entity: GOAL_TABLE,
+      entityId: Number(goal.dataValues.id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     return res.json(goal);
   } catch (error) {
     next(error);

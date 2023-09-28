@@ -14,7 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteNegotiationController = exports.updateNegotiationController = exports.createNegotiationController = exports.getNegotiationsByIdController = exports.getNegotiationsByCHBController = exports.getNegotiationsController = void 0;
 const negotiation_service_1 = __importDefault(require("../../app/dash/services/negotiation.service"));
+const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
+const negotiation_model_1 = __importDefault(require("../../db/models/negotiation.model"));
 const service = new negotiation_service_1.default();
+const serviceUserLog = new user_log_service_1.default();
+const { NEGOTIATION_TABLE } = negotiation_model_1.default;
 const getNegotiationsController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const negotiations = yield service.findAll();
@@ -48,9 +52,18 @@ const getNegotiationsByIdController = (req, res, next) => __awaiter(void 0, void
 });
 exports.getNegotiationsByIdController = getNegotiationsByIdController;
 const createNegotiationController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     try {
         const body = req.body;
         const newNegotiation = yield service.create(body);
+        yield serviceUserLog.create({
+            customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
+            codeAction: "P09-01",
+            entity: NEGOTIATION_TABLE,
+            entityId: Number(newNegotiation.dataValues.id),
+            ip: req.ip,
+            customerId: Number((_b = req.user) === null || _b === void 0 ? void 0 : _b.customerId),
+        });
         res.status(201).json(newNegotiation);
     }
     catch (error) {
@@ -59,10 +72,19 @@ const createNegotiationController = (req, res, next) => __awaiter(void 0, void 0
 });
 exports.createNegotiationController = createNegotiationController;
 const updateNegotiationController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c, _d;
     try {
         const { id } = req.params;
         const body = req.body;
         const negotiation = yield service.update(id, body);
+        yield serviceUserLog.create({
+            customerUserId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.id),
+            codeAction: "P09-02",
+            entity: NEGOTIATION_TABLE,
+            entityId: Number(negotiation.dataValues.id),
+            ip: req.ip,
+            customerId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.customerId),
+        });
         res.json(negotiation);
     }
     catch (error) {
@@ -71,9 +93,18 @@ const updateNegotiationController = (req, res, next) => __awaiter(void 0, void 0
 });
 exports.updateNegotiationController = updateNegotiationController;
 const deleteNegotiationController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _e, _f;
     try {
         const { id } = req.params;
         yield service.delete(id);
+        yield serviceUserLog.create({
+            customerUserId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id),
+            codeAction: "P09-03",
+            entity: NEGOTIATION_TABLE,
+            entityId: Number(id),
+            ip: req.ip,
+            customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+        });
         res.status(201).json({ id });
     }
     catch (error) {

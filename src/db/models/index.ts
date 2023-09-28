@@ -25,6 +25,7 @@ import goalUserModel from "./goal-user.model";
 import permissionModel from "./permission.model";
 import rolesModel from "./roles.model";
 import rolePermissionModel from "./many-to-many/role-permission.model";
+import userLogModel from "./user-log.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
@@ -52,6 +53,7 @@ const { GoalUser, GoalUserSchema } = goalUserModel;
 const { Role, RoleSchema } = rolesModel;
 const { Permission, PermissionSchema } = permissionModel;
 const { RolePermission, RolePermissionSchema } = rolePermissionModel;
+const { UserLog, UserLogSchema } = userLogModel;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -89,6 +91,7 @@ export const setupModels = (sequelize: Sequelize) => {
   Role.init(RoleSchema, Role.config(sequelize));
   Permission.init(PermissionSchema, Permission.config(sequelize));
   RolePermission.init(RolePermissionSchema, RolePermission.config(sequelize));
+  UserLog.init(UserLogSchema, UserLog.config(sequelize));
 
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
@@ -114,4 +117,5 @@ export const setupModels = (sequelize: Sequelize) => {
   Role.associate(sequelize.models);
   Permission.associate(sequelize.models);
   RolePermission.associate(sequelize.models);
+  UserLog.associate(sequelize.models);
 };

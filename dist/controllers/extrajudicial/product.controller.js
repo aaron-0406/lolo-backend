@@ -15,7 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProductController = exports.changeProductController = exports.updateProductController = exports.createProductController = exports.getProductsByCustomerIdController = exports.getProductByCodeController = exports.getProductsByClientCodeController = void 0;
 const boom_1 = __importDefault(require("@hapi/boom"));
 const product_service_1 = __importDefault(require("../../app/extrajudicial/services/product.service"));
+const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
+const product_model_1 = __importDefault(require("../../db/models/product.model"));
 const service = new product_service_1.default();
+const serviceUserLog = new user_log_service_1.default();
+const { PRODUCT_TABLE } = product_model_1.default;
 const getProductsByClientCodeController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { code } = req.params;
@@ -50,8 +54,17 @@ const getProductsByCustomerIdController = (req, res, next) => __awaiter(void 0, 
 });
 exports.getProductsByCustomerIdController = getProductsByCustomerIdController;
 const createProductController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     try {
         const product = yield service.create(req.body);
+        yield serviceUserLog.create({
+            customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
+            codeAction: "P03-09-01",
+            entity: PRODUCT_TABLE,
+            entityId: Number(product.dataValues.id),
+            ip: req.ip,
+            customerId: Number((_b = req.user) === null || _b === void 0 ? void 0 : _b.customerId),
+        });
         res.json(product);
     }
     catch (error) {
@@ -60,9 +73,18 @@ const createProductController = (req, res, next) => __awaiter(void 0, void 0, vo
 });
 exports.createProductController = createProductController;
 const updateProductController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c, _d;
     try {
         const { id } = req.params;
         const product = yield service.update(req.body, Number(id));
+        yield serviceUserLog.create({
+            customerUserId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.id),
+            codeAction: "P03-09-02",
+            entity: PRODUCT_TABLE,
+            entityId: Number(product.dataValues.id),
+            ip: req.ip,
+            customerId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.customerId),
+        });
         res.json(product);
     }
     catch (error) {
@@ -82,9 +104,18 @@ const changeProductController = (req, res, next) => __awaiter(void 0, void 0, vo
 });
 exports.changeProductController = changeProductController;
 const deleteProductController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _e, _f;
     try {
         const { id } = req.params;
         yield service.delete(Number(id));
+        yield serviceUserLog.create({
+            customerUserId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id),
+            codeAction: "P03-09-03",
+            entity: PRODUCT_TABLE,
+            entityId: Number(id),
+            ip: req.ip,
+            customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+        });
         res.json(Number(id));
     }
     catch (error) {

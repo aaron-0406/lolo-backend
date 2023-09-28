@@ -14,7 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteDirectionController = exports.updateDirectionController = exports.createDirectionController = exports.getDirectionByIdController = exports.getDirectionByClientIdController = exports.getAllDirectionsController = void 0;
 const direction_service_1 = __importDefault(require("../../app/extrajudicial/services/direction.service"));
+const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
+const direction_model_1 = __importDefault(require("../../db/models/direction.model"));
 const service = new direction_service_1.default();
+const serviceUserLog = new user_log_service_1.default();
+const { DIRECTION_TABLE } = direction_model_1.default;
 const getAllDirectionsController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const directions = yield service.findAll();
@@ -48,9 +52,18 @@ const getDirectionByIdController = (req, res, next) => __awaiter(void 0, void 0,
 });
 exports.getDirectionByIdController = getDirectionByIdController;
 const createDirectionController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     try {
         const body = req.body;
         const newDirection = yield service.create(body);
+        yield serviceUserLog.create({
+            customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
+            codeAction: "P03-08-01",
+            entity: DIRECTION_TABLE,
+            entityId: Number(newDirection.dataValues.id),
+            ip: req.ip,
+            customerId: Number((_b = req.user) === null || _b === void 0 ? void 0 : _b.customerId),
+        });
         res.status(201).json(newDirection);
     }
     catch (error) {
@@ -59,10 +72,19 @@ const createDirectionController = (req, res, next) => __awaiter(void 0, void 0, 
 });
 exports.createDirectionController = createDirectionController;
 const updateDirectionController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c, _d;
     try {
         const { id } = req.params;
         const body = req.body;
         const direction = yield service.update(id, body);
+        yield serviceUserLog.create({
+            customerUserId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.id),
+            codeAction: "P03-08-02",
+            entity: DIRECTION_TABLE,
+            entityId: Number(direction.dataValues.id),
+            ip: req.ip,
+            customerId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.customerId),
+        });
         res.json(direction);
     }
     catch (error) {
@@ -71,9 +93,18 @@ const updateDirectionController = (req, res, next) => __awaiter(void 0, void 0, 
 });
 exports.updateDirectionController = updateDirectionController;
 const deleteDirectionController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _e, _f;
     try {
         const { id } = req.params;
         yield service.delete(id);
+        yield serviceUserLog.create({
+            customerUserId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id),
+            codeAction: "P03-08-03",
+            entity: DIRECTION_TABLE,
+            entityId: Number(id),
+            ip: req.ip,
+            customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+        });
         res.status(201).json({ id });
     }
     catch (error) {

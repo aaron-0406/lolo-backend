@@ -240,7 +240,7 @@ class ClientService {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield this.findCode(code, chb);
             yield client.destroy();
-            return { code };
+            return { code, id: client.dataValues.id };
         });
     }
     readAndUpdateExcelFile(date, cityId) {

@@ -1,7 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import FuncionarioService from "../../app/dash/services/funcionario.service";
+import UserLogService from "../../app/dash/services/user-log.service";
+import funcionarioModel from "../../db/models/funcionario.model";
 
 const service = new FuncionarioService();
+const serviceUserLog = new UserLogService();
+
+const { FUNCIONARIO_TABLE } = funcionarioModel;
 
 export const getFuncionariosController = async (
   req: Request,
@@ -52,6 +57,16 @@ export const createFuncionarioController = async (
   try {
     const body = req.body;
     const newFuncionario = await service.create(body);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P08-01",
+      entity: FUNCIONARIO_TABLE,
+      entityId: Number(newFuncionario.dataValues.id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     res.status(201).json(newFuncionario);
   } catch (error) {
     next(error);
@@ -67,6 +82,16 @@ export const updateFuncionarioController = async (
     const { id } = req.params;
     const body = req.body;
     const funcionario = await service.update(id, body);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P08-02",
+      entity: FUNCIONARIO_TABLE,
+      entityId: Number(funcionario.dataValues.id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     res.json(funcionario);
   } catch (error) {
     next(error);
@@ -81,6 +106,16 @@ export const deleteFuncionarioController = async (
   try {
     const { id } = req.params;
     await service.delete(id);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P08-03",
+      entity: FUNCIONARIO_TABLE,
+      entityId: Number(id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     res.status(201).json({ id });
   } catch (error) {
     next(error);

@@ -28,9 +28,12 @@ exports.JWTAuth = JWTAuth;
 const checkPermissions = (...permissions) => {
     return (req, res, next) => {
         const user = req.user;
+        const userPermissions = user === null || user === void 0 ? void 0 : user.permissions.map((permission) => {
+            return permission.code;
+        });
         if (!user)
             return next(boom_1.default.unauthorized("No JWT"));
-        if (permissions.some((permission) => user.permissions.includes(permission)))
+        if (permissions.some((permission) => userPermissions === null || userPermissions === void 0 ? void 0 : userPermissions.includes(permission)))
             return next();
         return next(boom_1.default.unauthorized("No tienes permisos para realizar esta petición"));
     };

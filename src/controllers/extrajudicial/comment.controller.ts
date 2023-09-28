@@ -1,7 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import CommentService from "../../app/extrajudicial/services/comment.service";
+import UserLogService from "../../app/dash/services/user-log.service";
+import commentModel from "../../db/models/comment.model";
 
 const service = new CommentService();
+const serviceUserLog = new UserLogService();
+
+const { COMMENT_TABLE } = commentModel;
 
 export const getAllCommentsByClientController = async (
   req: Request,
@@ -88,6 +93,16 @@ export const createCommentController = async (
   try {
     const body = req.body;
     const newComment = await service.create(body);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P03-01-01",
+      entity: COMMENT_TABLE,
+      entityId: Number(newComment.dataValues.id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     res.status(201).json(newComment);
   } catch (error) {
     next(error);
@@ -103,6 +118,16 @@ export const updateCommentController = async (
     const { id } = req.params;
     const body = req.body;
     const comment = await service.update(id, body);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P03-01-02",
+      entity: COMMENT_TABLE,
+      entityId: Number(comment.dataValues.id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     res.json(comment);
   } catch (error) {
     next(error);
@@ -117,6 +142,16 @@ export const deleteCommentController = async (
   try {
     const { id } = req.params;
     await service.delete(id);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P03-01-03",
+      entity: COMMENT_TABLE,
+      entityId: Number(id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     res.status(201).json({ id });
   } catch (error) {
     next(error);
