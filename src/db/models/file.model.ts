@@ -21,12 +21,12 @@ const FileSchema: ModelAttributes<File, FileType> = {
   name: {
     allowNull: false,
     field: "name",
-    type: DataTypes.STRING(100),
+    type: DataTypes.TEXT("long"),
   },
   originalName: {
     allowNull: false,
     field: "originalname",
-    type: DataTypes.STRING(100),
+    type: DataTypes.TEXT("long"),
   },
   createdAt: {
     allowNull: false,
