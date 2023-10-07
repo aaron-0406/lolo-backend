@@ -5,10 +5,14 @@ const { FILE_TABLE } = fileModel;
 
 export async function up(queryInterface: QueryInterface) {
   await queryInterface.changeColumn(FILE_TABLE, "name", {
+    allowNull: false,
+    field: "name",
     type: DataTypes.TEXT("long"),
   });
 
   await queryInterface.changeColumn(FILE_TABLE, "originalname", {
+    allowNull: false,
+    field: "originalname",
     type: DataTypes.TEXT("long"),
   });
 }

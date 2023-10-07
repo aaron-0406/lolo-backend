@@ -19,9 +19,13 @@ const { FILE_TABLE } = file_model_1.default;
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
         yield queryInterface.changeColumn(FILE_TABLE, "name", {
+            allowNull: false,
+            field: "name",
             type: sequelize_1.DataTypes.TEXT("long"),
         });
         yield queryInterface.changeColumn(FILE_TABLE, "originalname", {
+            allowNull: false,
+            field: "originalname",
             type: sequelize_1.DataTypes.TEXT("long"),
         });
     });
