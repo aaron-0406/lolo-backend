@@ -14,7 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCommentController = exports.updateCommentController = exports.createCommentController = exports.getCommentByIdController = exports.getChartByCustomerUserController = exports.getAllCommentsByClientController = void 0;
 const comment_service_1 = __importDefault(require("../../app/extrajudicial/services/comment.service"));
+const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
+const comment_model_1 = __importDefault(require("../../db/models/comment.model"));
 const service = new comment_service_1.default();
+const serviceUserLog = new user_log_service_1.default();
+const { COMMENT_TABLE } = comment_model_1.default;
 const getAllCommentsByClientController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { clientId } = req.params;
@@ -77,9 +81,18 @@ const getCommentByIdController = (req, res, next) => __awaiter(void 0, void 0, v
 });
 exports.getCommentByIdController = getCommentByIdController;
 const createCommentController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     try {
         const body = req.body;
         const newComment = yield service.create(body);
+        yield serviceUserLog.create({
+            customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
+            codeAction: "P03-01-01",
+            entity: COMMENT_TABLE,
+            entityId: Number(newComment.dataValues.id),
+            ip: req.ip,
+            customerId: Number((_b = req.user) === null || _b === void 0 ? void 0 : _b.customerId),
+        });
         res.status(201).json(newComment);
     }
     catch (error) {
@@ -88,10 +101,19 @@ const createCommentController = (req, res, next) => __awaiter(void 0, void 0, vo
 });
 exports.createCommentController = createCommentController;
 const updateCommentController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c, _d;
     try {
         const { id } = req.params;
         const body = req.body;
         const comment = yield service.update(id, body);
+        yield serviceUserLog.create({
+            customerUserId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.id),
+            codeAction: "P03-01-02",
+            entity: COMMENT_TABLE,
+            entityId: Number(comment.dataValues.id),
+            ip: req.ip,
+            customerId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.customerId),
+        });
         res.json(comment);
     }
     catch (error) {
@@ -100,9 +122,18 @@ const updateCommentController = (req, res, next) => __awaiter(void 0, void 0, vo
 });
 exports.updateCommentController = updateCommentController;
 const deleteCommentController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _e, _f;
     try {
         const { id } = req.params;
         yield service.delete(id);
+        yield serviceUserLog.create({
+            customerUserId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id),
+            codeAction: "P03-01-03",
+            entity: COMMENT_TABLE,
+            entityId: Number(id),
+            ip: req.ip,
+            customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+        });
         res.status(201).json({ id });
     }
     catch (error) {

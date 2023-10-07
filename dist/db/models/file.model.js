@@ -17,12 +17,12 @@ const FileSchema = {
     name: {
         allowNull: false,
         field: "name",
-        type: sequelize_1.DataTypes.STRING(100),
+        type: sequelize_1.DataTypes.TEXT("long"),
     },
     originalName: {
         allowNull: false,
         field: "originalname",
-        type: sequelize_1.DataTypes.STRING(100),
+        type: sequelize_1.DataTypes.TEXT("long"),
     },
     createdAt: {
         allowNull: false,

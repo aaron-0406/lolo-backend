@@ -12,13 +12,13 @@ const createJudicialCourtSchema = joi_1.default.object({
     customerHasBankId: customerHasBankId.required(),
 });
 const updateJudicialCourtSchema = joi_1.default.object({
-    court: court.optional(),
+    court: court.required(),
 });
 const getJudicialCourtByIDSchema = joi_1.default.object({
     id: id.required(),
 });
 const getJudicialCourtByCHBSchema = joi_1.default.object({
-    chb: id.required(),
+    chb: customerHasBankId.required(),
 });
 exports.default = {
     createJudicialCourtSchema,

@@ -43,8 +43,10 @@ app.use(express.urlencoded({ extended: false }));
 //CORS
 const whitelist = [
   "http://localhost:3000",
+  "http://localhost:5000",
   "http://192.168.1.24:3000",
   "http://192.168.0.10:3000",
+  "https://lolobank.com",
   "http://lolobank.com",
 ];
 const options: CorsOptions = {
@@ -68,8 +70,8 @@ app.get("*", (req, res) => {
 });
 
 app.use(logErrors);
-app.use(ormErrorHandler);
 app.use(boomErrorHandler);
+app.use(ormErrorHandler);
 app.use(errorHandler);
 
 app.listen(port, () => {

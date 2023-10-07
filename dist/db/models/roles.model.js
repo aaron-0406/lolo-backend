@@ -28,6 +28,10 @@ const RoleSchema = {
 class Role extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.CUSTOMER, { as: "customer" });
+        this.hasMany(models.CUSTOMER_USER, {
+            as: "customerUser",
+            foreignKey: "roleId",
+        });
     }
     static config(sequelize) {
         return {

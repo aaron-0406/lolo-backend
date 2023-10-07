@@ -63,7 +63,7 @@ const getJudicialCaseFileByIDSchema = joi_1.default.object({
     id: id.required(),
 });
 const getJudicialCaseFileByNumberCaseFileSchema = joi_1.default.object({
-    id: id.required(),
+    numberCaseFile: numberCaseFile.required(),
 });
 exports.default = {
     createJudicialCaseFileSchema,

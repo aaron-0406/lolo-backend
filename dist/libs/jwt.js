@@ -8,7 +8,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // Sign token function
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const signToken = (payload, secret) => {
-    return jsonwebtoken_1.default.sign(payload, secret);
+    return jsonwebtoken_1.default.sign(payload, secret, { expiresIn: 14400 });
 };
 exports.signToken = signToken;
 // Verify token

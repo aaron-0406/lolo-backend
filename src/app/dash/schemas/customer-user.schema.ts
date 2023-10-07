@@ -7,12 +7,19 @@ const lastName = Joi.string().min(2).max(100);
 const phone = Joi.string().min(2).max(50);
 const dni = Joi.string().max(8);
 const email = Joi.string().min(2).max(70);
-const password = Joi.string().min(2).max(70);
-const privilege = Joi.string().max(6);
+const password = Joi.string()
+  .min(12)
+  .max(70)
+  .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_])(?=.*[0-9])/)
+  .messages({
+    "string.pattern.base":
+      "El campo debe contener al menos una letra minúscula y mayúscula, un número, junto a un caracter.",
+  });
 const state = Joi.boolean();
 const createAt = Joi.date();
 const customerId = Joi.number();
-const roleId = Joi.number();
+const roleId = Joi.number().integer().min(1);
+const loginAttempts = Joi.number().integer().min(0);
 
 const createCustomerUserSchema = Joi.object<
   Omit<CustomerUserType, "id" | "permissions">,
@@ -24,11 +31,11 @@ const createCustomerUserSchema = Joi.object<
   dni: dni.optional(),
   email: email.required(),
   password: password.required(),
-  privilege: privilege.required(),
   state: state.required(),
   createdAt: createAt.optional(),
   customerId: customerId.required(),
   roleId: roleId.required(),
+  loginAttempts: loginAttempts.required(),
 });
 
 const updateCustomerUserStateSchema = Joi.object<{ state: boolean }, true>({
@@ -38,7 +45,12 @@ const updateCustomerUserStateSchema = Joi.object<{ state: boolean }, true>({
 const updateCustomerUserSchema = Joi.object<
   Omit<
     CustomerUserType,
-    "id" | "email" | "customerId" | "createdAt" | "permissions"
+    | "id"
+    | "email"
+    | "customerId"
+    | "createdAt"
+    | "permissions"
+    | "loginAttempts"
   >,
   true
 >({
@@ -46,7 +58,6 @@ const updateCustomerUserSchema = Joi.object<
   lastName: lastName.required(),
   phone: phone.required(),
   dni: dni.optional(),
-  privilege: privilege.required(),
   state: state.required(),
   password: password.optional(),
   roleId: roleId.required(),

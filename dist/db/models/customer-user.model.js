@@ -43,10 +43,6 @@ const CustomerUserSchema = {
         unique: true,
         type: sequelize_1.DataTypes.TEXT,
     },
-    privilege: {
-        allowNull: false,
-        type: sequelize_1.DataTypes.STRING(6),
-    },
     state: {
         allowNull: false,
         type: sequelize_1.DataTypes.TINYINT({ length: 1 }),
@@ -65,6 +61,8 @@ const CustomerUserSchema = {
             model: roles_model_1.default.ROLE_TABLE,
             key: "id_role",
         },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
     },
     customerId: {
         allowNull: false,
@@ -77,10 +75,17 @@ const CustomerUserSchema = {
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
     },
+    loginAttempts: {
+        type: sequelize_1.DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: false,
+        field: "login_attempts",
+    },
 };
 class CustomerUser extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.CUSTOMER, { as: "customer" });
+        this.belongsTo(models.ROLE, { as: "role" });
         this.hasMany(models.CLIENT, {
             as: "client",
             foreignKey: "customerUserId",

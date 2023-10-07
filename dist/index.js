@@ -21,8 +21,10 @@ app.use(express_1.default.urlencoded({ extended: false }));
 //CORS
 const whitelist = [
     "http://localhost:3000",
+    "http://localhost:5000",
     "http://192.168.1.24:3000",
     "http://192.168.0.10:3000",
+    "https://lolobank.com",
     "http://lolobank.com",
 ];
 const options = {
@@ -44,8 +46,8 @@ app.get("*", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "/public/build", "index.html"));
 });
 app.use(logErrors);
-app.use(ormErrorHandler);
 app.use(boomErrorHandler);
+app.use(ormErrorHandler);
 app.use(errorHandler);
 app.listen(port, () => {
     fs_1.default.mkdir(path_1.default.join(__dirname, "./public/download"), () => { });

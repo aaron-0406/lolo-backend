@@ -17,16 +17,29 @@ const template_has_values_service_1 = __importDefault(require("../../app/extraju
 const document_service_1 = __importDefault(require("../../app/extrajudicial/services/document.service"));
 const client_service_1 = __importDefault(require("../../app/extrajudicial/services/client.service"));
 const helpers_1 = require("../../libs/helpers");
+const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
+const template_has_values_model_1 = __importDefault(require("../../db/models/many-to-many/template-has-values.model"));
 const serviceTemplateHasValues = new template_has_values_service_1.default();
 const serviceClient = new client_service_1.default();
 const service = new document_service_1.default();
+const serviceUserLog = new user_log_service_1.default();
+const { TEMPLATE_HAS_VALUES_TABLE } = template_has_values_model_1.default;
 const generateDocumentController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     try {
         const { body: { templateHasValuesId, usersId }, } = req;
         const templateHasValues = yield serviceTemplateHasValues.findOneWidthTemplate(templateHasValuesId);
         const clients = yield serviceClient.findAllBDetailsAndClientsId(usersId);
         const doc = yield service.generateDocument(templateHasValues, clients);
         const docName = yield (0, helpers_1.saveWordDocument)(doc, templateHasValues.name);
+        yield serviceUserLog.create({
+            customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
+            codeAction: "P03-05",
+            entity: TEMPLATE_HAS_VALUES_TABLE,
+            entityId: Number(templateHasValuesId),
+            ip: req.ip,
+            customerId: Number((_b = req.user) === null || _b === void 0 ? void 0 : _b.customerId),
+        });
         res.json({ docName });
     }
     catch (error) {

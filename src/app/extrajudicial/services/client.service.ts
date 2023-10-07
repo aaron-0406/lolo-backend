@@ -277,7 +277,7 @@ class ClientService {
   async delete(code: string, chb: string, idCustomer: number) {
     const client = await this.findCode(code, chb);
     await client.destroy();
-    return { code };
+    return { code, id: client.dataValues.id };
   }
 
   async readAndUpdateExcelFile(date: Date, cityId: number) {

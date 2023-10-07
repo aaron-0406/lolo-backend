@@ -26,7 +26,7 @@ class JudicialCourtService {
     findAllByCHB(chb) {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.JUDICIAL_COURT.findAll({
-                where: { customerHasBankId: { chb } },
+                where: { customerHasBankId: chb },
             });
             return rta;
         });

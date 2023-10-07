@@ -47,10 +47,6 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
     unique: true,
     type: DataTypes.TEXT,
   },
-  privilege: {
-    allowNull: false,
-    type: DataTypes.STRING(6),
-  },
   state: {
     allowNull: false,
     type: DataTypes.TINYINT({ length: 1 }),
@@ -69,6 +65,8 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
       model: rolesModel.ROLE_TABLE,
       key: "id_role",
     },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
   },
   customerId: {
     allowNull: false,
@@ -81,11 +79,19 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
+  loginAttempts: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    allowNull: false,
+    field: "login_attempts",
+  },
 };
 
 class CustomerUser extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER, { as: "customer" });
+
+    this.belongsTo(models.ROLE, { as: "role" });
 
     this.hasMany(models.CLIENT, {
       as: "client",

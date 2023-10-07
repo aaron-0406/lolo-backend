@@ -9,7 +9,7 @@ import {
   updateDirectionController,
   deleteDirectionController,
 } from "../../controllers/extrajudicial/direction.controller";
-import { JWTAuth } from "../../middlewares/auth.handler";
+import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
 const {
   createDirectionSchema,
@@ -39,6 +39,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
+  checkPermissions("P03-08-01"),
   validatorHandler(createDirectionSchema, "body"),
   createDirectionController
 );
@@ -46,6 +47,7 @@ router.post(
 router.patch(
   "/:id",
   JWTAuth,
+  checkPermissions("P03-08-02"),
   validatorHandler(getDirectionByIDSchema, "params"),
   validatorHandler(updateDirectionSchema, "body"),
   updateDirectionController
@@ -54,6 +56,7 @@ router.patch(
 router.delete(
   "/:id",
   JWTAuth,
+  checkPermissions("P03-08-03"),
   validatorHandler(getDirectionByIDSchema, "params"),
   deleteDirectionController
 );

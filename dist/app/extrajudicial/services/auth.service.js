@@ -14,8 +14,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt_1 = require("../../../libs/bcrypt");
 const sequelize_1 = __importDefault(require("../../../libs/sequelize"));
+const customer_user_service_1 = __importDefault(require("../../dash/services/customer-user.service"));
 const boom_1 = __importDefault(require("@hapi/boom"));
 const { models } = sequelize_1.default;
+const service = new customer_user_service_1.default();
 class AuthService {
     constructor() { }
     login(data) {
@@ -28,8 +30,15 @@ class AuthService {
                 throw boom_1.default.notFound("Correo o contraseña incorrectos");
             if (!(userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.dataValues.state))
                 throw boom_1.default.notFound("Usuario inhabilitado");
-            if (!(yield (0, bcrypt_1.matchPassword)(password, userCustomer.dataValues.password)))
+            if (!(yield (0, bcrypt_1.matchPassword)(password, userCustomer.dataValues.password))) {
+                if ((userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.dataValues.loginAttempts) >= 2) {
+                    service.updateState(String(customerId), false);
+                    throw boom_1.default.notFound("Alcanzó el máximo número de intentos fallidos, su cuenta fue bloqueada.");
+                }
+                service.failedAttemptsCounter(String(customerId), false);
                 throw boom_1.default.notFound("Correo o contraseña incorrectos");
+            }
+            service.failedAttemptsCounter(String(customerId), true);
             return userCustomer;
         });
     }

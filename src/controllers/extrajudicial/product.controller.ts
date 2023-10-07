@@ -1,8 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 import boom from "@hapi/boom";
 import ProductService from "../../app/extrajudicial/services/product.service";
+import UserLogService from "../../app/dash/services/user-log.service";
+import productModel from "../../db/models/product.model";
 
 const service = new ProductService();
+const serviceUserLog = new UserLogService();
+
+const { PRODUCT_TABLE } = productModel;
 
 export const getProductsByClientCodeController = async (
   req: Request,
@@ -53,6 +58,16 @@ export const createProductController = async (
 ) => {
   try {
     const product = await service.create(req.body);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P03-09-01",
+      entity: PRODUCT_TABLE,
+      entityId: Number(product.dataValues.id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     res.json(product);
   } catch (error: any) {
     next(boom.badRequest(error.message));
@@ -67,6 +82,16 @@ export const updateProductController = async (
   try {
     const { id } = req.params;
     const product = await service.update(req.body, Number(id));
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P03-09-02",
+      entity: PRODUCT_TABLE,
+      entityId: Number(product.dataValues.id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     res.json(product);
   } catch (error: any) {
     next(boom.badRequest(error.message));
@@ -95,6 +120,16 @@ export const deleteProductController = async (
   try {
     const { id } = req.params;
     await service.delete(Number(id));
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P03-09-03",
+      entity: PRODUCT_TABLE,
+      entityId: Number(id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     res.json(Number(id));
   } catch (error: any) {
     next(boom.badRequest(error.message));

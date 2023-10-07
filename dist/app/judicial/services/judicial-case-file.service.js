@@ -25,12 +25,15 @@ class JudicialCaseFileService {
     }
     findAllByClient(clientId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.JUDICIAL_CASE_FILE.findAll({
+            const judicialCaseFile = yield models.JUDICIAL_CASE_FILE.findAll({
                 where: {
                     clientId,
                 },
             });
-            return rta;
+            if (!judicialCaseFile) {
+                throw boom_1.default.notFound("Expediente no encontrado");
+            }
+            return judicialCaseFile;
         });
     }
     findByID(id) {

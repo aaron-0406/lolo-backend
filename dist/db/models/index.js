@@ -34,6 +34,7 @@ const judicial_case_file_model_1 = __importDefault(require("./judicial-case-file
 const judicial_subject_model_1 = __importDefault(require("./judicial-subject.model"));
 const judicial_court_model_1 = __importDefault(require("./judicial-court.model"));
 const judicial_procedural_way_model_1 = __importDefault(require("./judicial-procedural-way.model"));
+const user_log_model_1 = __importDefault(require("./user-log.model"));
 const { Customer, CustomerSchema } = customer_model_1.default;
 const { Funcionario, FuncionarioSchema } = funcionario_model_1.default;
 const { Bank, BankSchema } = bank_model_1.default;
@@ -64,6 +65,7 @@ const { JudicialCaseFile, JudicialCaseFileSchema } = judicial_case_file_model_1.
 const { JudicialSubject, JudicialSubjectSchema } = judicial_subject_model_1.default;
 const { JudicialCourt, JudicialCourtSchema } = judicial_court_model_1.default;
 const { JudicialProceduralWay, JudicialProceduralWaySchema } = judicial_procedural_way_model_1.default;
+const { UserLog, UserLogSchema } = user_log_model_1.default;
 const setupModels = (sequelize) => {
     Customer.init(CustomerSchema, Customer.config(sequelize));
     Bank.init(BankSchema, Bank.config(sequelize));
@@ -95,6 +97,7 @@ const setupModels = (sequelize) => {
     JudicialSubject.init(JudicialSubjectSchema, JudicialSubject.config(sequelize));
     JudicialCourt.init(JudicialCourtSchema, JudicialCourt.config(sequelize));
     JudicialProceduralWay.init(JudicialProceduralWaySchema, JudicialProceduralWay.config(sequelize));
+    UserLog.init(UserLogSchema, UserLog.config(sequelize));
     Customer.associate(sequelize.models);
     CustomerUser.associate(sequelize.models);
     Bank.associate(sequelize.models);
@@ -123,5 +126,6 @@ const setupModels = (sequelize) => {
     JudicialCourt.associate(sequelize.models);
     JudicialSubject.associate(sequelize.models);
     JudicialProceduralWay.associate(sequelize.models);
+    UserLog.associate(sequelize.models);
 };
 exports.setupModels = setupModels;

@@ -9,7 +9,7 @@ import {
   findFileByClientIdController,
   findFileByIdController,
 } from "../../controllers/extrajudicial/file.controller";
-import { JWTAuth } from "../../middlewares/auth.handler";
+import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
 const { createFileSchema, getFileSchema } = fileSchema;
 const router = express.Router();
@@ -31,6 +31,7 @@ router.get(
 router.get(
   "/single/:idCustomer/:chb/:code/:id",
   JWTAuth,
+  checkPermissions("P03-06-01"),
   validatorHandler(getFileSchema, "params"),
   findFileByIdController
 );
@@ -38,6 +39,7 @@ router.get(
 router.post(
   "/:idCustomer/:chb/:code/:id",
   JWTAuth,
+  checkPermissions("P03-06-02"),
   validatorHandler(createFileSchema, "params"),
   multerFile,
   createFileController
@@ -61,6 +63,7 @@ router.post(
 router.delete(
   "/:idCustomer/:chb/:code/:id",
   JWTAuth,
+  checkPermissions("P03-06-03"),
   validatorHandler(createFileSchema, "params"),
   deleteFileController
 );

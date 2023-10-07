@@ -29,6 +29,7 @@ import judicialCaseFileModel from "./judicial-case-file.model";
 import judicialSubjectModel from "./judicial-subject.model";
 import judicialCourtModel from "./judicial-court.model";
 import judicialProceduralWayModel from "./judicial-procedural-way.model";
+import userLogModel from "./user-log.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
@@ -61,6 +62,7 @@ const { JudicialSubject, JudicialSubjectSchema } = judicialSubjectModel;
 const { JudicialCourt, JudicialCourtSchema } = judicialCourtModel;
 const { JudicialProceduralWay, JudicialProceduralWaySchema } =
   judicialProceduralWayModel;
+const { UserLog, UserLogSchema } = userLogModel;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -108,6 +110,7 @@ export const setupModels = (sequelize: Sequelize) => {
     JudicialProceduralWaySchema,
     JudicialProceduralWay.config(sequelize)
   );
+  UserLog.init(UserLogSchema, UserLog.config(sequelize));
 
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
@@ -137,4 +140,5 @@ export const setupModels = (sequelize: Sequelize) => {
   JudicialCourt.associate(sequelize.models);
   JudicialSubject.associate(sequelize.models);
   JudicialProceduralWay.associate(sequelize.models);
+  UserLog.associate(sequelize.models);
 };

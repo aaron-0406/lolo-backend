@@ -13,7 +13,7 @@ import {
   getCustomerUserGoal as getPersonalGoal,
   getGoalGlobalController,
 } from "../../controllers/extrajudicial/goal.controller";
-import { JWTAuth } from "../../middlewares/auth.handler";
+import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
 const router = Router();
 const {
@@ -40,11 +40,18 @@ router.get(
 );
 
 router.get("/:goalId/customer-user", JWTAuth, getCustomerUsersGoals);
-router.put("/:goalId/customer-user", JWTAuth, updateCustomerUserGoals);
+
+router.put(
+  "/:goalId/customer-user",
+  JWTAuth,
+  checkPermissions("P04-04"),
+  updateCustomerUserGoals
+);
 
 router.post(
   "/",
   JWTAuth,
+  checkPermissions("P04-01"),
   validatorHandler(createGoalSchema, "body"),
   createGoalController
 );
@@ -52,6 +59,7 @@ router.post(
 router.patch(
   "/:id",
   JWTAuth,
+  checkPermissions("P04-02"),
   validatorHandler(getGoalByIdSchema, "params"),
   validatorHandler(updateGoalSchema, "body"),
   updateGoalController
@@ -60,6 +68,7 @@ router.patch(
 router.delete(
   "/:id",
   JWTAuth,
+  checkPermissions("P04-03"),
   validatorHandler(getGoalByIdSchema, "params"),
   deleteGoalController
 );

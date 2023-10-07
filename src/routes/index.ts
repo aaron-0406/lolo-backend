@@ -6,7 +6,6 @@ import customerHasBankRouter from "./dash/customer-has-bank.routes";
 import funcionarioRouter from "./dash/funcionario.routes";
 import cityRouter from "./dash/city.routes";
 import customerUserRouter from "./dash/customer-user.routes";
-import userAppRouter from "./dash/user-app.routes";
 import clientRouter from "./extrajudicial/client.routes";
 import guarantorRouter from "./extrajudicial/guarantor.routes";
 import directionRouter from "./extrajudicial/direction.routes";
@@ -30,6 +29,7 @@ import managementActionRouter from "./dash/management-action.routes";
 import goalRouter from "./extrajudicial/goal.routes";
 import roleRouter from "./dash/role.routes";
 import permissionRouter from "./dash/permission.routes";
+import userLogRouter from "./dash/user-log.routes";
 
 const routerApi = (app: Express) => {
   const router = express.Router();
@@ -66,6 +66,7 @@ const routerApi = (app: Express) => {
   router.use("/dash/customer-bank", customerHasBankRouter);
   router.use("/dash/bank", bankRouter);
   router.use("/dash/city", cityRouter);
+  router.use("/dash/user-log", userLogRouter);
 };
 
 export default routerApi;

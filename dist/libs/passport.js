@@ -33,8 +33,15 @@ passport_1.default.use("local.signin", new passport_local_1.Strategy({
     try {
         const user = yield service.login({ email, password, customerId });
         const permissions = yield servicePermission.findAllByRoleId(user.dataValues.roleId);
-        const codes = permissions.map((permissions) => permissions.code);
-        return done(null, Object.assign(Object.assign({}, user.dataValues), { permissions: codes }));
+        const permissionsObject = permissions.map((permissions) => {
+            return {
+                code: permissions.code,
+                link: permissions.link,
+                icon: permissions.icon,
+                name: permissions.name,
+            };
+        });
+        return done(null, Object.assign(Object.assign({}, user.dataValues), { permissions: permissionsObject }));
     }
     catch (error) {
         return done(boom_1.default.badRequest(error), false);

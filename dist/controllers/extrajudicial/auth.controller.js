@@ -29,9 +29,13 @@ const jwt_1 = require("../../libs/jwt");
 const auth_service_1 = __importDefault(require("../../app/extrajudicial/services/auth.service"));
 const permission_service_1 = __importDefault(require("../../app/dash/services/permission.service"));
 const customer_user_service_1 = __importDefault(require("../../app/dash/services/customer-user.service"));
+const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
+const user_app_model_1 = __importDefault(require("../../db/models/user-app.model"));
 const serviceAuth = new auth_service_1.default();
 const servicePermission = new permission_service_1.default();
 const serviceCustomerUser = new customer_user_service_1.default();
+const serviceUserLog = new user_log_service_1.default();
+const { USER_APP_TABLE } = user_app_model_1.default;
 const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         passport_1.default.authenticate("local.signin", { session: false }, (err, user) => {
@@ -49,10 +53,18 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
 });
 exports.loginController = loginController;
 const changePasswordController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
+    var _a, _b, _c, _d;
     try {
         const { newPassword, repeatPassword } = req.body;
         yield serviceAuth.changePassword({ newPassword, repeatPassword }, Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id));
+        yield serviceUserLog.create({
+            customerUserId: Number((_b = req.user) === null || _b === void 0 ? void 0 : _b.id),
+            codeAction: "P01-01",
+            entity: USER_APP_TABLE,
+            entityId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.id),
+            ip: req.ip,
+            customerId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.customerId),
+        });
         return res.json({ success: "Contraseña modificada" });
     }
     catch (error) {
@@ -61,14 +73,21 @@ const changePasswordController = (req, res, next) => __awaiter(void 0, void 0, v
 });
 exports.changePasswordController = changePasswordController;
 const changeCredentialsController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _b, _c;
+    var _e, _f, _g, _h, _j;
     try {
-        yield serviceAuth.changeCredentials(req.body, Number((_b = req.user) === null || _b === void 0 ? void 0 : _b.id));
-        const user = yield serviceCustomerUser.findOne(String((_c = req.user) === null || _c === void 0 ? void 0 : _c.id));
+        yield serviceAuth.changeCredentials(req.body, Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id));
+        const user = yield serviceCustomerUser.findOne(String((_f = req.user) === null || _f === void 0 ? void 0 : _f.id));
         const permissions = yield servicePermission.findAllByRoleId(user.dataValues.roleId);
-        const codes = permissions.map((permissions) => permissions.code);
-        const customerUser = Object.assign(Object.assign({}, user.dataValues), { permissions: codes });
+        const customerUser = Object.assign(Object.assign({}, user.dataValues), { permissions });
         const token = (0, jwt_1.signToken)(customerUser, `${process.env.JWT_SECRET}`);
+        yield serviceUserLog.create({
+            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
+            codeAction: "P01-02",
+            entity: USER_APP_TABLE,
+            entityId: Number((_h = req.user) === null || _h === void 0 ? void 0 : _h.id),
+            ip: req.ip,
+            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+        });
         return res.json({
             user: customerUser,
             token,

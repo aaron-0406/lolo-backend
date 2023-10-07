@@ -8,7 +8,7 @@ import {
   getRoleByIdController,
   updateRoleController,
 } from "../../controllers/dash/role.controller";
-import { JWTAuth } from "../../middlewares/auth.handler";
+import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
 const {
   getRoleByIdSchema,
@@ -35,6 +35,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
+  checkPermissions("P11-01"),
   validatorHandler(createRoleSchema, "body"),
   createRoleController
 );
@@ -42,6 +43,7 @@ router.post(
 router.put(
   "/:id",
   JWTAuth,
+  checkPermissions("P11-02"),
   validatorHandler(getRoleByIdSchema, "params"),
   validatorHandler(updateRoleSchema, "body"),
   updateRoleController
@@ -50,6 +52,7 @@ router.put(
 router.delete(
   "/:id",
   JWTAuth,
+  checkPermissions("P11-03"),
   validatorHandler(getRoleByIdSchema, "params"),
   deleteRoleController
 );

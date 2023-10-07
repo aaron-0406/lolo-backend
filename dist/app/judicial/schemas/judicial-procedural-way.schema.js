@@ -12,13 +12,13 @@ const createJudicialProceduralWaySchema = joi_1.default.object({
     customerHasBankId: customerHasBankId.required(),
 });
 const updateJudicialProceduralWaySchema = joi_1.default.object({
-    proceduralWay: proceduralWay.optional(),
+    proceduralWay: proceduralWay.required(),
 });
 const getJudicialProceduralWayByIDSchema = joi_1.default.object({
     id: id.required(),
 });
 const getJudicialProcedurakWayByCHBSchema = joi_1.default.object({
-    chb: id.required(),
+    chb: customerHasBankId.required(),
 });
 exports.default = {
     getJudicialProcedurakWayByCHBSchema,

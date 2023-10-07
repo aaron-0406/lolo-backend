@@ -27,7 +27,8 @@ const getJudicialSubjectController = (req, res, next) => __awaiter(void 0, void 
 exports.getJudicialSubjectController = getJudicialSubjectController;
 const getJudicialSubjectByCHBController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const judicialSubjects = yield service.findAllByCHB(Number(req.query.chb));
+        const { chb } = req.params;
+        const judicialSubjects = yield service.findAllByCHB(Number(chb));
         res.json(judicialSubjects);
     }
     catch (error) {

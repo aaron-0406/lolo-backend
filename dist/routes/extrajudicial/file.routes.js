@@ -20,8 +20,8 @@ const multerFile = (req, res, next) => {
     });
 };
 router.get("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getFileSchema, "params"), file_controller_1.findFileByClientIdController);
-router.get("/single/:idCustomer/:chb/:code/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getFileSchema, "params"), file_controller_1.findFileByIdController);
-router.post("/:idCustomer/:chb/:code/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(createFileSchema, "params"), multerFile, file_controller_1.createFileController);
+router.get("/single/:idCustomer/:chb/:code/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P03-06-01"), (0, validator_handler_1.default)(getFileSchema, "params"), file_controller_1.findFileByIdController);
+router.post("/:idCustomer/:chb/:code/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P03-06-02"), (0, validator_handler_1.default)(createFileSchema, "params"), multerFile, file_controller_1.createFileController);
 // router.put(
 //   "/:id",
 //   validatorHandler(getCitySchema, "params"),
@@ -36,5 +36,5 @@ router.post("/:idCustomer/:chb/:code/:id", auth_handler_1.JWTAuth, (0, validator
 //     }
 //   }
 // );
-router.delete("/:idCustomer/:chb/:code/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(createFileSchema, "params"), file_controller_1.deleteFileController);
+router.delete("/:idCustomer/:chb/:code/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P03-06-03"), (0, validator_handler_1.default)(createFileSchema, "params"), file_controller_1.deleteFileController);
 exports.default = router;

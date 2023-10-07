@@ -10,8 +10,8 @@ const judicial_procedural_way_controller_1 = require("../../controllers/judicial
 const auth_handler_1 = require("../../middlewares/auth.handler");
 const { getJudicialProceduralWayByIDSchema, createJudicialProceduralWaySchema, updateJudicialProceduralWaySchema, getJudicialProcedurakWayByCHBSchema, } = judicial_procedural_way_schema_1.default;
 const router = express_1.default.Router();
-// router.get("/", JWTAuth, getJudicialProceduralWayController);
-router.get("/", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getJudicialProcedurakWayByCHBSchema, "query"), judicial_procedural_way_controller_1.getJudicialProceduralWayByCHBController);
+router.get("/", auth_handler_1.JWTAuth, judicial_procedural_way_controller_1.getJudicialProceduralWayController);
+router.get("/chb/:chb", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getJudicialProcedurakWayByCHBSchema, "params"), judicial_procedural_way_controller_1.getJudicialProceduralWayByCHBController);
 router.get("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getJudicialProceduralWayByIDSchema, "params"), judicial_procedural_way_controller_1.getJudicialProceduralWayByIdController);
 router.post("/", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(createJudicialProceduralWaySchema, "body"), judicial_procedural_way_controller_1.createJudicialProceduralWayController);
 router.patch("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getJudicialProceduralWayByIDSchema, "params"), (0, validator_handler_1.default)(updateJudicialProceduralWaySchema, "body"), judicial_procedural_way_controller_1.updateJudicialProceduralWayController);

@@ -12,7 +12,7 @@ import {
   getClientsByNameController,
   updateClientController,
 } from "../../controllers/extrajudicial/client.controller";
-import { JWTAuth } from "../../middlewares/auth.handler";
+import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
 const {
   getClientByCHBSchema,
@@ -32,6 +32,7 @@ router.get("/", JWTAuth, getAllClientsController);
 router.get(
   "/download-excel-daily-management",
   JWTAuth,
+  checkPermissions("P02-01"),
   validatorHandler(getDateSchema, "query"),
   downloadExcelDailyManagementController
 );
@@ -69,6 +70,7 @@ router.get(
 router.post(
   "/:idCustomer",
   JWTAuth,
+  checkPermissions("P03-02"),
   validatorHandler(getClientByCustomer, "params"),
   validatorHandler(createClientSchema, "body"),
   createClientController
@@ -77,6 +79,7 @@ router.post(
 router.patch(
   "/:code/:chb",
   JWTAuth,
+  checkPermissions("P03-03"),
   validatorHandler(getClientByCodeSchema, "params"),
   validatorHandler(updateClientSchema, "body"),
   updateClientController
@@ -85,6 +88,7 @@ router.patch(
 router.delete(
   "/:code/:chb/:idCustomer",
   JWTAuth,
+  checkPermissions("P03-04"),
   validatorHandler(deleteClientByCodeSchema, "params"),
   deleteClientController
 );

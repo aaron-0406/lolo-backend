@@ -15,8 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteRoleController = exports.updateRoleController = exports.createRoleController = exports.getRoleByIdController = exports.getAllRoleByCustomerIdController = void 0;
 const role_service_1 = __importDefault(require("../../app/dash/services/role.service"));
 const permission_service_1 = __importDefault(require("../../app/dash/services/permission.service"));
+const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
+const roles_model_1 = __importDefault(require("../../db/models/roles.model"));
 const service = new role_service_1.default();
 const servicePermission = new permission_service_1.default();
+const serviceUserLog = new user_log_service_1.default();
+const { ROLE_TABLE } = roles_model_1.default;
 const getAllRoleByCustomerIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const roles = yield service.findAllByCustomerId(Number(req.params.customerId));
@@ -42,9 +46,18 @@ const getRoleByIdController = (req, res, next) => __awaiter(void 0, void 0, void
 });
 exports.getRoleByIdController = getRoleByIdController;
 const createRoleController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     try {
         const body = req.body;
         const newRole = yield service.create(body, body.permissions);
+        yield serviceUserLog.create({
+            customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
+            codeAction: "P11-01",
+            entity: ROLE_TABLE,
+            entityId: Number(newRole.dataValues.id),
+            ip: req.ip,
+            customerId: Number((_b = req.user) === null || _b === void 0 ? void 0 : _b.customerId),
+        });
         res.status(201).json(newRole);
     }
     catch (error) {
@@ -53,10 +66,19 @@ const createRoleController = (req, res, next) => __awaiter(void 0, void 0, void 
 });
 exports.createRoleController = createRoleController;
 const updateRoleController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c, _d;
     try {
         const { id } = req.params;
         const body = req.body;
         const role = yield service.update(id, body, body.permissions);
+        yield serviceUserLog.create({
+            customerUserId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.id),
+            codeAction: "P11-02",
+            entity: ROLE_TABLE,
+            entityId: Number(role.dataValues.id),
+            ip: req.ip,
+            customerId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.customerId),
+        });
         res.json(role);
     }
     catch (error) {
@@ -65,9 +87,18 @@ const updateRoleController = (req, res, next) => __awaiter(void 0, void 0, void 
 });
 exports.updateRoleController = updateRoleController;
 const deleteRoleController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _e, _f;
     try {
         const { id } = req.params;
         yield service.delete(id);
+        yield serviceUserLog.create({
+            customerUserId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id),
+            codeAction: "P11-03",
+            entity: ROLE_TABLE,
+            entityId: Number(id),
+            ip: req.ip,
+            customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+        });
         res.status(201).json({ id });
     }
     catch (error) {

@@ -5,10 +5,15 @@ import { signToken } from "../../libs/jwt";
 import AuthService from "../../app/extrajudicial/services/auth.service";
 import PermissionService from "../../app/dash/services/permission.service";
 import CustomerUserService from "../../app/dash/services/customer-user.service";
+import UserLogService from "../../app/dash/services/user-log.service";
+import userAppModel from "../../db/models/user-app.model";
 
 const serviceAuth = new AuthService();
 const servicePermission = new PermissionService();
 const serviceCustomerUser = new CustomerUserService();
+const serviceUserLog = new UserLogService();
+
+const { USER_APP_TABLE } = userAppModel;
 
 export const loginController = async (
   req: Request,
@@ -39,6 +44,16 @@ export const changePasswordController = async (
       { newPassword, repeatPassword },
       Number(req.user?.id)
     );
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P01-01",
+      entity: USER_APP_TABLE,
+      entityId: Number(req.user?.id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     return res.json({ success: "Contraseña modificada" });
   } catch (error) {
     next(error);
@@ -56,9 +71,18 @@ export const changeCredentialsController = async (
     const permissions = await servicePermission.findAllByRoleId(
       user.dataValues.roleId
     );
-    const codes = permissions.map((permissions) => permissions.code);
-    const customerUser = { ...user.dataValues, permissions: codes };
+    const customerUser = { ...user.dataValues, permissions };
     const token = signToken(customerUser, `${process.env.JWT_SECRET}`);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P01-02",
+      entity: USER_APP_TABLE,
+      entityId: Number(req.user?.id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     return res.json({
       user: customerUser,
       token,

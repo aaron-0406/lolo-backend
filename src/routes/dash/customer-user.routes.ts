@@ -10,7 +10,7 @@ import {
   updateCustomerUserController,
   deleteCustomerUserController,
 } from "../../controllers/dash/customer-user.controller";
-import { JWTAuth } from "../../middlewares/auth.handler";
+import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
 const {
   getCustomerUserSchema,
@@ -40,6 +40,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
+  checkPermissions("P10-01"),
   validatorHandler(createCustomerUserSchema, "body"),
   createCustomerUserController
 );
@@ -47,6 +48,7 @@ router.post(
 router.patch(
   "/state/:id",
   JWTAuth,
+  checkPermissions("P10-04"),
   validatorHandler(getCustomerUserSchema, "params"),
   validatorHandler(updateCustomerUserStateSchema, "body"),
   updateCustomerUserStateController
@@ -55,6 +57,7 @@ router.patch(
 router.patch(
   "/:id",
   JWTAuth,
+  checkPermissions("P10-02"),
   validatorHandler(getCustomerUserSchema, "params"),
   validatorHandler(updateCustomerUserSchema, "body"),
   updateCustomerUserController
@@ -63,6 +66,7 @@ router.patch(
 router.delete(
   "/:id",
   JWTAuth,
+  checkPermissions("P10-03"),
   validatorHandler(getCustomerUserSchema, "params"),
   deleteCustomerUserController
 );

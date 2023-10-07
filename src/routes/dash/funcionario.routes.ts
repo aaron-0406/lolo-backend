@@ -9,7 +9,7 @@ import {
   getFuncionariosController,
   updateFuncionarioController,
 } from "../../controllers/dash/funcionario.controller";
-import { JWTAuth } from "../../middlewares/auth.handler";
+import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
 const {
   getFuncionarioSchema,
@@ -38,6 +38,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
+  checkPermissions("P08-01"),
   validatorHandler(createFuncionarioSchema, "body"),
   createFuncionarioController
 );
@@ -45,6 +46,7 @@ router.post(
 router.put(
   "/:id",
   JWTAuth,
+  checkPermissions("P08-02"),
   validatorHandler(getFuncionarioSchema, "params"),
   validatorHandler(updateFuncionarioSchema, "body"),
   updateFuncionarioController
@@ -53,6 +55,7 @@ router.put(
 router.delete(
   "/:id",
   JWTAuth,
+  checkPermissions("P08-03"),
   validatorHandler(getFuncionarioSchema, "params"),
   deleteFuncionarioController
 );

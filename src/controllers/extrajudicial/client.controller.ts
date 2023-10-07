@@ -1,8 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import ClientService from "../../app/extrajudicial/services/client.service";
 import * as fs from "fs";
+import UserLogService from "../../app/dash/services/user-log.service";
+import cityModel from "../../db/models/city.model";
+import clientModel from "../../db/models/client.model";
 
 const service = new ClientService();
+const serviceUserLog = new UserLogService();
+
+const { CITY_TABLE } = cityModel;
+const { CLIENT_TABLE } = clientModel;
 
 export const getAllClientsController = async (
   req: Request,
@@ -28,6 +35,16 @@ export const downloadExcelDailyManagementController = async (
     const newCityId: any = cityId;
 
     const filePath = await service.readAndUpdateExcelFile(newDate, newCityId);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P02-01",
+      entity: CITY_TABLE,
+      entityId: Number(cityId),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     res.sendFile(filePath, (err) => {
       if (err) {
         next(err);
@@ -104,6 +121,16 @@ export const createClientController = async (
   try {
     const body = req.body;
     const newClient = await service.create(body, Number(req.params.idCustomer));
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P03-02",
+      entity: CLIENT_TABLE,
+      entityId: Number(newClient.dataValues.id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     res.status(201).json(newClient);
   } catch (error) {
     next(error);
@@ -119,6 +146,16 @@ export const updateClientController = async (
     const { code, chb } = req.params;
     const body = req.body;
     const client = await service.update(code, chb, body);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P03-03",
+      entity: CLIENT_TABLE,
+      entityId: Number(client.dataValues.id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     res.json(client);
   } catch (error) {
     next(error);
@@ -132,7 +169,17 @@ export const deleteClientController = async (
 ) => {
   try {
     const { code, chb, idCustomer } = req.params;
-    await service.delete(code, chb, Number(idCustomer));
+    const client = await service.delete(code, chb, Number(idCustomer));
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P03-04",
+      entity: CLIENT_TABLE,
+      entityId: Number(client.id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     res.status(201).json({ code, chb });
   } catch (error) {
     next(error);

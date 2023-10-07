@@ -1,6 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import DirectionService from "../../app/extrajudicial/services/direction.service";
+import UserLogService from "../../app/dash/services/user-log.service";
+import directionModel from "../../db/models/direction.model";
+
 const service = new DirectionService();
+const serviceUserLog = new UserLogService();
+
+const { DIRECTION_TABLE } = directionModel;
 
 export const getAllDirectionsController = async (
   req: Request,
@@ -51,6 +57,16 @@ export const createDirectionController = async (
   try {
     const body = req.body;
     const newDirection = await service.create(body);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P03-08-01",
+      entity: DIRECTION_TABLE,
+      entityId: Number(newDirection.dataValues.id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     res.status(201).json(newDirection);
   } catch (error) {
     next(error);
@@ -66,6 +82,16 @@ export const updateDirectionController = async (
     const { id } = req.params;
     const body = req.body;
     const direction = await service.update(id, body);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P03-08-02",
+      entity: DIRECTION_TABLE,
+      entityId: Number(direction.dataValues.id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     res.json(direction);
   } catch (error) {
     next(error);
@@ -80,6 +106,16 @@ export const deleteDirectionController = async (
   try {
     const { id } = req.params;
     await service.delete(id);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P03-08-03",
+      entity: DIRECTION_TABLE,
+      entityId: Number(id),
+      ip: req.ip,
+      customerId: Number(req.user?.customerId),
+    });
+
     res.status(201).json({ id });
   } catch (error) {
     next(error);
