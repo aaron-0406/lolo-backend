@@ -1,18 +1,18 @@
 export type JudicialCaseFileType = {
   id: number;
-  numberCaseFile: number;
+  numberCaseFile: string;
   judgmentNumber: number;
   secretary: string;
   amountDemandedSoles: number;
   amountDemandedDollars: number;
   cautionaryCode: string;
-  errandCode:string
+  errandCode: string;
   judicialVenue: string;
   judge: string;
   demandDate: Date;
   createdAt: Date;
   clientId: number;
-  customerUserId:number;
+  customerUserId: number;
   judicialCourtId: number;
   judicialSubjectId: number;
   judicialProceduralWayId: number;

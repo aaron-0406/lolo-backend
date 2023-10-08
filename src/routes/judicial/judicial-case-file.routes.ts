@@ -8,7 +8,7 @@ import {
   getJudicialCaseFileByIdController,
   getJudicialCaseFileController,
   updateJudicialCaseFileController,
-  getJudicialCaseFileByNumberCaseFileController
+  getJudicialCaseFileByNumberCaseFileController,
 } from "../../controllers/judicial/judicial-case-file.controller";
 import { JWTAuth } from "../../middlewares/auth.handler";
 

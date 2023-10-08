@@ -20,7 +20,7 @@ class JudicialCaseFileService {
     });
 
     if (!judicialCaseFile) {
-      throw boom.notFound("Expediente no encontrado");
+      throw boom.notFound("Expedientes no encontrados");
     }
 
     return judicialCaseFile;

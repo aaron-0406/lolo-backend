@@ -40,6 +40,7 @@ export async function up(queryInterface: QueryInterface) {
       onDelete: "NO ACTION",
     },
   });
+
   await queryInterface.createTable(JUDICIAL_COURT_TABLE, {
     id: {
       primaryKey: true,
@@ -64,6 +65,7 @@ export async function up(queryInterface: QueryInterface) {
       onDelete: "NO ACTION",
     },
   });
+
   await queryInterface.createTable(JUDICIAL_PROCEDURAL_WAY_TABLE, {
     id: {
       primaryKey: true,
@@ -89,6 +91,7 @@ export async function up(queryInterface: QueryInterface) {
       onDelete: "NO ACTION",
     },
   });
+
   await queryInterface.createTable(JUDICIAL_CASE_FILE_TABLE, {
     id: {
       primaryKey: true,
@@ -100,7 +103,7 @@ export async function up(queryInterface: QueryInterface) {
     numberCaseFile: {
       allowNull: false,
       field: "number_case_file",
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(150),
     },
     judgmentNumber: {
       allowNull: true,
@@ -159,6 +162,8 @@ export async function up(queryInterface: QueryInterface) {
         model: CLIENT_TABLE,
         key: "id_client",
       },
+      onUpdate: "CASCADE",
+      onDelete: "NO ACTION",
     },
     customerUserId: {
       allowNull: false,
@@ -168,159 +173,46 @@ export async function up(queryInterface: QueryInterface) {
         model: CUSTOMER_USER_TABLE,
         key: "id_customer_user",
       },
+      onUpdate: "CASCADE",
+      onDelete: "NO ACTION",
     },
     judicialCourtId: {
       allowNull: false,
       field: "judicial_court_id_judicial_court",
       type: DataTypes.INTEGER,
       references: {
-        model: JUDICIAL_COURT_TABLE,
+        model: judicialCourtModel.JUDICIAL_COURT_TABLE,
         key: "id_judicial_court",
       },
+      onUpdate: "CASCADE",
+      onDelete: "NO ACTION",
     },
     judicialSubjectId: {
       allowNull: false,
       field: "judicial_subject_id_judicial_subject",
       type: DataTypes.INTEGER,
       references: {
-        model: JUDICIAL_SUBJECT_TABLE,
+        model: judicialSubjectModel.JUDICIAL_SUBJECT_TABLE,
         key: "id_judicial_subject",
       },
+      onUpdate: "CASCADE",
+      onDelete: "NO ACTION",
     },
     judicialProceduralWayId: {
       allowNull: false,
       field: "judicial_procedural_way_id_judicial_procedural_way",
       type: DataTypes.INTEGER,
       references: {
-        model: JUDICIAL_PROCEDURAL_WAY_TABLE,
+        model: judicialProceduralWayModel.JUDICIAL_PROCEDURAL_WAY_TABLE,
         key: "id_judicial_procedural_way",
       },
+      onUpdate: "CASCADE",
+      onDelete: "NO ACTION",
     },
-  });
-  await queryInterface.addConstraint(JUDICIAL_CASE_FILE_TABLE, {
-    fields: ["client_id_client"],
-    type: "foreign key",
-    name: "fk_judicial_case_file_client",
-    references: {
-      table: CLIENT_TABLE,
-      field: "id_client",
-    },
-    onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
-  });
-  await queryInterface.addConstraint(JUDICIAL_CASE_FILE_TABLE, {
-    fields: ["customer_user_id_customer_user"],
-    type: "foreign key",
-    name: "fk_judicial_case_file_customer_user",
-    references: {
-      table: CUSTOMER_USER_TABLE,
-      field: "id_customer_user",
-    },
-    onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
-  });
-  await queryInterface.addConstraint(JUDICIAL_CASE_FILE_TABLE, {
-    fields: ["judicial_court_id_judicial_court"],
-    type: "foreign key",
-    name: "fk_judicial_court_judicial_case_file",
-    references: {
-      table: JUDICIAL_COURT_TABLE,
-      field: "id_judicial_court",
-    },
-    onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
-  });
-  await queryInterface.addConstraint(JUDICIAL_CASE_FILE_TABLE, {
-    fields: ["judicial_subject_id_judicial_subject"],
-    type: "foreign key",
-    name: "fk_judicial_subject_judicial_case_file",
-    references: {
-      table: JUDICIAL_SUBJECT_TABLE,
-      field: "id_judicial_subject",
-    },
-    onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
-  });
-  await queryInterface.addConstraint(JUDICIAL_CASE_FILE_TABLE, {
-    fields: ["judicial_procedural_way_id_judicial_procedural_way"],
-    type: "foreign key",
-    name: "fk_judicial_procedural_way_judicial_case_file",
-    references: {
-      table: JUDICIAL_PROCEDURAL_WAY_TABLE,
-      field: "id_judicial_procedural_way",
-    },
-    onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
-  });
-
-  await queryInterface.addConstraint(JUDICIAL_PROCEDURAL_WAY_TABLE, {
-    fields: ["customer_has_bank_id_customer_has_bank"],
-    type: "foreign key",
-    name: "fk_judicial_procedural_way_customer_has_bank",
-    references: {
-      table: CUSTOMER_HAS_BANK_TABLE,
-      field: "id_customer_has_bank",
-    },
-    onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
-  });
-  await queryInterface.addConstraint(JUDICIAL_COURT_TABLE, {
-    fields: ["customer_has_bank_id_customer_has_bank"],
-    type: "foreign key",
-    name: "fk_judicial_court_customer_has_bank",
-    references: {
-      table: CUSTOMER_HAS_BANK_TABLE,
-      field: "id_customer_has_bank",
-    },
-    onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
-  });
-  await queryInterface.addConstraint(JUDICIAL_SUBJECT_TABLE, {
-    fields: ["customer_has_bank_id_customer_has_bank"],
-    type: "foreign key",
-    name: "fk_judicial_subject_customer_has_bank",
-    references: {
-      table: CUSTOMER_HAS_BANK_TABLE,
-      field: "id_customer_has_bank",
-    },
-    onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
   });
 }
 
 export async function down(queryInterface: QueryInterface) {
-  await queryInterface.removeConstraint(
-    JUDICIAL_CASE_FILE_TABLE,
-    "fk_judicial_case_file_client"
-  );
-  await queryInterface.removeConstraint(
-    JUDICIAL_CASE_FILE_TABLE,
-    "fk_judicial_case_file_customer_user"
-  );
-  await queryInterface.removeConstraint(
-    JUDICIAL_CASE_FILE_TABLE,
-    "fk_judicial_court_judicial_case_file"
-  );
-  await queryInterface.removeConstraint(
-    JUDICIAL_CASE_FILE_TABLE,
-    "fk_judicial_subject_judicial_case_file"
-  );
-  await queryInterface.removeConstraint(
-    JUDICIAL_CASE_FILE_TABLE,
-    "fk_judicial_subject_judicial_case_file"
-  );
-  await queryInterface.removeConstraint(
-    JUDICIAL_SUBJECT_TABLE,
-    "fk_judicial_subject_customer_has_bank"
-  );
-  await queryInterface.removeConstraint(
-    JUDICIAL_COURT_TABLE,
-    "fk_judicial_court_customer_has_bank"
-  );
-  await queryInterface.removeConstraint(
-    JUDICIAL_PROCEDURAL_WAY_TABLE,
-    "fk_judicial_procedural_way_customer_has_bank"
-  );
   await queryInterface.dropTable(JUDICIAL_SUBJECT_TABLE);
   await queryInterface.dropTable(JUDICIAL_PROCEDURAL_WAY_TABLE);
   await queryInterface.dropTable(JUDICIAL_COURT_TABLE);

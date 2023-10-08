@@ -11,6 +11,7 @@ class JudicialSubjectService {
     const rta = await models.JUDICIAL_SUBJECT.findAll();
     return rta;
   }
+
   async findAllByCHB(chb: number) {
     const rta = await models.JUDICIAL_SUBJECT.findAll({
       where: { customerHasBankId: chb },
@@ -26,7 +27,7 @@ class JudicialSubjectService {
     });
 
     if (!judicialSubject) {
-      throw boom.notFound("Asunto no encontrado");
+      throw boom.notFound("Materia no encontrado");
     }
 
     return judicialSubject;

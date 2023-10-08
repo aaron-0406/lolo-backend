@@ -11,6 +11,7 @@ class JudicialProceduralWayService {
     const rta = await models.JUDICIAL_PROCEDURAL_WAY.findAll();
     return rta;
   }
+
   async findAllByCHB(chb: number) {
     const rta = await models.JUDICIAL_PROCEDURAL_WAY.findAll({
       where: { customerHasBankId: chb },
@@ -26,7 +27,7 @@ class JudicialProceduralWayService {
     });
 
     if (!judicialProceduralWay)
-      throw boom.notFound("Procedimiento no encontrado");
+      throw boom.notFound("Vía procedimental no encontrada");
 
     return judicialProceduralWay;
   }

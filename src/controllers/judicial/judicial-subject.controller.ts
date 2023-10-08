@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import JudicialSubjectService from "../../app/judicial/services/judicial-subject.service";
+
 const service = new JudicialSubjectService();
 
 export const getJudicialSubjectController = async (

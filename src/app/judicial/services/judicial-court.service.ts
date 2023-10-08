@@ -11,6 +11,7 @@ class JudicialCourtService {
     const rta = await models.JUDICIAL_COURT.findAll();
     return rta;
   }
+
   async findAllByCHB(chb: number) {
     const rta = await models.JUDICIAL_COURT.findAll({
       where: { customerHasBankId: chb },
@@ -26,7 +27,7 @@ class JudicialCourtService {
     });
 
     if (!judicialCourt) {
-      throw boom.notFound("Corte no encontrado");
+      throw boom.notFound("Juzgado no encontrado");
     }
 
     return judicialCourt;
@@ -40,7 +41,6 @@ class JudicialCourtService {
   async update(id: string, changes: JudicialCourtType) {
     const judicialCourt = await this.findByID(id);
     const rta = await judicialCourt.update(changes);
-
     return rta;
   }
 
