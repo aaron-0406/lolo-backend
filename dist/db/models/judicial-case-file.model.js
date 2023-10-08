@@ -21,7 +21,7 @@ const JudicialCaseFileSchema = {
     numberCaseFile: {
         allowNull: false,
         field: "number_case_file",
-        type: sequelize_1.DataTypes.INTEGER,
+        type: sequelize_1.DataTypes.STRING(150),
     },
     judgmentNumber: {
         allowNull: true,
@@ -80,6 +80,8 @@ const JudicialCaseFileSchema = {
             model: client_model_1.default.CLIENT_TABLE,
             key: "id_client",
         },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
     },
     customerUserId: {
         allowNull: false,
@@ -89,6 +91,8 @@ const JudicialCaseFileSchema = {
             model: customer_user_model_1.default.CUSTOMER_USER_TABLE,
             key: "id_customer_user",
         },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
     },
     judicialCourtId: {
         allowNull: false,
@@ -98,6 +102,8 @@ const JudicialCaseFileSchema = {
             model: judicial_court_model_1.default.JUDICIAL_COURT_TABLE,
             key: "id_judicial_court",
         },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
     },
     judicialSubjectId: {
         allowNull: false,
@@ -107,6 +113,8 @@ const JudicialCaseFileSchema = {
             model: judicial_subject_model_1.default.JUDICIAL_SUBJECT_TABLE,
             key: "id_judicial_subject",
         },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
     },
     judicialProceduralWayId: {
         allowNull: false,
@@ -116,6 +124,8 @@ const JudicialCaseFileSchema = {
             model: judicial_procedural_way_model_1.default.JUDICIAL_PROCEDURAL_WAY_TABLE,
             key: "id_judicial_procedural_way",
         },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
     },
 };
 class JudicialCaseFile extends sequelize_1.Model {
@@ -126,6 +136,7 @@ class JudicialCaseFile extends sequelize_1.Model {
         this.belongsTo(models.JUDICIAL_PROCEDURAL_WAY, {
             as: "judicialProceduralWay",
         });
+        this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
     }
     static config(sequelize) {
         return {

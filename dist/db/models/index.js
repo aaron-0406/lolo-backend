@@ -61,11 +61,11 @@ const { GoalUser, GoalUserSchema } = goal_user_model_1.default;
 const { Role, RoleSchema } = roles_model_1.default;
 const { Permission, PermissionSchema } = permission_model_1.default;
 const { RolePermission, RolePermissionSchema } = role_permission_model_1.default;
-const { JudicialCaseFile, JudicialCaseFileSchema } = judicial_case_file_model_1.default;
 const { JudicialSubject, JudicialSubjectSchema } = judicial_subject_model_1.default;
 const { JudicialCourt, JudicialCourtSchema } = judicial_court_model_1.default;
 const { JudicialProceduralWay, JudicialProceduralWaySchema } = judicial_procedural_way_model_1.default;
 const { UserLog, UserLogSchema } = user_log_model_1.default;
+const { JudicialCaseFile, JudicialCaseFileSchema } = judicial_case_file_model_1.default;
 const setupModels = (sequelize) => {
     Customer.init(CustomerSchema, Customer.config(sequelize));
     Bank.init(BankSchema, Bank.config(sequelize));
@@ -93,10 +93,10 @@ const setupModels = (sequelize) => {
     Role.init(RoleSchema, Role.config(sequelize));
     Permission.init(PermissionSchema, Permission.config(sequelize));
     RolePermission.init(RolePermissionSchema, RolePermission.config(sequelize));
-    JudicialCaseFile.init(JudicialCaseFileSchema, JudicialCaseFile.config(sequelize));
     JudicialSubject.init(JudicialSubjectSchema, JudicialSubject.config(sequelize));
     JudicialCourt.init(JudicialCourtSchema, JudicialCourt.config(sequelize));
     JudicialProceduralWay.init(JudicialProceduralWaySchema, JudicialProceduralWay.config(sequelize));
+    JudicialCaseFile.init(JudicialCaseFileSchema, JudicialCaseFile.config(sequelize));
     UserLog.init(UserLogSchema, UserLog.config(sequelize));
     Customer.associate(sequelize.models);
     CustomerUser.associate(sequelize.models);
@@ -122,10 +122,10 @@ const setupModels = (sequelize) => {
     Role.associate(sequelize.models);
     Permission.associate(sequelize.models);
     RolePermission.associate(sequelize.models);
-    JudicialCaseFile.associate(sequelize.models);
     JudicialCourt.associate(sequelize.models);
     JudicialSubject.associate(sequelize.models);
     JudicialProceduralWay.associate(sequelize.models);
+    JudicialCaseFile.associate(sequelize.models);
     UserLog.associate(sequelize.models);
 };
 exports.setupModels = setupModels;

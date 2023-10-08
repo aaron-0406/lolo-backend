@@ -31,7 +31,7 @@ class JudicialCaseFileService {
                 },
             });
             if (!judicialCaseFile) {
-                throw boom_1.default.notFound("Expediente no encontrado");
+                throw boom_1.default.notFound("Expedientes no encontrados");
             }
             return judicialCaseFile;
         });

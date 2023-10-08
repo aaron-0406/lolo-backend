@@ -39,7 +39,7 @@ class JudicialCourtService {
                 },
             });
             if (!judicialCourt) {
-                throw boom_1.default.notFound("Corte no encontrado");
+                throw boom_1.default.notFound("Juzgado no encontrado");
             }
             return judicialCourt;
         });

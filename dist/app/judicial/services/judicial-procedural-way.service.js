@@ -39,7 +39,7 @@ class JudicialProceduralWayService {
                 },
             });
             if (!judicialProceduralWay)
-                throw boom_1.default.notFound("Procedimiento no encontrado");
+                throw boom_1.default.notFound("Vía procedimental no encontrada");
             return judicialProceduralWay;
         });
     }

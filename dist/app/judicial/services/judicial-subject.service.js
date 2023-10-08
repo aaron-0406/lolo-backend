@@ -39,7 +39,7 @@ class JudicialSubjectService {
                 },
             });
             if (!judicialSubject) {
-                throw boom_1.default.notFound("Asunto no encontrado");
+                throw boom_1.default.notFound("Materia no encontrado");
             }
             return judicialSubject;
         });
