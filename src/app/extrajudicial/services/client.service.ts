@@ -49,6 +49,50 @@ class ClientService {
     return JSON.parse(JSON.stringify(rta));
   }
 
+  async findByName(chb: string, query: any) {
+    const { filter } = query;
+
+    const filtro = filter as string;
+
+    const filters: any = {};
+    if (filter !== "" && filter !== undefined) {
+      filters.name = { [Op.substring]: filtro };
+    }
+
+    let filtersWhere: any = {
+      customer_has_bank_id_customer_has_bank: chb,
+    };
+    if (Object.keys(filters).length > 0) {
+      filtersWhere = {
+        [Op.or]: [filters],
+        customer_has_bank_id_customer_has_bank: chb,
+      };
+    }
+
+    const clients = await models.CLIENT.findAll({
+      include: [
+        { model: models.NEGOTIATION, as: "negotiation" },
+        {
+          model: models.FUNCIONARIO,
+          as: "funcionario",
+          attributes: { exclude: ["bankId"] },
+        },
+        {
+          model: models.CUSTOMER_USER,
+          as: "customerUser",
+        },
+        {
+          model: models.CITY,
+          as: "city",
+        },
+      ],
+      order: [["name", "DESC"]],
+      where: filtersWhere,
+    });
+
+    return clients;
+  }
+
   async findAllCHB(chb: string, query: any) {
     const { limit, page, filter, negotiations, funcionarios, users, cities } =
       query;

@@ -9,6 +9,7 @@ import {
   getClientByCodeCHBController,
   getClientsByCHBController,
   getClientsByCHBDetailsController,
+  getClientsByNameController,
   updateClientController,
 } from "../../controllers/extrajudicial/client.controller";
 import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
@@ -21,6 +22,7 @@ const {
   getClientByCustomer,
   deleteClientByCodeSchema,
   getClientByCHBSchemaQuery,
+  getClientByNameSchemaQuery,
   getDateSchema,
 } = clientSchema;
 const router = express.Router();
@@ -41,6 +43,14 @@ router.get(
   validatorHandler(getClientByCHBSchema, "params"),
   validatorHandler(getClientByCHBSchemaQuery, "query"),
   getClientsByCHBController
+);
+
+router.get(
+  "/:chb/by-name",
+  JWTAuth,
+  validatorHandler(getClientByCHBSchema, "params"),
+  validatorHandler(getClientByNameSchemaQuery, "query"),
+  getClientsByNameController
 );
 
 router.get(

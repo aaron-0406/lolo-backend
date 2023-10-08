@@ -87,6 +87,10 @@ const getClientByCHBSchemaQuery = Joi.object({
   cities,
 }).options({ abortEarly: true });
 
+const getClientByNameSchemaQuery = Joi.object({
+  filter,
+}).options({ abortEarly: true });
+
 const getClientByCustomer = Joi.object<{ idCustomer: number }, true>({
   idCustomer,
 });
@@ -113,5 +117,6 @@ export default {
   getClientByCodeSchema,
   deleteClientByCodeSchema,
   getClientByCHBSchemaQuery,
+  getClientByNameSchemaQuery,
   getDateSchema,
 };

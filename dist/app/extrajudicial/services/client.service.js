@@ -62,6 +62,46 @@ class ClientService {
             return JSON.parse(JSON.stringify(rta));
         });
     }
+    findByName(chb, query) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { filter } = query;
+            const filtro = filter;
+            const filters = {};
+            if (filter !== "" && filter !== undefined) {
+                filters.name = { [sequelize_2.Op.substring]: filtro };
+            }
+            let filtersWhere = {
+                customer_has_bank_id_customer_has_bank: chb,
+            };
+            if (Object.keys(filters).length > 0) {
+                filtersWhere = {
+                    [sequelize_2.Op.or]: [filters],
+                    customer_has_bank_id_customer_has_bank: chb,
+                };
+            }
+            const clients = yield models.CLIENT.findAll({
+                include: [
+                    { model: models.NEGOTIATION, as: "negotiation" },
+                    {
+                        model: models.FUNCIONARIO,
+                        as: "funcionario",
+                        attributes: { exclude: ["bankId"] },
+                    },
+                    {
+                        model: models.CUSTOMER_USER,
+                        as: "customerUser",
+                    },
+                    {
+                        model: models.CITY,
+                        as: "city",
+                    },
+                ],
+                order: [["name", "DESC"]],
+                where: filtersWhere,
+            });
+            return clients;
+        });
+    }
     findAllCHB(chb, query) {
         return __awaiter(this, void 0, void 0, function* () {
             const { limit, page, filter, negotiations, funcionarios, users, cities } = query;

@@ -25,6 +25,10 @@ const template_routes_1 = __importDefault(require("./extrajudicial/template.rout
 const values_routes_1 = __importDefault(require("./extrajudicial/values.routes"));
 const dashboard_routes_1 = __importDefault(require("./extrajudicial/dashboard.routes"));
 const product_routes_1 = __importDefault(require("./extrajudicial/product.routes"));
+const judicial_case_file_routes_1 = __importDefault(require("./judicial/judicial-case-file.routes"));
+const judicial_court_routes_1 = __importDefault(require("./judicial/judicial-court.routes"));
+const judicial_procedural_way_routes_1 = __importDefault(require("./judicial/judicial-procedural-way.routes"));
+const judicial_subject_routes_1 = __importDefault(require("./judicial/judicial-subject.routes"));
 const management_action_routes_1 = __importDefault(require("./dash/management-action.routes"));
 const goal_routes_1 = __importDefault(require("./extrajudicial/goal.routes"));
 const role_routes_1 = __importDefault(require("./dash/role.routes"));
@@ -47,6 +51,10 @@ const routerApi = (app) => {
     router.use("/cobranza/dashboard", dashboard_routes_1.default);
     router.use("/cobranza/product", product_routes_1.default);
     router.use("/cobranza/goal", goal_routes_1.default);
+    router.use("/judicial/case-file", judicial_case_file_routes_1.default);
+    router.use("/judicial/court", judicial_court_routes_1.default);
+    router.use("/judicial/procedural-way", judicial_procedural_way_routes_1.default);
+    router.use("/judicial/subject", judicial_subject_routes_1.default);
     router.use("/dash/auth", auth_routes_2.default);
     router.use("/dash/role", role_routes_1.default);
     router.use("/dash/permission", permission_routes_1.default);
