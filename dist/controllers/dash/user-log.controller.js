@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllUserLogsByCustomerIdController = exports.getAllUserLogsController = void 0;
+exports.getUserLogsFilterByCustomerIdController = exports.getAllUserLogsByCustomerIdController = exports.getAllUserLogsController = void 0;
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const service = new user_log_service_1.default();
 const getAllUserLogsController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -36,3 +36,14 @@ const getAllUserLogsByCustomerIdController = (req, res, next) => __awaiter(void 
     }
 });
 exports.getAllUserLogsByCustomerIdController = getAllUserLogsByCustomerIdController;
+const getUserLogsFilterByCustomerIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { customerId } = req.params;
+        const userLogs = yield service.findByCustomerId(customerId, req.query);
+        res.json(userLogs);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.getUserLogsFilterByCustomerIdController = getUserLogsFilterByCustomerIdController;
