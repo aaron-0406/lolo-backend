@@ -1,4 +1,4 @@
-import { QueryInterface } from "sequelize";
+import { QueryInterface, Op } from "sequelize";
 import permissionModel from "../models/permission.model";
 
 const { PERMISSION_TABLE } = permissionModel;
@@ -21,5 +21,21 @@ export async function up(queryInterface: QueryInterface) {
 }
 
 export async function down(queryInterface: QueryInterface) {
-  return queryInterface.bulkDelete(PERMISSION_TABLE, {});
+  const deleteCriteria = {
+    [Op.or]: [
+      {
+        name: "EXPEDIENTES",
+        code: "P13",
+        icon: "ri-bank-fill",
+        link: "/judicial/:urlIdentifier/expedientes",
+      },
+      {
+        name: "DETALLES DEL EXPEDIENTE",
+        code: "P13-01",
+        icon: "-",
+        link: "/judicial/:urlIdentifier/expedientes/:code",
+      },
+    ],
+  };
+  return queryInterface.bulkDelete(PERMISSION_TABLE, deleteCriteria);
 }
