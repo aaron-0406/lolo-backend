@@ -22,7 +22,7 @@ function up(queryInterface) {
                 name: "EXPEDIENTES",
                 code: "P13",
                 icon: "ri-bank-fill",
-                link: "judicial/:urlIdentifier/expedientes",
+                link: "/judicial/:urlIdentifier/expedientes",
             },
             {
                 name: "DETALLES DEL EXPEDIENTE",
