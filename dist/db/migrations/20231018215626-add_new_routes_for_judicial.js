@@ -27,7 +27,7 @@ function up(queryInterface) {
             {
                 name: "DETALLES DEL EXPEDIENTE",
                 code: "P13-01",
-                icon: "ri-bank-fill",
+                icon: "-",
                 link: "/judicial/:urlIdentifier/expedientes/:code",
             },
         ]);
