@@ -29,3 +29,17 @@ export const getAllUserLogsByCustomerIdController = async (
     next(error);
   }
 };
+
+export const getUserLogsFilterByCustomerIdController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { customerId } = req.params;
+    const userLogs = await service.findByCustomerId(customerId, req.query);
+    res.json(userLogs);
+  } catch (error) {
+    next(error);
+  }
+};
