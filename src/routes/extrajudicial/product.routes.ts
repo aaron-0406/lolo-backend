@@ -46,7 +46,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
-  checkPermissions("P03-09-01"),
+  checkPermissions("P02-02-06-01"),
   validatorHandler(createProductSchema, "body"),
   createProductController
 );
@@ -54,7 +54,7 @@ router.post(
 router.put(
   "/:id",
   JWTAuth,
-  checkPermissions("P03-09-02"),
+  checkPermissions("P02-02-06-02"),
   validatorHandler(getProductByIdSchema, "params"),
   validatorHandler(updateProductSchema, "body"),
   updateProductController
@@ -71,7 +71,7 @@ router.patch(
 router.delete(
   "/:id",
   JWTAuth,
-  checkPermissions("P03-09-03"),
+  checkPermissions("P02-02-06-03"),
   validatorHandler(getProductByIdSchema, "params"),
   deleteProductController
 );

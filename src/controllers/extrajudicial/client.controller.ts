@@ -124,7 +124,7 @@ export const createClientController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P03-02",
+      codeAction: "P02-03",
       entity: CLIENT_TABLE,
       entityId: Number(newClient.dataValues.id),
       ip: req.ip,
@@ -149,7 +149,7 @@ export const updateClientController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P03-03",
+      codeAction: "P02-04",
       entity: CLIENT_TABLE,
       entityId: Number(client.dataValues.id),
       ip: req.ip,
@@ -173,7 +173,7 @@ export const deleteClientController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P03-04",
+      codeAction: "P02-05",
       entity: CLIENT_TABLE,
       entityId: Number(client.id),
       ip: req.ip,

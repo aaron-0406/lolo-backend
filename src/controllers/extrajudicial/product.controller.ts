@@ -61,7 +61,7 @@ export const createProductController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P03-09-01",
+      codeAction: "P02-02-06-01",
       entity: PRODUCT_TABLE,
       entityId: Number(product.dataValues.id),
       ip: req.ip,
@@ -85,7 +85,7 @@ export const updateProductController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P03-09-02",
+      codeAction: "P02-02-06-02",
       entity: PRODUCT_TABLE,
       entityId: Number(product.dataValues.id),
       ip: req.ip,
@@ -123,7 +123,7 @@ export const deleteProductController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P03-09-03",
+      codeAction: "P02-02-06-03",
       entity: PRODUCT_TABLE,
       entityId: Number(id),
       ip: req.ip,

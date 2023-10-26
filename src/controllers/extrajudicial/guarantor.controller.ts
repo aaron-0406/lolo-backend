@@ -60,7 +60,7 @@ export const createGuarantorController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P03-07-01",
+      codeAction: "P02-02-04-01",
       entity: GUARANTOR_TABLE,
       entityId: Number(newGuarantor.dataValues.id),
       ip: req.ip,
@@ -85,7 +85,7 @@ export const updateGuarantorController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P03-07-02",
+      codeAction: "P02-02-04-02",
       entity: GUARANTOR_TABLE,
       entityId: Number(guarantor.dataValues.id),
       ip: req.ip,
@@ -109,7 +109,7 @@ export const deleteGuarantorController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P03-07-03",
+      codeAction: "P02-02-04-03",
       entity: GUARANTOR_TABLE,
       entityId: Number(id),
       ip: req.ip,

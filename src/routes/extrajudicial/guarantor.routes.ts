@@ -39,7 +39,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
-  checkPermissions("P03-07-01"),
+  checkPermissions("P02-02-04-01"),
   validatorHandler(createGuarantorSchema, "body"),
   createGuarantorController
 );
@@ -47,7 +47,7 @@ router.post(
 router.patch(
   "/:id",
   JWTAuth,
-  checkPermissions("P03-07-02"),
+  checkPermissions("P02-02-04-02"),
   validatorHandler(getGuarantorByIDSchema, "params"),
   validatorHandler(updateGuarantorSchema, "body"),
   updateGuarantorController
@@ -56,7 +56,7 @@ router.patch(
 router.delete(
   "/:id",
   JWTAuth,
-  checkPermissions("P03-07-03"),
+  checkPermissions("P02-02-04-03"),
   validatorHandler(getGuarantorByIDSchema, "params"),
   deleteGuarantorController
 );

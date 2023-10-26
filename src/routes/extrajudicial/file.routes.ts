@@ -31,7 +31,7 @@ router.get(
 router.get(
   "/single/:idCustomer/:chb/:code/:id",
   JWTAuth,
-  checkPermissions("P03-06-01"),
+  checkPermissions("P02-02-03-01"),
   validatorHandler(getFileSchema, "params"),
   findFileByIdController
 );
@@ -39,7 +39,7 @@ router.get(
 router.post(
   "/:idCustomer/:chb/:code/:id",
   JWTAuth,
-  checkPermissions("P03-06-02"),
+  checkPermissions("P02-02-03-02"),
   validatorHandler(createFileSchema, "params"),
   multerFile,
   createFileController
@@ -63,7 +63,7 @@ router.post(
 router.delete(
   "/:idCustomer/:chb/:code/:id",
   JWTAuth,
-  checkPermissions("P03-06-03"),
+  checkPermissions("P02-02-03-03"),
   validatorHandler(createFileSchema, "params"),
   deleteFileController
 );
