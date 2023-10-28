@@ -37,7 +37,7 @@ const funcionarios = Joi.string().required();
 const users = Joi.string().required();
 const cities = Joi.string().required();
 
-const createClientSchema = Joi.object<Omit<ClientType, "id">, true>({
+const saveClientSchema = Joi.object<Omit<ClientType, "id">, true>({
   code: code.required(),
   negotiationId,
   dniOrRuc: dniOrRuc.optional().empty("").allow(""),
@@ -50,22 +50,6 @@ const createClientSchema = Joi.object<Omit<ClientType, "id">, true>({
   funcionarioId: funcionarioId.required(),
   customerUserId: customerUserId.required(),
   customerHasBankId: customerHasBankId.required(),
-});
-
-const updateClientSchema = Joi.object<
-  Omit<ClientType, "id" | "code" | "customerHasBankId">,
-  true
->({
-  negotiationId,
-  dniOrRuc: dniOrRuc,
-  name: name,
-  salePerimeter: salePerimeter.optional().empty("").allow(""),
-  phone: phone.optional().empty("").allow(""),
-  email: email.optional().empty("").allow(""),
-  createdAt: createdAt,
-  customerUserId: customerUserId,
-  cityId: cityId,
-  funcionarioId: funcionarioId,
 });
 
 const getClientByCodeSchema = Joi.object<{ code: string; chb: number }, true>({
@@ -110,9 +94,8 @@ const getDateSchema = Joi.object<{ date: Date; cityId: number }, true>({
 });
 
 export default {
-  createClientSchema,
+  saveClientSchema,
   getClientByCustomer,
-  updateClientSchema,
   getClientByCHBSchema,
   getClientByCodeSchema,
   deleteClientByCodeSchema,

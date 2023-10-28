@@ -113,18 +113,19 @@ export const getClientByCodeCHBController = async (
   }
 };
 
-export const createClientController = async (
+export const saveClientController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const body = req.body;
+    const permission = body.id === 0 ? "P02-03" : "P02-04"
     const newClient = await service.create(body, Number(req.params.idCustomer));
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P02-03",
+      codeAction: permission,
       entity: CLIENT_TABLE,
       entityId: Number(newClient.dataValues.id),
       ip: req.ip,
@@ -132,31 +133,6 @@ export const createClientController = async (
     });
 
     res.status(201).json(newClient);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const updateClientController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { code, chb } = req.params;
-    const body = req.body;
-    const client = await service.update(code, chb, body);
-
-    await serviceUserLog.create({
-      customerUserId: Number(req.user?.id),
-      codeAction: "P02-04",
-      entity: CLIENT_TABLE,
-      entityId: Number(client.dataValues.id),
-      ip: req.ip,
-      customerId: Number(req.user?.customerId),
-    });
-
-    res.json(client);
   } catch (error) {
     next(error);
   }

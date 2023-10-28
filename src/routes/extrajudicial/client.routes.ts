@@ -2,7 +2,7 @@ import express from "express";
 import validatorHandler from "../../middlewares/validator.handler";
 import clientSchema from "../../app/extrajudicial/schemas/client.schema";
 import {
-  createClientController,
+  saveClientController,
   deleteClientController,
   downloadExcelDailyManagementController,
   getAllClientsController,
@@ -10,15 +10,13 @@ import {
   getClientsByCHBController,
   getClientsByCHBDetailsController,
   getClientsByNameController,
-  updateClientController,
 } from "../../controllers/extrajudicial/client.controller";
 import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
 const {
   getClientByCHBSchema,
   getClientByCodeSchema,
-  createClientSchema,
-  updateClientSchema,
+  saveClientSchema,
   getClientByCustomer,
   deleteClientByCodeSchema,
   getClientByCHBSchemaQuery,
@@ -70,19 +68,14 @@ router.get(
 router.post(
   "/:idCustomer",
   JWTAuth,
-  checkPermissions("P02-03"),
+  (req, res, next) => {
+    //se obtiene si es edit o add (esto se envio desde front)
+    const customPermission = req.query.permission === "add" ? "P02-03" : "P02-04";
+    checkPermissions(customPermission)(req, res, next);
+  },
   validatorHandler(getClientByCustomer, "params"),
-  validatorHandler(createClientSchema, "body"),
-  createClientController
-);
-
-router.patch(
-  "/:code/:chb",
-  JWTAuth,
-  checkPermissions("P02-04"),
-  validatorHandler(getClientByCodeSchema, "params"),
-  validatorHandler(updateClientSchema, "body"),
-  updateClientController
+  validatorHandler(saveClientSchema, "body"),
+  saveClientController
 );
 
 router.delete(

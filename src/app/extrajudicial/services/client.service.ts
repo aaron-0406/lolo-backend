@@ -256,9 +256,13 @@ class ClientService {
       },
     });
 
-    if (client) throw boom.notFound("Ya existe un cliente con este código");
+    if (client) {
+      console.log("ya existe el cliente")
+      return this.update(data.code, String(data.customerHasBankId), data)
+    }
 
     const newClient = await models.CLIENT.create(data);
+    console.log("se creó el cliente");
 
     // CREATE A FOLDER FOR CLIENT
     await createFolder(
@@ -267,7 +271,7 @@ class ClientService {
     return newClient;
   }
 
-  async update(code: string, chb: string, changes: ClientType) {
+  async update(code: string, chb: string, changes: Omit<ClientType, "id" | "createdAt">) {
     const client = await this.findCode(code, chb);
     const rta = await client.update(changes);
 
