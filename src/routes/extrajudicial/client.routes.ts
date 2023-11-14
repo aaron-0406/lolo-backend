@@ -23,6 +23,10 @@ const {
   getClientByNameSchemaQuery,
   getDateSchema,
 } = clientSchema;
+
+import ClientService from "../../app/extrajudicial/services/client.service";
+
+const service = new ClientService();
 const router = express.Router();
 
 router.get("/", JWTAuth, getAllClientsController);
@@ -69,8 +73,11 @@ router.post(
   "/:idCustomer",
   JWTAuth,
   (req, res, next) => {
-    //se obtiene si es edit o add (esto se envio desde front)
-    const customPermission = req.query.permission === "add" ? "P02-03" : "P02-04";
+    const { chb, code } = req.body;
+    // const exits = await service.doesClientExist(code, chb)
+    // const customPermission = exits ? "P02-04" : "P02-03";
+    const customPermission = "P02-04"
+    console.log(customPermission);
     checkPermissions(customPermission)(req, res, next);
   },
   validatorHandler(getClientByCustomer, "params"),

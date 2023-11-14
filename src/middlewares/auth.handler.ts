@@ -32,7 +32,7 @@ export const checkPermissions = (...permissions: string[]) => {
     const userPermissions = user?.permissions.map((permission: any) => {
       return permission.code;
     });
-
+    console.log(userPermissions)
     if (!user) return next(boom.unauthorized("No JWT"));
     if (permissions.some((permission) => userPermissions?.includes(permission)))
       return next();

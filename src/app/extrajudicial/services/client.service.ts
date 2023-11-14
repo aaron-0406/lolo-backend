@@ -234,6 +234,17 @@ class ClientService {
     return rta;
   }
 
+  async doesClientExist(code: string, chb: string) {
+    const client = await models.CLIENT.findOne({
+      where: {
+        code: code,
+        customer_has_bank_id_customer_has_bank: chb,
+      },
+    });
+
+    return !!client;
+  }
+
   async findCode(code: string, chb: string) {
     const client = await models.CLIENT.findOne({
       where: {
@@ -257,8 +268,8 @@ class ClientService {
     });
 
     if (client) {
-      console.log("ya existe el cliente")
-      return this.update(data.code, String(data.customerHasBankId), data)
+      console.log("ya existe el cliente");
+      return this.update(data.code, String(data.customerHasBankId), data);
     }
 
     const newClient = await models.CLIENT.create(data);
@@ -271,7 +282,11 @@ class ClientService {
     return newClient;
   }
 
-  async update(code: string, chb: string, changes: Omit<ClientType, "id" | "createdAt">) {
+  async update(
+    code: string,
+    chb: string,
+    changes: Omit<ClientType, "id" | "createdAt">
+  ) {
     const client = await this.findCode(code, chb);
     const rta = await client.update(changes);
 
