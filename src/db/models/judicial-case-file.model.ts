@@ -11,6 +11,7 @@ import judicialCourtModel from "./judicial-court.model";
 import judicialProceduralWayModel from "./judicial-procedural-way.model";
 import judicialSubjectModel from "./judicial-subject.model";
 import customerUserModel from "./customer-user.model";
+import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 
 const JUDICIAL_CASE_FILE_TABLE = "JUDICIAL_CASE_FILE";
 
@@ -134,6 +135,17 @@ const JudicialCaseFileSchema: ModelAttributes<
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
+  customerHasBankId: {
+    allowNull: false,
+    field: "customer_has_bank_id",
+    type: DataTypes.INTEGER,
+    references: {
+      model: customerHasBankModel.CUSTOMER_HAS_BANK_TABLE,
+      key: "id_customer_has_bank",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
 };
 
 class JudicialCaseFile extends Model {
@@ -145,6 +157,7 @@ class JudicialCaseFile extends Model {
       as: "judicialProceduralWay",
     });
     this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
+    this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
   }
 
   static config(sequelize: Sequelize) {

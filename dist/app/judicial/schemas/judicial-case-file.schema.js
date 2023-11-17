@@ -15,12 +15,12 @@ const errandCode = joi_1.default.string().max(150);
 const judicialVenue = joi_1.default.string().max(150);
 const judge = joi_1.default.string().max(150);
 const demandDate = joi_1.default.date();
-const createdAt = joi_1.default.date();
 const clientId = joi_1.default.number();
 const customerUserId = joi_1.default.number();
 const judicialCourtId = joi_1.default.number().positive();
 const judicialSubjectId = joi_1.default.number().positive();
 const judicialProceduralWayId = joi_1.default.number().positive();
+const customerHasBankId = joi_1.default.number().positive();
 const createJudicialCaseFileSchema = joi_1.default.object({
     numberCaseFile: numberCaseFile.required(),
     judgmentNumber: judgmentNumber.optional().empty("").allow(""),
@@ -37,6 +37,7 @@ const createJudicialCaseFileSchema = joi_1.default.object({
     judicialProceduralWayId: judicialProceduralWayId.required(),
     clientId: clientId.required(),
     customerUserId: customerUserId.required(),
+    customerHasBankId: customerHasBankId.required(),
 });
 const updateJudicialCaseFileSchema = joi_1.default.object({
     numberCaseFile: numberCaseFile.required(),
@@ -53,6 +54,7 @@ const updateJudicialCaseFileSchema = joi_1.default.object({
     judicialCourtId: judicialCourtId.required(),
     judicialSubjectId: judicialSubjectId.required(),
     judicialProceduralWayId: judicialProceduralWayId.required(),
+    customerHasBankId: customerHasBankId.required(),
 });
 const getJudicialCaseFileByClientIDSchema = joi_1.default.object({
     clientId: clientId.required(),
