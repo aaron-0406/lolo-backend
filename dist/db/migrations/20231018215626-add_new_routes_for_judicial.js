@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.down = exports.up = void 0;
+const sequelize_1 = require("sequelize");
 const permission_model_1 = __importDefault(require("../models/permission.model"));
 const { PERMISSION_TABLE } = permission_model_1.default;
 function up(queryInterface) {
@@ -36,7 +37,23 @@ function up(queryInterface) {
 exports.up = up;
 function down(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
-        return queryInterface.bulkDelete(PERMISSION_TABLE, {});
+        const deleteCriteria = {
+            [sequelize_1.Op.or]: [
+                {
+                    name: "EXPEDIENTES",
+                    code: "P13",
+                    icon: "ri-bank-fill",
+                    link: "/judicial/:urlIdentifier/expedientes",
+                },
+                {
+                    name: "DETALLES DEL EXPEDIENTE",
+                    code: "P13-01",
+                    icon: "-",
+                    link: "/judicial/:urlIdentifier/expedientes/:code",
+                },
+            ],
+        };
+        return queryInterface.bulkDelete(PERMISSION_TABLE, deleteCriteria);
     });
 }
 exports.down = down;
