@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = __importDefault(require("../../../libs/sequelize"));
 const boom_1 = __importDefault(require("@hapi/boom"));
+const sequelize_2 = require("sequelize");
 const { models } = sequelize_1.default;
 class JudicialCaseFileService {
     constructor() { }
@@ -34,6 +35,64 @@ class JudicialCaseFileService {
                 throw boom_1.default.notFound("Expedientes no encontrados");
             }
             return judicialCaseFile;
+        });
+    }
+    findAllByCHB(chb, query) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { limit, page, filter } = query;
+            //TODO: Improving this code to get the filtered judicial case list
+            //TODO: Remove negotiation, funcionario and customer user
+            const { negotiations, funcionarios, users, name } = filter;
+            const limite = parseInt(limit, 10);
+            const pagina = parseInt(page, 10);
+            const names = name;
+            const listNegotiations = JSON.parse(negotiations);
+            const listFuncionarios = JSON.parse(funcionarios);
+            const listUsers = JSON.parse(users);
+            const filters = {};
+            if (filter !== "" && filter !== undefined) {
+                filters.name = { [sequelize_2.Op.substring]: names };
+            }
+            if (listNegotiations.length) {
+                filters.negotiation_id_negotiation = { [sequelize_2.Op.in]: listNegotiations };
+            }
+            if (listFuncionarios.length) {
+                filters.funcionario_id_funcionario = { [sequelize_2.Op.in]: listFuncionarios };
+            }
+            if (listUsers.length) {
+                filters.customer_user_id_customer_user = { [sequelize_2.Op.in]: listUsers };
+            }
+            let filtersWhere = {
+                customer_has_bank_id: chb,
+            };
+            if (Object.keys(filters).length > 0) {
+                filtersWhere = {
+                    [sequelize_2.Op.or]: [filters],
+                    customer_has_bank_id: chb,
+                };
+            }
+            const quantity = yield models.CLIENT.count({
+                where: filtersWhere,
+            });
+            const clients = yield models.CLIENT.findAll({
+                include: [
+                    { model: models.NEGOTIATION, as: "negotiation" },
+                    {
+                        model: models.FUNCIONARIO,
+                        as: "funcionario",
+                        attributes: { exclude: ["bankId"] },
+                    },
+                    {
+                        model: models.CUSTOMER_USER,
+                        as: "customerUser",
+                    },
+                ],
+                order: [["name", "ASC"]],
+                limit: limite,
+                offset: (pagina - 1) * limite,
+                where: filtersWhere,
+            });
+            return { clients, quantity };
         });
     }
     findByID(id) {
