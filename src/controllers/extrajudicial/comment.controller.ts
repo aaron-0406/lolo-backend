@@ -96,7 +96,7 @@ export const createCommentController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P03-01-01",
+      codeAction: "P02-02-01-01",
       entity: COMMENT_TABLE,
       entityId: Number(newComment.dataValues.id),
       ip: req.ip,
@@ -121,7 +121,7 @@ export const updateCommentController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P03-01-02",
+      codeAction: "P02-02-01-02",
       entity: COMMENT_TABLE,
       entityId: Number(comment.dataValues.id),
       ip: req.ip,
@@ -145,7 +145,7 @@ export const deleteCommentController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P03-01-03",
+      codeAction: "P02-02-01-03",
       entity: COMMENT_TABLE,
       entityId: Number(id),
       ip: req.ip,

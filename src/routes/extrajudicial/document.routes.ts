@@ -10,7 +10,7 @@ import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 router.post(
   "/",
   JWTAuth,
-  checkPermissions("P03-05"),
+  checkPermissions("P02-02-02"),
   validatorHandler(createDocumentSchema, "body"),
   generateDocumentController
 );

@@ -31,7 +31,7 @@ export const generateDocumentController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P03-05",
+      codeAction: "P02-02-02",
       entity: TEMPLATE_HAS_VALUES_TABLE,
       entityId: Number(templateHasValuesId),
       ip: req.ip,

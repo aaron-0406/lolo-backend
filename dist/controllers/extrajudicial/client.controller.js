@@ -135,7 +135,7 @@ const createClientController = (req, res, next) => __awaiter(void 0, void 0, voi
         const newClient = yield service.create(body, Number(req.params.idCustomer));
         yield serviceUserLog.create({
             customerUserId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.id),
-            codeAction: "P03-02",
+            codeAction: "P02-03",
             entity: CLIENT_TABLE,
             entityId: Number(newClient.dataValues.id),
             ip: req.ip,
@@ -156,7 +156,7 @@ const updateClientController = (req, res, next) => __awaiter(void 0, void 0, voi
         const client = yield service.update(code, chb, body);
         yield serviceUserLog.create({
             customerUserId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id),
-            codeAction: "P03-03",
+            codeAction: "P02-04",
             entity: CLIENT_TABLE,
             entityId: Number(client.dataValues.id),
             ip: req.ip,
@@ -176,7 +176,7 @@ const deleteClientController = (req, res, next) => __awaiter(void 0, void 0, voi
         const client = yield service.delete(code, chb, Number(idCustomer));
         yield serviceUserLog.create({
             customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
-            codeAction: "P03-04",
+            codeAction: "P02-05",
             entity: CLIENT_TABLE,
             entityId: Number(client.id),
             ip: req.ip,

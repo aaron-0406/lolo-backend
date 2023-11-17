@@ -58,7 +58,7 @@ const createGuarantorController = (req, res, next) => __awaiter(void 0, void 0, 
         const newGuarantor = yield service.create(body);
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
-            codeAction: "P03-07-01",
+            codeAction: "P02-02-04-01",
             entity: GUARANTOR_TABLE,
             entityId: Number(newGuarantor.dataValues.id),
             ip: req.ip,
@@ -79,7 +79,7 @@ const updateGuarantorController = (req, res, next) => __awaiter(void 0, void 0, 
         const guarantor = yield service.update(id, body);
         yield serviceUserLog.create({
             customerUserId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.id),
-            codeAction: "P03-07-02",
+            codeAction: "P02-02-04-02",
             entity: GUARANTOR_TABLE,
             entityId: Number(guarantor.dataValues.id),
             ip: req.ip,
@@ -99,7 +99,7 @@ const deleteGuarantorController = (req, res, next) => __awaiter(void 0, void 0, 
         yield service.delete(id);
         yield serviceUserLog.create({
             customerUserId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id),
-            codeAction: "P03-07-03",
+            codeAction: "P02-02-04-03",
             entity: GUARANTOR_TABLE,
             entityId: Number(id),
             ip: req.ip,

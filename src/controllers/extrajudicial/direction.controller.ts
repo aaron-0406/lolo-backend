@@ -60,7 +60,7 @@ export const createDirectionController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P03-08-01",
+      codeAction: "P02-02-05-01",
       entity: DIRECTION_TABLE,
       entityId: Number(newDirection.dataValues.id),
       ip: req.ip,
@@ -85,7 +85,7 @@ export const updateDirectionController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P03-08-02",
+      codeAction: "P02-02-05-02",
       entity: DIRECTION_TABLE,
       entityId: Number(direction.dataValues.id),
       ip: req.ip,
@@ -109,7 +109,7 @@ export const deleteDirectionController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P03-08-03",
+      codeAction: "P02-02-05-03",
       entity: DIRECTION_TABLE,
       entityId: Number(id),
       ip: req.ip,

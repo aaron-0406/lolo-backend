@@ -39,7 +39,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
-  checkPermissions("P03-08-01"),
+  checkPermissions("P02-02-05-01"),
   validatorHandler(createDirectionSchema, "body"),
   createDirectionController
 );
@@ -47,7 +47,7 @@ router.post(
 router.patch(
   "/:id",
   JWTAuth,
-  checkPermissions("P03-08-02"),
+  checkPermissions("P02-02-05-02"),
   validatorHandler(getDirectionByIDSchema, "params"),
   validatorHandler(updateDirectionSchema, "body"),
   updateDirectionController
@@ -56,7 +56,7 @@ router.patch(
 router.delete(
   "/:id",
   JWTAuth,
-  checkPermissions("P03-08-03"),
+  checkPermissions("P02-02-05-03"),
   validatorHandler(getDirectionByIDSchema, "params"),
   deleteDirectionController
 );

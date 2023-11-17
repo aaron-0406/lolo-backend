@@ -38,7 +38,7 @@ export const findFileByIdController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P03-06-01",
+      codeAction: "P02-02-03-01",
       entity: FILE_TABLE,
       entityId: Number(id),
       ip: req.ip,
@@ -67,7 +67,7 @@ export const createFileController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P03-06-02",
+      codeAction: "P02-02-03-02",
       entity: FILE_TABLE,
       entityId: 0,
       ip: req.ip,
@@ -97,7 +97,7 @@ export const deleteFileController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P03-06-03",
+      codeAction: "P02-02-03-03",
       entity: FILE_TABLE,
       entityId: Number(id),
       ip: req.ip,

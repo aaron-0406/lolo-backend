@@ -44,7 +44,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
-  checkPermissions("P03-01-01"),
+  checkPermissions("P02-02-01-01"),
   validatorHandler(createCommentSchema, "body"),
   createCommentController
 );
@@ -52,7 +52,7 @@ router.post(
 router.patch(
   "/:id",
   JWTAuth,
-  checkPermissions("P03-01-02"),
+  checkPermissions("P02-02-01-02"),
   validatorHandler(getCommentByIDSchema, "params"),
   validatorHandler(updateCommentSchema, "body"),
   updateCommentController
@@ -61,7 +61,7 @@ router.patch(
 router.delete(
   "/:id",
   JWTAuth,
-  checkPermissions("P03-01-03"),
+  checkPermissions("P02-02-01-03"),
   validatorHandler(getCommentByIDSchema, "params"),
   deleteCommentController
 );

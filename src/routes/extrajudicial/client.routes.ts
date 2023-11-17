@@ -70,7 +70,7 @@ router.get(
 router.post(
   "/:idCustomer",
   JWTAuth,
-  checkPermissions("P03-02"),
+  checkPermissions("P02-03"),
   validatorHandler(getClientByCustomer, "params"),
   validatorHandler(createClientSchema, "body"),
   createClientController
@@ -79,7 +79,7 @@ router.post(
 router.patch(
   "/:code/:chb",
   JWTAuth,
-  checkPermissions("P03-03"),
+  checkPermissions("P02-04"),
   validatorHandler(getClientByCodeSchema, "params"),
   validatorHandler(updateClientSchema, "body"),
   updateClientController
@@ -88,7 +88,7 @@ router.patch(
 router.delete(
   "/:code/:chb/:idCustomer",
   JWTAuth,
-  checkPermissions("P03-04"),
+  checkPermissions("P02-05"),
   validatorHandler(deleteClientByCodeSchema, "params"),
   deleteClientController
 );
