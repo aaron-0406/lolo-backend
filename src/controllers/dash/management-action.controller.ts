@@ -21,6 +21,23 @@ export const getManagementActionsController = async (
   }
 };
 
+export const getManagementActionByCHBControllerPaginated = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { chb } = req.params;
+    const { data, quantity, numberPages } = await service.findAllByCHBPaginated(
+      chb,
+      req.query
+    );
+    res.json({ data, quantity, numberPages });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getManagementActionByCHBController = async (
   req: Request,
   res: Response,

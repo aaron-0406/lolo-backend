@@ -14,6 +14,35 @@ class FuncionarioService {
     return rta;
   }
 
+  async findAllByCHBPaginated(chb: string, query: any) {
+    const { limit, page } = query;
+
+    const limite = parseInt(limit, 10);
+    const pagina = parseInt(page, 10);
+
+    const quantity = await models.FUNCIONARIO.count({
+      where: {
+        customer_has_bank_id_customer_has_bank: chb,
+      },
+    });
+
+    const numberPages = Math.ceil(quantity / limit);
+
+    const data = await models.FUNCIONARIO.findAll({
+      where: {
+        customer_has_bank_id_customer_has_bank: chb,
+      },
+      attributes: { exclude: ["bankId"] },
+      order: [["id", "DESC"]],
+      limit: limite,
+      offset: (pagina - 1) * limite,
+    });
+
+    if (!data) throw boom.notFound("Funcionario no encontrado");
+
+    return { data, quantity, numberPages };
+  }
+
   async findAllByCHB(chb: string) {
     const rta = await models.FUNCIONARIO.findAll({
       attributes: { exclude: ["bankId"] },
