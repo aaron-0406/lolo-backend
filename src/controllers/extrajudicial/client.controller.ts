@@ -127,12 +127,14 @@ export const saveClientController = async (
       req.user
     );
 
+    const clientIp = req.headers['x-forwarded-for'] || req.ip;
+
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: permission,
       entity: CLIENT_TABLE,
       entityId: Number(client.dataValues.id),
-      ip: req.ip,
+      ip: clientIp as string,
       customerId: Number(req.user?.customerId),
     });
 

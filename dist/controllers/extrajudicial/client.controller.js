@@ -134,12 +134,13 @@ const saveClientController = (req, res, next) => __awaiter(void 0, void 0, void 
         const body = req.body;
         const permission = body.id === 0 ? "P02-03" : "P02-04";
         const client = yield service.save(body, Number(req.params.idCustomer), req.user);
+        const clientIp = req.headers['x-forwarded-for'] || req.ip;
         yield serviceUserLog.create({
             customerUserId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.id),
             codeAction: permission,
             entity: CLIENT_TABLE,
             entityId: Number(client.dataValues.id),
-            ip: req.ip,
+            ip: clientIp,
             customerId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.customerId),
         });
         res.status(201).json(client);
