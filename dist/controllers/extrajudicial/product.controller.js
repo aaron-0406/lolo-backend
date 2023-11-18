@@ -59,7 +59,7 @@ const createProductController = (req, res, next) => __awaiter(void 0, void 0, vo
         const product = yield service.create(req.body);
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
-            codeAction: "P03-09-01",
+            codeAction: "P02-02-06-01",
             entity: PRODUCT_TABLE,
             entityId: Number(product.dataValues.id),
             ip: req.ip,
@@ -79,7 +79,7 @@ const updateProductController = (req, res, next) => __awaiter(void 0, void 0, vo
         const product = yield service.update(req.body, Number(id));
         yield serviceUserLog.create({
             customerUserId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.id),
-            codeAction: "P03-09-02",
+            codeAction: "P02-02-06-02",
             entity: PRODUCT_TABLE,
             entityId: Number(product.dataValues.id),
             ip: req.ip,
@@ -110,7 +110,7 @@ const deleteProductController = (req, res, next) => __awaiter(void 0, void 0, vo
         yield service.delete(Number(id));
         yield serviceUserLog.create({
             customerUserId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id),
-            codeAction: "P03-09-03",
+            codeAction: "P02-02-06-03",
             entity: PRODUCT_TABLE,
             entityId: Number(id),
             ip: req.ip,

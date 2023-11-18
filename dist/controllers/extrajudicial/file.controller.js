@@ -37,7 +37,7 @@ const findFileByIdController = (req, res, next) => __awaiter(void 0, void 0, voi
         const file = yield service.findOne(Number(idCustomer), Number(chb), Number(code), Number(id));
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
-            codeAction: "P03-06-01",
+            codeAction: "P02-02-03-01",
             entity: FILE_TABLE,
             entityId: Number(id),
             ip: req.ip,
@@ -62,7 +62,7 @@ const createFileController = (req, res, next) => __awaiter(void 0, void 0, void 
         const newFile = yield service.create(body);
         yield serviceUserLog.create({
             customerUserId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.id),
-            codeAction: "P03-06-02",
+            codeAction: "P02-02-03-02",
             entity: FILE_TABLE,
             entityId: 0,
             ip: req.ip,
@@ -83,7 +83,7 @@ const deleteFileController = (req, res, next) => __awaiter(void 0, void 0, void 
         yield service.delete(Number(idCustomer), Number(chb), Number(code), Number(id));
         yield serviceUserLog.create({
             customerUserId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id),
-            codeAction: "P03-06-03",
+            codeAction: "P02-02-03-03",
             entity: FILE_TABLE,
             entityId: Number(id),
             ip: req.ip,

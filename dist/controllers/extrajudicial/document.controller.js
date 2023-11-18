@@ -34,7 +34,7 @@ const generateDocumentController = (req, res, next) => __awaiter(void 0, void 0,
         const docName = yield (0, helpers_1.saveWordDocument)(doc, templateHasValues.name);
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
-            codeAction: "P03-05",
+            codeAction: "P02-02-02",
             entity: TEMPLATE_HAS_VALUES_TABLE,
             entityId: Number(templateHasValuesId),
             ip: req.ip,

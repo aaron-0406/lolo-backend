@@ -10,5 +10,5 @@ const document_controller_1 = require("../../controllers/extrajudicial/document.
 const { createDocumentSchema } = document_schema_1.default;
 const router = express_1.default.Router();
 const auth_handler_1 = require("../../middlewares/auth.handler");
-router.post("/", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P03-05"), (0, validator_handler_1.default)(createDocumentSchema, "body"), document_controller_1.generateDocumentController);
+router.post("/", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P02-02-02"), (0, validator_handler_1.default)(createDocumentSchema, "body"), document_controller_1.generateDocumentController);
 exports.default = router;

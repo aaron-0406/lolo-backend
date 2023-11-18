@@ -16,4 +16,5 @@ export type JudicialCaseFileType = {
   judicialCourtId: number;
   judicialSubjectId: number;
   judicialProceduralWayId: number;
+  customerHasBankId: number;
 };

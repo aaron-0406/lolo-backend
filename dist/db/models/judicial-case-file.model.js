@@ -9,6 +9,7 @@ const judicial_court_model_1 = __importDefault(require("./judicial-court.model")
 const judicial_procedural_way_model_1 = __importDefault(require("./judicial-procedural-way.model"));
 const judicial_subject_model_1 = __importDefault(require("./judicial-subject.model"));
 const customer_user_model_1 = __importDefault(require("./customer-user.model"));
+const customer_has_bank_model_1 = __importDefault(require("./many-to-many/customer-has-bank.model"));
 const JUDICIAL_CASE_FILE_TABLE = "JUDICIAL_CASE_FILE";
 const JudicialCaseFileSchema = {
     id: {
@@ -127,6 +128,17 @@ const JudicialCaseFileSchema = {
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
     },
+    customerHasBankId: {
+        allowNull: false,
+        field: "customer_has_bank_id",
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: customer_has_bank_model_1.default.CUSTOMER_HAS_BANK_TABLE,
+            key: "id_customer_has_bank",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
+    },
 };
 class JudicialCaseFile extends sequelize_1.Model {
     static associate(models) {
@@ -137,6 +149,7 @@ class JudicialCaseFile extends sequelize_1.Model {
             as: "judicialProceduralWay",
         });
         this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
+        this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
     }
     static config(sequelize) {
         return {

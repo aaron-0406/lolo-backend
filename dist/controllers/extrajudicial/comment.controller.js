@@ -87,7 +87,7 @@ const createCommentController = (req, res, next) => __awaiter(void 0, void 0, vo
         const newComment = yield service.create(body);
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
-            codeAction: "P03-01-01",
+            codeAction: "P02-02-01-01",
             entity: COMMENT_TABLE,
             entityId: Number(newComment.dataValues.id),
             ip: req.ip,
@@ -108,7 +108,7 @@ const updateCommentController = (req, res, next) => __awaiter(void 0, void 0, vo
         const comment = yield service.update(id, body);
         yield serviceUserLog.create({
             customerUserId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.id),
-            codeAction: "P03-01-02",
+            codeAction: "P02-02-01-02",
             entity: COMMENT_TABLE,
             entityId: Number(comment.dataValues.id),
             ip: req.ip,
@@ -128,7 +128,7 @@ const deleteCommentController = (req, res, next) => __awaiter(void 0, void 0, vo
         yield service.delete(id);
         yield serviceUserLog.create({
             customerUserId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id),
-            codeAction: "P03-01-03",
+            codeAction: "P02-02-01-03",
             entity: COMMENT_TABLE,
             entityId: Number(id),
             ip: req.ip,

@@ -58,7 +58,7 @@ const createDirectionController = (req, res, next) => __awaiter(void 0, void 0, 
         const newDirection = yield service.create(body);
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
-            codeAction: "P03-08-01",
+            codeAction: "P02-02-05-01",
             entity: DIRECTION_TABLE,
             entityId: Number(newDirection.dataValues.id),
             ip: req.ip,
@@ -79,7 +79,7 @@ const updateDirectionController = (req, res, next) => __awaiter(void 0, void 0, 
         const direction = yield service.update(id, body);
         yield serviceUserLog.create({
             customerUserId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.id),
-            codeAction: "P03-08-02",
+            codeAction: "P02-02-05-02",
             entity: DIRECTION_TABLE,
             entityId: Number(direction.dataValues.id),
             ip: req.ip,
@@ -99,7 +99,7 @@ const deleteDirectionController = (req, res, next) => __awaiter(void 0, void 0, 
         yield service.delete(id);
         yield serviceUserLog.create({
             customerUserId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id),
-            codeAction: "P03-08-03",
+            codeAction: "P02-02-05-03",
             entity: DIRECTION_TABLE,
             entityId: Number(id),
             ip: req.ip,
