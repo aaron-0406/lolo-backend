@@ -9,6 +9,7 @@ import path from "path";
 import CommentService from "./comment.service";
 import ProductService from "../../extrajudicial/services/product.service";
 import moment from "moment";
+import { checkPermissionsWithoutParams } from "../../../middlewares/auth.handler";
 
 const { models } = sequelize;
 
@@ -248,7 +249,11 @@ class ClientService {
     return client;
   }
 
-  async create(data: Omit<ClientType, "id" | "createdAt">, idCustomer: number) {
+  async save(
+    data: Omit<ClientType, "createdAt">,
+    idCustomer: number,
+    user?: Express.User
+  ) {
     const client = await models.CLIENT.findOne({
       where: {
         code: data.code,
@@ -256,18 +261,37 @@ class ClientService {
       },
     });
 
-    if (client) throw boom.notFound("Ya existe un cliente con este código");
+    if (!data.id && client) {
+      throw boom.notFound("Ya existe un cliente con este código!");
+    }
 
-    const newClient = await models.CLIENT.create(data);
+    if (client) {
+      if (checkPermissionsWithoutParams(["P02-04"], user)) {
+        return this.update(data.code, String(data.customerHasBankId), data);
+      } else {
+        throw boom.notFound("No tienes permisos para actualizar este cliente.");
+      }
+    }
 
-    // CREATE A FOLDER FOR CLIENT
-    await createFolder(
-      `${config.AWS_CHB_PATH}${idCustomer}/${data.customerHasBankId}/${data.code}/`
-    );
-    return newClient;
+    if (checkPermissionsWithoutParams(["P02-03"], user)) {
+      const newClient = await models.CLIENT.create(data);
+
+      // CREATE A FOLDER FOR CLIENT
+      await createFolder(
+        `${config.AWS_CHB_PATH}${idCustomer}/${data.customerHasBankId}/${data.code}/`
+      );
+
+      return newClient;
+    } else {
+      throw boom.notFound("No tienes permisos para crear un nuevo cliente.");
+    }
   }
 
-  async update(code: string, chb: string, changes: ClientType) {
+  async update(
+    code: string,
+    chb: string,
+    changes: Omit<ClientType, "id" | "createdAt">
+  ) {
     const client = await this.findCode(code, chb);
     const rta = await client.update(changes);
 

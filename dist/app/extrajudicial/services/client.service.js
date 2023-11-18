@@ -22,6 +22,7 @@ const path_1 = __importDefault(require("path"));
 const comment_service_1 = __importDefault(require("./comment.service"));
 const product_service_1 = __importDefault(require("../../extrajudicial/services/product.service"));
 const moment_1 = __importDefault(require("moment"));
+const auth_handler_1 = require("../../../middlewares/auth.handler");
 const { models } = sequelize_1.default;
 class ClientService {
     constructor() { }
@@ -253,7 +254,7 @@ class ClientService {
             return client;
         });
     }
-    create(data, idCustomer) {
+    save(data, idCustomer, user) {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield models.CLIENT.findOne({
                 where: {
@@ -261,12 +262,26 @@ class ClientService {
                     customer_has_bank_id_customer_has_bank: data.customerHasBankId,
                 },
             });
-            if (client)
-                throw boom_1.default.notFound("Ya existe un cliente con este código");
-            const newClient = yield models.CLIENT.create(data);
-            // CREATE A FOLDER FOR CLIENT
-            yield (0, aws_bucket_1.createFolder)(`${config_1.default.AWS_CHB_PATH}${idCustomer}/${data.customerHasBankId}/${data.code}/`);
-            return newClient;
+            if (!data.id && client) {
+                throw boom_1.default.notFound("Ya existe un cliente con este código!");
+            }
+            if (client) {
+                if ((0, auth_handler_1.checkPermissionsWithoutParams)(["P02-04"], user)) {
+                    return this.update(data.code, String(data.customerHasBankId), data);
+                }
+                else {
+                    throw boom_1.default.notFound("No tienes permisos para actualizar este cliente.");
+                }
+            }
+            if ((0, auth_handler_1.checkPermissionsWithoutParams)(["P02-03"], user)) {
+                const newClient = yield models.CLIENT.create(data);
+                // CREATE A FOLDER FOR CLIENT
+                yield (0, aws_bucket_1.createFolder)(`${config_1.default.AWS_CHB_PATH}${idCustomer}/${data.customerHasBankId}/${data.code}/`);
+                return newClient;
+            }
+            else {
+                throw boom_1.default.notFound("No tienes permisos para crear un nuevo cliente.");
+            }
         });
     }
     update(code, chb, changes) {

@@ -113,50 +113,30 @@ export const getClientByCodeCHBController = async (
   }
 };
 
-export const createClientController = async (
+export const saveClientController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const body = req.body;
-    const newClient = await service.create(body, Number(req.params.idCustomer));
+    const permission = body.id === 0 ? "P02-03" : "P02-04";
+    const client = await service.save(
+      body,
+      Number(req.params.idCustomer),
+      req.user
+    );
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P02-03",
-      entity: CLIENT_TABLE,
-      entityId: Number(newClient.dataValues.id),
-      ip: req.ip,
-      customerId: Number(req.user?.customerId),
-    });
-
-    res.status(201).json(newClient);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const updateClientController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { code, chb } = req.params;
-    const body = req.body;
-    const client = await service.update(code, chb, body);
-
-    await serviceUserLog.create({
-      customerUserId: Number(req.user?.id),
-      codeAction: "P02-04",
+      codeAction: permission,
       entity: CLIENT_TABLE,
       entityId: Number(client.dataValues.id),
       ip: req.ip,
       customerId: Number(req.user?.customerId),
     });
 
-    res.json(client);
+    res.status(201).json(client);
   } catch (error) {
     next(error);
   }
