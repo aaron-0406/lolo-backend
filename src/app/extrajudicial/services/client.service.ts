@@ -235,17 +235,6 @@ class ClientService {
     return rta;
   }
 
-  async doesTheClientExist(code: string, chb: string) {
-    const client = await models.CLIENT.findOne({
-      where: {
-        code: code,
-        customer_has_bank_id_customer_has_bank: chb,
-      },
-    });
-
-    return !!client;
-  }
-
   async findCode(code: string, chb: string) {
     const client = await models.CLIENT.findOne({
       where: {

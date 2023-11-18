@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteClientController = exports.updateClientController = exports.createClientController = exports.getClientByCodeCHBController = exports.getClientsByCHBDetailsController = exports.getClientsByNameController = exports.getClientsByCHBController = exports.downloadExcelDailyManagementController = exports.getAllClientsController = void 0;
+exports.deleteClientController = exports.saveClientController = exports.getClientByCodeCHBController = exports.getClientsByCHBDetailsController = exports.getClientsByNameController = exports.getClientsByCHBController = exports.downloadExcelDailyManagementController = exports.getAllClientsController = void 0;
 const client_service_1 = __importDefault(require("../../app/extrajudicial/services/client.service"));
 const fs = __importStar(require("fs"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
@@ -128,59 +128,39 @@ const getClientByCodeCHBController = (req, res, next) => __awaiter(void 0, void 
     }
 });
 exports.getClientByCodeCHBController = getClientByCodeCHBController;
-const createClientController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const saveClientController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _c, _d;
     try {
         const body = req.body;
-        const newClient = yield service.create(body, Number(req.params.idCustomer));
+        const permission = body.id === 0 ? "P02-03" : "P02-04";
+        const client = yield service.save(body, Number(req.params.idCustomer), req.user);
         yield serviceUserLog.create({
             customerUserId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.id),
-            codeAction: "P02-03",
-            entity: CLIENT_TABLE,
-            entityId: Number(newClient.dataValues.id),
-            ip: req.ip,
-            customerId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.customerId),
-        });
-        res.status(201).json(newClient);
-    }
-    catch (error) {
-        next(error);
-    }
-});
-exports.createClientController = createClientController;
-const updateClientController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _e, _f;
-    try {
-        const { code, chb } = req.params;
-        const body = req.body;
-        const client = yield service.update(code, chb, body);
-        yield serviceUserLog.create({
-            customerUserId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id),
-            codeAction: "P02-04",
+            codeAction: permission,
             entity: CLIENT_TABLE,
             entityId: Number(client.dataValues.id),
             ip: req.ip,
-            customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+            customerId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.customerId),
         });
-        res.json(client);
+        res.status(201).json(client);
     }
     catch (error) {
         next(error);
     }
 });
-exports.updateClientController = updateClientController;
+exports.saveClientController = saveClientController;
 const deleteClientController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _g, _h;
+    var _e, _f;
     try {
         const { code, chb, idCustomer } = req.params;
         const client = yield service.delete(code, chb, Number(idCustomer));
         yield serviceUserLog.create({
-            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
+            customerUserId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id),
             codeAction: "P02-05",
             entity: CLIENT_TABLE,
             entityId: Number(client.id),
             ip: req.ip,
-            customerId: Number((_h = req.user) === null || _h === void 0 ? void 0 : _h.customerId),
+            customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
         });
         res.status(201).json({ code, chb });
     }

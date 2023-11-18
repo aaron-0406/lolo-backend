@@ -105,15 +105,6 @@ const createClientsXslxController = (req, res, next) => __awaiter(void 0, void 0
                 _d = false;
                 try {
                     const client = _c;
-                    yield clientService.create({
-                        code: client.code,
-                        cityId: client.cityId,
-                        name: client.name,
-                        funcionarioId: client.funcionarioId,
-                        customerUserId,
-                        negotiationId: 17,
-                        customerHasBankId,
-                    }, idBank);
                 }
                 finally {
                     _d = true;
@@ -177,7 +168,9 @@ const createProductsXslxController = (req, res, next) => __awaiter(void 0, void 
                     const product = _l;
                     const client = yield clientService.findByCustomerIdAndCode(product.customerId, product.clientCode);
                     if (!client) {
-                        yield clientService.create({
+                        //TODO: Update logic with save service of client service
+                        /* await clientService.create(
+                          {
                             code: product.clientCode,
                             cityId: product.cityId,
                             name: product.clientName,
@@ -185,7 +178,9 @@ const createProductsXslxController = (req, res, next) => __awaiter(void 0, void 
                             customerUserId,
                             negotiationId: 17,
                             customerHasBankId,
-                        }, idBank);
+                          },
+                          idBank
+                        ); */
                     }
                     yield productService.create({
                         code: product.code,

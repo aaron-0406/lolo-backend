@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const joi_1 = __importDefault(require("joi"));
+const id = joi_1.default.number();
 const code = joi_1.default.string().min(1).max(50);
 const negotiationId = joi_1.default.number().required();
 const dniOrRuc = joi_1.default.string().min(1).max(20);
@@ -35,7 +36,8 @@ const negotiations = joi_1.default.string().required();
 const funcionarios = joi_1.default.string().required();
 const users = joi_1.default.string().required();
 const cities = joi_1.default.string().required();
-const createClientSchema = joi_1.default.object({
+const saveClientSchema = joi_1.default.object({
+    id: id.optional(),
     code: code.required(),
     negotiationId,
     dniOrRuc: dniOrRuc.optional().empty("").allow(""),
@@ -48,18 +50,6 @@ const createClientSchema = joi_1.default.object({
     funcionarioId: funcionarioId.required(),
     customerUserId: customerUserId.required(),
     customerHasBankId: customerHasBankId.required(),
-});
-const updateClientSchema = joi_1.default.object({
-    negotiationId,
-    dniOrRuc: dniOrRuc,
-    name: name,
-    salePerimeter: salePerimeter.optional().empty("").allow(""),
-    phone: phone.optional().empty("").allow(""),
-    email: email.optional().empty("").allow(""),
-    createdAt: createdAt,
-    customerUserId: customerUserId,
-    cityId: cityId,
-    funcionarioId: funcionarioId,
 });
 const getClientByCodeSchema = joi_1.default.object({
     code: code.required(),
@@ -93,9 +83,8 @@ const getDateSchema = joi_1.default.object({
     cityId: cityId.required(),
 });
 exports.default = {
-    createClientSchema,
+    saveClientSchema,
     getClientByCustomer,
-    updateClientSchema,
     getClientByCHBSchema,
     getClientByCodeSchema,
     deleteClientByCodeSchema,

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkPermissions = exports.JWTAuth = void 0;
+exports.checkPermissionsWithoutParams = exports.checkPermissions = exports.JWTAuth = void 0;
 const passport_1 = __importDefault(require("passport"));
 const boom_1 = __importDefault(require("@hapi/boom"));
 // Authenticate by JWT
@@ -39,3 +39,14 @@ const checkPermissions = (...permissions) => {
     };
 };
 exports.checkPermissions = checkPermissions;
+const checkPermissionsWithoutParams = (permissions, user) => {
+    const userPermissions = user === null || user === void 0 ? void 0 : user.permissions.map((permission) => {
+        return permission.code;
+    });
+    if (!user)
+        return false;
+    if (permissions.some((permission) => userPermissions === null || userPermissions === void 0 ? void 0 : userPermissions.includes(permission)))
+        return true;
+    return false;
+};
+exports.checkPermissionsWithoutParams = checkPermissionsWithoutParams;
