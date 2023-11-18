@@ -120,8 +120,12 @@ export const saveClientController = async (
 ) => {
   try {
     const body = req.body;
-    const permission = body.id === 0 ? "P02-03" : "P02-04"
-    const client = await service.save(body, Number(req.params.idCustomer));
+    const permission = body.id === 0 ? "P02-03" : "P02-04";
+    const client = await service.save(
+      body,
+      Number(req.params.idCustomer),
+      req.user
+    );
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),

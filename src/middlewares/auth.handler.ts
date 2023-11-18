@@ -42,3 +42,18 @@ export const checkPermissions = (...permissions: string[]) => {
     );
   };
 };
+
+export const checkPermissionsWithoutParams = (
+  permissions: [...permissions: string[]],
+  user?: Express.User
+) => {
+  const userPermissions = user?.permissions.map((permission: any) => {
+    return permission.code;
+  });
+
+  if (!user) return boom.unauthorized("No JWT");
+  if (permissions.some((permission) => userPermissions?.includes(permission)))
+    return true;
+
+  return false;
+};
