@@ -41,12 +41,12 @@ const options = {
 app.use((0, cors_1.default)(options));
 app.use(express_1.default.static(path_1.default.join(__dirname, "/public")));
 app.use(express_1.default.static(path_1.default.join(__dirname, "/public/build")));
+app.use(ip_handler_1.default);
 (0, routes_1.default)(app);
 // Todas las peticiones GET que no hayamos manejado en las líneas anteriores retornaran nuestro app React
 app.get("*", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "/public/build", "index.html"));
 });
-app.use(ip_handler_1.default);
 app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(ormErrorHandler);
