@@ -52,7 +52,7 @@ const getGuarantorByIdController = (req, res, next) => __awaiter(void 0, void 0,
 });
 exports.getGuarantorByIdController = getGuarantorByIdController;
 const createGuarantorController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+    var _a, _b, _c;
     try {
         const body = req.body;
         const newGuarantor = yield service.create(body);
@@ -61,8 +61,8 @@ const createGuarantorController = (req, res, next) => __awaiter(void 0, void 0, 
             codeAction: "P02-02-04-01",
             entity: GUARANTOR_TABLE,
             entityId: Number(newGuarantor.dataValues.id),
-            ip: req.ip,
-            customerId: Number((_b = req.user) === null || _b === void 0 ? void 0 : _b.customerId),
+            ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
+            customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
         });
         res.status(201).json(newGuarantor);
     }
@@ -72,18 +72,18 @@ const createGuarantorController = (req, res, next) => __awaiter(void 0, void 0, 
 });
 exports.createGuarantorController = createGuarantorController;
 const updateGuarantorController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _c, _d;
+    var _d, _e, _f;
     try {
         const { id } = req.params;
         const body = req.body;
         const guarantor = yield service.update(id, body);
         yield serviceUserLog.create({
-            customerUserId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.id),
+            customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
             codeAction: "P02-02-04-02",
             entity: GUARANTOR_TABLE,
             entityId: Number(guarantor.dataValues.id),
-            ip: req.ip,
-            customerId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.customerId),
+            ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
+            customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
         });
         res.json(guarantor);
     }
@@ -93,17 +93,17 @@ const updateGuarantorController = (req, res, next) => __awaiter(void 0, void 0, 
 });
 exports.updateGuarantorController = updateGuarantorController;
 const deleteGuarantorController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _e, _f;
+    var _g, _h, _j;
     try {
         const { id } = req.params;
         yield service.delete(id);
         yield serviceUserLog.create({
-            customerUserId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id),
+            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
             codeAction: "P02-02-04-03",
             entity: GUARANTOR_TABLE,
             entityId: Number(id),
-            ip: req.ip,
-            customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+            ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
+            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
         });
         res.status(201).json({ id });
     }

@@ -63,7 +63,7 @@ export const createCustomerUserController = async (
       codeAction: "P10-01",
       entity: CUSTOMER_USER_TABLE,
       entityId: Number(newUser.dataValues.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -88,7 +88,7 @@ export const updateCustomerUserStateController = async (
       codeAction: "P10-04",
       entity: CUSTOMER_USER_TABLE,
       entityId: Number(user.dataValues.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -114,7 +114,7 @@ export const updateCustomerUserController = async (
       codeAction: "P10-02",
       entity: CUSTOMER_USER_TABLE,
       entityId: Number(user.dataValues.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -138,7 +138,7 @@ export const deleteCustomerUserController = async (
       codeAction: "P10-03",
       entity: CUSTOMER_USER_TABLE,
       entityId: Number(id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 

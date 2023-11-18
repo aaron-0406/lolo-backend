@@ -23,7 +23,7 @@ const goalUserService = new goal_user_service_1.default();
 const serviceUserLog = new user_log_service_1.default();
 const { GOAL_TABLE } = goal_model_1.default;
 const createGoalController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c;
+    var _a, _b, _c, _d;
     try {
         const goal = yield goalService.create(Object.assign(Object.assign({}, req.body), { customerId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.customerId) }));
         yield serviceUserLog.create({
@@ -31,8 +31,8 @@ const createGoalController = (req, res, next) => __awaiter(void 0, void 0, void 
             codeAction: "P04-01",
             entity: GOAL_TABLE,
             entityId: Number(goal.dataValues.id),
-            ip: req.ip,
-            customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
+            ip: (_c = req.clientIp) !== null && _c !== void 0 ? _c : "",
+            customerId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.customerId),
         });
         return res.json(goal);
     }
@@ -42,12 +42,12 @@ const createGoalController = (req, res, next) => __awaiter(void 0, void 0, void 
 });
 exports.createGoalController = createGoalController;
 const getGoalController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _d;
+    var _e;
     try {
         const { limit, page } = req.query;
         const limite = Number(limit);
         const pagina = Number(page);
-        const goals = yield goalService.findAll(Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.customerId), {
+        const goals = yield goalService.findAll(Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.customerId), {
             limit: limite,
             page: pagina,
         });
@@ -59,9 +59,9 @@ const getGoalController = (req, res, next) => __awaiter(void 0, void 0, void 0, 
 });
 exports.getGoalController = getGoalController;
 const getGoalByIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _e;
+    var _f;
     try {
-        const goal = yield goalService.findByID(Number(req.params.id), Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.customerId));
+        const goal = yield goalService.findByID(Number(req.params.id), Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId));
         return res.json(goal);
     }
     catch (error) {
@@ -70,9 +70,9 @@ const getGoalByIdController = (req, res, next) => __awaiter(void 0, void 0, void
 });
 exports.getGoalByIdController = getGoalByIdController;
 const getGoalGlobalController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _f;
+    var _g;
     try {
-        const goal = yield goalService.finGlobalGoal(Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId));
+        const goal = yield goalService.finGlobalGoal(Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.customerId));
         if (!goal)
             throw boom_1.default.notFound("Meta no encontrada");
         return res.json(goal);
@@ -93,9 +93,9 @@ const getCustomerUsersGoals = (req, res, next) => __awaiter(void 0, void 0, void
 });
 exports.getCustomerUsersGoals = getCustomerUsersGoals;
 const getCustomerUserGoal = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _g;
+    var _h;
     try {
-        const customerGoal = yield goalService.findGoalUserByCustomerId(Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id));
+        const customerGoal = yield goalService.findGoalUserByCustomerId(Number((_h = req.user) === null || _h === void 0 ? void 0 : _h.id));
         return res.json(customerGoal);
     }
     catch (error) {
@@ -104,20 +104,20 @@ const getCustomerUserGoal = (req, res, next) => __awaiter(void 0, void 0, void 0
 });
 exports.getCustomerUserGoal = getCustomerUserGoal;
 const updateCustomerUserGoals = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _h, _j, _k;
+    var _j, _k, _l, _m;
     try {
         for (let i = 0; i < req.body.length; i++) {
             const element = req.body[i];
             yield goalUserService.updateGoalUser(element.id, element.quantity);
         }
-        const goal = yield goalService.findByID(Number(req.params.goalId), Number((_h = req.user) === null || _h === void 0 ? void 0 : _h.customerId));
+        const goal = yield goalService.findByID(Number(req.params.goalId), Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId));
         yield serviceUserLog.create({
-            customerUserId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.id),
+            customerUserId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.id),
             codeAction: "P04-04",
             entity: GOAL_TABLE,
             entityId: Number(goal.dataValues.id),
-            ip: req.ip,
-            customerId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.customerId),
+            ip: (_l = req.clientIp) !== null && _l !== void 0 ? _l : "",
+            customerId: Number((_m = req.user) === null || _m === void 0 ? void 0 : _m.customerId),
         });
         res.json(goal);
     }
@@ -127,16 +127,16 @@ const updateCustomerUserGoals = (req, res, next) => __awaiter(void 0, void 0, vo
 });
 exports.updateCustomerUserGoals = updateCustomerUserGoals;
 const updateGoalController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _l, _m, _o;
+    var _o, _p, _q, _r;
     try {
-        const goal = yield goalService.update(Number(req.params.id), Number((_l = req.user) === null || _l === void 0 ? void 0 : _l.customerId), req.body);
+        const goal = yield goalService.update(Number(req.params.id), Number((_o = req.user) === null || _o === void 0 ? void 0 : _o.customerId), req.body);
         yield serviceUserLog.create({
-            customerUserId: Number((_m = req.user) === null || _m === void 0 ? void 0 : _m.id),
+            customerUserId: Number((_p = req.user) === null || _p === void 0 ? void 0 : _p.id),
             codeAction: "P04-02",
             entity: GOAL_TABLE,
             entityId: Number(goal.dataValues.id),
-            ip: req.ip,
-            customerId: Number((_o = req.user) === null || _o === void 0 ? void 0 : _o.customerId),
+            ip: (_q = req.clientIp) !== null && _q !== void 0 ? _q : "",
+            customerId: Number((_r = req.user) === null || _r === void 0 ? void 0 : _r.customerId),
         });
         return res.json(goal);
     }
@@ -146,16 +146,16 @@ const updateGoalController = (req, res, next) => __awaiter(void 0, void 0, void 
 });
 exports.updateGoalController = updateGoalController;
 const deleteGoalController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _p, _q;
+    var _s, _t, _u;
     try {
         const goal = yield goalService.delete(Number(req.params.id));
         yield serviceUserLog.create({
-            customerUserId: Number((_p = req.user) === null || _p === void 0 ? void 0 : _p.id),
+            customerUserId: Number((_s = req.user) === null || _s === void 0 ? void 0 : _s.id),
             codeAction: "P04-03",
             entity: GOAL_TABLE,
             entityId: Number(goal.dataValues.id),
-            ip: req.ip,
-            customerId: Number((_q = req.user) === null || _q === void 0 ? void 0 : _q.customerId),
+            ip: (_t = req.clientIp) !== null && _t !== void 0 ? _t : "",
+            customerId: Number((_u = req.user) === null || _u === void 0 ? void 0 : _u.customerId),
         });
         return res.json(goal);
     }

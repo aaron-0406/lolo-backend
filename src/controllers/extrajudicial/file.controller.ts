@@ -41,7 +41,7 @@ export const findFileByIdController = async (
       codeAction: "P02-02-03-01",
       entity: FILE_TABLE,
       entityId: Number(id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -70,7 +70,7 @@ export const createFileController = async (
       codeAction: "P02-02-03-02",
       entity: FILE_TABLE,
       entityId: 0,
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -100,7 +100,7 @@ export const deleteFileController = async (
       codeAction: "P02-02-03-03",
       entity: FILE_TABLE,
       entityId: Number(id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 

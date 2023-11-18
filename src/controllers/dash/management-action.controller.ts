@@ -63,7 +63,7 @@ export const createManagementActionController = async (
       codeAction: "P07-01",
       entity: MANAGEMENT_ACTION_TABLE,
       entityId: Number(newManagementAction.dataValues.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -88,7 +88,7 @@ export const updateManagementActionController = async (
       codeAction: "P07-02",
       entity: MANAGEMENT_ACTION_TABLE,
       entityId: Number(managementAction.dataValues.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -112,7 +112,7 @@ export const deleteManagementActionController = async (
       codeAction: "P07-03",
       entity: MANAGEMENT_ACTION_TABLE,
       entityId: Number(id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 

@@ -99,7 +99,7 @@ export const createCommentController = async (
       codeAction: "P02-02-01-01",
       entity: COMMENT_TABLE,
       entityId: Number(newComment.dataValues.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -124,7 +124,7 @@ export const updateCommentController = async (
       codeAction: "P02-02-01-02",
       entity: COMMENT_TABLE,
       entityId: Number(comment.dataValues.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -148,7 +148,7 @@ export const deleteCommentController = async (
       codeAction: "P02-02-01-03",
       entity: COMMENT_TABLE,
       entityId: Number(id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 

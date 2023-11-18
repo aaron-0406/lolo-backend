@@ -34,7 +34,7 @@ export const generateDocumentController = async (
       codeAction: "P02-02-02",
       entity: TEMPLATE_HAS_VALUES_TABLE,
       entityId: Number(templateHasValuesId),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 

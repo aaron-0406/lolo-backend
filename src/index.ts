@@ -5,37 +5,19 @@ import errorHandlerr from "./middlewares/error.handler";
 import morgan from "morgan";
 import path from "path";
 import fs from "fs";
+import "./libs/passport";
+import ipHandler from "./middlewares/ip.handler";
 import {
   deleteDownloadFolderTask,
   sendWeeklyReportsByEmail,
 } from "./libs/cron_jobs";
-
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace Express {
-    interface User {
-      id: number;
-      name: string;
-      lastName: string;
-      phone: string;
-      dni: string;
-      email: string;
-      privilege: string;
-      state: boolean;
-      createdAt: Date;
-      customerId: number;
-      roleId: number;
-      permissions: Array<String>;
-    }
-  }
-}
 
 const { logErrors, ormErrorHandler, boomErrorHandler, errorHandler } =
   errorHandlerr;
 
 const app = express();
 const port = process.env.PORT || 5000;
-import "./libs/passport";
+
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
@@ -69,6 +51,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/public/build", "index.html"));
 });
 
+app.use(ipHandler);
 app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(ormErrorHandler);

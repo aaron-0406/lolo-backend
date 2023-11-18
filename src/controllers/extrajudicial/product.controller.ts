@@ -64,7 +64,7 @@ export const createProductController = async (
       codeAction: "P02-02-06-01",
       entity: PRODUCT_TABLE,
       entityId: Number(product.dataValues.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -88,7 +88,7 @@ export const updateProductController = async (
       codeAction: "P02-02-06-02",
       entity: PRODUCT_TABLE,
       entityId: Number(product.dataValues.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -126,7 +126,7 @@ export const deleteProductController = async (
       codeAction: "P02-02-06-03",
       entity: PRODUCT_TABLE,
       entityId: Number(id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 

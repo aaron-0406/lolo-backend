@@ -56,7 +56,7 @@ const getAllClientsController = (req, res, next) => __awaiter(void 0, void 0, vo
 });
 exports.getAllClientsController = getAllClientsController;
 const downloadExcelDailyManagementController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+    var _a, _b, _c;
     try {
         const { date, cityId } = req.query;
         const newDate = date;
@@ -67,8 +67,8 @@ const downloadExcelDailyManagementController = (req, res, next) => __awaiter(voi
             codeAction: "P02-01",
             entity: CITY_TABLE,
             entityId: Number(cityId),
-            ip: req.ip,
-            customerId: Number((_b = req.user) === null || _b === void 0 ? void 0 : _b.customerId),
+            ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
+            customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
         });
         res.sendFile(filePath, (err) => {
             if (err) {
@@ -129,19 +129,18 @@ const getClientByCodeCHBController = (req, res, next) => __awaiter(void 0, void 
 });
 exports.getClientByCodeCHBController = getClientByCodeCHBController;
 const saveClientController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _c, _d;
+    var _d, _e, _f;
     try {
         const body = req.body;
         const permission = body.id === 0 ? "P02-03" : "P02-04";
         const client = yield service.save(body, Number(req.params.idCustomer), req.user);
-        const clientIp = req.headers['x-forwarded-for'] || req.ip;
         yield serviceUserLog.create({
-            customerUserId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.id),
+            customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
             codeAction: permission,
             entity: CLIENT_TABLE,
             entityId: Number(client.dataValues.id),
-            ip: clientIp,
-            customerId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.customerId),
+            ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
+            customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
         });
         res.status(201).json(client);
     }
@@ -151,17 +150,17 @@ const saveClientController = (req, res, next) => __awaiter(void 0, void 0, void 
 });
 exports.saveClientController = saveClientController;
 const deleteClientController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _e, _f;
+    var _g, _h, _j;
     try {
         const { code, chb, idCustomer } = req.params;
         const client = yield service.delete(code, chb, Number(idCustomer));
         yield serviceUserLog.create({
-            customerUserId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id),
+            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
             codeAction: "P02-05",
             entity: CLIENT_TABLE,
             entityId: Number(client.id),
-            ip: req.ip,
-            customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+            ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
+            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
         });
         res.status(201).json({ code, chb });
     }

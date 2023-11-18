@@ -53,7 +53,7 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
 });
 exports.loginController = loginController;
 const changePasswordController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e;
     try {
         const { newPassword, repeatPassword } = req.body;
         yield serviceAuth.changePassword({ newPassword, repeatPassword }, Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id));
@@ -62,8 +62,8 @@ const changePasswordController = (req, res, next) => __awaiter(void 0, void 0, v
             codeAction: "P01-01",
             entity: USER_APP_TABLE,
             entityId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.id),
-            ip: req.ip,
-            customerId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.customerId),
+            ip: (_d = req.clientIp) !== null && _d !== void 0 ? _d : "",
+            customerId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.customerId),
         });
         return res.json({ success: "Contraseña modificada" });
     }
@@ -73,20 +73,20 @@ const changePasswordController = (req, res, next) => __awaiter(void 0, void 0, v
 });
 exports.changePasswordController = changePasswordController;
 const changeCredentialsController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _e, _f, _g, _h, _j;
+    var _f, _g, _h, _j, _k, _l;
     try {
-        yield serviceAuth.changeCredentials(req.body, Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id));
-        const user = yield serviceCustomerUser.findOne(String((_f = req.user) === null || _f === void 0 ? void 0 : _f.id));
+        yield serviceAuth.changeCredentials(req.body, Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.id));
+        const user = yield serviceCustomerUser.findOne(String((_g = req.user) === null || _g === void 0 ? void 0 : _g.id));
         const permissions = yield servicePermission.findAllByRoleId(user.dataValues.roleId);
         const customerUser = Object.assign(Object.assign({}, user.dataValues), { permissions });
         const token = (0, jwt_1.signToken)(customerUser, `${process.env.JWT_SECRET}`);
         yield serviceUserLog.create({
-            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
+            customerUserId: Number((_h = req.user) === null || _h === void 0 ? void 0 : _h.id),
             codeAction: "P01-02",
             entity: USER_APP_TABLE,
-            entityId: Number((_h = req.user) === null || _h === void 0 ? void 0 : _h.id),
-            ip: req.ip,
-            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            entityId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.id),
+            ip: (_k = req.clientIp) !== null && _k !== void 0 ? _k : "",
+            customerId: Number((_l = req.user) === null || _l === void 0 ? void 0 : _l.customerId),
         });
         return res.json({
             user: customerUser,

@@ -10,11 +10,12 @@ const error_handler_1 = __importDefault(require("./middlewares/error.handler"));
 const morgan_1 = __importDefault(require("morgan"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
+require("./libs/passport");
+const ip_handler_1 = __importDefault(require("./middlewares/ip.handler"));
 const cron_jobs_1 = require("./libs/cron_jobs");
 const { logErrors, ormErrorHandler, boomErrorHandler, errorHandler } = error_handler_1.default;
 const app = (0, express_1.default)();
 const port = process.env.PORT || 5000;
-require("./libs/passport");
 app.use(express_1.default.json());
 app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.urlencoded({ extended: false }));
@@ -45,6 +46,7 @@ app.use(express_1.default.static(path_1.default.join(__dirname, "/public/build")
 app.get("*", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "/public/build", "index.html"));
 });
+app.use(ip_handler_1.default);
 app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(ormErrorHandler);

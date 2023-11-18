@@ -63,7 +63,7 @@ export const createFuncionarioController = async (
       codeAction: "P08-01",
       entity: FUNCIONARIO_TABLE,
       entityId: Number(newFuncionario.dataValues.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -88,7 +88,7 @@ export const updateFuncionarioController = async (
       codeAction: "P08-02",
       entity: FUNCIONARIO_TABLE,
       entityId: Number(funcionario.dataValues.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -112,7 +112,7 @@ export const deleteFuncionarioController = async (
       codeAction: "P08-03",
       entity: FUNCIONARIO_TABLE,
       entityId: Number(id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 

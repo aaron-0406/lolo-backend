@@ -52,7 +52,7 @@ const getCustomerUserByIdController = (req, res, next) => __awaiter(void 0, void
 });
 exports.getCustomerUserByIdController = getCustomerUserByIdController;
 const createCustomerUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+    var _a, _b, _c;
     try {
         const body = req.body;
         const newUser = yield service.create(body);
@@ -61,8 +61,8 @@ const createCustomerUserController = (req, res, next) => __awaiter(void 0, void 
             codeAction: "P10-01",
             entity: CUSTOMER_USER_TABLE,
             entityId: Number(newUser.dataValues.id),
-            ip: req.ip,
-            customerId: Number((_b = req.user) === null || _b === void 0 ? void 0 : _b.customerId),
+            ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
+            customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
         });
         res.status(201).json(newUser);
     }
@@ -72,18 +72,18 @@ const createCustomerUserController = (req, res, next) => __awaiter(void 0, void 
 });
 exports.createCustomerUserController = createCustomerUserController;
 const updateCustomerUserStateController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _c, _d;
+    var _d, _e, _f;
     try {
         const { id } = req.params;
         const body = req.body;
         const user = yield service.updateState(id, body.state);
         yield serviceUserLog.create({
-            customerUserId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.id),
+            customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
             codeAction: "P10-04",
             entity: CUSTOMER_USER_TABLE,
             entityId: Number(user.dataValues.id),
-            ip: req.ip,
-            customerId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.customerId),
+            ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
+            customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
         });
         res.json(user);
     }
@@ -93,7 +93,7 @@ const updateCustomerUserStateController = (req, res, next) => __awaiter(void 0, 
 });
 exports.updateCustomerUserStateController = updateCustomerUserStateController;
 const updateCustomerUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _e, _f;
+    var _g, _h, _j;
     try {
         const { id } = req.params;
         const body = req.body;
@@ -101,12 +101,12 @@ const updateCustomerUserController = (req, res, next) => __awaiter(void 0, void 
             delete req.body.password;
         const user = yield service.update(id, body);
         yield serviceUserLog.create({
-            customerUserId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id),
+            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
             codeAction: "P10-02",
             entity: CUSTOMER_USER_TABLE,
             entityId: Number(user.dataValues.id),
-            ip: req.ip,
-            customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+            ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
+            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
         });
         res.json(user);
     }
@@ -116,17 +116,17 @@ const updateCustomerUserController = (req, res, next) => __awaiter(void 0, void 
 });
 exports.updateCustomerUserController = updateCustomerUserController;
 const deleteCustomerUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _g, _h;
+    var _k, _l, _m;
     try {
         const { id } = req.params;
         yield service.delete(id);
         yield serviceUserLog.create({
-            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
+            customerUserId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.id),
             codeAction: "P10-03",
             entity: CUSTOMER_USER_TABLE,
             entityId: Number(id),
-            ip: req.ip,
-            customerId: Number((_h = req.user) === null || _h === void 0 ? void 0 : _h.customerId),
+            ip: (_l = req.clientIp) !== null && _l !== void 0 ? _l : "",
+            customerId: Number((_m = req.user) === null || _m === void 0 ? void 0 : _m.customerId),
         });
         res.status(201).json({ id });
     }

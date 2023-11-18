@@ -25,7 +25,7 @@ const service = new document_service_1.default();
 const serviceUserLog = new user_log_service_1.default();
 const { TEMPLATE_HAS_VALUES_TABLE } = template_has_values_model_1.default;
 const generateDocumentController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+    var _a, _b, _c;
     try {
         const { body: { templateHasValuesId, usersId }, } = req;
         const templateHasValues = yield serviceTemplateHasValues.findOneWidthTemplate(templateHasValuesId);
@@ -37,8 +37,8 @@ const generateDocumentController = (req, res, next) => __awaiter(void 0, void 0,
             codeAction: "P02-02-02",
             entity: TEMPLATE_HAS_VALUES_TABLE,
             entityId: Number(templateHasValuesId),
-            ip: req.ip,
-            customerId: Number((_b = req.user) === null || _b === void 0 ? void 0 : _b.customerId),
+            ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
+            customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
         });
         res.json({ docName });
     }

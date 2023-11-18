@@ -62,7 +62,7 @@ export const createNegotiationController = async (
       codeAction: "P09-01",
       entity: NEGOTIATION_TABLE,
       entityId: Number(newNegotiation.dataValues.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -87,7 +87,7 @@ export const updateNegotiationController = async (
       codeAction: "P09-02",
       entity: NEGOTIATION_TABLE,
       entityId: Number(negotiation.dataValues.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -111,7 +111,7 @@ export const deleteNegotiationController = async (
       codeAction: "P09-03",
       entity: NEGOTIATION_TABLE,
       entityId: Number(id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 

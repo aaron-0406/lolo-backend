@@ -52,7 +52,7 @@ const getFuncionarioByIdController = (req, res, next) => __awaiter(void 0, void 
 });
 exports.getFuncionarioByIdController = getFuncionarioByIdController;
 const createFuncionarioController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+    var _a, _b, _c;
     try {
         const body = req.body;
         const newFuncionario = yield service.create(body);
@@ -61,8 +61,8 @@ const createFuncionarioController = (req, res, next) => __awaiter(void 0, void 0
             codeAction: "P08-01",
             entity: FUNCIONARIO_TABLE,
             entityId: Number(newFuncionario.dataValues.id),
-            ip: req.ip,
-            customerId: Number((_b = req.user) === null || _b === void 0 ? void 0 : _b.customerId),
+            ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
+            customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
         });
         res.status(201).json(newFuncionario);
     }
@@ -72,18 +72,18 @@ const createFuncionarioController = (req, res, next) => __awaiter(void 0, void 0
 });
 exports.createFuncionarioController = createFuncionarioController;
 const updateFuncionarioController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _c, _d;
+    var _d, _e, _f;
     try {
         const { id } = req.params;
         const body = req.body;
         const funcionario = yield service.update(id, body);
         yield serviceUserLog.create({
-            customerUserId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.id),
+            customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
             codeAction: "P08-02",
             entity: FUNCIONARIO_TABLE,
             entityId: Number(funcionario.dataValues.id),
-            ip: req.ip,
-            customerId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.customerId),
+            ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
+            customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
         });
         res.json(funcionario);
     }
@@ -93,17 +93,17 @@ const updateFuncionarioController = (req, res, next) => __awaiter(void 0, void 0
 });
 exports.updateFuncionarioController = updateFuncionarioController;
 const deleteFuncionarioController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _e, _f;
+    var _g, _h, _j;
     try {
         const { id } = req.params;
         yield service.delete(id);
         yield serviceUserLog.create({
-            customerUserId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id),
+            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
             codeAction: "P08-03",
             entity: FUNCIONARIO_TABLE,
             entityId: Number(id),
-            ip: req.ip,
-            customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+            ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
+            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
         });
         res.status(201).json({ id });
     }

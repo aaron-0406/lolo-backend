@@ -63,7 +63,7 @@ export const createDirectionController = async (
       codeAction: "P02-02-05-01",
       entity: DIRECTION_TABLE,
       entityId: Number(newDirection.dataValues.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -88,7 +88,7 @@ export const updateDirectionController = async (
       codeAction: "P02-02-05-02",
       entity: DIRECTION_TABLE,
       entityId: Number(direction.dataValues.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -112,7 +112,7 @@ export const deleteDirectionController = async (
       codeAction: "P02-02-05-03",
       entity: DIRECTION_TABLE,
       entityId: Number(id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 

@@ -50,7 +50,7 @@ export const changePasswordController = async (
       codeAction: "P01-01",
       entity: USER_APP_TABLE,
       entityId: Number(req.user?.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -79,7 +79,7 @@ export const changeCredentialsController = async (
       codeAction: "P01-02",
       entity: USER_APP_TABLE,
       entityId: Number(req.user?.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 

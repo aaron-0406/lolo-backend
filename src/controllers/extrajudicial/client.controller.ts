@@ -41,7 +41,7 @@ export const downloadExcelDailyManagementController = async (
       codeAction: "P02-01",
       entity: CITY_TABLE,
       entityId: Number(cityId),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -127,14 +127,12 @@ export const saveClientController = async (
       req.user
     );
 
-    const clientIp = req.headers['x-forwarded-for'] || req.ip;
-
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: permission,
       entity: CLIENT_TABLE,
       entityId: Number(client.dataValues.id),
-      ip: clientIp as string,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -158,7 +156,7 @@ export const deleteClientController = async (
       codeAction: "P02-05",
       entity: CLIENT_TABLE,
       entityId: Number(client.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 

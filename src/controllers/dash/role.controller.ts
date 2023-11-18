@@ -56,7 +56,7 @@ export const createRoleController = async (
       codeAction: "P11-01",
       entity: ROLE_TABLE,
       entityId: Number(newRole.dataValues.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -81,7 +81,7 @@ export const updateRoleController = async (
       codeAction: "P11-02",
       entity: ROLE_TABLE,
       entityId: Number(role.dataValues.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -105,7 +105,7 @@ export const deleteRoleController = async (
       codeAction: "P11-03",
       entity: ROLE_TABLE,
       entityId: Number(id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 

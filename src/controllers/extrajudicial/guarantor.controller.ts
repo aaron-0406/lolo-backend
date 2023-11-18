@@ -63,7 +63,7 @@ export const createGuarantorController = async (
       codeAction: "P02-02-04-01",
       entity: GUARANTOR_TABLE,
       entityId: Number(newGuarantor.dataValues.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -88,7 +88,7 @@ export const updateGuarantorController = async (
       codeAction: "P02-02-04-02",
       entity: GUARANTOR_TABLE,
       entityId: Number(guarantor.dataValues.id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
@@ -112,7 +112,7 @@ export const deleteGuarantorController = async (
       codeAction: "P02-02-04-03",
       entity: GUARANTOR_TABLE,
       entityId: Number(id),
-      ip: req.ip,
+      ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
