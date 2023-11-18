@@ -51,7 +51,7 @@ export const checkPermissionsWithoutParams = (
     return permission.code;
   });
 
-  if (!user) return boom.unauthorized("No JWT");
+  if (!user) return false;
   if (permissions.some((permission) => userPermissions?.includes(permission)))
     return true;
 
