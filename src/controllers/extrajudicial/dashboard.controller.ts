@@ -86,7 +86,8 @@ export const createClientsXslxController = async (
   try {
     const { clients, customerUserId, customerHasBankId, idBank } = req.body;
     for await (const client of clients) {
-      await clientService.create(
+      //TODO: Update logic with save service of client service
+      /* await clientService.create(
         {
           code: client.code,
           cityId: client.cityId,
@@ -97,7 +98,7 @@ export const createClientsXslxController = async (
           customerHasBankId,
         },
         idBank
-      );
+      ); */
     }
     res.json({ success: "Cliente agregado" });
   } catch (error: any) {
@@ -134,7 +135,8 @@ export const createProductsXslxController = async (
         product.clientCode
       );
       if (!client) {
-        await clientService.create(
+        //TODO: Update logic with save service of client service
+        /* await clientService.create(
           {
             code: product.clientCode,
             cityId: product.cityId,
@@ -145,7 +147,7 @@ export const createProductsXslxController = async (
             customerHasBankId,
           },
           idBank
-        );
+        ); */
       }
       await productService.create({
         code: product.code,

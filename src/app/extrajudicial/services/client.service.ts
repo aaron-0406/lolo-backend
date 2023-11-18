@@ -234,7 +234,7 @@ class ClientService {
     return rta;
   }
 
-  async doesClientExist(code: string, chb: string) {
+  async doesTheClientExist(code: string, chb: string) {
     const client = await models.CLIENT.findOne({
       where: {
         code: code,
@@ -259,7 +259,7 @@ class ClientService {
     return client;
   }
 
-  async create(data: Omit<ClientType, "id" | "createdAt">, idCustomer: number) {
+  async save(data: Omit<ClientType, "createdAt">, idCustomer: number) {
     const client = await models.CLIENT.findOne({
       where: {
         code: data.code,
@@ -267,18 +267,21 @@ class ClientService {
       },
     });
 
+    if (!data.id && client) {
+      throw new Error("Ya existe un cliente con este código!");
+    }
+
     if (client) {
-      console.log("ya existe el cliente");
       return this.update(data.code, String(data.customerHasBankId), data);
     }
 
     const newClient = await models.CLIENT.create(data);
-    console.log("se creó el cliente");
 
     // CREATE A FOLDER FOR CLIENT
     await createFolder(
       `${config.AWS_CHB_PATH}${idCustomer}/${data.customerHasBankId}/${data.code}/`
     );
+
     return newClient;
   }
 

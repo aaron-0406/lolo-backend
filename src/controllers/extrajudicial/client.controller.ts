@@ -121,18 +121,18 @@ export const saveClientController = async (
   try {
     const body = req.body;
     const permission = body.id === 0 ? "P02-03" : "P02-04"
-    const newClient = await service.create(body, Number(req.params.idCustomer));
+    const client = await service.save(body, Number(req.params.idCustomer));
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: permission,
       entity: CLIENT_TABLE,
-      entityId: Number(newClient.dataValues.id),
+      entityId: Number(client.dataValues.id),
       ip: req.ip,
       customerId: Number(req.user?.customerId),
     });
 
-    res.status(201).json(newClient);
+    res.status(201).json(client);
   } catch (error) {
     next(error);
   }

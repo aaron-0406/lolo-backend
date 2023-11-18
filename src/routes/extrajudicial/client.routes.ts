@@ -24,9 +24,6 @@ const {
   getDateSchema,
 } = clientSchema;
 
-import ClientService from "../../app/extrajudicial/services/client.service";
-
-const service = new ClientService();
 const router = express.Router();
 
 router.get("/", JWTAuth, getAllClientsController);
@@ -72,14 +69,6 @@ router.get(
 router.post(
   "/:idCustomer",
   JWTAuth,
-  (req, res, next) => {
-    const { chb, code } = req.body;
-    // const exits = await service.doesClientExist(code, chb)
-    // const customPermission = exits ? "P02-04" : "P02-03";
-    const customPermission = "P02-04"
-    console.log(customPermission);
-    checkPermissions(customPermission)(req, res, next);
-  },
   validatorHandler(getClientByCustomer, "params"),
   validatorHandler(saveClientSchema, "body"),
   saveClientController
