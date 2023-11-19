@@ -37,7 +37,9 @@ class UserLogService {
     }
     findByCustomerId(customerId, query) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { actions, users } = query;
+            const { limit, page, actions, users } = query;
+            const limite = parseInt(limit, 10);
+            const pagina = parseInt(page, 10);
             const listActions = JSON.parse(actions);
             const listUsers = JSON.parse(users);
             const filters = {};
@@ -56,12 +58,17 @@ class UserLogService {
                     customer_id_customer: customerId,
                 };
             }
-            const userLogs = yield models.USER_LOG.findAll({
-                include: ["customerUser"],
-                order: [["id", "DESC"]],
+            const quantity = yield models.USER_LOG.count({
                 where: filtersWhere,
             });
-            return userLogs;
+            const logs = yield models.USER_LOG.findAll({
+                include: ["customerUser"],
+                order: [["id", "DESC"]],
+                limit: limite,
+                offset: (pagina - 1) * limite,
+                where: filtersWhere,
+            });
+            return { logs, quantity };
         });
     }
     create(data) {
