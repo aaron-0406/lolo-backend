@@ -25,8 +25,10 @@ class UserLogService {
   }
 
   async findByCustomerId(customerId: string, query: any) {
-    const { actions, users } = query;
+    const { limit, page, actions, users } = query;
 
+    const limite = parseInt(limit, 10);
+    const pagina = parseInt(page, 10);
     const listActions = JSON.parse(actions);
     const listUsers = JSON.parse(users);
 
@@ -48,13 +50,19 @@ class UserLogService {
       };
     }
 
-    const userLogs = await models.USER_LOG.findAll({
-      include: ["customerUser"],
-      order: [["id", "DESC"]],
+    const quantity = await models.USER_LOG.count({
       where: filtersWhere,
     });
 
-    return userLogs;
+    const logs = await models.USER_LOG.findAll({
+      include: ["customerUser"],
+      order: [["id", "DESC"]],
+      limit: limite,
+      offset: (pagina - 1) * limite,
+      where: filtersWhere,
+    });
+
+    return { logs, quantity };
   }
 
   async create(data: Omit<UserLogType, "id" | "createAt">) {
