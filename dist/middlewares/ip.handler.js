@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const getClientIp = (req) => {
-    return (req.headers["x-forwarded-for"] || req.ip || "");
-    //return clientIP.split(",")[1].trim();
+    const clientIP = (req.headers["x-forwarded-for"] || req.ip || "");
+    return clientIP.split(",")[0].trim();
 };
 const ipHandler = (req, res, next) => {
     req.clientIp = getClientIp(req);
