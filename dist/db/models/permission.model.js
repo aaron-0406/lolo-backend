@@ -14,6 +14,12 @@ const PermissionSchema = {
     code: { type: sequelize_1.DataTypes.STRING(150), unique: true, allowNull: false },
     icon: { type: sequelize_1.DataTypes.STRING(150), allowNull: false },
     link: { type: sequelize_1.DataTypes.STRING(150), allowNull: false, defaultValue: "#" },
+    dropDown: {
+        allowNull: false,
+        type: sequelize_1.DataTypes.TINYINT({ length: 1 }),
+        defaultValue: 0,
+        field: "drop_down",
+    },
 };
 class Permission extends sequelize_1.Model {
     static associate(models) { }
