@@ -8,7 +8,7 @@ const icon = Joi.string().min(1).max(150);
 const link = Joi.string().min(1).max(150);
 
 const createPermissionSchema = Joi.object<
-  Omit<PermissionType, "id" | "permissions">,
+  Omit<PermissionType, "id" | "permissions" | "dropDown">,
   true
 >({
   name: name.required(),
@@ -26,7 +26,7 @@ const getPermissionsSchema = Joi.object<{ code: string }, true>({
 });
 
 const updatePermissionSchema = Joi.object<
-  Omit<PermissionType, "id" | "permissions">,
+  Omit<PermissionType, "id" | "permissions" | "dropDown">,
   true
 >({
   name,

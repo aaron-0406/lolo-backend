@@ -5,10 +5,10 @@ const { PERMISSION_TABLE } = permissionModal;
 
 export async function up(queryInterface: QueryInterface) {
   await queryInterface.addColumn(PERMISSION_TABLE, "drop_down", {
+    allowNull: false,
     type: DataTypes.BOOLEAN,
     defaultValue: false,
-    allowNull: false,
-    field: "drop_down"
+    field: "drop_down",
   });
 }
 

@@ -19,10 +19,10 @@ const { PERMISSION_TABLE } = permission_model_1.default;
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
         yield queryInterface.addColumn(PERMISSION_TABLE, "drop_down", {
-            type: sequelize_1.DataTypes.BOOLEAN,
-            defaultValue: false,
             allowNull: false,
-            field: "drop_down"
+            type: sequelize_1.DataTypes.TINYINT({ length: 1 }),
+            defaultValue: 0,
+            field: "drop_down",
         });
     });
 }

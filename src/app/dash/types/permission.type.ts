@@ -4,5 +4,6 @@ export type PermissionType = {
   code: string;
   icon: string;
   link: string;
+  dropDown: boolean;
   permissions?: Array<PermissionType>;
 };

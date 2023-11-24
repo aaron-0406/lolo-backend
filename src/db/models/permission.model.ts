@@ -22,6 +22,12 @@ const PermissionSchema: ModelAttributes<Permission, PermissionType> = {
   code: { type: DataTypes.STRING(150), unique: true, allowNull: false },
   icon: { type: DataTypes.STRING(150), allowNull: false },
   link: { type: DataTypes.STRING(150), allowNull: false, defaultValue: "#" },
+  dropDown: {
+    allowNull: false,
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+    field: "drop_down",
+  },
 };
 
 class Permission extends Model {

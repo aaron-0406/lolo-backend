@@ -22,6 +22,7 @@ class PermissionService {
       code: permission.dataValues.code,
       icon: permission.dataValues.icon,
       link: permission.dataValues.link,
+      dropDown: permission.dataValues.dropDown,
     }));
   }
 
@@ -46,6 +47,7 @@ class PermissionService {
       code: permission.dataValues.code,
       icon: permission.dataValues.icon,
       link: permission.dataValues.link,
+      dropDown: permission.dataValues.dropDown,
     }));
   }
 
