@@ -30,7 +30,7 @@ const createGoalController = (req, res, next) => __awaiter(void 0, void 0, void 
             customerUserId: Number((_b = req.user) === null || _b === void 0 ? void 0 : _b.id),
             codeAction: "P04-01",
             entity: GOAL_TABLE,
-            entityId: Number(goal.dataValues.id),
+            entityId: Number(goal.id),
             ip: (_c = req.clientIp) !== null && _c !== void 0 ? _c : "",
             customerId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.customerId),
         });
@@ -115,7 +115,7 @@ const updateCustomerUserGoals = (req, res, next) => __awaiter(void 0, void 0, vo
             customerUserId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.id),
             codeAction: "P04-04",
             entity: GOAL_TABLE,
-            entityId: Number(goal.dataValues.id),
+            entityId: Number(goal.id),
             ip: (_l = req.clientIp) !== null && _l !== void 0 ? _l : "",
             customerId: Number((_m = req.user) === null || _m === void 0 ? void 0 : _m.customerId),
         });
@@ -134,7 +134,7 @@ const updateGoalController = (req, res, next) => __awaiter(void 0, void 0, void 
             customerUserId: Number((_p = req.user) === null || _p === void 0 ? void 0 : _p.id),
             codeAction: "P04-02",
             entity: GOAL_TABLE,
-            entityId: Number(goal.dataValues.id),
+            entityId: Number(goal.id),
             ip: (_q = req.clientIp) !== null && _q !== void 0 ? _q : "",
             customerId: Number((_r = req.user) === null || _r === void 0 ? void 0 : _r.customerId),
         });

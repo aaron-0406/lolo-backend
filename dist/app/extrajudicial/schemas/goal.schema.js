@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const joi_1 = __importDefault(require("joi"));
 const id = joi_1.default.number().required();
+const name = joi_1.default.string();
 const week = joi_1.default.number().positive();
 const startDate = joi_1.default.date();
 const limit = joi_1.default.number().required();
@@ -14,10 +15,12 @@ const getGoalQuerySchema = joi_1.default.object({
     page,
 }).options({ abortEarly: true });
 const createGoalSchema = joi_1.default.object({
+    name: name.required(),
     startDate: startDate.required(),
     week: week.required(),
 }).options({ abortEarly: true });
 const updateGoalSchema = joi_1.default.object({
+    name: name.required(),
     startDate: startDate.required(),
     week: week.optional(),
 }).options({ abortEarly: true });

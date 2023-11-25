@@ -26,7 +26,7 @@ export const createGoalController = async (
       customerUserId: Number(req.user?.id),
       codeAction: "P04-01",
       entity: GOAL_TABLE,
-      entityId: Number(goal.dataValues.id),
+      entityId: Number(goal.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
@@ -136,7 +136,7 @@ export const updateCustomerUserGoals = async (
       customerUserId: Number(req.user?.id),
       codeAction: "P04-04",
       entity: GOAL_TABLE,
-      entityId: Number(goal.dataValues.id),
+      entityId: Number(goal.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
@@ -163,7 +163,7 @@ export const updateGoalController = async (
       customerUserId: Number(req.user?.id),
       codeAction: "P04-02",
       entity: GOAL_TABLE,
-      entityId: Number(goal.dataValues.id),
+      entityId: Number(goal.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });

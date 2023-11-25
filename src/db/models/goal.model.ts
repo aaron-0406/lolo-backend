@@ -19,6 +19,10 @@ const GoalSchema: ModelAttributes<Goal, GoalType> = {
     field: "id_goal",
     type: DataTypes.INTEGER,
   },
+  name: {
+    allowNull: false,
+    type: DataTypes.STRING(200),
+  },
   startDate: {
     allowNull: false,
     field: "start_date",

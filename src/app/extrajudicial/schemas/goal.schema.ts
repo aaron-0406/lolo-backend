@@ -2,6 +2,7 @@ import Joi from "joi";
 import { GoalType } from "../types/goal.type";
 
 const id = Joi.number().required();
+const name = Joi.string();
 const week = Joi.number().positive();
 const startDate = Joi.date();
 
@@ -17,6 +18,7 @@ const createGoalSchema = Joi.object<
   Omit<GoalType, "id" | "createdAt" | "endDate" | "customerId">,
   true
 >({
+  name: name.required(),
   startDate: startDate.required(),
   week: week.required(),
 }).options({ abortEarly: true });
@@ -25,6 +27,7 @@ const updateGoalSchema = Joi.object<
   Omit<GoalType, "id" | "createdAt" | "customerId" | "endDate">,
   true
 >({
+  name: name.required(),
   startDate: startDate.required(),
   week: week.optional(),
 }).options({ abortEarly: true });

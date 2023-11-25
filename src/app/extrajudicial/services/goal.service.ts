@@ -30,6 +30,7 @@ class GoalService {
     const query = `
       SELECT
         id_goal as id,
+        name,
         start_date as startDate,
         end_date as endDate,
         week,
@@ -49,6 +50,7 @@ class GoalService {
     const query = `
       SELECT
         id_goal as id,
+        name,
         start_date as startDate,
         end_date as endDate,
         week,
@@ -68,6 +70,7 @@ class GoalService {
     const result = await models.GOAL.findOne({
       attributes: [
         "id_goal",
+        "name",
         ["start_date", "startDate"],
         ["end_date", "endDate"],
         "week",

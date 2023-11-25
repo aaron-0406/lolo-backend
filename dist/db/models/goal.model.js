@@ -15,6 +15,10 @@ const GoalSchema = {
         field: "id_goal",
         type: sequelize_1.DataTypes.INTEGER,
     },
+    name: {
+        allowNull: false,
+        type: sequelize_1.DataTypes.STRING(200),
+    },
     startDate: {
         allowNull: false,
         field: "start_date",
