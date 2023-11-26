@@ -34,6 +34,7 @@ const goal_routes_1 = __importDefault(require("./extrajudicial/goal.routes"));
 const role_routes_1 = __importDefault(require("./dash/role.routes"));
 const permission_routes_1 = __importDefault(require("./dash/permission.routes"));
 const user_log_routes_1 = __importDefault(require("./dash/user-log.routes"));
+const ext_contact_routes_1 = __importDefault(require("./extrajudicial/ext-contact.routes"));
 const routerApi = (app) => {
     const router = express_1.default.Router();
     app.use("/api/v1", router);
@@ -51,6 +52,7 @@ const routerApi = (app) => {
     router.use("/cobranza/dashboard", dashboard_routes_1.default);
     router.use("/cobranza/product", product_routes_1.default);
     router.use("/cobranza/goal", goal_routes_1.default);
+    router.use("/cobranza/contact", ext_contact_routes_1.default);
     router.use("/judicial/case-file", judicial_case_file_routes_1.default);
     router.use("/judicial/court", judicial_court_routes_1.default);
     router.use("/judicial/procedural-way", judicial_procedural_way_routes_1.default);
