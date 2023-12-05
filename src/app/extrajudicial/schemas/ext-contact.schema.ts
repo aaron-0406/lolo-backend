@@ -2,7 +2,7 @@ import Joi from "joi";
 import { ExtContactType } from "../types/ext-contact.type";
 
 const id = Joi.number();
-const peruPhoneNumberRegex = /^9\d{5,8}$/;
+const peruPhoneNumberRegex = /^(9\d{8}|[1-7]\d{6})$/;
 const name = Joi.string().max(200);
 const phone = Joi.string()
   .max(9)

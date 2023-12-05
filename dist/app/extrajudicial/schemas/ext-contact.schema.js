@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const joi_1 = __importDefault(require("joi"));
 const id = joi_1.default.number();
-const peruPhoneNumberRegex = /^9\d{5,8}$/;
+const peruPhoneNumberRegex = /^(9\d{8}|[1-7]\d{6})$/;
 const name = joi_1.default.string().max(200);
 const phone = joi_1.default.string()
     .max(9)

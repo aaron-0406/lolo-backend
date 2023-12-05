@@ -17,6 +17,7 @@ class ExtContactService {
       where: {
         client_id_client: clientID,
       },
+      order: [["created_at", "DESC"]],
     });
 
     return rta;
