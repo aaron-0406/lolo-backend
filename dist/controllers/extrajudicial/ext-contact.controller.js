@@ -58,7 +58,7 @@ const createExtContactController = (req, res, next) => __awaiter(void 0, void 0,
         const newExtContact = yield service.create(body);
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
-            codeAction: "P02-02-04-01",
+            codeAction: "P02-02-07-01",
             entity: EXT_CONTACT_TABLE,
             entityId: Number(newExtContact.dataValues.id),
             ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
@@ -79,7 +79,7 @@ const updateExtContactController = (req, res, next) => __awaiter(void 0, void 0,
         const extContact = yield service.update(id, body);
         yield serviceUserLog.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
-            codeAction: "P02-02-04-02",
+            codeAction: "P02-02-07-02",
             entity: EXT_CONTACT_TABLE,
             entityId: Number(extContact.dataValues.id),
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
@@ -99,7 +99,7 @@ const deleteExtContactController = (req, res, next) => __awaiter(void 0, void 0,
         yield service.delete(id);
         yield serviceUserLog.create({
             customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
-            codeAction: "P02-02-04-03",
+            codeAction: "P02-02-07-03",
             entity: EXT_CONTACT_TABLE,
             entityId: Number(id),
             ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
