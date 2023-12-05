@@ -60,7 +60,7 @@ export const createExtContactController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P02-02-04-01", //changing
+      codeAction: "P02-02-07-01",
       entity: EXT_CONTACT_TABLE,
       entityId: Number(newExtContact.dataValues.id),
       ip: req.clientIp ?? "",
@@ -85,7 +85,7 @@ export const updateExtContactController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P02-02-04-02", //changing
+      codeAction: "P02-02-07-02",
       entity: EXT_CONTACT_TABLE,
       entityId: Number(extContact.dataValues.id),
       ip: req.clientIp ?? "",
@@ -109,7 +109,7 @@ export const deleteExtContactController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P02-02-04-03", //changing
+      codeAction: "P02-02-07-03",
       entity: EXT_CONTACT_TABLE,
       entityId: Number(id),
       ip: req.clientIp ?? "",

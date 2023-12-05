@@ -39,7 +39,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
-  checkPermissions("P02-02-04-01"), //changing
+  checkPermissions("P02-02-07-01"),
   validatorHandler(createExtContactSchema, "body"),
   createExtContactController
 );
@@ -47,7 +47,7 @@ router.post(
 router.patch(
   "/:id",
   JWTAuth,
-  checkPermissions("P02-02-04-02"), //changing
+  checkPermissions("P02-02-07-02"),
   validatorHandler(getExtContactByIDSchema, "params"),
   validatorHandler(updateExtContactSchema, "body"),
   updateExtContactController
@@ -56,7 +56,7 @@ router.patch(
 router.delete(
   "/:id",
   JWTAuth,
-  checkPermissions("P02-02-04-03"), //changing
+  checkPermissions("P02-02-07-03"),
   validatorHandler(getExtContactByIDSchema, "params"),
   deleteExtContactController
 );

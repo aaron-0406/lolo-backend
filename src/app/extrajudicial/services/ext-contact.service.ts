@@ -18,6 +18,7 @@ class ExtContactService {
         client_id_client: clientID,
       },
     });
+
     return rta;
   }
 

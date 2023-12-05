@@ -12,6 +12,7 @@ import directionModel from "./direction.model";
 import guarantorModel from "./guarantor.model";
 import managementActionModel from "./management-action.model";
 import commentModel from "./comment.model";
+import extContactsModel from "./ext-contacts.model";
 import fileModel from "./file.model";
 import negotiationModel from "./negotiation.model";
 import templateModel from "./template.model";
@@ -43,6 +44,7 @@ const { Direction, DirectionSchema } = directionModel;
 const { Guarantor, GuarantorSchema } = guarantorModel;
 const { ManagementAction, ManagementActionSchema } = managementActionModel;
 const { Comment, CommentSchema } = commentModel;
+const { ExtContact, ExtContactSchema } = extContactsModel;
 const { File, FileSchema } = fileModel;
 const { Negotiation, NegotiationSchema } = negotiationModel;
 const { Template, TemplateSchema } = templateModel;
@@ -80,6 +82,7 @@ export const setupModels = (sequelize: Sequelize) => {
     ManagementAction.config(sequelize)
   );
   Comment.init(CommentSchema, Comment.config(sequelize));
+  ExtContact.init(ExtContactSchema, ExtContact.config(sequelize));
   CustomerHasBank.init(
     CustomerHasBankSchema,
     CustomerHasBank.config(sequelize)
