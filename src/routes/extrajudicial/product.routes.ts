@@ -14,6 +14,7 @@ import {
   createProductController,
   deleteProductController,
   getProductByCodeController,
+  getProductByIdController,
   getProductsByClientCodeController,
   getProductsByCustomerIdController,
   updateProductController,
@@ -27,6 +28,13 @@ router.get(
   JWTAuth,
   validatorHandler(getProductsByClientCodeSchema, "params"),
   getProductsByClientCodeController
+);
+
+router.get(
+  "/client-by-id/:id",
+  JWTAuth,
+  validatorHandler(getProductByIdSchema, "params"),
+  getProductByIdController
 );
 
 router.get(

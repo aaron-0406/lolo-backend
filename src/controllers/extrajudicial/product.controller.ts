@@ -23,6 +23,20 @@ export const getProductsByClientCodeController = async (
   }
 };
 
+export const getProductByIdController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const product = await service.getByProductId(parseInt(id));
+    res.json(product);
+  } catch (error: any) {
+    next(boom.badRequest(error.message));
+  }
+};
+
 export const getProductByCodeController = async (
   req: Request,
   res: Response,
