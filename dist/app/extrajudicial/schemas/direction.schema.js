@@ -6,18 +6,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const joi_1 = __importDefault(require("joi"));
 const id = joi_1.default.number();
 const direction = joi_1.default.string().min(1).max(200);
-const createdAt = joi_1.default.date();
 const clientId = joi_1.default.number();
-const type = joi_1.default.string().required();
+const type = joi_1.default.string().required().max(200);
 const createDirectionSchema = joi_1.default.object({
     direction: direction.required(),
-    createdAt: createdAt.optional(),
     clientId: clientId.required(),
-    type
+    type,
 });
 const updateDirectionSchema = joi_1.default.object({
     direction: direction.required(),
-    createdAt: createdAt.optional(),
     type,
 });
 const getDirectionByClientIDSchema = joi_1.default.object({
