@@ -12,13 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.down = exports.up = void 0;
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield queryInterface.sequelize.query("UPDATE permission SET link = '/cobranza/:urlIdentifier/clientes/:code/productos' WHERE code = 'P02-02-06'");
+        yield queryInterface.sequelize.query("UPDATE PERMISSION SET link = '/cobranza/:urlIdentifier/clientes/:code/productos' WHERE code = 'P02-02-06'");
     });
 }
 exports.up = up;
 function down(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield queryInterface.sequelize.query("UPDATE permission SET link = '#' WHERE code = 'P02-02-06'");
+        yield queryInterface.sequelize.query("UPDATE PERMISSION SET link = '#' WHERE code = 'P02-02-06'");
     });
 }
 exports.down = down;
