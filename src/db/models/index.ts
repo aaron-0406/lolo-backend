@@ -13,6 +13,8 @@ import guarantorModel from "./guarantor.model";
 import managementActionModel from "./management-action.model";
 import commentModel from "./comment.model";
 import extContactsModel from "./ext-contacts.model";
+import extTagGroupModel from "./ext-tag-group.model";
+import extTagModel from "./ext-tag.model";
 import fileModel from "./file.model";
 import negotiationModel from "./negotiation.model";
 import templateModel from "./template.model";
@@ -45,6 +47,8 @@ const { Guarantor, GuarantorSchema } = guarantorModel;
 const { ManagementAction, ManagementActionSchema } = managementActionModel;
 const { Comment, CommentSchema } = commentModel;
 const { ExtContact, ExtContactSchema } = extContactsModel;
+const { ExtTagGroup, ExtTagGroupSchema } = extTagGroupModel;
+const { ExtTag, ExtTagSchema } = extTagModel;
 const { File, FileSchema } = fileModel;
 const { Negotiation, NegotiationSchema } = negotiationModel;
 const { Template, TemplateSchema } = templateModel;
@@ -83,6 +87,8 @@ export const setupModels = (sequelize: Sequelize) => {
   );
   Comment.init(CommentSchema, Comment.config(sequelize));
   ExtContact.init(ExtContactSchema, ExtContact.config(sequelize));
+  ExtTagGroup.init(ExtTagGroupSchema, ExtTagGroup.config(sequelize));
+  ExtTag.init(ExtTagSchema, ExtTag.config(sequelize));
   CustomerHasBank.init(
     CustomerHasBankSchema,
     CustomerHasBank.config(sequelize)
@@ -127,6 +133,9 @@ export const setupModels = (sequelize: Sequelize) => {
   ManagementAction.associate(sequelize.models);
   Comment.associate(sequelize.models);
   CustomerHasBank.associate(sequelize.models);
+  ExtContact.associate(sequelize.models);
+  ExtTagGroup.associate(sequelize.models);
+  ExtTag.associate(sequelize.models);
   Direction.associate(sequelize.models);
   Guarantor.associate(sequelize.models);
   Funcionario.associate(sequelize.models);
