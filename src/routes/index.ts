@@ -31,6 +31,8 @@ import roleRouter from "./dash/role.routes";
 import permissionRouter from "./dash/permission.routes";
 import userLogRouter from "./dash/user-log.routes";
 import extContactRouter from "./extrajudicial/ext-contact.routes";
+import extTagGroupRouter from "./extrajudicial/ext-tag-group.routes";
+import extTagRouter from "./extrajudicial/ext-tag.routes";
 
 const routerApi = (app: Express) => {
   const router = express.Router();
@@ -51,6 +53,8 @@ const routerApi = (app: Express) => {
   router.use("/cobranza/product", productRouter);
   router.use("/cobranza/goal", goalRouter);
   router.use("/cobranza/contact", extContactRouter);
+  router.use("/cobranza/ext-tag-group", extTagGroupRouter);
+  router.use("/cobranza/ext-tag", extTagRouter);
 
   router.use("/judicial/case-file", judicialCaseFileRouter);
   router.use("/judicial/court", judicialCourtRouter);
