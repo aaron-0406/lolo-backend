@@ -60,7 +60,7 @@ export const createExtTagController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P02-02-07-01", // TODO: Changing permission code
+      codeAction: "P14-01",
       entity: EXT_TAG_TABLE,
       entityId: Number(newExtTag.dataValues.id),
       ip: req.clientIp ?? "",
@@ -85,7 +85,7 @@ export const updateExtTagController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P02-02-07-02", // TODO: Changing permission code
+      codeAction: "P14-02",
       entity: EXT_TAG_TABLE,
       entityId: Number(extTag.dataValues.id),
       ip: req.clientIp ?? "",
@@ -109,7 +109,7 @@ export const deleteExtTagController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P02-02-07-03", // TODO: Changing permission code
+      codeAction: "P14-03",
       entity: EXT_TAG_TABLE,
       entityId: Number(id),
       ip: req.clientIp ?? "",
