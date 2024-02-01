@@ -18,15 +18,21 @@ const { EXT_TAG_GROUP_TABLE } = ext_tag_group_model_1.default;
 const newTagGroups = [
     {
         name: "Archivos",
-        customerHasBankId: 1,
+        customer_has_bank_id_customer_has_bank: 1,
+        created_at: "2024-02-01 03:33:31",
+        updated_at: "2024-02-01 03:33:31",
     },
     {
         name: "Productos",
-        customerHasBankId: 1,
+        customer_has_bank_id_customer_has_bank: 1,
+        created_at: "2024-02-01 03:33:31",
+        updated_at: "2024-02-01 03:33:31",
     },
     {
         name: "Clientes",
-        customerHasBankId: 1,
+        customer_has_bank_id_customer_has_bank: 1,
+        created_at: "2024-02-01 03:33:31",
+        updated_at: "2024-02-01 03:33:31",
     },
 ];
 function up(queryInterface) {
