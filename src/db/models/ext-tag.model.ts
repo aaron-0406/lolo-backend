@@ -30,6 +30,10 @@ const ExtTagSchema: ModelAttributes<ExtTag, ExtTagType> = {
     allowNull: false,
     type: DataTypes.STRING(7),
   },
+  action: {
+    allowNull: false,
+    type: DataTypes.TINYINT({ length: 1 }),
+  },
   tagGroupId: {
     allowNull: false,
     field: "tag_group_id_group_tag",

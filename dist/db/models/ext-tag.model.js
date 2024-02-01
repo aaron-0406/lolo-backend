@@ -25,6 +25,10 @@ const ExtTagSchema = {
         allowNull: false,
         type: sequelize_1.DataTypes.STRING(7),
     },
+    action: {
+        allowNull: false,
+        type: sequelize_1.DataTypes.TINYINT({ length: 1 }),
+    },
     tagGroupId: {
         allowNull: false,
         field: "tag_group_id_group_tag",
