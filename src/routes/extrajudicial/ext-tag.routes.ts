@@ -39,7 +39,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
-  checkPermissions("P02-02-07-01"), // TODO: Changing permission code
+  checkPermissions("P14-01"),
   validatorHandler(createExtTagSchema, "body"),
   createExtTagController
 );
@@ -47,7 +47,7 @@ router.post(
 router.patch(
   "/:id",
   JWTAuth,
-  checkPermissions("P02-02-07-02"), // TODO: Changing permission code
+  checkPermissions("P14-02"),
   validatorHandler(getExtTagByIDSchema, "params"),
   validatorHandler(updateExtTagSchema, "body"),
   updateExtTagController
@@ -56,7 +56,7 @@ router.patch(
 router.delete(
   "/:id",
   JWTAuth,
-  checkPermissions("P02-02-07-03"), // TODO: Changing permission code
+  checkPermissions("P14-03"),
   validatorHandler(getExtTagByIDSchema, "params"),
   deleteExtTagController
 );
