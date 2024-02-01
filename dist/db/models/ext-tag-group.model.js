@@ -51,6 +51,10 @@ const ExtTagGroupSchema = {
 class ExtTagGroup extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
+        this.hasMany(models.EXT_TAG, {
+            as: "extTag",
+            foreignKey: "tagGroupId",
+        });
     }
     static config(sequelize) {
         return {
