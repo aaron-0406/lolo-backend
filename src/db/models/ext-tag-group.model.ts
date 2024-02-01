@@ -57,6 +57,10 @@ const ExtTagGroupSchema: ModelAttributes<ExtTagGroup, ExtTagGroupType> = {
 class ExtTagGroup extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
+    this.hasMany(models.EXT_TAG, {
+      as: "extTag",
+      foreignKey: "tagGroupId",
+    });
   }
 
   static config(sequelize: Sequelize) {

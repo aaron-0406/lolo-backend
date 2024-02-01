@@ -73,7 +73,10 @@ const ExtTagSchema: ModelAttributes<ExtTag, ExtTagType> = {
 
 class ExtTag extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
-    this.belongsTo(models.EXT_TAG_GROUP, { as: "extTagGroup" });
+    this.belongsTo(models.EXT_TAG_GROUP, {
+      as: "extTagGroup",
+      foreignKey: "tagGroupId",
+    });
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
   }
 

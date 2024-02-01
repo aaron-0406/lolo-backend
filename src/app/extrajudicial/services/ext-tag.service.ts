@@ -14,10 +14,19 @@ class ExtTagService {
 
   async findAllByCHB(chb: string) {
     const rta = await models.EXT_TAG.findAll({
+      include: [
+        {
+          model: models.EXT_TAG_GROUP,
+          as: "extTagGroup",
+          foreignKey: "tagGroupId",
+          identifier: "id",
+          attributes: ["name"],
+        },
+      ],
+      order: [["created_at", "DESC"]],
       where: {
         customer_has_bank_id_customer_has_bank: chb,
       },
-      order: [["created_at", "DESC"]],
     });
 
     return rta;
