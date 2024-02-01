@@ -13,10 +13,7 @@ const router = express_1.default.Router();
 router.get("/", auth_handler_1.JWTAuth, ext_tag_controller_1.getExtTagsController);
 router.get("/all-data-by-chb/:chb", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getExtTagByCHBSchema, "params"), ext_tag_controller_1.getExtTagsByCHBController);
 router.get("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getExtTagByIDSchema, "params"), ext_tag_controller_1.getExtTagByIdController);
-router.post("/", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P02-02-07-01"), // TODO: Changing permission code
-(0, validator_handler_1.default)(createExtTagSchema, "body"), ext_tag_controller_1.createExtTagController);
-router.patch("/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P02-02-07-02"), // TODO: Changing permission code
-(0, validator_handler_1.default)(getExtTagByIDSchema, "params"), (0, validator_handler_1.default)(updateExtTagSchema, "body"), ext_tag_controller_1.updateExtTagController);
-router.delete("/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P02-02-07-03"), // TODO: Changing permission code
-(0, validator_handler_1.default)(getExtTagByIDSchema, "params"), ext_tag_controller_1.deleteExtTagController);
+router.post("/", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P14-01"), (0, validator_handler_1.default)(createExtTagSchema, "body"), ext_tag_controller_1.createExtTagController);
+router.patch("/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P14-02"), (0, validator_handler_1.default)(getExtTagByIDSchema, "params"), (0, validator_handler_1.default)(updateExtTagSchema, "body"), ext_tag_controller_1.updateExtTagController);
+router.delete("/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P14-03"), (0, validator_handler_1.default)(getExtTagByIDSchema, "params"), ext_tag_controller_1.deleteExtTagController);
 exports.default = router;
