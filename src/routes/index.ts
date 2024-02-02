@@ -31,6 +31,7 @@ import roleRouter from "./dash/role.routes";
 import permissionRouter from "./dash/permission.routes";
 import userLogRouter from "./dash/user-log.routes";
 import extContactRouter from "./extrajudicial/ext-contact.routes";
+import dashIpAddressBank from "./dash/dash-ip-address-bank.routes";
 
 const routerApi = (app: Express) => {
   const router = express.Router();
@@ -69,6 +70,7 @@ const routerApi = (app: Express) => {
   router.use("/dash/bank", bankRouter);
   router.use("/dash/city", cityRouter);
   router.use("/dash/user-log", userLogRouter);
+  router.use("/dash/ip-address-bank", dashIpAddressBank);
 };
 
 export default routerApi;

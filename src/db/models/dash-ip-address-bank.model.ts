@@ -52,10 +52,7 @@ const DashIpAddressBankSchema: ModelAttributes<
 };
 
 class DashIpAddressBank extends Model {
-  static associate(models: { [key: string]: ModelCtor<Model> }) {
-    this.belongsTo(models.CLIENT, { as: "client" });
-    this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
-  }
+  static associate(models: { [key: string]: ModelCtor<Model> }) {}
 
   static config(sequelize: Sequelize) {
     return {
