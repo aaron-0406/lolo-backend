@@ -60,7 +60,7 @@ export const createDashIpAddressController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P13-01",
+      codeAction: "P14-01",
       entity: DASH_IP_ADDRESS_BANK_TABLE,
       entityId: Number(newDashIpAddress.dataValues.id),
       ip: req.clientIp ?? "",
@@ -85,7 +85,7 @@ export const updateDashIpAddressStateController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P13-02",
+      codeAction: "P14-02",
       entity: DASH_IP_ADDRESS_BANK_TABLE,
       entityId: Number(user.dataValues.id),
       ip: req.clientIp ?? "",
@@ -110,7 +110,7 @@ export const updateDashIpAddressController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P13-03",
+      codeAction: "P14-03",
       entity: DASH_IP_ADDRESS_BANK_TABLE,
       entityId: Number(dashIpAddress.dataValues.id),
       ip: req.clientIp ?? "",
@@ -134,7 +134,7 @@ export const deleteDashIpAddressController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P13-04",
+      codeAction: "P14-04",
       entity: DASH_IP_ADDRESS_BANK_TABLE,
       entityId: Number(id),
       ip: req.clientIp ?? "",

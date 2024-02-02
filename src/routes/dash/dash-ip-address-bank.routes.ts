@@ -40,7 +40,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
-  checkPermissions("P13-01"),
+  checkPermissions("P14-01"),
   validatorHandler(createIpAddressSchema, "body"),
   createDashIpAddressController
 );
@@ -48,7 +48,7 @@ router.post(
 router.patch(
   "/state/:id",
   JWTAuth,
-  checkPermissions("P13-02"),
+  checkPermissions("P14-02"),
   validatorHandler(getIpAddressSchema, "params"),
   validatorHandler(updateIpAddressStateSchema, "body"),
   updateDashIpAddressStateController
@@ -57,7 +57,7 @@ router.patch(
 router.patch(
   "/:id",
   JWTAuth,
-  checkPermissions("P13-03"),
+  checkPermissions("P14-03"),
   validatorHandler(getIpAddressSchema, "params"),
   validatorHandler(updateIpAddressSchema, "body"),
   updateDashIpAddressController
@@ -66,7 +66,7 @@ router.patch(
 router.delete(
   "/:id",
   JWTAuth,
-  checkPermissions("P13-04"),
+  checkPermissions("P14-04"),
   validatorHandler(getIpAddressSchema, "params"),
   deleteDashIpAddressController
 );

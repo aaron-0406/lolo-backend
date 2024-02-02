@@ -35,6 +35,7 @@ const role_routes_1 = __importDefault(require("./dash/role.routes"));
 const permission_routes_1 = __importDefault(require("./dash/permission.routes"));
 const user_log_routes_1 = __importDefault(require("./dash/user-log.routes"));
 const ext_contact_routes_1 = __importDefault(require("./extrajudicial/ext-contact.routes"));
+const dash_ip_address_bank_routes_1 = __importDefault(require("./dash/dash-ip-address-bank.routes"));
 const routerApi = (app) => {
     const router = express_1.default.Router();
     app.use("/api/v1", router);
@@ -69,5 +70,6 @@ const routerApi = (app) => {
     router.use("/dash/bank", bank_routes_1.default);
     router.use("/dash/city", city_routes_1.default);
     router.use("/dash/user-log", user_log_routes_1.default);
+    router.use("/dash/ip-address-bank", dash_ip_address_bank_routes_1.default);
 };
 exports.default = routerApi;

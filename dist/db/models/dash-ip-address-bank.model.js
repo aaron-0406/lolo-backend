@@ -41,10 +41,7 @@ const DashIpAddressBankSchema = {
     },
 };
 class DashIpAddressBank extends sequelize_1.Model {
-    static associate(models) {
-        this.belongsTo(models.CLIENT, { as: "client" });
-        this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
-    }
+    static associate(models) { }
     static config(sequelize) {
         return {
             sequelize,
