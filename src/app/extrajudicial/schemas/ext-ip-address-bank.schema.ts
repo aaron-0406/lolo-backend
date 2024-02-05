@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { DashIpAddressBankType } from "../types/dash-ip-address-bank.type";
+import { ExtIpAddressBankType } from "../types/ext-ip-address-bank.type";
 
 const id = Joi.number();
 const addressName = Joi.string().min(2).max(100);
@@ -7,7 +7,7 @@ const ip = Joi.string().min(2).max(100);
 const state = Joi.boolean();
 
 const createIpAddressSchema = Joi.object<
-  Omit<DashIpAddressBankType, "id" | "createdAt" | "updatedAt" | "deletedAt">,
+  Omit<ExtIpAddressBankType, "id" | "createdAt" | "updatedAt" | "deletedAt">,
   true
 >({
   addressName: addressName.required(),
@@ -20,7 +20,7 @@ const updateIpAddressStateSchema = Joi.object<{ state: boolean }, true>({
 });
 
 const updateIpAddressSchema = Joi.object<
-  Omit<DashIpAddressBankType, "id" | "createdAt" | "updatedAt" | "deletedAt">,
+  Omit<ExtIpAddressBankType, "id" | "createdAt" | "updatedAt" | "deletedAt">,
   true
 >({
   addressName: addressName.required(),

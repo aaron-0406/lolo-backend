@@ -5,13 +5,13 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { DashIpAddressBankType } from "../../app/dash/types/dash-ip-address-bank.type";
+import { ExtIpAddressBankType } from "../../app/extrajudicial/types/ext-ip-address-bank.type";
 
-const DASH_IP_ADDRESS_BANK_TABLE = "DASH_IP_ADDRESS_BANK";
+const EXT_IP_ADDRESS_BANK_TABLE = "EXT_IP_ADDRESS_BANK";
 
-const DashIpAddressBankSchema: ModelAttributes<
-  DashIpAddressBank,
-  DashIpAddressBankType
+const ExtIpAddressBankSchema: ModelAttributes<
+  ExtIpAddressBank,
+  ExtIpAddressBankType
 > = {
   id: {
     primaryKey: true,
@@ -51,14 +51,14 @@ const DashIpAddressBankSchema: ModelAttributes<
   },
 };
 
-class DashIpAddressBank extends Model {
+class ExtIpAddressBank extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {}
 
   static config(sequelize: Sequelize) {
     return {
       sequelize,
-      tableName: DASH_IP_ADDRESS_BANK_TABLE,
-      modelName: DASH_IP_ADDRESS_BANK_TABLE,
+      tableName: EXT_IP_ADDRESS_BANK_TABLE,
+      modelName: EXT_IP_ADDRESS_BANK_TABLE,
       timestamps: true,
       paranoid: true,
       deletedAt: "deleted_at",
@@ -67,7 +67,7 @@ class DashIpAddressBank extends Model {
 }
 
 export default {
-  DASH_IP_ADDRESS_BANK_TABLE,
-  DashIpAddressBankSchema,
-  DashIpAddressBank,
+  EXT_IP_ADDRESS_BANK_TABLE,
+  ExtIpAddressBankSchema,
+  ExtIpAddressBank,
 };

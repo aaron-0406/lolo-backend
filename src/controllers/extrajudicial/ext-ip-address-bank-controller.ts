@@ -1,79 +1,79 @@
 import { Request, Response, NextFunction } from "express";
-import DashIpAddressBankService from "../../app/dash/services/dash-ip-address-bank.service";
+import ExtIpAddressBankService from "../../app/extrajudicial/services/ext-ip-address-bank.service";
 import UserLogService from "../../app/dash/services/user-log.service";
-import dashIpAddressBankModel from "../../db/models/dash-ip-address-bank.model";
+import ExtIpAddressBankModel from "../../db/models/ext-ip-address-bank.model";
 
-const service = new DashIpAddressBankService();
+const service = new ExtIpAddressBankService();
 const serviceUserLog = new UserLogService();
 
-const { DASH_IP_ADDRESS_BANK_TABLE } = dashIpAddressBankModel;
+const { EXT_IP_ADDRESS_BANK_TABLE } = ExtIpAddressBankModel;
 
-export const getDashIpAddressController = async (
+export const getIpAddressController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const dashIpAddress = await service.findAll();
-    res.json(dashIpAddress);
+    const IpAddress = await service.findAll();
+    res.json(IpAddress);
   } catch (error) {
     next(error);
   }
 };
 
-export const getDashIpAddressByIpController = async (
+export const getIpAddressByIpController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { ip } = req.params;
-    const dashIpAddress = await service.findByIP(ip);
-    res.json(dashIpAddress);
+    const IpAddress = await service.findByIP(ip);
+    res.json(IpAddress);
   } catch (error) {
     next(error);
   }
 };
 
-export const getDashIpAddressByIdController = async (
+export const getIpAddressByIdController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { id } = req.params;
-    const dashIpAddress = await service.findByID(id);
-    res.json(dashIpAddress);
+    const IpAddress = await service.findByID(id);
+    res.json(IpAddress);
   } catch (error) {
     next(error);
   }
 };
 
-export const createDashIpAddressController = async (
+export const createIpAddressController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const body = req.body;
-    const newDashIpAddress = await service.create(body);
+    const newIpAddress = await service.create(body);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P14-01",
-      entity: DASH_IP_ADDRESS_BANK_TABLE,
-      entityId: Number(newDashIpAddress.dataValues.id),
+      entity: EXT_IP_ADDRESS_BANK_TABLE,
+      entityId: Number(newIpAddress.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
-    res.status(201).json(newDashIpAddress);
+    res.status(201).json(newIpAddress);
   } catch (error) {
     next(error);
   }
 };
 
-export const updateDashIpAddressStateController = async (
+export const updateIpAddressStateController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -81,24 +81,24 @@ export const updateDashIpAddressStateController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const user = await service.updateState(id, body.state);
+    const ipAddress = await service.updateState(id, body.state);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P14-02",
-      entity: DASH_IP_ADDRESS_BANK_TABLE,
-      entityId: Number(user.dataValues.id),
+      entity: EXT_IP_ADDRESS_BANK_TABLE,
+      entityId: Number(ipAddress.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
-    res.json(user);
+    res.json(ipAddress);
   } catch (error) {
     next(error);
   }
 };
 
-export const updateDashIpAddressController = async (
+export const updateIpAddressController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -106,24 +106,24 @@ export const updateDashIpAddressController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const dashIpAddress = await service.update(id, body);
+    const IpAddress = await service.update(id, body);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P14-03",
-      entity: DASH_IP_ADDRESS_BANK_TABLE,
-      entityId: Number(dashIpAddress.dataValues.id),
+      entity: EXT_IP_ADDRESS_BANK_TABLE,
+      entityId: Number(IpAddress.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
-    res.json(dashIpAddress);
+    res.json(IpAddress);
   } catch (error) {
     next(error);
   }
 };
 
-export const deleteDashIpAddressController = async (
+export const deleteIpAddressController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -135,7 +135,7 @@ export const deleteDashIpAddressController = async (
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P14-04",
-      entity: DASH_IP_ADDRESS_BANK_TABLE,
+      entity: EXT_IP_ADDRESS_BANK_TABLE,
       entityId: Number(id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),

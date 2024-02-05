@@ -31,7 +31,7 @@ import judicialSubjectModel from "./judicial-subject.model";
 import judicialCourtModel from "./judicial-court.model";
 import judicialProceduralWayModel from "./judicial-procedural-way.model";
 import userLogModel from "./user-log.model";
-import dashIpAddressBankModel from "./dash-ip-address-bank.model";
+import extIpAddressBankModel from "./ext-ip-address-bank.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
@@ -66,7 +66,7 @@ const { JudicialProceduralWay, JudicialProceduralWaySchema } =
   judicialProceduralWayModel;
 const { UserLog, UserLogSchema } = userLogModel;
 const { JudicialCaseFile, JudicialCaseFileSchema } = judicialCaseFileModel;
-const { DashIpAddressBank, DashIpAddressBankSchema } = dashIpAddressBankModel;
+const { ExtIpAddressBank, ExtIpAddressBankSchema } = extIpAddressBankModel;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -119,9 +119,9 @@ export const setupModels = (sequelize: Sequelize) => {
     JudicialCaseFile.config(sequelize)
   );
   UserLog.init(UserLogSchema, UserLog.config(sequelize));
-  DashIpAddressBank.init(
-    DashIpAddressBankSchema,
-    DashIpAddressBank.config(sequelize)
+  ExtIpAddressBank.init(
+    ExtIpAddressBankSchema,
+    ExtIpAddressBank.config(sequelize)
   );
 
   Customer.associate(sequelize.models);
@@ -153,5 +153,5 @@ export const setupModels = (sequelize: Sequelize) => {
   JudicialProceduralWay.associate(sequelize.models);
   JudicialCaseFile.associate(sequelize.models);
   UserLog.associate(sequelize.models);
-  DashIpAddressBank.associate(sequelize.models);
+  ExtIpAddressBank.associate(sequelize.models);
 };
