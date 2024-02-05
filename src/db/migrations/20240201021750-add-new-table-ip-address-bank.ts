@@ -1,15 +1,15 @@
 import { DataTypes, QueryInterface } from "sequelize";
-import dashIpAddressBank from "../models/dash-ip-address-bank.model";
+import extIpAddressBank from "../models/ext-ip-address-bank.model";
 
-const { DASH_IP_ADDRESS_BANK_TABLE } = dashIpAddressBank;
+const { EXT_IP_ADDRESS_BANK_TABLE } = extIpAddressBank;
 
 export async function up(queryInterface: QueryInterface) {
-  await queryInterface.createTable(DASH_IP_ADDRESS_BANK_TABLE, {
+  await queryInterface.createTable(EXT_IP_ADDRESS_BANK_TABLE, {
     id: {
       primaryKey: true,
       allowNull: false,
       autoIncrement: true,
-      field: "id_dash_ip_address_bank",
+      field: "id_ext_ip_address_bank",
       type: DataTypes.INTEGER,
     },
     addressName: {
@@ -45,5 +45,5 @@ export async function up(queryInterface: QueryInterface) {
 }
 
 export async function down(queryInterface: QueryInterface) {
-  await queryInterface.dropTable(DASH_IP_ADDRESS_BANK_TABLE);
+  await queryInterface.dropTable(EXT_IP_ADDRESS_BANK_TABLE);
 }

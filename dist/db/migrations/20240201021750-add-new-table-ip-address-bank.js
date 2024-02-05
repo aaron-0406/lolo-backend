@@ -14,16 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.down = exports.up = void 0;
 const sequelize_1 = require("sequelize");
-const dash_ip_address_bank_model_1 = __importDefault(require("../models/dash-ip-address-bank.model"));
-const { DASH_IP_ADDRESS_BANK_TABLE } = dash_ip_address_bank_model_1.default;
+const ext_ip_address_bank_model_1 = __importDefault(require("../models/ext-ip-address-bank.model"));
+const { EXT_IP_ADDRESS_BANK_TABLE } = ext_ip_address_bank_model_1.default;
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield queryInterface.createTable(DASH_IP_ADDRESS_BANK_TABLE, {
+        yield queryInterface.createTable(EXT_IP_ADDRESS_BANK_TABLE, {
             id: {
                 primaryKey: true,
                 allowNull: false,
                 autoIncrement: true,
-                field: "id_dash_ip_address_bank",
+                field: "id_ext_ip_address_bank",
                 type: sequelize_1.DataTypes.INTEGER,
             },
             addressName: {
@@ -61,7 +61,7 @@ function up(queryInterface) {
 exports.up = up;
 function down(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield queryInterface.dropTable(DASH_IP_ADDRESS_BANK_TABLE);
+        yield queryInterface.dropTable(EXT_IP_ADDRESS_BANK_TABLE);
     });
 }
 exports.down = down;

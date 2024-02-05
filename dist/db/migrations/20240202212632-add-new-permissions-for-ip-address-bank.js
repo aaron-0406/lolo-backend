@@ -19,31 +19,31 @@ const { PERMISSION_TABLE } = permission_model_1.default;
 const newPermissions = [
     {
         name: "DIRECCIONES IP",
-        code: "P14",
+        code: "P15",
         icon: "ri-signal-tower-fill",
         link: "/:urlIdentifier/banco-direcciones-ip",
     },
     {
         name: "AGREGAR DIRECCION IP",
-        code: "P14-01",
+        code: "P15-01",
         icon: "-",
         link: "#",
     },
     {
         name: "ACTUALIZAR ESTADO DIRECCION IP",
-        code: "P14-02",
+        code: "P15-02",
         icon: "-",
         link: "#",
     },
     {
         name: "ACTUALIZAR DIRECCION IP",
-        code: "P14-03",
+        code: "P15-03",
         icon: "-",
         link: "#",
     },
     {
         name: "ELIMINAR DIRECCION IP",
-        code: "P14-04",
+        code: "P15-04",
         icon: "-",
         link: "#",
     },
@@ -58,7 +58,7 @@ function down(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
         const deleteCriteria = {
             code: {
-                [sequelize_1.Op.startsWith]: "P14",
+                [sequelize_1.Op.startsWith]: "P15",
             },
         };
         yield queryInterface.bulkDelete(PERMISSION_TABLE, deleteCriteria);

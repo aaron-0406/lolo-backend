@@ -6,31 +6,31 @@ const { PERMISSION_TABLE } = permissionModel;
 const newPermissions = [
   {
     name: "DIRECCIONES IP",
-    code: "P14",
+    code: "P15",
     icon: "ri-signal-tower-fill",
     link: "/:urlIdentifier/banco-direcciones-ip",
   },
   {
     name: "AGREGAR DIRECCION IP",
-    code: "P14-01",
+    code: "P15-01",
     icon: "-",
     link: "#",
   },
   {
     name: "ACTUALIZAR ESTADO DIRECCION IP",
-    code: "P14-02",
+    code: "P15-02",
     icon: "-",
     link: "#",
   },
   {
     name: "ACTUALIZAR DIRECCION IP",
-    code: "P14-03",
+    code: "P15-03",
     icon: "-",
     link: "#",
   },
   {
     name: "ELIMINAR DIRECCION IP",
-    code: "P14-04",
+    code: "P15-04",
     icon: "-",
     link: "#",
   },
@@ -43,7 +43,7 @@ export async function up(queryInterface: QueryInterface) {
 export async function down(queryInterface: QueryInterface) {
   const deleteCriteria = {
     code: {
-      [Op.startsWith]: "P14",
+      [Op.startsWith]: "P15",
     },
   };
 

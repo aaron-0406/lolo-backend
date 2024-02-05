@@ -35,7 +35,7 @@ const role_routes_1 = __importDefault(require("./dash/role.routes"));
 const permission_routes_1 = __importDefault(require("./dash/permission.routes"));
 const user_log_routes_1 = __importDefault(require("./dash/user-log.routes"));
 const ext_contact_routes_1 = __importDefault(require("./extrajudicial/ext-contact.routes"));
-const dash_ip_address_bank_routes_1 = __importDefault(require("./dash/dash-ip-address-bank.routes"));
+const ext_ip_address_bank_routes_1 = __importDefault(require("./extrajudicial/ext-ip-address-bank.routes"));
 const ext_tag_group_routes_1 = __importDefault(require("./extrajudicial/ext-tag-group.routes"));
 const ext_tag_routes_1 = __importDefault(require("./extrajudicial/ext-tag.routes"));
 const routerApi = (app) => {
@@ -56,6 +56,7 @@ const routerApi = (app) => {
     router.use("/cobranza/product", product_routes_1.default);
     router.use("/cobranza/goal", goal_routes_1.default);
     router.use("/cobranza/contact", ext_contact_routes_1.default);
+    router.use("/cobranza/ip-address-bank", ext_ip_address_bank_routes_1.default);
     router.use("/cobranza/ext-tag-group", ext_tag_group_routes_1.default);
     router.use("/cobranza/ext-tag", ext_tag_routes_1.default);
     router.use("/judicial/case-file", judicial_case_file_routes_1.default);
@@ -74,6 +75,5 @@ const routerApi = (app) => {
     router.use("/dash/bank", bank_routes_1.default);
     router.use("/dash/city", city_routes_1.default);
     router.use("/dash/user-log", user_log_routes_1.default);
-    router.use("/dash/ip-address-bank", dash_ip_address_bank_routes_1.default);
 };
 exports.default = routerApi;

@@ -17,7 +17,7 @@ const ExtIpAddressBankSchema: ModelAttributes<
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    field: "id_dash_ip_address_bank",
+    field: "id_ext_ip_address_bank",
     type: DataTypes.INTEGER,
   },
   addressName: {
