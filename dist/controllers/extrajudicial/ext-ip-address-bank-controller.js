@@ -58,7 +58,7 @@ const createIpAddressController = (req, res, next) => __awaiter(void 0, void 0, 
         const newIpAddress = yield service.create(body);
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
-            codeAction: "P14-01",
+            codeAction: "P15-01",
             entity: EXT_IP_ADDRESS_BANK_TABLE,
             entityId: Number(newIpAddress.dataValues.id),
             ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
@@ -79,7 +79,7 @@ const updateIpAddressStateController = (req, res, next) => __awaiter(void 0, voi
         const ipAddress = yield service.updateState(id, body.state);
         yield serviceUserLog.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
-            codeAction: "P14-02",
+            codeAction: "P15-02",
             entity: EXT_IP_ADDRESS_BANK_TABLE,
             entityId: Number(ipAddress.dataValues.id),
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
@@ -100,7 +100,7 @@ const updateIpAddressController = (req, res, next) => __awaiter(void 0, void 0, 
         const IpAddress = yield service.update(id, body);
         yield serviceUserLog.create({
             customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
-            codeAction: "P14-03",
+            codeAction: "P15-03",
             entity: EXT_IP_ADDRESS_BANK_TABLE,
             entityId: Number(IpAddress.dataValues.id),
             ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
@@ -120,7 +120,7 @@ const deleteIpAddressController = (req, res, next) => __awaiter(void 0, void 0, 
         yield service.delete(id);
         yield serviceUserLog.create({
             customerUserId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.id),
-            codeAction: "P14-04",
+            codeAction: "P15-04",
             entity: EXT_IP_ADDRESS_BANK_TABLE,
             entityId: Number(id),
             ip: (_l = req.clientIp) !== null && _l !== void 0 ? _l : "",

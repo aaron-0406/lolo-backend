@@ -60,7 +60,7 @@ export const createIpAddressController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P14-01",
+      codeAction: "P15-01",
       entity: EXT_IP_ADDRESS_BANK_TABLE,
       entityId: Number(newIpAddress.dataValues.id),
       ip: req.clientIp ?? "",
@@ -85,7 +85,7 @@ export const updateIpAddressStateController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P14-02",
+      codeAction: "P15-02",
       entity: EXT_IP_ADDRESS_BANK_TABLE,
       entityId: Number(ipAddress.dataValues.id),
       ip: req.clientIp ?? "",
@@ -110,7 +110,7 @@ export const updateIpAddressController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P14-03",
+      codeAction: "P15-03",
       entity: EXT_IP_ADDRESS_BANK_TABLE,
       entityId: Number(IpAddress.dataValues.id),
       ip: req.clientIp ?? "",
@@ -134,7 +134,7 @@ export const deleteIpAddressController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P14-04",
+      codeAction: "P15-04",
       entity: EXT_IP_ADDRESS_BANK_TABLE,
       entityId: Number(id),
       ip: req.clientIp ?? "",

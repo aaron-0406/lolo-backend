@@ -40,7 +40,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
-  checkPermissions("P14-01"),
+  checkPermissions("P15-01"),
   validatorHandler(createIpAddressSchema, "body"),
   createIpAddressController
 );
@@ -48,7 +48,7 @@ router.post(
 router.patch(
   "/state/:id",
   JWTAuth,
-  checkPermissions("P14-02"),
+  checkPermissions("P15-02"),
   validatorHandler(getIpAddressSchema, "params"),
   validatorHandler(updateIpAddressStateSchema, "body"),
   updateIpAddressStateController
@@ -57,7 +57,7 @@ router.patch(
 router.patch(
   "/:id",
   JWTAuth,
-  checkPermissions("P14-03"),
+  checkPermissions("P15-03"),
   validatorHandler(getIpAddressSchema, "params"),
   validatorHandler(updateIpAddressSchema, "body"),
   updateIpAddressController
@@ -66,7 +66,7 @@ router.patch(
 router.delete(
   "/:id",
   JWTAuth,
-  checkPermissions("P14-04"),
+  checkPermissions("P15-04"),
   validatorHandler(getIpAddressSchema, "params"),
   deleteIpAddressController
 );
