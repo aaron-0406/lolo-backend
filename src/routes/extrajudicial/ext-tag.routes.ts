@@ -5,6 +5,7 @@ import extTagSchema from "../../app/extrajudicial/schemas/ext-tag.schema";
 import {
   createExtTagController,
   updateExtTagController,
+  updateExtTagActionController,
   deleteExtTagController,
   getExtTagByIdController,
   getExtTagsByCHBController,
@@ -16,6 +17,7 @@ const {
   getExtTagByIDSchema,
   createExtTagSchema,
   updateExtTagSchema,
+  updateExtTagActionSchema,
 } = extTagSchema;
 
 const router = express.Router();
@@ -42,6 +44,15 @@ router.post(
   checkPermissions("P14-01"),
   validatorHandler(createExtTagSchema, "body"),
   createExtTagController
+);
+
+router.patch(
+  "/action/:id",
+  JWTAuth,
+  checkPermissions("P14-02"),
+  validatorHandler(getExtTagByIDSchema, "params"),
+  validatorHandler(updateExtTagActionSchema, "body"),
+  updateExtTagActionController
 );
 
 router.patch(

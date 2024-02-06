@@ -57,6 +57,13 @@ class ExtTagService {
     return rta;
   }
 
+  async updateAction(id: string, action: boolean) {
+    const extTag = await this.findByID(id);
+    const rta = await extTag.update({ ...extTag, action });
+
+    return rta;
+  }
+
   async delete(id: string) {
     const extTag = await this.findByID(id);
     await extTag.destroy();

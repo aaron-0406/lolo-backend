@@ -98,6 +98,31 @@ export const updateExtTagController = async (
   }
 };
 
+export const updateExtTagActionController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const extTag = await service.updateAction(id, body.action);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P14-02",
+      entity: EXT_TAG_TABLE,
+      entityId: Number(extTag.dataValues.id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    });
+
+    res.json(extTag);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const deleteExtTagController = async (
   req: Request,
   res: Response,

@@ -30,6 +30,10 @@ const updateExtTagSchema = Joi.object<
   customerHasBankId: customerHasBankId.required(),
 });
 
+const updateExtTagActionSchema = Joi.object<{ action: boolean }, true>({
+  action: action.required(),
+});
+
 const getExtTagByCHBSchema = Joi.object<{ chb: number }, true>({
   chb: customerHasBankId.required(),
 });
@@ -41,6 +45,7 @@ const getExtTagByIDSchema = Joi.object<{ id: number }, true>({
 export default {
   createExtTagSchema,
   updateExtTagSchema,
+  updateExtTagActionSchema,
   getExtTagByCHBSchema,
   getExtTagByIDSchema,
 };
