@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteExtTagController = exports.updateExtTagController = exports.createExtTagController = exports.getExtTagByIdController = exports.getExtTagsByCHBController = exports.getExtTagsController = void 0;
+exports.deleteExtTagController = exports.updateExtTagActionController = exports.updateExtTagController = exports.createExtTagController = exports.getExtTagByIdController = exports.getExtTagsByCHBController = exports.getExtTagsController = void 0;
 const ext_tag_service_1 = __importDefault(require("../../app/extrajudicial/services/ext-tag.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const ext_tag_model_1 = __importDefault(require("../../db/models/ext-tag.model"));
@@ -92,18 +92,39 @@ const updateExtTagController = (req, res, next) => __awaiter(void 0, void 0, voi
     }
 });
 exports.updateExtTagController = updateExtTagController;
-const deleteExtTagController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const updateExtTagActionController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _g, _h, _j;
+    try {
+        const { id } = req.params;
+        const body = req.body;
+        const extTag = yield service.updateAction(id, body.action);
+        yield serviceUserLog.create({
+            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
+            codeAction: "P14-02",
+            entity: EXT_TAG_TABLE,
+            entityId: Number(extTag.dataValues.id),
+            ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
+            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+        });
+        res.json(extTag);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.updateExtTagActionController = updateExtTagActionController;
+const deleteExtTagController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _k, _l, _m;
     try {
         const { id } = req.params;
         yield service.delete(id);
         yield serviceUserLog.create({
-            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
+            customerUserId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.id),
             codeAction: "P14-03",
             entity: EXT_TAG_TABLE,
             entityId: Number(id),
-            ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
-            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            ip: (_l = req.clientIp) !== null && _l !== void 0 ? _l : "",
+            customerId: Number((_m = req.user) === null || _m === void 0 ? void 0 : _m.customerId),
         });
         res.status(201).json({ id });
     }

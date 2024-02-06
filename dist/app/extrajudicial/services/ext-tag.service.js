@@ -69,6 +69,13 @@ class ExtTagService {
             return rta;
         });
     }
+    updateAction(id, action) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const extTag = yield this.findByID(id);
+            const rta = yield extTag.update(Object.assign(Object.assign({}, extTag), { action }));
+            return rta;
+        });
+    }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const extTag = yield this.findByID(id);

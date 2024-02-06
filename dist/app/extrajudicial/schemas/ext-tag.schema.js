@@ -24,6 +24,9 @@ const updateExtTagSchema = joi_1.default.object({
     tagGroupId: tagGroupId.required(),
     customerHasBankId: customerHasBankId.required(),
 });
+const updateExtTagActionSchema = joi_1.default.object({
+    action: action.required(),
+});
 const getExtTagByCHBSchema = joi_1.default.object({
     chb: customerHasBankId.required(),
 });
@@ -33,6 +36,7 @@ const getExtTagByIDSchema = joi_1.default.object({
 exports.default = {
     createExtTagSchema,
     updateExtTagSchema,
+    updateExtTagActionSchema,
     getExtTagByCHBSchema,
     getExtTagByIDSchema,
 };
