@@ -1,4 +1,4 @@
-import { Op } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 import sequelize from "../../../libs/sequelize";
 import { UserLogType } from "../types/user-log.type";
 
@@ -8,7 +8,28 @@ class UserLogService {
   constructor() {}
 
   async findAll() {
-    const rta = await models.USER_LOG.findAll();
+    const rta = await models.USER_LOG.findAll({
+      attributes: [
+        "id_user_log",
+        "codeAction",
+        "entityId",
+        "entity",
+        [
+          Sequelize.literal(`
+          CASE
+        WHEN EXISTS (SELECT 1 FROM EXT_IP_ADDRESS_BANK WHERE ip = USER_LOG.ip AND deleted_at IS NULL)
+        THEN (SELECT addressName FROM EXT_IP_ADDRESS_BANK WHERE ip = USER_LOG.ip AND deleted_at IS NULL LIMIT 1)
+        ELSE USER_LOG.ip
+        END
+       `),
+          "ip",
+        ],
+        "createAt",
+        "customer_user_id_customer_user",
+        "customer_id_customer",
+      ],
+    });
+
     return rta;
   }
 
@@ -18,6 +39,25 @@ class UserLogService {
         customer_id_customer: customerId,
       },
       include: ["customerUser"],
+      attributes: [
+        "id_user_log",
+        "codeAction",
+        "entityId",
+        "entity",
+        [
+          Sequelize.literal(`
+            CASE
+              WHEN EXISTS (SELECT 1 FROM EXT_IP_ADDRESS_BANK WHERE ip = USER_LOG.ip AND deleted_at IS NULL)
+              THEN (SELECT addressName FROM EXT_IP_ADDRESS_BANK WHERE ip = USER_LOG.ip AND deleted_at IS NULL LIMIT 1)
+              ELSE USER_LOG.ip
+            END
+          `),
+          "ip",
+        ],
+        "createAt",
+        "customer_user_id_customer_user",
+        "customer_id_customer",
+      ],
       order: [["id", "DESC"]],
     });
 
@@ -56,6 +96,25 @@ class UserLogService {
 
     const logs = await models.USER_LOG.findAll({
       include: ["customerUser"],
+      attributes: [
+        "id_user_log",
+        "codeAction",
+        "entityId",
+        "entity",
+        [
+          Sequelize.literal(`
+            CASE
+              WHEN EXISTS (SELECT 1 FROM EXT_IP_ADDRESS_BANK WHERE ip = USER_LOG.ip AND deleted_at IS NULL)
+              THEN (SELECT addressName FROM EXT_IP_ADDRESS_BANK WHERE ip = USER_LOG.ip AND deleted_at IS NULL LIMIT 1)
+              ELSE USER_LOG.ip
+            END
+          `),
+          "ip",
+        ],
+        "createAt",
+        "customer_user_id_customer_user",
+        "customer_id_customer",
+      ],
       order: [["id", "DESC"]],
       limit: limite,
       offset: (pagina - 1) * limite,
