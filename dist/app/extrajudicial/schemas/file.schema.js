@@ -8,11 +8,13 @@ const id = joi_1.default.number();
 const code = joi_1.default.number();
 const idCustomer = joi_1.default.number();
 const chb = joi_1.default.number();
+const tagId = joi_1.default.number();
 const createFileSchema = joi_1.default.object({
     idCustomer,
     chb,
     code,
     id,
+    tagId,
 });
 const getFileSchema = joi_1.default.object({
     idCustomer,

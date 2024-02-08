@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteExtTagController = exports.updateExtTagActionController = exports.updateExtTagController = exports.createExtTagController = exports.getExtTagByIdController = exports.getExtTagsByCHBController = exports.getExtTagsController = void 0;
+exports.deleteExtTagController = exports.updateExtTagActionController = exports.updateExtTagController = exports.createExtTagController = exports.getExtTagByIdController = exports.getExtTagsByCHBAndTagGroupIdController = exports.getExtTagsByCHBController = exports.getExtTagsController = void 0;
 const ext_tag_service_1 = __importDefault(require("../../app/extrajudicial/services/ext-tag.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const ext_tag_model_1 = __importDefault(require("../../db/models/ext-tag.model"));
@@ -40,6 +40,17 @@ const getExtTagsByCHBController = (req, res, next) => __awaiter(void 0, void 0, 
     }
 });
 exports.getExtTagsByCHBController = getExtTagsByCHBController;
+const getExtTagsByCHBAndTagGroupIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { chb, tagGroupId } = req.params;
+        const extTags = yield service.findAllByCHBAndTagGroupId(chb, tagGroupId);
+        res.json(extTags);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.getExtTagsByCHBAndTagGroupIdController = getExtTagsByCHBAndTagGroupIdController;
 const getExtTagByIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;

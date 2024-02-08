@@ -55,14 +55,15 @@ class FileService {
             const filesAdded = [];
             for (let i = 0; i < data.files.length; i++) {
                 const { filename, originalname } = data.files[i];
+                // UPLOAD TO AWS
+                yield (0, aws_bucket_1.uploadFile)(data.files[i], `${config_1.default.AWS_CHB_PATH}${idCustomer}/${chb}/${code}`);
                 // STORED IN DATABASE
                 const newFile = yield models.FILE.create({
                     name: filename,
                     originalName: originalname,
                     clientId,
+                    tagId: data.tagId,
                 });
-                // UPLOAD TO AWS
-                yield (0, aws_bucket_1.uploadFile)(data.files[i], `${config_1.default.AWS_CHB_PATH}${idCustomer}/${chb}/${code}`);
                 // DELETE TEMP FILE
                 yield (0, helpers_1.deleteFile)("../public/docs", filename);
                 filesAdded.push(newFile);
