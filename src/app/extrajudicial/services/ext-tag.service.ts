@@ -32,6 +32,18 @@ class ExtTagService {
     return rta;
   }
 
+  async findAllByCHBAndTagGroupId(chb: string, tagGroupId: string) {
+    const rta = await models.EXT_TAG.findAll({
+      order: [["created_at", "DESC"]],
+      where: {
+        customer_has_bank_id_customer_has_bank: chb,
+        tag_group_id_group_tag: tagGroupId,
+      },
+    });
+
+    return rta;
+  }
+
   async findByID(id: string) {
     const extTag = await models.EXT_TAG.findOne({
       where: {

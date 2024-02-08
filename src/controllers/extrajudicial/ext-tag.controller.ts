@@ -35,6 +35,20 @@ export const getExtTagsByCHBController = async (
   }
 };
 
+export const getExtTagsByCHBAndTagGroupIdController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { chb, tagGroupId } = req.params;
+    const extTags = await service.findAllByCHBAndTagGroupId(chb, tagGroupId);
+    res.json(extTags);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getExtTagByIdController = async (
   req: Request,
   res: Response,

@@ -18,6 +18,7 @@ type CreateParam = {
   idCustomer: number;
   chb: number;
   files: Express.Multer.File[];
+  tagId: number;
 };
 
 class FileService {
@@ -63,18 +64,19 @@ class FileService {
     for (let i = 0; i < data.files.length; i++) {
       const { filename, originalname } = data.files[i];
 
-      // STORED IN DATABASE
-      const newFile = await models.FILE.create({
-        name: filename,
-        originalName: originalname,
-        clientId,
-      });
-
       // UPLOAD TO AWS
       await uploadFile(
         data.files[i],
         `${config.AWS_CHB_PATH}${idCustomer}/${chb}/${code}`
       );
+
+      // STORED IN DATABASE
+      const newFile = await models.FILE.create({
+        name: filename,
+        originalName: originalname,
+        clientId,
+        tagId: data.tagId,
+      });
 
       // DELETE TEMP FILE
       await deleteFile("../public/docs", filename);

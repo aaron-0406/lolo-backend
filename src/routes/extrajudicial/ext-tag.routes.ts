@@ -9,11 +9,13 @@ import {
   deleteExtTagController,
   getExtTagByIdController,
   getExtTagsByCHBController,
+  getExtTagsByCHBAndTagGroupIdController,
   getExtTagsController,
 } from "../../controllers/extrajudicial/ext-tag.controller";
 
 const {
   getExtTagByCHBSchema,
+  getExtTagByCHBAndTagGroupIdSchema,
   getExtTagByIDSchema,
   createExtTagSchema,
   updateExtTagSchema,
@@ -29,6 +31,13 @@ router.get(
   JWTAuth,
   validatorHandler(getExtTagByCHBSchema, "params"),
   getExtTagsByCHBController
+);
+
+router.get(
+  "/all-data-by-chb-and-tag-group-id/:chb/:tagGroupId",
+  JWTAuth,
+  validatorHandler(getExtTagByCHBAndTagGroupIdSchema, "params"),
+  getExtTagsByCHBAndTagGroupIdController
 );
 
 router.get(

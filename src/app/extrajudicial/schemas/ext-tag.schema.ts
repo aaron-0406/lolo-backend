@@ -38,6 +38,14 @@ const getExtTagByCHBSchema = Joi.object<{ chb: number }, true>({
   chb: customerHasBankId.required(),
 });
 
+const getExtTagByCHBAndTagGroupIdSchema = Joi.object<
+  { chb: number; tagGroupId: number },
+  true
+>({
+  chb: customerHasBankId.required(),
+  tagGroupId: tagGroupId.required(),
+});
+
 const getExtTagByIDSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
@@ -47,5 +55,6 @@ export default {
   updateExtTagSchema,
   updateExtTagActionSchema,
   getExtTagByCHBSchema,
+  getExtTagByCHBAndTagGroupIdSchema,
   getExtTagByIDSchema,
 };
