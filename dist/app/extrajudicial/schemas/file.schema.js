@@ -16,10 +16,16 @@ const createFileSchema = joi_1.default.object({
     id,
     tagId,
 });
+const deleteFileSchema = joi_1.default.object({
+    idCustomer,
+    chb,
+    code,
+    id,
+});
 const getFileSchema = joi_1.default.object({
     idCustomer,
     chb,
     code,
     id,
 });
-exports.default = { createFileSchema, getFileSchema };
+exports.default = { createFileSchema, deleteFileSchema, getFileSchema };

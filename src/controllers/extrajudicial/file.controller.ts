@@ -61,6 +61,7 @@ export const createFileController = async (
     req.body.idCustomer = Number(req.params.idCustomer);
     req.body.code = Number(req.params.code);
     req.body.chb = Number(req.params.chb);
+    req.body.tagId = Number(req.params.tagId);
     req.body.files = req.files;
     const { body } = req;
     const newFile = await service.create(body);

@@ -57,6 +57,7 @@ const createFileController = (req, res, next) => __awaiter(void 0, void 0, void 
         req.body.idCustomer = Number(req.params.idCustomer);
         req.body.code = Number(req.params.code);
         req.body.chb = Number(req.params.chb);
+        req.body.tagId = Number(req.params.tagId);
         req.body.files = req.files;
         const { body } = req;
         const newFile = yield service.create(body);

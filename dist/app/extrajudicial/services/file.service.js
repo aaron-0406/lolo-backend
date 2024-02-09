@@ -24,6 +24,15 @@ class FileService {
     find(clientId) {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.FILE.findAll({
+                include: [
+                    {
+                        model: models.EXT_TAG,
+                        as: "classificationTag",
+                        foreignKey: "tagId",
+                        identifier: "id",
+                        attributes: ["name", "color"],
+                    },
+                ],
                 where: {
                     clientId,
                 },

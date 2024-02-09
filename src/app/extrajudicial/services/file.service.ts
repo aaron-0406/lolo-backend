@@ -26,6 +26,15 @@ class FileService {
 
   async find(clientId: number) {
     const rta = await models.FILE.findAll({
+      include: [
+        {
+          model: models.EXT_TAG,
+          as: "classificationTag",
+          foreignKey: "tagId",
+          identifier: "id",
+          attributes: ["name", "color"],
+        },
+      ],
       where: {
         clientId,
       },

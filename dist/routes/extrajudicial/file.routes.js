@@ -10,7 +10,7 @@ const multer_handler_1 = require("../../middlewares/multer.handler");
 const boom_1 = __importDefault(require("@hapi/boom"));
 const file_controller_1 = require("../../controllers/extrajudicial/file.controller");
 const auth_handler_1 = require("../../middlewares/auth.handler");
-const { createFileSchema, getFileSchema } = file_schema_1.default;
+const { createFileSchema, deleteFileSchema, getFileSchema } = file_schema_1.default;
 const router = express_1.default.Router();
 const multerFile = (req, res, next) => {
     multer_handler_1.archivos.array("file")(req, res, (err) => {
@@ -21,7 +21,7 @@ const multerFile = (req, res, next) => {
 };
 router.get("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getFileSchema, "params"), file_controller_1.findFileByClientIdController);
 router.get("/single/:idCustomer/:chb/:code/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P02-02-03-01"), (0, validator_handler_1.default)(getFileSchema, "params"), file_controller_1.findFileByIdController);
-router.post("/:idCustomer/:chb/:code/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P02-02-03-02"), (0, validator_handler_1.default)(createFileSchema, "params"), multerFile, file_controller_1.createFileController);
+router.post("/:idCustomer/:chb/:code/:id/:tagId", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P02-02-03-02"), (0, validator_handler_1.default)(createFileSchema, "params"), multerFile, file_controller_1.createFileController);
 // router.put(
 //   "/:id",
 //   validatorHandler(getCitySchema, "params"),
@@ -36,5 +36,5 @@ router.post("/:idCustomer/:chb/:code/:id", auth_handler_1.JWTAuth, (0, auth_hand
 //     }
 //   }
 // );
-router.delete("/:idCustomer/:chb/:code/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P02-02-03-03"), (0, validator_handler_1.default)(createFileSchema, "params"), file_controller_1.deleteFileController);
+router.delete("/:idCustomer/:chb/:code/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P02-02-03-03"), (0, validator_handler_1.default)(deleteFileSchema, "params"), file_controller_1.deleteFileController);
 exports.default = router;

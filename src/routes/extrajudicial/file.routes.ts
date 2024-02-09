@@ -11,7 +11,7 @@ import {
 } from "../../controllers/extrajudicial/file.controller";
 import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
-const { createFileSchema, getFileSchema } = fileSchema;
+const { createFileSchema, deleteFileSchema, getFileSchema } = fileSchema;
 const router = express.Router();
 
 const multerFile = (req: Request, res: Response, next: NextFunction) => {
@@ -37,7 +37,7 @@ router.get(
 );
 
 router.post(
-  "/:idCustomer/:chb/:code/:id",
+  "/:idCustomer/:chb/:code/:id/:tagId",
   JWTAuth,
   checkPermissions("P02-02-03-02"),
   validatorHandler(createFileSchema, "params"),
@@ -64,7 +64,7 @@ router.delete(
   "/:idCustomer/:chb/:code/:id",
   JWTAuth,
   checkPermissions("P02-02-03-03"),
-  validatorHandler(createFileSchema, "params"),
+  validatorHandler(deleteFileSchema, "params"),
   deleteFileController
 );
 

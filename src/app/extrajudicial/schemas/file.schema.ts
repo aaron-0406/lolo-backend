@@ -14,6 +14,13 @@ const createFileSchema = Joi.object({
   tagId,
 });
 
+const deleteFileSchema = Joi.object({
+  idCustomer,
+  chb,
+  code,
+  id,
+});
+
 const getFileSchema = Joi.object({
   idCustomer,
   chb,
@@ -21,4 +28,4 @@ const getFileSchema = Joi.object({
   id,
 });
 
-export default { createFileSchema, getFileSchema };
+export default { createFileSchema, deleteFileSchema, getFileSchema };
