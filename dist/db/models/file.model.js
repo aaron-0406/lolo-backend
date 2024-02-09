@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const client_model_1 = __importDefault(require("./client.model"));
+const ext_tag_model_1 = __importDefault(require("./ext-tag.model"));
 const FILE_TABLE = "FILE";
 const FileSchema = {
     id: {
@@ -41,12 +42,27 @@ const FileSchema = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
     },
+    tagId: {
+        allowNull: true,
+        field: "tag_id",
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: ext_tag_model_1.default.EXT_TAG_TABLE,
+            key: "id_ext_tag",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
+    },
 };
 class File extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.CLIENT, {
             as: "client",
             foreignKey: "clientId",
+        });
+        this.belongsTo(models.EXT_TAG, {
+            as: "classificationTag",
+            foreignKey: "tagId",
         });
     }
     static config(sequelize) {

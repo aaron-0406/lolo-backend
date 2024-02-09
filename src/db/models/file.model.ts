@@ -5,8 +5,9 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { FileType } from "../../app/dash/types/file.type";
 import clientModel from "./client.model";
+import extTagModel from "./ext-tag.model";
+import { FileType } from "../../app/extrajudicial/types/file.type";
 
 const FILE_TABLE = "FILE";
 
@@ -45,6 +46,17 @@ const FileSchema: ModelAttributes<File, FileType> = {
     onUpdate: "CASCADE",
     onDelete: "CASCADE",
   },
+  tagId: {
+    allowNull: true,
+    field: "tag_id",
+    type: DataTypes.INTEGER,
+    references: {
+      model: extTagModel.EXT_TAG_TABLE,
+      key: "id_ext_tag",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "SET NULL",
+  },
 };
 
 class File extends Model {
@@ -52,6 +64,11 @@ class File extends Model {
     this.belongsTo(models.CLIENT, {
       as: "client",
       foreignKey: "clientId",
+    });
+
+    this.belongsTo(models.EXT_TAG, {
+      as: "classificationTag",
+      foreignKey: "tagId",
     });
   }
 
