@@ -80,6 +80,20 @@ class FileService {
             return filesAdded;
         });
     }
+    updateFile(id, originalName, tagId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const file = yield models.FILE.findOne({
+                where: {
+                    id_file: id,
+                },
+            });
+            if (file) {
+                const rta = yield file.update(Object.assign(Object.assign({}, file), { originalName, tagId }));
+                return rta;
+            }
+            throw boom_1.default.notFound("Archivo no encontrado");
+        });
+    }
     delete(idCustomer, chb, code, id) {
         return __awaiter(this, void 0, void 0, function* () {
             const file = yield models.FILE.findOne({

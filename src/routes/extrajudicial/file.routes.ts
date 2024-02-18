@@ -5,13 +5,20 @@ import { archivos } from "../../middlewares/multer.handler";
 import boom from "@hapi/boom";
 import {
   createFileController,
+  updateFileController,
   deleteFileController,
   findFileByClientIdController,
   findFileByIdController,
 } from "../../controllers/extrajudicial/file.controller";
 import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
-const { createFileSchema, deleteFileSchema, getFileSchema } = fileSchema;
+const {
+  createFileSchema,
+  updateFileSchema,
+  deleteFileSchema,
+  getFileSchema,
+  getFileByIdSchema,
+} = fileSchema;
 const router = express.Router();
 
 const multerFile = (req: Request, res: Response, next: NextFunction) => {
@@ -45,20 +52,14 @@ router.post(
   createFileController
 );
 
-// router.put(
-//   "/:id",
-//   validatorHandler(getCitySchema, "params"),
-//   async (req, res, next) => {
-//     try {
-//       const { id } = req.params;
-//       const body = req.body;
-//       const city = await service.update(id, body);
-//       res.json(city);
-//     } catch (error) {
-//       next(error);
-//     }
-//   }
-// );
+router.patch(
+  "/:id",
+  JWTAuth,
+  checkPermissions("P02-02-03-04"),
+  validatorHandler(getFileByIdSchema, "params"),
+  validatorHandler(updateFileSchema, "body"),
+  updateFileController
+);
 
 router.delete(
   "/:idCustomer/:chb/:code/:id",

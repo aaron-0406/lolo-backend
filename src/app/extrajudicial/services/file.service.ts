@@ -94,6 +94,21 @@ class FileService {
     return filesAdded;
   }
 
+  async updateFile(id: string, originalName: string, tagId: number) {
+    const file = await models.FILE.findOne({
+      where: {
+        id_file: id,
+      },
+    });
+
+    if (file) {
+      const rta = await file.update({ ...file, originalName, tagId });
+      return rta;
+    }
+
+    throw boom.notFound("Archivo no encontrado");
+  }
+
   async delete(idCustomer: number, chb: number, code: number, id: number) {
     const file = await models.FILE.findOne({
       where: {

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteFileController = exports.createFileController = exports.findFileByIdController = exports.findFileByClientIdController = void 0;
+exports.deleteFileController = exports.updateFileController = exports.createFileController = exports.findFileByIdController = exports.findFileByClientIdController = void 0;
 const file_service_1 = __importDefault(require("../../app/extrajudicial/services/file.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const file_model_1 = __importDefault(require("../../db/models/file.model"));
@@ -77,18 +77,40 @@ const createFileController = (req, res, next) => __awaiter(void 0, void 0, void 
     }
 });
 exports.createFileController = createFileController;
-const deleteFileController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const updateFileController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _g, _h, _j;
+    try {
+        const { id } = req.params;
+        const body = req.body;
+        const file = yield service.updateFile(id, body.originalName, body.tagId);
+        yield serviceUserLog.create({
+            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
+            codeAction: "P02-02-03-04",
+            entity: FILE_TABLE,
+            entityId: Number(file.dataValues.id),
+            ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
+            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+        });
+        res.json(file);
+    }
+    catch (error) {
+        console.log(error);
+        next(error);
+    }
+});
+exports.updateFileController = updateFileController;
+const deleteFileController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _k, _l, _m;
     try {
         const { id, code, idCustomer, chb } = req.params;
         yield service.delete(Number(idCustomer), Number(chb), Number(code), Number(id));
         yield serviceUserLog.create({
-            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
+            customerUserId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.id),
             codeAction: "P02-02-03-03",
             entity: FILE_TABLE,
             entityId: Number(id),
-            ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
-            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            ip: (_l = req.clientIp) !== null && _l !== void 0 ? _l : "",
+            customerId: Number((_m = req.user) === null || _m === void 0 ? void 0 : _m.customerId),
         });
         res.status(201).json({ id });
     }
