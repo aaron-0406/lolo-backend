@@ -29,9 +29,23 @@ passport_1.default.use("local.signin", new passport_local_1.Strategy({
     passwordField: "password",
     passReqToCallback: true,
 }, (req, email, password, done) => __awaiter(void 0, void 0, void 0, function* () {
-    const { customerId } = req.body;
+    const { customerId, code2fa } = req.body;
     try {
-        const user = yield service.login({ email, password, customerId });
+        const user = yield service.login({
+            email,
+            password,
+            customerId,
+            code2fa,
+        });
+        if (!!user.dataValues.code2fa) {
+            yield service.verify2fa(code2fa, user.dataValues.id);
+        }
+        else {
+            const qrCodeUrl = yield service.generate2fa(user.dataValues.email, user.dataValues.id);
+            return done(null, {
+                qr: qrCodeUrl,
+            });
+        }
         const permissions = yield servicePermission.findAllByRoleId(user.dataValues.roleId);
         const permissionsObject = permissions.map((permissions) => {
             return {

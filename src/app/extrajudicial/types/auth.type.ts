@@ -2,6 +2,7 @@ export type LoginType = {
   email: string;
   password: string;
   customerId: number;
+  code2fa: string;
 };
 
 export type ChangePasswordType = {

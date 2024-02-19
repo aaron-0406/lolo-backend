@@ -7,6 +7,7 @@ import {
 } from "../types/auth.type";
 import CustomerUserService from "../../dash/services/customer-user.service";
 import boom from "@hapi/boom";
+import speakeasy from "speakeasy";
 const { models } = sequelize;
 
 const service = new CustomerUserService();
@@ -55,6 +56,41 @@ class AuthService {
       { dni, lastName: lastname, name, phone },
       { where: { id: customerUserId } }
     );
+  }
+
+  async generate2fa(email: string, userId: number) {
+    const secret = speakeasy.generateSecret({ length: 32 });
+    const qrCodeUrl = speakeasy.otpauthURL({
+      secret: secret.ascii,
+      label: email,
+      issuer: "LoloBank",
+    });
+
+    await models.CUSTOMER_USER.update(
+      { code2fa: secret },
+      { where: { id: userId } }
+    );
+
+    return qrCodeUrl;
+  }
+
+  async verify2fa(token: string, userId: number) {
+    const userCustomer = await models.CUSTOMER_USER.findOne({
+      where: { id: userId },
+    });
+
+    const secret = userCustomer?.dataValues.code2fa;
+
+    const verificationResult = speakeasy.totp.verify({
+      secret: secret,
+      encoding: "ascii",
+      token: token,
+      window: 6,
+    });
+
+    if (!verificationResult) {
+      throw boom.notFound("Autenticación de doble factor fallida");
+    }
   }
 }
 

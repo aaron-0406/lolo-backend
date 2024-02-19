@@ -81,6 +81,10 @@ const CustomerUserSchema = {
         allowNull: false,
         field: "login_attempts",
     },
+    code2fa: {
+        allowNull: true,
+        type: sequelize_1.DataTypes.STRING(70),
+    },
 };
 class CustomerUser extends sequelize_1.Model {
     static associate(models) {

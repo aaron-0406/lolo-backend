@@ -15,17 +15,19 @@ const newPassword = Joi.string()
     "string.pattern.base":
       "El campo debe contener al menos una letra minúscula y mayúscula, un número, junto a un caracter.",
   })
-  .required();  
+  .required();
 const name = Joi.string().required();
 const lastname = Joi.string().required();
 const dni = Joi.string().required().max(8);
 const phone = Joi.string().required();
 const customerId = Joi.number().required().min(1);
+const code2fa = Joi.string().required();
 
 const loginSchema = Joi.object<LoginType>({
   email,
   password,
   customerId,
+  code2fa,
 }).options({ abortEarly: true });
 
 const changePasswordSchema = Joi.object<ChangePasswordType>({

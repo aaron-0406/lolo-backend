@@ -23,10 +23,18 @@ export const loginController = async (
   try {
     passport.authenticate("local.signin", { session: false }, (err, user) => {
       if (err) return next(err);
-      // Singing token with the user
-      const { password, ...rest } = user as CustomerUserType;
-      const token = signToken(rest, `${process.env.JWT_SECRET}`);
-      return res.json({ success: "Sesión Iniciada", user: rest, token });
+
+      if (user.qr) {
+        return res.json({
+          success:
+            "Utiliza tu aplicación para escanear el código QR y comenzar la autenticación de dos pasos.",
+          qr: user.qr,
+        });
+      } else {
+        const { password, ...rest } = user as CustomerUserType;
+        const token = signToken(rest, `${process.env.JWT_SECRET}`);
+        return res.json({ success: "Sesión Iniciada", user: rest, token });
+      }
     })(req, res, next);
   } catch (error) {
     next(error);

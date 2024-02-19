@@ -41,10 +41,17 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         passport_1.default.authenticate("local.signin", { session: false }, (err, user) => {
             if (err)
                 return next(err);
-            // Singing token with the user
-            const _a = user, { password } = _a, rest = __rest(_a, ["password"]);
-            const token = (0, jwt_1.signToken)(rest, `${process.env.JWT_SECRET}`);
-            return res.json({ success: "Sesión Iniciada", user: rest, token });
+            if (user.qr) {
+                return res.json({
+                    success: "Utiliza tu aplicación para escanear el código QR y comenzar la autenticación de dos pasos.",
+                    qr: user.qr,
+                });
+            }
+            else {
+                const _a = user, { password } = _a, rest = __rest(_a, ["password"]);
+                const token = (0, jwt_1.signToken)(rest, `${process.env.JWT_SECRET}`);
+                return res.json({ success: "Sesión Iniciada", user: rest, token });
+            }
         })(req, res, next);
     }
     catch (error) {
