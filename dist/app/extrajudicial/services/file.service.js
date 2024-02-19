@@ -24,6 +24,15 @@ class FileService {
     find(clientId) {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.FILE.findAll({
+                include: [
+                    {
+                        model: models.EXT_TAG,
+                        as: "classificationTag",
+                        foreignKey: "tagId",
+                        identifier: "id",
+                        attributes: ["name", "color"],
+                    },
+                ],
                 where: {
                     clientId,
                 },
@@ -69,6 +78,20 @@ class FileService {
                 filesAdded.push(newFile);
             }
             return filesAdded;
+        });
+    }
+    updateFile(id, originalName, tagId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const file = yield models.FILE.findOne({
+                where: {
+                    id_file: id,
+                },
+            });
+            if (file) {
+                const rta = yield file.update(Object.assign(Object.assign({}, file), { originalName, tagId }));
+                return rta;
+            }
+            throw boom_1.default.notFound("Archivo no encontrado");
         });
     }
     delete(idCustomer, chb, code, id) {

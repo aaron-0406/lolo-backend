@@ -27,8 +27,9 @@ const JWTAuth = (req, res, next) => {
 exports.JWTAuth = JWTAuth;
 const checkPermissions = (...permissions) => {
     return (req, res, next) => {
+        var _a;
         const user = req.user;
-        const userPermissions = user === null || user === void 0 ? void 0 : user.permissions.map((permission) => {
+        const userPermissions = (_a = user === null || user === void 0 ? void 0 : user.permissions) === null || _a === void 0 ? void 0 : _a.map((permission) => {
             return permission.code;
         });
         if (!user)
@@ -40,7 +41,8 @@ const checkPermissions = (...permissions) => {
 };
 exports.checkPermissions = checkPermissions;
 const checkPermissionsWithoutParams = (permissions, user) => {
-    const userPermissions = user === null || user === void 0 ? void 0 : user.permissions.map((permission) => {
+    var _a;
+    const userPermissions = (_a = user === null || user === void 0 ? void 0 : user.permissions) === null || _a === void 0 ? void 0 : _a.map((permission) => {
         return permission.code;
     });
     if (!user)

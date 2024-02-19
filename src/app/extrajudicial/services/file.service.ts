@@ -26,6 +26,15 @@ class FileService {
 
   async find(clientId: number) {
     const rta = await models.FILE.findAll({
+      include: [
+        {
+          model: models.EXT_TAG,
+          as: "classificationTag",
+          foreignKey: "tagId",
+          identifier: "id",
+          attributes: ["name", "color"],
+        },
+      ],
       where: {
         clientId,
       },
@@ -83,6 +92,21 @@ class FileService {
       filesAdded.push(newFile);
     }
     return filesAdded;
+  }
+
+  async updateFile(id: string, originalName: string, tagId: number) {
+    const file = await models.FILE.findOne({
+      where: {
+        id_file: id,
+      },
+    });
+
+    if (file) {
+      const rta = await file.update({ ...file, originalName, tagId });
+      return rta;
+    }
+
+    throw boom.notFound("Archivo no encontrado");
   }
 
   async delete(idCustomer: number, chb: number, code: number, id: number) {
