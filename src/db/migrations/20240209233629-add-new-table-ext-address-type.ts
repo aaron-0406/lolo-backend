@@ -7,6 +7,25 @@ const { EXT_ADDRESS_TYPE_TABLE } = extAddressTypeModel;
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 const { DIRECTION_TABLE } = directionModel;
 
+const newAddresses = [
+  {
+    id_address_type: 1,
+    address_type: "GARANTIA",
+    customer_has_bank_id_customer_has_bank: 1,
+    created_at: new Date(),
+    updated_at: new Date(),
+    deleted_at: null,
+  },
+  {
+    id_address_type: 2,
+    address_type: "DOMICILIARIA",
+    customer_has_bank_id_customer_has_bank: 1,
+    created_at: new Date(),
+    updated_at: new Date(),
+    deleted_at: null,
+  },
+];
+
 export async function up(queryInterface: QueryInterface) {
   await queryInterface.createTable(EXT_ADDRESS_TYPE_TABLE, {
     id: {
@@ -51,6 +70,8 @@ export async function up(queryInterface: QueryInterface) {
     },
   });
 
+  await queryInterface.bulkInsert(EXT_ADDRESS_TYPE_TABLE, newAddresses);
+
   await queryInterface.addConstraint(EXT_ADDRESS_TYPE_TABLE, {
     fields: ["customer_has_bank_id_customer_has_bank"],
     type: "foreign key",
@@ -63,16 +84,21 @@ export async function up(queryInterface: QueryInterface) {
     onDelete: "NO ACTION",
   });
 
-  await queryInterface.removeColumn(DIRECTION_TABLE, "type");
+  const updateMappings = [
+    { oldValue: "DIR GARANTIA", newValue: 1 },
+    { oldValue: "DIR DOMICILIARIA", newValue: 2 },
+  ];
 
-  await queryInterface.addColumn(
-    DIRECTION_TABLE,
-    "address_type_id_address_type",
-    {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    }
-  );
+  for (const mapping of updateMappings) {
+    await queryInterface.sequelize.query(
+      `UPDATE ${DIRECTION_TABLE} SET type = '${mapping.newValue}' WHERE type = '${mapping.oldValue}'`
+    );
+  }
+
+  await queryInterface.sequelize.query(`
+  ALTER TABLE ${DIRECTION_TABLE}
+  CHANGE COLUMN type address_type_id_address_type INT NOT NULL
+  `);
 
   await queryInterface.sequelize.query(
     `ALTER TABLE DIRECTION MODIFY COLUMN address_type_id_address_type INT AFTER client_id_client`
@@ -99,18 +125,24 @@ export async function down(queryInterface: QueryInterface) {
 
   await queryInterface.dropTable(EXT_ADDRESS_TYPE_TABLE);
 
+  await queryInterface.sequelize.query(`
+  ALTER TABLE ${DIRECTION_TABLE}
+  CHANGE COLUMN address_type_id_address_type type VARCHAR(200) NOT NULL
+  `);
+
+  const updateMappings = [
+    { oldValue: "1", newValue: "DIR GARANTIA" },
+    { oldValue: "2", newValue: "DIR DOMICILIARIA" },
+  ];
+
+  for (const mapping of updateMappings) {
+    await queryInterface.sequelize.query(
+      `UPDATE ${DIRECTION_TABLE} SET type = '${mapping.newValue}' WHERE type = '${mapping.oldValue}'`
+    );
+  }
+
   await queryInterface.removeConstraint(
     DIRECTION_TABLE,
     "fk_direction_address_type"
   );
-
-  await queryInterface.removeColumn(
-    DIRECTION_TABLE,
-    "management_action_id_management_action"
-  );
-
-  await queryInterface.addColumn(DIRECTION_TABLE, "type", {
-    allowNull: false,
-    type: DataTypes.STRING(200),
-  });
 }

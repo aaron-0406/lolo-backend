@@ -20,6 +20,24 @@ const customer_has_bank_model_1 = __importDefault(require("../models/many-to-man
 const { EXT_ADDRESS_TYPE_TABLE } = ext_address_type_model_1.default;
 const { CUSTOMER_HAS_BANK_TABLE } = customer_has_bank_model_1.default;
 const { DIRECTION_TABLE } = direction_model_1.default;
+const newAddresses = [
+    {
+        id_address_type: 1,
+        address_type: "GARANTIA",
+        customer_has_bank_id_customer_has_bank: 1,
+        created_at: new Date(),
+        updated_at: new Date(),
+        deleted_at: null,
+    },
+    {
+        id_address_type: 2,
+        address_type: "DOMICILIARIA",
+        customer_has_bank_id_customer_has_bank: 1,
+        created_at: new Date(),
+        updated_at: new Date(),
+        deleted_at: null,
+    },
+];
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
         yield queryInterface.createTable(EXT_ADDRESS_TYPE_TABLE, {
@@ -64,6 +82,7 @@ function up(queryInterface) {
                 type: sequelize_1.DataTypes.DATE,
             },
         });
+        yield queryInterface.bulkInsert(EXT_ADDRESS_TYPE_TABLE, newAddresses);
         yield queryInterface.addConstraint(EXT_ADDRESS_TYPE_TABLE, {
             fields: ["customer_has_bank_id_customer_has_bank"],
             type: "foreign key",
@@ -75,11 +94,17 @@ function up(queryInterface) {
             onUpdate: "CASCADE",
             onDelete: "NO ACTION",
         });
-        yield queryInterface.removeColumn(DIRECTION_TABLE, "type");
-        yield queryInterface.addColumn(DIRECTION_TABLE, "address_type_id_address_type", {
-            type: sequelize_1.DataTypes.INTEGER,
-            allowNull: true,
-        });
+        const updateMappings = [
+            { oldValue: "DIR GARANTIA", newValue: 1 },
+            { oldValue: "DIR DOMICILIARIA", newValue: 2 },
+        ];
+        for (const mapping of updateMappings) {
+            yield queryInterface.sequelize.query(`UPDATE ${DIRECTION_TABLE} SET type = '${mapping.newValue}' WHERE type = '${mapping.oldValue}'`);
+        }
+        yield queryInterface.sequelize.query(`
+  ALTER TABLE ${DIRECTION_TABLE}
+  CHANGE COLUMN type address_type_id_address_type INT NOT NULL
+  `);
         yield queryInterface.sequelize.query(`ALTER TABLE DIRECTION MODIFY COLUMN address_type_id_address_type INT AFTER client_id_client`);
         yield queryInterface.addConstraint(DIRECTION_TABLE, {
             fields: ["address_type_id_address_type"],
@@ -99,12 +124,18 @@ function down(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
         yield queryInterface.removeConstraint(EXT_ADDRESS_TYPE_TABLE, "fk_address_type_customer_has_bank");
         yield queryInterface.dropTable(EXT_ADDRESS_TYPE_TABLE);
+        yield queryInterface.sequelize.query(`
+  ALTER TABLE ${DIRECTION_TABLE}
+  CHANGE COLUMN address_type_id_address_type type VARCHAR(200) NOT NULL
+  `);
+        const updateMappings = [
+            { oldValue: "1", newValue: "DIR GARANTIA" },
+            { oldValue: "2", newValue: "DIR DOMICILIARIA" },
+        ];
+        for (const mapping of updateMappings) {
+            yield queryInterface.sequelize.query(`UPDATE ${DIRECTION_TABLE} SET type = '${mapping.newValue}' WHERE type = '${mapping.oldValue}'`);
+        }
         yield queryInterface.removeConstraint(DIRECTION_TABLE, "fk_direction_address_type");
-        yield queryInterface.removeColumn(DIRECTION_TABLE, "management_action_id_management_action");
-        yield queryInterface.addColumn(DIRECTION_TABLE, "type", {
-            allowNull: false,
-            type: sequelize_1.DataTypes.STRING(200),
-        });
     });
 }
 exports.down = down;
