@@ -26,7 +26,7 @@ export const loginController = async (
 
       if (user.qr) {
         return res.json({
-          success:
+          message:
             "Utiliza tu aplicación para escanear el código QR y comenzar la autenticación de dos pasos.",
           qr: user.qr,
         });

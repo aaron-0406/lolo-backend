@@ -59,9 +59,9 @@ class AuthService {
   }
 
   async generate2fa(email: string, userId: number) {
-    const secret = speakeasy.generateSecret({ length: 32 });
+    const secret = speakeasy.generateSecret({ length: 32 }).ascii;
     const qrCodeUrl = speakeasy.otpauthURL({
-      secret: secret.ascii,
+      secret: secret,
       label: email,
       issuer: "LoloBank",
     });

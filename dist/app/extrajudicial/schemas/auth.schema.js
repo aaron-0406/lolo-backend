@@ -19,12 +19,12 @@ const lastname = joi_1.default.string().required();
 const dni = joi_1.default.string().required().max(8);
 const phone = joi_1.default.string().required();
 const customerId = joi_1.default.number().required().min(1);
-const code2fa = joi_1.default.string().required();
+const code2fa = joi_1.default.string();
 const loginSchema = joi_1.default.object({
     email,
     password,
     customerId,
-    code2fa,
+    code2fa: code2fa.optional().empty("").allow(""),
 }).options({ abortEarly: true });
 const changePasswordSchema = joi_1.default.object({
     newPassword,

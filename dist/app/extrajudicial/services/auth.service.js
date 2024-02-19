@@ -60,9 +60,9 @@ class AuthService {
     }
     generate2fa(email, userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const secret = speakeasy_1.default.generateSecret({ length: 32 });
+            const secret = speakeasy_1.default.generateSecret({ length: 32 }).ascii;
             const qrCodeUrl = speakeasy_1.default.otpauthURL({
-                secret: secret.ascii,
+                secret: secret,
                 label: email,
                 issuer: "LoloBank",
             });

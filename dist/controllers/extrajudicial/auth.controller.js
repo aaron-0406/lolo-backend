@@ -43,7 +43,7 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
                 return next(err);
             if (user.qr) {
                 return res.json({
-                    success: "Utiliza tu aplicación para escanear el código QR y comenzar la autenticación de dos pasos.",
+                    message: "Utiliza tu aplicación para escanear el código QR y comenzar la autenticación de dos pasos.",
                     qr: user.qr,
                 });
             }

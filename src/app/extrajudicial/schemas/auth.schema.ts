@@ -21,13 +21,13 @@ const lastname = Joi.string().required();
 const dni = Joi.string().required().max(8);
 const phone = Joi.string().required();
 const customerId = Joi.number().required().min(1);
-const code2fa = Joi.string().required();
+const code2fa = Joi.string();
 
 const loginSchema = Joi.object<LoginType>({
   email,
   password,
   customerId,
-  code2fa,
+  code2fa: code2fa.optional().empty("").allow(""),
 }).options({ abortEarly: true });
 
 const changePasswordSchema = Joi.object<ChangePasswordType>({
