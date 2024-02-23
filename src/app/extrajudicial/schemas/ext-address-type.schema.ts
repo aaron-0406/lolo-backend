@@ -23,11 +23,8 @@ const updateAddressTypeSchema = Joi.object<
   type: type.required(),
 });
 
-const getAddressTypeByChbSchema = Joi.object<
-  { customerHasBankId: number },
-  true
->({
-  customerHasBankId: customerHasBankId.required(),
+const getAddressTypeByChbSchema = Joi.object<{ chb: number }, true>({
+  chb: customerHasBankId.required(),
 });
 
 const getAddressTypeByIDSchema = Joi.object<{ id: number }, true>({

@@ -23,7 +23,7 @@ const router = express.Router();
 router.get("/", JWTAuth, getAllAddressTypesController);
 
 router.get(
-  "/chb/:chb",
+  "/all/:chb",
   JWTAuth,
   validatorHandler(getAddressTypeByChbSchema, "params"),
   getAddressTypeByCHBController
