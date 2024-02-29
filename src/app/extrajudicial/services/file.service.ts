@@ -117,10 +117,10 @@ class FileService {
     });
     if (!file) return -1;
     const newFile: FileType = JSON.parse(JSON.stringify(file));
-    await file.destroy();
     await deleteFileBucket(
       `${config.AWS_CHB_PATH}${idCustomer}/${chb}/${code}/${newFile.name}`
     );
+    await file.destroy();
     return { id };
   }
 }
