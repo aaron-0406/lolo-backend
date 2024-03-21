@@ -35,6 +35,7 @@ class ManagementActionService {
                         as: "customerHasBank",
                     },
                 ],
+                order: [["nameAction", "ASC"]],
             });
             if (!rta)
                 throw boom_1.default.notFound("Acción no encontrada");

@@ -18,6 +18,7 @@ type CreateParam = {
   idCustomer: number;
   chb: number;
   files: Express.Multer.File[];
+  tagId: number;
 };
 
 class FileService {
@@ -25,6 +26,15 @@ class FileService {
 
   async find(clientId: number) {
     const rta = await models.FILE.findAll({
+      include: [
+        {
+          model: models.EXT_TAG,
+          as: "classificationTag",
+          foreignKey: "tagId",
+          identifier: "id",
+          attributes: ["name", "color"],
+        },
+      ],
       where: {
         clientId,
       },
@@ -63,24 +73,40 @@ class FileService {
     for (let i = 0; i < data.files.length; i++) {
       const { filename, originalname } = data.files[i];
 
-      // STORED IN DATABASE
-      const newFile = await models.FILE.create({
-        name: filename,
-        originalName: originalname,
-        clientId,
-      });
-
       // UPLOAD TO AWS
       await uploadFile(
         data.files[i],
         `${config.AWS_CHB_PATH}${idCustomer}/${chb}/${code}`
       );
 
+      // STORED IN DATABASE
+      const newFile = await models.FILE.create({
+        name: filename,
+        originalName: originalname,
+        clientId,
+        tagId: data.tagId,
+      });
+
       // DELETE TEMP FILE
       await deleteFile("../public/docs", filename);
       filesAdded.push(newFile);
     }
     return filesAdded;
+  }
+
+  async updateFile(id: string, originalName: string, tagId: number) {
+    const file = await models.FILE.findOne({
+      where: {
+        id_file: id,
+      },
+    });
+
+    if (file) {
+      const rta = await file.update({ ...file, originalName, tagId });
+      return rta;
+    }
+
+    throw boom.notFound("Archivo no encontrado");
   }
 
   async delete(idCustomer: number, chb: number, code: number, id: number) {
@@ -91,10 +117,10 @@ class FileService {
     });
     if (!file) return -1;
     const newFile: FileType = JSON.parse(JSON.stringify(file));
-    await file.destroy();
     await deleteFileBucket(
       `${config.AWS_CHB_PATH}${idCustomer}/${chb}/${code}/${newFile.name}`
     );
+    await file.destroy();
     return { id };
   }
 }

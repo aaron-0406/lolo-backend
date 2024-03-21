@@ -29,7 +29,7 @@ export const JWTAuth = (req: Request, res: Response, next: NextFunction) => {
 export const checkPermissions = (...permissions: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const user = req.user;
-    const userPermissions = user?.permissions.map((permission: any) => {
+    const userPermissions = user?.permissions?.map((permission: any) => {
       return permission.code;
     });
 
@@ -47,7 +47,7 @@ export const checkPermissionsWithoutParams = (
   permissions: [...permissions: string[]],
   user?: Express.User
 ) => {
-  const userPermissions = user?.permissions.map((permission: any) => {
+  const userPermissions = user?.permissions?.map((permission: any) => {
     return permission.code;
   });
 

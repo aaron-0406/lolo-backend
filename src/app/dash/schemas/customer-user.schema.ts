@@ -22,7 +22,7 @@ const roleId = Joi.number().integer().min(1);
 const loginAttempts = Joi.number().integer().min(0);
 
 const createCustomerUserSchema = Joi.object<
-  Omit<CustomerUserType, "id" | "permissions">,
+  Omit<CustomerUserType, "id" | "permissions" | "code2fa">,
   true
 >({
   name: name.required(),
@@ -51,6 +51,7 @@ const updateCustomerUserSchema = Joi.object<
     | "createdAt"
     | "permissions"
     | "loginAttempts"
+    | "code2fa"
   >,
   true
 >({

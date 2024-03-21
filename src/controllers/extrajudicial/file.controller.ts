@@ -61,6 +61,7 @@ export const createFileController = async (
     req.body.idCustomer = Number(req.params.idCustomer);
     req.body.code = Number(req.params.code);
     req.body.chb = Number(req.params.chb);
+    req.body.tagId = Number(req.params.tagId);
     req.body.files = req.files;
     const { body } = req;
     const newFile = await service.create(body);
@@ -75,6 +76,32 @@ export const createFileController = async (
     });
 
     res.status(201).json(newFile);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+export const updateFileController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const file = await service.updateFile(id, body.originalName, body.tagId);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P02-02-03-04",
+      entity: FILE_TABLE,
+      entityId: Number(file.dataValues.id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    });
+
+    res.json(file);
   } catch (error) {
     console.log(error);
     next(error);

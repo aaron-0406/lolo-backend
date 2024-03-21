@@ -35,6 +35,20 @@ export const getExtTagsByCHBController = async (
   }
 };
 
+export const getExtTagsByCHBAndTagGroupIdController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { chb, tagGroupId } = req.params;
+    const extTags = await service.findAllByCHBAndTagGroupId(chb, tagGroupId);
+    res.json(extTags);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getExtTagByIdController = async (
   req: Request,
   res: Response,
@@ -82,6 +96,31 @@ export const updateExtTagController = async (
     const { id } = req.params;
     const body = req.body;
     const extTag = await service.update(id, body);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P14-02",
+      entity: EXT_TAG_TABLE,
+      entityId: Number(extTag.dataValues.id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    });
+
+    res.json(extTag);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateExtTagActionController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const extTag = await service.updateAction(id, body.action);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),

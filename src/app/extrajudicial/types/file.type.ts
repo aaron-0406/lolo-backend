@@ -4,4 +4,5 @@ export type FileType = {
   originalName: string;
   createdAt: Date;
   clientId: number;
+  tagId: number;
 };

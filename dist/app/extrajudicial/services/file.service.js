@@ -24,6 +24,15 @@ class FileService {
     find(clientId) {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.FILE.findAll({
+                include: [
+                    {
+                        model: models.EXT_TAG,
+                        as: "classificationTag",
+                        foreignKey: "tagId",
+                        identifier: "id",
+                        attributes: ["name", "color"],
+                    },
+                ],
                 where: {
                     clientId,
                 },
@@ -55,19 +64,34 @@ class FileService {
             const filesAdded = [];
             for (let i = 0; i < data.files.length; i++) {
                 const { filename, originalname } = data.files[i];
+                // UPLOAD TO AWS
+                yield (0, aws_bucket_1.uploadFile)(data.files[i], `${config_1.default.AWS_CHB_PATH}${idCustomer}/${chb}/${code}`);
                 // STORED IN DATABASE
                 const newFile = yield models.FILE.create({
                     name: filename,
                     originalName: originalname,
                     clientId,
+                    tagId: data.tagId,
                 });
-                // UPLOAD TO AWS
-                yield (0, aws_bucket_1.uploadFile)(data.files[i], `${config_1.default.AWS_CHB_PATH}${idCustomer}/${chb}/${code}`);
                 // DELETE TEMP FILE
                 yield (0, helpers_1.deleteFile)("../public/docs", filename);
                 filesAdded.push(newFile);
             }
             return filesAdded;
+        });
+    }
+    updateFile(id, originalName, tagId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const file = yield models.FILE.findOne({
+                where: {
+                    id_file: id,
+                },
+            });
+            if (file) {
+                const rta = yield file.update(Object.assign(Object.assign({}, file), { originalName, tagId }));
+                return rta;
+            }
+            throw boom_1.default.notFound("Archivo no encontrado");
         });
     }
     delete(idCustomer, chb, code, id) {
@@ -80,8 +104,8 @@ class FileService {
             if (!file)
                 return -1;
             const newFile = JSON.parse(JSON.stringify(file));
-            yield file.destroy();
             yield (0, aws_bucket_1.deleteFileBucket)(`${config_1.default.AWS_CHB_PATH}${idCustomer}/${chb}/${code}/${newFile.name}`);
+            yield file.destroy();
             return { id };
         });
     }

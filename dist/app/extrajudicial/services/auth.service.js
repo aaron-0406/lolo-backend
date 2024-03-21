@@ -16,6 +16,7 @@ const bcrypt_1 = require("../../../libs/bcrypt");
 const sequelize_1 = __importDefault(require("../../../libs/sequelize"));
 const customer_user_service_1 = __importDefault(require("../../dash/services/customer-user.service"));
 const boom_1 = __importDefault(require("@hapi/boom"));
+const speakeasy_1 = __importDefault(require("speakeasy"));
 const { models } = sequelize_1.default;
 const service = new customer_user_service_1.default();
 class AuthService {
@@ -55,6 +56,35 @@ class AuthService {
         return __awaiter(this, void 0, void 0, function* () {
             const { dni, lastname, name, phone } = data;
             yield models.CUSTOMER_USER.update({ dni, lastName: lastname, name, phone }, { where: { id: customerUserId } });
+        });
+    }
+    generate2fa(email, userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const secret = speakeasy_1.default.generateSecret({ length: 32 }).ascii;
+            const qrCodeUrl = speakeasy_1.default.otpauthURL({
+                secret: secret,
+                label: email,
+                issuer: "LoloBank",
+            });
+            yield models.CUSTOMER_USER.update({ code2fa: secret }, { where: { id: userId } });
+            return qrCodeUrl;
+        });
+    }
+    verify2fa(token, userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const userCustomer = yield models.CUSTOMER_USER.findOne({
+                where: { id: userId },
+            });
+            const secret = userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.dataValues.code2fa;
+            const verificationResult = speakeasy_1.default.totp.verify({
+                secret: secret,
+                encoding: "ascii",
+                token: token,
+                window: 6,
+            });
+            if (!verificationResult) {
+                throw boom_1.default.notFound("Autenticación de doble factor fallida");
+            }
         });
     }
 }

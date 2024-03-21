@@ -85,6 +85,10 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
     allowNull: false,
     field: "login_attempts",
   },
+  code2fa: {
+    allowNull: true,
+    type: DataTypes.STRING(70),
+  },
 };
 
 class CustomerUser extends Model {

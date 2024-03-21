@@ -43,6 +43,18 @@ class ExtTagService {
             return rta;
         });
     }
+    findAllByCHBAndTagGroupId(chb, tagGroupId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rta = yield models.EXT_TAG.findAll({
+                order: [["created_at", "DESC"]],
+                where: {
+                    customer_has_bank_id_customer_has_bank: chb,
+                    tag_group_id_group_tag: tagGroupId,
+                },
+            });
+            return rta;
+        });
+    }
     findByID(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const extTag = yield models.EXT_TAG.findOne({
@@ -66,6 +78,13 @@ class ExtTagService {
         return __awaiter(this, void 0, void 0, function* () {
             const extTag = yield this.findByID(id);
             const rta = yield extTag.update(changes);
+            return rta;
+        });
+    }
+    updateAction(id, action) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const extTag = yield this.findByID(id);
+            const rta = yield extTag.update(Object.assign(Object.assign({}, extTag), { action }));
             return rta;
         });
     }

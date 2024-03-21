@@ -66,11 +66,21 @@ const createFolder = (folderName) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.createFolder = createFolder;
 const deleteFileBucket = (fileName) => __awaiter(void 0, void 0, void 0, function* () {
-    const uploadParam = {
+    const commandListParams = {
         Bucket: AWS_BUCKET_NAME,
-        Key: fileName,
+        Prefix: fileName,
     };
-    const command = new client_s3_1.DeleteObjectCommand(uploadParam);
-    return yield client.send(command);
+    const commandList = new client_s3_1.ListObjectVersionsCommand(commandListParams);
+    yield client.send(commandList).then((data) => {
+        var _a;
+        const latestVersion = (_a = data.Versions) === null || _a === void 0 ? void 0 : _a[0];
+        const commandDeleteParam = {
+            Bucket: AWS_BUCKET_NAME,
+            Key: fileName,
+            VersionId: latestVersion === null || latestVersion === void 0 ? void 0 : latestVersion.VersionId,
+        };
+        const commandDelete = new client_s3_1.DeleteObjectCommand(commandDeleteParam);
+        return client.send(commandDelete);
+    });
 });
 exports.deleteFileBucket = deleteFileBucket;

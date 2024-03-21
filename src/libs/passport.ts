@@ -20,9 +20,27 @@ passport.use(
       passReqToCallback: true,
     },
     async (req, email, password, done) => {
-      const { customerId } = req.body;
+      const { customerId, code2fa } = req.body;
       try {
-        const user = await service.login({ email, password, customerId });
+        const user = await service.login({
+          email,
+          password,
+          customerId,
+          code2fa,
+        });
+
+        if (!!user.dataValues.code2fa) {
+          await service.verify2fa(code2fa, user.dataValues.id);
+        } else {
+          const qrCodeUrl = await service.generate2fa(
+            user.dataValues.email,
+            user.dataValues.id
+          );
+          return done(null, {
+            qr: qrCodeUrl,
+          });
+        }
+
         const permissions = await servicePermission.findAllByRoleId(
           user.dataValues.roleId
         );
