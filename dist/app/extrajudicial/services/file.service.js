@@ -104,8 +104,8 @@ class FileService {
             if (!file)
                 return -1;
             const newFile = JSON.parse(JSON.stringify(file));
-            yield file.destroy();
             yield (0, aws_bucket_1.deleteFileBucket)(`${config_1.default.AWS_CHB_PATH}${idCustomer}/${chb}/${code}/${newFile.name}`);
+            yield file.destroy();
             return { id };
         });
     }
