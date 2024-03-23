@@ -56,7 +56,7 @@ const routerApi = (app) => {
     router.use("/cobranza/product", product_routes_1.default);
     router.use("/cobranza/goal", goal_routes_1.default);
     router.use("/cobranza/contact", ext_contact_routes_1.default);
-    router.use("/cobranza/ip-address-bank", ext_ip_address_bank_routes_1.default);
+    router.use("/cobranza/ext-ip-address-bank", ext_ip_address_bank_routes_1.default);
     router.use("/cobranza/ext-tag-group", ext_tag_group_routes_1.default);
     router.use("/cobranza/ext-tag", ext_tag_routes_1.default);
     router.use("/judicial/case-file", judicial_case_file_routes_1.default);

@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.down = exports.up = void 0;
 const sequelize_1 = require("sequelize");
 const ext_ip_address_bank_model_1 = __importDefault(require("../models/ext-ip-address-bank.model"));
+const customer_model_1 = __importDefault(require("../models/customer.model"));
 const { EXT_IP_ADDRESS_BANK_TABLE } = ext_ip_address_bank_model_1.default;
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -37,6 +38,17 @@ function up(queryInterface) {
             state: {
                 allowNull: false,
                 type: sequelize_1.DataTypes.TINYINT({ length: 1 }),
+            },
+            customerId: {
+                allowNull: false,
+                field: "customer_id_customer",
+                type: sequelize_1.DataTypes.INTEGER,
+                references: {
+                    model: customer_model_1.default.CUSTOMER_TABLE,
+                    key: "id_customer",
+                },
+                onUpdate: "CASCADE",
+                onDelete: "NO ACTION",
             },
             createdAt: {
                 allowNull: false,

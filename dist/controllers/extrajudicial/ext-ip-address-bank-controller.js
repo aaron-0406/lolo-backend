@@ -12,28 +12,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteIpAddressController = exports.updateIpAddressController = exports.updateIpAddressStateController = exports.createIpAddressController = exports.getIpAddressByIdController = exports.getIpAddressByIpController = exports.getIpAddressController = void 0;
+exports.deleteIpAddressController = exports.updateIpAddressController = exports.updateIpAddressStateController = exports.createIpAddressController = exports.getIpAddressByIdController = exports.getIpAddressByIpController = exports.getIpAddressesController = void 0;
 const ext_ip_address_bank_service_1 = __importDefault(require("../../app/extrajudicial/services/ext-ip-address-bank.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const ext_ip_address_bank_model_1 = __importDefault(require("../../db/models/ext-ip-address-bank.model"));
 const service = new ext_ip_address_bank_service_1.default();
 const serviceUserLog = new user_log_service_1.default();
 const { EXT_IP_ADDRESS_BANK_TABLE } = ext_ip_address_bank_model_1.default;
-const getIpAddressController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const getIpAddressesController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const IpAddress = yield service.findAll();
-        res.json(IpAddress);
+        const { customerId } = req.params;
+        const ipAddress = yield service.findAllByCustomerId(customerId);
+        res.json(ipAddress);
     }
     catch (error) {
         next(error);
     }
 });
-exports.getIpAddressController = getIpAddressController;
+exports.getIpAddressesController = getIpAddressesController;
 const getIpAddressByIpController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { ip } = req.params;
-        const IpAddress = yield service.findByIP(ip);
-        res.json(IpAddress);
+        const { ip, customerId } = req.params;
+        const ipAddress = yield service.findByIP(ip, customerId);
+        res.json(ipAddress);
     }
     catch (error) {
         next(error);
@@ -42,9 +43,9 @@ const getIpAddressByIpController = (req, res, next) => __awaiter(void 0, void 0,
 exports.getIpAddressByIpController = getIpAddressByIpController;
 const getIpAddressByIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
-        const IpAddress = yield service.findByID(id);
-        res.json(IpAddress);
+        const { id, customerId } = req.params;
+        const ipAddress = yield service.findByID(id, customerId);
+        res.json(ipAddress);
     }
     catch (error) {
         next(error);
@@ -74,9 +75,9 @@ exports.createIpAddressController = createIpAddressController;
 const updateIpAddressStateController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _d, _e, _f;
     try {
-        const { id } = req.params;
+        const { id, customerId } = req.params;
         const body = req.body;
-        const ipAddress = yield service.updateState(id, body.state);
+        const ipAddress = yield service.updateState(id, customerId, body.state);
         yield serviceUserLog.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
             codeAction: "P15-02",
@@ -97,16 +98,16 @@ const updateIpAddressController = (req, res, next) => __awaiter(void 0, void 0, 
     try {
         const { id } = req.params;
         const body = req.body;
-        const IpAddress = yield service.update(id, body);
+        const ipAddress = yield service.update(id, body);
         yield serviceUserLog.create({
             customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
             codeAction: "P15-03",
             entity: EXT_IP_ADDRESS_BANK_TABLE,
-            entityId: Number(IpAddress.dataValues.id),
+            entityId: Number(ipAddress.dataValues.id),
             ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
             customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
         });
-        res.json(IpAddress);
+        res.json(ipAddress);
     }
     catch (error) {
         next(error);
@@ -116,8 +117,8 @@ exports.updateIpAddressController = updateIpAddressController;
 const deleteIpAddressController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _k, _l, _m;
     try {
-        const { id } = req.params;
-        yield service.delete(id);
+        const { id, customerId } = req.params;
+        yield service.delete(id, customerId);
         yield serviceUserLog.create({
             customerUserId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.id),
             codeAction: "P15-04",

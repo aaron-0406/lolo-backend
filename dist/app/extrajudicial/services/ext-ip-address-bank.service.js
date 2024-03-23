@@ -17,30 +17,40 @@ const boom_1 = __importDefault(require("@hapi/boom"));
 const { models } = sequelize_1.default;
 class ExtIpAddressBankService {
     constructor() { }
-    findAll() {
+    findAllByCustomerId(customerId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.EXT_IP_ADDRESS_BANK.findAll();
+            const rta = yield models.EXT_IP_ADDRESS_BANK.findAll({
+                where: {
+                    customer_id_customer: customerId,
+                },
+            });
             return rta;
         });
     }
-    findByID(id) {
+    findByID(id, customerId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const extIpAddress = yield models.EXT_IP_ADDRESS_BANK.findByPk(id);
+            const extIpAddress = yield models.EXT_IP_ADDRESS_BANK.findOne({
+                where: {
+                    id,
+                    customer_id_customer: customerId,
+                },
+            });
             if (!extIpAddress) {
-                throw boom_1.default.notFound("Dirección no encontrado");
+                throw boom_1.default.notFound("Dirección de IP no encontrada");
             }
             return extIpAddress;
         });
     }
-    findByIP(ip) {
+    findByIP(ip, customerId) {
         return __awaiter(this, void 0, void 0, function* () {
             const extIpAddress = yield models.EXT_IP_ADDRESS_BANK.findOne({
                 where: {
                     ip,
+                    customer_id_customer: customerId,
                 },
             });
             if (!extIpAddress) {
-                throw boom_1.default.notFound("Dirección no encontrado");
+                throw boom_1.default.notFound("IP no encontrada");
             }
             return extIpAddress;
         });
@@ -53,21 +63,21 @@ class ExtIpAddressBankService {
     }
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
-            const extIpAddress = yield this.findByID(id);
+            const extIpAddress = yield this.findByID(id, String(changes.customerId));
             const rta = yield extIpAddress.update(changes);
             return rta;
         });
     }
-    updateState(id, state) {
+    updateState(id, customerId, state) {
         return __awaiter(this, void 0, void 0, function* () {
-            const extIpAddress = yield this.findByID(id);
+            const extIpAddress = yield this.findByID(id, customerId);
             const rta = yield extIpAddress.update(Object.assign(Object.assign({}, extIpAddress), { state }));
             return rta;
         });
     }
-    delete(id) {
+    delete(id, customerId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const extIpAddress = yield this.findByID(id);
+            const extIpAddress = yield this.findByID(id, customerId);
             yield extIpAddress.destroy();
             return { id };
         });
