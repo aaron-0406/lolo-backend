@@ -3,6 +3,7 @@ export type ExtIpAddressBankType = {
   addressName: string;
   ip: string;
   state: boolean;
+  customerId: number;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;

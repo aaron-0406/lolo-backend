@@ -7,29 +7,40 @@ const { models } = sequelize;
 class ExtIpAddressBankService {
   constructor() {}
 
-  async findAll() {
-    const rta = await models.EXT_IP_ADDRESS_BANK.findAll();
+  async findAllByCustomerId(customerId: string) {
+    const rta = await models.EXT_IP_ADDRESS_BANK.findAll({
+      where: {
+        customer_id_customer: customerId,
+      },
+    });
     return rta;
   }
 
-  async findByID(id: string) {
-    const extIpAddress = await models.EXT_IP_ADDRESS_BANK.findByPk(id);
-
-    if (!extIpAddress) {
-      throw boom.notFound("Dirección no encontrado");
-    }
-    return extIpAddress;
-  }
-
-  async findByIP(ip: string) {
+  async findByID(id: string, customerId: string) {
     const extIpAddress = await models.EXT_IP_ADDRESS_BANK.findOne({
       where: {
-        ip,
+        id,
+        customer_id_customer: customerId,
       },
     });
 
     if (!extIpAddress) {
-      throw boom.notFound("Dirección no encontrado");
+      throw boom.notFound("Dirección de IP no encontrada");
+    }
+
+    return extIpAddress;
+  }
+
+  async findByIP(ip: string, customerId: string) {
+    const extIpAddress = await models.EXT_IP_ADDRESS_BANK.findOne({
+      where: {
+        ip,
+        customer_id_customer: customerId,
+      },
+    });
+
+    if (!extIpAddress) {
+      throw boom.notFound("IP no encontrada");
     }
     return extIpAddress;
   }
@@ -40,21 +51,21 @@ class ExtIpAddressBankService {
   }
 
   async update(id: string, changes: ExtIpAddressBankType) {
-    const extIpAddress = await this.findByID(id);
+    const extIpAddress = await this.findByID(id, String(changes.customerId));
     const rta = await extIpAddress.update(changes);
 
     return rta;
   }
 
-  async updateState(id: string, state: boolean) {
-    const extIpAddress = await this.findByID(id);
+  async updateState(id: string, customerId: string, state: boolean) {
+    const extIpAddress = await this.findByID(id, customerId);
     const rta = await extIpAddress.update({ ...extIpAddress, state });
 
     return rta;
   }
 
-  async delete(id: string) {
-    const extIpAddress = await this.findByID(id);
+  async delete(id: string, customerId: string) {
+    const extIpAddress = await this.findByID(id, customerId);
     await extIpAddress.destroy();
 
     return { id };

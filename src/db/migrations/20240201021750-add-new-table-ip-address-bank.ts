@@ -1,5 +1,6 @@
 import { DataTypes, QueryInterface } from "sequelize";
 import extIpAddressBank from "../models/ext-ip-address-bank.model";
+import customerModel from "../models/customer.model";
 
 const { EXT_IP_ADDRESS_BANK_TABLE } = extIpAddressBank;
 
@@ -23,6 +24,17 @@ export async function up(queryInterface: QueryInterface) {
     state: {
       allowNull: false,
       type: DataTypes.TINYINT({ length: 1 }),
+    },
+    customerId: {
+      allowNull: false,
+      field: "customer_id_customer",
+      type: DataTypes.INTEGER,
+      references: {
+        model: customerModel.CUSTOMER_TABLE,
+        key: "id_customer",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "NO ACTION",
     },
     createdAt: {
       allowNull: false,

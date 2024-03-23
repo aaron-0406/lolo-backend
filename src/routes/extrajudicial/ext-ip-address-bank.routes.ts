@@ -1,8 +1,8 @@
 import express from "express";
 import validatorHandler from "../../middlewares/validator.handler";
-import IpAddressSchema from "../../app/extrajudicial/schemas/ext-ip-address-bank.schema";
+import ipAddressSchema from "../../app/extrajudicial/schemas/ext-ip-address-bank.schema";
 import {
-  getIpAddressController,
+  getIpAddressesController,
   getIpAddressByIpController,
   getIpAddressByIdController,
   createIpAddressController,
@@ -16,25 +16,32 @@ const {
   createIpAddressSchema,
   updateIpAddressStateSchema,
   updateIpAddressSchema,
-  getIpAddressSchema,
+  getIpAddressByIdSchema,
   getIpAddressByIpSchema,
-} = IpAddressSchema;
+  getIpAddressesByCustomerIdSchema,
+  getIpAddressesByIdSchema,
+} = ipAddressSchema;
 const router = express.Router();
 
-router.get("/", JWTAuth, getIpAddressController);
-
 router.get(
-  "/:id",
+  "/id-address/:id/:customerId",
   JWTAuth,
-  validatorHandler(getIpAddressSchema, "params"),
+  validatorHandler(getIpAddressByIdSchema, "params"),
   getIpAddressByIdController
 );
 
 router.get(
-  "/:ip",
+  "/ip-address/:ip/:customerId",
   JWTAuth,
   validatorHandler(getIpAddressByIpSchema, "params"),
   getIpAddressByIpController
+);
+
+router.get(
+  "/:customerId",
+  JWTAuth,
+  validatorHandler(getIpAddressesByCustomerIdSchema, "params"),
+  getIpAddressesController
 );
 
 router.post(
@@ -46,10 +53,10 @@ router.post(
 );
 
 router.patch(
-  "/state/:id",
+  "/state/:id/:customerId",
   JWTAuth,
   checkPermissions("P15-02"),
-  validatorHandler(getIpAddressSchema, "params"),
+  validatorHandler(getIpAddressByIdSchema, "params"),
   validatorHandler(updateIpAddressStateSchema, "body"),
   updateIpAddressStateController
 );
@@ -58,16 +65,16 @@ router.patch(
   "/:id",
   JWTAuth,
   checkPermissions("P15-03"),
-  validatorHandler(getIpAddressSchema, "params"),
+  validatorHandler(getIpAddressesByIdSchema, "params"),
   validatorHandler(updateIpAddressSchema, "body"),
   updateIpAddressController
 );
 
 router.delete(
-  "/:id",
+  "/:id/:customerId",
   JWTAuth,
   checkPermissions("P15-04"),
-  validatorHandler(getIpAddressSchema, "params"),
+  validatorHandler(getIpAddressByIdSchema, "params"),
   deleteIpAddressController
 );
 

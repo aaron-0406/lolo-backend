@@ -6,6 +6,7 @@ import {
   ModelCtor,
 } from "sequelize";
 import { ExtIpAddressBankType } from "../../app/extrajudicial/types/ext-ip-address-bank.type";
+import customerModel from "./customer.model";
 
 const EXT_IP_ADDRESS_BANK_TABLE = "EXT_IP_ADDRESS_BANK";
 
@@ -32,6 +33,17 @@ const ExtIpAddressBankSchema: ModelAttributes<
     allowNull: false,
     type: DataTypes.TINYINT({ length: 1 }),
   },
+  customerId: {
+    allowNull: false,
+    field: "customer_id_customer",
+    type: DataTypes.INTEGER,
+    references: {
+      model: customerModel.CUSTOMER_TABLE,
+      key: "id_customer",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
   createdAt: {
     allowNull: false,
     field: "created_at",
@@ -52,7 +64,9 @@ const ExtIpAddressBankSchema: ModelAttributes<
 };
 
 class ExtIpAddressBank extends Model {
-  static associate(models: { [key: string]: ModelCtor<Model> }) {}
+  static associate(models: { [key: string]: ModelCtor<Model> }) {
+    this.belongsTo(models.CUSTOMER, { as: "customer" });
+  }
 
   static config(sequelize: Sequelize) {
     return {

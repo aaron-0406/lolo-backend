@@ -31,7 +31,7 @@ import roleRouter from "./dash/role.routes";
 import permissionRouter from "./dash/permission.routes";
 import userLogRouter from "./dash/user-log.routes";
 import extContactRouter from "./extrajudicial/ext-contact.routes";
-import ExtIpAddressBank from "./extrajudicial/ext-ip-address-bank.routes";
+import extIpAddressBank from "./extrajudicial/ext-ip-address-bank.routes";
 import extTagGroupRouter from "./extrajudicial/ext-tag-group.routes";
 import extTagRouter from "./extrajudicial/ext-tag.routes";
 
@@ -54,7 +54,7 @@ const routerApi = (app: Express) => {
   router.use("/cobranza/product", productRouter);
   router.use("/cobranza/goal", goalRouter);
   router.use("/cobranza/contact", extContactRouter);
-  router.use("/cobranza/ip-address-bank", ExtIpAddressBank);
+  router.use("/cobranza/ext-ip-address-bank", extIpAddressBank);
   router.use("/cobranza/ext-tag-group", extTagGroupRouter);
   router.use("/cobranza/ext-tag", extTagRouter);
 
