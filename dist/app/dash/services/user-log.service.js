@@ -16,32 +16,10 @@ const sequelize_1 = require("sequelize");
 const sequelize_2 = __importDefault(require("../../../libs/sequelize"));
 const { models } = sequelize_2.default;
 class UserLogService {
-    constructor() {
-        this.attributes = [
-            "id_user_log",
-            "codeAction",
-            "entityId",
-            "entity",
-            [
-                sequelize_1.Sequelize.literal(`
-        CASE
-          WHEN EXISTS (SELECT 1 FROM EXT_IP_ADDRESS_BANK WHERE ip = USER_LOG.ip AND deleted_at IS NULL)
-          THEN (SELECT addressName FROM EXT_IP_ADDRESS_BANK WHERE ip = USER_LOG.ip AND deleted_at IS NULL LIMIT 1)
-          ELSE USER_LOG.ip
-        END
-      `),
-                "ip",
-            ],
-            "createAt",
-            "customer_user_id_customer_user",
-            "customer_id_customer",
-        ];
-    }
+    constructor() { }
     findAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.USER_LOG.findAll({
-                attributes: this.attributes,
-            });
+            const rta = yield models.USER_LOG.findAll();
             return rta;
         });
     }
@@ -52,7 +30,6 @@ class UserLogService {
                     customer_id_customer: customerId,
                 },
                 include: ["customerUser"],
-                attributes: this.attributes,
                 order: [["id", "DESC"]],
             });
             return rta;
@@ -86,7 +63,6 @@ class UserLogService {
             });
             const logs = yield models.USER_LOG.findAll({
                 include: ["customerUser"],
-                attributes: this.attributes,
                 order: [["id", "DESC"]],
                 limit: limite,
                 offset: (pagina - 1) * limite,
