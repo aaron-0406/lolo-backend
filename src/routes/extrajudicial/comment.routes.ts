@@ -16,6 +16,7 @@ const {
   getCommentByIDSchema,
   createCommentSchema,
   updateCommentSchema,
+  getCommentByClientIDSchemaQuery,
 } = commentSchema;
 
 const router = express.Router();
@@ -23,7 +24,9 @@ const router = express.Router();
 router.get(
   "/all-client/:clientId",
   JWTAuth,
+  checkPermissions("P02-02-01-04"),
   validatorHandler(getCommentByClientIDSchema, "params"),
+  validatorHandler(getCommentByClientIDSchemaQuery, "query"),
   getAllCommentsByClientController
 );
 

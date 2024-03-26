@@ -5,6 +5,7 @@ const id = Joi.number();
 const customerId = Joi.number();
 const name = Joi.string().min(1).max(100);
 const permissions = Joi.array().items(Joi.number().positive());
+const visible = Joi.boolean();
 
 const createRoleSchema = Joi.object<
   Omit<RoleType & { permissions: Array<number> }, "id">,
@@ -22,6 +23,10 @@ const getAllRoleByCustomerIdSchema = Joi.object<{ customerId: number }, true>({
   customerId: id.required(),
 });
 
+const getAllRoleByCustomerIdSchemaQuery = Joi.object({
+  visible,
+}).options({ abortEarly: true });
+
 const updateRoleSchema = Joi.object<
   Omit<RoleType & { permissions: Array<number> }, "id" | "customerId">,
   true
@@ -35,4 +40,5 @@ export default {
   createRoleSchema,
   updateRoleSchema,
   getRoleByIdSchema,
+  getAllRoleByCustomerIdSchemaQuery,
 };

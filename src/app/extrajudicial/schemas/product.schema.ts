@@ -6,12 +6,17 @@ const state = Joi.string().required();
 const id = Joi.number().required();
 const customerId = Joi.number().required();
 const name = Joi.string().required();
+const visible = Joi.boolean();
 
 export const getProductsByClientCodeSchema = Joi.object<{ code: string }, true>(
   {
     code,
   }
 );
+
+export const getProductsByClientCodeSchemaQuery = Joi.object({
+  visible,
+}).options({ abortEarly: true });
 
 export const getProductByIdSchema = Joi.object<{ id: number }, true>({
   id,

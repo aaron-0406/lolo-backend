@@ -16,6 +16,7 @@ const {
   getExtContactByIDSchema,
   createExtContactSchema,
   updateExtContactSchema,
+  getExtContactByClientIDSchemaQuery,
 } = extContactSchema;
 
 const router = express.Router();
@@ -25,7 +26,9 @@ router.get("/", JWTAuth, getExtContactController);
 router.get(
   "/all-client/:clientId",
   JWTAuth,
+  checkPermissions("P02-02-07-04"),
   validatorHandler(getExtContactByClientIDSchema, "params"),
+  validatorHandler(getExtContactByClientIDSchemaQuery, "query"),
   getExtContactClientIdController
 );
 

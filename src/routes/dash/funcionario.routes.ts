@@ -14,6 +14,7 @@ import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 const {
   getFuncionarioSchema,
   getFuncionarioByCHBSchema,
+  getFuncionarioByCHBSchemaQuery,
   createFuncionarioSchema,
   updateFuncionarioSchema,
 } = funcionarioSchema;
@@ -24,7 +25,9 @@ router.get("/", JWTAuth, getFuncionariosController);
 router.get(
   "/all/:chb",
   JWTAuth,
+  checkPermissions("P08-04"),
   validatorHandler(getFuncionarioByCHBSchema, "params"),
+  validatorHandler(getFuncionarioByCHBSchemaQuery, "query"),
   getFuncionariosByCHBController
 );
 

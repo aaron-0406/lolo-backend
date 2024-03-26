@@ -20,6 +20,7 @@ const {
   getClientByCustomer,
   deleteClientByCodeSchema,
   getClientByCHBSchemaQuery,
+  getClientByCodeSchemaQuery,
   getClientByNameSchemaQuery,
   getDateSchema,
 } = clientSchema;
@@ -39,6 +40,7 @@ router.get(
 router.get(
   "/:chb",
   JWTAuth,
+  checkPermissions("P02-06"),
   validatorHandler(getClientByCHBSchema, "params"),
   validatorHandler(getClientByCHBSchemaQuery, "query"),
   getClientsByCHBController
@@ -62,7 +64,9 @@ router.get(
 router.get(
   "/:code/:chb",
   JWTAuth,
+  checkPermissions("P02-02-08"),
   validatorHandler(getClientByCodeSchema, "params"),
+  validatorHandler(getClientByCodeSchemaQuery, "query"),
   getClientByCodeCHBController
 );
 

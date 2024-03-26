@@ -29,6 +29,19 @@ export const getExtTagGroupByCHBController = async (
   try {
     const { chb } = req.params;
     const extTagGroups = await service.findAllByCHB(chb);
+    const { visible } = req.query;
+
+    if (visible === "true") {
+      await serviceUserLog.create({
+        customerUserId: Number(req.user?.id),
+        codeAction: "P14-04",
+        entity: EXT_TAG_GROUP_TABLE,
+        entityId: Number(chb),
+        ip: req.clientIp ?? "",
+        customerId: Number(req.user?.customerId),
+      });
+    }
+
     res.json(extTagGroups);
   } catch (error) {
     next(error);

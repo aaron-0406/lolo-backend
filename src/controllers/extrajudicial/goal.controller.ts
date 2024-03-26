@@ -43,7 +43,7 @@ export const getGoalController = async (
   next: NextFunction
 ) => {
   try {
-    const { limit, page } = req.query;
+    const { limit, page, visible } = req.query;
     const limite = Number(limit);
     const pagina = Number(page);
 
@@ -51,6 +51,17 @@ export const getGoalController = async (
       limit: limite,
       page: pagina,
     });
+
+    if (visible === "true") {
+      await serviceUserLog.create({
+        customerUserId: Number(req.user?.id),
+        codeAction: "P04-05",
+        entity: GOAL_TABLE,
+        entityId: Number(req.user?.customerId),
+        ip: req.clientIp ?? "",
+        customerId: Number(req.user?.customerId),
+      });
+    }
 
     return res.json(goals);
   } catch (error) {
@@ -96,6 +107,20 @@ export const getCustomerUsersGoals = async (
     const customerUsers = await goalService.findCustomerUserByGoalId(
       Number(req.params.goalId)
     );
+
+    const { visible } = req.query;
+
+    if (visible === "true") {
+      await serviceUserLog.create({
+        customerUserId: Number(req.user?.id),
+        codeAction: "P04-06",
+        entity: GOAL_TABLE,
+        entityId: Number(req.params.goalId),
+        ip: req.clientIp ?? "",
+        customerId: Number(req.user?.customerId),
+      });
+    }
+
     return res.json(customerUsers);
   } catch (error) {
     next(error);

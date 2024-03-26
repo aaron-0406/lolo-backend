@@ -29,6 +29,19 @@ export const getDirectionByClientIdController = async (
   try {
     const { clientId } = req.params;
     const directions = await service.findAllByClient(clientId);
+    const { visible } = req.query;
+
+    if (visible === "true") {
+      await serviceUserLog.create({
+        customerUserId: Number(req.user?.id),
+        codeAction: "P02-02-05-04",
+        entity: DIRECTION_TABLE,
+        entityId: Number(clientId),
+        ip: req.clientIp ?? "",
+        customerId: Number(req.user?.customerId),
+      });
+    }
+
     res.json(directions);
   } catch (error) {
     next(error);

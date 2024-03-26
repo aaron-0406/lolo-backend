@@ -20,6 +20,7 @@ const createAt = Joi.date();
 const customerId = Joi.number();
 const roleId = Joi.number().integer().min(1);
 const loginAttempts = Joi.number().integer().min(0);
+const visible = Joi.boolean();
 
 const createCustomerUserSchema = Joi.object<
   Omit<CustomerUserType, "id" | "permissions" | "code2fa">,
@@ -72,10 +73,15 @@ const getCustomerUserByIdSchema = Joi.object<{ customerId: number }, true>({
   customerId: customerId.required(),
 });
 
+const getCustomerUserByIdSchemaQuery = Joi.object({
+  visible,
+}).options({ abortEarly: true });
+
 export default {
   createCustomerUserSchema,
   updateCustomerUserSchema,
   getCustomerUserSchema,
   getCustomerUserByIdSchema,
   updateCustomerUserStateSchema,
+  getCustomerUserByIdSchemaQuery,
 };

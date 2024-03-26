@@ -16,6 +16,19 @@ export const findFileByClientIdController = async (
   try {
     const { id } = req.params;
     const files = await service.find(Number(id));
+    const { visible } = req.query;
+
+    if (visible === "true") {
+      await serviceUserLog.create({
+        customerUserId: Number(req.user?.id),
+        codeAction: "P02-02-03-05",
+        entity: FILE_TABLE,
+        entityId: Number(id),
+        ip: req.clientIp ?? "",
+        customerId: Number(req.user?.customerId),
+      });
+    }
+
     res.json(files);
   } catch (error) {
     next(error);

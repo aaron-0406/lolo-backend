@@ -5,6 +5,7 @@ const id = Joi.number();
 const name = Joi.string().min(1).max(150);
 const createAt = Joi.date();
 const customerHasBankId = Joi.number();
+const visible = Joi.boolean();
 
 const createFuncionarioSchema = Joi.object<Omit<FuncionarioType, "id">, true>({
   name: name.required(),
@@ -26,9 +27,14 @@ const getFuncionarioByCHBSchema = Joi.object<{ chb: number }, true>({
   chb: id.required(),
 });
 
+const getFuncionarioByCHBSchemaQuery = Joi.object({
+  visible,
+}).options({ abortEarly: true });
+
 export default {
   createFuncionarioSchema,
   updateFuncionarioSchema,
   getFuncionarioSchema,
   getFuncionarioByCHBSchema,
+  getFuncionarioByCHBSchemaQuery,
 };

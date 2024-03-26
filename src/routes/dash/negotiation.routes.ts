@@ -14,6 +14,7 @@ import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 const {
   getNegotiationSchema,
   getNegotiationByCHBSchema,
+  getNegotiationByCHBSchemaQuery,
   createNegotiationSchema,
   updateNegotiationSchema,
 } = negotiationSchema;
@@ -24,7 +25,9 @@ router.get("/", JWTAuth, getNegotiationsController);
 router.get(
   "/all/:chb",
   JWTAuth,
+  checkPermissions("P09-04"),
   validatorHandler(getNegotiationByCHBSchema, "params"),
+  validatorHandler(getNegotiationByCHBSchemaQuery, "query"),
   getNegotiationsByCHBController
 );
 

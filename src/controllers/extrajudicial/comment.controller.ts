@@ -16,6 +16,19 @@ export const getAllCommentsByClientController = async (
   try {
     const { clientId } = req.params;
     const comments = await service.findAllByClient(clientId);
+    const { visible } = req.query;
+
+    if (visible === "true") {
+      await serviceUserLog.create({
+        customerUserId: Number(req.user?.id),
+        codeAction: "P02-02-01-04",
+        entity: COMMENT_TABLE,
+        entityId: Number(clientId),
+        ip: req.clientIp ?? "",
+        customerId: Number(req.user?.customerId),
+      });
+    }
+
     res.json(comments);
   } catch (error) {
     next(error);

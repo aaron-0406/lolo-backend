@@ -37,6 +37,7 @@ const negotiations = Joi.string().required();
 const funcionarios = Joi.string().required();
 const users = Joi.string().required();
 const cities = Joi.string().required();
+const visible = Joi.boolean();
 
 const saveClientSchema = Joi.object<ClientType, true>({
   id: id.optional(),
@@ -59,6 +60,10 @@ const getClientByCodeSchema = Joi.object<{ code: string; chb: number }, true>({
   chb: customerHasBankId.required(),
 });
 
+const getClientByCodeSchemaQuery = Joi.object({
+  visible,
+}).options({ abortEarly: true });
+
 const getClientByCHBSchema = Joi.object<{ chb: number }, true>({
   chb: customerHasBankId.required(),
 });
@@ -71,6 +76,7 @@ const getClientByCHBSchemaQuery = Joi.object({
   funcionarios,
   users,
   cities,
+  visible,
 }).options({ abortEarly: true });
 
 const getClientByNameSchemaQuery = Joi.object({
@@ -101,6 +107,7 @@ export default {
   getClientByCHBSchema,
   getClientByCodeSchema,
   deleteClientByCodeSchema,
+  getClientByCodeSchemaQuery,
   getClientByCHBSchemaQuery,
   getClientByNameSchemaQuery,
   getDateSchema,

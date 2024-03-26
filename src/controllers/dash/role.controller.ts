@@ -19,6 +19,20 @@ export const getAllRoleByCustomerIdController = async (
     const roles = await service.findAllByCustomerId(
       Number(req.params.customerId)
     );
+
+    const { visible } = req.query
+
+    if (visible === "true") {
+      await serviceUserLog.create({
+        customerUserId: Number(req.user?.id),
+        codeAction: "P11-04",
+        entity: ROLE_TABLE,
+        entityId: Number(req.params.customerId),
+        ip: req.clientIp ?? "",
+        customerId: Number(req.user?.customerId),
+      });
+    }
+
     res.json(roles);
   } catch (error) {
     next(error);

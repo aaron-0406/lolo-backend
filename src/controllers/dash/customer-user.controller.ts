@@ -29,6 +29,19 @@ export const getCustomerUserByCustomerIdController = async (
   try {
     const { customerId } = req.params;
     const users = await service.findAllByCustomerID(customerId);
+    const { visible } = req.query;
+
+    if (visible === "true") {
+      await serviceUserLog.create({
+        customerUserId: Number(req.user?.id),
+        codeAction: "P10-05",
+        entity: CUSTOMER_USER_TABLE,
+        entityId: Number(customerId),
+        ip: req.clientIp ?? "",
+        customerId: Number(req.user?.customerId),
+      });
+    }
+
     res.json(users);
   } catch (error) {
     next(error);

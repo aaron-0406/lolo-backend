@@ -5,6 +5,7 @@ const id = Joi.number();
 const name = Joi.string().min(1).max(200);
 const createAt = Joi.date();
 const customerHasBankId = Joi.number();
+const visible = Joi.boolean();
 
 const createNegotiationSchema = Joi.object<Omit<NegotiationType, "id">, true>({
   name: name.required(),
@@ -26,9 +27,14 @@ const getNegotiationByCHBSchema = Joi.object<{ chb: number }, true>({
   chb: id.required(),
 });
 
+const getNegotiationByCHBSchemaQuery = Joi.object({
+  visible,
+}).options({ abortEarly: true });
+
 export default {
   createNegotiationSchema,
   updateNegotiationSchema,
   getNegotiationSchema,
   getNegotiationByCHBSchema,
+  getNegotiationByCHBSchemaQuery,
 };

@@ -6,6 +6,7 @@ const idCustomer = Joi.number();
 const chb = Joi.number();
 const tagId = Joi.number();
 const originalName = Joi.string();
+const visible = Joi.boolean();
 
 const createFileSchema = Joi.object({
   idCustomer,
@@ -37,6 +38,10 @@ const getFileSchema = Joi.object({
   id,
 });
 
+const getFileSchemaQuery = Joi.object({
+  visible,
+}).options({ abortEarly: true });
+
 const getFileByIdSchema = Joi.object({
   id,
 });
@@ -47,4 +52,5 @@ export default {
   deleteFileSchema,
   getFileSchema,
   getFileByIdSchema,
+  getFileSchemaQuery
 };
