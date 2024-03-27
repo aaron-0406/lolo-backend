@@ -6,6 +6,8 @@ import {
   PutObjectCommand,
   PutObjectCommandInput,
   S3Client,
+  ListObjectVersionsCommand,
+  ListObjectVersionsCommandInput,
 } from "@aws-sdk/client-s3";
 import fs from "fs";
 import config from "../config/config";
@@ -60,7 +62,7 @@ export const readFile = async (filename: string) => {
       stream.on("error", reject); // or something like that. might need to close `hash`
     });
     await end;
-    return 
+    return;
   }
 };
 
@@ -74,10 +76,22 @@ export const createFolder = async (folderName: string) => {
 };
 
 export const deleteFileBucket = async (fileName: string) => {
-  const uploadParam: DeleteObjectCommandInput = {
+  const commandListParams: ListObjectVersionsCommandInput = {
     Bucket: AWS_BUCKET_NAME,
-    Key: fileName,
+    Prefix: fileName,
   };
-  const command = new DeleteObjectCommand(uploadParam);
-  return await client.send(command);
+  const commandList = new ListObjectVersionsCommand(commandListParams);
+
+  await client.send(commandList).then((data) => {
+    const latestVersion = data.Versions?.[0];
+
+    const commandDeleteParam: DeleteObjectCommandInput = {
+      Bucket: AWS_BUCKET_NAME,
+      Key: fileName,
+      VersionId: latestVersion?.VersionId,
+    };
+    const commandDelete = new DeleteObjectCommand(commandDeleteParam);
+
+    return client.send(commandDelete);
+  });
 };

@@ -35,6 +35,7 @@ class NegotiationService {
                         as: "customerHasBank",
                     },
                 ],
+                order: [["name", "ASC"]],
             });
             return rta;
         });
