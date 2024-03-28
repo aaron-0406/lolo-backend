@@ -42,8 +42,8 @@ const getAddressTypeByCHBController = (req, res, next) => __awaiter(void 0, void
 exports.getAddressTypeByCHBController = getAddressTypeByCHBController;
 const getAddressTypeByIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
-        const address = yield service.findByID(id);
+        const { id, chb } = req.params;
+        const address = yield service.findByID(id, chb);
         res.json(address);
     }
     catch (error) {
@@ -95,8 +95,8 @@ exports.updateAddressTypeController = updateAddressTypeController;
 const deleteAddressTypeController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _g, _h, _j;
     try {
-        const { id } = req.params;
-        yield service.delete(id);
+        const { id, chb } = req.params;
+        yield service.delete(id, chb);
         yield serviceUserLog.create({
             customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
             codeAction: "P16-03",

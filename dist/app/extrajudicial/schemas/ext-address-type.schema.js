@@ -13,16 +13,22 @@ const createAddressTypeSchema = joi_1.default.object({
 });
 const updateAddressTypeSchema = joi_1.default.object({
     type: type.required(),
+    customerHasBankId: customerHasBankId.required(),
 });
 const getAddressTypeByChbSchema = joi_1.default.object({
-    customerHasBankId: customerHasBankId.required(),
+    chb: customerHasBankId.required(),
 });
 const getAddressTypeByIDSchema = joi_1.default.object({
     id: id.required(),
+});
+const getAddressTypeByIDAndCHBSchema = joi_1.default.object({
+    id: id.required(),
+    chb: customerHasBankId.required(),
 });
 exports.default = {
     createAddressTypeSchema,
     updateAddressTypeSchema,
     getAddressTypeByChbSchema,
     getAddressTypeByIDSchema,
+    getAddressTypeByIDAndCHBSchema,
 };

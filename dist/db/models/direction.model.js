@@ -51,6 +51,7 @@ const DirectionSchema = {
 class Direction extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.CLIENT, { as: "client" });
+        this.belongsTo(models.EXT_ADDRESS_TYPE, { as: "addressType" });
     }
     static config(sequelize) {
         return {

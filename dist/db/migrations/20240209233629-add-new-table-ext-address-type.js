@@ -83,17 +83,6 @@ function up(queryInterface) {
             },
         });
         yield queryInterface.bulkInsert(EXT_ADDRESS_TYPE_TABLE, newAddresses);
-        yield queryInterface.addConstraint(EXT_ADDRESS_TYPE_TABLE, {
-            fields: ["customer_has_bank_id_customer_has_bank"],
-            type: "foreign key",
-            name: "fk_address_type_customer_has_bank",
-            references: {
-                table: CUSTOMER_HAS_BANK_TABLE,
-                field: "id_customer_has_bank",
-            },
-            onUpdate: "CASCADE",
-            onDelete: "NO ACTION",
-        });
         const updateMappings = [
             { oldValue: "DIR GARANTIA", newValue: 1 },
             { oldValue: "DIR DOMICILIARIA", newValue: 2 },
@@ -122,7 +111,6 @@ function up(queryInterface) {
 exports.up = up;
 function down(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield queryInterface.removeConstraint(EXT_ADDRESS_TYPE_TABLE, "fk_address_type_customer_has_bank");
         yield queryInterface.dropTable(EXT_ADDRESS_TYPE_TABLE);
         yield queryInterface.sequelize.query(`
   ALTER TABLE ${DIRECTION_TABLE}

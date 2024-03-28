@@ -33,11 +33,12 @@ class ExtAddressTypeService {
             return rta;
         });
     }
-    findByID(id) {
+    findByID(id, chb) {
         return __awaiter(this, void 0, void 0, function* () {
             const address = yield models.EXT_ADDRESS_TYPE.findOne({
                 where: {
                     id_address_type: id,
+                    customer_has_bank_id_customer_has_bank: chb,
                 },
             });
             if (!address)
@@ -53,14 +54,14 @@ class ExtAddressTypeService {
     }
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
-            const address = yield this.findByID(id);
+            const address = yield this.findByID(id, String(changes.customerHasBankId));
             const rta = yield address.update(changes);
             return rta;
         });
     }
-    delete(id) {
+    delete(id, chb) {
         return __awaiter(this, void 0, void 0, function* () {
-            const address = yield this.findByID(id);
+            const address = yield this.findByID(id, chb);
             yield address.destroy();
             return { id };
         });
