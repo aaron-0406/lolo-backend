@@ -45,8 +45,14 @@ const NegotiationSchema: ModelAttributes<Negotiation, NegotiationType> = {
 class Negotiation extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
+    
     this.hasMany(models.CLIENT, {
       as: "client",
+      foreignKey: "negotiationId",
+    });
+
+    this.hasMany(models.PRODUCT, {
+      as: "product",
       foreignKey: "negotiationId",
     });
   }

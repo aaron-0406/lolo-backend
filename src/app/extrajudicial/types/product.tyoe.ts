@@ -7,6 +7,7 @@ export type ProductType = {
   customerId: number;
   funcionarioId: string;
   cityId: string;
+  negotiationId: number;
 };
 
 export type ProductTypeName = ProductType & {
