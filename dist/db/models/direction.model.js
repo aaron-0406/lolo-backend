@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const client_model_1 = __importDefault(require("./client.model"));
+const ext_address_type_model_1 = __importDefault(require("./ext-address-type.model"));
 const DIRECTION_TABLE = "DIRECTION";
 const DirectionSchema = {
     id: {
@@ -15,10 +16,6 @@ const DirectionSchema = {
         type: sequelize_1.DataTypes.INTEGER,
     },
     direction: {
-        allowNull: false,
-        type: sequelize_1.DataTypes.STRING(200),
-    },
-    type: {
         allowNull: false,
         type: sequelize_1.DataTypes.STRING(200),
     },
@@ -38,6 +35,17 @@ const DirectionSchema = {
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
+    },
+    addressTypeId: {
+        allowNull: true,
+        field: "address_type_id_address_type",
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: ext_address_type_model_1.default.EXT_ADDRESS_TYPE_TABLE,
+            key: "id_address_type",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
     },
 };
 class Direction extends sequelize_1.Model {

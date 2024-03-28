@@ -32,6 +32,7 @@ import {
 import { ValuesType } from "../types/values.type";
 import { GuarantorType } from "../../extrajudicial/types/guarantor.type";
 import { DirectionType } from "../../extrajudicial/types/direction.type";
+import { ExtAddressType } from "../types/ext-address-type.type";
 import { ClientType } from "../../extrajudicial/types/client.type";
 import { TemplateImgType } from "../types/template-img.type";
 import { ProductType } from "../types/product.tyoe";
@@ -41,11 +42,13 @@ import { CityType } from "../../dash/types/city.type";
 import { NegotiationType } from "../../dash/types/negotiation.type";
 import { CommentType } from "../../extrajudicial/types/comment.type";
 import CommentService from "../../extrajudicial/services/comment.service";
+import ExtAddressTypeService from "../../extrajudicial/services/ext-address-type.service";
 import CustomerService from "../../dash/services/customer.service";
 import GoalService from "../../extrajudicial/services/goal.service";
 
 const commentService = new CommentService();
 const goalService = new GoalService();
+const serviceAddressType = new ExtAddressTypeService();
 
 type TemplateHasValues = TemplateHasValuesType & {
   template: TemplateType & { template_imgs: TemplateImgType[] };
@@ -174,12 +177,16 @@ class DocumentService {
         parrafos: TemplateDocument[];
       };
       const element = clients[i] as ClientTypeDoc;
+      const addressType = await serviceAddressType.findAllByChb(
+        String(element.customerHasBankId)
+      );
 
       const texts = this.makeTexts(
         [...newPlantilla.parrafos],
         templateHasValues.values,
         templateHasValues.template.template_imgs,
-        element
+        element,
+        addressType as any[]
       );
       // parrafos = [...parrafos, ...texts, ];
       parrafos = [...parrafos, ...texts];
@@ -416,7 +423,8 @@ class DocumentService {
     parrafos: TemplateDocument[],
     values: ValuesType[],
     templateImg: TemplateImgType[],
-    client: ClientTypeDoc
+    client: ClientTypeDoc,
+    addressType: ExtAddressType[]
   ) {
     const paragraphs = [];
     for (let i = 0; i < parrafos.length; i++) {
@@ -495,6 +503,10 @@ class DocumentService {
 
           for (let k = 0; k < client.direction.length; k++) {
             const direction = client.direction[k];
+            const dir = addressType.find(
+              (record: ExtAddressType) => record.id === direction.addressTypeId
+            );
+            const rtaDir = dir ? dir.type : "No encontrado";
 
             rows.push(
               ...newElement.map((row: any) => {
@@ -508,7 +520,7 @@ class DocumentService {
                               ...item,
                               text: item.text
                                 ?.replace("[direction.id]", direction.id)
-                                ?.replace("[direction.type]", direction.type)
+                                ?.replace("[direction.type]", rtaDir)
                                 ?.replace(
                                   "[direction.direction]",
                                   direction.direction
@@ -660,13 +672,17 @@ class DocumentService {
         if (element.texts.some((item) => item.text?.includes("direction"))) {
           for (let k = 0; k < client.direction.length; k++) {
             const direction = client.direction[k];
+            const dir = addressType.find(
+              (record: ExtAddressType) => record.id === direction.addressTypeId
+            );
+            const rtaDir = dir ? dir.type : "No encontrado";
             let newElement = JSON.parse(JSON.stringify(element.texts));
             newElement = newElement.map((item: any) => {
               return {
                 ...item,
                 text: item.text
                   ?.replace("[direction.id]", direction.id)
-                  ?.replace("[direction.type]", direction.type)
+                  ?.replace("[direction.type]", rtaDir)
                   ?.replace("[direction.direction]", direction.direction),
               };
             });

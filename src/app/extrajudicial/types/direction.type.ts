@@ -3,5 +3,5 @@ export type DirectionType = {
   direction: string;
   createdAt: Date;
   clientId: number;
-  type: string;
+  addressTypeId: number;
 };
