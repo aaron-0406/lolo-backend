@@ -8,6 +8,7 @@ import {
 import { ProductType } from "../../app/extrajudicial/types/product.tyoe";
 import clientModel from "./client.model";
 import customerModel from "./customer.model";
+import negotiationModel from "./negotiation.model";
 
 const PRODUCT_TABLE = "PRODUCT";
 
@@ -56,11 +57,23 @@ const ProductSchema: ModelAttributes<
     onUpdate: "CASCADE",
     onDelete: "CASCADE",
   },
+  negotiationId: {
+    allowNull: true,
+    field: "negotiation_id_negotiation",
+    type: DataTypes.INTEGER,
+    references: {
+      model: negotiationModel.NEGOTIATION_TABLE,
+      key: "id_negotiation",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
 };
 
 class Product extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER, { as: "customer" });
+    this.belongsTo(models.NEGOTIATION, { as: "negotiation" });
   }
 
   static config(sequelize: Sequelize) {

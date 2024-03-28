@@ -44,6 +44,10 @@ class Negotiation extends sequelize_1.Model {
             as: "client",
             foreignKey: "negotiationId",
         });
+        this.hasMany(models.PRODUCT, {
+            as: "product",
+            foreignKey: "negotiationId",
+        });
     }
     static config(sequelize) {
         return {
