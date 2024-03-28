@@ -5,6 +5,7 @@ const id = Joi.number();
 const direction = Joi.string().min(1).max(200);
 const clientId = Joi.number();
 const type = Joi.string().required().max(200);
+const visible = Joi.boolean();
 
 const createDirectionSchema = Joi.object<
   Omit<DirectionType, "id" | "createdAt">,
@@ -27,6 +28,10 @@ const getDirectionByClientIDSchema = Joi.object<{ clientId: number }, true>({
   clientId: clientId.required(),
 });
 
+const getDirectionByClientIDSchemaQuery = Joi.object({
+  visible,
+}).options({ abortEarly: true });
+
 const getDirectionByIDSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
@@ -36,4 +41,5 @@ export default {
   updateDirectionSchema,
   getDirectionByClientIDSchema,
   getDirectionByIDSchema,
+  getDirectionByClientIDSchemaQuery,
 };

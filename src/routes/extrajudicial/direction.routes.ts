@@ -15,6 +15,7 @@ const {
   createDirectionSchema,
   updateDirectionSchema,
   getDirectionByClientIDSchema,
+  getDirectionByClientIDSchemaQuery,
   getDirectionByIDSchema,
 } = directionSchema;
 
@@ -25,7 +26,9 @@ router.get("/", JWTAuth, getAllDirectionsController);
 router.get(
   "/all-client/:clientId",
   JWTAuth,
+  checkPermissions("P02-02-05-04"),
   validatorHandler(getDirectionByClientIDSchema, "params"),
+  validatorHandler(getDirectionByClientIDSchemaQuery, "query"),
   getDirectionByClientIdController
 );
 

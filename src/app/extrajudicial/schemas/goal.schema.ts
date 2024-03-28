@@ -8,10 +8,16 @@ const startDate = Joi.date();
 
 const limit = Joi.number().required();
 const page = Joi.number().required();
+const visible = Joi.boolean();
 
 const getGoalQuerySchema = Joi.object({
   limit,
   page,
+  visible,
+}).options({ abortEarly: true });
+
+const getCustomerUsersGoalsQuery = Joi.object({
+  visible,
 }).options({ abortEarly: true });
 
 const createGoalSchema = Joi.object<
@@ -41,4 +47,5 @@ export default {
   getGoalByIdSchema,
   updateGoalSchema,
   getGoalQuerySchema,
+  getCustomerUsersGoalsQuery,
 };

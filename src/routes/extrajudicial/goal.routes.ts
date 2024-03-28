@@ -21,11 +21,13 @@ const {
   createGoalSchema,
   updateGoalSchema,
   getGoalQuerySchema,
+  getCustomerUsersGoalsQuery,
 } = goalSchema;
 
 router.get(
   "/",
   JWTAuth,
+  checkPermissions("P04-05"),
   validatorHandler(getGoalQuerySchema, "query"),
   getGoalController
 );
@@ -39,7 +41,13 @@ router.get(
   getGoalByIdController
 );
 
-router.get("/:goalId/customer-user", JWTAuth, getCustomerUsersGoals);
+router.get(
+  "/:goalId/customer-user",
+  JWTAuth,
+  checkPermissions("P04-06"),
+  validatorHandler(getCustomerUsersGoalsQuery, "query"),
+  getCustomerUsersGoals
+);
 
 router.put(
   "/:goalId/customer-user",

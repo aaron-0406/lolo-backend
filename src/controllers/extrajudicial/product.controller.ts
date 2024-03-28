@@ -17,6 +17,19 @@ export const getProductsByClientCodeController = async (
   try {
     const { code } = req.params;
     const products = await service.getByClientCode(code);
+    const { visible } = req.query;
+
+    if (visible === "true") {
+      await serviceUserLog.create({
+        customerUserId: Number(req.user?.id),
+        codeAction: "P02-02-06-04",
+        entity: PRODUCT_TABLE,
+        entityId: Number(code),
+        ip: req.clientIp ?? "",
+        customerId: Number(req.user?.customerId),
+      });
+    }
+
     res.json(products);
   } catch (error: any) {
     next(boom.badRequest(error.message));

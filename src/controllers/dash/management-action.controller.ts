@@ -29,6 +29,19 @@ export const getManagementActionByCHBController = async (
   try {
     const { chb } = req.params;
     const managementActions = await service.findAllByCHB(chb);
+    const { visible } = req.query;
+
+    if (visible === "true") {
+      await serviceUserLog.create({
+        customerUserId: Number(req.user?.id),
+        codeAction: "P07-04",
+        entity: MANAGEMENT_ACTION_TABLE,
+        entityId: Number(chb),
+        ip: req.clientIp ?? "",
+        customerId: Number(req.user?.customerId),
+      });
+    }
+
     res.json(managementActions);
   } catch (error) {
     next(error);

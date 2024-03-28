@@ -9,6 +9,7 @@ const date = Joi.date();
 const hour = Joi.date();
 const customerUserId = Joi.number();
 const clientId = Joi.number();
+const visible = Joi.boolean();
 
 const createCommentSchema = Joi.object<Omit<CommentType, "id">, true>({
   comment: comment.required(),
@@ -36,6 +37,10 @@ const getCommentByClientIDSchema = Joi.object<{ clientId: number }, true>({
   clientId: clientId.required(),
 });
 
+const getCommentByClientIDSchemaQuery = Joi.object({
+  visible,
+}).options({ abortEarly: true });
+
 const getCommentByIDSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
@@ -45,4 +50,5 @@ export default {
   updateCommentSchema,
   getCommentByClientIDSchema,
   getCommentByIDSchema,
+  getCommentByClientIDSchemaQuery,
 };

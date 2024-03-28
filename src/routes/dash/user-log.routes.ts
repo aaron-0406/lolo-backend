@@ -1,5 +1,5 @@
 import express from "express";
-import { JWTAuth } from "../../middlewares/auth.handler";
+import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 import {
   getAllUserLogsController,
   getAllUserLogsByCustomerIdController,
@@ -28,6 +28,7 @@ router.get(
 router.get(
   "/filter/:customerId",
   JWTAuth,
+  checkPermissions("P12-01"),
   validatorHandler(getUserLogsFilterByCustomerIdSchema, "params"),
   validatorHandler(getUserLogsFilterByCustomerIdQuery, "query"),
   getUserLogsFilterByCustomerIdController

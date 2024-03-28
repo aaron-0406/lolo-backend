@@ -15,13 +15,16 @@ const {
   createRoleSchema,
   updateRoleSchema,
   getAllRoleByCustomerIdSchema,
+  getAllRoleByCustomerIdSchemaQuery,
 } = roleSchema;
 const router = express.Router();
 
 router.get(
   "/customer/:customerId",
   JWTAuth,
+  checkPermissions("P11-04"),
   validatorHandler(getAllRoleByCustomerIdSchema, "params"),
+  validatorHandler(getAllRoleByCustomerIdSchemaQuery, "query"),
   getAllRoleByCustomerIdController
 );
 

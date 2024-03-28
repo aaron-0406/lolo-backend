@@ -14,6 +14,7 @@ import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 const {
   getManagementActionSchema,
   getManagementActionByCHBSchema,
+  getManagementActionByCHBSchemaQuery,
   createManagementActionSchema,
   updateManagementActionSchema,
 } = managementActionSchema;
@@ -24,7 +25,9 @@ router.get("/", JWTAuth, getManagementActionsController);
 router.get(
   "/all/:chb",
   JWTAuth,
+  checkPermissions("P07-04"),
   validatorHandler(getManagementActionByCHBSchema, "params"),
+  validatorHandler(getManagementActionByCHBSchemaQuery, "query"),
   getManagementActionByCHBController
 );
 

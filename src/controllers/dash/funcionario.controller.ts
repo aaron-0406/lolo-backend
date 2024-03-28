@@ -29,6 +29,19 @@ export const getFuncionariosByCHBController = async (
   try {
     const { chb } = req.params;
     const funcionario = await service.findAllByCHB(chb);
+    const { visible } = req.query;
+
+    if (visible === "true") {
+      await serviceUserLog.create({
+        customerUserId: Number(req.user?.id),
+        codeAction: "P08-04",
+        entity: FUNCIONARIO_TABLE,
+        entityId: Number(chb),
+        ip: req.clientIp ?? "",
+        customerId: Number(req.user?.customerId),
+      });
+    }
+
     res.json(funcionario);
   } catch (error) {
     next(error);

@@ -13,6 +13,7 @@ import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
 const {
   getGuarantorByClientIDSchema,
+  getGuarantorByClientIDSchemaQuery,
   getGuarantorByIDSchema,
   createGuarantorSchema,
   updateGuarantorSchema,
@@ -25,7 +26,9 @@ router.get("/", JWTAuth, getGuarantorController);
 router.get(
   "/all-client/:clientId",
   JWTAuth,
+  checkPermissions("P02-02-04-04"),
   validatorHandler(getGuarantorByClientIDSchema, "params"),
+  validatorHandler(getGuarantorByClientIDSchemaQuery, "query"),
   getGuarantorByClientIdController
 );
 

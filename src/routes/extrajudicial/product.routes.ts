@@ -6,6 +6,7 @@ import {
   getProductByIdSchema,
   getProductsByClientCodeSchema,
   getProductsByCustomerIdSchema,
+  getProductsByClientCodeSchemaQuery,
   updateProductSchema,
 } from "../../app/extrajudicial/schemas/product.schema";
 import validatorHandler from "../../middlewares/validator.handler";
@@ -26,7 +27,9 @@ const router = Router();
 router.get(
   "/client/:code",
   JWTAuth,
+  checkPermissions("P02-02-06-04"),
   validatorHandler(getProductsByClientCodeSchema, "params"),
+  validatorHandler(getProductsByClientCodeSchemaQuery, "query"),
   getProductsByClientCodeController
 );
 

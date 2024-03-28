@@ -18,6 +18,7 @@ const {
   createCustomerUserSchema,
   updateCustomerUserSchema,
   updateCustomerUserStateSchema,
+  getCustomerUserByIdSchemaQuery,
 } = customerUserSchema;
 const router = express.Router();
 
@@ -26,7 +27,9 @@ router.get("/", JWTAuth, getCustomerUsersController);
 router.get(
   "/users/:customerId",
   JWTAuth,
+  checkPermissions("P10-05"),
   validatorHandler(getCustomerUserByIdSchema, "params"),
+  validatorHandler(getCustomerUserByIdSchemaQuery, "query"),
   getCustomerUserByCustomerIdController
 );
 

@@ -29,6 +29,19 @@ export const getExtContactClientIdController = async (
   try {
     const { clientId } = req.params;
     const extContacts = await service.findAllByClient(clientId);
+    const { visible } = req.query;
+
+    if (visible === "true") {
+      await serviceUserLog.create({
+        customerUserId: Number(req.user?.id),
+        codeAction: "P02-02-07-04",
+        entity: EXT_CONTACT_TABLE,
+        entityId: Number(clientId),
+        ip: req.clientIp ?? "",
+        customerId: Number(req.user?.customerId),
+      });
+    }
+
     res.json(extContacts);
   } catch (error) {
     next(error);

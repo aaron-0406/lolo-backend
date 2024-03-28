@@ -15,6 +15,7 @@ import {
 
 const {
   getExtTagByCHBSchema,
+  getExtTagByCHBSchemaQuery,
   getExtTagByCHBAndTagGroupIdSchema,
   getExtTagByIDSchema,
   createExtTagSchema,
@@ -30,6 +31,7 @@ router.get(
   "/all-data-by-chb/:chb",
   JWTAuth,
   validatorHandler(getExtTagByCHBSchema, "params"),
+  validatorHandler(getExtTagByCHBSchemaQuery, "query"),
   getExtTagsByCHBController
 );
 

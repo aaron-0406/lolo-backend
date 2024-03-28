@@ -28,6 +28,19 @@ export const getNegotiationsByCHBController = async (
   try {
     const { chb } = req.params;
     const negotiations = await service.findAllByCHB(chb);
+    const { visible } = req.query;
+
+    if (visible === "true") {
+      await serviceUserLog.create({
+        customerUserId: Number(req.user?.id),
+        codeAction: "P09-04",
+        entity: NEGOTIATION_TABLE,
+        entityId: Number(chb),
+        ip: req.clientIp ?? "",
+        customerId: Number(req.user?.customerId),
+      });
+    }
+
     res.json(negotiations);
   } catch (error) {
     next(error);

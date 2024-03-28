@@ -65,6 +65,19 @@ export const getClientsByCHBController = async (
   try {
     const { chb } = req.params;
     const { clients, quantity } = await service.findAllCHB(chb, req.query);
+    const { visible } = req.query;
+
+    if (visible === "true") {
+      await serviceUserLog.create({
+        customerUserId: Number(req.user?.id),
+        codeAction: "P02-06",
+        entity: CLIENT_TABLE,
+        entityId: Number(chb),
+        ip: req.clientIp ?? "",
+        customerId: Number(req.user?.customerId),
+      });
+    }
+
     res.json({ clients, quantity });
   } catch (error) {
     next(error);
@@ -107,6 +120,19 @@ export const getClientByCodeCHBController = async (
   try {
     const { code, chb } = req.params;
     const client = await service.findCode(code, chb);
+    const { visible } = req.query;
+
+    if (visible === "true") {
+      await serviceUserLog.create({
+        customerUserId: Number(req.user?.id),
+        codeAction: "P02-02-08",
+        entity: CLIENT_TABLE,
+        entityId: Number(client.dataValues.id),
+        ip: req.clientIp ?? "",
+        customerId: Number(req.user?.customerId),
+      });
+    }
+
     res.json(client);
   } catch (error) {
     next(error);

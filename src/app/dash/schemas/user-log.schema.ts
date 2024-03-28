@@ -13,6 +13,8 @@ const limit = Joi.number().required().messages({
   "any.required": "El campo limit es requerido.",
 });
 
+const visible = Joi.boolean();
+
 const getUserLogsByCustomerIdchema = Joi.object<{ customerId: number }, true>({
   customerId: customerId.required(),
 });
@@ -29,6 +31,7 @@ const getUserLogsFilterByCustomerIdQuery = Joi.object({
   limit,
   actions,
   users,
+  visible,
 }).options({ abortEarly: true });
 
 export default {
