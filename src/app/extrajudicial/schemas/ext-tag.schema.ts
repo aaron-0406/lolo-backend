@@ -7,6 +7,7 @@ const color = Joi.string().max(7);
 const action = Joi.boolean();
 const tagGroupId = Joi.number();
 const customerHasBankId = Joi.number();
+const visible = Joi.boolean();
 
 const createExtTagSchema = Joi.object<
   Omit<ExtTagType, "id" | "createdAt" | "updatedAt" | "deletedAt">,
@@ -38,6 +39,10 @@ const getExtTagByCHBSchema = Joi.object<{ chb: number }, true>({
   chb: customerHasBankId.required(),
 });
 
+const getExtTagByCHBSchemaQuery = Joi.object({
+  visible,
+}).options({ abortEarly: true });
+
 const getExtTagByCHBAndTagGroupIdSchema = Joi.object<
   { chb: number; tagGroupId: number },
   true
@@ -57,4 +62,5 @@ export default {
   getExtTagByCHBSchema,
   getExtTagByCHBAndTagGroupIdSchema,
   getExtTagByIDSchema,
+  getExtTagByCHBSchemaQuery,
 };
