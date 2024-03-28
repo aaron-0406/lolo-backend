@@ -34,7 +34,7 @@ import extContactRouter from "./extrajudicial/ext-contact.routes";
 import extIpAddressBank from "./extrajudicial/ext-ip-address-bank.routes";
 import extTagGroupRouter from "./extrajudicial/ext-tag-group.routes";
 import extTagRouter from "./extrajudicial/ext-tag.routes";
-import extAddresType from "./extrajudicial/ext-address-type.routes"
+import extAddresType from "./extrajudicial/ext-address-type.routes";
 
 const routerApi = (app: Express) => {
   const router = express.Router();
@@ -58,7 +58,7 @@ const routerApi = (app: Express) => {
   router.use("/cobranza/ext-ip-address-bank", extIpAddressBank);
   router.use("/cobranza/ext-tag-group", extTagGroupRouter);
   router.use("/cobranza/ext-tag", extTagRouter);
-  router.use("/cobranza/address-type", extAddresType)
+  router.use("/cobranza/ext-address-type", extAddresType);
 
   router.use("/judicial/case-file", judicialCaseFileRouter);
   router.use("/judicial/court", judicialCourtRouter);

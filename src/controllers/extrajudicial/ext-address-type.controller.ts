@@ -41,8 +41,8 @@ export const getAddressTypeByIdController = async (
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
-    const address = await service.findByID(id);
+    const { id, chb } = req.params;
+    const address = await service.findByID(id, chb);
     res.json(address);
   } catch (error) {
     next(error);
@@ -104,8 +104,8 @@ export const deleteAddressTypeController = async (
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
-    await service.delete(id);
+    const { id, chb } = req.params;
+    await service.delete(id, chb);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),

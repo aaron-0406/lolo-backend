@@ -72,18 +72,6 @@ export async function up(queryInterface: QueryInterface) {
 
   await queryInterface.bulkInsert(EXT_ADDRESS_TYPE_TABLE, newAddresses);
 
-  await queryInterface.addConstraint(EXT_ADDRESS_TYPE_TABLE, {
-    fields: ["customer_has_bank_id_customer_has_bank"],
-    type: "foreign key",
-    name: "fk_address_type_customer_has_bank",
-    references: {
-      table: CUSTOMER_HAS_BANK_TABLE,
-      field: "id_customer_has_bank",
-    },
-    onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
-  });
-
   const updateMappings = [
     { oldValue: "DIR GARANTIA", newValue: 1 },
     { oldValue: "DIR DOMICILIARIA", newValue: 2 },
@@ -118,11 +106,6 @@ export async function up(queryInterface: QueryInterface) {
 }
 
 export async function down(queryInterface: QueryInterface) {
-  await queryInterface.removeConstraint(
-    EXT_ADDRESS_TYPE_TABLE,
-    "fk_address_type_customer_has_bank"
-  );
-
   await queryInterface.dropTable(EXT_ADDRESS_TYPE_TABLE);
 
   await queryInterface.sequelize.query(`

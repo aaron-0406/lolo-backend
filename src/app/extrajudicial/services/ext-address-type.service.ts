@@ -21,10 +21,11 @@ class ExtAddressTypeService {
     return rta;
   }
 
-  async findByID(id: string) {
+  async findByID(id: string, chb: string) {
     const address = await models.EXT_ADDRESS_TYPE.findOne({
       where: {
         id_address_type: id,
+        customer_has_bank_id_customer_has_bank: chb,
       },
     });
 
@@ -37,16 +38,14 @@ class ExtAddressTypeService {
     return newAddress;
   }
 
-
-
   async update(id: string, changes: ExtAddressType) {
-    const address = await this.findByID(id);
+    const address = await this.findByID(id, String(changes.customerHasBankId));
     const rta = await address.update(changes);
     return rta;
   }
 
-  async delete(id: string) {
-    const address = await this.findByID(id);
+  async delete(id: string, chb: string) {
+    const address = await this.findByID(id, chb);
     await address.destroy();
 
     return { id };

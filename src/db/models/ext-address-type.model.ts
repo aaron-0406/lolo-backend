@@ -4,7 +4,6 @@ import {
   Sequelize,
   ModelAttributes,
   ModelCtor,
-  ModelStatic,
 } from "sequelize";
 import { ExtAddressType } from "../../app/extrajudicial/types/ext-address-type.type";
 import customerHasBankModel from "./many-to-many/customer-has-bank.model";

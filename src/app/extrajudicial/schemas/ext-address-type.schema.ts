@@ -14,13 +14,11 @@ const createAddressTypeSchema = Joi.object<
 });
 
 const updateAddressTypeSchema = Joi.object<
-  Omit<
-    ExtAddressType,
-    "id" | "createdAt" | "updatedAt" | "deletedAt" | "customerHasBankId"
-  >,
+  Omit<ExtAddressType, "id" | "createdAt" | "updatedAt" | "deletedAt">,
   true
 >({
   type: type.required(),
+  customerHasBankId: customerHasBankId.required(),
 });
 
 const getAddressTypeByChbSchema = Joi.object<{ chb: number }, true>({
@@ -31,9 +29,18 @@ const getAddressTypeByIDSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
 
+const getAddressTypeByIDAndCHBSchema = Joi.object<
+  { id: number; chb: number },
+  true
+>({
+  id: id.required(),
+  chb: customerHasBankId.required(),
+});
+
 export default {
   createAddressTypeSchema,
   updateAddressTypeSchema,
   getAddressTypeByChbSchema,
   getAddressTypeByIDSchema,
+  getAddressTypeByIDAndCHBSchema,
 };

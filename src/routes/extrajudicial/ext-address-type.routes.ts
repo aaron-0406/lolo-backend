@@ -16,6 +16,7 @@ const {
   updateAddressTypeSchema,
   getAddressTypeByChbSchema,
   getAddressTypeByIDSchema,
+  getAddressTypeByIDAndCHBSchema,
 } = extAddressTypeSchema;
 
 const router = express.Router();
@@ -30,9 +31,9 @@ router.get(
 );
 
 router.get(
-  "/:id",
+  "/:id/:chb",
   JWTAuth,
-  validatorHandler(getAddressTypeByIDSchema, "params"),
+  validatorHandler(getAddressTypeByIDAndCHBSchema, "params"),
   getAddressTypeByIdController
 );
 
@@ -54,10 +55,10 @@ router.patch(
 );
 
 router.delete(
-  "/:id",
+  "/:id/:chb",
   JWTAuth,
   checkPermissions("P16-03"),
-  validatorHandler(getAddressTypeByIDSchema, "params"),
+  validatorHandler(getAddressTypeByIDAndCHBSchema, "params"),
   deleteAddressTypeController
 );
 
