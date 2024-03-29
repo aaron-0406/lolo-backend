@@ -35,6 +35,7 @@ interface Product {
   clientCode: string;
   state: string;
   customerId: number;
+  negotiationId: number;
 }
 
 const clientSchema = Joi.object<Client, true>({
@@ -51,6 +52,7 @@ const productSchema = Joi.object<Product, true>({
   state: Joi.string().empty().allow("").required(),
   clientCode: Joi.string().required(),
   customerId: Joi.number().integer().required(),
+  negotiationId: Joi.number().required(),
 });
 
 export const createClientsSchema = Joi.object<
