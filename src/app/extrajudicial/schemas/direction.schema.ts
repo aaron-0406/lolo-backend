@@ -4,7 +4,7 @@ import { DirectionType } from "../types/direction.type";
 const id = Joi.number();
 const direction = Joi.string().min(1).max(200);
 const clientId = Joi.number();
-const type = Joi.string().required().max(200);
+const addressTypeId = Joi.number();
 
 const createDirectionSchema = Joi.object<
   Omit<DirectionType, "id" | "createdAt">,
@@ -12,7 +12,7 @@ const createDirectionSchema = Joi.object<
 >({
   direction: direction.required(),
   clientId: clientId.required(),
-  type,
+  addressTypeId,
 });
 
 const updateDirectionSchema = Joi.object<
@@ -20,7 +20,7 @@ const updateDirectionSchema = Joi.object<
   true
 >({
   direction: direction.required(),
-  type,
+  addressTypeId,
 });
 
 const getDirectionByClientIDSchema = Joi.object<{ clientId: number }, true>({

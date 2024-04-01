@@ -2,7 +2,7 @@ import Joi from "joi";
 import { ExtIpAddressBankType } from "../types/ext-ip-address-bank.type";
 
 const id = Joi.number();
-const addressName = Joi.string().min(2).max(100);
+const addressName = Joi.string().min(2).max(200);
 const ip = Joi.string().min(2).max(100);
 const state = Joi.boolean();
 const customerId = Joi.number();
