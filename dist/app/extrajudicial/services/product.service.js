@@ -62,8 +62,17 @@ class ProductService {
     }
     create(product) {
         return __awaiter(this, void 0, void 0, function* () {
-            const newProduct = yield models.PRODUCT.create(product);
-            return newProduct;
+            const pdc = yield models.PRODUCT.findOne({
+                where: {
+                    code: product.code,
+                    customerId: product.customerId,
+                },
+            });
+            if (!pdc) {
+                const newProduct = yield models.PRODUCT.create(product);
+                return newProduct;
+            }
+            throw boom_1.default.notFound("El código de producto ya existe");
         });
     }
     update(product, id) {

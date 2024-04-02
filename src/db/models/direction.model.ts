@@ -7,6 +7,7 @@ import {
 } from "sequelize";
 import { DirectionType } from "../../app/extrajudicial/types/direction.type";
 import clientModel from "./client.model";
+import extAddressTypeModel from "./ext-address-type.model";
 
 const DIRECTION_TABLE = "DIRECTION";
 
@@ -19,10 +20,6 @@ const DirectionSchema: ModelAttributes<Direction, DirectionType> = {
     type: DataTypes.INTEGER,
   },
   direction: {
-    allowNull: false,
-    type: DataTypes.STRING(200),
-  },
-  type: {
     allowNull: false,
     type: DataTypes.STRING(200),
   },
@@ -43,11 +40,23 @@ const DirectionSchema: ModelAttributes<Direction, DirectionType> = {
     onUpdate: "CASCADE",
     onDelete: "CASCADE",
   },
+  addressTypeId: {
+    allowNull: true,
+    field: "address_type_id_address_type",
+    type: DataTypes.INTEGER,
+    references: {
+      model: extAddressTypeModel.EXT_ADDRESS_TYPE_TABLE,
+      key: "id_address_type",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
 };
 
 class Direction extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CLIENT, { as: "client" });
+    this.belongsTo(models.EXT_ADDRESS_TYPE, { as: "addressType" });
   }
 
   static config(sequelize: Sequelize) {

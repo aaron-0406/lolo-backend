@@ -48,8 +48,19 @@ class ProductService {
   }
 
   async create(product: Omit<ProductType, "id" | "funcionarioId" | "cityId">) {
-    const newProduct = await models.PRODUCT.create(product);
-    return newProduct;
+    const pdc = await models.PRODUCT.findOne({
+      where: {
+        code: product.code,
+        customerId: product.customerId,
+      },
+    });
+
+    if (!pdc) {
+      const newProduct = await models.PRODUCT.create(product);
+      return newProduct;
+    }
+
+    throw boom.notFound("El código de producto ya existe");
   }
 
   async update(product: ProductType, id: number) {
