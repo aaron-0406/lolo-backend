@@ -94,7 +94,7 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
 class CustomerUser extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER, { as: "customer" });
-
+    this.belongsTo(models.EXT_OFFICE, { as: "extOffice" });
     this.belongsTo(models.ROLE, { as: "role" });
 
     this.hasMany(models.CLIENT, {

@@ -56,6 +56,11 @@ class Customer extends Model {
       foreignKey: "customerId",
     });
 
+    this.hasMany(models.EXT_OFFICE, {
+      as: "extOffice",
+      foreignKey: "customerId",
+    });
+
     this.belongsToMany(models.BANK, {
       as: "customerBanks",
       through: models.CUSTOMER_HAS_BANK,
