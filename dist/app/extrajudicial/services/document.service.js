@@ -22,10 +22,12 @@ const docx_1 = require("docx");
 const fs_1 = __importDefault(require("fs"));
 const docx_2 = require("../../../libs/docx");
 const comment_service_1 = __importDefault(require("../../extrajudicial/services/comment.service"));
+const ext_address_type_service_1 = __importDefault(require("../../extrajudicial/services/ext-address-type.service"));
 const customer_service_1 = __importDefault(require("../../dash/services/customer.service"));
 const goal_service_1 = __importDefault(require("../../extrajudicial/services/goal.service"));
 const commentService = new comment_service_1.default();
 const goalService = new goal_service_1.default();
+const serviceAddressType = new ext_address_type_service_1.default();
 class DocumentService {
     constructor() { }
     generateDocument(templateHasValues, clients) {
@@ -84,7 +86,8 @@ class DocumentService {
                 // Copy
                 const newPlantilla = JSON.parse(JSON.stringify(plantilla));
                 const element = clients[i];
-                const texts = this.makeTexts([...newPlantilla.parrafos], templateHasValues.values, templateHasValues.template.template_imgs, element);
+                const addressType = yield serviceAddressType.findAllByChb(String(element.customerHasBankId));
+                const texts = this.makeTexts([...newPlantilla.parrafos], templateHasValues.values, templateHasValues.template.template_imgs, element, addressType);
                 // parrafos = [...parrafos, ...texts, ];
                 parrafos = [...parrafos, ...texts];
                 // Salto de pagina
@@ -230,7 +233,7 @@ class DocumentService {
         });
         return doc;
     }
-    makeTexts(parrafos, values, templateImg, client) {
+    makeTexts(parrafos, values, templateImg, client, addressType) {
         var _a, _b;
         const paragraphs = [];
         for (let i = 0; i < parrafos.length; i++) {
@@ -280,6 +283,8 @@ class DocumentService {
                     let rows = [];
                     for (let k = 0; k < client.direction.length; k++) {
                         const direction = client.direction[k];
+                        const dir = addressType.find((record) => record.id === direction.addressTypeId);
+                        const rtaDir = dir ? dir.type : "No encontrado";
                         rows.push(...newElement.map((row) => {
                             return {
                                 children: row.children.map((cell) => {
@@ -288,7 +293,7 @@ class DocumentService {
                                             return {
                                                 texts: paragraph.texts.map((item) => {
                                                     var _a, _b, _c;
-                                                    return Object.assign(Object.assign({}, item), { text: (_c = (_b = (_a = item.text) === null || _a === void 0 ? void 0 : _a.replace("[direction.id]", direction.id)) === null || _b === void 0 ? void 0 : _b.replace("[direction.type]", direction.type)) === null || _c === void 0 ? void 0 : _c.replace("[direction.direction]", direction.direction) });
+                                                    return Object.assign(Object.assign({}, item), { text: (_c = (_b = (_a = item.text) === null || _a === void 0 ? void 0 : _a.replace("[direction.id]", direction.id)) === null || _b === void 0 ? void 0 : _b.replace("[direction.type]", rtaDir)) === null || _c === void 0 ? void 0 : _c.replace("[direction.direction]", direction.direction) });
                                                 }),
                                             };
                                         }),
@@ -380,10 +385,12 @@ class DocumentService {
                 if (element.texts.some((item) => { var _a; return (_a = item.text) === null || _a === void 0 ? void 0 : _a.includes("direction"); })) {
                     for (let k = 0; k < client.direction.length; k++) {
                         const direction = client.direction[k];
+                        const dir = addressType.find((record) => record.id === direction.addressTypeId);
+                        const rtaDir = dir ? dir.type : "No encontrado";
                         let newElement = JSON.parse(JSON.stringify(element.texts));
                         newElement = newElement.map((item) => {
                             var _a, _b, _c;
-                            return Object.assign(Object.assign({}, item), { text: (_c = (_b = (_a = item.text) === null || _a === void 0 ? void 0 : _a.replace("[direction.id]", direction.id)) === null || _b === void 0 ? void 0 : _b.replace("[direction.type]", direction.type)) === null || _c === void 0 ? void 0 : _c.replace("[direction.direction]", direction.direction) });
+                            return Object.assign(Object.assign({}, item), { text: (_c = (_b = (_a = item.text) === null || _a === void 0 ? void 0 : _a.replace("[direction.id]", direction.id)) === null || _b === void 0 ? void 0 : _b.replace("[direction.type]", rtaDir)) === null || _c === void 0 ? void 0 : _c.replace("[direction.direction]", direction.direction) });
                         });
                         const parrafo = (0, docx_2.createParagraph)(newElement, false, element.options);
                         paragraphs.push(parrafo);
