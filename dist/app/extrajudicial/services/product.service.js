@@ -23,6 +23,7 @@ class ProductService {
                 where: {
                     clientCode: code,
                 },
+                include: [{ model: models.NEGOTIATION, as: "negotiation" }],
             });
             return JSON.parse(JSON.stringify(rta));
         });
@@ -33,6 +34,7 @@ class ProductService {
                 where: {
                     code,
                 },
+                include: [{ model: models.NEGOTIATION, as: "negotiation" }],
             });
             // if (!product) throw boom.notFound("Producto no encontrado");
             return product;
@@ -81,13 +83,6 @@ class ProductService {
             yield productFound.update(product);
             const productEdited = yield this.getByProductId(id);
             return productEdited;
-        });
-    }
-    change(product, id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const productFound = yield this.getByProductId(id);
-            yield productFound.update(product);
-            return product;
         });
     }
     delete(id) {
