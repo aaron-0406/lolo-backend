@@ -35,6 +35,7 @@ class DashboardService {
           clientName: `${file[3]}`,
           state: `${file[8]}`,
           customerId: -1,
+          negotiationId: -1,
         },
       ];
     });

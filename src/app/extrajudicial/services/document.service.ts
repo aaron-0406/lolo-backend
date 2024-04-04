@@ -570,7 +570,8 @@ class DocumentService {
                                 ?.replace("[product.id]", product.id)
                                 ?.replace("[product.code]", product.code)
                                 ?.replace("[product.name]", product.name)
-                                ?.replace("[product.state]", product.state),
+                                ?.replace("[product.state]", product.state)
+                                ?.replace("[product.negotiationId]", product.negotiationId),
                             };
                           }),
                         };
@@ -707,7 +708,8 @@ class DocumentService {
                   ?.replace("[product.id]", product.id)
                   ?.replace("[product.code]", product.code)
                   ?.replace("[product.name]", product.name)
-                  ?.replace("[product.state]", product.state),
+                  ?.replace("[product.state]", product.state)
+                  ?.replace("[product.negotiationId]", product.negotiationId),
               };
             });
 

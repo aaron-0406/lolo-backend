@@ -12,6 +12,7 @@ class ProductService {
       where: {
         clientCode: code,
       },
+      include: [{ model: models.NEGOTIATION, as: "negotiation" }],
     });
     return JSON.parse(JSON.stringify(rta));
   }
@@ -21,6 +22,7 @@ class ProductService {
       where: {
         code,
       },
+      include: [{ model: models.NEGOTIATION, as: "negotiation" }],
     });
     // if (!product) throw boom.notFound("Producto no encontrado");
     return product;
@@ -66,12 +68,6 @@ class ProductService {
     await productFound.update(product);
     const productEdited = await this.getByProductId(id);
     return productEdited;
-  }
-
-  async change(product: Partial<ProductType>, id: number) {
-    const productFound = await this.getByProductId(id);
-    await productFound.update(product);
-    return product;
   }
 
   async delete(id: number) {

@@ -1,6 +1,5 @@
 import { Router } from "express";
 import {
-  changeProductSchema,
   createProductSchema,
   getProductByCodeSchema,
   getProductByIdSchema,
@@ -10,7 +9,6 @@ import {
 } from "../../app/extrajudicial/schemas/product.schema";
 import validatorHandler from "../../middlewares/validator.handler";
 import {
-  changeProductController,
   createProductController,
   deleteProductController,
   getProductByCodeController,
@@ -66,14 +64,6 @@ router.put(
   validatorHandler(getProductByIdSchema, "params"),
   validatorHandler(updateProductSchema, "body"),
   updateProductController
-);
-
-router.patch(
-  "/:id",
-  JWTAuth,
-  validatorHandler(getProductByIdSchema, "params"),
-  validatorHandler(changeProductSchema, "body"),
-  changeProductController
 );
 
 router.delete(

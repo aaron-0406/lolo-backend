@@ -15,6 +15,5 @@ router.get("/single/:code", auth_handler_1.JWTAuth, (0, validator_handler_1.defa
 router.get("/:customerId", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(product_schema_1.getProductsByCustomerIdSchema, "params"), product_controller_1.getProductsByCustomerIdController);
 router.post("/", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P02-02-06-01"), (0, validator_handler_1.default)(product_schema_1.createProductSchema, "body"), product_controller_1.createProductController);
 router.put("/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P02-02-06-02"), (0, validator_handler_1.default)(product_schema_1.getProductByIdSchema, "params"), (0, validator_handler_1.default)(product_schema_1.updateProductSchema, "body"), product_controller_1.updateProductController);
-router.patch("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(product_schema_1.getProductByIdSchema, "params"), (0, validator_handler_1.default)(product_schema_1.changeProductSchema, "body"), product_controller_1.changeProductController);
 router.delete("/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P02-02-06-03"), (0, validator_handler_1.default)(product_schema_1.getProductByIdSchema, "params"), product_controller_1.deleteProductController);
 exports.default = router;

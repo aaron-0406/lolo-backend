@@ -155,6 +155,7 @@ export const createProductsXslxController = async (
         customerId: product.customerId,
         name: product.name,
         state: product.state,
+        negotiationId: product.negotiationId,
       });
     }
     res.json({ success: "Producto agregado" });

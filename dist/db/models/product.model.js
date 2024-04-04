@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const client_model_1 = __importDefault(require("./client.model"));
 const customer_model_1 = __importDefault(require("./customer.model"));
+const negotiation_model_1 = __importDefault(require("./negotiation.model"));
 const PRODUCT_TABLE = "PRODUCT";
 const ProductSchema = {
     id: {
@@ -49,10 +50,22 @@ const ProductSchema = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
     },
+    negotiationId: {
+        allowNull: true,
+        field: "negotiation_id_negotiation",
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: negotiation_model_1.default.NEGOTIATION_TABLE,
+            key: "id_negotiation",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
+    },
 };
 class Product extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.CUSTOMER, { as: "customer" });
+        this.belongsTo(models.NEGOTIATION, { as: "negotiation" });
     }
     static config(sequelize) {
         return {
