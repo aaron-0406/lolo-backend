@@ -40,6 +40,7 @@ const judicial_court_model_1 = __importDefault(require("./judicial-court.model")
 const judicial_procedural_way_model_1 = __importDefault(require("./judicial-procedural-way.model"));
 const user_log_model_1 = __importDefault(require("./user-log.model"));
 const ext_ip_address_bank_model_1 = __importDefault(require("./ext-ip-address-bank.model"));
+const ext_office_model_1 = __importDefault(require("./ext-office.model"));
 const { Customer, CustomerSchema } = customer_model_1.default;
 const { Funcionario, FuncionarioSchema } = funcionario_model_1.default;
 const { Bank, BankSchema } = bank_model_1.default;
@@ -76,6 +77,7 @@ const { JudicialProceduralWay, JudicialProceduralWaySchema } = judicial_procedur
 const { UserLog, UserLogSchema } = user_log_model_1.default;
 const { JudicialCaseFile, JudicialCaseFileSchema } = judicial_case_file_model_1.default;
 const { ExtIpAddressBank, ExtIpAddressBankSchema } = ext_ip_address_bank_model_1.default;
+const { ExtOffice, ExtOfficeSchema } = ext_office_model_1.default;
 const setupModels = (sequelize) => {
     Customer.init(CustomerSchema, Customer.config(sequelize));
     Bank.init(BankSchema, Bank.config(sequelize));
@@ -113,6 +115,7 @@ const setupModels = (sequelize) => {
     JudicialCaseFile.init(JudicialCaseFileSchema, JudicialCaseFile.config(sequelize));
     UserLog.init(UserLogSchema, UserLog.config(sequelize));
     ExtIpAddressBank.init(ExtIpAddressBankSchema, ExtIpAddressBank.config(sequelize));
+    ExtOffice.init(ExtOfficeSchema, ExtOffice.config(sequelize));
     Customer.associate(sequelize.models);
     CustomerUser.associate(sequelize.models);
     Bank.associate(sequelize.models);
@@ -147,5 +150,6 @@ const setupModels = (sequelize) => {
     JudicialCaseFile.associate(sequelize.models);
     UserLog.associate(sequelize.models);
     ExtIpAddressBank.associate(sequelize.models);
+    ExtOffice.associate(sequelize.models);
 };
 exports.setupModels = setupModels;

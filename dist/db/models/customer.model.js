@@ -47,6 +47,10 @@ class Customer extends sequelize_1.Model {
             as: "customerUser",
             foreignKey: "customerId",
         });
+        this.hasMany(models.EXT_OFFICE, {
+            as: "extOffice",
+            foreignKey: "customerId",
+        });
         this.belongsToMany(models.BANK, {
             as: "customerBanks",
             through: models.CUSTOMER_HAS_BANK,

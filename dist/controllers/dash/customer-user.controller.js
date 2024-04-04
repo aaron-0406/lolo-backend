@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCustomerUserController = exports.updateCustomerUserController = exports.updateCustomerUserStateController = exports.createCustomerUserController = exports.getCustomerUserByIdController = exports.getCustomerUserByCustomerIdController = exports.getCustomerUsersController = void 0;
+exports.deleteCustomerUserController = exports.updateCustomerUserController = exports.updateCustomerUserStateController = exports.createCustomerUserController = exports.getCustomerUserByIdController = exports.getCustomerUserByCustomerIdController = exports.getCustomerUserByOfficeController = exports.getCustomerUsersController = void 0;
 const customer_user_service_1 = __importDefault(require("../../app/dash/services/customer-user.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const customer_user_model_1 = __importDefault(require("../../db/models/customer-user.model"));
@@ -29,6 +29,17 @@ const getCustomerUsersController = (req, res, next) => __awaiter(void 0, void 0,
     }
 });
 exports.getCustomerUsersController = getCustomerUsersController;
+const getCustomerUserByOfficeController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { officeId } = req.params;
+        const users = yield service.findAllByOffice(officeId);
+        res.json(users);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.getCustomerUserByOfficeController = getCustomerUserByOfficeController;
 const getCustomerUserByCustomerIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { customerId } = req.params;

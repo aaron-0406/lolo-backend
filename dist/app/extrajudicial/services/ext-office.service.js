@@ -15,11 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = __importDefault(require("../../../libs/sequelize"));
 const boom_1 = __importDefault(require("@hapi/boom"));
 const { models } = sequelize_1.default;
-class ExtIpAddressBankService {
+class ExtOfficeService {
     constructor() { }
     findAllByCustomerId(customerId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.EXT_IP_ADDRESS_BANK.findAll({
+            const rta = yield models.EXT_OFFICE.findAll({
                 where: {
                     customer_id_customer: customerId,
                 },
@@ -27,11 +27,11 @@ class ExtIpAddressBankService {
             return rta;
         });
     }
-    findAllByOffice(officeId) {
+    findAllByCityId(cityId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.EXT_IP_ADDRESS_BANK.findAll({
+            const rta = yield models.EXT_OFFICE.findAll({
                 where: {
-                    officeId,
+                    cityId,
                 },
             });
             return rta;
@@ -39,58 +39,44 @@ class ExtIpAddressBankService {
     }
     findByID(id, customerId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const extIpAddress = yield models.EXT_IP_ADDRESS_BANK.findOne({
+            const rta = yield models.EXT_OFFICE.findOne({
                 where: {
                     id,
                     customer_id_customer: customerId,
                 },
             });
-            if (!extIpAddress) {
-                throw boom_1.default.notFound("Dirección de IP no encontrada");
+            if (!rta) {
+                throw boom_1.default.notFound("Oficina no encontrada");
             }
-            return extIpAddress;
-        });
-    }
-    findByIP(ip, customerId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const extIpAddress = yield models.EXT_IP_ADDRESS_BANK.findOne({
-                where: {
-                    ip,
-                    customer_id_customer: customerId,
-                },
-            });
-            if (!extIpAddress) {
-                throw boom_1.default.notFound("IP no encontrada");
-            }
-            return extIpAddress;
+            return rta;
         });
     }
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const newExtIpAddress = yield models.EXT_IP_ADDRESS_BANK.create(data);
-            return newExtIpAddress;
+            const newExtIpOffice = yield models.EXT_OFFICE.create(data);
+            return newExtIpOffice;
         });
     }
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
-            const extIpAddress = yield this.findByID(id, String(changes.customerId));
-            const rta = yield extIpAddress.update(changes);
+            const extOffice = yield this.findByID(id, String(changes.customerId));
+            const rta = yield extOffice.update(changes);
             return rta;
         });
     }
     updateState(id, customerId, state) {
         return __awaiter(this, void 0, void 0, function* () {
-            const extIpAddress = yield this.findByID(id, customerId);
-            const rta = yield extIpAddress.update(Object.assign(Object.assign({}, extIpAddress), { state }));
+            const extOffice = yield this.findByID(id, customerId);
+            const rta = yield extOffice.update(Object.assign(Object.assign({}, extOffice), { state }));
             return rta;
         });
     }
     delete(id, customerId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const extIpAddress = yield this.findByID(id, customerId);
-            yield extIpAddress.destroy();
+            const extOffice = yield this.findByID(id, customerId);
+            yield extOffice.destroy();
             return { id };
         });
     }
 }
-exports.default = ExtIpAddressBankService;
+exports.default = ExtOfficeService;

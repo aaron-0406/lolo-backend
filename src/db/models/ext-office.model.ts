@@ -24,7 +24,7 @@ const ExtOfficeSchema: ModelAttributes<ExtOffice, ExtOfficeType> = {
     type: DataTypes.STRING(200),
   },
   address: {
-    allowNull: true,
+    allowNull: false,
     type: DataTypes.STRING(200),
   },
   cityId: {

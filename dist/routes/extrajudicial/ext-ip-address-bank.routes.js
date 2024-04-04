@@ -8,10 +8,11 @@ const validator_handler_1 = __importDefault(require("../../middlewares/validator
 const ext_ip_address_bank_schema_1 = __importDefault(require("../../app/extrajudicial/schemas/ext-ip-address-bank.schema"));
 const ext_ip_address_bank_controller_1 = require("../../controllers/extrajudicial/ext-ip-address-bank-controller");
 const auth_handler_1 = require("../../middlewares/auth.handler");
-const { createIpAddressSchema, updateIpAddressStateSchema, updateIpAddressSchema, getIpAddressByIdSchema, getIpAddressByIpSchema, getIpAddressesByCustomerIdSchema, getIpAddressesByIdSchema, } = ext_ip_address_bank_schema_1.default;
+const { createIpAddressSchema, updateIpAddressStateSchema, updateIpAddressSchema, getIpAddressByIdSchema, getIpAddressByIpSchema, getIpAddressesByCustomerIdSchema, getIpAddressesByIdSchema, getIpAddressesByOfficeSchema, } = ext_ip_address_bank_schema_1.default;
 const router = express_1.default.Router();
 router.get("/id-address/:id/:customerId", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getIpAddressByIdSchema, "params"), ext_ip_address_bank_controller_1.getIpAddressByIdController);
 router.get("/ip-address/:ip/:customerId", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getIpAddressByIpSchema, "params"), ext_ip_address_bank_controller_1.getIpAddressByIpController);
+router.get("/office/:officeId", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getIpAddressesByOfficeSchema, "params"), ext_ip_address_bank_controller_1.getIpAddressesByOfficeController);
 router.get("/:customerId", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getIpAddressesByCustomerIdSchema, "params"), ext_ip_address_bank_controller_1.getIpAddressesController);
 router.post("/", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P15-01"), (0, validator_handler_1.default)(createIpAddressSchema, "body"), ext_ip_address_bank_controller_1.createIpAddressController);
 router.patch("/state/:id/:customerId", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P15-02"), (0, validator_handler_1.default)(getIpAddressByIdSchema, "params"), (0, validator_handler_1.default)(updateIpAddressStateSchema, "body"), ext_ip_address_bank_controller_1.updateIpAddressStateController);
