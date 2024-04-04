@@ -52,15 +52,3 @@ export const updateProductSchema = Joi.object<
   negotiationId,
   name,
 });
-
-export const changeProductSchema = Joi.object<
-  Omit<
-    ProductType,
-    "customerId" | "clientCode" | "code" | "id" | "cityId" | "funcionarioId"
-  >,
-  true
->({
-  state: state.optional(),
-  name,
-  negotiationId: negotiationId.optional(),
-});

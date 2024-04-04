@@ -70,12 +70,6 @@ class ProductService {
     return productEdited;
   }
 
-  async change(product: Partial<ProductType>, id: number) {
-    const productFound = await this.getByProductId(id);
-    await productFound.update(product);
-    return product;
-  }
-
   async delete(id: number) {
     const product = await this.getByProductId(id);
     await product.destroy();

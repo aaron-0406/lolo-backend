@@ -112,20 +112,6 @@ export const updateProductController = async (
   }
 };
 
-export const changeProductController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id } = req.params;
-    const product = await service.change(req.body, Number(id));
-    res.json(product);
-  } catch (error: any) {
-    next(boom.badRequest(error.message));
-  }
-};
-
 export const deleteProductController = async (
   req: Request,
   res: Response,
