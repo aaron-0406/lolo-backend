@@ -30,6 +30,23 @@ class CustomerUserService {
     return rta;
   }
 
+  async findAllByOffice(officeId: string) {
+    const rta = await models.CUSTOMER_USER.findAll({
+      include: ["role"],
+      attributes: {
+        exclude: ["password"],
+      },
+      where: {
+        officeId,
+      },
+    });
+
+    if (!rta) {
+      throw boom.notFound("Cliente no encontrado");
+    }
+    return rta;
+  }
+
   async findOne(id: string) {
     const user = await models.CUSTOMER_USER.findByPk(id, {
       attributes: { exclude: ["password"] },

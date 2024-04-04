@@ -7,6 +7,7 @@ import {
 } from "sequelize";
 import { ExtIpAddressBankType } from "../../app/extrajudicial/types/ext-ip-address-bank.type";
 import customerModel from "./customer.model";
+import extOfficeModel from "./ext-office.model";
 
 const EXT_IP_ADDRESS_BANK_TABLE = "EXT_IP_ADDRESS_BANK";
 
@@ -40,6 +41,17 @@ const ExtIpAddressBankSchema: ModelAttributes<
     references: {
       model: customerModel.CUSTOMER_TABLE,
       key: "id_customer",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
+  officeId: {
+    allowNull: false,
+    field: "ext_office_id_ext_office",
+    type: DataTypes.INTEGER,
+    references: {
+      model: extOfficeModel.EXT_OFFICE_TABLE,
+      key: "id_ext_office",
     },
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",

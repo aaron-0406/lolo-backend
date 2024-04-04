@@ -16,6 +16,15 @@ class ExtIpAddressBankService {
     return rta;
   }
 
+  async findAllByOffice(officeId: string) {
+    const rta = await models.EXT_IP_ADDRESS_BANK.findAll({
+      where: {
+        officeId,
+      },
+    });
+    return rta;
+  }
+
   async findByID(id: string, customerId: string) {
     const extIpAddress = await models.EXT_IP_ADDRESS_BANK.findOne({
       where: {

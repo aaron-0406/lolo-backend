@@ -20,6 +20,7 @@ const createAt = Joi.date();
 const customerId = Joi.number();
 const roleId = Joi.number().integer().min(1);
 const loginAttempts = Joi.number().integer().min(0);
+const officeId = Joi.number();
 
 const createCustomerUserSchema = Joi.object<
   Omit<CustomerUserType, "id" | "permissions" | "code2fa">,
@@ -36,6 +37,7 @@ const createCustomerUserSchema = Joi.object<
   customerId: customerId.required(),
   roleId: roleId.required(),
   loginAttempts: loginAttempts.required(),
+  officeId: officeId.required(),
 });
 
 const updateCustomerUserStateSchema = Joi.object<{ state: boolean }, true>({
@@ -62,6 +64,7 @@ const updateCustomerUserSchema = Joi.object<
   state: state.required(),
   password: password.optional(),
   roleId: roleId.required(),
+  officeId: officeId.required(),
 });
 
 const getCustomerUserSchema = Joi.object<{ id: number }, true>({
@@ -72,10 +75,15 @@ const getCustomerUserByIdSchema = Joi.object<{ customerId: number }, true>({
   customerId: customerId.required(),
 });
 
+const getCustomerUserByOfficeSchema = Joi.object<{ officeId: number }, true>({
+  officeId: officeId.required(),
+});
+
 export default {
   createCustomerUserSchema,
   updateCustomerUserSchema,
   getCustomerUserSchema,
   getCustomerUserByIdSchema,
   updateCustomerUserStateSchema,
+  getCustomerUserByOfficeSchema,
 };

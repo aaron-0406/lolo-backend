@@ -6,6 +6,7 @@ const addressName = Joi.string().min(2).max(200);
 const ip = Joi.string().min(2).max(100);
 const state = Joi.boolean();
 const customerId = Joi.number();
+const officeId = Joi.number();
 
 const createIpAddressSchema = Joi.object<
   Omit<ExtIpAddressBankType, "id" | "createdAt" | "updatedAt" | "deletedAt">,
@@ -15,6 +16,7 @@ const createIpAddressSchema = Joi.object<
   ip: ip.required(),
   state: state.required(),
   customerId: customerId.required(),
+  officeId: officeId.required(),
 });
 
 const updateIpAddressStateSchema = Joi.object<{ state: boolean }, true>({
@@ -29,6 +31,7 @@ const updateIpAddressSchema = Joi.object<
   ip: ip.required(),
   state: state.required(),
   customerId: customerId.required(),
+  officeId: officeId.required(),
 });
 
 const getIpAddressByIdSchema = Joi.object<
@@ -58,6 +61,10 @@ const getIpAddressesByIdSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
 
+const getIpAddressesByOfficeSchema = Joi.object<{ officeId: number }, true>({
+  officeId: officeId.required(),
+});
+
 export default {
   createIpAddressSchema,
   updateIpAddressStateSchema,
@@ -66,4 +73,5 @@ export default {
   getIpAddressByIpSchema,
   getIpAddressesByCustomerIdSchema,
   getIpAddressesByIdSchema,
+  getIpAddressesByOfficeSchema
 };

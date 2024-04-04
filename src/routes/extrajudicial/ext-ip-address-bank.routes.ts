@@ -9,6 +9,7 @@ import {
   updateIpAddressStateController,
   updateIpAddressController,
   deleteIpAddressController,
+  getIpAddressesByOfficeController,
 } from "../../controllers/extrajudicial/ext-ip-address-bank-controller";
 import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
@@ -20,6 +21,7 @@ const {
   getIpAddressByIpSchema,
   getIpAddressesByCustomerIdSchema,
   getIpAddressesByIdSchema,
+  getIpAddressesByOfficeSchema,
 } = ipAddressSchema;
 const router = express.Router();
 
@@ -35,6 +37,13 @@ router.get(
   JWTAuth,
   validatorHandler(getIpAddressByIpSchema, "params"),
   getIpAddressByIpController
+);
+
+router.get(
+  "/office/:officeId",
+  JWTAuth,
+  validatorHandler(getIpAddressesByOfficeSchema, "params"),
+  getIpAddressesByOfficeController
 );
 
 router.get(

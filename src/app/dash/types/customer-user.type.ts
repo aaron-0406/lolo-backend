@@ -16,6 +16,7 @@ export type CustomerUserType = {
     icon: string;
   }>;
   customerId: number;
+  officeId: number;
   loginAttempts?: number;
   code2fa?: string;
 };
