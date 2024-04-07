@@ -6,6 +6,7 @@ export type ExtContactType = {
   state: number;
   clientId: number;
   customerHasBankId: number;
+  extContactTypeId: number;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
