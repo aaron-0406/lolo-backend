@@ -37,6 +37,32 @@ const negotiations = joi_1.default.string().required();
 const funcionarios = joi_1.default.string().required();
 const users = joi_1.default.string().required();
 const cities = joi_1.default.string().required();
+const getClientByCodeSchema = joi_1.default.object({
+    code: code.required(),
+    chb: customerHasBankId.required(),
+});
+const getClientByCHBSchema = joi_1.default.object({
+    chb: customerHasBankId.required(),
+});
+const getClientByCustomer = joi_1.default.object({
+    idCustomer,
+});
+const getClientByCHBSchemaQuery = joi_1.default.object({
+    page,
+    filter,
+    limit,
+    negotiations,
+    funcionarios,
+    users,
+    cities,
+}).options({ abortEarly: true });
+const getClientByNameSchemaQuery = joi_1.default.object({
+    filter,
+}).options({ abortEarly: true });
+const getDateSchema = joi_1.default.object({
+    date: joi_1.default.date().required(),
+    cityId: cityId.required(),
+});
 const saveClientSchema = joi_1.default.object({
     id: id.optional(),
     code: code.required(),
@@ -53,44 +79,23 @@ const saveClientSchema = joi_1.default.object({
     customerUserId: customerUserId.required(),
     customerHasBankId: customerHasBankId.required(),
 });
-const getClientByCodeSchema = joi_1.default.object({
+const transferClientToAnotherBankSchema = joi_1.default.object({
     code: code.required(),
-    chb: customerHasBankId.required(),
-});
-const getClientByCHBSchema = joi_1.default.object({
-    chb: customerHasBankId.required(),
-});
-const getClientByCHBSchemaQuery = joi_1.default.object({
-    page,
-    filter,
-    limit,
-    negotiations,
-    funcionarios,
-    users,
-    cities,
-}).options({ abortEarly: true });
-const getClientByNameSchemaQuery = joi_1.default.object({
-    filter,
-}).options({ abortEarly: true });
-const getClientByCustomer = joi_1.default.object({
-    idCustomer,
+    chbTransferred: chbTransferred.required(),
 });
 const deleteClientByCodeSchema = joi_1.default.object({
     code: code.required(),
     chb: customerHasBankId.required(),
     idCustomer,
 });
-const getDateSchema = joi_1.default.object({
-    date: joi_1.default.date().required(),
-    cityId: cityId.required(),
-});
 exports.default = {
-    saveClientSchema,
     getClientByCustomer,
     getClientByCHBSchema,
     getClientByCodeSchema,
-    deleteClientByCodeSchema,
     getClientByCHBSchemaQuery,
     getClientByNameSchemaQuery,
     getDateSchema,
+    saveClientSchema,
+    transferClientToAnotherBankSchema,
+    deleteClientByCodeSchema,
 };

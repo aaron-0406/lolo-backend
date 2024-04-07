@@ -137,10 +137,14 @@ class ClientService {
             };
             if (Object.keys(filters).length > 0) {
                 filtersWhere = {
-                    [sequelize_2.Op.or]: [
-                        filters,
-                        { chb_transferred: chb },
-                        { customer_has_bank_id_customer_has_bank: chb },
+                    [sequelize_2.Op.or]: [filters],
+                    [sequelize_2.Op.and]: [
+                        {
+                            [sequelize_2.Op.or]: [
+                                { chb_transferred: chb },
+                                { customer_has_bank_id_customer_has_bank: chb },
+                            ],
+                        },
                     ],
                 };
             }
@@ -257,6 +261,18 @@ class ClientService {
                         { customer_has_bank_id_customer_has_bank: chb },
                     ],
                 },
+                include: [
+                    {
+                        model: models.FUNCIONARIO,
+                        as: "funcionario",
+                        attributes: ["name", "customerHasBankId"],
+                    },
+                    {
+                        model: models.NEGOTIATION,
+                        as: "negotiation",
+                        attributes: ["name", "customerHasBankId"],
+                    },
+                ],
             });
             if (!client) {
                 throw boom_1.default.notFound("Cliente no encontrado");
@@ -269,7 +285,10 @@ class ClientService {
             const client = yield models.CLIENT.findOne({
                 where: {
                     code: data.code,
-                    customer_has_bank_id_customer_has_bank: data.customerHasBankId,
+                    [sequelize_2.Op.or]: [
+                        { chb_transferred: data.customerHasBankId },
+                        { customer_has_bank_id_customer_has_bank: data.customerHasBankId },
+                    ],
                 },
             });
             if (!data.id && client) {

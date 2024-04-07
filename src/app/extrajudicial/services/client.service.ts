@@ -131,10 +131,14 @@ class ClientService {
     };
     if (Object.keys(filters).length > 0) {
       filtersWhere = {
-        [Op.or]: [
-          filters,
-          { chb_transferred: chb },
-          { customer_has_bank_id_customer_has_bank: chb },
+        [Op.or]: [filters],
+        [Op.and]: [
+          {
+            [Op.or]: [
+              { chb_transferred: chb },
+              { customer_has_bank_id_customer_has_bank: chb },
+            ],
+          },
         ],
       };
     }
@@ -251,6 +255,18 @@ class ClientService {
           { customer_has_bank_id_customer_has_bank: chb },
         ],
       },
+      include: [
+        {
+          model: models.FUNCIONARIO,
+          as: "funcionario",
+          attributes: ["name", "customerHasBankId"],
+        },
+        {
+          model: models.NEGOTIATION,
+          as: "negotiation",
+          attributes: ["name", "customerHasBankId"],
+        },
+      ],
     });
 
     if (!client) {
@@ -268,7 +284,10 @@ class ClientService {
     const client = await models.CLIENT.findOne({
       where: {
         code: data.code,
-        customer_has_bank_id_customer_has_bank: data.customerHasBankId,
+        [Op.or]: [
+          { chb_transferred: data.customerHasBankId },
+          { customer_has_bank_id_customer_has_bank: data.customerHasBankId },
+        ],
       },
     });
 

@@ -29,6 +29,13 @@ class DirectionService {
                 where: {
                     client_id_client: clientID,
                 },
+                include: [
+                    {
+                        model: models.EXT_ADDRESS_TYPE,
+                        as: "addressType",
+                        attributes: ["type"],
+                    },
+                ],
             });
             return rta;
         });
@@ -39,6 +46,13 @@ class DirectionService {
                 where: {
                     id_direction: id,
                 },
+                include: [
+                    {
+                        model: models.EXT_ADDRESS_TYPE,
+                        as: "addressType",
+                        attributes: ["type", "customerHasBankId"],
+                    },
+                ],
             });
             if (!direction)
                 throw boom_1.default.notFound("Dirección no encontrada");
@@ -48,6 +62,15 @@ class DirectionService {
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const newDirection = yield models.DIRECTION.create(data);
+            yield newDirection.reload({
+                include: [
+                    {
+                        model: models.EXT_ADDRESS_TYPE,
+                        as: "addressType",
+                        attributes: ["type"],
+                    },
+                ],
+            });
             return newDirection;
         });
     }
@@ -55,6 +78,15 @@ class DirectionService {
         return __awaiter(this, void 0, void 0, function* () {
             const direction = yield this.findByID(id);
             const rta = yield direction.update(changes);
+            yield rta.reload({
+                include: [
+                    {
+                        model: models.EXT_ADDRESS_TYPE,
+                        as: "addressType",
+                        attributes: ["type"],
+                    },
+                ],
+            });
             return rta;
         });
     }
