@@ -60,6 +60,10 @@ class CustomerHasBank extends sequelize_1.Model {
             as: "negotiation",
             foreignKey: "customerHasBankId",
         });
+        this.hasMany(models.EXT_CONTACT_TYPE, {
+            as: "extContactType",
+            foreignKey: "customerHasBankId",
+        });
         this.belongsTo(models.BANK, { as: "bank", foreignKey: "idBank" });
     }
     static config(sequelize) {
