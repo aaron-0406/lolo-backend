@@ -33,6 +33,13 @@ class ProductService {
       where: {
         id,
       },
+      include: [
+        {
+          model: models.NEGOTIATION,
+          as: "negotiation",
+          attributes: ["name", "customerHasBankId"],
+        },
+      ],
     });
     if (!product) throw boom.notFound("Producto no encontrado");
     return product;
@@ -57,6 +64,15 @@ class ProductService {
 
     if (!pdc) {
       const newProduct = await models.PRODUCT.create(product);
+      await newProduct.reload({
+        include: [
+          {
+            model: models.NEGOTIATION,
+            as: "negotiation",
+            attributes: ["name", "customerHasBankId"],
+          },
+        ],
+      });
       return newProduct;
     }
 

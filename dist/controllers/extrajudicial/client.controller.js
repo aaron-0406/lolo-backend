@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteClientController = exports.saveClientController = exports.getClientByCodeCHBController = exports.getClientsByCHBDetailsController = exports.getClientsByNameController = exports.getClientsByCHBController = exports.downloadExcelDailyManagementController = exports.getAllClientsController = void 0;
+exports.deleteClientController = exports.transferClientToAnotherBankController = exports.saveClientController = exports.getClientByCodeCHBController = exports.getClientsByCHBDetailsController = exports.getClientsByNameController = exports.getClientsByCHBController = exports.downloadExcelDailyManagementController = exports.getAllClientsController = void 0;
 const client_service_1 = __importDefault(require("../../app/extrajudicial/services/client.service"));
 const fs = __importStar(require("fs"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
@@ -149,6 +149,18 @@ const saveClientController = (req, res, next) => __awaiter(void 0, void 0, void 
     }
 });
 exports.saveClientController = saveClientController;
+const transferClientToAnotherBankController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { chb } = req.params;
+        const body = req.body;
+        const data = yield service.transferToAnotherBank(body.code, chb, body.chbTransferred);
+        res.status(201).json({ chbTransferred: data.chbTransferred });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.transferClientToAnotherBankController = transferClientToAnotherBankController;
 const deleteClientController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _g, _h, _j;
     try {

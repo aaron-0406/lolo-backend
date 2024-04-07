@@ -54,6 +54,11 @@ const ClientSchema = {
         allowNull: true,
         type: sequelize_1.DataTypes.TEXT("tiny"),
     },
+    chbTransferred: {
+        allowNull: true,
+        field: "chb_transferred",
+        type: sequelize_1.DataTypes.INTEGER,
+    },
     createdAt: {
         allowNull: false,
         field: "created_at",
@@ -112,16 +117,24 @@ class Client extends sequelize_1.Model {
         this.belongsTo(models.NEGOTIATION, { as: "negotiation" });
         this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
         this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
+        this.hasMany(models.COMMENT, {
+            as: "comment",
+            foreignKey: "clientId",
+        });
+        this.hasMany(models.EXT_CONTACT, {
+            as: "extContacts",
+            foreignKey: "clientId",
+        });
+        this.hasMany(models.FILE, {
+            as: "files",
+            foreignKey: "clientId",
+        });
         this.hasMany(models.GUARANTOR, {
             as: "guarantor",
             foreignKey: "clientId",
         });
         this.hasMany(models.DIRECTION, {
             as: "direction",
-            foreignKey: "clientId",
-        });
-        this.hasMany(models.COMMENT, {
-            as: "comment",
             foreignKey: "clientId",
         });
     }

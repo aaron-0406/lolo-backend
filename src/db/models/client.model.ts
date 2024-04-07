@@ -24,7 +24,7 @@ const ClientSchema: ModelAttributes<Client, ClientType> = {
   },
   code: {
     allowNull: false,
-    unique:true,
+    unique: true,
     type: DataTypes.STRING(150),
   },
   negotiationId: {
@@ -57,6 +57,11 @@ const ClientSchema: ModelAttributes<Client, ClientType> = {
   email: {
     allowNull: true,
     type: DataTypes.TEXT("tiny"),
+  },
+  chbTransferred: {
+    allowNull: true,
+    field: "chb_transferred",
+    type: DataTypes.INTEGER,
   },
   createdAt: {
     allowNull: false,
@@ -122,6 +127,21 @@ class Client extends Model {
 
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
 
+    this.hasMany(models.COMMENT, {
+      as: "comment",
+      foreignKey: "clientId",
+    });
+
+    this.hasMany(models.EXT_CONTACT, {
+      as: "extContacts",
+      foreignKey: "clientId",
+    });
+
+    this.hasMany(models.FILE, {
+      as: "files",
+      foreignKey: "clientId",
+    });
+
     this.hasMany(models.GUARANTOR, {
       as: "guarantor",
       foreignKey: "clientId",
@@ -129,11 +149,6 @@ class Client extends Model {
 
     this.hasMany(models.DIRECTION, {
       as: "direction",
-      foreignKey: "clientId",
-    });
-
-    this.hasMany(models.COMMENT, {
-      as: "comment",
       foreignKey: "clientId",
     });
   }

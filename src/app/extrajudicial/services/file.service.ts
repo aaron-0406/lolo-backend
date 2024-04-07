@@ -47,6 +47,11 @@ class FileService {
       where: {
         id,
       },
+      include: {
+        model: models.EXT_TAG,
+        as: "classificationTag",
+        attributes: ["name", "customerHasBankId"],
+      },
     });
 
     if (!file) {
