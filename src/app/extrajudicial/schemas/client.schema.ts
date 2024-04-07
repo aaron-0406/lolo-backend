@@ -9,6 +9,7 @@ const name = Joi.string().min(1).max(200);
 const salePerimeter = Joi.string();
 const phone = Joi.string().min(1).max(300);
 const email = Joi.string().min(1).max(300);
+const chbTransferred = Joi.number();
 const createdAt = Joi.date();
 const cityId = Joi.number();
 const funcionarioId = Joi.number();
@@ -47,6 +48,7 @@ const saveClientSchema = Joi.object<ClientType, true>({
   salePerimeter: salePerimeter.optional().empty("").allow(""),
   phone: phone.optional().empty("").allow(""),
   email: email.optional().empty("").allow(""),
+  chbTransferred: chbTransferred.optional().empty("").allow(""),
   createdAt: createdAt.optional(),
   cityId: cityId.required(),
   funcionarioId: funcionarioId.required(),

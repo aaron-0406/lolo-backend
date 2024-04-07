@@ -130,12 +130,18 @@ class ClientService {
                 filters.city_id_city = { [sequelize_2.Op.in]: listCities };
             }
             let filtersWhere = {
-                customer_has_bank_id_customer_has_bank: chb,
+                [sequelize_2.Op.or]: [
+                    { chb_transferred: chb },
+                    { customer_has_bank_id_customer_has_bank: chb },
+                ],
             };
             if (Object.keys(filters).length > 0) {
                 filtersWhere = {
-                    [sequelize_2.Op.or]: [filters],
-                    customer_has_bank_id_customer_has_bank: chb,
+                    [sequelize_2.Op.or]: [
+                        filters,
+                        { chb_transferred: chb },
+                        { customer_has_bank_id_customer_has_bank: chb },
+                    ],
                 };
             }
             const quantity = yield models.CLIENT.count({
@@ -240,12 +246,16 @@ class ClientService {
             return rta;
         });
     }
+    // INFO: VIEW - CLIENTS
     findCode(code, chb) {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield models.CLIENT.findOne({
                 where: {
                     code: code,
-                    customer_has_bank_id_customer_has_bank: chb,
+                    [sequelize_2.Op.or]: [
+                        { chb_transferred: chb },
+                        { customer_has_bank_id_customer_has_bank: chb },
+                    ],
                 },
             });
             if (!client) {
@@ -282,6 +292,13 @@ class ClientService {
             else {
                 throw boom_1.default.notFound("No tienes permisos para crear un nuevo cliente.");
             }
+        });
+    }
+    transferToAnotherBank(code, chb, chbTransferred) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const client = yield this.findCode(code, chb);
+            yield client.update(Object.assign(Object.assign({}, client), { chbTransferred: chb == chbTransferred ? null : chbTransferred }));
+            return { chbTransferred };
         });
     }
     update(code, chb, changes) {

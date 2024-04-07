@@ -12,6 +12,7 @@ const name = joi_1.default.string().min(1).max(200);
 const salePerimeter = joi_1.default.string();
 const phone = joi_1.default.string().min(1).max(300);
 const email = joi_1.default.string().min(1).max(300);
+const chbTransferred = joi_1.default.number();
 const createdAt = joi_1.default.date();
 const cityId = joi_1.default.number();
 const funcionarioId = joi_1.default.number();
@@ -45,6 +46,7 @@ const saveClientSchema = joi_1.default.object({
     salePerimeter: salePerimeter.optional().empty("").allow(""),
     phone: phone.optional().empty("").allow(""),
     email: email.optional().empty("").allow(""),
+    chbTransferred: chbTransferred.optional().empty("").allow(""),
     createdAt: createdAt.optional(),
     cityId: cityId.required(),
     funcionarioId: funcionarioId.required(),
