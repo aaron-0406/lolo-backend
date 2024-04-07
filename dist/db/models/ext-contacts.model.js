@@ -29,6 +29,10 @@ const ExtContactSchema = {
         allowNull: true,
         type: sequelize_1.DataTypes.STRING(200),
     },
+    dni: {
+        allowNull: true,
+        type: sequelize_1.DataTypes.STRING(20),
+    },
     state: {
         allowNull: false,
         type: sequelize_1.DataTypes.TINYINT({ length: 1 }),
@@ -56,12 +60,12 @@ const ExtContactSchema = {
         onDelete: "NO ACTION",
     },
     extContactTypeId: {
-        allowNull: false,
+        allowNull: true,
         field: "ext_contact_type_id_ext_contact_type",
         type: sequelize_1.DataTypes.INTEGER,
         references: {
             model: ext_contact_type_model_1.default.EXT_CONTACT_TYPE_TABLE,
-            key: "id_ext_tag_group",
+            key: "id_ext_contact_type",
         },
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",

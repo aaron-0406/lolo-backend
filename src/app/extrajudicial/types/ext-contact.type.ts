@@ -3,6 +3,7 @@ export type ExtContactType = {
   name: string;
   phone?: string;
   email?: string;
+  dni: string;
   state: number;
   clientId: number;
   customerHasBankId: number;

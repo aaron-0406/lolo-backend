@@ -34,6 +34,10 @@ const ExtContactSchema: ModelAttributes<ExtContact, ExtContactType> = {
     allowNull: true,
     type: DataTypes.STRING(200),
   },
+  dni: {
+    allowNull: true,
+    type: DataTypes.STRING(20),
+  },
   state: {
     allowNull: false,
     type: DataTypes.TINYINT({ length: 1 }),
@@ -61,12 +65,12 @@ const ExtContactSchema: ModelAttributes<ExtContact, ExtContactType> = {
     onDelete: "NO ACTION",
   },
   extContactTypeId: {
-    allowNull: false,
+    allowNull: true,
     field: "ext_contact_type_id_ext_contact_type",
     type: DataTypes.INTEGER,
     references: {
       model: extContactTypeModel.EXT_CONTACT_TYPE_TABLE,
-      key: "id_ext_tag_group",
+      key: "id_ext_contact_type",
     },
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",

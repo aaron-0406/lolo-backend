@@ -23,6 +23,7 @@ const state = Joi.number();
 const clientId = Joi.number();
 const customerHasBankId = Joi.number();
 const extContactTypeId = Joi.number();
+const dni = Joi.string();
 
 const createExtContactSchema = Joi.object<
   Omit<ExtContactType, "id" | "createdAt" | "updatedAt" | "deletedAt">,
@@ -35,6 +36,7 @@ const createExtContactSchema = Joi.object<
   clientId: clientId.required(),
   customerHasBankId: customerHasBankId.required(),
   extContactTypeId: extContactTypeId.required(),
+  dni: dni.required(),
 });
 
 const updateExtContactSchema = Joi.object<
@@ -48,6 +50,7 @@ const updateExtContactSchema = Joi.object<
   clientId: clientId.required(),
   customerHasBankId: customerHasBankId.required(),
   extContactTypeId: extContactTypeId.required(),
+  dni: dni.required(),
 });
 
 const getExtContactByClientIDSchema = Joi.object<{ clientId: number }, true>({
