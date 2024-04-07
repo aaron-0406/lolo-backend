@@ -9,6 +9,7 @@ const name = Joi.string().min(1).max(200);
 const salePerimeter = Joi.string();
 const phone = Joi.string().min(1).max(300);
 const email = Joi.string().min(1).max(300);
+const chbTransferred = Joi.number();
 const createdAt = Joi.date();
 const cityId = Joi.number();
 const funcionarioId = Joi.number();
@@ -38,22 +39,6 @@ const funcionarios = Joi.string().required();
 const users = Joi.string().required();
 const cities = Joi.string().required();
 
-const saveClientSchema = Joi.object<ClientType, true>({
-  id: id.optional(),
-  code: code.required(),
-  negotiationId,
-  dniOrRuc: dniOrRuc.optional().empty("").allow(""),
-  name: name.required(),
-  salePerimeter: salePerimeter.optional().empty("").allow(""),
-  phone: phone.optional().empty("").allow(""),
-  email: email.optional().empty("").allow(""),
-  createdAt: createdAt.optional(),
-  cityId: cityId.required(),
-  funcionarioId: funcionarioId.required(),
-  customerUserId: customerUserId.required(),
-  customerHasBankId: customerHasBankId.required(),
-});
-
 const getClientByCodeSchema = Joi.object<{ code: string; chb: number }, true>({
   code: code.required(),
   chb: customerHasBankId.required(),
@@ -61,6 +46,10 @@ const getClientByCodeSchema = Joi.object<{ code: string; chb: number }, true>({
 
 const getClientByCHBSchema = Joi.object<{ chb: number }, true>({
   chb: customerHasBankId.required(),
+});
+
+const getClientByCustomer = Joi.object<{ idCustomer: number }, true>({
+  idCustomer,
 });
 
 const getClientByCHBSchemaQuery = Joi.object({
@@ -77,8 +66,37 @@ const getClientByNameSchemaQuery = Joi.object({
   filter,
 }).options({ abortEarly: true });
 
-const getClientByCustomer = Joi.object<{ idCustomer: number }, true>({
-  idCustomer,
+const getDateSchema = Joi.object<{ date: Date; cityId: number }, true>({
+  date: Joi.date().required(),
+  cityId: cityId.required(),
+});
+
+const saveClientSchema = Joi.object<ClientType, true>({
+  id: id.optional(),
+  code: code.required(),
+  negotiationId,
+  dniOrRuc: dniOrRuc.optional().empty("").allow(""),
+  name: name.required(),
+  salePerimeter: salePerimeter.optional().empty("").allow(""),
+  phone: phone.optional().empty("").allow(""),
+  email: email.optional().empty("").allow(""),
+  chbTransferred: chbTransferred.optional().empty("").allow(""),
+  createdAt: createdAt.optional(),
+  cityId: cityId.required(),
+  funcionarioId: funcionarioId.required(),
+  customerUserId: customerUserId.required(),
+  customerHasBankId: customerHasBankId.required(),
+});
+
+const transferClientToAnotherBankSchema = Joi.object<
+  {
+    code: string;
+    chbTransferred: number;
+  },
+  true
+>({
+  code: code.required(),
+  chbTransferred: chbTransferred.required(),
 });
 
 const deleteClientByCodeSchema = Joi.object<
@@ -90,18 +108,14 @@ const deleteClientByCodeSchema = Joi.object<
   idCustomer,
 });
 
-const getDateSchema = Joi.object<{ date: Date; cityId: number }, true>({
-  date: Joi.date().required(),
-  cityId: cityId.required(),
-});
-
 export default {
-  saveClientSchema,
   getClientByCustomer,
   getClientByCHBSchema,
   getClientByCodeSchema,
-  deleteClientByCodeSchema,
   getClientByCHBSchemaQuery,
   getClientByNameSchemaQuery,
   getDateSchema,
+  saveClientSchema,
+  transferClientToAnotherBankSchema,
+  deleteClientByCodeSchema,
 };

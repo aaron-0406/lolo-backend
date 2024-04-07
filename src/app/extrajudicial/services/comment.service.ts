@@ -26,6 +26,11 @@ class CommentService {
           as: "customerUser",
           attributes: ["name"],
         },
+        {
+          model: models.MANAGEMENT_ACTION,
+          as: "managementAction",
+          attributes: ["nameAction"],
+        },
       ],
       order: [["id", "DESC"]],
     });
@@ -83,6 +88,11 @@ class CommentService {
           model: models.CUSTOMER_USER,
           as: "customerUser",
           attributes: ["name"],
+        },
+        {
+          model: models.MANAGEMENT_ACTION,
+          as: "managementAction",
+          attributes: ["nameAction", "customerHasBankId"],
         },
       ],
     });

@@ -124,12 +124,22 @@ class ClientService {
     }
 
     let filtersWhere: any = {
-      customer_has_bank_id_customer_has_bank: chb,
+      [Op.or]: [
+        { chb_transferred: chb },
+        { customer_has_bank_id_customer_has_bank: chb },
+      ],
     };
     if (Object.keys(filters).length > 0) {
       filtersWhere = {
         [Op.or]: [filters],
-        customer_has_bank_id_customer_has_bank: chb,
+        [Op.and]: [
+          {
+            [Op.or]: [
+              { chb_transferred: chb },
+              { customer_has_bank_id_customer_has_bank: chb },
+            ],
+          },
+        ],
       };
     }
 
@@ -235,17 +245,34 @@ class ClientService {
     return rta;
   }
 
+  // INFO: VIEW - CLIENTS
   async findCode(code: string, chb: string) {
     const client = await models.CLIENT.findOne({
       where: {
         code: code,
-        customer_has_bank_id_customer_has_bank: chb,
+        [Op.or]: [
+          { chb_transferred: chb },
+          { customer_has_bank_id_customer_has_bank: chb },
+        ],
       },
+      include: [
+        {
+          model: models.FUNCIONARIO,
+          as: "funcionario",
+          attributes: ["name", "customerHasBankId"],
+        },
+        {
+          model: models.NEGOTIATION,
+          as: "negotiation",
+          attributes: ["name", "customerHasBankId"],
+        },
+      ],
     });
 
     if (!client) {
       throw boom.notFound("Cliente no encontrado");
     }
+
     return client;
   }
 
@@ -257,7 +284,10 @@ class ClientService {
     const client = await models.CLIENT.findOne({
       where: {
         code: data.code,
-        customer_has_bank_id_customer_has_bank: data.customerHasBankId,
+        [Op.or]: [
+          { chb_transferred: data.customerHasBankId },
+          { customer_has_bank_id_customer_has_bank: data.customerHasBankId },
+        ],
       },
     });
 
@@ -285,6 +315,20 @@ class ClientService {
     } else {
       throw boom.notFound("No tienes permisos para crear un nuevo cliente.");
     }
+  }
+
+  async transferToAnotherBank(
+    code: string,
+    chb: string,
+    chbTransferred: string
+  ) {
+    const client = await this.findCode(code, chb);
+    await client.update({
+      ...client,
+      chbTransferred: chb == chbTransferred ? null : chbTransferred,
+    });
+
+    return { chbTransferred };
   }
 
   async update(

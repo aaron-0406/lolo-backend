@@ -7,6 +7,7 @@ export type ClientType = {
   salePerimeter?: string;
   phone?: string;
   email?: string;
+  chbTransferred?: number;
   createdAt: Date;
   cityId: number;
   funcionarioId: number;

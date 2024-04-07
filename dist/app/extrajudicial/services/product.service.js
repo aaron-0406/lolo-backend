@@ -46,6 +46,13 @@ class ProductService {
                 where: {
                     id,
                 },
+                include: [
+                    {
+                        model: models.NEGOTIATION,
+                        as: "negotiation",
+                        attributes: ["name", "customerHasBankId"],
+                    },
+                ],
             });
             if (!product)
                 throw boom_1.default.notFound("Producto no encontrado");
@@ -72,6 +79,15 @@ class ProductService {
             });
             if (!pdc) {
                 const newProduct = yield models.PRODUCT.create(product);
+                yield newProduct.reload({
+                    include: [
+                        {
+                            model: models.NEGOTIATION,
+                            as: "negotiation",
+                            attributes: ["name", "customerHasBankId"],
+                        },
+                    ],
+                });
                 return newProduct;
             }
             throw boom_1.default.notFound("El código de producto ya existe");

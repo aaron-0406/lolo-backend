@@ -17,6 +17,13 @@ class DirectionService {
       where: {
         client_id_client: clientID,
       },
+      include: [
+        {
+          model: models.EXT_ADDRESS_TYPE,
+          as: "addressType",
+          attributes: ["type"],
+        },
+      ],
     });
     return rta;
   }
@@ -26,6 +33,13 @@ class DirectionService {
       where: {
         id_direction: id,
       },
+      include: [
+        {
+          model: models.EXT_ADDRESS_TYPE,
+          as: "addressType",
+          attributes: ["type", "customerHasBankId"],
+        },
+      ],
     });
 
     if (!direction) throw boom.notFound("Dirección no encontrada");
@@ -34,14 +48,31 @@ class DirectionService {
 
   async create(data: DirectionType) {
     const newDirection = await models.DIRECTION.create(data);
+    await newDirection.reload({
+      include: [
+        {
+          model: models.EXT_ADDRESS_TYPE,
+          as: "addressType",
+          attributes: ["type"],
+        },
+      ],
+    });
+
     return newDirection;
   }
-
-  
 
   async update(id: string, changes: DirectionType) {
     const direction = await this.findByID(id);
     const rta = await direction.update(changes);
+    await rta.reload({
+      include: [
+        {
+          model: models.EXT_ADDRESS_TYPE,
+          as: "addressType",
+          attributes: ["type"],
+        },
+      ],
+    });
     return rta;
   }
 

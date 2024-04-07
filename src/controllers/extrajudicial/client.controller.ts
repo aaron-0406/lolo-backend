@@ -142,6 +142,27 @@ export const saveClientController = async (
   }
 };
 
+export const transferClientToAnotherBankController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { chb } = req.params;
+    const body = req.body;
+
+    const data = await service.transferToAnotherBank(
+      body.code,
+      chb,
+      body.chbTransferred
+    );
+
+    res.status(201).json({ chbTransferred: data.chbTransferred });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const deleteClientController = async (
   req: Request,
   res: Response,
