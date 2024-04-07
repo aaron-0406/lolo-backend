@@ -17,6 +17,10 @@ class ExtContactService {
       where: {
         client_id_client: clientID,
       },
+      include: {
+        model: models.EXT_CONTACT_TYPE,
+        as: "extContactType",
+      },
       order: [["created_at", "DESC"]],
     });
 
@@ -39,6 +43,13 @@ class ExtContactService {
   async create(data: ExtContactType) {
     const newExtContact = await models.EXT_CONTACT.create(data);
     return newExtContact;
+  }
+
+  async updateState(id: string, state: boolean) {
+    const extContact = await this.findByID(id);
+    const rta = await extContact.update({ ...extContact, state });
+
+    return rta;
   }
 
   async update(id: string, changes: ExtContactType) {

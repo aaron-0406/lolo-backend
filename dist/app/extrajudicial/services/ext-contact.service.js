@@ -53,6 +53,13 @@ class ExtContactService {
             return newExtContact;
         });
     }
+    updateState(id, state) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const extContact = yield this.findByID(id);
+            const rta = yield extContact.update(Object.assign(Object.assign({}, extContact), { state }));
+            return rta;
+        });
+    }
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const extContact = yield this.findByID(id);

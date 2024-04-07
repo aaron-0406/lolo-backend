@@ -21,7 +21,7 @@ const email = joi_1.default.string()
     "string.email": "La dirección de correo electrónico no es válida",
     "string.max": "La dirección de correo electrónico no debe exceder los 200 caracteres",
 });
-const state = joi_1.default.number();
+const state = joi_1.default.boolean();
 const clientId = joi_1.default.number();
 const customerHasBankId = joi_1.default.number();
 const extContactTypeId = joi_1.default.number();
@@ -46,6 +46,9 @@ const updateExtContactSchema = joi_1.default.object({
     extContactTypeId: extContactTypeId.required(),
     dni: dni.required(),
 });
+const updateExtContactStateSchema = joi_1.default.object({
+    state: state.required(),
+});
 const getExtContactByClientIDSchema = joi_1.default.object({
     clientId: clientId.required(),
 });
@@ -57,4 +60,5 @@ exports.default = {
     updateExtContactSchema,
     getExtContactByClientIDSchema,
     getExtContactByIDSchema,
+    updateExtContactStateSchema,
 };

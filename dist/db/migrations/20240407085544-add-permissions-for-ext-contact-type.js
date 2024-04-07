@@ -47,6 +47,12 @@ const newPermissions = [
         icon: "-",
         link: "#",
     },
+    {
+        name: "ACTUALIZAR ESTADO DE CONTACTO",
+        code: "P02-02-07-04",
+        icon: "-",
+        link: "#",
+    },
 ];
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -57,9 +63,16 @@ exports.up = up;
 function down(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
         const deleteCriteria = {
-            code: {
-                [sequelize_1.Op.startsWith]: "P18",
-            },
+            [sequelize_1.Op.or]: [
+                {
+                    code: {
+                        [sequelize_1.Op.startsWith]: "P18",
+                    },
+                },
+                {
+                    code: "P02-02-07-04",
+                },
+            ],
         };
         yield queryInterface.bulkDelete(PERMISSION_TABLE, deleteCriteria);
     });

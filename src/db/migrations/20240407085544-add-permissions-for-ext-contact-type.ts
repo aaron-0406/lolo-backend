@@ -34,6 +34,12 @@ const newPermissions = [
     icon: "-",
     link: "#",
   },
+  {
+    name: "ACTUALIZAR ESTADO DE CONTACTO",
+    code: "P02-02-07-04",
+    icon: "-",
+    link: "#",
+  },
 ];
 
 export async function up(queryInterface: QueryInterface) {
@@ -42,9 +48,16 @@ export async function up(queryInterface: QueryInterface) {
 
 export async function down(queryInterface: QueryInterface) {
   const deleteCriteria = {
-    code: {
-      [Op.startsWith]: "P18",
-    },
+    [Op.or]: [
+      {
+        code: {
+          [Op.startsWith]: "P18",
+        },
+      },
+      {
+        code: "P02-02-07-04",
+      },
+    ],
   };
   await queryInterface.bulkDelete(PERMISSION_TABLE, deleteCriteria);
 }
