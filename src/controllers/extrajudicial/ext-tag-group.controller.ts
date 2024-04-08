@@ -27,8 +27,7 @@ export const getExtTagGroupByCHBController = async (
   next: NextFunction
 ) => {
   try {
-    const { chb } = req.params;
-    const extTagGroups = await service.findAllByCHB(chb);
+    const extTagGroups = await service.findAllWithOrder();
     res.json(extTagGroups);
   } catch (error) {
     next(error);

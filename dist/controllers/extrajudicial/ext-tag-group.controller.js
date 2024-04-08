@@ -31,8 +31,7 @@ const getExtTagGroupController = (req, res, next) => __awaiter(void 0, void 0, v
 exports.getExtTagGroupController = getExtTagGroupController;
 const getExtTagGroupByCHBController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { chb } = req.params;
-        const extTagGroups = yield service.findAllByCHB(chb);
+        const extTagGroups = yield service.findAllWithOrder();
         res.json(extTagGroups);
     }
     catch (error) {

@@ -12,11 +12,8 @@ class ExtTagGroupService {
     return rta;
   }
 
-  async findAllByCHB(chb: string) {
+  async findAllWithOrder() {
     const rta = await models.EXT_TAG_GROUP.findAll({
-      where: {
-        customer_has_bank_id_customer_has_bank: chb,
-      },
       order: [["created_at", "DESC"]],
     });
 

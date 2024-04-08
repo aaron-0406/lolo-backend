@@ -6,9 +6,6 @@ import {
   ModelCtor,
 } from "sequelize";
 import { ExtTagGroupType } from "../../app/extrajudicial/types/ext-tag-group.type";
-import customerHasBankModel from "./many-to-many/customer-has-bank.model";
-
-const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 
 const EXT_TAG_GROUP_TABLE = "EXT_TAG_GROUP";
 
@@ -23,17 +20,6 @@ const ExtTagGroupSchema: ModelAttributes<ExtTagGroup, ExtTagGroupType> = {
   name: {
     allowNull: false,
     type: DataTypes.STRING(200),
-  },
-  customerHasBankId: {
-    allowNull: false,
-    field: "customer_has_bank_id_customer_has_bank",
-    type: DataTypes.INTEGER,
-    references: {
-      model: CUSTOMER_HAS_BANK_TABLE,
-      key: "id_customer_has_bank",
-    },
-    onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
   },
   createdAt: {
     allowNull: false,
@@ -56,7 +42,6 @@ const ExtTagGroupSchema: ModelAttributes<ExtTagGroup, ExtTagGroupType> = {
 
 class ExtTagGroup extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
-    this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
     this.hasMany(models.EXT_TAG, {
       as: "extTag",
       foreignKey: "tagGroupId",

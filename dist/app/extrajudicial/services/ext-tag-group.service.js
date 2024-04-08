@@ -23,12 +23,9 @@ class ExtTagGroupService {
             return rta;
         });
     }
-    findAllByCHB(chb) {
+    findAllWithOrder() {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.EXT_TAG_GROUP.findAll({
-                where: {
-                    customer_has_bank_id_customer_has_bank: chb,
-                },
                 order: [["created_at", "DESC"]],
             });
             return rta;
