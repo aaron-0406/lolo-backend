@@ -8,6 +8,7 @@ import {
 import { ExtContactType } from "../../app/extrajudicial/types/ext-contact.type";
 import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 import clientModel from "./client.model";
+import extContactTypeModel from "./ext-contact-type.model";
 
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 
@@ -32,6 +33,10 @@ const ExtContactSchema: ModelAttributes<ExtContact, ExtContactType> = {
   email: {
     allowNull: true,
     type: DataTypes.STRING(200),
+  },
+  dni: {
+    allowNull: true,
+    type: DataTypes.STRING(20),
   },
   state: {
     allowNull: false,
@@ -59,6 +64,17 @@ const ExtContactSchema: ModelAttributes<ExtContact, ExtContactType> = {
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
+  extContactTypeId: {
+    allowNull: true,
+    field: "ext_contact_type_id_ext_contact_type",
+    type: DataTypes.INTEGER,
+    references: {
+      model: extContactTypeModel.EXT_CONTACT_TYPE_TABLE,
+      key: "id_ext_contact_type",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
   createdAt: {
     allowNull: false,
     field: "created_at",
@@ -82,6 +98,10 @@ class ExtContact extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CLIENT, { as: "client" });
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
+    this.belongsTo(models.EXT_CONTACT_TYPE, {
+      as: "extContactType",
+      foreignKey: "extContactTypeId",
+    });
   }
 
   static config(sequelize: Sequelize) {
