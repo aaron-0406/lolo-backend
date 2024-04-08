@@ -29,6 +29,10 @@ class ExtContactService {
                 where: {
                     client_id_client: clientID,
                 },
+                include: {
+                    model: models.EXT_CONTACT_TYPE,
+                    as: "extContactType",
+                },
                 order: [["created_at", "DESC"]],
             });
             return rta;
@@ -40,6 +44,11 @@ class ExtContactService {
                 where: {
                     id_ext_contact: id,
                 },
+                include: {
+                    model: models.EXT_CONTACT_TYPE,
+                    as: "extContactType",
+                    attributes: ["contactType", "customerHasBankId"],
+                },
             });
             if (!extContact) {
                 throw boom_1.default.notFound("Contacto no encontrado");
@@ -50,6 +59,13 @@ class ExtContactService {
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const newExtContact = yield models.EXT_CONTACT.create(data);
+            yield newExtContact.reload({
+                include: {
+                    model: models.EXT_CONTACT_TYPE,
+                    as: "extContactType",
+                    attributes: ["contactType", "customerHasBankId"],
+                },
+            });
             return newExtContact;
         });
     }
@@ -57,6 +73,13 @@ class ExtContactService {
         return __awaiter(this, void 0, void 0, function* () {
             const extContact = yield this.findByID(id);
             const rta = yield extContact.update(Object.assign(Object.assign({}, extContact), { state }));
+            yield rta.reload({
+                include: {
+                    model: models.EXT_CONTACT_TYPE,
+                    as: "extContactType",
+                    attributes: ["contactType", "customerHasBankId"],
+                },
+            });
             return rta;
         });
     }
@@ -64,6 +87,13 @@ class ExtContactService {
         return __awaiter(this, void 0, void 0, function* () {
             const extContact = yield this.findByID(id);
             const rta = yield extContact.update(changes);
+            yield rta.reload({
+                include: {
+                    model: models.EXT_CONTACT_TYPE,
+                    as: "extContactType",
+                    attributes: ["contactType", "customerHasBankId"],
+                },
+            });
             return rta;
         });
     }
