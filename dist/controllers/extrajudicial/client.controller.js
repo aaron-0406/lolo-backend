@@ -150,10 +150,19 @@ const saveClientController = (req, res, next) => __awaiter(void 0, void 0, void 
 });
 exports.saveClientController = saveClientController;
 const transferClientToAnotherBankController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _g, _h, _j;
     try {
         const { chb } = req.params;
         const body = req.body;
         const data = yield service.transferToAnotherBank(body.code, chb, body.chbTransferred);
+        yield serviceUserLog.create({
+            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
+            codeAction: "P02-06",
+            entity: CLIENT_TABLE,
+            entityId: Number(body.code),
+            ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
+            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+        });
         res.status(201).json({ chbTransferred: data.chbTransferred });
     }
     catch (error) {
@@ -162,17 +171,17 @@ const transferClientToAnotherBankController = (req, res, next) => __awaiter(void
 });
 exports.transferClientToAnotherBankController = transferClientToAnotherBankController;
 const deleteClientController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _g, _h, _j;
+    var _k, _l, _m;
     try {
         const { code, chb, idCustomer } = req.params;
         const client = yield service.delete(code, chb, Number(idCustomer));
         yield serviceUserLog.create({
-            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
+            customerUserId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.id),
             codeAction: "P02-05",
             entity: CLIENT_TABLE,
             entityId: Number(client.id),
-            ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
-            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            ip: (_l = req.clientIp) !== null && _l !== void 0 ? _l : "",
+            customerId: Number((_m = req.user) === null || _m === void 0 ? void 0 : _m.customerId),
         });
         res.status(201).json({ code, chb });
     }

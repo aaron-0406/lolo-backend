@@ -17,6 +17,6 @@ router.get("/:chb/by-name", auth_handler_1.JWTAuth, (0, validator_handler_1.defa
 router.get("/:chb/details", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getClientByCHBSchema, "params"), client_controller_1.getClientsByCHBDetailsController);
 router.get("/:code/:chb", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getClientByCodeSchema, "params"), client_controller_1.getClientByCodeCHBController);
 router.post("/:idCustomer", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getClientByCustomer, "params"), (0, validator_handler_1.default)(saveClientSchema, "body"), client_controller_1.saveClientController);
-router.post("/transfer-client-to-another-bank/:chb", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getClientByCHBSchema, "params"), (0, validator_handler_1.default)(transferClientToAnotherBankSchema, "body"), client_controller_1.transferClientToAnotherBankController);
+router.post("/transfer-client-to-another-bank/:chb", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P02-06"), (0, validator_handler_1.default)(getClientByCHBSchema, "params"), (0, validator_handler_1.default)(transferClientToAnotherBankSchema, "body"), client_controller_1.transferClientToAnotherBankController);
 router.delete("/:code/:chb/:idCustomer", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P02-05"), (0, validator_handler_1.default)(deleteClientByCodeSchema, "params"), client_controller_1.deleteClientController);
 exports.default = router;

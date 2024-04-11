@@ -157,6 +157,15 @@ export const transferClientToAnotherBankController = async (
       body.chbTransferred
     );
 
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P02-06",
+      entity: CLIENT_TABLE,
+      entityId: Number(body.code),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    });
+
     res.status(201).json({ chbTransferred: data.chbTransferred });
   } catch (error) {
     next(error);
