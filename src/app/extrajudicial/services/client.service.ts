@@ -158,6 +158,7 @@ class ClientService {
         {
           model: models.CUSTOMER_USER,
           as: "customerUser",
+          attributes: { exclude: ["password"] },
         },
         {
           model: models.CITY,
