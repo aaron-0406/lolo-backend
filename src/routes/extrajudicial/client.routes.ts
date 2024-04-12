@@ -79,6 +79,7 @@ router.post(
 router.post(
   "/transfer-client-to-another-bank/:chb",
   JWTAuth,
+  checkPermissions("P02-06"),
   validatorHandler(getClientByCHBSchema, "params"),
   validatorHandler(transferClientToAnotherBankSchema, "body"),
   transferClientToAnotherBankController
