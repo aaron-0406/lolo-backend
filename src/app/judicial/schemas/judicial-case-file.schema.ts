@@ -1,8 +1,13 @@
 import Joi from "joi";
 import { JudicialCaseFileType } from "../types/judicial-case-file.type";
+const regexPatternNumberFileCase =
+  /^\d{4}-\d{4}-\d{1,4}-\d{4}-[A-Z]{2}-[A-Z]{2}-\d{2}$/;
 
 const id = Joi.number();
-const numberCaseFile = Joi.string().max(150);
+const numberCaseFile = Joi.string().regex(regexPatternNumberFileCase).messages({
+  "string.pattern.base":
+    'El formato del código no es válido. Debe seguir el patrón "####-####-####-####-LL-LL-##".',
+});
 const judgmentNumber = Joi.number();
 const secretary = Joi.string().max(150);
 const amountDemandedSoles = Joi.number().positive();
@@ -13,6 +18,7 @@ const judicialVenue = Joi.string().max(150);
 const judge = Joi.string().max(150);
 const demandDate = Joi.date();
 const clientId = Joi.number();
+const chb = Joi.number();
 const customerUserId = Joi.number();
 const judicialCourtId = Joi.number().positive();
 const judicialSubjectId = Joi.number().positive();
@@ -69,6 +75,10 @@ const getJudicialCaseFileByClientIDSchema = Joi.object<
   clientId: clientId.required(),
 });
 
+const getJudicialCaseFileByCHBSchema = Joi.object<{ chb: number }, true>({
+  chb: chb.required(),
+});
+
 const getJudicialCaseFileByIDSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
@@ -86,4 +96,5 @@ export default {
   getJudicialCaseFileByClientIDSchema,
   getJudicialCaseFileByNumberCaseFileSchema,
   getJudicialCaseFileByIDSchema,
+  getJudicialCaseFileByCHBSchema,
 };

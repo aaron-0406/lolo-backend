@@ -30,14 +30,28 @@ export const getJudicialCaseFileByClientIdController = async (
   }
 };
 
+export const getJudicialCaseFileByCHBIdController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { chb } = req.params;
+    const caseFiles = await service.findAllByCHB(chb, req.query);
+    res.json(caseFiles);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getJudicialCaseFileByNumberCaseFileController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { code } = req.params;
-    const caseFile = await service.findByNumberCaseFile(code);
+    const { numberCaseFile } = req.params;
+    const caseFile = await service.findByNumberCaseFile(numberCaseFile);
     res.json(caseFile);
   } catch (error) {
     next(error);

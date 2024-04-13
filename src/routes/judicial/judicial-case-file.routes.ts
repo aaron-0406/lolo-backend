@@ -9,6 +9,7 @@ import {
   getJudicialCaseFileController,
   updateJudicialCaseFileController,
   getJudicialCaseFileByNumberCaseFileController,
+  getJudicialCaseFileByCHBIdController,
 } from "../../controllers/judicial/judicial-case-file.controller";
 import { JWTAuth } from "../../middlewares/auth.handler";
 
@@ -18,6 +19,7 @@ const {
   getJudicialCaseFileByNumberCaseFileSchema,
   createJudicialCaseFileSchema,
   updateJudicialCaseFileSchema,
+  getJudicialCaseFileByCHBSchema,
 } = judicialCaseFileSchema;
 
 const router = express.Router();
@@ -32,7 +34,14 @@ router.get(
 );
 
 router.get(
-  "/number-case/:code",
+  "/chb/:chb",
+  JWTAuth,
+  validatorHandler(getJudicialCaseFileByCHBSchema, "params"),
+  getJudicialCaseFileByCHBIdController
+);
+
+router.get(
+  "/number-case/:numberCaseFile",
   JWTAuth,
   validatorHandler(getJudicialCaseFileByNumberCaseFileSchema, "params"),
   getJudicialCaseFileByNumberCaseFileController

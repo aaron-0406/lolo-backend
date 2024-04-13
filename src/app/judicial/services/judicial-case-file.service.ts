@@ -28,67 +28,40 @@ class JudicialCaseFileService {
   }
 
   async findAllByCHB(chb: string, query: any) {
-    const { limit, page, filter } = query;
-
-    //TODO: Improving this code to get the filtered judicial case list
-    //TODO: Remove negotiation, funcionario and customer user
-    const { negotiations, funcionarios, users, name } = filter;
-
+    const { limit, page } = query;
     const limite = parseInt(limit, 10);
     const pagina = parseInt(page, 10);
-    const names = name as string;
-    const listNegotiations = JSON.parse(negotiations);
-    const listFuncionarios = JSON.parse(funcionarios);
-    const listUsers = JSON.parse(users);
 
-    const filters: any = {};
-    if (filter !== "" && filter !== undefined) {
-      filters.name = { [Op.substring]: names };
-    }
-    if (listNegotiations.length) {
-      filters.negotiation_id_negotiation = { [Op.in]: listNegotiations };
-    }
-    if (listFuncionarios.length) {
-      filters.funcionario_id_funcionario = { [Op.in]: listFuncionarios };
-    }
-    if (listUsers.length) {
-      filters.customer_user_id_customer_user = { [Op.in]: listUsers };
-    }
+    const quantity = await models.JUDICIAL_CASE_FILE.count();
 
-    let filtersWhere: any = {
-      customer_has_bank_id: chb,
-    };
-    if (Object.keys(filters).length > 0) {
-      filtersWhere = {
-        [Op.or]: [filters],
-        customer_has_bank_id: chb,
-      };
-    }
-
-    const quantity = await models.CLIENT.count({
-      where: filtersWhere,
-    });
-
-    const clients = await models.CLIENT.findAll({
+    const caseFiles = await models.JUDICIAL_CASE_FILE.findAll({
+      limit: limite,
+      offset: (pagina - 1) * limite,
       include: [
-        { model: models.NEGOTIATION, as: "negotiation" },
-        {
-          model: models.FUNCIONARIO,
-          as: "funcionario",
-          attributes: { exclude: ["bankId"] },
-        },
         {
           model: models.CUSTOMER_USER,
           as: "customerUser",
+          attributes: { exclude: ["password"] },
+        },
+        {
+          model: models.JUDICIAL_COURT,
+          as: "judicialCourt",
+        },
+        {
+          model: models.JUDICIAL_PROCEDURAL_WAY,
+          as: "judicialProceduralWay",
+        },
+        {
+          model: models.JUDICIAL_SUBJECT,
+          as: "judicialSubject",
         },
       ],
-      order: [["name", "ASC"]],
-      limit: limite,
-      offset: (pagina - 1) * limite,
-      where: filtersWhere,
+      where: {
+        customerHasBankId: chb,
+      },
     });
 
-    return { clients, quantity };
+    return { caseFiles, quantity };
   }
 
   async findByID(id: string) {
@@ -96,6 +69,25 @@ class JudicialCaseFileService {
       where: {
         id,
       },
+      include: [
+        {
+          model: models.CUSTOMER_USER,
+          as: "customerUser",
+          attributes: { exclude: ["password"] },
+        },
+        {
+          model: models.JUDICIAL_COURT,
+          as: "judicialCourt",
+        },
+        {
+          model: models.JUDICIAL_PROCEDURAL_WAY,
+          as: "judicialProceduralWay",
+        },
+        {
+          model: models.JUDICIAL_SUBJECT,
+          as: "judicialSubject",
+        },
+      ],
     });
 
     if (!judicialCaseFile) {
@@ -120,13 +112,16 @@ class JudicialCaseFileService {
 
   async create(data: JudicialCaseFileType) {
     const newJudicialCaseFile = await models.JUDICIAL_CASE_FILE.create(data);
-    return newJudicialCaseFile;
+    const judicialCaseFile = await this.findByID(
+      newJudicialCaseFile.dataValues.id
+    );
+
+    return judicialCaseFile;
   }
 
   async update(id: string, changes: JudicialCaseFileType) {
     const judicialCaseFile = await this.findByID(id);
     const rta = await judicialCaseFile.update(changes);
-
     return rta;
   }
 
