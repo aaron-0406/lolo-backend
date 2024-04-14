@@ -166,7 +166,7 @@ export const transferClientToAnotherBankController = async (
       customerId: Number(req.user?.customerId),
     });
 
-    res.status(201).json({ chbTransferred: data.chbTransferred });
+    res.status(201).json({ id: data.id, chbTransferred: data.chbTransferred });
   } catch (error) {
     next(error);
   }
@@ -190,7 +190,7 @@ export const deleteClientController = async (
       customerId: Number(req.user?.customerId),
     });
 
-    res.status(201).json({ code, chb });
+    res.status(201).json({ code, chb, id: client.id });
   } catch (error) {
     next(error);
   }

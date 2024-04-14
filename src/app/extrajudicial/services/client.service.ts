@@ -158,7 +158,7 @@ class ClientService {
         {
           model: models.CUSTOMER_USER,
           as: "customerUser",
-          attributes: { exclude: ["password"] },
+          attributes: ["id", "name"],
         },
         {
           model: models.CITY,
@@ -260,12 +260,22 @@ class ClientService {
         {
           model: models.FUNCIONARIO,
           as: "funcionario",
-          attributes: ["name", "customerHasBankId"],
+          attributes: ["id", "name", "customerHasBankId"],
         },
         {
           model: models.NEGOTIATION,
           as: "negotiation",
-          attributes: ["name", "customerHasBankId"],
+          attributes: ["id", "name", "customerHasBankId"],
+        },
+        {
+          model: models.CITY,
+          as: "city",
+          attributes: ["id", "name"],
+        },
+        {
+          model: models.CUSTOMER_USER,
+          as: "customerUser",
+          attributes: ["id", "name"],
         },
       ],
     });
@@ -306,6 +316,30 @@ class ClientService {
 
     if (checkPermissionsWithoutParams(["P02-03"], user)) {
       const newClient = await models.CLIENT.create(data);
+      await newClient.reload({
+        include: [
+          {
+            model: models.FUNCIONARIO,
+            as: "funcionario",
+            attributes: ["id", "name", "customerHasBankId"],
+          },
+          {
+            model: models.NEGOTIATION,
+            as: "negotiation",
+            attributes: ["id", "name", "customerHasBankId"],
+          },
+          {
+            model: models.CITY,
+            as: "city",
+            attributes: ["id", "name"],
+          },
+          {
+            model: models.CUSTOMER_USER,
+            as: "customerUser",
+            attributes: ["id", "name"],
+          },
+        ],
+      });
 
       // CREATE A FOLDER FOR CLIENT
       await createFolder(
@@ -329,7 +363,7 @@ class ClientService {
       chbTransferred: chb == chbTransferred ? null : chbTransferred,
     });
 
-    return { chbTransferred };
+    return { id: client.dataValues.id, chbTransferred };
   }
 
   async update(

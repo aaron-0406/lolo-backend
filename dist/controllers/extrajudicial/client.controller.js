@@ -163,7 +163,7 @@ const transferClientToAnotherBankController = (req, res, next) => __awaiter(void
             ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
             customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
         });
-        res.status(201).json({ chbTransferred: data.chbTransferred });
+        res.status(201).json({ id: data.id, chbTransferred: data.chbTransferred });
     }
     catch (error) {
         next(error);
@@ -183,7 +183,7 @@ const deleteClientController = (req, res, next) => __awaiter(void 0, void 0, voi
             ip: (_l = req.clientIp) !== null && _l !== void 0 ? _l : "",
             customerId: Number((_m = req.user) === null || _m === void 0 ? void 0 : _m.customerId),
         });
-        res.status(201).json({ code, chb });
+        res.status(201).json({ code, chb, id: client.id });
     }
     catch (error) {
         next(error);

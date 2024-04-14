@@ -162,6 +162,7 @@ class ClientService {
                     {
                         model: models.CUSTOMER_USER,
                         as: "customerUser",
+                        attributes: ["id", "name"],
                     },
                     {
                         model: models.CITY,
@@ -265,12 +266,22 @@ class ClientService {
                     {
                         model: models.FUNCIONARIO,
                         as: "funcionario",
-                        attributes: ["name", "customerHasBankId"],
+                        attributes: ["id", "name", "customerHasBankId"],
                     },
                     {
                         model: models.NEGOTIATION,
                         as: "negotiation",
-                        attributes: ["name", "customerHasBankId"],
+                        attributes: ["id", "name", "customerHasBankId"],
+                    },
+                    {
+                        model: models.CITY,
+                        as: "city",
+                        attributes: ["id", "name"],
+                    },
+                    {
+                        model: models.CUSTOMER_USER,
+                        as: "customerUser",
+                        attributes: ["id", "name"],
                     },
                 ],
             });
@@ -304,6 +315,30 @@ class ClientService {
             }
             if ((0, auth_handler_1.checkPermissionsWithoutParams)(["P02-03"], user)) {
                 const newClient = yield models.CLIENT.create(data);
+                yield newClient.reload({
+                    include: [
+                        {
+                            model: models.FUNCIONARIO,
+                            as: "funcionario",
+                            attributes: ["id", "name", "customerHasBankId"],
+                        },
+                        {
+                            model: models.NEGOTIATION,
+                            as: "negotiation",
+                            attributes: ["id", "name", "customerHasBankId"],
+                        },
+                        {
+                            model: models.CITY,
+                            as: "city",
+                            attributes: ["id", "name"],
+                        },
+                        {
+                            model: models.CUSTOMER_USER,
+                            as: "customerUser",
+                            attributes: ["id", "name"],
+                        },
+                    ],
+                });
                 // CREATE A FOLDER FOR CLIENT
                 yield (0, aws_bucket_1.createFolder)(`${config_1.default.AWS_CHB_PATH}${idCustomer}/${data.customerHasBankId}/${data.code}/`);
                 return newClient;
@@ -317,7 +352,7 @@ class ClientService {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield this.findCode(code, chb);
             yield client.update(Object.assign(Object.assign({}, client), { chbTransferred: chb == chbTransferred ? null : chbTransferred }));
-            return { chbTransferred };
+            return { id: client.dataValues.id, chbTransferred };
         });
     }
     update(code, chb, changes) {
