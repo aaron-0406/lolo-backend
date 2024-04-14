@@ -5,19 +5,19 @@ const { PERMISSION_TABLE } = permissionModel;
 
 const newPermissions = [
   {
-    name: "AGREGAR EXPEDIENTES",
+    name: "AGREGAR EXPEDIENTE",
     code: "P13-02",
     icon: "-",
     link: "#",
   },
   {
-    name: "EDITAR EXPEDIENTES",
+    name: "EDITAR EXPEDIENTE",
     code: "P13-03",
     icon: "-",
     link: "#",
   },
   {
-    name: "ELIMINAR EXPEDIENTES",
+    name: "ELIMINAR EXPEDIENTE",
     code: "P13-04",
     icon: "-",
     link: "#",
@@ -31,7 +31,7 @@ export async function up(queryInterface: QueryInterface) {
 export async function down(queryInterface: QueryInterface) {
   const deleteCriteria = {
     code: {
-      [Op.startsWith]: "P17",
+      [Op.startsWith]: "P13",
     },
   };
 

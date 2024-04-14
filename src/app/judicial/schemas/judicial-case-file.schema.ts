@@ -1,8 +1,8 @@
 import Joi from "joi";
 import { JudicialCaseFileType } from "../types/judicial-case-file.type";
+
 const regexPatternNumberFileCase =
   /^\d{4}-\d{4}-\d{1,4}-\d{4}-[A-Z]{2}-[A-Z]{2}-\d{2}$/;
-
 const id = Joi.number();
 const numberCaseFile = Joi.string().regex(regexPatternNumberFileCase).messages({
   "string.pattern.base":
@@ -24,6 +24,21 @@ const judicialCourtId = Joi.number().positive();
 const judicialSubjectId = Joi.number().positive();
 const judicialProceduralWayId = Joi.number().positive();
 const customerHasBankId = Joi.number().positive();
+
+const page = Joi.number().required().messages({
+  "number.base": "El campo page es inválido",
+  "any.required": "El campo page es requerido.",
+});
+
+const limit = Joi.number().required().messages({
+  "number.base": "El campo limit es inválido",
+  "any.required": "El campo limit es requerido.",
+});
+
+const courts = Joi.string().required();
+const proceduralWays = Joi.string().required();
+const subjects = Joi.string().required();
+const users = Joi.string().required();
 
 const createJudicialCaseFileSchema = Joi.object<
   Omit<JudicialCaseFileType, "id" | "createdAt">,
@@ -79,6 +94,15 @@ const getJudicialCaseFileByCHBSchema = Joi.object<{ chb: number }, true>({
   chb: chb.required(),
 });
 
+const getJudicialCaseFileByCHBSchemaQuery = Joi.object({
+  page,
+  limit,
+  courts,
+  proceduralWays,
+  subjects,
+  users,
+}).options({ abortEarly: true });
+
 const getJudicialCaseFileByIDSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
@@ -97,4 +121,5 @@ export default {
   getJudicialCaseFileByNumberCaseFileSchema,
   getJudicialCaseFileByIDSchema,
   getJudicialCaseFileByCHBSchema,
+  getJudicialCaseFileByCHBSchemaQuery,
 };

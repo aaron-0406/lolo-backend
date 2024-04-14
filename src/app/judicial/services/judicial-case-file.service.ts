@@ -28,15 +28,46 @@ class JudicialCaseFileService {
   }
 
   async findAllByCHB(chb: string, query: any) {
-    const { limit, page } = query;
+    const { limit, page, courts, proceduralWays, subjects, users } = query;
+
     const limite = parseInt(limit, 10);
     const pagina = parseInt(page, 10);
+    const listCourts = JSON.parse(courts);
+    const listProceduralWays = JSON.parse(proceduralWays);
+    const listSubjects = JSON.parse(subjects);
+    const listUsers = JSON.parse(users);
 
-    const quantity = await models.JUDICIAL_CASE_FILE.count();
+    const filters: any = {};
+    if (listCourts.length) {
+      filters.judicial_court_id_judicial_court = { [Op.in]: listCourts };
+    }
+    if (listProceduralWays.length) {
+      filters.judicial_procedural_way_id_judicial_procedural_way = {
+        [Op.in]: listProceduralWays,
+      };
+    }
+    if (listSubjects.length) {
+      filters.judicial_subject_id_judicial_subject = { [Op.in]: listSubjects };
+    }
+    if (listUsers.length) {
+      filters.customer_user_id_customer_user = { [Op.in]: listUsers };
+    }
+
+    let filtersWhere: any = {
+      customer_has_bank_id: chb,
+    };
+    if (Object.keys(filters).length > 0) {
+      filtersWhere = {
+        [Op.or]: [filters],
+        customer_has_bank_id: chb,
+      };
+    }
+
+    const quantity = await models.JUDICIAL_CASE_FILE.count({
+      where: filtersWhere,
+    });
 
     const caseFiles = await models.JUDICIAL_CASE_FILE.findAll({
-      limit: limite,
-      offset: (pagina - 1) * limite,
       include: [
         {
           model: models.CUSTOMER_USER,
@@ -56,9 +87,9 @@ class JudicialCaseFileService {
           as: "judicialSubject",
         },
       ],
-      where: {
-        customerHasBankId: chb,
-      },
+      limit: limite,
+      offset: (pagina - 1) * limite,
+      where: filtersWhere,
     });
 
     return { caseFiles, quantity };
