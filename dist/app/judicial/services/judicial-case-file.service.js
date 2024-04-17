@@ -78,7 +78,7 @@ class JudicialCaseFileService {
                     {
                         model: models.CUSTOMER_USER,
                         as: "customerUser",
-                        attributes: { exclude: ["password"] },
+                        attributes: ["id", "name"],
                     },
                     {
                         model: models.JUDICIAL_COURT,
@@ -92,12 +92,43 @@ class JudicialCaseFileService {
                         model: models.JUDICIAL_SUBJECT,
                         as: "judicialSubject",
                     },
+                    {
+                        model: models.CLIENT,
+                        as: "client",
+                        attributes: ["id", "name"],
+                    },
                 ],
                 limit: limite,
                 offset: (pagina - 1) * limite,
                 where: filtersWhere,
             });
             return { caseFiles, quantity };
+        });
+    }
+    existNumberCaseFile(customerId, numberCaseFile) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const judicialCaseFile = yield models.JUDICIAL_CASE_FILE.findOne({
+                where: {
+                    number_case_file: numberCaseFile,
+                },
+            });
+            if (!judicialCaseFile) {
+                return false;
+            }
+            const customerHasBank = yield models.CUSTOMER_HAS_BANK.findOne({
+                where: {
+                    id_customer_has_bank: judicialCaseFile === null || judicialCaseFile === void 0 ? void 0 : judicialCaseFile.dataValues.customerHasBankId,
+                },
+            });
+            if (!customerHasBank) {
+                return false;
+            }
+            if (customerId == customerHasBank.dataValues.idCustomer) {
+                return true;
+            }
+            else {
+                return false;
+            }
         });
     }
     findByID(id) {
@@ -110,7 +141,7 @@ class JudicialCaseFileService {
                     {
                         model: models.CUSTOMER_USER,
                         as: "customerUser",
-                        attributes: { exclude: ["password"] },
+                        attributes: ["id", "name"],
                     },
                     {
                         model: models.JUDICIAL_COURT,
@@ -135,6 +166,17 @@ class JudicialCaseFileService {
     findByNumberCaseFile(numberCaseFile) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialCaseFile = yield models.JUDICIAL_CASE_FILE.findOne({
+                include: {
+                    model: models.CLIENT,
+                    as: "client",
+                    include: [
+                        {
+                            model: models.CUSTOMER_USER,
+                            as: "customerUser",
+                            attributes: ["id", "name"],
+                        },
+                    ],
+                },
                 where: {
                     numberCaseFile,
                 },
@@ -145,11 +187,17 @@ class JudicialCaseFileService {
             return judicialCaseFile;
         });
     }
-    create(data) {
+    create(data, customerId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const newJudicialCaseFile = yield models.JUDICIAL_CASE_FILE.create(data);
-            const judicialCaseFile = yield this.findByID(newJudicialCaseFile.dataValues.id);
-            return judicialCaseFile;
+            const existCaseFile = yield this.existNumberCaseFile(customerId, data.numberCaseFile);
+            if (!existCaseFile) {
+                const newJudicialCaseFile = yield models.JUDICIAL_CASE_FILE.create(data);
+                const judicialCaseFile = yield this.findByID(newJudicialCaseFile.dataValues.id);
+                return judicialCaseFile;
+            }
+            else {
+                throw boom_1.default.notFound("Ya existe un expediente con este código");
+            }
         });
     }
     update(id, changes) {

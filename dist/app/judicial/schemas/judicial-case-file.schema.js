@@ -4,15 +4,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const joi_1 = __importDefault(require("joi"));
-const regexPatternNumberFileCase = /^\d{4}-\d{4}-\d{1,4}-\d{4}-[A-Z]{2}-[A-Z]{2}-\d{2}$/;
+const regexPatternNumberFileCase = /^\d{5}-\d{4}-\d{1,4}-\d{4}-[A-Z]{2}-[A-Z]{2}-\d{2}$/;
 const id = joi_1.default.number();
 const numberCaseFile = joi_1.default.string().regex(regexPatternNumberFileCase).messages({
     "string.pattern.base": 'El formato del código no es válido. Debe seguir el patrón "####-####-####-####-LL-LL-##".',
 });
 const judgmentNumber = joi_1.default.number();
 const secretary = joi_1.default.string().max(150);
-const amountDemandedSoles = joi_1.default.number().positive();
-const amountDemandedDollars = joi_1.default.number().positive();
+const amountDemandedSoles = joi_1.default.number();
+const amountDemandedDollars = joi_1.default.number();
 const cautionaryCode = joi_1.default.string().max(150);
 const errandCode = joi_1.default.string().max(150);
 const judicialVenue = joi_1.default.string().max(150);
@@ -37,6 +37,7 @@ const courts = joi_1.default.string().required();
 const proceduralWays = joi_1.default.string().required();
 const subjects = joi_1.default.string().required();
 const users = joi_1.default.string().required();
+const customerId = joi_1.default.number();
 const createJudicialCaseFileSchema = joi_1.default.object({
     numberCaseFile: numberCaseFile.required(),
     judgmentNumber: judgmentNumber.optional().empty("").allow(""),
@@ -71,6 +72,7 @@ const updateJudicialCaseFileSchema = joi_1.default.object({
     judicialSubjectId: judicialSubjectId.required(),
     judicialProceduralWayId: judicialProceduralWayId.required(),
     customerHasBankId: customerHasBankId.required(),
+    clientId: clientId.required(),
 });
 const getJudicialCaseFileByClientIDSchema = joi_1.default.object({
     clientId: clientId.required(),
@@ -92,6 +94,9 @@ const getJudicialCaseFileByIDSchema = joi_1.default.object({
 const getJudicialCaseFileByNumberCaseFileSchema = joi_1.default.object({
     numberCaseFile: numberCaseFile.required(),
 });
+const getJudicialCaseFileByCustomerIdSchema = joi_1.default.object({
+    customerId: customerId.required(),
+});
 exports.default = {
     createJudicialCaseFileSchema,
     updateJudicialCaseFileSchema,
@@ -100,4 +105,5 @@ exports.default = {
     getJudicialCaseFileByIDSchema,
     getJudicialCaseFileByCHBSchema,
     getJudicialCaseFileByCHBSchemaQuery,
+    getJudicialCaseFileByCustomerIdSchema,
 };

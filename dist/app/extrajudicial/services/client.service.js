@@ -32,6 +32,7 @@ class ClientService {
             return rta;
         });
     }
+    //INFO: METHODS OF DASHBOARD
     findByCustomerIdAndCode(customerId, code) {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.CLIENT.findOne({
@@ -63,118 +64,36 @@ class ClientService {
             return JSON.parse(JSON.stringify(rta));
         });
     }
-    findByName(chb, query) {
+    //INFO: MODAL - SEARCH BY NAME OR CODE
+    findByNameOrCode(chb, query) {
         return __awaiter(this, void 0, void 0, function* () {
             const { filter } = query;
             const filtro = filter;
-            const filters = {};
-            if (filter !== "" && filter !== undefined) {
-                filters.name = { [sequelize_2.Op.substring]: filtro };
-            }
+            const filters = [
+                { name: { [sequelize_2.Op.substring]: filtro } },
+                { code: { [sequelize_2.Op.substring]: filtro } },
+            ];
             let filtersWhere = {
                 customer_has_bank_id_customer_has_bank: chb,
             };
-            if (Object.keys(filters).length > 0) {
+            if (filters.length > 0) {
                 filtersWhere = {
-                    [sequelize_2.Op.or]: [filters],
+                    [sequelize_2.Op.or]: [...filters],
                     customer_has_bank_id_customer_has_bank: chb,
                 };
             }
             const clients = yield models.CLIENT.findAll({
                 include: [
-                    { model: models.NEGOTIATION, as: "negotiation" },
-                    {
-                        model: models.FUNCIONARIO,
-                        as: "funcionario",
-                        attributes: { exclude: ["bankId"] },
-                    },
                     {
                         model: models.CUSTOMER_USER,
                         as: "customerUser",
-                    },
-                    {
-                        model: models.CITY,
-                        as: "city",
+                        attributes: ["id", "name"],
                     },
                 ],
                 order: [["name", "DESC"]],
                 where: filtersWhere,
             });
             return clients;
-        });
-    }
-    findAllCHB(chb, query) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { limit, page, filter, negotiations, funcionarios, users, cities } = query;
-            const limite = parseInt(limit, 10);
-            const pagina = parseInt(page, 10);
-            const filtro = filter;
-            const listNegotiations = JSON.parse(negotiations);
-            const listFuncionarios = JSON.parse(funcionarios);
-            const listUsers = JSON.parse(users);
-            const listCities = JSON.parse(cities);
-            const filters = {};
-            if (filter !== "" && filter !== undefined) {
-                filters.name = { [sequelize_2.Op.substring]: filtro };
-            }
-            if (listNegotiations.length) {
-                filters.negotiation_id_negotiation = { [sequelize_2.Op.in]: listNegotiations };
-            }
-            if (listFuncionarios.length) {
-                filters.funcionario_id_funcionario = { [sequelize_2.Op.in]: listFuncionarios };
-            }
-            if (listUsers.length) {
-                filters.customer_user_id_customer_user = { [sequelize_2.Op.in]: listUsers };
-            }
-            if (listCities.length) {
-                filters.city_id_city = { [sequelize_2.Op.in]: listCities };
-            }
-            let filtersWhere = {
-                [sequelize_2.Op.or]: [
-                    { chb_transferred: chb },
-                    { customer_has_bank_id_customer_has_bank: chb },
-                ],
-            };
-            if (Object.keys(filters).length > 0) {
-                filtersWhere = {
-                    [sequelize_2.Op.or]: [filters],
-                    [sequelize_2.Op.and]: [
-                        {
-                            [sequelize_2.Op.or]: [
-                                { chb_transferred: chb },
-                                { customer_has_bank_id_customer_has_bank: chb },
-                            ],
-                        },
-                    ],
-                };
-            }
-            const quantity = yield models.CLIENT.count({
-                where: filtersWhere,
-            });
-            const clients = yield models.CLIENT.findAll({
-                include: [
-                    { model: models.NEGOTIATION, as: "negotiation" },
-                    {
-                        model: models.FUNCIONARIO,
-                        as: "funcionario",
-                        attributes: { exclude: ["bankId"] },
-                    },
-                    {
-                        model: models.CUSTOMER_USER,
-                        as: "customerUser",
-                        attributes: ["id", "name"],
-                    },
-                    {
-                        model: models.CITY,
-                        as: "city",
-                    },
-                ],
-                order: [["name", "ASC"]],
-                limit: limite,
-                offset: (pagina - 1) * limite,
-                where: filtersWhere,
-            });
-            return { clients, quantity };
         });
     }
     findAllCHBDetails(chb) {
@@ -289,6 +208,80 @@ class ClientService {
                 throw boom_1.default.notFound("Cliente no encontrado");
             }
             return client;
+        });
+    }
+    findAllCHB(chb, query) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { limit, page, filter, negotiations, funcionarios, users, cities } = query;
+            const limite = parseInt(limit, 10);
+            const pagina = parseInt(page, 10);
+            const filtro = filter;
+            const listNegotiations = JSON.parse(negotiations);
+            const listFuncionarios = JSON.parse(funcionarios);
+            const listUsers = JSON.parse(users);
+            const listCities = JSON.parse(cities);
+            const filters = {};
+            if (filter !== "" && filter !== undefined) {
+                filters.name = { [sequelize_2.Op.substring]: filtro };
+            }
+            if (listNegotiations.length) {
+                filters.negotiation_id_negotiation = { [sequelize_2.Op.in]: listNegotiations };
+            }
+            if (listFuncionarios.length) {
+                filters.funcionario_id_funcionario = { [sequelize_2.Op.in]: listFuncionarios };
+            }
+            if (listUsers.length) {
+                filters.customer_user_id_customer_user = { [sequelize_2.Op.in]: listUsers };
+            }
+            if (listCities.length) {
+                filters.city_id_city = { [sequelize_2.Op.in]: listCities };
+            }
+            let filtersWhere = {
+                [sequelize_2.Op.or]: [
+                    { chb_transferred: chb },
+                    { customer_has_bank_id_customer_has_bank: chb },
+                ],
+            };
+            if (Object.keys(filters).length > 0) {
+                filtersWhere = {
+                    [sequelize_2.Op.or]: [filters],
+                    [sequelize_2.Op.and]: [
+                        {
+                            [sequelize_2.Op.or]: [
+                                { chb_transferred: chb },
+                                { customer_has_bank_id_customer_has_bank: chb },
+                            ],
+                        },
+                    ],
+                };
+            }
+            const quantity = yield models.CLIENT.count({
+                where: filtersWhere,
+            });
+            const clients = yield models.CLIENT.findAll({
+                include: [
+                    { model: models.NEGOTIATION, as: "negotiation" },
+                    {
+                        model: models.FUNCIONARIO,
+                        as: "funcionario",
+                        attributes: { exclude: ["bankId"] },
+                    },
+                    {
+                        model: models.CUSTOMER_USER,
+                        as: "customerUser",
+                        attributes: ["id", "name"],
+                    },
+                    {
+                        model: models.CITY,
+                        as: "city",
+                    },
+                ],
+                order: [["name", "ASC"]],
+                limit: limite,
+                offset: (pagina - 1) * limite,
+                where: filtersWhere,
+            });
+            return { clients, quantity };
         });
     }
     save(data, idCustomer, user) {

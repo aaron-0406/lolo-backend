@@ -76,8 +76,9 @@ exports.getJudicialCaseFileByIdController = getJudicialCaseFileByIdController;
 const createJudicialCaseFileController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c;
     try {
+        const { customerId } = req.params;
         const body = req.body;
-        const newJudicialCaseFile = yield service.create(body);
+        const newJudicialCaseFile = yield service.create(body, customerId);
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
             codeAction: "P13-02",
