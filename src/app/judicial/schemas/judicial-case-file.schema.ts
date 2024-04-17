@@ -2,7 +2,7 @@ import Joi from "joi";
 import { JudicialCaseFileType } from "../types/judicial-case-file.type";
 
 const regexPatternNumberFileCase =
-  /^\d{4}-\d{4}-\d{1,4}-\d{4}-[A-Z]{2}-[A-Z]{2}-\d{2}$/;
+  /^\d{5}-\d{4}-\d{1,4}-\d{4}-[A-Z]{2}-[A-Z]{2}-\d{2}$/;
 const id = Joi.number();
 const numberCaseFile = Joi.string().regex(regexPatternNumberFileCase).messages({
   "string.pattern.base":
@@ -10,8 +10,8 @@ const numberCaseFile = Joi.string().regex(regexPatternNumberFileCase).messages({
 });
 const judgmentNumber = Joi.number();
 const secretary = Joi.string().max(150);
-const amountDemandedSoles = Joi.number().positive();
-const amountDemandedDollars = Joi.number().positive();
+const amountDemandedSoles = Joi.number();
+const amountDemandedDollars = Joi.number();
 const cautionaryCode = Joi.string().max(150);
 const errandCode = Joi.string().max(150);
 const judicialVenue = Joi.string().max(150);
@@ -40,6 +40,8 @@ const proceduralWays = Joi.string().required();
 const subjects = Joi.string().required();
 const users = Joi.string().required();
 
+const customerId = Joi.number();
+
 const createJudicialCaseFileSchema = Joi.object<
   Omit<JudicialCaseFileType, "id" | "createdAt">,
   true
@@ -63,7 +65,7 @@ const createJudicialCaseFileSchema = Joi.object<
 });
 
 const updateJudicialCaseFileSchema = Joi.object<
-  Omit<JudicialCaseFileType, "id" | "clientId" | "createdAt">,
+  Omit<JudicialCaseFileType, "id" | "createdAt">,
   true
 >({
   numberCaseFile: numberCaseFile.required(),
@@ -81,6 +83,7 @@ const updateJudicialCaseFileSchema = Joi.object<
   judicialSubjectId: judicialSubjectId.required(),
   judicialProceduralWayId: judicialProceduralWayId.required(),
   customerHasBankId: customerHasBankId.required(),
+  clientId: clientId.required(),
 });
 
 const getJudicialCaseFileByClientIDSchema = Joi.object<
@@ -114,6 +117,13 @@ const getJudicialCaseFileByNumberCaseFileSchema = Joi.object<
   numberCaseFile: numberCaseFile.required(),
 });
 
+const getJudicialCaseFileByCustomerIdSchema = Joi.object<
+  { customerId: number },
+  true
+>({
+  customerId: customerId.required(),
+});
+
 export default {
   createJudicialCaseFileSchema,
   updateJudicialCaseFileSchema,
@@ -122,4 +132,5 @@ export default {
   getJudicialCaseFileByIDSchema,
   getJudicialCaseFileByCHBSchema,
   getJudicialCaseFileByCHBSchemaQuery,
+  getJudicialCaseFileByCustomerIdSchema,
 };

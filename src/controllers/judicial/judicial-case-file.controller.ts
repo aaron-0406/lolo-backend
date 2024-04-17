@@ -83,8 +83,9 @@ export const createJudicialCaseFileController = async (
   next: NextFunction
 ) => {
   try {
+    const { customerId } = req.params;
     const body = req.body;
-    const newJudicialCaseFile = await service.create(body);
+    const newJudicialCaseFile = await service.create(body, customerId);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),

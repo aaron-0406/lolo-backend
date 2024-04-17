@@ -72,7 +72,7 @@ class JudicialCaseFileService {
         {
           model: models.CUSTOMER_USER,
           as: "customerUser",
-          attributes: { exclude: ["password"] },
+          attributes: ["id", "name"],
         },
         {
           model: models.JUDICIAL_COURT,
@@ -86,6 +86,11 @@ class JudicialCaseFileService {
           model: models.JUDICIAL_SUBJECT,
           as: "judicialSubject",
         },
+        {
+          model: models.CLIENT,
+          as: "client",
+          attributes: ["id", "name"],
+        },
       ],
       limit: limite,
       offset: (pagina - 1) * limite,
@@ -93,6 +98,34 @@ class JudicialCaseFileService {
     });
 
     return { caseFiles, quantity };
+  }
+
+  async existNumberCaseFile(customerId: string, numberCaseFile: string) {
+    const judicialCaseFile = await models.JUDICIAL_CASE_FILE.findOne({
+      where: {
+        number_case_file: numberCaseFile,
+      },
+    });
+
+    if (!judicialCaseFile) {
+      return false;
+    }
+
+    const customerHasBank = await models.CUSTOMER_HAS_BANK.findOne({
+      where: {
+        id_customer_has_bank: judicialCaseFile?.dataValues.customerHasBankId,
+      },
+    });
+
+    if (!customerHasBank) {
+      return false;
+    }
+
+    if (customerId == customerHasBank.dataValues.idCustomer) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   async findByID(id: string) {
@@ -104,7 +137,7 @@ class JudicialCaseFileService {
         {
           model: models.CUSTOMER_USER,
           as: "customerUser",
-          attributes: { exclude: ["password"] },
+          attributes: ["id", "name"],
         },
         {
           model: models.JUDICIAL_COURT,
@@ -130,6 +163,17 @@ class JudicialCaseFileService {
 
   async findByNumberCaseFile(numberCaseFile: string) {
     const judicialCaseFile = await models.JUDICIAL_CASE_FILE.findOne({
+      include: {
+        model: models.CLIENT,
+        as: "client",
+        include: [
+          {
+            model: models.CUSTOMER_USER,
+            as: "customerUser",
+            attributes: ["id", "name"],
+          },
+        ],
+      },
       where: {
         numberCaseFile,
       },
@@ -141,13 +185,22 @@ class JudicialCaseFileService {
     return judicialCaseFile;
   }
 
-  async create(data: JudicialCaseFileType) {
-    const newJudicialCaseFile = await models.JUDICIAL_CASE_FILE.create(data);
-    const judicialCaseFile = await this.findByID(
-      newJudicialCaseFile.dataValues.id
+  async create(data: JudicialCaseFileType, customerId: string) {
+    const existCaseFile = await this.existNumberCaseFile(
+      customerId,
+      data.numberCaseFile
     );
 
-    return judicialCaseFile;
+    if (!existCaseFile) {
+      const newJudicialCaseFile = await models.JUDICIAL_CASE_FILE.create(data);
+      const judicialCaseFile = await this.findByID(
+        newJudicialCaseFile.dataValues.id
+      );
+
+      return judicialCaseFile;
+    } else {
+      throw boom.notFound("Ya existe un expediente con este código");
+    }
   }
 
   async update(id: string, changes: JudicialCaseFileType) {

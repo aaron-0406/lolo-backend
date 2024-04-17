@@ -21,6 +21,7 @@ const {
   updateJudicialCaseFileSchema,
   getJudicialCaseFileByCHBSchema,
   getJudicialCaseFileByCHBSchemaQuery,
+  getJudicialCaseFileByCustomerIdSchema,
 } = judicialCaseFileSchema;
 
 const router = express.Router();
@@ -57,9 +58,10 @@ router.get(
 );
 
 router.post(
-  "/",
+  "/:customerId",
   JWTAuth,
   checkPermissions("P13-02"),
+  validatorHandler(getJudicialCaseFileByCustomerIdSchema, "params"),
   validatorHandler(createJudicialCaseFileSchema, "body"),
   createJudicialCaseFileController
 );

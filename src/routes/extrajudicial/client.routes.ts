@@ -10,7 +10,7 @@ import {
   getClientByCodeCHBController,
   getClientsByCHBController,
   getClientsByCHBDetailsController,
-  getClientsByNameController,
+  getClientsByNameOrCodeController,
 } from "../../controllers/extrajudicial/client.controller";
 import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
@@ -19,7 +19,7 @@ const {
   getClientByCodeSchema,
   getClientByCustomer,
   getClientByCHBSchemaQuery,
-  getClientByNameSchemaQuery,
+  getClientByNameOrCodeSchemaQuery,
   getDateSchema,
   saveClientSchema,
   transferClientToAnotherBankSchema,
@@ -47,11 +47,11 @@ router.get(
 );
 
 router.get(
-  "/:chb/by-name",
+  "/:chb/by-name-or-code",
   JWTAuth,
   validatorHandler(getClientByCHBSchema, "params"),
-  validatorHandler(getClientByNameSchemaQuery, "query"),
-  getClientsByNameController
+  validatorHandler(getClientByNameOrCodeSchemaQuery, "query"),
+  getClientsByNameOrCodeController
 );
 
 router.get(
