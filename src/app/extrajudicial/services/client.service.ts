@@ -21,6 +21,7 @@ class ClientService {
     return rta;
   }
 
+  //INFO: METHODS OF DASHBOARD
   async findByCustomerIdAndCode(customerId: number, code: string) {
     const rta = await models.CLIENT.findOne({
       where: {
@@ -50,41 +51,33 @@ class ClientService {
     return JSON.parse(JSON.stringify(rta));
   }
 
-  async findByName(chb: string, query: any) {
+  //INFO: MODAL - SEARCH BY NAME OR CODE
+  async findByNameOrCode(chb: string, query: any) {
     const { filter } = query;
 
     const filtro = filter as string;
 
-    const filters: any = {};
-    if (filter !== "" && filter !== undefined) {
-      filters.name = { [Op.substring]: filtro };
-    }
+    const filters: any[] = [
+      { name: { [Op.substring]: filtro } },
+      { code: { [Op.substring]: filtro } },
+    ];
 
     let filtersWhere: any = {
       customer_has_bank_id_customer_has_bank: chb,
     };
-    if (Object.keys(filters).length > 0) {
+    if (filters.length > 0) {
       filtersWhere = {
-        [Op.or]: [filters],
+        [Op.or]: [...filters],
         customer_has_bank_id_customer_has_bank: chb,
       };
     }
 
     const clients = await models.CLIENT.findAll({
       include: [
-        { model: models.NEGOTIATION, as: "negotiation" },
-        {
-          model: models.FUNCIONARIO,
-          as: "funcionario",
-          attributes: { exclude: ["bankId"] },
-        },
         {
           model: models.CUSTOMER_USER,
           as: "customerUser",
-        },
-        {
-          model: models.CITY,
-          as: "city",
+          attributes: ["id", "name"],
         },
       ],
       order: [["name", "DESC"]],
@@ -92,86 +85,6 @@ class ClientService {
     });
 
     return clients;
-  }
-
-  async findAllCHB(chb: string, query: any) {
-    const { limit, page, filter, negotiations, funcionarios, users, cities } =
-      query;
-
-    const limite = parseInt(limit, 10);
-    const pagina = parseInt(page, 10);
-    const filtro = filter as string;
-    const listNegotiations = JSON.parse(negotiations);
-    const listFuncionarios = JSON.parse(funcionarios);
-    const listUsers = JSON.parse(users);
-    const listCities = JSON.parse(cities);
-
-    const filters: any = {};
-    if (filter !== "" && filter !== undefined) {
-      filters.name = { [Op.substring]: filtro };
-    }
-    if (listNegotiations.length) {
-      filters.negotiation_id_negotiation = { [Op.in]: listNegotiations };
-    }
-    if (listFuncionarios.length) {
-      filters.funcionario_id_funcionario = { [Op.in]: listFuncionarios };
-    }
-    if (listUsers.length) {
-      filters.customer_user_id_customer_user = { [Op.in]: listUsers };
-    }
-    if (listCities.length) {
-      filters.city_id_city = { [Op.in]: listCities };
-    }
-
-    let filtersWhere: any = {
-      [Op.or]: [
-        { chb_transferred: chb },
-        { customer_has_bank_id_customer_has_bank: chb },
-      ],
-    };
-    if (Object.keys(filters).length > 0) {
-      filtersWhere = {
-        [Op.or]: [filters],
-        [Op.and]: [
-          {
-            [Op.or]: [
-              { chb_transferred: chb },
-              { customer_has_bank_id_customer_has_bank: chb },
-            ],
-          },
-        ],
-      };
-    }
-
-    const quantity = await models.CLIENT.count({
-      where: filtersWhere,
-    });
-
-    const clients = await models.CLIENT.findAll({
-      include: [
-        { model: models.NEGOTIATION, as: "negotiation" },
-        {
-          model: models.FUNCIONARIO,
-          as: "funcionario",
-          attributes: { exclude: ["bankId"] },
-        },
-        {
-          model: models.CUSTOMER_USER,
-          as: "customerUser",
-          attributes: ["id", "name"],
-        },
-        {
-          model: models.CITY,
-          as: "city",
-        },
-      ],
-      order: [["name", "ASC"]],
-      limit: limite,
-      offset: (pagina - 1) * limite,
-      where: filtersWhere,
-    });
-
-    return { clients, quantity };
   }
 
   async findAllCHBDetails(chb: string) {
@@ -285,6 +198,86 @@ class ClientService {
     }
 
     return client;
+  }
+
+  async findAllCHB(chb: string, query: any) {
+    const { limit, page, filter, negotiations, funcionarios, users, cities } =
+      query;
+
+    const limite = parseInt(limit, 10);
+    const pagina = parseInt(page, 10);
+    const filtro = filter as string;
+    const listNegotiations = JSON.parse(negotiations);
+    const listFuncionarios = JSON.parse(funcionarios);
+    const listUsers = JSON.parse(users);
+    const listCities = JSON.parse(cities);
+
+    const filters: any = {};
+    if (filter !== "" && filter !== undefined) {
+      filters.name = { [Op.substring]: filtro };
+    }
+    if (listNegotiations.length) {
+      filters.negotiation_id_negotiation = { [Op.in]: listNegotiations };
+    }
+    if (listFuncionarios.length) {
+      filters.funcionario_id_funcionario = { [Op.in]: listFuncionarios };
+    }
+    if (listUsers.length) {
+      filters.customer_user_id_customer_user = { [Op.in]: listUsers };
+    }
+    if (listCities.length) {
+      filters.city_id_city = { [Op.in]: listCities };
+    }
+
+    let filtersWhere: any = {
+      [Op.or]: [
+        { chb_transferred: chb },
+        { customer_has_bank_id_customer_has_bank: chb },
+      ],
+    };
+    if (Object.keys(filters).length > 0) {
+      filtersWhere = {
+        [Op.or]: [filters],
+        [Op.and]: [
+          {
+            [Op.or]: [
+              { chb_transferred: chb },
+              { customer_has_bank_id_customer_has_bank: chb },
+            ],
+          },
+        ],
+      };
+    }
+
+    const quantity = await models.CLIENT.count({
+      where: filtersWhere,
+    });
+
+    const clients = await models.CLIENT.findAll({
+      include: [
+        { model: models.NEGOTIATION, as: "negotiation" },
+        {
+          model: models.FUNCIONARIO,
+          as: "funcionario",
+          attributes: { exclude: ["bankId"] },
+        },
+        {
+          model: models.CUSTOMER_USER,
+          as: "customerUser",
+          attributes: ["id", "name"],
+        },
+        {
+          model: models.CITY,
+          as: "city",
+        },
+      ],
+      order: [["name", "ASC"]],
+      limit: limite,
+      offset: (pagina - 1) * limite,
+      where: filtersWhere,
+    });
+
+    return { clients, quantity };
   }
 
   async save(

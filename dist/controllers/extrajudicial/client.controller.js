@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteClientController = exports.transferClientToAnotherBankController = exports.saveClientController = exports.getClientByCodeCHBController = exports.getClientsByCHBDetailsController = exports.getClientsByNameController = exports.getClientsByCHBController = exports.downloadExcelDailyManagementController = exports.getAllClientsController = void 0;
+exports.deleteClientController = exports.transferClientToAnotherBankController = exports.saveClientController = exports.getClientByCodeCHBController = exports.getClientsByCHBDetailsController = exports.getClientsByNameOrCodeController = exports.getClientsByCHBController = exports.downloadExcelDailyManagementController = exports.getAllClientsController = void 0;
 const client_service_1 = __importDefault(require("../../app/extrajudicial/services/client.service"));
 const fs = __importStar(require("fs"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
@@ -95,17 +95,17 @@ const getClientsByCHBController = (req, res, next) => __awaiter(void 0, void 0, 
     }
 });
 exports.getClientsByCHBController = getClientsByCHBController;
-const getClientsByNameController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const getClientsByNameOrCodeController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { chb } = req.params;
-        const clients = yield service.findByName(chb, req.query);
+        const clients = yield service.findByNameOrCode(chb, req.query);
         res.json(clients);
     }
     catch (error) {
         next(error);
     }
 });
-exports.getClientsByNameController = getClientsByNameController;
+exports.getClientsByNameOrCodeController = getClientsByNameOrCodeController;
 const getClientsByCHBDetailsController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { chb } = req.params;
