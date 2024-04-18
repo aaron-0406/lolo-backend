@@ -28,10 +28,12 @@ class JudicialCaseFileService {
   }
 
   async findAllByCHB(chb: string, query: any) {
-    const { limit, page, courts, proceduralWays, subjects, users } = query;
+    const { limit, page, filter, courts, proceduralWays, subjects, users } =
+      query;
 
     const limite = parseInt(limit, 10);
     const pagina = parseInt(page, 10);
+    const clientName = filter as string;
     const listCourts = JSON.parse(courts);
     const listProceduralWays = JSON.parse(proceduralWays);
     const listSubjects = JSON.parse(subjects);
@@ -56,14 +58,30 @@ class JudicialCaseFileService {
     let filtersWhere: any = {
       customer_has_bank_id: chb,
     };
+
+    // Agregar filtro por nombre de cliente si se proporciona
+    if (clientName) {
+      filtersWhere = {
+        ...filtersWhere,
+        "$client.name$": { [Op.like]: `%${clientName}%` }, // Filtrar por nombre de cliente (parcialmente coincidente)
+      };
+    }
+
+    // Combinar filtros adicionales si se proporcionan
     if (Object.keys(filters).length > 0) {
       filtersWhere = {
-        [Op.or]: [filters],
-        customer_has_bank_id: chb,
+        [Op.and]: [{ [Op.or]: [filters] }, filtersWhere],
       };
     }
 
     const quantity = await models.JUDICIAL_CASE_FILE.count({
+      include: [
+        {
+          model: models.CLIENT,
+          as: "client",
+          where: clientName ? { name: clientName } : undefined, // Aplicar filtro por nombre de cliente si se proporciona
+        },
+      ],
       where: filtersWhere,
     });
 
