@@ -31,7 +31,7 @@ const newPermissions = [
   {
     name: "MATERIAS",
     code: "P21",
-    icon: "ri-book-marked-fill",
+    icon: "ri-book-2-fill",
     link: "/judicial/:urlIdentifier/materias",
   },
   {
