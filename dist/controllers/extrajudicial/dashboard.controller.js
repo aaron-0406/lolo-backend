@@ -189,6 +189,7 @@ const createProductsXslxController = (req, res, next) => __awaiter(void 0, void 
                         name: product.name,
                         state: product.state,
                         negotiationId: product.negotiationId,
+                        customerHasBankId: product.customerHasBankId,
                     });
                 }
                 finally {

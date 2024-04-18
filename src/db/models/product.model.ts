@@ -7,10 +7,12 @@ import {
 } from "sequelize";
 import { ProductType } from "../../app/extrajudicial/types/product.tyoe";
 import clientModel from "./client.model";
+import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 import customerModel from "./customer.model";
 import negotiationModel from "./negotiation.model";
 
 const PRODUCT_TABLE = "PRODUCT";
+const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 
 const ProductSchema: ModelAttributes<
   Product,
@@ -68,12 +70,26 @@ const ProductSchema: ModelAttributes<
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
+  customerHasBankId: {
+    allowNull: false,
+    field: "customer_has_bank_id_customer_has_bank",
+    type: DataTypes.INTEGER,
+    references: {
+      model: CUSTOMER_HAS_BANK_TABLE,
+      key: "id_customer_has_bank",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
 };
 
 class Product extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER, { as: "customer" });
     this.belongsTo(models.NEGOTIATION, { as: "negotiation" });
+    // this.belongsTo(models.EXT_PRODUCT_NAME, { as: "extProductName" });
+    this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
+    this.belongsTo(models.CLIENT, { as: "client" });
   }
 
   static config(sequelize: Sequelize) {

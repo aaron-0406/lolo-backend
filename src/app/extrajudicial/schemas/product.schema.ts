@@ -30,7 +30,7 @@ export const getProductsByCustomerIdSchema = Joi.object<
 });
 
 export const createProductSchema = Joi.object<
-  Omit<ProductType, "id" | "cityId" | "funcionarioId">,
+  Omit<ProductType, "id" | "cityId" | "funcionarioId" | "customerHasBankId">,
   true
 >({
   code,
@@ -44,7 +44,13 @@ export const createProductSchema = Joi.object<
 export const updateProductSchema = Joi.object<
   Omit<
     ProductType,
-    "customerId" | "clientCode" | "code" | "id" | "cityId" | "funcionarioId"
+    | "customerId"
+    | "clientCode"
+    | "code"
+    | "id"
+    | "cityId"
+    | "funcionarioId"
+    | "customerHasBankId"
   >,
   true
 >({

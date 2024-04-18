@@ -36,6 +36,7 @@ import judicialProceduralWayModel from "./judicial-procedural-way.model";
 import userLogModel from "./user-log.model";
 import extIpAddressBankModel from "./ext-ip-address-bank.model";
 import extContactTypeModel from "./ext-contact-type.model";
+// import extProductNameModel from "./ext-product-name.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
@@ -75,6 +76,7 @@ const { UserLog, UserLogSchema } = userLogModel;
 const { JudicialCaseFile, JudicialCaseFileSchema } = judicialCaseFileModel;
 const { ExtIpAddressBank, ExtIpAddressBankSchema } = extIpAddressBankModel;
 const { ExtContactType, ExtContactTypeSchema } = extContactTypeModel;
+// const { ExtProductName, ExtProductNameSchema } = extProductNameModel;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -135,6 +137,7 @@ export const setupModels = (sequelize: Sequelize) => {
     ExtIpAddressBank.config(sequelize)
   );
   ExtContactType.init(ExtContactTypeSchema, ExtContactType.config(sequelize));
+  // ExtProductName.init(ExtProductNameSchema, ExtProductName.config(sequelize));
 
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
@@ -171,4 +174,5 @@ export const setupModels = (sequelize: Sequelize) => {
   UserLog.associate(sequelize.models);
   ExtIpAddressBank.associate(sequelize.models);
   ExtContactType.associate(sequelize.models);
+  // ExtProductName.associate(sequelize.models);
 };
