@@ -34,6 +34,13 @@ const filter = Joi.string().optional().min(3).messages({
   "string.empty": "El campo filter no puede estar vácio",
 });
 
+const filterByNameOrCode = Joi.string().optional().min(2).messages({
+  "string.base": "El campo filter es inválido",
+  "any.required": "El campo filter es requerido.",
+  "string.min": "El campo debe ser de mínimo 2 caracteres",
+  "string.empty": "El campo filter no puede estar vácio",
+});
+
 const negotiations = Joi.string().required();
 const funcionarios = Joi.string().required();
 const users = Joi.string().required();
@@ -62,8 +69,8 @@ const getClientByCHBSchemaQuery = Joi.object({
   cities,
 }).options({ abortEarly: true });
 
-const getClientByNameSchemaQuery = Joi.object({
-  filter,
+const getClientByNameOrCodeSchemaQuery = Joi.object({
+  filter: filterByNameOrCode,
 }).options({ abortEarly: true });
 
 const getDateSchema = Joi.object<{ date: Date; cityId: number }, true>({
@@ -113,7 +120,7 @@ export default {
   getClientByCHBSchema,
   getClientByCodeSchema,
   getClientByCHBSchemaQuery,
-  getClientByNameSchemaQuery,
+  getClientByNameOrCodeSchemaQuery,
   getDateSchema,
   saveClientSchema,
   transferClientToAnotherBankSchema,
