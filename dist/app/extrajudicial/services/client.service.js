@@ -299,14 +299,14 @@ class ClientService {
                 throw boom_1.default.notFound("Ya existe un cliente con este código!");
             }
             if (client) {
-                if ((0, auth_handler_1.checkPermissionsWithoutParams)(["P02-04"], user)) {
+                if (yield (0, auth_handler_1.checkPermissionsWithoutParams)(["P02-04"], user)) {
                     return this.update(data.code, String(data.customerHasBankId), data);
                 }
                 else {
                     throw boom_1.default.notFound("No tienes permisos para actualizar este cliente.");
                 }
             }
-            if ((0, auth_handler_1.checkPermissionsWithoutParams)(["P02-03"], user)) {
+            if (yield (0, auth_handler_1.checkPermissionsWithoutParams)(["P02-03"], user)) {
                 const newClient = yield models.CLIENT.create(data);
                 yield newClient.reload({
                     include: [

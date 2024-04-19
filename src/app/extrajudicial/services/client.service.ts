@@ -300,14 +300,14 @@ class ClientService {
     }
 
     if (client) {
-      if (checkPermissionsWithoutParams(["P02-04"], user)) {
+      if (await checkPermissionsWithoutParams(["P02-04"], user)) {
         return this.update(data.code, String(data.customerHasBankId), data);
       } else {
         throw boom.notFound("No tienes permisos para actualizar este cliente.");
       }
     }
 
-    if (checkPermissionsWithoutParams(["P02-03"], user)) {
+    if (await checkPermissionsWithoutParams(["P02-03"], user)) {
       const newClient = await models.CLIENT.create(data);
       await newClient.reload({
         include: [

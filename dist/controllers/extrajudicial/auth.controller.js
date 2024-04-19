@@ -48,9 +48,13 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
                 });
             }
             else {
-                const _a = user, { password } = _a, rest = __rest(_a, ["password"]);
+                const _a = user, { password, permissions } = _a, rest = __rest(_a, ["password", "permissions"]);
                 const token = (0, jwt_1.signToken)(rest, `${process.env.JWT_SECRET}`);
-                return res.json({ success: "Sesión Iniciada", user: rest, token });
+                return res.json({
+                    success: "Sesión Iniciada",
+                    user: Object.assign(Object.assign({}, rest), { permissions }),
+                    token,
+                });
             }
         })(req, res, next);
     }
@@ -86,7 +90,7 @@ const changeCredentialsController = (req, res, next) => __awaiter(void 0, void 0
         const user = yield serviceCustomerUser.findOne(String((_g = req.user) === null || _g === void 0 ? void 0 : _g.id));
         const permissions = yield servicePermission.findAllByRoleId(user.dataValues.roleId);
         const customerUser = Object.assign(Object.assign({}, user.dataValues), { permissions });
-        const token = (0, jwt_1.signToken)(customerUser, `${process.env.JWT_SECRET}`);
+        const token = (0, jwt_1.signToken)(user.dataValues, `${process.env.JWT_SECRET}`);
         yield serviceUserLog.create({
             customerUserId: Number((_h = req.user) === null || _h === void 0 ? void 0 : _h.id),
             codeAction: "P01-02",
