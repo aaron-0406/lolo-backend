@@ -45,7 +45,7 @@ const GuarantorSchema: ModelAttributes<Guarantor, GuarantorType> = {
       key: "id_client",
     },
     onUpdate: "CASCADE",
-    onDelete: "CASCADE",
+    onDelete: "NO ACTION",
   },
 };
 
