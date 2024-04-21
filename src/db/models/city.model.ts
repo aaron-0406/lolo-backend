@@ -39,7 +39,7 @@ const CitySchema: ModelAttributes<City, CityType> = {
 
 class City extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
-    this.belongsTo(models.CUSTOMER_TABLE, { as: "customer" });
+    this.belongsTo(models.CUSTOMER, { as: "customer" });
 
     this.hasMany(models.CLIENT, {
       as: "client",
