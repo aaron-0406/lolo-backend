@@ -34,7 +34,7 @@ const DirectionSchema = {
             key: "id_client",
         },
         onUpdate: "CASCADE",
-        onDelete: "CASCADE",
+        onDelete: "NO ACTION",
     },
     addressTypeId: {
         allowNull: true,

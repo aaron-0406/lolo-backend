@@ -55,13 +55,13 @@ class Template extends Model {
     this.hasMany(models.TEMPLATE_HAS_VALUES, {
       as: "template_has_values",
       foreignKey: "templateId",
-      onDelete: "CASCADE",
+      onDelete: "NO ACTION",
       onUpdate: "CASCADE",
     });
     this.hasMany(models.TEMPLATE_IMG, {
       as: "template_imgs",
       foreignKey: "templateId",
-      onDelete: "CASCADE",
+      onDelete: "NO ACTION",
       onUpdate: "CASCADE",
     });
   }

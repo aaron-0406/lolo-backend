@@ -40,7 +40,7 @@ const FileSchema = {
             key: "id_client",
         },
         onUpdate: "CASCADE",
-        onDelete: "CASCADE",
+        onDelete: "NO ACTION",
     },
     tagId: {
         allowNull: true,

@@ -53,7 +53,7 @@ const CommentSchema = {
             key: "id_customer_user",
         },
         onUpdate: "CASCADE",
-        onDelete: "CASCADE",
+        onDelete: "NO ACTION",
     },
     clientId: {
         allowNull: false,
@@ -64,7 +64,7 @@ const CommentSchema = {
             key: "id_client",
         },
         onUpdate: "CASCADE",
-        onDelete: "CASCADE",
+        onDelete: "NO ACTION",
     },
 };
 class Comment extends sequelize_1.Model {
