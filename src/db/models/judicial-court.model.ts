@@ -7,6 +7,7 @@ import {
 } from "sequelize";
 import { JudicialCourtType } from "../../app/judicial/types/judicial-court.type";
 import customerHasBankModel from "./many-to-many/customer-has-bank.model";
+import cityModel from "./city.model";
 
 const JUDICIAL_COURT_TABLE = "JUDICIAL_COURT";
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
@@ -34,11 +35,23 @@ const JudicialCourtSchema: ModelAttributes<JudicialCourt, JudicialCourtType> = {
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
+  cityId: {
+    allowNull: true,
+    field: "city_id_city",
+    type: DataTypes.INTEGER,
+    references: {
+      model: cityModel.CITY_TABLE,
+      key: "id_city",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
 };
 
 class JudicialCourt extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
+    this.belongsTo(models.CITY, { as: "city" });
   }
 
   static config(sequelize: Sequelize) {

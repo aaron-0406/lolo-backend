@@ -15,6 +15,13 @@ class JudicialCourtService {
   async findAllByCHB(chb: number) {
     const rta = await models.JUDICIAL_COURT.findAll({
       where: { customerHasBankId: chb },
+      include: [
+        {
+          model: models.CITY,
+          as: "city",
+          attributes: ["id", "name"],
+        },
+      ],
     });
     return rta;
   }
@@ -24,6 +31,13 @@ class JudicialCourtService {
       where: {
         id,
       },
+      include: [
+        {
+          model: models.CITY,
+          as: "city",
+          attributes: ["id", "name"],
+        },
+      ],
     });
 
     if (!judicialCourt) {
@@ -39,7 +53,11 @@ class JudicialCourtService {
   }
 
   async update(id: string, changes: JudicialCourtType) {
-    const judicialCourt = await this.findByID(id);
+    const judicialCourt = await models.JUDICIAL_COURT.findByPk(id);
+    if (!judicialCourt) {
+      throw boom.notFound("Juzgado no encontrado");
+    }
+
     const rta = await judicialCourt.update(changes);
     return rta;
   }
