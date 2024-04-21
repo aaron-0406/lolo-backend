@@ -7,12 +7,14 @@ const id = Joi.number().required();
 const customerId = Joi.number().required();
 const name = Joi.string().required();
 const negotiationId = Joi.number().required();
+const clientId = Joi.number().required();
 
-export const getProductsByClientCodeSchema = Joi.object<{ code: string }, true>(
-  {
-    code,
-  }
-);
+export const getProductsByClientCodeSchema = Joi.object<
+  { clientId: number },
+  true
+>({
+  clientId,
+});
 
 export const getProductByIdSchema = Joi.object<{ id: number }, true>({
   id,
@@ -35,10 +37,10 @@ export const createProductSchema = Joi.object<
 >({
   code,
   state,
-  clientCode: code,
   customerId,
   name,
   negotiationId,
+  clientId,
 });
 
 export const updateProductSchema = Joi.object<
@@ -51,6 +53,7 @@ export const updateProductSchema = Joi.object<
     | "cityId"
     | "funcionarioId"
     | "customerHasBankId"
+    | "clientId"
   >,
   true
 >({

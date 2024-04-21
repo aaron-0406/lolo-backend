@@ -39,9 +39,10 @@ class JudicialCaseFileService {
     }
     findAllByCHB(chb, query) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { limit, page, courts, proceduralWays, subjects, users } = query;
+            const { limit, page, filter, courts, proceduralWays, subjects, users } = query;
             const limite = parseInt(limit, 10);
             const pagina = parseInt(page, 10);
+            const clientName = filter;
             const listCourts = JSON.parse(courts);
             const listProceduralWays = JSON.parse(proceduralWays);
             const listSubjects = JSON.parse(subjects);
@@ -64,13 +65,24 @@ class JudicialCaseFileService {
             let filtersWhere = {
                 customer_has_bank_id: chb,
             };
+            // Agregar filtro por nombre de cliente si se proporciona
+            if (clientName) {
+                filtersWhere = Object.assign(Object.assign({}, filtersWhere), { "$client.name$": { [sequelize_2.Op.like]: `%${clientName}%` } });
+            }
+            // Combinar filtros adicionales si se proporcionan
             if (Object.keys(filters).length > 0) {
                 filtersWhere = {
-                    [sequelize_2.Op.or]: [filters],
-                    customer_has_bank_id: chb,
+                    [sequelize_2.Op.and]: [{ [sequelize_2.Op.or]: [filters] }, filtersWhere],
                 };
             }
             const quantity = yield models.JUDICIAL_CASE_FILE.count({
+                include: [
+                    {
+                        model: models.CLIENT,
+                        as: "client",
+                        where: clientName ? { name: clientName } : undefined, // Aplicar filtro por nombre de cliente si se proporciona
+                    },
+                ],
                 where: filtersWhere,
             });
             const caseFiles = yield models.JUDICIAL_CASE_FILE.findAll({

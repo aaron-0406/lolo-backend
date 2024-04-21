@@ -62,18 +62,18 @@ const readXslxController = (req, res, next) => __awaiter(void 0, void 0, void 0,
         const products = yield productService.getAllByCustomerId(customerId);
         const clients = yield clientService.findAllByCustomerId(customerId);
         const clientsAdded = productsXlsx
-            .filter((product) => !clients.some((c) => c.code === product.clientCode))
-            .filter((client, index, arr) => arr.findIndex((t) => t.clientCode === client.clientCode) === index)
+            .filter((product) => !clients.some((c) => c.id === product.clientId))
+            .filter((client, index, arr) => arr.findIndex((t) => t.clientId === client.clientId) === index)
             .sort((a, b) => a.clientName.localeCompare(b.clientName));
         const clientsDeleted = clients
-            .filter((client) => !productsXlsx.some((c) => c.clientCode === client.code))
+            .filter((client) => !productsXlsx.some((c) => c.clientId === client.id))
             .sort((a, b) => a.name.localeCompare(b.name));
         const productsAdded = productsXlsx
             .filter((product) => !products.some((p) => p.code === product.code))
             .sort((a, b) => a.clientName.localeCompare(b.clientName));
         const productsDeleted = products
             .filter((product) => !productsXlsx.some((p) => p.code === product.code))
-            .sort((a, b) => String(a.clientCode).localeCompare(String(b.clientCode)));
+            .sort((a, b) => String(a.clientId).localeCompare(String(b.clientId)));
         const productsCastigo = products
             .filter((product) => {
             const productFound = productsXlsx.find((obj) => obj.code === product.code);
@@ -81,7 +81,7 @@ const readXslxController = (req, res, next) => __awaiter(void 0, void 0, void 0,
                 return false;
             return productFound.state === "CASTIGO" && product.state === "ACTIVA";
         })
-            .sort((a, b) => String(a.clientCode).localeCompare(String(b.clientCode)));
+            .sort((a, b) => String(a.clientId).localeCompare(String(b.clientId)));
         res.json({
             clientsAdded,
             clientsDeleted,
@@ -166,12 +166,12 @@ const createProductsXslxController = (req, res, next) => __awaiter(void 0, void 
                 _m = false;
                 try {
                     const product = _l;
-                    const client = yield clientService.findByCustomerIdAndCode(product.customerId, product.clientCode);
+                    const client = yield clientService.findByCustomerIdAndCode(product.customerId, product.clientId);
                     if (!client) {
                         //TODO: Update logic with save service of client service
                         /* await clientService.create(
                           {
-                            code: product.clientCode,
+                            code: product.clientId,
                             cityId: product.cityId,
                             name: product.clientName,
                             funcionarioId: product.funcionarioId,
@@ -184,12 +184,12 @@ const createProductsXslxController = (req, res, next) => __awaiter(void 0, void 
                     }
                     yield productService.create({
                         code: product.code,
-                        clientCode: product.clientCode,
                         customerId: product.customerId,
                         name: product.name,
                         state: product.state,
                         negotiationId: product.negotiationId,
                         customerHasBankId: product.customerHasBankId,
+                        clientId: product.clientId,
                     });
                 }
                 finally {
@@ -251,7 +251,7 @@ const sendXslxController = (req, res, next) => __awaiter(void 0, void 0, void 0,
                 rowTitles: ["CODIGO CLIENTE", "NOMBRE"],
                 workSheetName: "CLIENTES AGREGADOS",
                 rowData: clientsAdded.map((item) => {
-                    return [item.clientCode, item.clientName];
+                    return [item.clientId, item.clientName];
                 }),
             },
             {
@@ -272,7 +272,7 @@ const sendXslxController = (req, res, next) => __awaiter(void 0, void 0, void 0,
                 workSheetName: "PRODUCTOS AGREGADOS",
                 rowData: productsAdded.map((item) => {
                     return [
-                        item.clientCode,
+                        item.clientId,
                         item.clientName,
                         item.code,
                         item.name,
@@ -284,7 +284,7 @@ const sendXslxController = (req, res, next) => __awaiter(void 0, void 0, void 0,
                 rowTitles: ["CODIGO CLIENTE", "CODIGO PRODUCTO", "NOMBRE PRODUCTO"],
                 workSheetName: "PRODUCTOS ELIMINADOS",
                 rowData: productsDeleted.map((item) => {
-                    return [item.clientCode, item.code, item.name];
+                    return [item.clientId, item.code, item.name];
                 }),
             },
             {
@@ -296,7 +296,7 @@ const sendXslxController = (req, res, next) => __awaiter(void 0, void 0, void 0,
                 ],
                 workSheetName: "PRODUCTOS CASTIGO",
                 rowData: productsCastigo.map((item) => {
-                    return [item.clientCode, item.code, item.name, item.state];
+                    return [item.clientId, item.code, item.name, item.state];
                 }),
             },
         ];

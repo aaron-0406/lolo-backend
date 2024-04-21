@@ -31,9 +31,13 @@ export const loginController = async (
           qr: user.qr,
         });
       } else {
-        const { password, ...rest } = user as CustomerUserType;
+        const { password, permissions, ...rest } = user as CustomerUserType;
         const token = signToken(rest, `${process.env.JWT_SECRET}`);
-        return res.json({ success: "Sesión Iniciada", user: rest, token });
+        return res.json({
+          success: "Sesión Iniciada",
+          user: { ...rest, permissions },
+          token,
+        });
       }
     })(req, res, next);
   } catch (error) {
@@ -80,7 +84,7 @@ export const changeCredentialsController = async (
       user.dataValues.roleId
     );
     const customerUser = { ...user.dataValues, permissions };
-    const token = signToken(customerUser, `${process.env.JWT_SECRET}`);
+    const token = signToken(user.dataValues, `${process.env.JWT_SECRET}`);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),

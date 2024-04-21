@@ -4,7 +4,7 @@ import { ManagementActionType } from "../types/management-action.type";
 const id = Joi.number();
 const codeAction = Joi.string().min(1).max(10);
 const nameAction = Joi.string().min(1).max(150);
-const codeSubTypeManagement = Joi.string().min(1).max(10);
+const codeSubTypeManagement = Joi.string().min(1).max(10).optional().allow("");
 const customerHasBankId = Joi.number();
 
 const createManagementActionSchema = Joi.object<
@@ -13,7 +13,7 @@ const createManagementActionSchema = Joi.object<
 >({
   codeAction: codeAction.required(),
   nameAction: nameAction.required(),
-  codeSubTypeManagement: codeSubTypeManagement.required(),
+  codeSubTypeManagement: codeSubTypeManagement.optional(),
   customerHasBankId: customerHasBankId.required(),
 });
 
@@ -23,7 +23,7 @@ const updateManagementActionSchema = Joi.object<
 >({
   codeAction: codeAction.required(),
   nameAction: nameAction.required(),
-  codeSubTypeManagement: codeSubTypeManagement.required(),
+  codeSubTypeManagement: codeSubTypeManagement.optional(),
   customerHasBankId: customerHasBankId.required(),
 });
 

@@ -52,7 +52,7 @@ class CommentService {
                     {
                         model: models.CLIENT,
                         as: "client",
-                        attributes: ["code", "name", "cityId"],
+                        attributes: ["id", "code", "name", "cityId"],
                     },
                     {
                         model: models.MANAGEMENT_ACTION,
@@ -150,7 +150,7 @@ class CommentService {
         LEFT JOIN COMMENT C ON DATE(C.date) = fecha.dia
         INNER JOIN CUSTOMER_USER CU ON CU.id_customer_user = C.customer_user_id_customer_user
         INNER JOIN CUSTOMER CUS ON CUS.id_customer = CU.customer_id_customer
-        WHERE CUS.id_customer = ${customerId} 
+        WHERE CUS.id_customer = ${customerId}
         GROUP BY fecha.dia
     `;
             const comentariosPorDia = yield sequelize_1.default.query(query);
@@ -216,7 +216,7 @@ class CommentService {
         INNER JOIN CLIENT CLI ON CLI.id_client = C.client_id_client
         INNER JOIN CUSTOMER_HAS_BANK CHB ON CLI.customer_has_bank_id_customer_has_bank = CHB.id_customer_has_bank
         INNER JOIN BANK B ON B.id_bank = CHB.bank_id_bank
-      WHERE CHB.customer_id_customer=${customerId} 
+      WHERE CHB.customer_id_customer=${customerId}
             AND C.date BETWEEN DATE('${(0, helpers_1.formatDate)(primerDiaSemanaPasada)}') AND DATE('${(0, helpers_1.formatDate)(ultimoDiaSemanaPasada)}')
       GROUP BY B.id_bank
     `;
@@ -332,7 +332,7 @@ class CommentService {
         INNER JOIN CUSTOMER_HAS_BANK CHB ON CLI.customer_has_bank_id_customer_has_bank = CHB.id_customer_has_bank
         INNER JOIN BANK B ON B.id_bank = CHB.bank_id_bank
         INNER JOIN CUSTOMER_USER CU ON CU.id_customer_user = C.customer_user_id_customer_user
-      WHERE CHB.customer_id_customer=${customerId} 
+      WHERE CHB.customer_id_customer=${customerId}
             AND CU.id_customer_user = ${customerUserId}
             AND C.date BETWEEN DATE('${(0, helpers_1.formatDate)(primerDiaSemanaPasada)}') AND DATE('${(0, helpers_1.formatDate)(ultimoDiaSemanaPasada)}')
       GROUP BY B.id_bank

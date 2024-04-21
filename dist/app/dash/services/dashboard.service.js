@@ -35,7 +35,7 @@ class DashboardService {
                     ...products,
                     {
                         id: -1,
-                        clientCode: `${file[1]}`,
+                        clientId: Number(`${file[1]}`),
                         name: `${file[37]}`,
                         funcionarioId: `${file[29]}`,
                         cityId: `${file[32]}`,

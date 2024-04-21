@@ -35,17 +35,15 @@ export const readXslxController = async (
     const clients = await clientService.findAllByCustomerId(customerId);
 
     const clientsAdded: ProductTypeName[] = productsXlsx
-      .filter((product) => !clients.some((c) => c.code === product.clientCode))
+      .filter((product) => !clients.some((c) => c.id === product.clientId))
       .filter(
         (client, index, arr) =>
-          arr.findIndex((t) => t.clientCode === client.clientCode) === index
+          arr.findIndex((t) => t.clientId === client.clientId) === index
       )
       .sort((a, b) => a.clientName.localeCompare(b.clientName));
 
     const clientsDeleted: ClientType[] = clients
-      .filter(
-        (client) => !productsXlsx.some((c) => c.clientCode === client.code)
-      )
+      .filter((client) => !productsXlsx.some((c) => c.clientId === client.id))
       .sort((a, b) => a.name.localeCompare(b.name));
 
     const productsAdded: ProductTypeName[] = productsXlsx
@@ -54,7 +52,7 @@ export const readXslxController = async (
 
     const productsDeleted: ProductType[] = products
       .filter((product) => !productsXlsx.some((p) => p.code === product.code))
-      .sort((a, b) => String(a.clientCode).localeCompare(String(b.clientCode)));
+      .sort((a, b) => String(a.clientId).localeCompare(String(b.clientId)));
 
     const productsCastigo: ProductType[] = products
       .filter((product) => {
@@ -64,7 +62,7 @@ export const readXslxController = async (
         if (!productFound) return false;
         return productFound.state === "CASTIGO" && product.state === "ACTIVA";
       })
-      .sort((a, b) => String(a.clientCode).localeCompare(String(b.clientCode)));
+      .sort((a, b) => String(a.clientId).localeCompare(String(b.clientId)));
 
     res.json({
       clientsAdded,
@@ -132,13 +130,13 @@ export const createProductsXslxController = async (
     for await (const product of products) {
       const client = await clientService.findByCustomerIdAndCode(
         product.customerId,
-        product.clientCode
+        product.clientId
       );
       if (!client) {
         //TODO: Update logic with save service of client service
         /* await clientService.create(
           {
-            code: product.clientCode,
+            code: product.clientId,
             cityId: product.cityId,
             name: product.clientName,
             funcionarioId: product.funcionarioId,
@@ -151,12 +149,12 @@ export const createProductsXslxController = async (
       }
       await productService.create({
         code: product.code,
-        clientCode: product.clientCode,
         customerId: product.customerId,
         name: product.name,
         state: product.state,
         negotiationId: product.negotiationId,
         customerHasBankId: product.customerHasBankId,
+        clientId: product.clientId,
       });
     }
     res.json({ success: "Producto agregado" });
@@ -202,7 +200,7 @@ export const sendXslxController = async (
         rowTitles: ["CODIGO CLIENTE", "NOMBRE"],
         workSheetName: "CLIENTES AGREGADOS",
         rowData: clientsAdded.map((item: ProductTypeName) => {
-          return [item.clientCode, item.clientName];
+          return [item.clientId, item.clientName];
         }),
       },
       {
@@ -223,7 +221,7 @@ export const sendXslxController = async (
         workSheetName: "PRODUCTOS AGREGADOS",
         rowData: productsAdded.map((item: ProductTypeName) => {
           return [
-            item.clientCode,
+            item.clientId,
             item.clientName,
             item.code,
             item.name,
@@ -235,7 +233,7 @@ export const sendXslxController = async (
         rowTitles: ["CODIGO CLIENTE", "CODIGO PRODUCTO", "NOMBRE PRODUCTO"],
         workSheetName: "PRODUCTOS ELIMINADOS",
         rowData: productsDeleted.map((item: ProductType) => {
-          return [item.clientCode, item.code, item.name];
+          return [item.clientId, item.code, item.name];
         }),
       },
       {
@@ -247,7 +245,7 @@ export const sendXslxController = async (
         ],
         workSheetName: "PRODUCTOS CASTIGO",
         rowData: productsCastigo.map((item: ProductType) => {
-          return [item.clientCode, item.code, item.name, item.state];
+          return [item.clientId, item.code, item.name, item.state];
         }),
       },
     ];

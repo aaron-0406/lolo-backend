@@ -2,6 +2,9 @@ import passport from "passport";
 import boom from "@hapi/boom";
 import { NextFunction, Request, Response } from "express";
 import { TokenExpiredError } from "jsonwebtoken";
+import PermissionService from "../app/dash/services/permission.service";
+
+const servicePermission = new PermissionService();
 
 // Authenticate by JWT
 export const JWTAuth = (req: Request, res: Response, next: NextFunction) => {
@@ -27,9 +30,12 @@ export const JWTAuth = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export const checkPermissions = (...permissions: string[]) => {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const findPermissions = await servicePermission.findAllByRoleId(
+      req.user?.roleId ?? 0
+    );
     const user = req.user;
-    const userPermissions = user?.permissions?.map((permission: any) => {
+    const userPermissions = findPermissions?.map((permission: any) => {
       return permission.code;
     });
 
@@ -43,11 +49,15 @@ export const checkPermissions = (...permissions: string[]) => {
   };
 };
 
-export const checkPermissionsWithoutParams = (
+export const checkPermissionsWithoutParams = async (
   permissions: [...permissions: string[]],
   user?: Express.User
 ) => {
-  const userPermissions = user?.permissions?.map((permission: any) => {
+  const findPermissions = await servicePermission.findAllByRoleId(
+    user?.roleId ?? 0
+  );
+
+  const userPermissions = findPermissions?.map((permission: any) => {
     return permission.code;
   });
 

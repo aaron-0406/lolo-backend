@@ -37,7 +37,7 @@ const ECampoSchema = {
             key: "id_template",
         },
         onUpdate: "CASCADE",
-        onDelete: "CASCADE",
+        onDelete: "NO ACTION",
     },
 };
 class ECampo extends sequelize_1.Model {

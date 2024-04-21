@@ -9,7 +9,8 @@ export const getAllCityController = async (
   next: NextFunction
 ) => {
   try {
-    const cities = await service.findAll();
+    const { customerId } = req.params;
+    const cities = await service.findAll(Number(customerId));
     res.json(cities);
   } catch (error) {
     next(error);

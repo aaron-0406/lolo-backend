@@ -41,7 +41,7 @@ const ECampoSchema: ModelAttributes<ECampo, ECampoType> = {
       key: "id_template",
     },
     onUpdate: "CASCADE",
-    onDelete: "CASCADE",
+    onDelete: "NO ACTION",
   },
 };
 
