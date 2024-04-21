@@ -10,10 +10,16 @@ import {
 } from "../../controllers/dash/city.controller";
 import { JWTAuth } from "../../middlewares/auth.handler";
 
-const { getCitySchema, createCitySchema, updateCitySchema } = citySchema;
+const { getCitySchema, createCitySchema, updateCitySchema, getCitiesSchema } =
+  citySchema;
 const router = express.Router();
 
-router.get("/", JWTAuth, getAllCityController);
+router.get(
+  "/chb/:chb",
+  JWTAuth,
+  validatorHandler(getCitiesSchema, "params"),
+  getAllCityController
+);
 
 router.get(
   "/:id",

@@ -7,8 +7,13 @@ const { models } = sequelize;
 class CityService {
   constructor() {}
 
-  async findAll() {
-    const rta = await models.CITY.findAll();
+  async findAll(chb: number) {
+    console.log("rta");
+    const rta = await models.CITY.findAll({
+      where: {
+        customer_has_bank_id: chb,
+      },
+    });
     return rta;
   }
 
