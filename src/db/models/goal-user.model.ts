@@ -45,7 +45,7 @@ const GoalUserSchema: ModelAttributes<GoalUser, GoalUserType> = {
       key: "id_customer_user",
     },
     onUpdate: "CASCADE",
-    onDelete: "CASCADE",
+    onDelete: "NO ACTION",
   },
   createdAt: {
     allowNull: false,
