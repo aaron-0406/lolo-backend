@@ -11,8 +11,9 @@ const id = joi_1.default.number().required();
 const customerId = joi_1.default.number().required();
 const name = joi_1.default.string().required();
 const negotiationId = joi_1.default.number().required();
+const clientId = joi_1.default.number().required();
 exports.getProductsByClientCodeSchema = joi_1.default.object({
-    code,
+    clientId,
 });
 exports.getProductByIdSchema = joi_1.default.object({
     id,
@@ -26,10 +27,10 @@ exports.getProductsByCustomerIdSchema = joi_1.default.object({
 exports.createProductSchema = joi_1.default.object({
     code,
     state,
-    clientCode: code,
     customerId,
     name,
     negotiationId,
+    clientId,
 });
 exports.updateProductSchema = joi_1.default.object({
     state,

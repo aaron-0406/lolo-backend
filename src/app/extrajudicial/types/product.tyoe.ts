@@ -3,10 +3,10 @@ export type ProductType = {
   code: string;
   name: string;
   state: string;
-  clientCode: string;
   customerId: number;
   funcionarioId: string;
   cityId: string;
+  clientId: number;
   negotiationId: number;
 };
 

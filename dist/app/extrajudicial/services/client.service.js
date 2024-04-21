@@ -378,7 +378,7 @@ class ClientService {
             const productService = new product_service_1.default();
             const comments = yield commentService.findAllByDate(date);
             const commentsWithProducts = yield Promise.all(comments.map((comment) => __awaiter(this, void 0, void 0, function* () {
-                const products = yield productService.getByClientCode(comment.client.code);
+                const products = yield productService.getByClientId(comment.client.id);
                 return Object.assign(Object.assign({}, comment), { client: Object.assign(Object.assign({}, comment.client), { products: products.map((product) => {
                             return {
                                 code: product.code,

@@ -17,11 +17,11 @@ const boom_1 = __importDefault(require("@hapi/boom"));
 const { models } = sequelize_1.default;
 class ProductService {
     constructor() { }
-    getByClientCode(code) {
+    getByClientId(clientId) {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.PRODUCT.findAll({
                 where: {
-                    clientCode: code,
+                    client_id: clientId,
                 },
                 include: [{ model: models.NEGOTIATION, as: "negotiation" }],
             });

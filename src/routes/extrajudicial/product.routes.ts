@@ -22,7 +22,7 @@ import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 const router = Router();
 
 router.get(
-  "/client/:code",
+  "/client/:clientId",
   JWTAuth,
   validatorHandler(getProductsByClientCodeSchema, "params"),
   getProductsByClientCodeController
