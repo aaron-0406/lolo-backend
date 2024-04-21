@@ -7,10 +7,10 @@ const { models } = sequelize;
 class CityService {
   constructor() {}
 
-  async findAll(chb: number) {
+  async findAll(customerId: number) {
     const rta = await models.CITY.findAll({
       where: {
-        customer_id_customer: chb,
+        customer_id_customer: customerId,
       },
     });
     return rta;

@@ -34,7 +34,7 @@ const CitySchema = {
 };
 class City extends sequelize_1.Model {
     static associate(models) {
-        this.belongsTo(models.CUSTOMER_TABLE, { as: "customer" });
+        this.belongsTo(models.CUSTOMER, { as: "customer" });
         this.hasMany(models.CLIENT, {
             as: "client",
             foreignKey: "cityId",

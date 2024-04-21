@@ -5,18 +5,14 @@ const id = Joi.number();
 const customerId = Joi.number();
 const name = Joi.string().min(1).max(50);
 
-const createCitySchema = Joi.object<
-  Omit<CityType, "id" | "customerId">,
-  true
->({
+const createCitySchema = Joi.object<Omit<CityType, "id">, true>({
   name: name.required(),
+  customerId: customerId.required(),
 });
 
-const updateCitySchema = Joi.object<
-  Omit<CityType, "id" | "customerId">,
-  true
->({
+const updateCitySchema = Joi.object<Omit<CityType, "id">, true>({
   name: name,
+  customerId: customerId.required(),
 });
 
 const getCitySchema = Joi.object<{ id: number }, true>({

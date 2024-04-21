@@ -9,9 +9,11 @@ const customerId = joi_1.default.number();
 const name = joi_1.default.string().min(1).max(50);
 const createCitySchema = joi_1.default.object({
     name: name.required(),
+    customerId: customerId.required(),
 });
 const updateCitySchema = joi_1.default.object({
     name: name,
+    customerId: customerId.required(),
 });
 const getCitySchema = joi_1.default.object({
     id: id.required(),

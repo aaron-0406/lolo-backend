@@ -17,11 +17,11 @@ const boom_1 = __importDefault(require("@hapi/boom"));
 const { models } = sequelize_1.default;
 class CityService {
     constructor() { }
-    findAll(chb) {
+    findAll(customerId) {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.CITY.findAll({
                 where: {
-                    customer_id_customer: chb,
+                    customer_id_customer: customerId,
                 },
             });
             return rta;
