@@ -38,7 +38,7 @@ const DirectionSchema: ModelAttributes<Direction, DirectionType> = {
       key: "id_client",
     },
     onUpdate: "CASCADE",
-    onDelete: "CASCADE",
+    onDelete: "NO ACTION",
   },
   addressTypeId: {
     allowNull: true,

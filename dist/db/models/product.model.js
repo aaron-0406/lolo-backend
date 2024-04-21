@@ -48,7 +48,7 @@ const ProductSchema = {
             key: "id_customer",
         },
         onUpdate: "CASCADE",
-        onDelete: "CASCADE",
+        onDelete: "NO ACTION",
     },
     negotiationId: {
         allowNull: true,

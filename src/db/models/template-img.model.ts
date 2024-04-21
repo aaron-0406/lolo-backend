@@ -41,7 +41,7 @@ const TemplateImgSchema: ModelAttributes<TemplateImg, TemplateImgType> = {
       key: "id_template",
     },
     onUpdate: "CASCADE",
-    onDelete: "CASCADE",
+    onDelete: "NO ACTION",
   },
 };
 
@@ -51,7 +51,7 @@ class TemplateImg extends Model {
       as: "template",
       foreignKey: "templateId",
       targetKey: "id",
-      onDelete: "CASCADE",
+      onDelete: "NO ACTION",
       onUpdate: "CASCADE",
     });
   }

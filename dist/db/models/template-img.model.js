@@ -37,7 +37,7 @@ const TemplateImgSchema = {
             key: "id_template",
         },
         onUpdate: "CASCADE",
-        onDelete: "CASCADE",
+        onDelete: "NO ACTION",
     },
 };
 class TemplateImg extends sequelize_1.Model {
@@ -46,7 +46,7 @@ class TemplateImg extends sequelize_1.Model {
             as: "template",
             foreignKey: "templateId",
             targetKey: "id",
-            onDelete: "CASCADE",
+            onDelete: "NO ACTION",
             onUpdate: "CASCADE",
         });
     }
