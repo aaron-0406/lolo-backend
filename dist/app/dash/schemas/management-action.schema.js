@@ -7,18 +7,18 @@ const joi_1 = __importDefault(require("joi"));
 const id = joi_1.default.number();
 const codeAction = joi_1.default.string().min(1).max(10);
 const nameAction = joi_1.default.string().min(1).max(150);
-const codeSubTypeManagement = joi_1.default.string().min(1).max(10);
+const codeSubTypeManagement = joi_1.default.string().min(1).max(10).optional().allow("");
 const customerHasBankId = joi_1.default.number();
 const createManagementActionSchema = joi_1.default.object({
     codeAction: codeAction.required(),
     nameAction: nameAction.required(),
-    codeSubTypeManagement: codeSubTypeManagement.required(),
+    codeSubTypeManagement: codeSubTypeManagement.optional(),
     customerHasBankId: customerHasBankId.required(),
 });
 const updateManagementActionSchema = joi_1.default.object({
     codeAction: codeAction.required(),
     nameAction: nameAction.required(),
-    codeSubTypeManagement: codeSubTypeManagement.required(),
+    codeSubTypeManagement: codeSubTypeManagement.optional(),
     customerHasBankId: customerHasBankId.required(),
 });
 const getManagementActionSchema = joi_1.default.object({

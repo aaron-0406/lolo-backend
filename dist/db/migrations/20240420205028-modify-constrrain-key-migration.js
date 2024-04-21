@@ -50,19 +50,19 @@ function up(queryInterface) {
                 table: CLIENT_TABLE,
                 field: "id_client",
             },
-            onUpdate: "NO ACTION",
+            onUpdate: "CASCADE",
             onDelete: "NO ACTION",
         });
-        yield queryInterface.removeConstraint(COMMENT_TABLE, "customer_user_id_customer_user");
+        yield queryInterface.removeConstraint(COMMENT_TABLE, "COMMENT_ibfk_1");
         yield queryInterface.addConstraint(COMMENT_TABLE, {
             fields: ["customer_user_id_customer_user"],
             type: "foreign key",
-            name: "customer_user_id_customer_user",
+            name: "COMMENT_ibfk_1",
             references: {
                 table: CUSTOMER_USER_TABLE,
                 field: "id_customer_user",
             },
-            onUpdate: "NO ACTION",
+            onUpdate: "CASCADE",
             onDelete: "NO ACTION",
         });
         yield queryInterface.removeConstraint(DIRECTION_TABLE, "DIRECTION_ibfk_1");
@@ -74,19 +74,19 @@ function up(queryInterface) {
                 table: CLIENT_TABLE,
                 field: "id_client",
             },
-            onUpdate: "NO ACTION",
+            onUpdate: "CASCADE",
             onDelete: "NO ACTION",
         });
-        yield queryInterface.removeConstraint(ECAMPO_TABLE, "template_id_template");
+        yield queryInterface.removeConstraint(ECAMPO_TABLE, "ECAMPO_ibfk_1");
         yield queryInterface.addConstraint(ECAMPO_TABLE, {
             fields: ["template_id_template"],
             type: "foreign key",
-            name: "template_id_template",
+            name: "ECAMPO_ibfk_1",
             references: {
                 table: TEMPLATE_TABLE,
                 field: "id_template",
             },
-            onUpdate: "NO ACTION",
+            onUpdate: "CASCADE",
             onDelete: "NO ACTION",
         });
         yield queryInterface.removeConstraint(FILE_TABLE, "FILE_ibfk_1");
@@ -98,19 +98,19 @@ function up(queryInterface) {
                 table: CLIENT_TABLE,
                 field: "id_client",
             },
-            onUpdate: "NO ACTION",
+            onUpdate: "CASCADE",
             onDelete: "NO ACTION",
         });
-        yield queryInterface.removeConstraint(GOAL_USER_TABLE, "fk_goal_user_customer_user");
+        yield queryInterface.removeConstraint(GOAL_USER_TABLE, "GOAL_USER_ibfk_2");
         yield queryInterface.addConstraint(GOAL_USER_TABLE, {
             fields: ["customer_user_id_customer_user"],
             type: "foreign key",
-            name: "fk_goal_user_customer_user",
+            name: "GOAL_USER_ibfk_2",
             references: {
                 table: CUSTOMER_USER_TABLE,
                 field: "id_customer_user",
             },
-            onUpdate: "NO ACTION",
+            onUpdate: "CASCADE",
             onDelete: "NO ACTION",
         });
         yield queryInterface.removeConstraint(GOAL_TABLE, "fk_goal_customer");
@@ -122,7 +122,7 @@ function up(queryInterface) {
                 table: CUSTOMER_TABLE,
                 field: "id_customer",
             },
-            onUpdate: "NO ACTION",
+            onUpdate: "CASCADE",
             onDelete: "NO ACTION",
         });
         yield queryInterface.removeConstraint(GUARANTOR_TABLE, "GUARANTOR_ibfk_1");
@@ -134,7 +134,7 @@ function up(queryInterface) {
                 table: CLIENT_TABLE,
                 field: "id_client",
             },
-            onUpdate: "NO ACTION",
+            onUpdate: "CASCADE",
             onDelete: "NO ACTION",
         });
         yield queryInterface.removeConstraint(PRODUCT_TABLE, "PRODUCT_ibfk_2");
@@ -146,7 +146,7 @@ function up(queryInterface) {
                 table: CUSTOMER_TABLE,
                 field: "id_customer",
             },
-            onUpdate: "NO ACTION",
+            onUpdate: "CASCADE",
             onDelete: "NO ACTION",
         });
         yield queryInterface.removeConstraint(TEMPLATE_IMG_TABLE, "TEMPLATE_IMG_ibfk_1");
@@ -158,7 +158,7 @@ function up(queryInterface) {
                 table: TEMPLATE_TABLE,
                 field: "id_template",
             },
-            onUpdate: "NO ACTION",
+            onUpdate: "CASCADE",
             onDelete: "NO ACTION",
         });
     });
