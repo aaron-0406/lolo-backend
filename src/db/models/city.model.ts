@@ -6,8 +6,10 @@ import {
   ModelCtor,
 } from "sequelize";
 import { CityType } from "../../app/dash/types/city.type";
+import customerModel from "./customer.model";
 
 const CITY_TABLE = "CITY";
+const { CUSTOMER_TABLE } = customerModel;
 
 const CitySchema: ModelAttributes<City, CityType> = {
   id: {
@@ -22,10 +24,23 @@ const CitySchema: ModelAttributes<City, CityType> = {
     field: "name",
     type: DataTypes.STRING(50),
   },
+  customerId: {
+    allowNull: false,
+    field: "customer_id_customer",
+    type: DataTypes.INTEGER,
+    references: {
+      model: CUSTOMER_TABLE,
+      key: "id_customer",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
 };
 
 class City extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
+    this.belongsTo(models.CUSTOMER, { as: "customer" });
+
     this.hasMany(models.CLIENT, {
       as: "client",
       foreignKey: "cityId",
