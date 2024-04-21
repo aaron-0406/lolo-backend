@@ -28,16 +28,16 @@ const ProductSchema = {
         allowNull: false,
         type: sequelize_1.DataTypes.STRING(150),
     },
-    clientCode: {
+    clientId: {
         allowNull: false,
-        field: "client_code_client",
-        type: sequelize_1.DataTypes.STRING(150),
+        field: "client_id",
+        type: sequelize_1.DataTypes.INTEGER,
         references: {
             model: client_model_1.default.CLIENT_TABLE,
-            key: "code",
+            key: "id_client",
         },
         onUpdate: "CASCADE",
-        onDelete: "CASCADE",
+        onDelete: "NO ACTION",
     },
     customerId: {
         allowNull: false,
@@ -64,6 +64,7 @@ const ProductSchema = {
 };
 class Product extends sequelize_1.Model {
     static associate(models) {
+        this.belongsTo(models.CLIENT, { as: "client" });
         this.belongsTo(models.CUSTOMER, { as: "customer" });
         this.belongsTo(models.NEGOTIATION, { as: "negotiation" });
     }

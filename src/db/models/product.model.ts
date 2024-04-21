@@ -35,16 +35,16 @@ const ProductSchema: ModelAttributes<
     allowNull: false,
     type: DataTypes.STRING(150),
   },
-  clientCode: {
+  clientId: {
     allowNull: false,
-    field: "client_code_client",
-    type: DataTypes.STRING(150),
+    field: "client_id",
+    type: DataTypes.INTEGER,
     references: {
       model: clientModel.CLIENT_TABLE,
-      key: "code",
+      key: "id_client",
     },
     onUpdate: "CASCADE",
-    onDelete: "CASCADE",
+    onDelete: "NO ACTION",
   },
   customerId: {
     allowNull: false,
@@ -72,6 +72,7 @@ const ProductSchema: ModelAttributes<
 
 class Product extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
+    this.belongsTo(models.CLIENT, { as: "client" });
     this.belongsTo(models.CUSTOMER, { as: "customer" });
     this.belongsTo(models.NEGOTIATION, { as: "negotiation" });
   }

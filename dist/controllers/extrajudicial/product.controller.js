@@ -22,11 +22,12 @@ const serviceUserLog = new user_log_service_1.default();
 const { PRODUCT_TABLE } = product_model_1.default;
 const getProductsByClientCodeController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { code } = req.params;
-        const products = yield service.getByClientCode(code);
+        const { clientId } = req.params;
+        const products = yield service.getByClientId(Number(clientId));
         res.json(products);
     }
     catch (error) {
+        console.log(error);
         next(boom_1.default.badRequest(error.message));
     }
 });

@@ -7,10 +7,10 @@ const { models } = sequelize;
 class ProductService {
   constructor() {}
 
-  async getByClientCode(code: string): Promise<ProductType[]> {
+  async getByClientId(clientId: number): Promise<ProductType[]> {
     const rta = await models.PRODUCT.findAll({
       where: {
-        clientCode: code,
+        client_id: clientId,
       },
       include: [{ model: models.NEGOTIATION, as: "negotiation" }],
     });
