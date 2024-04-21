@@ -15,10 +15,11 @@ export const getProductsByClientCodeController = async (
   next: NextFunction
 ) => {
   try {
-    const { code } = req.params;
-    const products = await service.getByClientCode(code);
+    const { clientId } = req.params;
+    const products = await service.getByClientId(Number(clientId));
     res.json(products);
   } catch (error: any) {
+    console.log(error);
     next(boom.badRequest(error.message));
   }
 };

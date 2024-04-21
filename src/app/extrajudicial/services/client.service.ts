@@ -402,9 +402,7 @@ class ClientService {
     const comments = await commentService.findAllByDate(date);
     const commentsWithProducts = await Promise.all(
       comments.map(async (comment: any) => {
-        const products = await productService.getByClientCode(
-          comment.client.code
-        );
+        const products = await productService.getByClientId(comment.client.id);
 
         return {
           ...comment,
