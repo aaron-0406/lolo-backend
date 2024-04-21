@@ -15,7 +15,7 @@ const { getCitySchema, createCitySchema, updateCitySchema, getCitiesSchema } =
 const router = express.Router();
 
 router.get(
-  "/chb/:chb",
+  "/chb/:customerId",
   JWTAuth,
   validatorHandler(getCitiesSchema, "params"),
   getAllCityController

@@ -6,10 +6,10 @@ import {
   ModelCtor,
 } from "sequelize";
 import { CityType } from "../../app/dash/types/city.type";
-import customerHasBankModel from "./many-to-many/customer-has-bank.model";
+import customerModel from "./customer.model";
 
 const CITY_TABLE = "CITY";
-const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
+const { CUSTOMER_TABLE } = customerModel;
 
 const CitySchema: ModelAttributes<City, CityType> = {
   id: {
@@ -24,13 +24,13 @@ const CitySchema: ModelAttributes<City, CityType> = {
     field: "name",
     type: DataTypes.STRING(50),
   },
-  customerHasBankId: {
+  customerId: {
     allowNull: false,
-    field: "customer_has_bank_id",
+    field: "customer_id_customer",
     type: DataTypes.INTEGER,
     references: {
-      model: CUSTOMER_HAS_BANK_TABLE,
-      key: "id_customer_has_bank",
+      model: CUSTOMER_TABLE,
+      key: "id_customer",
     },
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
@@ -39,7 +39,7 @@ const CitySchema: ModelAttributes<City, CityType> = {
 
 class City extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
-    this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
+    this.belongsTo(models.CUSTOMER_TABLE, { as: "customer" });
 
     this.hasMany(models.CLIENT, {
       as: "client",

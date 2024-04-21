@@ -17,7 +17,7 @@ const city_service_1 = __importDefault(require("../../app/dash/services/city.ser
 const service = new city_service_1.default();
 const getAllCityController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const cities = yield service.findAll();
+        const cities = yield service.findAll(Number(req.params.customerId));
         res.json(cities);
     }
     catch (error) {

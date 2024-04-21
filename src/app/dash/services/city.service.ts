@@ -8,10 +8,9 @@ class CityService {
   constructor() {}
 
   async findAll(chb: number) {
-    console.log("rta");
     const rta = await models.CITY.findAll({
       where: {
-        customer_has_bank_id: chb,
+        customer_id_customer: chb,
       },
     });
     return rta;
