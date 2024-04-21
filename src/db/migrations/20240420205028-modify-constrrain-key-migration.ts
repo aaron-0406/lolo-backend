@@ -37,23 +37,20 @@ export async function up(queryInterface: QueryInterface) {
       table: CLIENT_TABLE,
       field: "id_client",
     },
-    onUpdate: "NO ACTION",
+    onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   });
 
-  await queryInterface.removeConstraint(
-    COMMENT_TABLE,
-    "customer_user_id_customer_user"
-  );
+  await queryInterface.removeConstraint(COMMENT_TABLE, "COMMENT_ibfk_1");
   await queryInterface.addConstraint(COMMENT_TABLE, {
     fields: ["customer_user_id_customer_user"],
     type: "foreign key",
-    name: "customer_user_id_customer_user",
+    name: "COMMENT_ibfk_1",
     references: {
       table: CUSTOMER_USER_TABLE,
       field: "id_customer_user",
     },
-    onUpdate: "NO ACTION",
+    onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   });
 
@@ -66,20 +63,20 @@ export async function up(queryInterface: QueryInterface) {
       table: CLIENT_TABLE,
       field: "id_client",
     },
-    onUpdate: "NO ACTION",
+    onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   });
 
-  await queryInterface.removeConstraint(ECAMPO_TABLE, "template_id_template");
+  await queryInterface.removeConstraint(ECAMPO_TABLE, "ECAMPO_ibfk_1");
   await queryInterface.addConstraint(ECAMPO_TABLE, {
     fields: ["template_id_template"],
     type: "foreign key",
-    name: "template_id_template",
+    name: "ECAMPO_ibfk_1",
     references: {
       table: TEMPLATE_TABLE,
       field: "id_template",
     },
-    onUpdate: "NO ACTION",
+    onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   });
 
@@ -92,23 +89,20 @@ export async function up(queryInterface: QueryInterface) {
       table: CLIENT_TABLE,
       field: "id_client",
     },
-    onUpdate: "NO ACTION",
+    onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   });
 
-  await queryInterface.removeConstraint(
-    GOAL_USER_TABLE,
-    "fk_goal_user_customer_user"
-  );
+  await queryInterface.removeConstraint(GOAL_USER_TABLE, "GOAL_USER_ibfk_2");
   await queryInterface.addConstraint(GOAL_USER_TABLE, {
     fields: ["customer_user_id_customer_user"],
     type: "foreign key",
-    name: "fk_goal_user_customer_user",
+    name: "GOAL_USER_ibfk_2",
     references: {
       table: CUSTOMER_USER_TABLE,
       field: "id_customer_user",
     },
-    onUpdate: "NO ACTION",
+    onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   });
 
@@ -121,7 +115,7 @@ export async function up(queryInterface: QueryInterface) {
       table: CUSTOMER_TABLE,
       field: "id_customer",
     },
-    onUpdate: "NO ACTION",
+    onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   });
 
@@ -134,7 +128,7 @@ export async function up(queryInterface: QueryInterface) {
       table: CLIENT_TABLE,
       field: "id_client",
     },
-    onUpdate: "NO ACTION",
+    onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   });
 
@@ -147,7 +141,7 @@ export async function up(queryInterface: QueryInterface) {
       table: CUSTOMER_TABLE,
       field: "id_customer",
     },
-    onUpdate: "NO ACTION",
+    onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   });
 
@@ -163,7 +157,7 @@ export async function up(queryInterface: QueryInterface) {
       table: TEMPLATE_TABLE,
       field: "id_template",
     },
-    onUpdate: "NO ACTION",
+    onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   });
 }
