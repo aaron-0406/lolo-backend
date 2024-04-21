@@ -3,25 +3,27 @@ import validatorHandler from "../../middlewares/validator.handler";
 import clientSchema from "../../app/extrajudicial/schemas/client.schema";
 import {
   saveClientController,
+  transferClientToAnotherBankController,
   deleteClientController,
   downloadExcelDailyManagementController,
   getAllClientsController,
   getClientByCodeCHBController,
   getClientsByCHBController,
   getClientsByCHBDetailsController,
-  getClientsByNameController,
+  getClientsByNameOrCodeController,
 } from "../../controllers/extrajudicial/client.controller";
 import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
 const {
   getClientByCHBSchema,
   getClientByCodeSchema,
-  saveClientSchema,
   getClientByCustomer,
-  deleteClientByCodeSchema,
   getClientByCHBSchemaQuery,
-  getClientByNameSchemaQuery,
+  getClientByNameOrCodeSchemaQuery,
   getDateSchema,
+  saveClientSchema,
+  transferClientToAnotherBankSchema,
+  deleteClientByCodeSchema,
 } = clientSchema;
 
 const router = express.Router();
@@ -45,11 +47,11 @@ router.get(
 );
 
 router.get(
-  "/:chb/by-name",
+  "/:chb/by-name-or-code",
   JWTAuth,
   validatorHandler(getClientByCHBSchema, "params"),
-  validatorHandler(getClientByNameSchemaQuery, "query"),
-  getClientsByNameController
+  validatorHandler(getClientByNameOrCodeSchemaQuery, "query"),
+  getClientsByNameOrCodeController
 );
 
 router.get(
@@ -72,6 +74,15 @@ router.post(
   validatorHandler(getClientByCustomer, "params"),
   validatorHandler(saveClientSchema, "body"),
   saveClientController
+);
+
+router.post(
+  "/transfer-client-to-another-bank/:chb",
+  JWTAuth,
+  checkPermissions("P02-06"),
+  validatorHandler(getClientByCHBSchema, "params"),
+  validatorHandler(transferClientToAnotherBankSchema, "body"),
+  transferClientToAnotherBankController
 );
 
 router.delete(

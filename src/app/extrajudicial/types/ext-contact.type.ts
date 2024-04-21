@@ -3,9 +3,11 @@ export type ExtContactType = {
   name: string;
   phone?: string;
   email?: string;
-  state: number;
+  dni: string;
+  state: boolean;
   clientId: number;
   customerHasBankId: number;
+  extContactTypeId: number;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;

@@ -4,6 +4,7 @@ import judicialSubjectSchema from "../../app/judicial/schemas/judicial-subject.s
 import {
   createJudicialSubjectController,
   deleteJudicialSubjectController,
+  getJudicialSubjectByCHBController,
   getJudicialSubjectByIdController,
   getJudicialSubjectController,
   updateJudicialSubjectController,
@@ -25,7 +26,7 @@ router.get(
   "/chb/:chb",
   JWTAuth,
   validatorHandler(getJudicialSubjectByCHBSchema, "params"),
-  getJudicialSubjectController
+  getJudicialSubjectByCHBController
 );
 
 router.get(

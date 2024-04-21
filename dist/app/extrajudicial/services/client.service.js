@@ -32,6 +32,7 @@ class ClientService {
             return rta;
         });
     }
+    //INFO: METHODS OF DASHBOARD
     findByCustomerIdAndCode(customerId, code) {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.CLIENT.findOne({
@@ -63,107 +64,36 @@ class ClientService {
             return JSON.parse(JSON.stringify(rta));
         });
     }
-    findByName(chb, query) {
+    //INFO: MODAL - SEARCH BY NAME OR CODE
+    findByNameOrCode(chb, query) {
         return __awaiter(this, void 0, void 0, function* () {
             const { filter } = query;
             const filtro = filter;
-            const filters = {};
-            if (filter !== "" && filter !== undefined) {
-                filters.name = { [sequelize_2.Op.substring]: filtro };
-            }
+            const filters = [
+                { name: { [sequelize_2.Op.substring]: filtro } },
+                { code: { [sequelize_2.Op.substring]: filtro } },
+            ];
             let filtersWhere = {
                 customer_has_bank_id_customer_has_bank: chb,
             };
-            if (Object.keys(filters).length > 0) {
+            if (filters.length > 0) {
                 filtersWhere = {
-                    [sequelize_2.Op.or]: [filters],
+                    [sequelize_2.Op.or]: [...filters],
                     customer_has_bank_id_customer_has_bank: chb,
                 };
             }
             const clients = yield models.CLIENT.findAll({
                 include: [
-                    { model: models.NEGOTIATION, as: "negotiation" },
-                    {
-                        model: models.FUNCIONARIO,
-                        as: "funcionario",
-                        attributes: { exclude: ["bankId"] },
-                    },
                     {
                         model: models.CUSTOMER_USER,
                         as: "customerUser",
-                    },
-                    {
-                        model: models.CITY,
-                        as: "city",
+                        attributes: ["id", "name"],
                     },
                 ],
                 order: [["name", "DESC"]],
                 where: filtersWhere,
             });
             return clients;
-        });
-    }
-    findAllCHB(chb, query) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { limit, page, filter, negotiations, funcionarios, users, cities } = query;
-            const limite = parseInt(limit, 10);
-            const pagina = parseInt(page, 10);
-            const filtro = filter;
-            const listNegotiations = JSON.parse(negotiations);
-            const listFuncionarios = JSON.parse(funcionarios);
-            const listUsers = JSON.parse(users);
-            const listCities = JSON.parse(cities);
-            const filters = {};
-            if (filter !== "" && filter !== undefined) {
-                filters.name = { [sequelize_2.Op.substring]: filtro };
-            }
-            if (listNegotiations.length) {
-                filters.negotiation_id_negotiation = { [sequelize_2.Op.in]: listNegotiations };
-            }
-            if (listFuncionarios.length) {
-                filters.funcionario_id_funcionario = { [sequelize_2.Op.in]: listFuncionarios };
-            }
-            if (listUsers.length) {
-                filters.customer_user_id_customer_user = { [sequelize_2.Op.in]: listUsers };
-            }
-            if (listCities.length) {
-                filters.city_id_city = { [sequelize_2.Op.in]: listCities };
-            }
-            let filtersWhere = {
-                customer_has_bank_id_customer_has_bank: chb,
-            };
-            if (Object.keys(filters).length > 0) {
-                filtersWhere = {
-                    [sequelize_2.Op.or]: [filters],
-                    customer_has_bank_id_customer_has_bank: chb,
-                };
-            }
-            const quantity = yield models.CLIENT.count({
-                where: filtersWhere,
-            });
-            const clients = yield models.CLIENT.findAll({
-                include: [
-                    { model: models.NEGOTIATION, as: "negotiation" },
-                    {
-                        model: models.FUNCIONARIO,
-                        as: "funcionario",
-                        attributes: { exclude: ["bankId"] },
-                    },
-                    {
-                        model: models.CUSTOMER_USER,
-                        as: "customerUser",
-                    },
-                    {
-                        model: models.CITY,
-                        as: "city",
-                    },
-                ],
-                order: [["name", "ASC"]],
-                limit: limite,
-                offset: (pagina - 1) * limite,
-                where: filtersWhere,
-            });
-            return { clients, quantity };
         });
     }
     findAllCHBDetails(chb) {
@@ -240,13 +170,39 @@ class ClientService {
             return rta;
         });
     }
+    // INFO: VIEW - CLIENTS
     findCode(code, chb) {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield models.CLIENT.findOne({
                 where: {
                     code: code,
-                    customer_has_bank_id_customer_has_bank: chb,
+                    [sequelize_2.Op.or]: [
+                        { chb_transferred: chb },
+                        { customer_has_bank_id_customer_has_bank: chb },
+                    ],
                 },
+                include: [
+                    {
+                        model: models.FUNCIONARIO,
+                        as: "funcionario",
+                        attributes: ["id", "name", "customerHasBankId"],
+                    },
+                    {
+                        model: models.NEGOTIATION,
+                        as: "negotiation",
+                        attributes: ["id", "name", "customerHasBankId"],
+                    },
+                    {
+                        model: models.CITY,
+                        as: "city",
+                        attributes: ["id", "name"],
+                    },
+                    {
+                        model: models.CUSTOMER_USER,
+                        as: "customerUser",
+                        attributes: ["id", "name"],
+                    },
+                ],
             });
             if (!client) {
                 throw boom_1.default.notFound("Cliente no encontrado");
@@ -254,27 +210,128 @@ class ClientService {
             return client;
         });
     }
+    findAllCHB(chb, query) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { limit, page, filter, negotiations, funcionarios, users, cities } = query;
+            const limite = parseInt(limit, 10);
+            const pagina = parseInt(page, 10);
+            const filtro = filter;
+            const listNegotiations = JSON.parse(negotiations);
+            const listFuncionarios = JSON.parse(funcionarios);
+            const listUsers = JSON.parse(users);
+            const listCities = JSON.parse(cities);
+            const filters = {};
+            if (filter !== "" && filter !== undefined) {
+                filters.name = { [sequelize_2.Op.substring]: filtro };
+            }
+            if (listNegotiations.length) {
+                filters.negotiation_id_negotiation = { [sequelize_2.Op.in]: listNegotiations };
+            }
+            if (listFuncionarios.length) {
+                filters.funcionario_id_funcionario = { [sequelize_2.Op.in]: listFuncionarios };
+            }
+            if (listUsers.length) {
+                filters.customer_user_id_customer_user = { [sequelize_2.Op.in]: listUsers };
+            }
+            if (listCities.length) {
+                filters.city_id_city = { [sequelize_2.Op.in]: listCities };
+            }
+            let filtersWhere = {
+                [sequelize_2.Op.or]: [
+                    { chb_transferred: chb },
+                    { customer_has_bank_id_customer_has_bank: chb },
+                ],
+            };
+            if (Object.keys(filters).length > 0) {
+                filtersWhere = {
+                    [sequelize_2.Op.or]: [filters],
+                    [sequelize_2.Op.and]: [
+                        {
+                            [sequelize_2.Op.or]: [
+                                { chb_transferred: chb },
+                                { customer_has_bank_id_customer_has_bank: chb },
+                            ],
+                        },
+                    ],
+                };
+            }
+            const quantity = yield models.CLIENT.count({
+                where: filtersWhere,
+            });
+            const clients = yield models.CLIENT.findAll({
+                include: [
+                    { model: models.NEGOTIATION, as: "negotiation" },
+                    {
+                        model: models.FUNCIONARIO,
+                        as: "funcionario",
+                        attributes: { exclude: ["bankId"] },
+                    },
+                    {
+                        model: models.CUSTOMER_USER,
+                        as: "customerUser",
+                        attributes: ["id", "name"],
+                    },
+                    {
+                        model: models.CITY,
+                        as: "city",
+                    },
+                ],
+                order: [["name", "ASC"]],
+                limit: limite,
+                offset: (pagina - 1) * limite,
+                where: filtersWhere,
+            });
+            return { clients, quantity };
+        });
+    }
     save(data, idCustomer, user) {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield models.CLIENT.findOne({
                 where: {
                     code: data.code,
-                    customer_has_bank_id_customer_has_bank: data.customerHasBankId,
+                    [sequelize_2.Op.or]: [
+                        { chb_transferred: data.customerHasBankId },
+                        { customer_has_bank_id_customer_has_bank: data.customerHasBankId },
+                    ],
                 },
             });
             if (!data.id && client) {
                 throw boom_1.default.notFound("Ya existe un cliente con este código!");
             }
             if (client) {
-                if ((0, auth_handler_1.checkPermissionsWithoutParams)(["P02-04"], user)) {
+                if (yield (0, auth_handler_1.checkPermissionsWithoutParams)(["P02-04"], user)) {
                     return this.update(data.code, String(data.customerHasBankId), data);
                 }
                 else {
                     throw boom_1.default.notFound("No tienes permisos para actualizar este cliente.");
                 }
             }
-            if ((0, auth_handler_1.checkPermissionsWithoutParams)(["P02-03"], user)) {
+            if (yield (0, auth_handler_1.checkPermissionsWithoutParams)(["P02-03"], user)) {
                 const newClient = yield models.CLIENT.create(data);
+                yield newClient.reload({
+                    include: [
+                        {
+                            model: models.FUNCIONARIO,
+                            as: "funcionario",
+                            attributes: ["id", "name", "customerHasBankId"],
+                        },
+                        {
+                            model: models.NEGOTIATION,
+                            as: "negotiation",
+                            attributes: ["id", "name", "customerHasBankId"],
+                        },
+                        {
+                            model: models.CITY,
+                            as: "city",
+                            attributes: ["id", "name"],
+                        },
+                        {
+                            model: models.CUSTOMER_USER,
+                            as: "customerUser",
+                            attributes: ["id", "name"],
+                        },
+                    ],
+                });
                 // CREATE A FOLDER FOR CLIENT
                 yield (0, aws_bucket_1.createFolder)(`${config_1.default.AWS_CHB_PATH}${idCustomer}/${data.customerHasBankId}/${data.code}/`);
                 return newClient;
@@ -282,6 +339,13 @@ class ClientService {
             else {
                 throw boom_1.default.notFound("No tienes permisos para crear un nuevo cliente.");
             }
+        });
+    }
+    transferToAnotherBank(code, chb, chbTransferred) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const client = yield this.findCode(code, chb);
+            yield client.update(Object.assign(Object.assign({}, client), { chbTransferred: chb == chbTransferred ? null : chbTransferred }));
+            return { id: client.dataValues.id, chbTransferred };
         });
     }
     update(code, chb, changes) {

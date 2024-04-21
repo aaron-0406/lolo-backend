@@ -39,25 +39,25 @@ class JudicialCaseFileService {
     }
     findAllByCHB(chb, query) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { limit, page, filter } = query;
-            //TODO: Improving this code to get the filtered judicial case list
-            //TODO: Remove negotiation, funcionario and customer user
-            const { negotiations, funcionarios, users, name } = filter;
+            const { limit, page, filter, courts, proceduralWays, subjects, users } = query;
             const limite = parseInt(limit, 10);
             const pagina = parseInt(page, 10);
-            const names = name;
-            const listNegotiations = JSON.parse(negotiations);
-            const listFuncionarios = JSON.parse(funcionarios);
+            const clientName = filter;
+            const listCourts = JSON.parse(courts);
+            const listProceduralWays = JSON.parse(proceduralWays);
+            const listSubjects = JSON.parse(subjects);
             const listUsers = JSON.parse(users);
             const filters = {};
-            if (filter !== "" && filter !== undefined) {
-                filters.name = { [sequelize_2.Op.substring]: names };
+            if (listCourts.length) {
+                filters.judicial_court_id_judicial_court = { [sequelize_2.Op.in]: listCourts };
             }
-            if (listNegotiations.length) {
-                filters.negotiation_id_negotiation = { [sequelize_2.Op.in]: listNegotiations };
+            if (listProceduralWays.length) {
+                filters.judicial_procedural_way_id_judicial_procedural_way = {
+                    [sequelize_2.Op.in]: listProceduralWays,
+                };
             }
-            if (listFuncionarios.length) {
-                filters.funcionario_id_funcionario = { [sequelize_2.Op.in]: listFuncionarios };
+            if (listSubjects.length) {
+                filters.judicial_subject_id_judicial_subject = { [sequelize_2.Op.in]: listSubjects };
             }
             if (listUsers.length) {
                 filters.customer_user_id_customer_user = { [sequelize_2.Op.in]: listUsers };
@@ -65,34 +65,82 @@ class JudicialCaseFileService {
             let filtersWhere = {
                 customer_has_bank_id: chb,
             };
+            // Agregar filtro por nombre de cliente si se proporciona
+            if (clientName) {
+                filtersWhere = Object.assign(Object.assign({}, filtersWhere), { "$client.name$": { [sequelize_2.Op.like]: `%${clientName}%` } });
+            }
+            // Combinar filtros adicionales si se proporcionan
             if (Object.keys(filters).length > 0) {
                 filtersWhere = {
-                    [sequelize_2.Op.or]: [filters],
-                    customer_has_bank_id: chb,
+                    [sequelize_2.Op.and]: [{ [sequelize_2.Op.or]: [filters] }, filtersWhere],
                 };
             }
-            const quantity = yield models.CLIENT.count({
+            const quantity = yield models.JUDICIAL_CASE_FILE.count({
+                include: [
+                    {
+                        model: models.CLIENT,
+                        as: "client",
+                        where: clientName ? { name: clientName } : undefined, // Aplicar filtro por nombre de cliente si se proporciona
+                    },
+                ],
                 where: filtersWhere,
             });
-            const clients = yield models.CLIENT.findAll({
+            const caseFiles = yield models.JUDICIAL_CASE_FILE.findAll({
                 include: [
-                    { model: models.NEGOTIATION, as: "negotiation" },
-                    {
-                        model: models.FUNCIONARIO,
-                        as: "funcionario",
-                        attributes: { exclude: ["bankId"] },
-                    },
                     {
                         model: models.CUSTOMER_USER,
                         as: "customerUser",
+                        attributes: ["id", "name"],
+                    },
+                    {
+                        model: models.JUDICIAL_COURT,
+                        as: "judicialCourt",
+                    },
+                    {
+                        model: models.JUDICIAL_PROCEDURAL_WAY,
+                        as: "judicialProceduralWay",
+                    },
+                    {
+                        model: models.JUDICIAL_SUBJECT,
+                        as: "judicialSubject",
+                    },
+                    {
+                        model: models.CLIENT,
+                        as: "client",
+                        attributes: ["id", "name"],
                     },
                 ],
-                order: [["name", "ASC"]],
                 limit: limite,
                 offset: (pagina - 1) * limite,
                 where: filtersWhere,
             });
-            return { clients, quantity };
+            return { caseFiles, quantity };
+        });
+    }
+    existNumberCaseFile(customerId, numberCaseFile) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const judicialCaseFile = yield models.JUDICIAL_CASE_FILE.findOne({
+                where: {
+                    number_case_file: numberCaseFile,
+                },
+            });
+            if (!judicialCaseFile) {
+                return false;
+            }
+            const customerHasBank = yield models.CUSTOMER_HAS_BANK.findOne({
+                where: {
+                    id_customer_has_bank: judicialCaseFile === null || judicialCaseFile === void 0 ? void 0 : judicialCaseFile.dataValues.customerHasBankId,
+                },
+            });
+            if (!customerHasBank) {
+                return false;
+            }
+            if (customerId == customerHasBank.dataValues.idCustomer) {
+                return true;
+            }
+            else {
+                return false;
+            }
         });
     }
     findByID(id) {
@@ -101,6 +149,25 @@ class JudicialCaseFileService {
                 where: {
                     id,
                 },
+                include: [
+                    {
+                        model: models.CUSTOMER_USER,
+                        as: "customerUser",
+                        attributes: ["id", "name"],
+                    },
+                    {
+                        model: models.JUDICIAL_COURT,
+                        as: "judicialCourt",
+                    },
+                    {
+                        model: models.JUDICIAL_PROCEDURAL_WAY,
+                        as: "judicialProceduralWay",
+                    },
+                    {
+                        model: models.JUDICIAL_SUBJECT,
+                        as: "judicialSubject",
+                    },
+                ],
             });
             if (!judicialCaseFile) {
                 throw boom_1.default.notFound("Expediente no encontrado");
@@ -111,6 +178,17 @@ class JudicialCaseFileService {
     findByNumberCaseFile(numberCaseFile) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialCaseFile = yield models.JUDICIAL_CASE_FILE.findOne({
+                include: {
+                    model: models.CLIENT,
+                    as: "client",
+                    include: [
+                        {
+                            model: models.CUSTOMER_USER,
+                            as: "customerUser",
+                            attributes: ["id", "name"],
+                        },
+                    ],
+                },
                 where: {
                     numberCaseFile,
                 },
@@ -121,10 +199,17 @@ class JudicialCaseFileService {
             return judicialCaseFile;
         });
     }
-    create(data) {
+    create(data, customerId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const newJudicialCaseFile = yield models.JUDICIAL_CASE_FILE.create(data);
-            return newJudicialCaseFile;
+            const existCaseFile = yield this.existNumberCaseFile(customerId, data.numberCaseFile);
+            if (!existCaseFile) {
+                const newJudicialCaseFile = yield models.JUDICIAL_CASE_FILE.create(data);
+                const judicialCaseFile = yield this.findByID(newJudicialCaseFile.dataValues.id);
+                return judicialCaseFile;
+            }
+            else {
+                throw boom_1.default.notFound("Ya existe un expediente con este código");
+            }
         });
     }
     update(id, changes) {

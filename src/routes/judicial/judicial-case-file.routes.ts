@@ -9,8 +9,9 @@ import {
   getJudicialCaseFileController,
   updateJudicialCaseFileController,
   getJudicialCaseFileByNumberCaseFileController,
+  getJudicialCaseFileByCHBIdController,
 } from "../../controllers/judicial/judicial-case-file.controller";
-import { JWTAuth } from "../../middlewares/auth.handler";
+import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
 const {
   getJudicialCaseFileByClientIDSchema,
@@ -18,6 +19,9 @@ const {
   getJudicialCaseFileByNumberCaseFileSchema,
   createJudicialCaseFileSchema,
   updateJudicialCaseFileSchema,
+  getJudicialCaseFileByCHBSchema,
+  getJudicialCaseFileByCHBSchemaQuery,
+  getJudicialCaseFileByCustomerIdSchema,
 } = judicialCaseFileSchema;
 
 const router = express.Router();
@@ -32,7 +36,15 @@ router.get(
 );
 
 router.get(
-  "/number-case/:code",
+  "/chb/:chb",
+  JWTAuth,
+  validatorHandler(getJudicialCaseFileByCHBSchema, "params"),
+  validatorHandler(getJudicialCaseFileByCHBSchemaQuery, "query"),
+  getJudicialCaseFileByCHBIdController
+);
+
+router.get(
+  "/number-case/:numberCaseFile",
   JWTAuth,
   validatorHandler(getJudicialCaseFileByNumberCaseFileSchema, "params"),
   getJudicialCaseFileByNumberCaseFileController
@@ -46,8 +58,10 @@ router.get(
 );
 
 router.post(
-  "/",
+  "/:customerId",
   JWTAuth,
+  checkPermissions("P13-02"),
+  validatorHandler(getJudicialCaseFileByCustomerIdSchema, "params"),
   validatorHandler(createJudicialCaseFileSchema, "body"),
   createJudicialCaseFileController
 );
@@ -55,6 +69,7 @@ router.post(
 router.patch(
   "/:id",
   JWTAuth,
+  checkPermissions("P13-03"),
   validatorHandler(getJudicialCaseFileByIDSchema, "params"),
   validatorHandler(updateJudicialCaseFileSchema, "body"),
   updateJudicialCaseFileController
@@ -63,6 +78,7 @@ router.patch(
 router.delete(
   "/:id",
   JWTAuth,
+  checkPermissions("P13-04"),
   validatorHandler(getJudicialCaseFileByIDSchema, "params"),
   deleteJudicialCaseFileController
 );

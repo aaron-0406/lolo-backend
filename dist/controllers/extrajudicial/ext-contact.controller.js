@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteExtContactController = exports.updateExtContactController = exports.createExtContactController = exports.getExtContactByIdController = exports.getExtContactClientIdController = exports.getExtContactController = void 0;
+exports.deleteExtContactController = exports.updateExtContactController = exports.updateContactStateController = exports.createExtContactController = exports.getExtContactByIdController = exports.getExtContactClientIdController = exports.getExtContactController = void 0;
 const ext_contact_service_1 = __importDefault(require("../../app/extrajudicial/services/ext-contact.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const ext_contacts_model_1 = __importDefault(require("../../db/models/ext-contacts.model"));
@@ -71,15 +71,15 @@ const createExtContactController = (req, res, next) => __awaiter(void 0, void 0,
     }
 });
 exports.createExtContactController = createExtContactController;
-const updateExtContactController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const updateContactStateController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _d, _e, _f;
     try {
         const { id } = req.params;
         const body = req.body;
-        const extContact = yield service.update(id, body);
+        const extContact = yield service.updateState(id, body.state);
         yield serviceUserLog.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
-            codeAction: "P02-02-07-02",
+            codeAction: "P02-02-07-04",
             entity: EXT_CONTACT_TABLE,
             entityId: Number(extContact.dataValues.id),
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
@@ -91,19 +91,40 @@ const updateExtContactController = (req, res, next) => __awaiter(void 0, void 0,
         next(error);
     }
 });
+exports.updateContactStateController = updateContactStateController;
+const updateExtContactController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _g, _h, _j;
+    try {
+        const { id } = req.params;
+        const body = req.body;
+        const extContact = yield service.update(id, body);
+        yield serviceUserLog.create({
+            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
+            codeAction: "P02-02-07-02",
+            entity: EXT_CONTACT_TABLE,
+            entityId: Number(extContact.dataValues.id),
+            ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
+            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+        });
+        res.json(extContact);
+    }
+    catch (error) {
+        next(error);
+    }
+});
 exports.updateExtContactController = updateExtContactController;
 const deleteExtContactController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _g, _h, _j;
+    var _k, _l, _m;
     try {
         const { id } = req.params;
         yield service.delete(id);
         yield serviceUserLog.create({
-            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
+            customerUserId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.id),
             codeAction: "P02-02-07-03",
             entity: EXT_CONTACT_TABLE,
             entityId: Number(id),
-            ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
-            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            ip: (_l = req.clientIp) !== null && _l !== void 0 ? _l : "",
+            customerId: Number((_m = req.user) === null || _m === void 0 ? void 0 : _m.customerId),
         });
         res.status(201).json({ id });
     }

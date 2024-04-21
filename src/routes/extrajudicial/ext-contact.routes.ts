@@ -8,6 +8,7 @@ import {
   getExtContactByIdController,
   getExtContactClientIdController,
   getExtContactController,
+  updateContactStateController,
 } from "../../controllers/extrajudicial/ext-contact.controller";
 import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
@@ -16,6 +17,7 @@ const {
   getExtContactByIDSchema,
   createExtContactSchema,
   updateExtContactSchema,
+  updateExtContactStateSchema,
 } = extContactSchema;
 
 const router = express.Router();
@@ -51,6 +53,15 @@ router.patch(
   validatorHandler(getExtContactByIDSchema, "params"),
   validatorHandler(updateExtContactSchema, "body"),
   updateExtContactController
+);
+
+router.patch(
+  "/state/:id",
+  JWTAuth,
+  checkPermissions("P02-02-07-04"),
+  validatorHandler(getExtContactByIDSchema, "params"),
+  validatorHandler(updateExtContactStateSchema, "body"),
+  updateContactStateController
 );
 
 router.delete(

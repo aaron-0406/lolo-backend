@@ -12,6 +12,7 @@ const name = joi_1.default.string().min(1).max(200);
 const salePerimeter = joi_1.default.string();
 const phone = joi_1.default.string().min(1).max(300);
 const email = joi_1.default.string().min(1).max(300);
+const chbTransferred = joi_1.default.number();
 const createdAt = joi_1.default.date();
 const cityId = joi_1.default.number();
 const funcionarioId = joi_1.default.number();
@@ -32,31 +33,25 @@ const filter = joi_1.default.string().optional().min(3).messages({
     "string.min": "El campo debe ser de mínimo 3 caracteres",
     "string.empty": "El campo filter no puede estar vácio",
 });
+const filterByNameOrCode = joi_1.default.string().optional().min(2).messages({
+    "string.base": "El campo filter es inválido",
+    "any.required": "El campo filter es requerido.",
+    "string.min": "El campo debe ser de mínimo 2 caracteres",
+    "string.empty": "El campo filter no puede estar vácio",
+});
 const negotiations = joi_1.default.string().required();
 const funcionarios = joi_1.default.string().required();
 const users = joi_1.default.string().required();
 const cities = joi_1.default.string().required();
-const saveClientSchema = joi_1.default.object({
-    id: id.optional(),
-    code: code.required(),
-    negotiationId,
-    dniOrRuc: dniOrRuc.optional().empty("").allow(""),
-    name: name.required(),
-    salePerimeter: salePerimeter.optional().empty("").allow(""),
-    phone: phone.optional().empty("").allow(""),
-    email: email.optional().empty("").allow(""),
-    createdAt: createdAt.optional(),
-    cityId: cityId.required(),
-    funcionarioId: funcionarioId.required(),
-    customerUserId: customerUserId.required(),
-    customerHasBankId: customerHasBankId.required(),
-});
 const getClientByCodeSchema = joi_1.default.object({
     code: code.required(),
     chb: customerHasBankId.required(),
 });
 const getClientByCHBSchema = joi_1.default.object({
     chb: customerHasBankId.required(),
+});
+const getClientByCustomer = joi_1.default.object({
+    idCustomer,
 });
 const getClientByCHBSchemaQuery = joi_1.default.object({
     page,
@@ -67,28 +62,46 @@ const getClientByCHBSchemaQuery = joi_1.default.object({
     users,
     cities,
 }).options({ abortEarly: true });
-const getClientByNameSchemaQuery = joi_1.default.object({
-    filter,
+const getClientByNameOrCodeSchemaQuery = joi_1.default.object({
+    filter: filterByNameOrCode,
 }).options({ abortEarly: true });
-const getClientByCustomer = joi_1.default.object({
-    idCustomer,
+const getDateSchema = joi_1.default.object({
+    date: joi_1.default.date().required(),
+    cityId: cityId.required(),
+});
+const saveClientSchema = joi_1.default.object({
+    id: id.optional(),
+    code: code.required(),
+    negotiationId,
+    dniOrRuc: dniOrRuc.optional().empty("").allow(""),
+    name: name.required(),
+    salePerimeter: salePerimeter.optional().empty("").allow(""),
+    phone: phone.optional().empty("").allow(""),
+    email: email.optional().empty("").allow(""),
+    chbTransferred: chbTransferred.optional().empty("").allow(""),
+    createdAt: createdAt.optional(),
+    cityId: cityId.required(),
+    funcionarioId: funcionarioId.required(),
+    customerUserId: customerUserId.required(),
+    customerHasBankId: customerHasBankId.required(),
+});
+const transferClientToAnotherBankSchema = joi_1.default.object({
+    code: code.required(),
+    chbTransferred: chbTransferred.required(),
 });
 const deleteClientByCodeSchema = joi_1.default.object({
     code: code.required(),
     chb: customerHasBankId.required(),
     idCustomer,
 });
-const getDateSchema = joi_1.default.object({
-    date: joi_1.default.date().required(),
-    cityId: cityId.required(),
-});
 exports.default = {
-    saveClientSchema,
     getClientByCustomer,
     getClientByCHBSchema,
     getClientByCodeSchema,
-    deleteClientByCodeSchema,
     getClientByCHBSchemaQuery,
-    getClientByNameSchemaQuery,
+    getClientByNameOrCodeSchemaQuery,
     getDateSchema,
+    saveClientSchema,
+    transferClientToAnotherBankSchema,
+    deleteClientByCodeSchema,
 };

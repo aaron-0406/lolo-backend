@@ -73,6 +73,31 @@ export const createExtContactController = async (
   }
 };
 
+export const updateContactStateController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const extContact = await service.updateState(id, body.state);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P02-02-07-04",
+      entity: EXT_CONTACT_TABLE,
+      entityId: Number(extContact.dataValues.id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    });
+
+    res.json(extContact);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const updateExtContactController = async (
   req: Request,
   res: Response,

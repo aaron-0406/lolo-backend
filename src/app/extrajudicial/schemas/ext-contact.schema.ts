@@ -19,9 +19,11 @@ const email = Joi.string()
     "string.max":
       "La dirección de correo electrónico no debe exceder los 200 caracteres",
   });
-const state = Joi.number();
+const state = Joi.boolean();
 const clientId = Joi.number();
 const customerHasBankId = Joi.number();
+const extContactTypeId = Joi.number();
+const dni = Joi.string();
 
 const createExtContactSchema = Joi.object<
   Omit<ExtContactType, "id" | "createdAt" | "updatedAt" | "deletedAt">,
@@ -33,6 +35,8 @@ const createExtContactSchema = Joi.object<
   state: state.required(),
   clientId: clientId.required(),
   customerHasBankId: customerHasBankId.required(),
+  extContactTypeId: extContactTypeId.optional(),
+  dni: dni.optional(),
 });
 
 const updateExtContactSchema = Joi.object<
@@ -45,6 +49,12 @@ const updateExtContactSchema = Joi.object<
   state: state.required(),
   clientId: clientId.required(),
   customerHasBankId: customerHasBankId.required(),
+  extContactTypeId: extContactTypeId.optional(),
+  dni: dni.optional(),
+});
+
+const updateExtContactStateSchema = Joi.object<{ state: boolean }, true>({
+  state: state.required(),
 });
 
 const getExtContactByClientIDSchema = Joi.object<{ clientId: number }, true>({
@@ -60,4 +70,5 @@ export default {
   updateExtContactSchema,
   getExtContactByClientIDSchema,
   getExtContactByIDSchema,
+  updateExtContactStateSchema,
 };

@@ -39,6 +39,7 @@ const ext_ip_address_bank_routes_1 = __importDefault(require("./extrajudicial/ex
 const ext_tag_group_routes_1 = __importDefault(require("./extrajudicial/ext-tag-group.routes"));
 const ext_tag_routes_1 = __importDefault(require("./extrajudicial/ext-tag.routes"));
 const ext_address_type_routes_1 = __importDefault(require("./extrajudicial/ext-address-type.routes"));
+const ext_contact_type_routes_1 = __importDefault(require("./extrajudicial/ext-contact-type.routes"));
 const routerApi = (app) => {
     const router = express_1.default.Router();
     app.use("/api/v1", router);
@@ -61,6 +62,7 @@ const routerApi = (app) => {
     router.use("/cobranza/ext-tag-group", ext_tag_group_routes_1.default);
     router.use("/cobranza/ext-tag", ext_tag_routes_1.default);
     router.use("/cobranza/ext-address-type", ext_address_type_routes_1.default);
+    router.use("/cobranza/ext-contact-type", ext_contact_type_routes_1.default);
     router.use("/judicial/case-file", judicial_case_file_routes_1.default);
     router.use("/judicial/court", judicial_court_routes_1.default);
     router.use("/judicial/procedural-way", judicial_procedural_way_routes_1.default);

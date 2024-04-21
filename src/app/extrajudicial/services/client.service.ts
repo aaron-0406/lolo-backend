@@ -21,6 +21,7 @@ class ClientService {
     return rta;
   }
 
+  //INFO: METHODS OF DASHBOARD
   async findByCustomerIdAndCode(customerId: number, code: string) {
     const rta = await models.CLIENT.findOne({
       where: {
@@ -50,41 +51,33 @@ class ClientService {
     return JSON.parse(JSON.stringify(rta));
   }
 
-  async findByName(chb: string, query: any) {
+  //INFO: MODAL - SEARCH BY NAME OR CODE
+  async findByNameOrCode(chb: string, query: any) {
     const { filter } = query;
 
     const filtro = filter as string;
 
-    const filters: any = {};
-    if (filter !== "" && filter !== undefined) {
-      filters.name = { [Op.substring]: filtro };
-    }
+    const filters: any[] = [
+      { name: { [Op.substring]: filtro } },
+      { code: { [Op.substring]: filtro } },
+    ];
 
     let filtersWhere: any = {
       customer_has_bank_id_customer_has_bank: chb,
     };
-    if (Object.keys(filters).length > 0) {
+    if (filters.length > 0) {
       filtersWhere = {
-        [Op.or]: [filters],
+        [Op.or]: [...filters],
         customer_has_bank_id_customer_has_bank: chb,
       };
     }
 
     const clients = await models.CLIENT.findAll({
       include: [
-        { model: models.NEGOTIATION, as: "negotiation" },
-        {
-          model: models.FUNCIONARIO,
-          as: "funcionario",
-          attributes: { exclude: ["bankId"] },
-        },
         {
           model: models.CUSTOMER_USER,
           as: "customerUser",
-        },
-        {
-          model: models.CITY,
-          as: "city",
+          attributes: ["id", "name"],
         },
       ],
       order: [["name", "DESC"]],
@@ -92,75 +85,6 @@ class ClientService {
     });
 
     return clients;
-  }
-
-  async findAllCHB(chb: string, query: any) {
-    const { limit, page, filter, negotiations, funcionarios, users, cities } =
-      query;
-
-    const limite = parseInt(limit, 10);
-    const pagina = parseInt(page, 10);
-    const filtro = filter as string;
-    const listNegotiations = JSON.parse(negotiations);
-    const listFuncionarios = JSON.parse(funcionarios);
-    const listUsers = JSON.parse(users);
-    const listCities = JSON.parse(cities);
-
-    const filters: any = {};
-    if (filter !== "" && filter !== undefined) {
-      filters.name = { [Op.substring]: filtro };
-    }
-    if (listNegotiations.length) {
-      filters.negotiation_id_negotiation = { [Op.in]: listNegotiations };
-    }
-    if (listFuncionarios.length) {
-      filters.funcionario_id_funcionario = { [Op.in]: listFuncionarios };
-    }
-    if (listUsers.length) {
-      filters.customer_user_id_customer_user = { [Op.in]: listUsers };
-    }
-    if (listCities.length) {
-      filters.city_id_city = { [Op.in]: listCities };
-    }
-
-    let filtersWhere: any = {
-      customer_has_bank_id_customer_has_bank: chb,
-    };
-    if (Object.keys(filters).length > 0) {
-      filtersWhere = {
-        [Op.or]: [filters],
-        customer_has_bank_id_customer_has_bank: chb,
-      };
-    }
-
-    const quantity = await models.CLIENT.count({
-      where: filtersWhere,
-    });
-
-    const clients = await models.CLIENT.findAll({
-      include: [
-        { model: models.NEGOTIATION, as: "negotiation" },
-        {
-          model: models.FUNCIONARIO,
-          as: "funcionario",
-          attributes: { exclude: ["bankId"] },
-        },
-        {
-          model: models.CUSTOMER_USER,
-          as: "customerUser",
-        },
-        {
-          model: models.CITY,
-          as: "city",
-        },
-      ],
-      order: [["name", "ASC"]],
-      limit: limite,
-      offset: (pagina - 1) * limite,
-      where: filtersWhere,
-    });
-
-    return { clients, quantity };
   }
 
   async findAllCHBDetails(chb: string) {
@@ -235,18 +159,125 @@ class ClientService {
     return rta;
   }
 
+  // INFO: VIEW - CLIENTS
   async findCode(code: string, chb: string) {
     const client = await models.CLIENT.findOne({
       where: {
         code: code,
-        customer_has_bank_id_customer_has_bank: chb,
+        [Op.or]: [
+          { chb_transferred: chb },
+          { customer_has_bank_id_customer_has_bank: chb },
+        ],
       },
+      include: [
+        {
+          model: models.FUNCIONARIO,
+          as: "funcionario",
+          attributes: ["id", "name", "customerHasBankId"],
+        },
+        {
+          model: models.NEGOTIATION,
+          as: "negotiation",
+          attributes: ["id", "name", "customerHasBankId"],
+        },
+        {
+          model: models.CITY,
+          as: "city",
+          attributes: ["id", "name"],
+        },
+        {
+          model: models.CUSTOMER_USER,
+          as: "customerUser",
+          attributes: ["id", "name"],
+        },
+      ],
     });
 
     if (!client) {
       throw boom.notFound("Cliente no encontrado");
     }
+
     return client;
+  }
+
+  async findAllCHB(chb: string, query: any) {
+    const { limit, page, filter, negotiations, funcionarios, users, cities } =
+      query;
+
+    const limite = parseInt(limit, 10);
+    const pagina = parseInt(page, 10);
+    const filtro = filter as string;
+    const listNegotiations = JSON.parse(negotiations);
+    const listFuncionarios = JSON.parse(funcionarios);
+    const listUsers = JSON.parse(users);
+    const listCities = JSON.parse(cities);
+
+    const filters: any = {};
+    if (filter !== "" && filter !== undefined) {
+      filters.name = { [Op.substring]: filtro };
+    }
+    if (listNegotiations.length) {
+      filters.negotiation_id_negotiation = { [Op.in]: listNegotiations };
+    }
+    if (listFuncionarios.length) {
+      filters.funcionario_id_funcionario = { [Op.in]: listFuncionarios };
+    }
+    if (listUsers.length) {
+      filters.customer_user_id_customer_user = { [Op.in]: listUsers };
+    }
+    if (listCities.length) {
+      filters.city_id_city = { [Op.in]: listCities };
+    }
+
+    let filtersWhere: any = {
+      [Op.or]: [
+        { chb_transferred: chb },
+        { customer_has_bank_id_customer_has_bank: chb },
+      ],
+    };
+    if (Object.keys(filters).length > 0) {
+      filtersWhere = {
+        [Op.or]: [filters],
+        [Op.and]: [
+          {
+            [Op.or]: [
+              { chb_transferred: chb },
+              { customer_has_bank_id_customer_has_bank: chb },
+            ],
+          },
+        ],
+      };
+    }
+
+    const quantity = await models.CLIENT.count({
+      where: filtersWhere,
+    });
+
+    const clients = await models.CLIENT.findAll({
+      include: [
+        { model: models.NEGOTIATION, as: "negotiation" },
+        {
+          model: models.FUNCIONARIO,
+          as: "funcionario",
+          attributes: { exclude: ["bankId"] },
+        },
+        {
+          model: models.CUSTOMER_USER,
+          as: "customerUser",
+          attributes: ["id", "name"],
+        },
+        {
+          model: models.CITY,
+          as: "city",
+        },
+      ],
+      order: [["name", "ASC"]],
+      limit: limite,
+      offset: (pagina - 1) * limite,
+      where: filtersWhere,
+    });
+
+    return { clients, quantity };
   }
 
   async save(
@@ -257,7 +288,10 @@ class ClientService {
     const client = await models.CLIENT.findOne({
       where: {
         code: data.code,
-        customer_has_bank_id_customer_has_bank: data.customerHasBankId,
+        [Op.or]: [
+          { chb_transferred: data.customerHasBankId },
+          { customer_has_bank_id_customer_has_bank: data.customerHasBankId },
+        ],
       },
     });
 
@@ -266,15 +300,39 @@ class ClientService {
     }
 
     if (client) {
-      if (checkPermissionsWithoutParams(["P02-04"], user)) {
+      if (await checkPermissionsWithoutParams(["P02-04"], user)) {
         return this.update(data.code, String(data.customerHasBankId), data);
       } else {
         throw boom.notFound("No tienes permisos para actualizar este cliente.");
       }
     }
 
-    if (checkPermissionsWithoutParams(["P02-03"], user)) {
+    if (await checkPermissionsWithoutParams(["P02-03"], user)) {
       const newClient = await models.CLIENT.create(data);
+      await newClient.reload({
+        include: [
+          {
+            model: models.FUNCIONARIO,
+            as: "funcionario",
+            attributes: ["id", "name", "customerHasBankId"],
+          },
+          {
+            model: models.NEGOTIATION,
+            as: "negotiation",
+            attributes: ["id", "name", "customerHasBankId"],
+          },
+          {
+            model: models.CITY,
+            as: "city",
+            attributes: ["id", "name"],
+          },
+          {
+            model: models.CUSTOMER_USER,
+            as: "customerUser",
+            attributes: ["id", "name"],
+          },
+        ],
+      });
 
       // CREATE A FOLDER FOR CLIENT
       await createFolder(
@@ -285,6 +343,20 @@ class ClientService {
     } else {
       throw boom.notFound("No tienes permisos para crear un nuevo cliente.");
     }
+  }
+
+  async transferToAnotherBank(
+    code: string,
+    chb: string,
+    chbTransferred: string
+  ) {
+    const client = await this.findCode(code, chb);
+    await client.update({
+      ...client,
+      chbTransferred: chb == chbTransferred ? null : chbTransferred,
+    });
+
+    return { id: client.dataValues.id, chbTransferred };
   }
 
   async update(

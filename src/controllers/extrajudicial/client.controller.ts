@@ -71,14 +71,14 @@ export const getClientsByCHBController = async (
   }
 };
 
-export const getClientsByNameController = async (
+export const getClientsByNameOrCodeController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { chb } = req.params;
-    const clients = await service.findByName(chb, req.query);
+    const clients = await service.findByNameOrCode(chb, req.query);
     res.json(clients);
   } catch (error) {
     next(error);
@@ -142,6 +142,36 @@ export const saveClientController = async (
   }
 };
 
+export const transferClientToAnotherBankController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { chb } = req.params;
+    const body = req.body;
+
+    const data = await service.transferToAnotherBank(
+      body.code,
+      chb,
+      body.chbTransferred
+    );
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P02-06",
+      entity: CLIENT_TABLE,
+      entityId: Number(body.code),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    });
+
+    res.status(201).json({ id: data.id, chbTransferred: data.chbTransferred });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const deleteClientController = async (
   req: Request,
   res: Response,
@@ -160,7 +190,7 @@ export const deleteClientController = async (
       customerId: Number(req.user?.customerId),
     });
 
-    res.status(201).json({ code, chb });
+    res.status(201).json({ code, chb, id: client.id });
   } catch (error) {
     next(error);
   }

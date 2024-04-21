@@ -12,7 +12,6 @@ import {
 } from "../../controllers/extrajudicial/ext-tag-group.controller";
 
 const {
-  getExtTagGroupByCHBSchema,
   getExtTagGroupByIDSchema,
   createExtTagGroupSchema,
   updateExtTagGroupSchema,
@@ -22,12 +21,7 @@ const router = express.Router();
 
 router.get("/", JWTAuth, getExtTagGroupController);
 
-router.get(
-  "/all-data-by-chb/:chb",
-  JWTAuth,
-  validatorHandler(getExtTagGroupByCHBSchema, "params"),
-  getExtTagGroupByCHBController
-);
+router.get("/all-data-with-order", JWTAuth, getExtTagGroupByCHBController);
 
 router.get(
   "/:id",

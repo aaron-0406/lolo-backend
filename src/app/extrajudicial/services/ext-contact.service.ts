@@ -17,6 +17,10 @@ class ExtContactService {
       where: {
         client_id_client: clientID,
       },
+      include: {
+        model: models.EXT_CONTACT_TYPE,
+        as: "extContactType",
+      },
       order: [["created_at", "DESC"]],
     });
 
@@ -28,6 +32,11 @@ class ExtContactService {
       where: {
         id_ext_contact: id,
       },
+      include: {
+        model: models.EXT_CONTACT_TYPE,
+        as: "extContactType",
+        attributes: ["contactType", "customerHasBankId"],
+      },
     });
 
     if (!extContact) {
@@ -38,13 +47,39 @@ class ExtContactService {
 
   async create(data: ExtContactType) {
     const newExtContact = await models.EXT_CONTACT.create(data);
+    await newExtContact.reload({
+      include: {
+        model: models.EXT_CONTACT_TYPE,
+        as: "extContactType",
+        attributes: ["contactType", "customerHasBankId"],
+      },
+    });
     return newExtContact;
+  }
+
+  async updateState(id: string, state: boolean) {
+    const extContact = await this.findByID(id);
+    const rta = await extContact.update({ ...extContact, state });
+    await rta.reload({
+      include: {
+        model: models.EXT_CONTACT_TYPE,
+        as: "extContactType",
+        attributes: ["contactType", "customerHasBankId"],
+      },
+    });
+    return rta;
   }
 
   async update(id: string, changes: ExtContactType) {
     const extContact = await this.findByID(id);
     const rta = await extContact.update(changes);
-
+    await rta.reload({
+      include: {
+        model: models.EXT_CONTACT_TYPE,
+        as: "extContactType",
+        attributes: ["contactType", "customerHasBankId"],
+      },
+    });
     return rta;
   }
 
