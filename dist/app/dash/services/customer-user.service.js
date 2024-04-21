@@ -41,6 +41,23 @@ class CustomerUserService {
             return rta;
         });
     }
+    findAllByOffice(officeId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rta = yield models.CUSTOMER_USER.findAll({
+                include: ["role"],
+                attributes: {
+                    exclude: ["password"],
+                },
+                where: {
+                    officeId,
+                },
+            });
+            if (!rta) {
+                throw boom_1.default.notFound("Cliente no encontrado");
+            }
+            return rta;
+        });
+    }
     findOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield models.CUSTOMER_USER.findByPk(id, {

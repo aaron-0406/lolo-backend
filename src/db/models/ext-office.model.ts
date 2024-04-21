@@ -5,34 +5,38 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { ExtIpAddressBankType } from "../../app/extrajudicial/types/ext-ip-address-bank.type";
+import { ExtOfficeType } from "../../app/extrajudicial/types/ext-office.type";
 import customerModel from "./customer.model";
-import extOfficeModel from "./ext-office.model";
+import cityModel from "./city.model";
 
-const EXT_IP_ADDRESS_BANK_TABLE = "EXT_IP_ADDRESS_BANK";
+const EXT_OFFICE_TABLE = "EXT_OFFICE";
 
-const ExtIpAddressBankSchema: ModelAttributes<
-  ExtIpAddressBank,
-  ExtIpAddressBankType
-> = {
+const ExtOfficeSchema: ModelAttributes<ExtOffice, ExtOfficeType> = {
   id: {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    field: "id_ext_ip_address_bank",
+    field: "id_ext_office",
     type: DataTypes.INTEGER,
   },
-  addressName: {
+  name: {
     allowNull: false,
     type: DataTypes.STRING(200),
   },
-  ip: {
+  address: {
     allowNull: false,
-    type: DataTypes.STRING(100),
+    type: DataTypes.STRING(200),
   },
-  state: {
+  cityId: {
     allowNull: false,
-    type: DataTypes.TINYINT({ length: 1 }),
+    field: "city_id_city",
+    type: DataTypes.INTEGER,
+    references: {
+      model: cityModel.CITY_TABLE,
+      key: "id_city",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
   },
   customerId: {
     allowNull: false,
@@ -45,16 +49,9 @@ const ExtIpAddressBankSchema: ModelAttributes<
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
-  officeId: {
+  state: {
     allowNull: false,
-    field: "ext_office_id_ext_office",
-    type: DataTypes.INTEGER,
-    references: {
-      model: extOfficeModel.EXT_OFFICE_TABLE,
-      key: "id_ext_office",
-    },
-    onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
+    type: DataTypes.TINYINT({ length: 1 }),
   },
   createdAt: {
     allowNull: false,
@@ -75,17 +72,26 @@ const ExtIpAddressBankSchema: ModelAttributes<
   },
 };
 
-class ExtIpAddressBank extends Model {
+class ExtOffice extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER, { as: "customer" });
-    this.belongsTo(models.EXT_OFFICE, { as: "extOffice" });
+    this.belongsTo(models.CITY, { as: "city" });
+
+    this.hasMany(models.EXT_IP_ADDRESS_BANK, {
+      as: "extIpAddressBank",
+      foreignKey: "officeId",
+    });
+    this.hasMany(models.CUSTOMER_USER, {
+      as: "customerUser",
+      foreignKey: "officeId",
+    });
   }
 
   static config(sequelize: Sequelize) {
     return {
       sequelize,
-      tableName: EXT_IP_ADDRESS_BANK_TABLE,
-      modelName: EXT_IP_ADDRESS_BANK_TABLE,
+      tableName: EXT_OFFICE_TABLE,
+      modelName: EXT_OFFICE_TABLE,
       timestamps: true,
       paranoid: true,
       deletedAt: "deleted_at",
@@ -93,8 +99,4 @@ class ExtIpAddressBank extends Model {
   }
 }
 
-export default {
-  EXT_IP_ADDRESS_BANK_TABLE,
-  ExtIpAddressBankSchema,
-  ExtIpAddressBank,
-};
+export default { EXT_OFFICE_TABLE, ExtOfficeSchema, ExtOffice };

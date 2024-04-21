@@ -5,27 +5,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const customer_model_1 = __importDefault(require("./customer.model"));
-const ext_office_model_1 = __importDefault(require("./ext-office.model"));
-const EXT_IP_ADDRESS_BANK_TABLE = "EXT_IP_ADDRESS_BANK";
-const ExtIpAddressBankSchema = {
+const city_model_1 = __importDefault(require("./city.model"));
+const EXT_OFFICE_TABLE = "EXT_OFFICE";
+const ExtOfficeSchema = {
     id: {
         primaryKey: true,
         allowNull: false,
         autoIncrement: true,
-        field: "id_ext_ip_address_bank",
+        field: "id_ext_office",
         type: sequelize_1.DataTypes.INTEGER,
     },
-    addressName: {
+    name: {
         allowNull: false,
         type: sequelize_1.DataTypes.STRING(200),
     },
-    ip: {
+    address: {
         allowNull: false,
-        type: sequelize_1.DataTypes.STRING(100),
+        type: sequelize_1.DataTypes.STRING(200),
     },
-    state: {
+    cityId: {
         allowNull: false,
-        type: sequelize_1.DataTypes.TINYINT({ length: 1 }),
+        field: "city_id_city",
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: city_model_1.default.CITY_TABLE,
+            key: "id_city",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
     },
     customerId: {
         allowNull: false,
@@ -38,16 +45,9 @@ const ExtIpAddressBankSchema = {
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
     },
-    officeId: {
+    state: {
         allowNull: false,
-        field: "ext_office_id_ext_office",
-        type: sequelize_1.DataTypes.INTEGER,
-        references: {
-            model: ext_office_model_1.default.EXT_OFFICE_TABLE,
-            key: "id_ext_office",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "NO ACTION",
+        type: sequelize_1.DataTypes.TINYINT({ length: 1 }),
     },
     createdAt: {
         allowNull: false,
@@ -67,24 +67,28 @@ const ExtIpAddressBankSchema = {
         type: sequelize_1.DataTypes.DATE,
     },
 };
-class ExtIpAddressBank extends sequelize_1.Model {
+class ExtOffice extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.CUSTOMER, { as: "customer" });
-        this.belongsTo(models.EXT_OFFICE, { as: "extOffice" });
+        this.belongsTo(models.CITY, { as: "city" });
+        this.hasMany(models.EXT_IP_ADDRESS_BANK, {
+            as: "extIpAddressBank",
+            foreignKey: "officeId",
+        });
+        this.hasMany(models.CUSTOMER_USER, {
+            as: "customerUser",
+            foreignKey: "officeId",
+        });
     }
     static config(sequelize) {
         return {
             sequelize,
-            tableName: EXT_IP_ADDRESS_BANK_TABLE,
-            modelName: EXT_IP_ADDRESS_BANK_TABLE,
+            tableName: EXT_OFFICE_TABLE,
+            modelName: EXT_OFFICE_TABLE,
             timestamps: true,
             paranoid: true,
             deletedAt: "deleted_at",
         };
     }
 }
-exports.default = {
-    EXT_IP_ADDRESS_BANK_TABLE,
-    ExtIpAddressBankSchema,
-    ExtIpAddressBank,
-};
+exports.default = { EXT_OFFICE_TABLE, ExtOfficeSchema, ExtOffice };

@@ -9,6 +9,7 @@ import {
   updateCustomerUserStateController,
   updateCustomerUserController,
   deleteCustomerUserController,
+  getCustomerUserByOfficeController,
 } from "../../controllers/dash/customer-user.controller";
 import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
@@ -18,6 +19,7 @@ const {
   createCustomerUserSchema,
   updateCustomerUserSchema,
   updateCustomerUserStateSchema,
+  getCustomerUserByOfficeSchema,
 } = customerUserSchema;
 const router = express.Router();
 
@@ -28,6 +30,13 @@ router.get(
   JWTAuth,
   validatorHandler(getCustomerUserByIdSchema, "params"),
   getCustomerUserByCustomerIdController
+);
+
+router.get(
+  "/office/:officeId",
+  JWTAuth,
+  validatorHandler(getCustomerUserByOfficeSchema, "params"),
+  getCustomerUserByOfficeController
 );
 
 router.get(

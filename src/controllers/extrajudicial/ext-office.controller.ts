@@ -1,94 +1,90 @@
 import { Request, Response, NextFunction } from "express";
-import ExtIpAddressBankService from "../../app/extrajudicial/services/ext-ip-address-bank.service";
+import ExtOfficeService from "../../app/extrajudicial/services/ext-office.service";
 import UserLogService from "../../app/dash/services/user-log.service";
-import ExtIpAddressBankModel from "../../db/models/ext-ip-address-bank.model";
+import ExtOfficeModel from "../../db/models/ext-office.model";
 
-const service = new ExtIpAddressBankService();
+const service = new ExtOfficeService();
 const serviceUserLog = new UserLogService();
 
-const { EXT_IP_ADDRESS_BANK_TABLE } = ExtIpAddressBankModel;
+const { EXT_OFFICE_TABLE } = ExtOfficeModel;
 
-export const getIpAddressesController = async (
+export const getOfficesController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { customerId } = req.params;
-    const ipAddress = await service.findAllByCustomerId(customerId);
-    res.json(ipAddress);
+    const offices = await service.findAllByCustomerId(customerId);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P17-05",
+      entity: EXT_OFFICE_TABLE,
+      entityId: Number(customerId),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    });
+
+    res.json(offices);
   } catch (error) {
     next(error);
   }
 };
 
-export const getIpAddressesByOfficeController = async (
+export const getOfficesByCityController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { officeId } = req.params;
-    const ipAddress = await service.findAllByOffice(officeId);
-    res.json(ipAddress);
+    const { cityId } = req.params;
+    const offices = await service.findAllByCityId(cityId);
+    res.json(offices);
   } catch (error) {
     next(error);
   }
 };
 
-export const getIpAddressByIpController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { ip, customerId } = req.params;
-    const ipAddress = await service.findByIP(ip, customerId);
-    res.json(ipAddress);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getIpAddressByIdController = async (
+export const getOfficeByIdController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { id, customerId } = req.params;
-    const ipAddress = await service.findByID(id, customerId);
-    res.json(ipAddress);
+    const office = await service.findByID(id, customerId);
+    res.json(office);
   } catch (error) {
     next(error);
   }
 };
 
-export const createIpAddressController = async (
+export const createOfficeController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const body = req.body;
-    const newIpAddress = await service.create(body);
+    const newOffice = await service.create(body);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P15-01",
-      entity: EXT_IP_ADDRESS_BANK_TABLE,
-      entityId: Number(newIpAddress.dataValues.id),
+      codeAction: "P17-01",
+      entity: EXT_OFFICE_TABLE,
+      entityId: Number(newOffice.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
-    res.status(201).json(newIpAddress);
+    res.status(201).json(newOffice);
   } catch (error) {
     next(error);
   }
 };
 
-export const updateIpAddressStateController = async (
+export const updateOfficeStateController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -96,24 +92,24 @@ export const updateIpAddressStateController = async (
   try {
     const { id, customerId } = req.params;
     const body = req.body;
-    const ipAddress = await service.updateState(id, customerId, body.state);
+    const office = await service.updateState(id, customerId, body.state);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P15-02",
-      entity: EXT_IP_ADDRESS_BANK_TABLE,
-      entityId: Number(ipAddress.dataValues.id),
+      codeAction: "P17-02",
+      entity: EXT_OFFICE_TABLE,
+      entityId: Number(office.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
-    res.json(ipAddress);
+    res.json(office);
   } catch (error) {
     next(error);
   }
 };
 
-export const updateIpAddressController = async (
+export const updateOfficeController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -121,24 +117,24 @@ export const updateIpAddressController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const ipAddress = await service.update(id, body);
+    const office = await service.update(id, body);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P15-03",
-      entity: EXT_IP_ADDRESS_BANK_TABLE,
-      entityId: Number(ipAddress.dataValues.id),
+      codeAction: "P17-03",
+      entity: EXT_OFFICE_TABLE,
+      entityId: Number(office.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
-    res.json(ipAddress);
+    res.json(office);
   } catch (error) {
     next(error);
   }
 };
 
-export const deleteIpAddressController = async (
+export const deleteOfficeController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -149,8 +145,8 @@ export const deleteIpAddressController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P15-04",
-      entity: EXT_IP_ADDRESS_BANK_TABLE,
+      codeAction: "P17-04",
+      entity: EXT_OFFICE_TABLE,
       entityId: Number(id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),

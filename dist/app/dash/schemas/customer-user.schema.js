@@ -22,6 +22,7 @@ const createAt = joi_1.default.date();
 const customerId = joi_1.default.number();
 const roleId = joi_1.default.number().integer().min(1);
 const loginAttempts = joi_1.default.number().integer().min(0);
+const officeId = joi_1.default.number();
 const createCustomerUserSchema = joi_1.default.object({
     name: name.required(),
     lastName: lastName.required(),
@@ -34,6 +35,7 @@ const createCustomerUserSchema = joi_1.default.object({
     customerId: customerId.required(),
     roleId: roleId.required(),
     loginAttempts: loginAttempts.required(),
+    officeId: officeId.required(),
 });
 const updateCustomerUserStateSchema = joi_1.default.object({
     state: state.required(),
@@ -46,6 +48,7 @@ const updateCustomerUserSchema = joi_1.default.object({
     state: state.required(),
     password: password.optional(),
     roleId: roleId.required(),
+    officeId: officeId.required(),
 });
 const getCustomerUserSchema = joi_1.default.object({
     id: id.required(),
@@ -53,10 +56,14 @@ const getCustomerUserSchema = joi_1.default.object({
 const getCustomerUserByIdSchema = joi_1.default.object({
     customerId: customerId.required(),
 });
+const getCustomerUserByOfficeSchema = joi_1.default.object({
+    officeId: officeId.required(),
+});
 exports.default = {
     createCustomerUserSchema,
     updateCustomerUserSchema,
     getCustomerUserSchema,
     getCustomerUserByIdSchema,
     updateCustomerUserStateSchema,
+    getCustomerUserByOfficeSchema,
 };

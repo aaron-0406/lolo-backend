@@ -8,6 +8,7 @@ import {
 import { CustomerUserType } from "../../app/dash/types/customer-user.type";
 import customerModel from "./customer.model";
 import rolesModel from "./roles.model";
+import extOfficeModel from "./ext-office.model";
 
 const CUSTOMER_USER_TABLE = "CUSTOMER_USER";
 
@@ -79,6 +80,17 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
+  officeId: {
+    allowNull: true,
+    field: "ext_office_id_ext_office",
+    type: DataTypes.INTEGER,
+    references: {
+      model: extOfficeModel.EXT_OFFICE_TABLE,
+      key: "id_ext_office",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
   loginAttempts: {
     type: DataTypes.INTEGER,
     defaultValue: 0,
@@ -94,7 +106,7 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
 class CustomerUser extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER, { as: "customer" });
-
+    this.belongsTo(models.EXT_OFFICE, { as: "extOffice" });
     this.belongsTo(models.ROLE, { as: "role" });
 
     this.hasMany(models.CLIENT, {

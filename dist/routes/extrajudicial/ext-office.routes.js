@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const validator_handler_1 = __importDefault(require("../../middlewares/validator.handler"));
+const ext_office_schema_1 = __importDefault(require("../../app/extrajudicial/schemas/ext-office.schema"));
+const ext_office_controller_1 = require("../../controllers/extrajudicial/ext-office.controller");
+const auth_handler_1 = require("../../middlewares/auth.handler");
+const { createOfficeSchema, updateOfficeStateSchema, updateOfficeSchema, getOfficeByIdSchema, getOfficesByCustomerIdSchema, getOfficesByIdSchema, getOfficesByCityIdSchema, } = ext_office_schema_1.default;
+const router = express_1.default.Router();
+router.get("/id-office/:id/:customerId", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getOfficeByIdSchema, "params"), ext_office_controller_1.getOfficeByIdController);
+router.get("/city/:cityId", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getOfficesByCityIdSchema, "params"), ext_office_controller_1.getOfficesByCityController);
+router.get("/:customerId", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P17-05"), (0, validator_handler_1.default)(getOfficesByCustomerIdSchema, "params"), ext_office_controller_1.getOfficesController);
+router.post("/", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P17-01"), (0, validator_handler_1.default)(createOfficeSchema, "body"), ext_office_controller_1.createOfficeController);
+router.patch("/state/:id/:customerId", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P17-02"), (0, validator_handler_1.default)(getOfficeByIdSchema, "params"), (0, validator_handler_1.default)(updateOfficeStateSchema, "body"), ext_office_controller_1.updateOfficeStateController);
+router.patch("/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P17-03"), (0, validator_handler_1.default)(getOfficesByIdSchema, "params"), (0, validator_handler_1.default)(updateOfficeSchema, "body"), ext_office_controller_1.updateOfficeController);
+router.delete("/:id/:customerId", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P17-04"), (0, validator_handler_1.default)(getOfficeByIdSchema, "params"), ext_office_controller_1.deleteOfficeController);
+exports.default = router;

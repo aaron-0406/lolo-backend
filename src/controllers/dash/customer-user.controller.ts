@@ -21,6 +21,20 @@ export const getCustomerUsersController = async (
   }
 };
 
+export const getCustomerUserByOfficeController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { officeId } = req.params;
+    const users = await service.findAllByOffice(officeId);
+    res.json(users);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getCustomerUserByCustomerIdController = async (
   req: Request,
   res: Response,

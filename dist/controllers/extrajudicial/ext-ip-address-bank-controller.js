@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteIpAddressController = exports.updateIpAddressController = exports.updateIpAddressStateController = exports.createIpAddressController = exports.getIpAddressByIdController = exports.getIpAddressByIpController = exports.getIpAddressesController = void 0;
+exports.deleteIpAddressController = exports.updateIpAddressController = exports.updateIpAddressStateController = exports.createIpAddressController = exports.getIpAddressByIdController = exports.getIpAddressByIpController = exports.getIpAddressesByOfficeController = exports.getIpAddressesController = void 0;
 const ext_ip_address_bank_service_1 = __importDefault(require("../../app/extrajudicial/services/ext-ip-address-bank.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const ext_ip_address_bank_model_1 = __importDefault(require("../../db/models/ext-ip-address-bank.model"));
@@ -30,6 +30,17 @@ const getIpAddressesController = (req, res, next) => __awaiter(void 0, void 0, v
     }
 });
 exports.getIpAddressesController = getIpAddressesController;
+const getIpAddressesByOfficeController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { officeId } = req.params;
+        const ipAddress = yield service.findAllByOffice(officeId);
+        res.json(ipAddress);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.getIpAddressesByOfficeController = getIpAddressesByOfficeController;
 const getIpAddressByIpController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { ip, customerId } = req.params;

@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const customer_model_1 = __importDefault(require("./customer.model"));
 const roles_model_1 = __importDefault(require("./roles.model"));
+const ext_office_model_1 = __importDefault(require("./ext-office.model"));
 const CUSTOMER_USER_TABLE = "CUSTOMER_USER";
 const CustomerUserSchema = {
     id: {
@@ -75,6 +76,17 @@ const CustomerUserSchema = {
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
     },
+    officeId: {
+        allowNull: true,
+        field: "ext_office_id_ext_office",
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: ext_office_model_1.default.EXT_OFFICE_TABLE,
+            key: "id_ext_office",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
+    },
     loginAttempts: {
         type: sequelize_1.DataTypes.INTEGER,
         defaultValue: 0,
@@ -89,6 +101,7 @@ const CustomerUserSchema = {
 class CustomerUser extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.CUSTOMER, { as: "customer" });
+        this.belongsTo(models.EXT_OFFICE, { as: "extOffice" });
         this.belongsTo(models.ROLE, { as: "role" });
         this.hasMany(models.CLIENT, {
             as: "client",

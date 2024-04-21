@@ -8,10 +8,11 @@ const validator_handler_1 = __importDefault(require("../../middlewares/validator
 const customer_user_schema_1 = __importDefault(require("../../app/dash/schemas/customer-user.schema"));
 const customer_user_controller_1 = require("../../controllers/dash/customer-user.controller");
 const auth_handler_1 = require("../../middlewares/auth.handler");
-const { getCustomerUserSchema, getCustomerUserByIdSchema, createCustomerUserSchema, updateCustomerUserSchema, updateCustomerUserStateSchema, } = customer_user_schema_1.default;
+const { getCustomerUserSchema, getCustomerUserByIdSchema, createCustomerUserSchema, updateCustomerUserSchema, updateCustomerUserStateSchema, getCustomerUserByOfficeSchema, } = customer_user_schema_1.default;
 const router = express_1.default.Router();
 router.get("/", auth_handler_1.JWTAuth, customer_user_controller_1.getCustomerUsersController);
 router.get("/users/:customerId", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getCustomerUserByIdSchema, "params"), customer_user_controller_1.getCustomerUserByCustomerIdController);
+router.get("/office/:officeId", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getCustomerUserByOfficeSchema, "params"), customer_user_controller_1.getCustomerUserByOfficeController);
 router.get("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getCustomerUserSchema, "params"), customer_user_controller_1.getCustomerUserByIdController);
 router.post("/", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P10-01"), (0, validator_handler_1.default)(createCustomerUserSchema, "body"), customer_user_controller_1.createCustomerUserController);
 router.patch("/state/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P10-04"), (0, validator_handler_1.default)(getCustomerUserSchema, "params"), (0, validator_handler_1.default)(updateCustomerUserStateSchema, "body"), customer_user_controller_1.updateCustomerUserStateController);
