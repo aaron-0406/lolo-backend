@@ -52,10 +52,10 @@ const ExtProductNameSchema = {
 class ExtProductName extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
-        // this.hasMany(models.PRODUCT, {
-        //   as: "product",
-        //   foreignKey: "extProductNameId",
-        // });
+        this.hasMany(models.PRODUCT, {
+            as: "product",
+            foreignKey: "extProductNameId",
+        });
     }
     static config(sequelize) {
         return {

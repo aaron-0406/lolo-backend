@@ -20,7 +20,7 @@ class ExtProductNameService {
     });
 
     if (!rta) {
-      throw boom.notFound("nombres de productos no encontrados");
+      throw boom.notFound("Nombres de productos no encontrados");
     }
 
     return rta;
@@ -34,7 +34,7 @@ class ExtProductNameService {
     });
 
     if (!extProductName) {
-      throw boom.notFound("nombre de contacto no encontrado");
+      throw boom.notFound("Nombre de producto no encontrado");
     }
     return extProductName;
   }

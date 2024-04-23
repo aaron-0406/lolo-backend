@@ -185,11 +185,11 @@ const createProductsXslxController = (req, res, next) => __awaiter(void 0, void 
                     yield productService.create({
                         code: product.code,
                         customerId: product.customerId,
-                        name: product.name,
                         state: product.state,
                         negotiationId: product.negotiationId,
                         customerHasBankId: product.customerHasBankId,
                         clientId: product.clientId,
+                        extProductNameId: product.extProductNameId,
                     });
                 }
                 finally {
@@ -271,20 +271,14 @@ const sendXslxController = (req, res, next) => __awaiter(void 0, void 0, void 0,
                 ],
                 workSheetName: "PRODUCTOS AGREGADOS",
                 rowData: productsAdded.map((item) => {
-                    return [
-                        item.clientId,
-                        item.clientName,
-                        item.code,
-                        item.name,
-                        item.state,
-                    ];
+                    return [item.clientId, item.clientName, item.code, item.state];
                 }),
             },
             {
                 rowTitles: ["CODIGO CLIENTE", "CODIGO PRODUCTO", "NOMBRE PRODUCTO"],
                 workSheetName: "PRODUCTOS ELIMINADOS",
                 rowData: productsDeleted.map((item) => {
-                    return [item.clientId, item.code, item.name];
+                    return [item.clientId, item.code];
                 }),
             },
             {
@@ -296,7 +290,7 @@ const sendXslxController = (req, res, next) => __awaiter(void 0, void 0, void 0,
                 ],
                 workSheetName: "PRODUCTOS CASTIGO",
                 rowData: productsCastigo.map((item) => {
-                    return [item.clientId, item.code, item.name, item.state];
+                    return [item.clientId, item.code, item.state];
                 }),
             },
         ];

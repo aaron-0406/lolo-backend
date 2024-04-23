@@ -154,7 +154,7 @@ class Client extends Model {
 
     this.hasMany(models.PRODUCT, {
       as: "product",
-      foreignKey: "code",
+      foreignKey: "clientId",
     });
   }
 

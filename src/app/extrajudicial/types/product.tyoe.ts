@@ -1,7 +1,6 @@
 export type ProductType = {
   id: number;
   code: string;
-  name: string;
   state: string;
   customerId: number;
   funcionarioId: string;
@@ -9,6 +8,7 @@ export type ProductType = {
   clientId: number;
   negotiationId: number;
   customerHasBankId: number;
+  extProductNameId: number;
 };
 
 export type ProductTypeName = ProductType & {

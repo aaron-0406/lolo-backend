@@ -28,7 +28,6 @@ class DashboardService {
         {
           id: -1,
           clientId: Number(`${file[1]}`),
-          name: `${file[37]}`,
           funcionarioId: `${file[29]}`,
           cityId: `${file[32]}`,
           code: `${file[2]}`,
@@ -37,6 +36,7 @@ class DashboardService {
           customerId: -1,
           negotiationId: -1,
           customerHasBankId: -1,
+          extProductNameId: -1,
         },
       ];
     });

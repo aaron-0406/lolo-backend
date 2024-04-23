@@ -8,8 +8,10 @@ const client_model_1 = __importDefault(require("./client.model"));
 const customer_has_bank_model_1 = __importDefault(require("./many-to-many/customer-has-bank.model"));
 const customer_model_1 = __importDefault(require("./customer.model"));
 const negotiation_model_1 = __importDefault(require("./negotiation.model"));
+const ext_product_name_model_1 = __importDefault(require("./ext-product-name.model"));
 const PRODUCT_TABLE = "PRODUCT";
 const { CUSTOMER_HAS_BANK_TABLE } = customer_has_bank_model_1.default;
+const { EXT_PRODUCT_NAME_TABLE } = ext_product_name_model_1.default;
 const ProductSchema = {
     id: {
         primaryKey: true,
@@ -23,10 +25,6 @@ const ProductSchema = {
         type: sequelize_1.DataTypes.STRING(150),
     },
     state: {
-        allowNull: false,
-        type: sequelize_1.DataTypes.STRING(150),
-    },
-    name: {
         allowNull: false,
         type: sequelize_1.DataTypes.STRING(150),
     },
@@ -74,15 +72,25 @@ const ProductSchema = {
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
     },
+    extProductNameId: {
+        allowNull: true,
+        field: "ext_product_name_id_ext_product_name",
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: EXT_PRODUCT_NAME_TABLE,
+            key: "id_ext_product_name",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
+    },
 };
 class Product extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.CLIENT, { as: "client" });
         this.belongsTo(models.CUSTOMER, { as: "customer" });
         this.belongsTo(models.NEGOTIATION, { as: "negotiation" });
-        // this.belongsTo(models.EXT_PRODUCT_NAME, { as: "extProductName" });
+        this.belongsTo(models.EXT_PRODUCT_NAME, { as: "extProductName" });
         this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
-        this.belongsTo(models.CLIENT, { as: "client" });
     }
     static config(sequelize) {
         return {
