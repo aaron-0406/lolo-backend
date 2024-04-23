@@ -1,62 +1,60 @@
 import Joi from "joi";
 import { ProductType } from "../types/product.tyoe";
 
-const code = Joi.string().required();
-const state = Joi.string().required();
-const id = Joi.number().required();
-const customerId = Joi.number().required();
-const name = Joi.string().required();
-const negotiationId = Joi.number().required();
-const clientId = Joi.number().required();
+const id = Joi.number();
+const code = Joi.string();
+const state = Joi.string();
+const customerId = Joi.number();
+const negotiationId = Joi.number();
+const clientId = Joi.number();
+const customerHasBankId = Joi.number();
+const extProductNameId = Joi.number();
 
 export const getProductsByClientCodeSchema = Joi.object<
   { clientId: number },
   true
 >({
-  clientId,
+  clientId: clientId.required(),
 });
 
 export const getProductByIdSchema = Joi.object<{ id: number }, true>({
-  id,
+  id: id.required(),
 });
 
 export const getProductByCodeSchema = Joi.object<{ code: string }, true>({
-  code,
+  code: code.required(),
 });
 
 export const getProductsByCustomerIdSchema = Joi.object<
   { customerId: number },
   true
 >({
-  customerId,
+  customerId: customerId.required(),
 });
 
 export const createProductSchema = Joi.object<
   Omit<ProductType, "id" | "cityId" | "funcionarioId">,
   true
 >({
-  code,
-  state,
-  customerId,
-  name,
-  negotiationId,
-  clientId,
+  code: code.required(),
+  state: state.required(),
+  customerId: customerId.required(),
+  negotiationId: negotiationId.required(),
+  clientId: clientId.required(),
+  customerHasBankId: customerHasBankId.required(),
+  extProductNameId: extProductNameId.optional(),
 });
 
 export const updateProductSchema = Joi.object<
   Omit<
     ProductType,
-    | "customerId"
-    | "clientCode"
-    | "code"
-    | "id"
-    | "cityId"
-    | "funcionarioId"
-    | "clientId"
+    "customerId" | "id" | "cityId" | "funcionarioId" | "clientId"
   >,
   true
 >({
-  state,
-  negotiationId,
-  name,
+  code: code.required(),
+  state: state.required(),
+  negotiationId: negotiationId.required(),
+  extProductNameId: extProductNameId.optional(),
+  customerHasBankId: customerHasBankId.required(),
 });
