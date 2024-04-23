@@ -36,6 +36,7 @@ import extTagGroupRouter from "./extrajudicial/ext-tag-group.routes";
 import extTagRouter from "./extrajudicial/ext-tag.routes";
 import extAddresType from "./extrajudicial/ext-address-type.routes";
 import extContactTypeRouter from "./extrajudicial/ext-contact-type.routes";
+import extProductNameRouter from "./extrajudicial/ext-product-name.routes";
 
 const routerApi = (app: Express) => {
   const router = express.Router();
@@ -61,6 +62,7 @@ const routerApi = (app: Express) => {
   router.use("/cobranza/ext-tag", extTagRouter);
   router.use("/cobranza/ext-address-type", extAddresType);
   router.use("/cobranza/ext-contact-type", extContactTypeRouter);
+  router.use("/cobranza/ext-product-name", extProductNameRouter);
 
   router.use("/judicial/case-file", judicialCaseFileRouter);
   router.use("/judicial/court", judicialCourtRouter);

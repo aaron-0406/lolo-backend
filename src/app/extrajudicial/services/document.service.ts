@@ -569,9 +569,12 @@ class DocumentService {
                               text: item.text
                                 ?.replace("[product.id]", product.id)
                                 ?.replace("[product.code]", product.code)
-                                ?.replace("[product.name]", product.name)
+                                //?.replace("[product.name]", product.name) //TODO: Refactor on this code
                                 ?.replace("[product.state]", product.state)
-                                ?.replace("[product.negotiationId]", product.negotiationId),
+                                ?.replace(
+                                  "[product.negotiationId]",
+                                  product.negotiationId
+                                ),
                             };
                           }),
                         };
@@ -707,7 +710,7 @@ class DocumentService {
                 text: item.text
                   ?.replace("[product.id]", product.id)
                   ?.replace("[product.code]", product.code)
-                  ?.replace("[product.name]", product.name)
+                  //?.replace("[product.name]", product.name) //TODO: Refactor on this code
                   ?.replace("[product.state]", product.state)
                   ?.replace("[product.negotiationId]", product.negotiationId),
               };

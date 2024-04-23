@@ -76,6 +76,11 @@ class CustomerHasBank extends Model {
       foreignKey: "customerHasBankId",
     });
 
+    this.hasMany(models.EXT_PRODUCT_NAME, {
+      as: "extProductName",
+      foreignKey: "customerHasBankId",
+    });
+
     this.belongsTo(models.BANK, { as: "bank", foreignKey: "idBank" });
   }
 

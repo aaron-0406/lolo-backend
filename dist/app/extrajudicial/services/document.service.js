@@ -321,8 +321,8 @@ class DocumentService {
                                         children: cell.children.map((paragraph) => {
                                             return {
                                                 texts: paragraph.texts.map((item) => {
-                                                    var _a, _b, _c, _d, _e;
-                                                    return Object.assign(Object.assign({}, item), { text: (_e = (_d = (_c = (_b = (_a = item.text) === null || _a === void 0 ? void 0 : _a.replace("[product.id]", product.id)) === null || _b === void 0 ? void 0 : _b.replace("[product.code]", product.code)) === null || _c === void 0 ? void 0 : _c.replace("[product.name]", product.name)) === null || _d === void 0 ? void 0 : _d.replace("[product.state]", product.state)) === null || _e === void 0 ? void 0 : _e.replace("[product.negotiationId]", product.negotiationId) });
+                                                    var _a, _b, _c, _d;
+                                                    return Object.assign(Object.assign({}, item), { text: (_d = (_c = (_b = (_a = item.text) === null || _a === void 0 ? void 0 : _a.replace("[product.id]", product.id)) === null || _b === void 0 ? void 0 : _b.replace("[product.code]", product.code)) === null || _c === void 0 ? void 0 : _c.replace("[product.state]", product.state)) === null || _d === void 0 ? void 0 : _d.replace("[product.negotiationId]", product.negotiationId) });
                                                 }),
                                             };
                                         }),
@@ -405,8 +405,8 @@ class DocumentService {
                         const product = client.product[k];
                         let newElement = JSON.parse(JSON.stringify(element.texts));
                         newElement = newElement.map((item) => {
-                            var _a, _b, _c, _d, _e;
-                            return Object.assign(Object.assign({}, item), { text: (_e = (_d = (_c = (_b = (_a = item.text) === null || _a === void 0 ? void 0 : _a.replace("[product.id]", product.id)) === null || _b === void 0 ? void 0 : _b.replace("[product.code]", product.code)) === null || _c === void 0 ? void 0 : _c.replace("[product.name]", product.name)) === null || _d === void 0 ? void 0 : _d.replace("[product.state]", product.state)) === null || _e === void 0 ? void 0 : _e.replace("[product.negotiationId]", product.negotiationId) });
+                            var _a, _b, _c, _d;
+                            return Object.assign(Object.assign({}, item), { text: (_d = (_c = (_b = (_a = item.text) === null || _a === void 0 ? void 0 : _a.replace("[product.id]", product.id)) === null || _b === void 0 ? void 0 : _b.replace("[product.code]", product.code)) === null || _c === void 0 ? void 0 : _c.replace("[product.state]", product.state)) === null || _d === void 0 ? void 0 : _d.replace("[product.negotiationId]", product.negotiationId) });
                         });
                         const parrafo = (0, docx_2.createParagraph)(newElement, false, element.options);
                         paragraphs.push(parrafo);
