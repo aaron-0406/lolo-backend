@@ -12,7 +12,14 @@ class ProductService {
       where: {
         client_id: clientId,
       },
-      include: [{ model: models.NEGOTIATION, as: "negotiation" }],
+      include: [
+        { model: models.NEGOTIATION, as: "negotiation" },
+        {
+          model: models.EXT_PRODUCT_NAME,
+          as: "extProductName",
+          attributes: ["id", "productName", "customerHasBankId"],
+        },
+      ],
     });
     return JSON.parse(JSON.stringify(rta));
   }
@@ -22,7 +29,14 @@ class ProductService {
       where: {
         code,
       },
-      include: [{ model: models.NEGOTIATION, as: "negotiation" }],
+      include: [
+        { model: models.NEGOTIATION, as: "negotiation" },
+        {
+          model: models.EXT_PRODUCT_NAME,
+          as: "extProductName",
+          attributes: ["id", "productName", "customerHasBankId"],
+        },
+      ],
     });
     // if (!product) throw boom.notFound("Producto no encontrado");
     return product;
@@ -38,6 +52,11 @@ class ProductService {
           model: models.NEGOTIATION,
           as: "negotiation",
           attributes: ["name", "customerHasBankId"],
+        },
+        {
+          model: models.EXT_PRODUCT_NAME,
+          as: "extProductName",
+          attributes: ["id", "productName", "customerHasBankId"],
         },
       ],
     });
@@ -70,6 +89,11 @@ class ProductService {
             model: models.NEGOTIATION,
             as: "negotiation",
             attributes: ["name", "customerHasBankId"],
+          },
+          {
+            model: models.EXT_PRODUCT_NAME,
+            as: "extProductName",
+            attributes: ["id", "productName", "customerHasBankId"],
           },
         ],
       });

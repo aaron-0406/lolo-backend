@@ -7,10 +7,14 @@ import {
 } from "sequelize";
 import { ProductType } from "../../app/extrajudicial/types/product.tyoe";
 import clientModel from "./client.model";
+import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 import customerModel from "./customer.model";
 import negotiationModel from "./negotiation.model";
+import extProductNameModel from "./ext-product-name.model";
 
 const PRODUCT_TABLE = "PRODUCT";
+const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
+const { EXT_PRODUCT_NAME_TABLE } = extProductNameModel;
 
 const ProductSchema: ModelAttributes<
   Product,
@@ -28,10 +32,6 @@ const ProductSchema: ModelAttributes<
     type: DataTypes.STRING(150),
   },
   state: {
-    allowNull: false,
-    type: DataTypes.STRING(150),
-  },
-  name: {
     allowNull: false,
     type: DataTypes.STRING(150),
   },
@@ -68,6 +68,28 @@ const ProductSchema: ModelAttributes<
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
+  customerHasBankId: {
+    allowNull: false,
+    field: "customer_has_bank_id_customer_has_bank",
+    type: DataTypes.INTEGER,
+    references: {
+      model: CUSTOMER_HAS_BANK_TABLE,
+      key: "id_customer_has_bank",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
+  extProductNameId: {
+    allowNull: true,
+    field: "ext_product_name_id_ext_product_name",
+    type: DataTypes.INTEGER,
+    references: {
+      model: EXT_PRODUCT_NAME_TABLE,
+      key: "id_ext_product_name",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
 };
 
 class Product extends Model {
@@ -75,6 +97,8 @@ class Product extends Model {
     this.belongsTo(models.CLIENT, { as: "client" });
     this.belongsTo(models.CUSTOMER, { as: "customer" });
     this.belongsTo(models.NEGOTIATION, { as: "negotiation" });
+    this.belongsTo(models.EXT_PRODUCT_NAME, { as: "extProductName" });
+    this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
   }
 
   static config(sequelize: Sequelize) {

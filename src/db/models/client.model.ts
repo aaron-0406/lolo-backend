@@ -151,6 +151,11 @@ class Client extends Model {
       as: "direction",
       foreignKey: "clientId",
     });
+
+    this.hasMany(models.PRODUCT, {
+      as: "product",
+      foreignKey: "clientId",
+    });
   }
 
   static config(sequelize: Sequelize) {

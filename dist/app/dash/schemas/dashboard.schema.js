@@ -29,6 +29,7 @@ const productSchema = joi_1.default.object({
     clientCode: joi_1.default.string().required(),
     customerId: joi_1.default.number().integer().required(),
     negotiationId: joi_1.default.number().required(),
+    customerHasBankId: joi_1.default.number().required(),
 });
 exports.createClientsSchema = joi_1.default.object({
     clients: joi_1.default.array().items(clientSchema).min(1),
