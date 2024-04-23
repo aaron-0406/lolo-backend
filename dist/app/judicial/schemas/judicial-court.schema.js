@@ -11,7 +11,7 @@ const cityId = joi_1.default.number();
 const createJudicialCourtSchema = joi_1.default.object({
     court: court.required(),
     customerHasBankId: customerHasBankId.required(),
-    cityId: cityId.required(),
+    cityId: cityId.optional(),
 });
 const updateJudicialCourtSchema = joi_1.default.object({
     court: court.required(),

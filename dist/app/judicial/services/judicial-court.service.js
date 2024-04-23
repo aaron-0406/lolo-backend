@@ -61,16 +61,27 @@ class JudicialCourtService {
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const newJudicialCourt = yield models.JUDICIAL_COURT.create(data);
+            yield newJudicialCourt.reload({
+                include: {
+                    model: models.CITY,
+                    as: "city",
+                    attributes: ["id", "name"],
+                },
+            });
             return newJudicialCourt;
         });
     }
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
-            const judicialCourt = yield models.JUDICIAL_COURT.findByPk(id);
-            if (!judicialCourt) {
-                throw boom_1.default.notFound("Juzgado no encontrado");
-            }
+            const judicialCourt = yield this.findByID(id);
             const rta = yield judicialCourt.update(changes);
+            yield rta.reload({
+                include: {
+                    model: models.CITY,
+                    as: "city",
+                    attributes: ["id", "name"],
+                },
+            });
             return rta;
         });
     }

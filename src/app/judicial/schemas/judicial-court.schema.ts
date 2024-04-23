@@ -12,7 +12,7 @@ const createJudicialCourtSchema = Joi.object<
 >({
   court: court.required(),
   customerHasBankId: customerHasBankId.required(),
-  cityId: cityId.required(),
+  cityId: cityId.optional(),
 });
 
 const updateJudicialCourtSchema = Joi.object<
