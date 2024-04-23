@@ -39,4 +39,5 @@ exports.updateProductSchema = joi_1.default.object({
     state: state.required(),
     negotiationId: negotiationId.required(),
     extProductNameId: extProductNameId.optional(),
+    customerHasBankId: customerHasBankId.required(),
 });
