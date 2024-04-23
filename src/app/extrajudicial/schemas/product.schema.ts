@@ -48,12 +48,7 @@ export const createProductSchema = Joi.object<
 export const updateProductSchema = Joi.object<
   Omit<
     ProductType,
-    | "customerId"
-    | "id"
-    | "cityId"
-    | "funcionarioId"
-    | "customerHasBankId"
-    | "clientId"
+    "customerId" | "id" | "cityId" | "funcionarioId" | "clientId"
   >,
   true
 >({
@@ -61,4 +56,5 @@ export const updateProductSchema = Joi.object<
   state: state.required(),
   negotiationId: negotiationId.required(),
   extProductNameId: extProductNameId.optional(),
+  customerHasBankId: customerHasBankId.required(),
 });
