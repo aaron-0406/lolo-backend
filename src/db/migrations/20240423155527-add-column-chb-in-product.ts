@@ -23,7 +23,7 @@ export async function up(queryInterface: QueryInterface) {
   );
 
   await queryInterface.sequelize.query(
-    `UPDATE product p INNER JOIN client c ON c.id_client = p.client_id set p.customer_has_bank_id_customer_has_bank = c.customer_has_bank_id_customer_has_bank;
+    `UPDATE PRODUCT p INNER JOIN CLIENT c ON c.id_client = p.client_id set p.customer_has_bank_id_customer_has_bank = c.customer_has_bank_id_customer_has_bank;
     `
   );
 

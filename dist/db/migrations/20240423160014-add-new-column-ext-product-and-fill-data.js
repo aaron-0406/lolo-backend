@@ -574,7 +574,7 @@ function up(queryInterface) {
             onUpdate: "CASCADE",
             onDelete: "NO ACTION",
         });
-        yield queryInterface.sequelize.query(`UPDATE product p INNER JOIN EXT_PRODUCT_NAME e ON e.customer_has_bank_id_customer_has_bank = p.customer_has_bank_id_customer_has_bank AND e.product_name = p.name
+        yield queryInterface.sequelize.query(`UPDATE PRODUCT p INNER JOIN EXT_PRODUCT_NAME e ON e.customer_has_bank_id_customer_has_bank = p.customer_has_bank_id_customer_has_bank AND e.product_name = p.name
       set p.ext_product_name_id_ext_product_name = e.id_ext_product_name;
     `);
         yield queryInterface.removeColumn(PRODUCT_TABLE, "name");

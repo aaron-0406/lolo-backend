@@ -24,7 +24,7 @@ function up(queryInterface) {
             type: sequelize_1.DataTypes.INTEGER,
             allowNull: true,
         });
-        yield queryInterface.sequelize.query(`UPDATE product p INNER JOIN client c ON c.code = p.client_code_client set p.client_id = c.id_client;
+        yield queryInterface.sequelize.query(`UPDATE PRODUCT p INNER JOIN CLIENT c ON c.code = p.client_code_client set p.client_id = c.id_client;
     `);
         yield queryInterface.addConstraint(PRODUCT_TABLE, {
             fields: ["client_id"],

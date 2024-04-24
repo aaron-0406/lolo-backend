@@ -31,7 +31,7 @@ function up(queryInterface) {
             onUpdate: "CASCADE",
             onDelete: "NO ACTION",
         });
-        yield queryInterface.sequelize.query(`UPDATE product p INNER JOIN client c ON c.id_client = p.client_id set p.customer_has_bank_id_customer_has_bank = c.customer_has_bank_id_customer_has_bank;
+        yield queryInterface.sequelize.query(`UPDATE PRODUCT p INNER JOIN CLIENT c ON c.id_client = p.client_id set p.customer_has_bank_id_customer_has_bank = c.customer_has_bank_id_customer_has_bank;
     `);
         yield queryInterface.changeColumn(PRODUCT_TABLE, "customer_has_bank_id_customer_has_bank", {
             type: sequelize_1.DataTypes.INTEGER,

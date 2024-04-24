@@ -569,7 +569,7 @@ export async function up(queryInterface: QueryInterface) {
   );
 
   await queryInterface.sequelize.query(
-    `UPDATE product p INNER JOIN EXT_PRODUCT_NAME e ON e.customer_has_bank_id_customer_has_bank = p.customer_has_bank_id_customer_has_bank AND e.product_name = p.name
+    `UPDATE PRODUCT p INNER JOIN EXT_PRODUCT_NAME e ON e.customer_has_bank_id_customer_has_bank = p.customer_has_bank_id_customer_has_bank AND e.product_name = p.name
       set p.ext_product_name_id_ext_product_name = e.id_ext_product_name;
     `
   );
