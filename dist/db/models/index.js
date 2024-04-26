@@ -41,6 +41,8 @@ const judicial_procedural_way_model_1 = __importDefault(require("./judicial-proc
 const user_log_model_1 = __importDefault(require("./user-log.model"));
 const ext_ip_address_bank_model_1 = __importDefault(require("./ext-ip-address-bank.model"));
 const ext_contact_type_model_1 = __importDefault(require("./ext-contact-type.model"));
+const judicial_obs_type_model_1 = __importDefault(require("./judicial-obs-type.model"));
+const judicial_observation_model_1 = __importDefault(require("./judicial-observation.model"));
 const { Customer, CustomerSchema } = customer_model_1.default;
 const { Funcionario, FuncionarioSchema } = funcionario_model_1.default;
 const { Bank, BankSchema } = bank_model_1.default;
@@ -78,6 +80,8 @@ const { UserLog, UserLogSchema } = user_log_model_1.default;
 const { JudicialCaseFile, JudicialCaseFileSchema } = judicial_case_file_model_1.default;
 const { ExtIpAddressBank, ExtIpAddressBankSchema } = ext_ip_address_bank_model_1.default;
 const { ExtContactType, ExtContactTypeSchema } = ext_contact_type_model_1.default;
+const { JudicialObsType, JudicialObsTypeSchema } = judicial_obs_type_model_1.default;
+const { JudicialObservation, JudicialObservationSchema } = judicial_observation_model_1.default;
 const setupModels = (sequelize) => {
     Customer.init(CustomerSchema, Customer.config(sequelize));
     Bank.init(BankSchema, Bank.config(sequelize));
@@ -116,6 +120,8 @@ const setupModels = (sequelize) => {
     UserLog.init(UserLogSchema, UserLog.config(sequelize));
     ExtIpAddressBank.init(ExtIpAddressBankSchema, ExtIpAddressBank.config(sequelize));
     ExtContactType.init(ExtContactTypeSchema, ExtContactType.config(sequelize));
+    JudicialObsType.init(JudicialObsTypeSchema, JudicialObsType.config(sequelize));
+    JudicialObservation.init(JudicialCaseFileSchema, JudicialObservation.config(sequelize));
     Customer.associate(sequelize.models);
     CustomerUser.associate(sequelize.models);
     Bank.associate(sequelize.models);
@@ -151,5 +157,7 @@ const setupModels = (sequelize) => {
     UserLog.associate(sequelize.models);
     ExtIpAddressBank.associate(sequelize.models);
     ExtContactType.associate(sequelize.models);
+    JudicialObsType.associate(sequelize.models);
+    JudicialObservation.associate(sequelize.models);
 };
 exports.setupModels = setupModels;
