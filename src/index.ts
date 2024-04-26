@@ -70,6 +70,13 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.static(path.join(__dirname, "/public/build")));
 app.use(ipHandler);
 
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
+  next();
+});
+
 routerApi(app);
 
 // Todas las peticiones GET que no hayamos manejado en las líneas anteriores retornaran nuestro app React
@@ -77,10 +84,6 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/public/build", "index.html"));
 });
 
-app.use((req: Request, res: Response, next: NextFunction) => {
-  res.setHeader("Cache-Control", "no-store");
-  next();
-});
 app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(ormErrorHandler);
