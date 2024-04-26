@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Response, Request } from "express";
 import cors, { CorsOptions } from "cors";
 import routerApi from "./routes";
 import errorHandlerr from "./middlewares/error.handler";
@@ -77,6 +77,10 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/public/build", "index.html"));
 });
 
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.setHeader("Cache-Control", "no-store");
+  next();
+});
 app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(ormErrorHandler);
