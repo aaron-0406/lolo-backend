@@ -5,46 +5,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const customer_has_bank_model_1 = __importDefault(require("./many-to-many/customer-has-bank.model"));
-const judicial_case_file_model_1 = __importDefault(require("./judicial-case-file.model"));
-const judicial_obs_type_model_1 = __importDefault(require("./judicial-obs-type.model"));
-const JUDICIAL_OBSERVATION_TABLE = "JUDICIAL_OBSERVATION";
+const judicial_observation_model_1 = __importDefault(require("./judicial-observation.model"));
+const JUDICIAL_OBS_FILE_TABLE = "JUDICIAL_OBS_FILE";
 const { CUSTOMER_HAS_BANK_TABLE } = customer_has_bank_model_1.default;
-const { JUDICIAL_CASE_FILE_TABLE } = judicial_case_file_model_1.default;
-const { JUDICIAL_OBS_TYPE_TABLE } = judicial_obs_type_model_1.default;
+const { JUDICIAL_OBSERVATION_TABLE } = judicial_observation_model_1.default;
 const JudicialObservationSchema = {
     id: {
         primaryKey: true,
         allowNull: false,
         autoIncrement: true,
-        field: "id_judicial_observation",
+        field: "id_judicial_obs_file",
         type: sequelize_1.DataTypes.INTEGER,
     },
-    date: {
+    awsName: {
         allowNull: false,
-        type: sequelize_1.DataTypes.DATE,
-    },
-    comment: {
-        allowNull: false,
+        field: "aws_name",
         type: sequelize_1.DataTypes.TEXT("long"),
     },
-    judicialCaseFileId: {
+    originalName: {
         allowNull: false,
-        field: "judicial_case_file_id_judicial_case_file",
-        type: sequelize_1.DataTypes.INTEGER,
-        references: {
-            model: JUDICIAL_CASE_FILE_TABLE,
-            key: "id_judicial_case_file",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "NO ACTION",
+        field: "original_name",
+        type: sequelize_1.DataTypes.TEXT("long"),
     },
-    judicialObsTypeId: {
+    judicialObservationId: {
         allowNull: false,
-        field: "judicial_obs_type_id_judicial_obs_type",
+        field: "judicial_observation_id_judicial_observation",
         type: sequelize_1.DataTypes.INTEGER,
         references: {
-            model: JUDICIAL_OBS_TYPE_TABLE,
-            key: "id_judicial_obs_type",
+            model: JUDICIAL_OBSERVATION_TABLE,
+            key: "id_judicial_observation",
         },
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
@@ -81,18 +70,13 @@ const JudicialObservationSchema = {
 class JudicialObservation extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
-        this.belongsTo(models.JUDICIAL_CASE_FILE, { as: "judicialCaseFile" });
-        this.belongsTo(models.JUDICIAL_OBS_TYPE, { as: "judicialObsType" });
-        this.hasMany(models.JUDICIAL_OBS_FILE, {
-            as: "judicialObsFile",
-            foreignKey: "judicialObservationId",
-        });
+        this.belongsTo(models.JUDICIAL_OBSERVATION, { as: "judicialObservation" });
     }
     static config(sequelize) {
         return {
             sequelize,
-            tableName: JUDICIAL_OBSERVATION_TABLE,
-            modelName: JUDICIAL_OBSERVATION_TABLE,
+            tableName: JUDICIAL_OBS_FILE_TABLE,
+            modelName: JUDICIAL_OBS_FILE_TABLE,
             timestamps: true,
             paranoid: true,
             deletedAt: "deleted_at",
@@ -100,7 +84,7 @@ class JudicialObservation extends sequelize_1.Model {
     }
 }
 exports.default = {
-    JUDICIAL_OBSERVATION_TABLE,
+    JUDICIAL_OBS_FILE_TABLE,
     JudicialObservationSchema,
     JudicialObservation,
 };
