@@ -47,6 +47,10 @@ app.use(ip_handler_1.default);
 app.get("*", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "/public/build", "index.html"));
 });
+app.use((req, res, next) => {
+    res.setHeader("Cache-Control", "no-store");
+    next();
+});
 app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(ormErrorHandler);
