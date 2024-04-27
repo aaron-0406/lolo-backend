@@ -11,10 +11,13 @@ import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 import customerModel from "./customer.model";
 import negotiationModel from "./negotiation.model";
 import extProductNameModel from "./ext-product-name.model";
+import judicialCaseFileModel from "../models/judicial-case-file.model";
 
 const PRODUCT_TABLE = "PRODUCT";
+
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 const { EXT_PRODUCT_NAME_TABLE } = extProductNameModel;
+const { JUDICIAL_CASE_FILE_TABLE } = judicialCaseFileModel;
 
 const ProductSchema: ModelAttributes<
   Product,
@@ -90,6 +93,17 @@ const ProductSchema: ModelAttributes<
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
+  judicialCaseFileId: {
+    allowNull: true,
+    field: "judicial_case_file_id_judicial_case_file",
+    type: DataTypes.INTEGER,
+    references: {
+      model: JUDICIAL_CASE_FILE_TABLE,
+      key: "id_judicial_case_file",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
 };
 
 class Product extends Model {
@@ -99,6 +113,7 @@ class Product extends Model {
     this.belongsTo(models.NEGOTIATION, { as: "negotiation" });
     this.belongsTo(models.EXT_PRODUCT_NAME, { as: "extProductName" });
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
+    this.belongsTo(models.JUDICIAL_CASE_FILE, { as: "judicialCaseFile" });
   }
 
   static config(sequelize: Sequelize) {
