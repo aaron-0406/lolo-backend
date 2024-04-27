@@ -9,6 +9,7 @@ const serviceUserLog = new UserLogService();
 
 const { PRODUCT_TABLE } = productModel;
 
+//INFO: CLIENTS SECTION
 export const getProductsByClientCodeController = async (
   req: Request,
   res: Response,
@@ -19,7 +20,6 @@ export const getProductsByClientCodeController = async (
     const products = await service.getByClientId(Number(clientId));
     res.json(products);
   } catch (error: any) {
-    console.log(error);
     next(boom.badRequest(error.message));
   }
 };
@@ -38,6 +38,85 @@ export const getProductByIdController = async (
   }
 };
 
+//INFO: JUDICIAL - CASE FILE SECTION
+export const getProductsByJudicialCaseFileController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { judicialCaseFileId } = req.params;
+    const products = await service.getByJudicialCaseFileId(
+      Number(judicialCaseFileId)
+    );
+    res.json(products);
+  } catch (error: any) {
+    next(boom.badRequest(error.message));
+  }
+};
+
+export const assignJudicialCaseFileToProductsController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { productIds, judicialCaseFileId } = req.body;
+    const products = await service.assignJudicialCaseFileToProducts(
+      productIds,
+      Number(judicialCaseFileId)
+    );
+
+    const userId = Number(req.user?.id);
+    const customerId = Number(req.user?.customerId);
+
+    for (const product of products) {
+      const productId = Number(product.id);
+
+      await serviceUserLog.create({
+        customerUserId: Number(userId),
+        codeAction: "P02-02-06-01", //TODO: CHANGE THIS PERMISSION
+        entity: PRODUCT_TABLE,
+        entityId: Number(productId),
+        ip: req.clientIp ?? "",
+        customerId: Number(customerId),
+      });
+    }
+
+    res.json(products);
+  } catch (error: any) {
+    next(boom.badRequest(error.message));
+  }
+};
+
+export const removeJudicialCaseFileFromProductController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { productRemovedId, judicialCaseFileId } = req.body;
+    const { id } = await service.removeJudicialCaseFileFromProduct(
+      productRemovedId,
+      judicialCaseFileId
+    );
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P02-02-06-01", //TODO: CHANGE THIS PERMISSION
+      entity: PRODUCT_TABLE,
+      entityId: Number(id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    });
+
+    res.json({ id });
+  } catch (error: any) {
+    next(boom.badRequest(error.message));
+  }
+};
+
+//INFO: DASHBOARD SECTION
 export const getProductByCodeController = async (
   req: Request,
   res: Response,

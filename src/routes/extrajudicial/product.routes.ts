@@ -5,7 +5,10 @@ import {
   getProductByIdSchema,
   getProductsByClientCodeSchema,
   getProductsByCustomerIdSchema,
+  getProductsByJudicialCaseFileIdSchema,
+  removeJudicialCaseFileFromProductSchema,
   updateProductSchema,
+  assignJudicialCaseFileToProductsSchema,
 } from "../../app/extrajudicial/schemas/product.schema";
 import validatorHandler from "../../middlewares/validator.handler";
 import {
@@ -15,12 +18,16 @@ import {
   getProductByIdController,
   getProductsByClientCodeController,
   getProductsByCustomerIdController,
+  getProductsByJudicialCaseFileController,
   updateProductController,
+  assignJudicialCaseFileToProductsController,
+  removeJudicialCaseFileFromProductController,
 } from "../../controllers/extrajudicial/product.controller";
 import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
 const router = Router();
 
+//INFO: CLIENTS SECTION
 router.get(
   "/client/:clientId",
   JWTAuth,
@@ -35,6 +42,31 @@ router.get(
   getProductByIdController
 );
 
+//INFO: JUDICIAL - CASE FILE SECTION
+router.get(
+  "/case-file/:judicialCaseFileId",
+  JWTAuth,
+  validatorHandler(getProductsByJudicialCaseFileIdSchema, "params"),
+  getProductsByJudicialCaseFileController
+);
+
+router.post(
+  "/assign-case-files/",
+  JWTAuth,
+  checkPermissions("P02-02-06-01"), //TODO: Change this permission
+  validatorHandler(assignJudicialCaseFileToProductsSchema, "body"),
+  assignJudicialCaseFileToProductsController
+);
+
+router.post(
+  "/remove-case-file/",
+  JWTAuth,
+  checkPermissions("P02-02-06-01"), //TODO: Change this permission
+  validatorHandler(removeJudicialCaseFileFromProductSchema, "body"),
+  removeJudicialCaseFileFromProductController
+);
+
+//INFO: DASHBOARD SECTION
 router.get(
   "/single/:code",
   JWTAuth,
