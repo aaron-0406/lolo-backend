@@ -18,6 +18,11 @@ class judicialObservationService {
         customer_has_bank_id_customer_has_bank: chb,
         judicial_case_file_id_judicial_case_file: judicialCaseId,
       },
+      include: {
+        model: models.JUDICIAL_OBS_FILE,
+        as: "judicialObsFile",
+        attributes: ["originalName"],
+      },
     });
 
     if (!rta) {
@@ -31,6 +36,11 @@ class judicialObservationService {
     const judicialObs = await models.JUDICIAL_OBSERVATION.findOne({
       where: {
         id_judicial_observation: id,
+      },
+      include: {
+        model: models.JUDICIAL_OBS_FILE,
+        as: "judicialObsFile",
+        attributes: ["originalName"],
       },
     });
 
@@ -46,8 +56,8 @@ class judicialObservationService {
   }
 
   async update(id: string, changes: JudicialObservationType) {
-    const judicialObsType = await this.findByID(id);
-    const rta = await judicialObsType.update(changes);
+    const newJudicialObs = await this.findByID(id);
+    const rta = await newJudicialObs.update(changes);
 
     return rta;
   }
