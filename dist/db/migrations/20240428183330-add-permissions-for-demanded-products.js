@@ -20,7 +20,7 @@ const newPermissions = [
     {
         name: "PRODUCTOS DEMANDADOS",
         code: "P13-01-03",
-        icon: "ri-bank-card-fill",
+        icon: "-",
         link: "/judicial/:urlIdentifier/expedientes/:code/productos-demandados",
     },
     {
