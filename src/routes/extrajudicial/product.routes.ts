@@ -46,6 +46,7 @@ router.get(
 router.get(
   "/case-file/:judicialCaseFileId",
   JWTAuth,
+  checkPermissions("P13-01-03-04"),
   validatorHandler(getProductsByJudicialCaseFileIdSchema, "params"),
   getProductsByJudicialCaseFileController
 );
@@ -53,7 +54,7 @@ router.get(
 router.post(
   "/assign-case-files/",
   JWTAuth,
-  checkPermissions("P02-02-06-01"), //TODO: Change this permission
+  checkPermissions("P13-01-03-02"),
   validatorHandler(assignJudicialCaseFileToProductsSchema, "body"),
   assignJudicialCaseFileToProductsController
 );
@@ -61,7 +62,7 @@ router.post(
 router.post(
   "/remove-case-file/",
   JWTAuth,
-  checkPermissions("P02-02-06-01"), //TODO: Change this permission
+  checkPermissions("P13-01-03-03"),
   validatorHandler(removeJudicialCaseFileFromProductSchema, "body"),
   removeJudicialCaseFileFromProductController
 );
