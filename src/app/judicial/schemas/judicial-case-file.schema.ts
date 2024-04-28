@@ -35,10 +35,9 @@ const limit = Joi.number().required().messages({
   "any.required": "El campo limit es requerido.",
 });
 
-const filter = Joi.string().optional().min(3).messages({
+const filter = Joi.string().optional().messages({
   "string.base": "El campo filter es inválido",
   "any.required": "El campo filter es requerido.",
-  "string.min": "El campo debe ser de mínimo 3 caracteres",
   "string.empty": "El campo filter no puede estar vácio",
 });
 

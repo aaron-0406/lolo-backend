@@ -11,7 +11,7 @@ export async function up(queryInterface: QueryInterface) {
     allowNull: true,
   });
   await queryInterface.sequelize.query(
-    `UPDATE product p INNER JOIN client c ON c.code = p.client_code_client set p.client_id = c.id_client;
+    `UPDATE PRODUCT p INNER JOIN CLIENT c ON c.code = p.client_code_client set p.client_id = c.id_client;
     `
   );
 

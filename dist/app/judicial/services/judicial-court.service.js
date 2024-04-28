@@ -27,6 +27,13 @@ class JudicialCourtService {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.JUDICIAL_COURT.findAll({
                 where: { customerHasBankId: chb },
+                include: [
+                    {
+                        model: models.CITY,
+                        as: "city",
+                        attributes: ["id", "name"],
+                    },
+                ],
             });
             return rta;
         });
@@ -37,6 +44,13 @@ class JudicialCourtService {
                 where: {
                     id,
                 },
+                include: [
+                    {
+                        model: models.CITY,
+                        as: "city",
+                        attributes: ["id", "name"],
+                    },
+                ],
             });
             if (!judicialCourt) {
                 throw boom_1.default.notFound("Juzgado no encontrado");
@@ -47,6 +61,13 @@ class JudicialCourtService {
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const newJudicialCourt = yield models.JUDICIAL_COURT.create(data);
+            yield newJudicialCourt.reload({
+                include: {
+                    model: models.CITY,
+                    as: "city",
+                    attributes: ["id", "name"],
+                },
+            });
             return newJudicialCourt;
         });
     }
@@ -54,6 +75,13 @@ class JudicialCourtService {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialCourt = yield this.findByID(id);
             const rta = yield judicialCourt.update(changes);
+            yield rta.reload({
+                include: {
+                    model: models.CITY,
+                    as: "city",
+                    attributes: ["id", "name"],
+                },
+            });
             return rta;
         });
     }

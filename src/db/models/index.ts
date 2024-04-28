@@ -38,6 +38,7 @@ import extIpAddressBankModel from "./ext-ip-address-bank.model";
 import extContactTypeModel from "./ext-contact-type.model";
 import judicialObsTypeModel from "./judicial-obs-type.model";
 import judicialObservationModel from "./judicial-observation.model";
+import extProductNameModel from "./ext-product-name.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
@@ -80,6 +81,7 @@ const { ExtContactType, ExtContactTypeSchema } = extContactTypeModel;
 const { JudicialObsType, JudicialObsTypeSchema } = judicialObsTypeModel;
 const { JudicialObservation, JudicialObservationSchema } =
   judicialObservationModel;
+const { ExtProductName, ExtProductNameSchema } = extProductNameModel;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -148,6 +150,7 @@ export const setupModels = (sequelize: Sequelize) => {
     JudicialCaseFileSchema,
     JudicialObservation.config(sequelize)
   );
+  ExtProductName.init(ExtProductNameSchema, ExtProductName.config(sequelize));
 
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
@@ -186,4 +189,5 @@ export const setupModels = (sequelize: Sequelize) => {
   ExtContactType.associate(sequelize.models);
   JudicialObsType.associate(sequelize.models);
   JudicialObservation.associate(sequelize.models);
+  ExtProductName.associate(sequelize.models);
 };

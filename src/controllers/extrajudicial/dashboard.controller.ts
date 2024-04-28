@@ -150,10 +150,11 @@ export const createProductsXslxController = async (
       await productService.create({
         code: product.code,
         customerId: product.customerId,
-        name: product.name,
         state: product.state,
         negotiationId: product.negotiationId,
+        customerHasBankId: product.customerHasBankId,
         clientId: product.clientId,
+        extProductNameId: product.extProductNameId,
       });
     }
     res.json({ success: "Producto agregado" });
@@ -219,20 +220,14 @@ export const sendXslxController = async (
         ],
         workSheetName: "PRODUCTOS AGREGADOS",
         rowData: productsAdded.map((item: ProductTypeName) => {
-          return [
-            item.clientId,
-            item.clientName,
-            item.code,
-            item.name,
-            item.state,
-          ];
+          return [item.clientId, item.clientName, item.code, item.state];
         }),
       },
       {
         rowTitles: ["CODIGO CLIENTE", "CODIGO PRODUCTO", "NOMBRE PRODUCTO"],
         workSheetName: "PRODUCTOS ELIMINADOS",
         rowData: productsDeleted.map((item: ProductType) => {
-          return [item.clientId, item.code, item.name];
+          return [item.clientId, item.code];
         }),
       },
       {
@@ -244,7 +239,7 @@ export const sendXslxController = async (
         ],
         workSheetName: "PRODUCTOS CASTIGO",
         rowData: productsCastigo.map((item: ProductType) => {
-          return [item.clientId, item.code, item.name, item.state];
+          return [item.clientId, item.code, item.state];
         }),
       },
     ];

@@ -79,7 +79,6 @@ class JudicialCaseFileService {
         {
           model: models.CLIENT,
           as: "client",
-          where: clientName ? { name: clientName } : undefined, // Aplicar filtro por nombre de cliente si se proporciona
         },
       ],
       where: filtersWhere,

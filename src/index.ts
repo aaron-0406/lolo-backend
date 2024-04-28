@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Response, Request } from "express";
 import cors, { CorsOptions } from "cors";
 import routerApi from "./routes";
 import errorHandlerr from "./middlewares/error.handler";
@@ -69,6 +69,13 @@ app.use(cors(options));
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.static(path.join(__dirname, "/public/build")));
 app.use(ipHandler);
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
+  next();
+});
 
 routerApi(app);
 

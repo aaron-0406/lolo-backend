@@ -45,6 +45,11 @@ class City extends Model {
       as: "client",
       foreignKey: "cityId",
     });
+
+    this.hasMany(models.JUDICIAL_COURT, {
+      as: "judicialCourt",
+      foreignKey: "cityId",
+    });
   }
 
   static config(sequelize: Sequelize) {
