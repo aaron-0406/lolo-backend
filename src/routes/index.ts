@@ -25,6 +25,10 @@ import judicialCaseFileRouter from "./judicial/judicial-case-file.routes";
 import judicialCourtRouter from "./judicial/judicial-court.routes";
 import judicialProceduralWayRouter from "./judicial/judicial-procedural-way.routes";
 import judicialSubjectRouter from "./judicial/judicial-subject.routes";
+import judicialBinTypeBinnacleRouter from "./judicial/judicial-bin-type-binnacle.routes";
+import judicialBinProceduralStageRouter from "./judicial/judicial-bin-procedural-stage.routes";
+import judicialBinnacleRouter from "./judicial/judicial-binnacle.routes";
+import judicialBinFileRouter from "./judicial/judicial-bin-file.routes";
 import managementActionRouter from "./dash/management-action.routes";
 import goalRouter from "./extrajudicial/goal.routes";
 import roleRouter from "./dash/role.routes";
@@ -68,6 +72,14 @@ const routerApi = (app: Express) => {
   router.use("/judicial/court", judicialCourtRouter);
   router.use("/judicial/procedural-way", judicialProceduralWayRouter);
   router.use("/judicial/subject", judicialSubjectRouter);
+
+  router.use("/judicial/bin-type-binnacle", judicialBinTypeBinnacleRouter);
+  router.use("/judicial/binnacle", judicialBinnacleRouter);
+  // router.use("/judicial/bin-file", judicialBinFileRouter);
+  router.use(
+    "/judicial/bin-procedural-stage",
+    judicialBinProceduralStageRouter
+  );
 
   router.use("/dash/auth", authDashRouter);
   router.use("/dash/role", roleRouter);
