@@ -166,6 +166,11 @@ class JudicialCaseFileService {
                         model: models.JUDICIAL_SUBJECT,
                         as: "judicialSubject",
                     },
+                    {
+                        model: models.CLIENT,
+                        as: "client",
+                        attributes: ["id", "name"],
+                    },
                 ],
             });
             if (!judicialCaseFile) {
@@ -184,11 +189,6 @@ class JudicialCaseFileService {
                         {
                             model: models.CUSTOMER_USER,
                             as: "customerUser",
-                            attributes: ["id", "name"],
-                        },
-                        {
-                            model: models.CLIENT,
-                            as: "client",
                             attributes: ["id", "name"],
                         },
                     ],
