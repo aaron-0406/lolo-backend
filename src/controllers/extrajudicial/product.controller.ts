@@ -75,7 +75,7 @@ export const assignJudicialCaseFileToProductsController = async (
 
       await serviceUserLog.create({
         customerUserId: Number(userId),
-        codeAction: "P02-02-06-01", //TODO: CHANGE THIS PERMISSION
+        codeAction: "P13-01-03-02",
         entity: PRODUCT_TABLE,
         entityId: Number(productId),
         ip: req.clientIp ?? "",
@@ -103,7 +103,7 @@ export const removeJudicialCaseFileFromProductController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P02-02-06-01", //TODO: CHANGE THIS PERMISSION
+      codeAction: "P13-01-03-03",
       entity: PRODUCT_TABLE,
       entityId: Number(id),
       ip: req.clientIp ?? "",
