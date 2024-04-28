@@ -40,9 +40,8 @@ export const createJudicialBinnacleController = async (
   next: NextFunction
 ) => {
   try {
-    const body = req.body;
-    console.log(body);
-    const newJudicialBinnacle = await service.create(body);
+    const { body, files } = req;
+    const newJudicialBinnacle = await service.create(body, files as []);
     res.status(201).json(newJudicialBinnacle);
   } catch (error) {
     next(error);
@@ -56,8 +55,8 @@ export const updateJudicialBinnacleController = async (
 ) => {
   try {
     const { id } = req.params;
-    const body = req.body;
-    const judicialBinnacle = await service.update(id, body);
+    const { body, files } = req;
+    const judicialBinnacle = await service.update(id, body, files as []);
     res.json(judicialBinnacle);
   } catch (error) {
     next(error);

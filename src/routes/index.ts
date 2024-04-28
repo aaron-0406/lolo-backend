@@ -75,7 +75,7 @@ const routerApi = (app: Express) => {
 
   router.use("/judicial/bin-type-binnacle", judicialBinTypeBinnacleRouter);
   router.use("/judicial/binnacle", judicialBinnacleRouter);
-  // router.use("/judicial/bin-file", judicialBinFileRouter);
+  router.use("/judicial/bin-file", judicialBinFileRouter);
   router.use(
     "/judicial/bin-procedural-stage",
     judicialBinProceduralStageRouter

@@ -6,25 +6,25 @@ const { PERMISSION_TABLE } = permissionModel;
 const newPermissions = [
   {
     name: "BITACORA",
-    code: "P13-05",
+    code: "P13-01-01",
     icon: "-",
     link: "/judicial/:urlIdentifier/expediente/:code/bitacora",
   },
   {
     name: "AGREGAR BITACORA",
-    code: "P13-05-01",
+    code: "P13-01-01-01",
     icon: "-",
     link: "#",
   },
   {
     name: "EDITAR BITACORA",
-    code: "P13-05-02",
+    code: "P13-01-01-02",
     icon: "-",
     link: "#",
   },
   {
     name: "ELIMINAR BITACORA",
-    code: "P13-05-03",
+    code: "P13-01-01-03",
     icon: "-",
     link: "#",
   },

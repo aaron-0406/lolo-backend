@@ -43,6 +43,10 @@ export const archivos = multer({
   fileFilter: filterDocuments,
 });
 
+export const archivosBinnacle = multer({
+  storage: storageArchivos,
+});
+
 export const archivosExcel = multer({
   storage: storageExcelArchivos,
   fileFilter: filterExcelDocuments,
