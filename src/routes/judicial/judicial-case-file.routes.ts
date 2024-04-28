@@ -44,7 +44,7 @@ router.get(
 );
 
 router.get(
-  "/number-case/:numberCaseFile",
+  "/number-case/:numberCaseFile/:chb",
   JWTAuth,
   validatorHandler(getJudicialCaseFileByNumberCaseFileSchema, "params"),
   getJudicialCaseFileByNumberCaseFileController

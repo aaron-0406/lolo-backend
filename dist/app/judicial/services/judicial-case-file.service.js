@@ -174,7 +174,7 @@ class JudicialCaseFileService {
             return judicialCaseFile;
         });
     }
-    findByNumberCaseFile(numberCaseFile) {
+    findByNumberCaseFile(numberCaseFile, chb) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialCaseFile = yield models.JUDICIAL_CASE_FILE.findOne({
                 include: {
@@ -186,10 +186,16 @@ class JudicialCaseFileService {
                             as: "customerUser",
                             attributes: ["id", "name"],
                         },
+                        {
+                            model: models.CLIENT,
+                            as: "client",
+                            attributes: ["id", "name"],
+                        },
                     ],
                 },
                 where: {
                     numberCaseFile,
+                    customer_has_bank_id: chb,
                 },
             });
             if (!judicialCaseFile) {

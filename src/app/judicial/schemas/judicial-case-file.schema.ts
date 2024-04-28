@@ -118,10 +118,11 @@ const getJudicialCaseFileByIDSchema = Joi.object<{ id: number }, true>({
 });
 
 const getJudicialCaseFileByNumberCaseFileSchema = Joi.object<
-  { numberCaseFile: string },
+  { numberCaseFile: string; chb: number },
   true
 >({
   numberCaseFile: numberCaseFile.required(),
+  chb: customerHasBankId.required(),
 });
 
 const getJudicialCaseFileByCustomerIdSchema = Joi.object<

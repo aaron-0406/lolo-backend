@@ -178,7 +178,7 @@ class JudicialCaseFileService {
     return judicialCaseFile;
   }
 
-  async findByNumberCaseFile(numberCaseFile: string) {
+  async findByNumberCaseFile(numberCaseFile: string, chb: number) {
     const judicialCaseFile = await models.JUDICIAL_CASE_FILE.findOne({
       include: {
         model: models.CLIENT,
@@ -189,10 +189,16 @@ class JudicialCaseFileService {
             as: "customerUser",
             attributes: ["id", "name"],
           },
+          {
+            model: models.CLIENT,
+            as: "client",
+            attributes: ["id", "name"],
+          },
         ],
       },
       where: {
         numberCaseFile,
+        customer_has_bank_id: chb,
       },
     });
 
