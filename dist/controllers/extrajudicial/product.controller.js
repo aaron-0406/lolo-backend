@@ -66,7 +66,7 @@ const assignJudicialCaseFileToProductsController = (req, res, next) => __awaiter
             const productId = Number(product.id);
             yield serviceUserLog.create({
                 customerUserId: Number(userId),
-                codeAction: "P02-02-06-01",
+                codeAction: "P13-01-03-02",
                 entity: PRODUCT_TABLE,
                 entityId: Number(productId),
                 ip: (_c = req.clientIp) !== null && _c !== void 0 ? _c : "",
@@ -87,7 +87,7 @@ const removeJudicialCaseFileFromProductController = (req, res, next) => __awaite
         const { id } = yield service.removeJudicialCaseFileFromProduct(productRemovedId, judicialCaseFileId);
         yield serviceUserLog.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
-            codeAction: "P02-02-06-01",
+            codeAction: "P13-01-03-03",
             entity: PRODUCT_TABLE,
             entityId: Number(id),
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
