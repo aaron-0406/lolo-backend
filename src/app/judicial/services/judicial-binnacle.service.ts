@@ -4,7 +4,6 @@ import { JudicialBinnacleType } from "../types/judicial-binnacle.type";
 import config from "../../../config/config";
 import { uploadFile } from "../../../libs/aws_bucket";
 import { deleteFile, renameFile } from "../../../libs/helpers";
-import fs from "fs-extra";
 
 const { models } = sequelize;
 
