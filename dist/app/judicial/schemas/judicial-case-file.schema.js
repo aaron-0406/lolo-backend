@@ -99,6 +99,7 @@ const getJudicialCaseFileByIDSchema = joi_1.default.object({
 });
 const getJudicialCaseFileByNumberCaseFileSchema = joi_1.default.object({
     numberCaseFile: numberCaseFile.required(),
+    chb: customerHasBankId.required(),
 });
 const getJudicialCaseFileByCustomerIdSchema = joi_1.default.object({
     customerId: customerId.required(),

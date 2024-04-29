@@ -45,6 +45,7 @@ class DashboardService {
                         negotiationId: -1,
                         customerHasBankId: -1,
                         extProductNameId: -1,
+                        judicialCaseFileId: -1,
                     },
                 ];
             });

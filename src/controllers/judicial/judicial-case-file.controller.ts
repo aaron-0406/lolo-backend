@@ -55,8 +55,11 @@ export const getJudicialCaseFileByNumberCaseFileController = async (
   next: NextFunction
 ) => {
   try {
-    const { numberCaseFile } = req.params;
-    const caseFile = await service.findByNumberCaseFile(numberCaseFile);
+    const { numberCaseFile, chb } = req.params;
+    const caseFile = await service.findByNumberCaseFile(
+      numberCaseFile,
+      Number(chb)
+    );
     res.json(caseFile);
   } catch (error) {
     next(error);

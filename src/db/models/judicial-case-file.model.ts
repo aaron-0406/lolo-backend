@@ -158,6 +158,11 @@ class JudicialCaseFile extends Model {
     });
     this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
+
+    this.hasMany(models.PRODUCT, {
+      as: "product",
+      foreignKey: "judicialCaseFileId",
+    });
   }
 
   static config(sequelize: Sequelize) {
