@@ -9,6 +9,10 @@ const judicialBinnacleId = joi_1.default.number();
 const nameOriginAws = joi_1.default.string();
 const originalName = joi_1.default.string();
 const customerHasBankId = joi_1.default.number();
+const idCustomer = joi_1.default.number();
+const chb = joi_1.default.number();
+const judicialFileCaseId = joi_1.default.number();
+const code = joi_1.default.string();
 const createJudicialBinFileSchema = joi_1.default.object({
     nameOriginAws: nameOriginAws.required(),
     originalName: originalName.required(),
@@ -19,13 +23,25 @@ const updateJudicialBinFileSchema = joi_1.default.object({
     nameOriginAws: nameOriginAws.required(),
     originalName: originalName.required(),
 });
+const getFileSchema = joi_1.default.object({
+    idCustomer,
+    chb,
+    code,
+    id,
+    judicialFileCaseId,
+});
 const getJudicialBinFileByIDSchema = joi_1.default.object({
     id: id.required(),
+    chb,
+    code,
+    idCustomer,
+    judicialFileCaseId,
 });
 const getJudicialBinFileByCHBSchema = joi_1.default.object({
     chb: customerHasBankId.required(),
 });
 exports.default = {
+    getFileSchema,
     createJudicialBinFileSchema,
     updateJudicialBinFileSchema,
     getJudicialBinFileByCHBSchema,

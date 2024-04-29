@@ -12,58 +12,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteJudicialBinFileController = exports.updateJudicialBinFileController = exports.createJudicialBinFileController = exports.getJudicialBinFileByIdController = exports.getJudicialBinFileByCHBController = void 0;
+exports.deleteJudicialBinFileController = exports.findFileByIdController = void 0;
 const judicial_bin_file_service_1 = __importDefault(require("../../app/judicial/services/judicial-bin-file.service"));
 const service = new judicial_bin_file_service_1.default();
-const getJudicialBinFileByCHBController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const findFileByIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { chb } = req.params;
-        const judicialBinFiles = yield service.findAllByCHB(Number(chb));
-        res.json(judicialBinFiles);
+        const { id, idCustomer, chb, code, judicialFileCaseId } = req.params;
+        const file = yield service.findOne(Number(idCustomer), Number(chb), code, Number(judicialFileCaseId), Number(id));
+        res.json(file);
     }
     catch (error) {
+        console.log(error);
         next(error);
     }
 });
-exports.getJudicialBinFileByCHBController = getJudicialBinFileByCHBController;
-const getJudicialBinFileByIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { id } = req.params;
-        const judicialBinFile = yield service.findByID(id);
-        res.json(judicialBinFile);
-    }
-    catch (error) {
-        next(error);
-    }
-});
-exports.getJudicialBinFileByIdController = getJudicialBinFileByIdController;
-const createJudicialBinFileController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const body = req.body;
-        const newJudicialBinFile = yield service.create(body);
-        res.status(201).json(newJudicialBinFile);
-    }
-    catch (error) {
-        next(error);
-    }
-});
-exports.createJudicialBinFileController = createJudicialBinFileController;
-const updateJudicialBinFileController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { id } = req.params;
-        const body = req.body;
-        const judicialBinFile = yield service.update(id, body);
-        res.json(judicialBinFile);
-    }
-    catch (error) {
-        next(error);
-    }
-});
-exports.updateJudicialBinFileController = updateJudicialBinFileController;
+exports.findFileByIdController = findFileByIdController;
 const deleteJudicialBinFileController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
-        yield service.delete(id);
+        const { id, idCustomer, chb, code, judicialFileCaseId } = req.params;
+        yield service.delete(id, Number(idCustomer), Number(chb), code, Number(judicialFileCaseId));
         res.status(201).json({ id: Number(id) });
     }
     catch (error) {

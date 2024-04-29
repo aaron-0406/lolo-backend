@@ -94,6 +94,10 @@ class JudicialBinnacle extends sequelize_1.Model {
             as: "judicialCaseFile",
             foreignKey: "id_judicial_case_file",
         });
+        this.hasMany(models.JUDICIAL_BIN_FILE, {
+            as: "judicialBinFiles",
+            foreignKey: "judicialBinnacleId",
+        });
         this.belongsTo(models.JUDICIAL_BIN_TYPE_BINNACLE, { as: "binnacleType" });
         this.belongsTo(models.JUDICIAL_BIN_PROCEDURAL_STAGE, {
             as: "judicialBinProceduralStage",

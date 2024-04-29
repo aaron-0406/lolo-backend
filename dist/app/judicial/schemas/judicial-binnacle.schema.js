@@ -28,6 +28,15 @@ const updateJudicialBinnacleSchema = joi_1.default.object({
 const getJudicialBinnacleByIDSchema = joi_1.default.object({
     id: id.required(),
 });
+const createJudicialBinnacleParamSchema = joi_1.default.object({
+    code: joi_1.default.string().required(),
+    idCustomer: joi_1.default.number().required(),
+});
+const updateJudicialBinnacleParamSchema = joi_1.default.object({
+    id: id.required(),
+    code: joi_1.default.string().required(),
+    idCustomer: joi_1.default.number().required(),
+});
 const getJudicialBinnacleByCHBSchema = joi_1.default.object({
     fileCase: joi_1.default.number().required(),
 });
@@ -36,4 +45,6 @@ exports.default = {
     updateJudicialBinnacleSchema,
     getJudicialBinnacleByCHBSchema,
     getJudicialBinnacleByIDSchema,
+    createJudicialBinnacleParamSchema,
+    updateJudicialBinnacleParamSchema,
 };

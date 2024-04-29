@@ -40,9 +40,11 @@ const getJudicialBinnacleByIdController = (req, res, next) => __awaiter(void 0, 
 exports.getJudicialBinnacleByIdController = getJudicialBinnacleByIdController;
 const createJudicialBinnacleController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const body = req.body;
-        console.log(body);
-        const newJudicialBinnacle = yield service.create(body);
+        const { body, files, params } = req;
+        const newJudicialBinnacle = yield service.create(body, files, {
+            code: params.code,
+            idCustomer: Number(params.idCustomer),
+        });
         res.status(201).json(newJudicialBinnacle);
     }
     catch (error) {
@@ -53,8 +55,11 @@ exports.createJudicialBinnacleController = createJudicialBinnacleController;
 const updateJudicialBinnacleController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
-        const body = req.body;
-        const judicialBinnacle = yield service.update(id, body);
+        const { body, files, params } = req;
+        const judicialBinnacle = yield service.update(id, body, files, {
+            code: params.code,
+            idCustomer: Number(params.idCustomer),
+        });
         res.json(judicialBinnacle);
     }
     catch (error) {
