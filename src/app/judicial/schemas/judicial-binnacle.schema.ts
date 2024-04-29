@@ -43,10 +43,23 @@ const getJudicialBinnacleByIDSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
 
-const getJudicialBinnacleByCHBSchema = Joi.object<
-  { fileCase: number },
+const createJudicialBinnacleParamSchema = Joi.object<
+  { code: string; idCustomer: number },
   true
 >({
+  code: Joi.string().required(),
+  idCustomer: Joi.number().required(),
+});
+const updateJudicialBinnacleParamSchema = Joi.object<
+  { id: number; code: string; idCustomer: number },
+  true
+>({
+  id: id.required(),
+  code: Joi.string().required(),
+  idCustomer: Joi.number().required(),
+});
+
+const getJudicialBinnacleByCHBSchema = Joi.object<{ fileCase: number }, true>({
   fileCase: Joi.number().required(),
 });
 
@@ -55,4 +68,6 @@ export default {
   updateJudicialBinnacleSchema,
   getJudicialBinnacleByCHBSchema,
   getJudicialBinnacleByIDSchema,
+  createJudicialBinnacleParamSchema,
+  updateJudicialBinnacleParamSchema,
 };

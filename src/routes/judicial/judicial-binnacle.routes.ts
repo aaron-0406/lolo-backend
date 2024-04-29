@@ -13,8 +13,12 @@ import {
 import { JWTAuth } from "../../middlewares/auth.handler";
 import { archivosBinnacle } from "../../middlewares/multer.handler";
 
-const { getJudicialBinnacleByIDSchema, getJudicialBinnacleByCHBSchema } =
-  judicialBinnacleSchema;
+const {
+  getJudicialBinnacleByIDSchema,
+  createJudicialBinnacleParamSchema,
+  getJudicialBinnacleByCHBSchema,
+  updateJudicialBinnacleParamSchema,
+} = judicialBinnacleSchema;
 
 const router = express.Router();
 
@@ -39,12 +43,18 @@ router.get(
   getJudicialBinnacleByIdController
 );
 
-router.post("/", JWTAuth, multerFile, createJudicialBinnacleController);
+router.post(
+  "/:idCustomer/:code",
+  JWTAuth,
+  validatorHandler(createJudicialBinnacleParamSchema, "params"),
+  multerFile,
+  createJudicialBinnacleController
+);
 
 router.patch(
-  "/:id",
+  "/:id/:idCustomer/:code",
   JWTAuth,
-  validatorHandler(getJudicialBinnacleByIDSchema, "params"),
+  validatorHandler(updateJudicialBinnacleParamSchema, "params"),
   multerFile,
   updateJudicialBinnacleController
 );

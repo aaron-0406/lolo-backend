@@ -10,6 +10,16 @@ const storageArchivos = multer.diskStorage({
     cb(null, `${uuid}${file.originalname}`);
   },
 });
+const storageArchivosBinnacle = multer.diskStorage({
+  destination: path.join(__dirname, "../public/docs"),
+  filename: (req, file, cb) => {
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    const year = today.getFullYear();
+    const name_origin_aws = `${month}-${year}-${file.originalname}`;
+    cb(null, `${name_origin_aws}`);
+  },
+});
 // Filter documents
 const filterDocuments = async (req: any, file: any, cb: any) => {
   const filetypes =
@@ -44,7 +54,7 @@ export const archivos = multer({
 });
 
 export const archivosBinnacle = multer({
-  storage: storageArchivos,
+  storage: storageArchivosBinnacle,
 });
 
 export const archivosExcel = multer({

@@ -7,6 +7,11 @@ const nameOriginAws = Joi.string();
 const originalName = Joi.string();
 const customerHasBankId = Joi.number();
 
+const idCustomer = Joi.number();
+const chb = Joi.number();
+const judicialFileCaseId = Joi.number();
+const code = Joi.string();
+
 const createJudicialBinFileSchema = Joi.object<
   Omit<JudicialBinFileType, "id" | "createdAt" | "updatedAt" | "deletedAt">,
   true
@@ -33,8 +38,20 @@ const updateJudicialBinFileSchema = Joi.object<
   originalName: originalName.required(),
 });
 
-const getJudicialBinFileByIDSchema = Joi.object<{ id: number }, true>({
+const getFileSchema = Joi.object({
+  idCustomer,
+  chb,
+  code,
+  id,
+  judicialFileCaseId,
+});
+
+const getJudicialBinFileByIDSchema = Joi.object({
   id: id.required(),
+  chb,
+  code,
+  idCustomer,
+  judicialFileCaseId,
 });
 
 const getJudicialBinFileByCHBSchema = Joi.object<{ chb: number }, true>({
@@ -42,6 +59,7 @@ const getJudicialBinFileByCHBSchema = Joi.object<{ chb: number }, true>({
 });
 
 export default {
+  getFileSchema,
   createJudicialBinFileSchema,
   updateJudicialBinFileSchema,
   getJudicialBinFileByCHBSchema,
