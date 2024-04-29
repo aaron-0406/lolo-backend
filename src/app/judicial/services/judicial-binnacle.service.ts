@@ -3,7 +3,8 @@ import boom from "@hapi/boom";
 import { JudicialBinnacleType } from "../types/judicial-binnacle.type";
 import config from "../../../config/config";
 import { uploadFile } from "../../../libs/aws_bucket";
-import { deleteFile } from "../../../libs/helpers";
+import { deleteFile, renameFile } from "../../../libs/helpers";
+import fs from "fs-extra";
 
 const { models } = sequelize;
 
@@ -75,6 +76,10 @@ class JudicialBinnacleService {
         customerHasBankId: data.customerHasBankId,
       });
 
+      const newFileName = `${newBinFile.dataValues.id}-${file.filename}`;
+      await renameFile(`../public/docs/`, file.filename, newFileName);
+      file.filename = newFileName;
+
       // UPLOAD TO AWS
       await uploadFile(
         file,
@@ -108,6 +113,11 @@ class JudicialBinnacleService {
         nameOriginAws: "",
         customerHasBankId: judicialBinnacle.dataValues.customerHasBankId,
       });
+
+      const newFileName = `${newBinFile.dataValues.id}-${file.filename}`;
+      await renameFile(`../public/docs/`, file.filename, newFileName);
+      file.filename = newFileName;
+
       // UPLOAD TO AWS
       await uploadFile(
         file,
