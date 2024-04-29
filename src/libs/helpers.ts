@@ -13,6 +13,21 @@ export const deleteFile = async (pathname: string, filename: string) => {
   }
 };
 
+export const renameFile = async (
+  pathname: string,
+  filename: string,
+  newFileName: string
+) => {
+  try {
+    await fs.rename(
+      path.join(__dirname, pathname, filename),
+      path.join(__dirname, pathname, newFileName)
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const isFileStoredIn = (dirname: string, filename: string) => {
   const files = fs.readdirSync(dirname);
   return files.some((file) => file === filename);

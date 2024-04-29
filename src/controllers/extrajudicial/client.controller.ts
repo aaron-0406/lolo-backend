@@ -67,6 +67,7 @@ export const getClientsByCHBController = async (
     const { clients, quantity } = await service.findAllCHB(chb, req.query);
     res.json({ clients, quantity });
   } catch (error) {
+    console.log(error)
     next(error);
   }
 };
