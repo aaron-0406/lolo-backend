@@ -9,8 +9,15 @@ import {
 } from "../../../libs/aws_bucket";
 import config from "../../../config/config";
 import path from "path";
+
 const { models } = sequelize;
 
+type CreateParam = {
+  code: number;
+  idCustomer: number;
+  idJudicialCaseFile: number;
+  files: Express.Multer.File[];
+};
 class judicialObsFileService {
   constructor() {}
 
@@ -45,6 +52,62 @@ class judicialObsFileService {
       throw boom.notFound("Archivo no encontrado");
     }
     return judicialObsFile;
+  }
+
+  async findOne(
+    idCustomer: string,
+    code: string,
+    idJudicialCaseFile: string,
+    id: string
+  ) {
+    const judicialObsFile = await models.JUDICIAL_OBS_FILE.findByPk(id);
+
+    if (!judicialObsFile) {
+      throw boom.notFound("Archivo no encontrado");
+    }
+
+    const isStored = isFileStoredIn(
+      path.join(__dirname, "../../../public/download"),
+      judicialObsFile.dataValues.originalName
+    );
+
+    if (!isStored) {
+      await readFile(
+        `${config.AWS_CHB_PATH}${idCustomer}/${judicialObsFile.dataValues.customerHasBankId}/${code}/case-file/${idJudicialCaseFile}/observation/${judicialObsFile.dataValues.awsName}`
+      );
+    }
+    return judicialObsFile;
+  }
+
+  async uploadObsFile(data: CreateParam, dataFile: JudicialObsFileType) {
+    const { code, idCustomer, idJudicialCaseFile } = data;
+    const filesAdded = [];
+
+    const awsName = `${dataFile.id}-${dataFile.originalName}-${
+      dataFile.createdAt.getMonth() + 1
+    }-${dataFile.createdAt.getFullYear()}`;
+
+    for (let i = 0; i < data.files.length; i++) {
+      // UPLOAD TO AWS
+      await uploadFile(
+        data.files[i],
+        `${config.AWS_CHB_PATH}${idCustomer}/${dataFile.customerHasBankId}/${code}/case-file/${idJudicialCaseFile}/observation/${awsName}`
+      );
+
+      // STORED IN DATABASE
+      const newFile = await this.create({
+        ...dataFile,
+        awsName: awsName,
+      });
+
+      // DELETE TEMP FILE
+      await deleteFile("../public/docs", dataFile.originalName);
+
+      // ADD FILE
+      filesAdded.push(newFile);
+    }
+
+    return filesAdded;
   }
 
   async create(data: JudicialObsFileType) {

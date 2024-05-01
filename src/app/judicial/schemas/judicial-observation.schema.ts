@@ -49,14 +49,18 @@ const createJudicialObservationSchema = Joi.object({
 const updateJudicialObservationSchema = Joi.object<
   Omit<
     JudicialObservationType,
-    "id" | "judicialCaseFileId" | "createdAt" | "updatedAt" | "deletedAt"
+    | "id"
+    | "customerHasBankId"
+    | "judicialCaseFileId"
+    | "createdAt"
+    | "updatedAt"
+    | "deletedAt"
   >,
   true
 >({
   date: date.required(),
   comment: comment.required(),
   judicialObsTypeId: judicialObsTypeId.required(),
-  customerHasBankId: customerHasBankId.required(),
 });
 
 const getJudicialObservationByIDSchema = Joi.object<{ id: number }, true>({

@@ -26,7 +26,7 @@ router.get("/", JWTAuth, getJudicialObsTypeController);
 router.get(
   "/data-by-chb-and-jucial-case/:chb/:judicialCaseId",
   JWTAuth,
-  checkPermissions("P13-01-04"),
+  checkPermissions("P13-01-02-04"),
   validatorHandler(getJudicialObservationByCHBAndJudicialCaseSchema, "params"),
   validatorHandler(
     getJudicialObservationByCHBAndJudicialCaseSchemaQuery,
@@ -45,7 +45,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
-  checkPermissions("P13-01-01"),
+  checkPermissions("P13-01-02-01"),
   validatorHandler(createJudicialObservationSchema, "body"),
   createJudicialObsTypeController
 );
@@ -53,7 +53,7 @@ router.post(
 router.patch(
   "/:id",
   JWTAuth,
-  checkPermissions("P13-01-02"),
+  checkPermissions("P13-01-02-02"),
   validatorHandler(getJudicialObservationByIDSchema, "params"),
   validatorHandler(updateJudicialObservationSchema, "body"),
   updateJudicialObsTypeController
@@ -62,7 +62,7 @@ router.patch(
 router.delete(
   "/:id",
   JWTAuth,
-  checkPermissions("P13-01-03"),
+  checkPermissions("P13-01-02-03"),
   validatorHandler(getJudicialObservationByIDSchema, "params"),
   deleteJudicialObsTypeController
 );

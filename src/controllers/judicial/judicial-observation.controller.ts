@@ -14,8 +14,8 @@ export const getJudicialObservationController = async (
   next: NextFunction
 ) => {
   try {
-    const judicialObsTypes = await service.findAll();
-    res.json(judicialObsTypes);
+    const judicialObservations = await service.findAll();
+    res.json(judicialObservations);
   } catch (error) {
     next(error);
   }
@@ -28,7 +28,7 @@ export const getJudicialObservationByCHBAndJudicialCaseController = async (
 ) => {
   try {
     const { chb, judicialCaseId } = req.params;
-    const judicialObsTypes = await service.findAllByCHBAndJudicialCase(
+    const judicialObservations = await service.findAllByCHBAndJudicialCase(
       chb,
       judicialCaseId
     );
@@ -37,7 +37,7 @@ export const getJudicialObservationByCHBAndJudicialCaseController = async (
     if (visible === "true") {
       await serviceUserLog.create({
         customerUserId: Number(req.user?.id),
-        codeAction: "P13-01-04",
+        codeAction: "P13-01-02-04",
         entity: JUDICIAL_OBSERVATION_TABLE,
         entityId: Number(judicialCaseId),
         ip: req.clientIp ?? "",
@@ -45,7 +45,7 @@ export const getJudicialObservationByCHBAndJudicialCaseController = async (
       });
     }
 
-    res.json(judicialObsTypes);
+    res.json(judicialObservations);
   } catch (error) {
     next(error);
   }
@@ -58,8 +58,8 @@ export const getJudicialObservationByIdController = async (
 ) => {
   try {
     const { id } = req.params;
-    const judicialObsType = await service.findByID(id);
-    res.json(judicialObsType);
+    const judicialObservation = await service.findByID(id);
+    res.json(judicialObservation);
   } catch (error) {
     next(error);
   }
@@ -71,19 +71,19 @@ export const createJudicialObservationController = async (
   next: NextFunction
 ) => {
   try {
-    const body = req.body;
-    const newJudicialObsType = await service.create(body);
+    const { JudicialObservation, JudicialObsFile } = req.body;
+    const newJudicialObservation = await service.create(JudicialObservation);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P13-01-01",
+      codeAction: "P13-01-02-01",
       entity: JUDICIAL_OBSERVATION_TABLE,
-      entityId: Number(newJudicialObsType.dataValues.id),
+      entityId: Number(newJudicialObservation.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
-    res.status(201).json(newJudicialObsType);
+    res.status(201).json(newJudicialObservation);
   } catch (error) {
     next(error);
   }
@@ -97,18 +97,18 @@ export const updateJudicialObservationController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const judicialObsType = await service.update(id, body);
+    const judicialObservation = await service.update(id, body);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P13-01-02",
+      codeAction: "P13-01-02-02",
       entity: JUDICIAL_OBSERVATION_TABLE,
-      entityId: Number(judicialObsType.dataValues.id),
+      entityId: Number(judicialObservation.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
-    res.json(judicialObsType);
+    res.json(judicialObservation);
   } catch (error) {
     next(error);
   }
@@ -125,7 +125,7 @@ export const deleteJudicialObservationController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P13-01-03",
+      codeAction: "P13-01-02-03",
       entity: JUDICIAL_OBSERVATION_TABLE,
       entityId: Number(id),
       ip: req.clientIp ?? "",

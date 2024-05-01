@@ -1,5 +1,4 @@
 import Joi from "joi";
-import { JudicialObsFileType } from "../types/judicial-obs-file.type";
 
 const id = Joi.number();
 const originalName = Joi.string().min(1);

@@ -73,8 +73,8 @@ class FileService {
 
   async create(data: CreateParam) {
     const { clientId, code, idCustomer, chb } = data;
-    // console.log(data);
     const filesAdded = [];
+    
     for (let i = 0; i < data.files.length; i++) {
       const { filename, originalname } = data.files[i];
 
@@ -120,6 +120,7 @@ class FileService {
         id,
       },
     });
+
     if (!file) return -1;
     const newFile: FileType = JSON.parse(JSON.stringify(file));
     await deleteFileBucket(
