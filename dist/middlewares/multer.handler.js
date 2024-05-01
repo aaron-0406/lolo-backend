@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.archivosExcel = exports.archivos = void 0;
+exports.archivosExcel = exports.archivosBinnacle = exports.archivos = void 0;
 const multer_1 = __importDefault(require("multer"));
 const path_1 = __importDefault(require("path"));
 const uuid_1 = require("uuid");
@@ -22,6 +22,16 @@ const storageArchivos = multer_1.default.diskStorage({
     filename: (req, file, cb) => {
         const uuid = (0, uuid_1.v4)();
         cb(null, `${uuid}${file.originalname}`);
+    },
+});
+const storageArchivosBinnacle = multer_1.default.diskStorage({
+    destination: path_1.default.join(__dirname, "../public/docs"),
+    filename: (req, file, cb) => {
+        const today = new Date();
+        const month = today.getMonth() + 1;
+        const year = today.getFullYear();
+        const name_origin_aws = `${month}-${year}-${file.originalname}`;
+        cb(null, `${name_origin_aws}`);
     },
 });
 // Filter documents
@@ -54,6 +64,9 @@ const filterExcelDocuments = (req, file, cb) => __awaiter(void 0, void 0, void 0
 exports.archivos = (0, multer_1.default)({
     storage: storageArchivos,
     fileFilter: filterDocuments,
+});
+exports.archivosBinnacle = (0, multer_1.default)({
+    storage: storageArchivosBinnacle,
 });
 exports.archivosExcel = (0, multer_1.default)({
     storage: storageExcelArchivos,

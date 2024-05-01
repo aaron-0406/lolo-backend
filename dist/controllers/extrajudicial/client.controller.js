@@ -91,6 +91,7 @@ const getClientsByCHBController = (req, res, next) => __awaiter(void 0, void 0, 
         res.json({ clients, quantity });
     }
     catch (error) {
+        console.log(error);
         next(error);
     }
 });

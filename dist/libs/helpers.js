@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buildTree = exports.extractDate = exports.saveWordDocument = exports.sumarDias = exports.restarDias = exports.getLastDayOfWeek = exports.getFirstDayOfWeek = exports.sortDaysByDate = exports.formatDate = exports.isFileStoredIn = exports.deleteFile = void 0;
+exports.buildTree = exports.extractDate = exports.saveWordDocument = exports.sumarDias = exports.restarDias = exports.getLastDayOfWeek = exports.getFirstDayOfWeek = exports.sortDaysByDate = exports.formatDate = exports.isFileStoredIn = exports.renameFile = exports.deleteFile = void 0;
 const docx_1 = require("docx");
 const fs_extra_1 = __importDefault(require("fs-extra"));
 const path_1 = __importDefault(require("path"));
@@ -26,6 +26,15 @@ const deleteFile = (pathname, filename) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.deleteFile = deleteFile;
+const renameFile = (pathname, filename, newFileName) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield fs_extra_1.default.rename(path_1.default.join(__dirname, pathname, filename), path_1.default.join(__dirname, pathname, newFileName));
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+exports.renameFile = renameFile;
 const isFileStoredIn = (dirname, filename) => {
     const files = fs_extra_1.default.readdirSync(dirname);
     return files.some((file) => file === filename);

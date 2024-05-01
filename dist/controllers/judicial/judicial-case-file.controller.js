@@ -53,8 +53,8 @@ const getJudicialCaseFileByCHBIdController = (req, res, next) => __awaiter(void 
 exports.getJudicialCaseFileByCHBIdController = getJudicialCaseFileByCHBIdController;
 const getJudicialCaseFileByNumberCaseFileController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { numberCaseFile } = req.params;
-        const caseFile = yield service.findByNumberCaseFile(numberCaseFile);
+        const { numberCaseFile, chb } = req.params;
+        const caseFile = yield service.findByNumberCaseFile(numberCaseFile, Number(chb));
         res.json(caseFile);
     }
     catch (error) {

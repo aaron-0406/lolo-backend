@@ -9,7 +9,11 @@ const negotiationId = Joi.number();
 const clientId = Joi.number();
 const customerHasBankId = Joi.number();
 const extProductNameId = Joi.number();
+const judicialCaseFileId = Joi.number();
 
+const productIds = Joi.string();
+
+//INFO: CLIENTS SECTION
 export const getProductsByClientCodeSchema = Joi.object<
   { clientId: number },
   true
@@ -21,6 +25,31 @@ export const getProductByIdSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
 
+//INFO: JUDICIAL - CASE FILE SECTION
+export const getProductsByJudicialCaseFileIdSchema = Joi.object<
+  { judicialCaseFileId: number },
+  true
+>({
+  judicialCaseFileId: judicialCaseFileId.required(),
+});
+
+export const assignJudicialCaseFileToProductsSchema = Joi.object<
+  { productIds: string; judicialCaseFileId: number },
+  true
+>({
+  productIds: productIds.required(),
+  judicialCaseFileId: judicialCaseFileId.required(),
+});
+
+export const removeJudicialCaseFileFromProductSchema = Joi.object<
+  { productRemovedId: number; judicialCaseFileId: number },
+  true
+>({
+  productRemovedId: id.required(),
+  judicialCaseFileId: judicialCaseFileId.required(),
+});
+
+//INFO: DASHBOARD SECTION
 export const getProductByCodeSchema = Joi.object<{ code: string }, true>({
   code: code.required(),
 });
@@ -43,6 +72,7 @@ export const createProductSchema = Joi.object<
   clientId: clientId.required(),
   customerHasBankId: customerHasBankId.required(),
   extProductNameId: extProductNameId.optional(),
+  judicialCaseFileId: judicialCaseFileId.optional(),
 });
 
 export const updateProductSchema = Joi.object<
@@ -57,4 +87,5 @@ export const updateProductSchema = Joi.object<
   negotiationId: negotiationId.required(),
   extProductNameId: extProductNameId.optional(),
   customerHasBankId: customerHasBankId.required(),
+  judicialCaseFileId: judicialCaseFileId.optional(),
 });

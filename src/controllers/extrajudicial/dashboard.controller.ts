@@ -155,6 +155,7 @@ export const createProductsXslxController = async (
         customerHasBankId: product.customerHasBankId,
         clientId: product.clientId,
         extProductNameId: product.extProductNameId,
+        judicialCaseFileId: product.judicialCaseFileId,
       });
     }
     res.json({ success: "Producto agregado" });

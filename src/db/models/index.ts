@@ -39,6 +39,10 @@ import extContactTypeModel from "./ext-contact-type.model";
 import judicialObsTypeModel from "./judicial-obs-type.model";
 import judicialObservationModel from "./judicial-observation.model";
 import extProductNameModel from "./ext-product-name.model";
+import judicialBinnacleModel from "./judicial-binnacle.model";
+import judicialBinProceduralStageModel from "./judicial-bin-procedural-stage.model";
+import judicialBinTypeBinnacleModel from "./judicial-bin-type-binnacle.model";
+import judicialBinFileModel from "./judicial-bin-file.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
@@ -82,6 +86,12 @@ const { JudicialObsType, JudicialObsTypeSchema } = judicialObsTypeModel;
 const { JudicialObservation, JudicialObservationSchema } =
   judicialObservationModel;
 const { ExtProductName, ExtProductNameSchema } = extProductNameModel;
+const { JudicialBinnacle, JudicialBinnacleSchema } = judicialBinnacleModel;
+const { JudicialBinProceduralStage, JudicialBinProceduralStageSchema } =
+  judicialBinProceduralStageModel;
+const { JudicialBinTypeBinnacle, JudicialBinTypeBinnacleSchema } =
+  judicialBinTypeBinnacleModel;
+const { JudicialBinFile, JudicialBinFileSchema } = judicialBinFileModel;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -151,6 +161,22 @@ export const setupModels = (sequelize: Sequelize) => {
     JudicialObservation.config(sequelize)
   );
   ExtProductName.init(ExtProductNameSchema, ExtProductName.config(sequelize));
+  JudicialBinnacle.init(
+    JudicialBinnacleSchema,
+    JudicialBinnacle.config(sequelize)
+  );
+  JudicialBinProceduralStage.init(
+    JudicialBinProceduralStageSchema,
+    JudicialBinProceduralStage.config(sequelize)
+  );
+  JudicialBinTypeBinnacle.init(
+    JudicialBinTypeBinnacleSchema,
+    JudicialBinTypeBinnacle.config(sequelize)
+  );
+  JudicialBinFile.init(
+    JudicialBinFileSchema,
+    JudicialBinFile.config(sequelize)
+  );
 
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
@@ -190,4 +216,8 @@ export const setupModels = (sequelize: Sequelize) => {
   JudicialObsType.associate(sequelize.models);
   JudicialObservation.associate(sequelize.models);
   ExtProductName.associate(sequelize.models);
+  JudicialBinnacle.associate(sequelize.models);
+  JudicialBinProceduralStage.associate(sequelize.models);
+  JudicialBinTypeBinnacle.associate(sequelize.models);
+  JudicialBinFile.associate(sequelize.models);
 };
