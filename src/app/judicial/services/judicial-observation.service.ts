@@ -11,7 +11,6 @@ class JudicialObservationService {
   constructor() {}
 
   async findAllByCHBAndFileCase(fileCase: number) {
-    console.log("3");
     const rta = await models.JUDICIAL_OBSERVATION.findAll({
       include: [
         {
