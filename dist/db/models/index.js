@@ -43,7 +43,12 @@ const ext_ip_address_bank_model_1 = __importDefault(require("./ext-ip-address-ba
 const ext_contact_type_model_1 = __importDefault(require("./ext-contact-type.model"));
 const judicial_obs_type_model_1 = __importDefault(require("./judicial-obs-type.model"));
 const judicial_observation_model_1 = __importDefault(require("./judicial-observation.model"));
+const judicial_obs_file_model_1 = __importDefault(require("./judicial-obs-file.model"));
 const ext_product_name_model_1 = __importDefault(require("./ext-product-name.model"));
+const judicial_binnacle_model_1 = __importDefault(require("./judicial-binnacle.model"));
+const judicial_bin_procedural_stage_model_1 = __importDefault(require("./judicial-bin-procedural-stage.model"));
+const judicial_bin_type_binnacle_model_1 = __importDefault(require("./judicial-bin-type-binnacle.model"));
+const judicial_bin_file_model_1 = __importDefault(require("./judicial-bin-file.model"));
 const { Customer, CustomerSchema } = customer_model_1.default;
 const { Funcionario, FuncionarioSchema } = funcionario_model_1.default;
 const { Bank, BankSchema } = bank_model_1.default;
@@ -83,7 +88,12 @@ const { ExtIpAddressBank, ExtIpAddressBankSchema } = ext_ip_address_bank_model_1
 const { ExtContactType, ExtContactTypeSchema } = ext_contact_type_model_1.default;
 const { JudicialObsType, JudicialObsTypeSchema } = judicial_obs_type_model_1.default;
 const { JudicialObservation, JudicialObservationSchema } = judicial_observation_model_1.default;
+const { JudicialObsFile, JudicialObsFileSchema } = judicial_obs_file_model_1.default;
 const { ExtProductName, ExtProductNameSchema } = ext_product_name_model_1.default;
+const { JudicialBinnacle, JudicialBinnacleSchema } = judicial_binnacle_model_1.default;
+const { JudicialBinProceduralStage, JudicialBinProceduralStageSchema } = judicial_bin_procedural_stage_model_1.default;
+const { JudicialBinTypeBinnacle, JudicialBinTypeBinnacleSchema } = judicial_bin_type_binnacle_model_1.default;
+const { JudicialBinFile, JudicialBinFileSchema } = judicial_bin_file_model_1.default;
 const setupModels = (sequelize) => {
     Customer.init(CustomerSchema, Customer.config(sequelize));
     Bank.init(BankSchema, Bank.config(sequelize));
@@ -123,8 +133,13 @@ const setupModels = (sequelize) => {
     ExtIpAddressBank.init(ExtIpAddressBankSchema, ExtIpAddressBank.config(sequelize));
     ExtContactType.init(ExtContactTypeSchema, ExtContactType.config(sequelize));
     JudicialObsType.init(JudicialObsTypeSchema, JudicialObsType.config(sequelize));
-    JudicialObservation.init(JudicialCaseFileSchema, JudicialObservation.config(sequelize));
+    JudicialObservation.init(JudicialObservationSchema, JudicialObservation.config(sequelize));
+    JudicialObsFile.init(JudicialObsFileSchema, JudicialObsFile.config(sequelize));
     ExtProductName.init(ExtProductNameSchema, ExtProductName.config(sequelize));
+    JudicialBinnacle.init(JudicialBinnacleSchema, JudicialBinnacle.config(sequelize));
+    JudicialBinProceduralStage.init(JudicialBinProceduralStageSchema, JudicialBinProceduralStage.config(sequelize));
+    JudicialBinTypeBinnacle.init(JudicialBinTypeBinnacleSchema, JudicialBinTypeBinnacle.config(sequelize));
+    JudicialBinFile.init(JudicialBinFileSchema, JudicialBinFile.config(sequelize));
     Customer.associate(sequelize.models);
     CustomerUser.associate(sequelize.models);
     Bank.associate(sequelize.models);
@@ -162,6 +177,11 @@ const setupModels = (sequelize) => {
     ExtContactType.associate(sequelize.models);
     JudicialObsType.associate(sequelize.models);
     JudicialObservation.associate(sequelize.models);
+    JudicialObsFile.associate(sequelize.models);
     ExtProductName.associate(sequelize.models);
+    JudicialBinnacle.associate(sequelize.models);
+    JudicialBinProceduralStage.associate(sequelize.models);
+    JudicialBinTypeBinnacle.associate(sequelize.models);
+    JudicialBinFile.associate(sequelize.models);
 };
 exports.setupModels = setupModels;

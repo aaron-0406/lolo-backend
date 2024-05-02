@@ -26,6 +26,7 @@ import judicialCourtRouter from "./judicial/judicial-court.routes";
 import judicialProceduralWayRouter from "./judicial/judicial-procedural-way.routes";
 import judicialSubjectRouter from "./judicial/judicial-subject.routes";
 import judicialObservationRouter from "./judicial/Judicial-observation.routes";
+import judicialObsRouter from "./judicial/judicial-obs-file.routes";
 import judicialObsTypeRouter from "./judicial/judicial-obs-type.routes";
 import judicialBinTypeBinnacleRouter from "./judicial/judicial-bin-type-binnacle.routes";
 import judicialBinProceduralStageRouter from "./judicial/judicial-bin-procedural-stage.routes";
@@ -76,6 +77,7 @@ const routerApi = (app: Express) => {
   router.use("/judicial/subject", judicialSubjectRouter);
   router.use("/judicial/obs-type", judicialObsTypeRouter);
   router.use("/judicial/observation", judicialObservationRouter);
+  router.use("/judicial/obs-file", judicialObsRouter);
 
   router.use("/judicial/bin-type-binnacle", judicialBinTypeBinnacleRouter);
   router.use("/judicial/binnacle", judicialBinnacleRouter);

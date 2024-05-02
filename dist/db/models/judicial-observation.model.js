@@ -81,8 +81,11 @@ const JudicialObservationSchema = {
 class JudicialObservation extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
-        this.belongsTo(models.JUDICIAL_CASE_FILE, { as: "judicialCaseFile" });
         this.belongsTo(models.JUDICIAL_OBS_TYPE, { as: "judicialObsType" });
+        this.hasOne(models.JUDICIAL_CASE_FILE, {
+            as: "judicialCaseFile",
+            foreignKey: "id_judicial_case_file",
+        });
         this.hasMany(models.JUDICIAL_OBS_FILE, {
             as: "judicialObsFile",
             foreignKey: "judicialObservationId",

@@ -13,8 +13,8 @@ const JUDICIAL_OBS_FILE_TABLE = "JUDICIAL_OBS_FILE";
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 const { JUDICIAL_OBSERVATION_TABLE } = judicialObservationModel;
 
-const JudicialObservationSchema: ModelAttributes<
-  JudicialObservation,
+const JudicialObsFileSchema: ModelAttributes<
+  JudicialObsFile,
   JudicialObsFileType
 > = {
   id: {
@@ -75,10 +75,13 @@ const JudicialObservationSchema: ModelAttributes<
   },
 };
 
-class JudicialObservation extends Model {
+class JudicialObsFile extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
-    this.belongsTo(models.JUDICIAL_OBSERVATION, { as: "judicialObservation" });
+    this.belongsTo(models.JUDICIAL_OBSERVATION, {
+      as: "judicialObservation",
+      foreignKey: "judicialObservationId",
+    });
   }
 
   static config(sequelize: Sequelize) {
@@ -95,6 +98,6 @@ class JudicialObservation extends Model {
 
 export default {
   JUDICIAL_OBS_FILE_TABLE,
-  JudicialObservationSchema,
-  JudicialObservation,
+  JudicialObsFileSchema,
+  JudicialObsFile,
 };

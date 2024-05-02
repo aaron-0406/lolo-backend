@@ -9,7 +9,7 @@ const judicial_observation_model_1 = __importDefault(require("./judicial-observa
 const JUDICIAL_OBS_FILE_TABLE = "JUDICIAL_OBS_FILE";
 const { CUSTOMER_HAS_BANK_TABLE } = customer_has_bank_model_1.default;
 const { JUDICIAL_OBSERVATION_TABLE } = judicial_observation_model_1.default;
-const JudicialObservationSchema = {
+const JudicialObsFileSchema = {
     id: {
         primaryKey: true,
         allowNull: false,
@@ -67,10 +67,13 @@ const JudicialObservationSchema = {
         type: sequelize_1.DataTypes.DATE,
     },
 };
-class JudicialObservation extends sequelize_1.Model {
+class JudicialObsFile extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
-        this.belongsTo(models.JUDICIAL_OBSERVATION, { as: "judicialObservation" });
+        this.belongsTo(models.JUDICIAL_OBSERVATION, {
+            as: "judicialObservation",
+            foreignKey: "judicialObservationId",
+        });
     }
     static config(sequelize) {
         return {
@@ -85,6 +88,6 @@ class JudicialObservation extends sequelize_1.Model {
 }
 exports.default = {
     JUDICIAL_OBS_FILE_TABLE,
-    JudicialObservationSchema,
-    JudicialObservation,
+    JudicialObsFileSchema,
+    JudicialObsFile,
 };

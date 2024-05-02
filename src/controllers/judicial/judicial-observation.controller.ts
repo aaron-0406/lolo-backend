@@ -1,37 +1,24 @@
 import { Request, Response, NextFunction } from "express";
 import JudicialObservationService from "../../app/judicial/services/judicial-observation.service";
+import judicialObservationTypeModel from "../../db/models/judicial-observation.model";
 import UserLogService from "../../app/dash/services/user-log.service";
-import judicialObservationModel from "../../db/models/judicial-observation.model";
 
 const service = new JudicialObservationService();
 const serviceUserLog = new UserLogService();
+const { JUDICIAL_OBSERVATION_TABLE } = judicialObservationTypeModel;
 
-const { JUDICIAL_OBSERVATION_TABLE } = judicialObservationModel;
-
-export const getJudicialObservationController = async (
+export const getJudicialObservationByCHBController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const judicialObservations = await service.findAll();
-    res.json(judicialObservations);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getJudicialObservationByCHBAndJudicialCaseController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { chb, judicialCaseId } = req.params;
-    const judicialObservations = await service.findAllByCHBAndJudicialCase(
-      chb,
-      judicialCaseId
+    const { fileCase } = req.params;
+    console.log("1")
+    const judicialObservations = await service.findAllByCHBAndFileCase(
+      Number(fileCase)
     );
+    console.log("2")
     const { visible } = req.query;
 
     if (visible === "true") {
@@ -39,7 +26,7 @@ export const getJudicialObservationByCHBAndJudicialCaseController = async (
         customerUserId: Number(req.user?.id),
         codeAction: "P13-01-02-04",
         entity: JUDICIAL_OBSERVATION_TABLE,
-        entityId: Number(judicialCaseId),
+        entityId: Number(fileCase),
         ip: req.clientIp ?? "",
         customerId: Number(req.user?.customerId),
       });
@@ -47,6 +34,7 @@ export const getJudicialObservationByCHBAndJudicialCaseController = async (
 
     res.json(judicialObservations);
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
@@ -71,8 +59,11 @@ export const createJudicialObservationController = async (
   next: NextFunction
 ) => {
   try {
-    const { JudicialObservation, JudicialObsFile } = req.body;
-    const newJudicialObservation = await service.create(JudicialObservation);
+    const { body, files, params } = req;
+    const newJudicialObservation = await service.create(body, files as [], {
+      code: params.code,
+      idCustomer: Number(params.idCustomer),
+    });
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
@@ -96,8 +87,11 @@ export const updateJudicialObservationController = async (
 ) => {
   try {
     const { id } = req.params;
-    const body = req.body;
-    const judicialObservation = await service.update(id, body);
+    const { body, files, params } = req;
+    const judicialObservation = await service.update(id, body, files as [], {
+      code: params.code,
+      idCustomer: Number(params.idCustomer),
+    });
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
@@ -125,14 +119,14 @@ export const deleteJudicialObservationController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P13-01-02-03",
+      codeAction: "P13-01-02-02",
       entity: JUDICIAL_OBSERVATION_TABLE,
       entityId: Number(id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
 
-    res.status(201).json({ id });
+    res.status(201).json({ id: Number(id) });
   } catch (error) {
     next(error);
   }

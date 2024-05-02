@@ -30,7 +30,12 @@ const judicial_court_routes_1 = __importDefault(require("./judicial/judicial-cou
 const judicial_procedural_way_routes_1 = __importDefault(require("./judicial/judicial-procedural-way.routes"));
 const judicial_subject_routes_1 = __importDefault(require("./judicial/judicial-subject.routes"));
 const Judicial_observation_routes_1 = __importDefault(require("./judicial/Judicial-observation.routes"));
+const judicial_obs_file_routes_1 = __importDefault(require("./judicial/judicial-obs-file.routes"));
 const judicial_obs_type_routes_1 = __importDefault(require("./judicial/judicial-obs-type.routes"));
+const judicial_bin_type_binnacle_routes_1 = __importDefault(require("./judicial/judicial-bin-type-binnacle.routes"));
+const judicial_bin_procedural_stage_routes_1 = __importDefault(require("./judicial/judicial-bin-procedural-stage.routes"));
+const judicial_binnacle_routes_1 = __importDefault(require("./judicial/judicial-binnacle.routes"));
+const judicial_bin_file_routes_1 = __importDefault(require("./judicial/judicial-bin-file.routes"));
 const management_action_routes_1 = __importDefault(require("./dash/management-action.routes"));
 const goal_routes_1 = __importDefault(require("./extrajudicial/goal.routes"));
 const role_routes_1 = __importDefault(require("./dash/role.routes"));
@@ -73,6 +78,11 @@ const routerApi = (app) => {
     router.use("/judicial/subject", judicial_subject_routes_1.default);
     router.use("/judicial/obs-type", judicial_obs_type_routes_1.default);
     router.use("/judicial/observation", Judicial_observation_routes_1.default);
+    router.use("/judicial/obs-file", judicial_obs_file_routes_1.default);
+    router.use("/judicial/bin-type-binnacle", judicial_bin_type_binnacle_routes_1.default);
+    router.use("/judicial/binnacle", judicial_binnacle_routes_1.default);
+    router.use("/judicial/bin-file", judicial_bin_file_routes_1.default);
+    router.use("/judicial/bin-procedural-stage", judicial_bin_procedural_stage_routes_1.default);
     router.use("/dash/auth", auth_routes_2.default);
     router.use("/dash/role", role_routes_1.default);
     router.use("/dash/permission", permission_routes_1.default);

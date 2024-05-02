@@ -1,133 +1,90 @@
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
 import { JudicialObsFileType } from "../types/judicial-obs-file.type";
-import { deleteFile, isFileStoredIn } from "../../../libs/helpers";
-import {
-  deleteFileBucket,
-  readFile,
-  uploadFile,
-} from "../../../libs/aws_bucket";
-import config from "../../../config/config";
+import { isFileStoredIn } from "../../../libs/helpers";
 import path from "path";
+import { deleteFileBucket, readFile } from "../../../libs/aws_bucket";
+import config from "../../../config/config";
 
 const { models } = sequelize;
 
-type CreateParam = {
-  code: number;
-  idCustomer: number;
-  idJudicialCaseFile: number;
-  files: Express.Multer.File[];
-};
-class judicialObsFileService {
+class JudicialObservationService {
   constructor() {}
 
-  async findAll() {
-    const rta = await models.JUDICIAL_OBS_FILE.findAll();
-    return rta;
-  }
-
-  async findAllByCHBAndJudicialObs(chb: string, judicialObservationId: string) {
+  async findAllByCHB(chb: number) {
     const rta = await models.JUDICIAL_OBS_FILE.findAll({
-      where: {
-        customer_has_bank_id_customer_has_bank: chb,
-        judicial_observation_id_judicial_observation: judicialObservationId,
-      },
+      where: { customerHasBankId: chb },
     });
-
-    if (!rta) {
-      throw boom.notFound("Archivos no encontrados");
-    }
-
     return rta;
   }
 
   async findByID(id: string) {
-    const judicialObsFile = await models.JUDICIAL_OBS_FILE.findOne({
+    const judiciaObsFile = await models.JUDICIAL_OBS_FILE.findOne({
       where: {
-        id_judicial_obs_file: id,
+        id,
       },
     });
 
-    if (!judicialObsFile) {
-      throw boom.notFound("Archivo no encontrado");
+    if (!judiciaObsFile) {
+      throw boom.notFound("Observación Judicial no encontrada");
     }
-    return judicialObsFile;
+
+    return judiciaObsFile;
   }
 
   async findOne(
-    idCustomer: string,
+    idCustomer: number,
+    chb: number,
     code: string,
-    idJudicialCaseFile: string,
-    id: string
+    judicialFileCaseId: number,
+    id: number
   ) {
-    const judicialObsFile = await models.JUDICIAL_OBS_FILE.findByPk(id);
+    const file = await models.JUDICIAL_OBS_FILE.findOne({
+      where: {
+        id,
+      },
+    });
 
-    if (!judicialObsFile) {
+    if (!file) {
       throw boom.notFound("Archivo no encontrado");
     }
-
     const isStored = isFileStoredIn(
       path.join(__dirname, "../../../public/download"),
-      judicialObsFile.dataValues.originalName
+      file.dataValues.name
     );
-
     if (!isStored) {
       await readFile(
-        `${config.AWS_CHB_PATH}${idCustomer}/${judicialObsFile.dataValues.customerHasBankId}/${code}/case-file/${idJudicialCaseFile}/observation/${judicialObsFile.dataValues.awsName}`
+        `${config.AWS_CHB_PATH}${idCustomer}/${chb}/${code}/case-file/${judicialFileCaseId}/observation/${file.dataValues.nameOriginAws}`
       );
     }
-    return judicialObsFile;
-  }
-
-  async uploadObsFile(data: CreateParam, dataFile: JudicialObsFileType) {
-    const { code, idCustomer, idJudicialCaseFile } = data;
-    const filesAdded = [];
-
-    const awsName = `${dataFile.id}-${dataFile.originalName}-${
-      dataFile.createdAt.getMonth() + 1
-    }-${dataFile.createdAt.getFullYear()}`;
-
-    for (let i = 0; i < data.files.length; i++) {
-      // UPLOAD TO AWS
-      await uploadFile(
-        data.files[i],
-        `${config.AWS_CHB_PATH}${idCustomer}/${dataFile.customerHasBankId}/${code}/case-file/${idJudicialCaseFile}/observation/${awsName}`
-      );
-
-      // STORED IN DATABASE
-      const newFile = await this.create({
-        ...dataFile,
-        awsName: awsName,
-      });
-
-      // DELETE TEMP FILE
-      await deleteFile("../public/docs", dataFile.originalName);
-
-      // ADD FILE
-      filesAdded.push(newFile);
-    }
-
-    return filesAdded;
+    return file;
   }
 
   async create(data: JudicialObsFileType) {
-    const newJudicialObsFile = await models.JUDICIAL_OBS_FILE.create(data);
-    return newJudicialObsFile;
+    const newJudiciaObsFile = await models.JUDICIAL_OBS_FILE.create(data);
+    return newJudiciaObsFile;
   }
 
   async update(id: string, changes: JudicialObsFileType) {
-    const judicialObsFile = await this.findByID(id);
-    const rta = await judicialObsFile.update(changes);
-
+    const judiciaObsFile = await this.findByID(id);
+    const rta = await judiciaObsFile.update(changes);
     return rta;
   }
 
-  async delete(id: string) {
-    const judicialObsFile = await this.findByID(id);
-    await judicialObsFile.destroy();
-
+  async delete(
+    id: string,
+    idCustomer: number,
+    chb: number,
+    code: string,
+    judicialFileCaseId: number
+  ) {
+    const judiciaObsFile = await this.findByID(id);
+    await judiciaObsFile.destroy();
+    await deleteFileBucket(
+      `${config.AWS_CHB_PATH}${idCustomer}/${chb}/${code}/case-file/${judicialFileCaseId}/observation/${judiciaObsFile.dataValues.nameOriginAws}`
+    );
     return { id };
   }
 }
 
-export default judicialObsFileService;
+export default JudicialObservationService;

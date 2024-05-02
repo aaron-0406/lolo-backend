@@ -1,50 +1,24 @@
 import Joi from "joi";
 import { JudicialObservationType } from "../types/judicial-observation.type";
-import { JudicialObsFileType } from "../types/judicial-obs-file.type";
 
-//judicial observation
 const id = Joi.number();
-const date = Joi.date();
-const comment = Joi.string().min(1);
-const judicialCaseFileId = Joi.number();
-const judicialObsTypeId = Joi.number();
+const comment = Joi.string();
 const customerHasBankId = Joi.number();
+const judicialObsTypeId = Joi.number();
+const judicialFileCaseId = Joi.number();
+const date = Joi.date();
 const visible = Joi.boolean();
 
-//judicial-obs-file
-const originalName = Joi.string().min(1);
-const judicialObservationId = Joi.number();
-
-const createJudicialObservationSchema = Joi.object({
-  JudicialObservation: Joi.object<
-    Omit<
-      JudicialObservationType,
-      "id" | "createdAt" | "updatedAt" | "deletedAt"
-    >,
-    true
-  >({
-    date: date.required(),
-    comment: comment.required(),
-    judicialCaseFileId: judicialCaseFileId.required(),
-    judicialObsTypeId: judicialObsTypeId.required(),
-    customerHasBankId: customerHasBankId.required(),
-  }).required(),
-  JudicialObsFile: Joi.array()
-    .items(
-      Joi.object<
-        Omit<
-          JudicialObsFileType,
-          "id" | "awsName" | "createdAt" | "updatedAt" | "deletedAt"
-        >,
-        true
-      >({
-        originalName: originalName.required(),
-        judicialObservationId: judicialObservationId.required(),
-        customerHasBankId: customerHasBankId.required(),
-      }).options({ stripUnknown: true })
-    )
-    .required(),
-}).options({ stripUnknown: true });
+const createJudicialObservationSchema = Joi.object<
+  Omit<JudicialObservationType, "id" | "createdAt" | "updatedAt" | "deletedAt">,
+  true
+>({
+  judicialObsTypeId: judicialObsTypeId.required(),
+  customerHasBankId: customerHasBankId.required(),
+  comment: comment.required(),
+  date: date.required(),
+  judicialCaseFileId: judicialFileCaseId.required(),
+});
 
 const updateJudicialObservationSchema = Joi.object<
   Omit<
@@ -58,31 +32,49 @@ const updateJudicialObservationSchema = Joi.object<
   >,
   true
 >({
-  date: date.required(),
   comment: comment.required(),
   judicialObsTypeId: judicialObsTypeId.required(),
+  date: date.required(),
 });
 
 const getJudicialObservationByIDSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
 
-const getJudicialObservationByCHBAndJudicialCaseSchema = Joi.object<
-  { chb: number; judicialCaseId: number },
+const createJudicialObservationParamSchema = Joi.object<
+  { code: string; idCustomer: number },
   true
 >({
-  chb: customerHasBankId.required(),
-  judicialCaseId: customerHasBankId.required(),
+  code: Joi.string().required(),
+  idCustomer: Joi.number().required(),
+});
+const updateJudicialObservationParamSchema = Joi.object<
+  { id: number; code: string; idCustomer: number },
+  true
+>({
+  id: id.required(),
+  code: Joi.string().required(),
+  idCustomer: Joi.number().required(),
 });
 
-const getJudicialObservationByCHBAndJudicialCaseSchemaQuery = Joi.object({
+const getJudicialObservationByCHBSchema = Joi.object<
+  { fileCase: number },
+  true
+>({
+  fileCase: Joi.number().required(),
+});
+
+const getJudicialObservationByCHBSchemaQuery = Joi.object({
   visible,
 }).options({ abortEarly: true });
+
 
 export default {
   createJudicialObservationSchema,
   updateJudicialObservationSchema,
+  getJudicialObservationByCHBSchema,
   getJudicialObservationByIDSchema,
-  getJudicialObservationByCHBAndJudicialCaseSchema,
-  getJudicialObservationByCHBAndJudicialCaseSchemaQuery,
+  createJudicialObservationParamSchema,
+  updateJudicialObservationParamSchema,
+  getJudicialObservationByCHBSchemaQuery,
 };

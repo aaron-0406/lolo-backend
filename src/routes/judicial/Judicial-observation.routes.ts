@@ -1,62 +1,67 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import validatorHandler from "../../middlewares/validator.handler";
-import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 import judicialObservationSchema from "../../app/judicial/schemas/judicial-observation.schema";
+import boom from "@hapi/boom";
+
 import {
-  getJudicialObsTypeController,
-  getJudicialObsTypeByCHBController,
-  getJudicialObsTypeByIdController,
-  createJudicialObsTypeController,
-  updateJudicialObsTypeController,
-  deleteJudicialObsTypeController,
-} from "../../controllers/judicial/judicial-obs-type.controller";
+  createJudicialObservationController,
+  deleteJudicialObservationController,
+  getJudicialObservationByCHBController,
+  getJudicialObservationByIdController,
+  updateJudicialObservationController,
+} from "../../controllers/judicial/judicial-observation.controller";
+import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
+import { archivos } from "../../middlewares/multer.handler";
 
 const {
-  createJudicialObservationSchema,
-  updateJudicialObservationSchema,
   getJudicialObservationByIDSchema,
-  getJudicialObservationByCHBAndJudicialCaseSchema,
-  getJudicialObservationByCHBAndJudicialCaseSchemaQuery,
+  createJudicialObservationParamSchema,
+  getJudicialObservationByCHBSchema,
+  updateJudicialObservationParamSchema,
+  getJudicialObservationByCHBSchemaQuery,
 } = judicialObservationSchema;
 
 const router = express.Router();
 
-router.get("/", JWTAuth, getJudicialObsTypeController);
+const multerFile = (req: Request, res: Response, next: NextFunction) => {
+  archivos.array("file")(req, res, (err) => {
+    if (err) return next(boom.badRequest(err));
+    return next();
+  });
+};
 
 router.get(
-  "/data-by-chb-and-jucial-case/:chb/:judicialCaseId",
+  "/file-case/:fileCase",
   JWTAuth,
   checkPermissions("P13-01-02-04"),
-  validatorHandler(getJudicialObservationByCHBAndJudicialCaseSchema, "params"),
-  validatorHandler(
-    getJudicialObservationByCHBAndJudicialCaseSchemaQuery,
-    "query"
-  ),
-  getJudicialObsTypeByCHBController
+  validatorHandler(getJudicialObservationByCHBSchema, "params"),
+  validatorHandler(getJudicialObservationByCHBSchemaQuery, "query"),
+  getJudicialObservationByCHBController
 );
 
 router.get(
   "/:id",
   JWTAuth,
   validatorHandler(getJudicialObservationByIDSchema, "params"),
-  getJudicialObsTypeByIdController
+  getJudicialObservationByIdController
 );
 
 router.post(
-  "/",
+  "/:idCustomer/:code",
   JWTAuth,
   checkPermissions("P13-01-02-01"),
-  validatorHandler(createJudicialObservationSchema, "body"),
-  createJudicialObsTypeController
+  validatorHandler(createJudicialObservationParamSchema, "params"),
+  multerFile,
+  createJudicialObservationController
 );
 
 router.patch(
-  "/:id",
+  "/:id/:idCustomer/:code",
   JWTAuth,
   checkPermissions("P13-01-02-02"),
-  validatorHandler(getJudicialObservationByIDSchema, "params"),
-  validatorHandler(updateJudicialObservationSchema, "body"),
-  updateJudicialObsTypeController
+  validatorHandler(updateJudicialObservationParamSchema, "params"),
+  multerFile,
+  updateJudicialObservationController
 );
 
 router.delete(
@@ -64,7 +69,7 @@ router.delete(
   JWTAuth,
   checkPermissions("P13-01-02-03"),
   validatorHandler(getJudicialObservationByIDSchema, "params"),
-  deleteJudicialObsTypeController
+  deleteJudicialObservationController
 );
 
 export default router;

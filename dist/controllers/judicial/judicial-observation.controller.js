@@ -12,51 +12,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteJudicialObservationController = exports.updateJudicialObservationController = exports.createJudicialObservationController = exports.getJudicialObservationByIdController = exports.getJudicialObservationByCHBAndJudicialCaseController = exports.getJudicialObservationController = void 0;
+exports.deleteJudicialObservationController = exports.updateJudicialObservationController = exports.createJudicialObservationController = exports.getJudicialObservationByIdController = exports.getJudicialObservationByCHBController = void 0;
 const judicial_observation_service_1 = __importDefault(require("../../app/judicial/services/judicial-observation.service"));
-const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const judicial_observation_model_1 = __importDefault(require("../../db/models/judicial-observation.model"));
+const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const service = new judicial_observation_service_1.default();
 const serviceUserLog = new user_log_service_1.default();
 const { JUDICIAL_OBSERVATION_TABLE } = judicial_observation_model_1.default;
-const getJudicialObservationController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const judicialObsTypes = yield service.findAll();
-        res.json(judicialObsTypes);
-    }
-    catch (error) {
-        next(error);
-    }
-});
-exports.getJudicialObservationController = getJudicialObservationController;
-const getJudicialObservationByCHBAndJudicialCaseController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const getJudicialObservationByCHBController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c;
     try {
-        const { chb, judicialCaseId } = req.params;
-        const judicialObsTypes = yield service.findAllByCHBAndJudicialCase(chb, judicialCaseId);
+        const { fileCase } = req.params;
+        console.log("1");
+        const judicialObservations = yield service.findAllByCHBAndFileCase(Number(fileCase));
+        console.log("2");
         const { visible } = req.query;
         if (visible === "true") {
             yield serviceUserLog.create({
                 customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
-                codeAction: "P13-01-04",
+                codeAction: "P13-01-02-04",
                 entity: JUDICIAL_OBSERVATION_TABLE,
-                entityId: Number(judicialCaseId),
+                entityId: Number(fileCase),
                 ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
                 customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
             });
         }
-        res.json(judicialObsTypes);
+        res.json(judicialObservations);
     }
     catch (error) {
+        console.log(error);
         next(error);
     }
 });
-exports.getJudicialObservationByCHBAndJudicialCaseController = getJudicialObservationByCHBAndJudicialCaseController;
+exports.getJudicialObservationByCHBController = getJudicialObservationByCHBController;
 const getJudicialObservationByIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
-        const judicialObsType = yield service.findByID(id);
-        res.json(judicialObsType);
+        const judicialObservation = yield service.findByID(id);
+        res.json(judicialObservation);
     }
     catch (error) {
         next(error);
@@ -66,17 +59,20 @@ exports.getJudicialObservationByIdController = getJudicialObservationByIdControl
 const createJudicialObservationController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _d, _e, _f;
     try {
-        const body = req.body;
-        const newJudicialObsType = yield service.create(body);
+        const { body, files, params } = req;
+        const newJudicialObservation = yield service.create(body, files, {
+            code: params.code,
+            idCustomer: Number(params.idCustomer),
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
-            codeAction: "P13-01-01",
+            codeAction: "P13-01-02-01",
             entity: JUDICIAL_OBSERVATION_TABLE,
-            entityId: Number(newJudicialObsType.dataValues.id),
+            entityId: Number(newJudicialObservation.dataValues.id),
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
             customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
         });
-        res.status(201).json(newJudicialObsType);
+        res.status(201).json(newJudicialObservation);
     }
     catch (error) {
         next(error);
@@ -87,17 +83,20 @@ const updateJudicialObservationController = (req, res, next) => __awaiter(void 0
     var _g, _h, _j;
     try {
         const { id } = req.params;
-        const body = req.body;
-        const judicialObsType = yield service.update(id, body);
+        const { body, files, params } = req;
+        const judicialObservation = yield service.update(id, body, files, {
+            code: params.code,
+            idCustomer: Number(params.idCustomer),
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
-            codeAction: "P13-01-02",
+            codeAction: "P13-01-02-02",
             entity: JUDICIAL_OBSERVATION_TABLE,
-            entityId: Number(judicialObsType.dataValues.id),
+            entityId: Number(judicialObservation.dataValues.id),
             ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
             customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
         });
-        res.json(judicialObsType);
+        res.json(judicialObservation);
     }
     catch (error) {
         next(error);
@@ -111,13 +110,13 @@ const deleteJudicialObservationController = (req, res, next) => __awaiter(void 0
         yield service.delete(id);
         yield serviceUserLog.create({
             customerUserId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.id),
-            codeAction: "P13-01-03",
+            codeAction: "P13-01-02-02",
             entity: JUDICIAL_OBSERVATION_TABLE,
             entityId: Number(id),
             ip: (_l = req.clientIp) !== null && _l !== void 0 ? _l : "",
             customerId: Number((_m = req.user) === null || _m === void 0 ? void 0 : _m.customerId),
         });
-        res.status(201).json({ id });
+        res.status(201).json({ id: Number(id) });
     }
     catch (error) {
         next(error);
