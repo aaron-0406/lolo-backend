@@ -14,11 +14,9 @@ export const getJudicialObservationByCHBController = async (
 ) => {
   try {
     const { fileCase } = req.params;
-    console.log("1")
     const judicialObservations = await service.findAllByCHBAndFileCase(
       Number(fileCase)
     );
-    console.log("2")
     const { visible } = req.query;
 
     if (visible === "true") {
@@ -119,7 +117,7 @@ export const deleteJudicialObservationController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P13-01-02-02",
+      codeAction: "P13-01-02-03",
       entity: JUDICIAL_OBSERVATION_TABLE,
       entityId: Number(id),
       ip: req.clientIp ?? "",

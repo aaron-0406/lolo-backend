@@ -63,18 +63,17 @@ class JudicialObservationService {
     );
     files.forEach(async (file) => {
       const newObsFile = await models.JUDICIAL_OBS_FILE.create({
-        judicial_observation_id_judicial_observation:
-          newJudicialObservation.dataValues.id,
-        original_name: file.originalname,
-        aws_name: "",
-        customer_has_bank_id_customer_has_bank: data.customerHasBankId,
+        judicialObservationId: newJudicialObservation.dataValues.id,
+        originalName: file.originalname,
+        awsName: "",
+        customerHasBankId: data.customerHasBankId,
       });
 
       const fecha = new Date();
       const mes = fecha.getMonth() + 1;
       const año = fecha.getFullYear();
 
-      const newFileName = `${newObsFile.dataValues.id}-${file.originalname}-${mes}-${año}`;
+      const newFileName = `${newObsFile.dataValues.id}-${mes}-${año}-${file.originalname}`;
       await renameFile(`../public/docs/`, file.filename, newFileName);
       file.filename = newFileName;
 
@@ -86,7 +85,7 @@ class JudicialObservationService {
 
       // UPDATE NAME IN DATABASE
       newObsFile.update({
-        aws_name: file.filename,
+        awsName: file.filename,
       });
 
       // DELETE TEMP FILE
@@ -108,32 +107,32 @@ class JudicialObservationService {
   ) {
     const judicialObservation = await this.findByID(id);
     await judicialObservation.update(changes);
+
     files.forEach(async (file) => {
       const newObsFile = await models.JUDICIAL_OBS_FILE.create({
-        judicial_observation_id_judicial_observation: id,
-        original_name: file.originalname,
-        aws_name: "",
-        customer_has_bank_id_customer_has_bank:
-          judicialObservation.dataValues.customerHasBankId,
+        judicialObservationId: id,
+        originalName: file.originalname,
+        awsName: "",
+        customerHasBankId: judicialObservation.dataValues.customerHasBankId,
       });
 
       const fecha = new Date();
       const mes = fecha.getMonth() + 1;
       const año = fecha.getFullYear();
 
-      const newFileName = `${newObsFile.dataValues.id}-${file.filename}-${mes}-${año}`;
+      const newFileName = `${newObsFile.dataValues.id}-${mes}-${año}-${file.filename}`;
       await renameFile(`../public/docs/`, file.filename, newFileName);
       file.filename = newFileName;
 
       // UPLOAD TO AWS
       await uploadFile(
         file,
-        `${config.AWS_CHB_PATH}${params.idCustomer}/${judicialObservation.dataValues.customerHasBankId}/${params.code}/case-file/${judicialObservation.dataValues.judicialFileCaseId}/observation`
+        `${config.AWS_CHB_PATH}${params.idCustomer}/${judicialObservation.dataValues.customerHasBankId}/${params.code}/case-file/${judicialObservation.dataValues.judicialCaseFileId}/observation`
       );
 
       // UPDATE NAME IN DATABASE
       newObsFile.update({
-        aws_name: file.filename,
+        awsName: file.filename,
       });
 
       // DELETE TEMP FILE
