@@ -23,9 +23,7 @@ const getJudicialObservationByCHBController = (req, res, next) => __awaiter(void
     var _a, _b, _c;
     try {
         const { fileCase } = req.params;
-        console.log("1");
         const judicialObservations = yield service.findAllByCHBAndFileCase(Number(fileCase));
-        console.log("2");
         const { visible } = req.query;
         if (visible === "true") {
             yield serviceUserLog.create({
@@ -110,7 +108,7 @@ const deleteJudicialObservationController = (req, res, next) => __awaiter(void 0
         yield service.delete(id);
         yield serviceUserLog.create({
             customerUserId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.id),
-            codeAction: "P13-01-02-02",
+            codeAction: "P13-01-02-03",
             entity: JUDICIAL_OBSERVATION_TABLE,
             entityId: Number(id),
             ip: (_l = req.clientIp) !== null && _l !== void 0 ? _l : "",
