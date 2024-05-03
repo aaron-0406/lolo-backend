@@ -208,6 +208,37 @@ class JudicialCaseFileService {
     return judicialCaseFile;
   }
 
+  async findRelatedNumberCaseFile(numberCaseFile: string, chb: number) {
+    const codes = numberCaseFile.split("-");
+    codes[2] = "%";
+    const filterNumberCaseFile = codes.join("-");
+
+    const judicialCaseFile = await models.JUDICIAL_CASE_FILE.findAll({
+      include: {
+        model: models.CLIENT,
+        as: "client",
+        include: [
+          {
+            model: models.CUSTOMER_USER,
+            as: "customerUser",
+            attributes: ["id", "name"],
+          },
+        ],
+      },
+      where: {
+        numberCaseFile: {
+          [Op.like]: filterNumberCaseFile,
+        },
+        customer_has_bank_id: chb,
+      },
+    });
+
+    if (!judicialCaseFile) {
+      throw boom.notFound("Expediente no encontrado");
+    }
+    return judicialCaseFile;
+  }
+
   async create(data: JudicialCaseFileType, customerId: string) {
     const existCaseFile = await this.existNumberCaseFile(
       customerId,

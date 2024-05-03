@@ -10,6 +10,7 @@ import {
   updateJudicialCaseFileController,
   getJudicialCaseFileByNumberCaseFileController,
   getJudicialCaseFileByCHBIdController,
+  getJudicialCaseFileRelatedController,
 } from "../../controllers/judicial/judicial-case-file.controller";
 import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
@@ -48,6 +49,13 @@ router.get(
   JWTAuth,
   validatorHandler(getJudicialCaseFileByNumberCaseFileSchema, "params"),
   getJudicialCaseFileByNumberCaseFileController
+);
+
+router.get(
+  "/related/:numberCaseFile/:chb",
+  JWTAuth,
+  validatorHandler(getJudicialCaseFileByNumberCaseFileSchema, "params"),
+  getJudicialCaseFileRelatedController
 );
 
 router.get(
