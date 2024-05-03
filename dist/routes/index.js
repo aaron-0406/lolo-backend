@@ -29,6 +29,9 @@ const judicial_case_file_routes_1 = __importDefault(require("./judicial/judicial
 const judicial_court_routes_1 = __importDefault(require("./judicial/judicial-court.routes"));
 const judicial_procedural_way_routes_1 = __importDefault(require("./judicial/judicial-procedural-way.routes"));
 const judicial_subject_routes_1 = __importDefault(require("./judicial/judicial-subject.routes"));
+const Judicial_observation_routes_1 = __importDefault(require("./judicial/Judicial-observation.routes"));
+const judicial_obs_file_routes_1 = __importDefault(require("./judicial/judicial-obs-file.routes"));
+const judicial_obs_type_routes_1 = __importDefault(require("./judicial/judicial-obs-type.routes"));
 const judicial_bin_type_binnacle_routes_1 = __importDefault(require("./judicial/judicial-bin-type-binnacle.routes"));
 const judicial_bin_procedural_stage_routes_1 = __importDefault(require("./judicial/judicial-bin-procedural-stage.routes"));
 const judicial_binnacle_routes_1 = __importDefault(require("./judicial/judicial-binnacle.routes"));
@@ -73,6 +76,9 @@ const routerApi = (app) => {
     router.use("/judicial/court", judicial_court_routes_1.default);
     router.use("/judicial/procedural-way", judicial_procedural_way_routes_1.default);
     router.use("/judicial/subject", judicial_subject_routes_1.default);
+    router.use("/judicial/obs-type", judicial_obs_type_routes_1.default);
+    router.use("/judicial/observation", Judicial_observation_routes_1.default);
+    router.use("/judicial/obs-file", judicial_obs_file_routes_1.default);
     router.use("/judicial/bin-type-binnacle", judicial_bin_type_binnacle_routes_1.default);
     router.use("/judicial/binnacle", judicial_binnacle_routes_1.default);
     router.use("/judicial/bin-file", judicial_bin_file_routes_1.default);

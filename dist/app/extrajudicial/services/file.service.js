@@ -65,7 +65,6 @@ class FileService {
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const { clientId, code, idCustomer, chb } = data;
-            // console.log(data);
             const filesAdded = [];
             for (let i = 0; i < data.files.length; i++) {
                 const { filename, originalname } = data.files[i];

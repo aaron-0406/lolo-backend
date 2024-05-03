@@ -36,6 +36,9 @@ import judicialProceduralWayModel from "./judicial-procedural-way.model";
 import userLogModel from "./user-log.model";
 import extIpAddressBankModel from "./ext-ip-address-bank.model";
 import extContactTypeModel from "./ext-contact-type.model";
+import judicialObsTypeModel from "./judicial-obs-type.model";
+import judicialObservationModel from "./judicial-observation.model";
+import judicialObsFileModel from "./judicial-obs-file.model";
 import extProductNameModel from "./ext-product-name.model";
 import judicialBinnacleModel from "./judicial-binnacle.model";
 import judicialBinProceduralStageModel from "./judicial-bin-procedural-stage.model";
@@ -80,6 +83,10 @@ const { UserLog, UserLogSchema } = userLogModel;
 const { JudicialCaseFile, JudicialCaseFileSchema } = judicialCaseFileModel;
 const { ExtIpAddressBank, ExtIpAddressBankSchema } = extIpAddressBankModel;
 const { ExtContactType, ExtContactTypeSchema } = extContactTypeModel;
+const { JudicialObsType, JudicialObsTypeSchema } = judicialObsTypeModel;
+const { JudicialObservation, JudicialObservationSchema } =
+  judicialObservationModel;
+const { JudicialObsFile, JudicialObsFileSchema } = judicialObsFileModel;
 const { ExtProductName, ExtProductNameSchema } = extProductNameModel;
 const { JudicialBinnacle, JudicialBinnacleSchema } = judicialBinnacleModel;
 const { JudicialBinProceduralStage, JudicialBinProceduralStageSchema } =
@@ -147,6 +154,18 @@ export const setupModels = (sequelize: Sequelize) => {
     ExtIpAddressBank.config(sequelize)
   );
   ExtContactType.init(ExtContactTypeSchema, ExtContactType.config(sequelize));
+  JudicialObsType.init(
+    JudicialObsTypeSchema,
+    JudicialObsType.config(sequelize)
+  );
+  JudicialObservation.init(
+    JudicialObservationSchema,
+    JudicialObservation.config(sequelize)
+  );
+  JudicialObsFile.init(
+    JudicialObsFileSchema,
+    JudicialObsFile.config(sequelize)
+  );
   ExtProductName.init(ExtProductNameSchema, ExtProductName.config(sequelize));
   JudicialBinnacle.init(
     JudicialBinnacleSchema,
@@ -200,6 +219,9 @@ export const setupModels = (sequelize: Sequelize) => {
   UserLog.associate(sequelize.models);
   ExtIpAddressBank.associate(sequelize.models);
   ExtContactType.associate(sequelize.models);
+  JudicialObsType.associate(sequelize.models);
+  JudicialObservation.associate(sequelize.models);
+  JudicialObsFile.associate(sequelize.models);
   ExtProductName.associate(sequelize.models);
   JudicialBinnacle.associate(sequelize.models);
   JudicialBinProceduralStage.associate(sequelize.models);
