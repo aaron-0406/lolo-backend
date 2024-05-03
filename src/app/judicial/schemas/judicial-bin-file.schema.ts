@@ -9,6 +9,7 @@ const customerHasBankId = Joi.number();
 
 const idCustomer = Joi.number();
 const chb = Joi.number();
+const size = Joi.number();
 const judicialFileCaseId = Joi.number();
 const code = Joi.string();
 
@@ -20,6 +21,7 @@ const createJudicialBinFileSchema = Joi.object<
   originalName: originalName.required(),
   customerHasBankId: customerHasBankId.required(),
   judicialBinnacleId: judicialBinnacleId.required(),
+  size: size.required(),
 });
 
 const updateJudicialBinFileSchema = Joi.object<
@@ -36,6 +38,7 @@ const updateJudicialBinFileSchema = Joi.object<
 >({
   nameOriginAws: nameOriginAws.required(),
   originalName: originalName.required(),
+  size: size.required(),
 });
 
 const getFileSchema = Joi.object({
