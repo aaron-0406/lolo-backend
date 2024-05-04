@@ -22,6 +22,7 @@ class JudicialObservationService {
           as: "judicialObsFile",
         },
       ],
+      order: [["id", "DESC"]],
       where: {
         judicial_case_file_id_judicial_case_file: fileCase,
       },
@@ -143,8 +144,8 @@ class JudicialObservationService {
 
     await Promise.all(fileCreationPromises);
 
-    const Observation = await this.findByID(judicialObservation.dataValues.id);
-    return Observation;
+    const observation = await this.findByID(judicialObservation.dataValues.id);
+    return observation;
   }
 
   async delete(id: string) {

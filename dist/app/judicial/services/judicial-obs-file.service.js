@@ -54,7 +54,7 @@ class JudicialObservationService {
             }
             const isStored = (0, helpers_1.isFileStoredIn)(path_1.default.join(__dirname, "../../../public/download"), file.dataValues.name);
             if (!isStored) {
-                yield (0, aws_bucket_1.readFile)(`${config_1.default.AWS_CHB_PATH}${idCustomer}/${chb}/${code}/case-file/${judicialFileCaseId}/observation/${file.dataValues.nameOriginAws}`);
+                yield (0, aws_bucket_1.readFile)(`${config_1.default.AWS_CHB_PATH}${idCustomer}/${chb}/${code}/case-file/${judicialFileCaseId}/observation/${file.dataValues.awsName}`);
             }
             return file;
         });
@@ -76,7 +76,7 @@ class JudicialObservationService {
         return __awaiter(this, void 0, void 0, function* () {
             const judiciaObsFile = yield this.findByID(id);
             yield judiciaObsFile.destroy();
-            yield (0, aws_bucket_1.deleteFileBucket)(`${config_1.default.AWS_CHB_PATH}${idCustomer}/${chb}/${code}/case-file/${judicialFileCaseId}/observation/${judiciaObsFile.dataValues.nameOriginAws}`);
+            yield (0, aws_bucket_1.deleteFileBucket)(`${config_1.default.AWS_CHB_PATH}${idCustomer}/${chb}/${code}/case-file/${judicialFileCaseId}/observation/${judiciaObsFile.dataValues.awsName}`);
             return { id };
         });
     }
