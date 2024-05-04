@@ -44,6 +44,7 @@ class CustomerUserService {
     findOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield models.CUSTOMER_USER.findByPk(id, {
+                include: ["role"],
                 attributes: { exclude: ["password"] },
             });
             if (!user) {
@@ -75,6 +76,12 @@ class CustomerUserService {
             if (!created) {
                 throw boom_1.default.notFound("Usuario ya existente");
             }
+            yield user.reload({
+                include: ["role"],
+                attributes: {
+                    exclude: ["password"],
+                },
+            });
             return user;
         });
     }
@@ -84,6 +91,12 @@ class CustomerUserService {
             if (changes.password)
                 changes.password = yield (0, bcrypt_1.encryptPassword)(changes.password);
             const rta = yield user.update(changes);
+            yield rta.reload({
+                include: ["role"],
+                attributes: {
+                    exclude: ["password"],
+                },
+            });
             return rta;
         });
     }
