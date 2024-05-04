@@ -61,7 +61,7 @@ class JudicialObservationService {
     const newJudicialObservation = await models.JUDICIAL_OBSERVATION.create(
       data
     );
-    files.forEach(async (file) => {
+    const fileCreationPromises = files.map(async (file) => {
       const newObsFile = await models.JUDICIAL_OBS_FILE.create({
         judicialObservationId: newJudicialObservation.dataValues.id,
         originalName: file.originalname,
@@ -92,6 +92,8 @@ class JudicialObservationService {
       await deleteFile("../public/docs", file.filename);
     });
 
+    await Promise.all(fileCreationPromises);
+
     const observation = await this.findByID(
       newJudicialObservation.dataValues.id
     );
@@ -108,7 +110,7 @@ class JudicialObservationService {
     const judicialObservation = await this.findByID(id);
     await judicialObservation.update(changes);
 
-    files.forEach(async (file) => {
+    const fileCreationPromises = files.map(async (file) => {
       const newObsFile = await models.JUDICIAL_OBS_FILE.create({
         judicialObservationId: id,
         originalName: file.originalname,
@@ -139,8 +141,10 @@ class JudicialObservationService {
       await deleteFile("../public/docs", file.filename);
     });
 
-    const newJudicialObservation = await this.findByID(id);
-    return newJudicialObservation;
+    await Promise.all(fileCreationPromises);
+
+    const Observation = await this.findByID(judicialObservation.dataValues.id);
+    return Observation;
   }
 
   async delete(id: string) {
