@@ -61,9 +61,21 @@ class CustomerUserService {
     }
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            data.password = yield (0, bcrypt_1.encryptPassword)(data.password);
-            const newUser = yield models.CUSTOMER_USER.create(data);
-            return newUser;
+            const [user, created] = yield models.CUSTOMER_USER.findOrCreate({
+                where: {
+                    dni: data.dni,
+                    customer_id_customer: data.customerId,
+                },
+                include: ["role"],
+                attributes: {
+                    exclude: ["password"],
+                },
+                defaults: data,
+            });
+            if (!created) {
+                throw boom_1.default.notFound("Usuario ya existente");
+            }
+            return user;
         });
     }
     update(id, changes) {
