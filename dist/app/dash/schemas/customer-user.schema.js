@@ -33,7 +33,7 @@ const createCustomerUserSchema = joi_1.default.object({
     createdAt: createAt.optional(),
     customerId: customerId.required(),
     roleId: roleId.required(),
-    loginAttempts: loginAttempts.required(),
+    loginAttempts: loginAttempts.optional(),
 });
 const updateCustomerUserStateSchema = joi_1.default.object({
     state: state.required(),

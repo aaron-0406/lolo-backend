@@ -54,7 +54,7 @@ class JudicialObservationService {
     );
     if (!isStored) {
       await readFile(
-        `${config.AWS_CHB_PATH}${idCustomer}/${chb}/${code}/case-file/${judicialFileCaseId}/observation/${file.dataValues.nameOriginAws}`
+        `${config.AWS_CHB_PATH}${idCustomer}/${chb}/${code}/case-file/${judicialFileCaseId}/observation/${file.dataValues.awsName}`
       );
     }
     return file;
@@ -81,7 +81,7 @@ class JudicialObservationService {
     const judiciaObsFile = await this.findByID(id);
     await judiciaObsFile.destroy();
     await deleteFileBucket(
-      `${config.AWS_CHB_PATH}${idCustomer}/${chb}/${code}/case-file/${judicialFileCaseId}/observation/${judiciaObsFile.dataValues.nameOriginAws}`
+      `${config.AWS_CHB_PATH}${idCustomer}/${chb}/${code}/case-file/${judicialFileCaseId}/observation/${judiciaObsFile.dataValues.awsName}`
     );
     return { id };
   }

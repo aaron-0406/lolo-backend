@@ -30,6 +30,7 @@ class JudicialBinnacleService {
           as: "judicialBinFiles",
         },
       ],
+      order: [["id", "DESC"]],
       where: {
         judicialFileCaseId: fileCase,
       },

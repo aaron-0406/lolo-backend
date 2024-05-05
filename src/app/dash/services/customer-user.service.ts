@@ -32,6 +32,7 @@ class CustomerUserService {
 
   async findOne(id: string) {
     const user = await models.CUSTOMER_USER.findByPk(id, {
+      include: ["role"],
       attributes: { exclude: ["password"] },
     });
 
@@ -49,9 +50,30 @@ class CustomerUserService {
   }
 
   async create(data: CustomerUserType) {
-    data.password = await encryptPassword(data.password);
-    const newUser = await models.CUSTOMER_USER.create(data);
-    return newUser;
+    const [user, created] = await models.CUSTOMER_USER.findOrCreate({
+      where: {
+        dni: data.dni,
+        customer_id_customer: data.customerId,
+      },
+      include: ["role"],
+      attributes: {
+        exclude: ["password"],
+      },
+      defaults: data,
+    });
+
+    if (!created) {
+      throw boom.notFound("Usuario ya existente");
+    }
+
+    await user.reload({
+      include: ["role"],
+      attributes: {
+        exclude: ["password"],
+      },
+    });
+
+    return user;
   }
 
   async update(id: string, changes: CustomerUserType) {
@@ -59,6 +81,13 @@ class CustomerUserService {
     if (changes.password)
       changes.password = await encryptPassword(changes.password);
     const rta = await user.update(changes);
+
+    await rta.reload({
+      include: ["role"],
+      attributes: {
+        exclude: ["password"],
+      },
+    });
 
     return rta;
   }
