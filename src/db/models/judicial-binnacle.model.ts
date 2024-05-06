@@ -140,7 +140,7 @@ class JudicialBinnacle extends Model {
       sequelize,
       tableName: JUDICIAL_BINNACLE_TABLE,
       modelName: JUDICIAL_BINNACLE_TABLE,
-      timestamps: false,
+      timestamps: true,
       paranoid: true,
       deleteAt: "deleted_at",
     };

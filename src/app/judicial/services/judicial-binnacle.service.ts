@@ -75,7 +75,6 @@ class JudicialBinnacleService {
     files: Array<any>,
     params: { idCustomer: number; code: string }
   ) {
-    console.log(data);
     const newJudicialBinnacle = await models.JUDICIAL_BINNACLE.create({
       ...data,
     });

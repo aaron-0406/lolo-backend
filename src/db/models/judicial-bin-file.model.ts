@@ -87,7 +87,7 @@ class JudicialBinFile extends Model {
       sequelize,
       tableName: JUDICIAL_BIN_FILE,
       modelName: JUDICIAL_BIN_FILE,
-      timestamps: false,
+      timestamps: true,
       paranoid: true,
       deleteAt: "deleted_at",
     };

@@ -52,7 +52,7 @@ export const createJudicialBinnacleController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P13-01-01-03",
+      codeAction: "P13-01-01-01",
       entity: JUDICIAL_BINNACLE_TABLE,
       entityId: Number(newJudicialBinnacle.dataValues.id),
       ip: req.clientIp ?? "",
