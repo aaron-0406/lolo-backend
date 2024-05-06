@@ -56,7 +56,7 @@ class JudicialBinDefendantProceduralAction extends sequelize_1.Model {
             sequelize,
             tableName: JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE,
             modelName: JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE,
-            timestamps: false,
+            timestamps: true,
             paranoid: true,
             deleteAt: "deleted_at",
         };
