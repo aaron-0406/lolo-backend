@@ -66,7 +66,7 @@ class JudicialBinProceduralStage extends Model {
       sequelize,
       tableName: JUDICIAL_BIN_PROCEDURAL_STAGE_TABLE,
       modelName: JUDICIAL_BIN_PROCEDURAL_STAGE_TABLE,
-      timestamps: false,
+      timestamps: true,
       paranoid: true,
       deleteAt: "deleted_at",
     };

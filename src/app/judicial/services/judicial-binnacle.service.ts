@@ -18,6 +18,10 @@ class JudicialBinnacleService {
           as: "binnacleType",
         },
         {
+          model: models.JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION,
+          as: "judicialBinDefendantProceduralAction",
+        },
+        {
           model: models.JUDICIAL_BIN_PROCEDURAL_STAGE,
           as: "judicialBinProceduralStage",
         },
@@ -26,6 +30,7 @@ class JudicialBinnacleService {
           as: "judicialBinFiles",
         },
       ],
+      order: [["id", "DESC"]],
       where: {
         judicialFileCaseId: fileCase,
       },
@@ -43,6 +48,10 @@ class JudicialBinnacleService {
         {
           model: models.JUDICIAL_BIN_PROCEDURAL_STAGE,
           as: "judicialBinProceduralStage",
+        },
+        {
+          model: models.JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION,
+          as: "judicialBinDefendantProceduralAction",
         },
         {
           model: models.JUDICIAL_BIN_FILE,
@@ -66,7 +75,9 @@ class JudicialBinnacleService {
     files: Array<any>,
     params: { idCustomer: number; code: string }
   ) {
-    const newJudicialBinnacle = await models.JUDICIAL_BINNACLE.create(data);
+    const newJudicialBinnacle = await models.JUDICIAL_BINNACLE.create({
+      ...data,
+    });
     files.forEach(async (file) => {
       const newBinFile = await models.JUDICIAL_BIN_FILE.create({
         judicialBinnacleId: newJudicialBinnacle.dataValues.id,

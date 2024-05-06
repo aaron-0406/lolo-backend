@@ -5,49 +5,24 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { JudicialBinFileType } from "../../app/judicial/types/judicial-bin-file.type";
+import { JudicialBinDefendantProceduralActionType } from "../../app/judicial/types/judicial-bin-defendant-procedural-action.type";
 import customerHasBankModel from "./many-to-many/customer-has-bank.model";
-import judicialBinnacleModel from "./judicial-binnacle.model";
 
-const JUDICIAL_BIN_FILE = "JUDICIAL_BIN_FILE";
+const JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE =
+  "JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION";
 
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
-const { JUDICIAL_BINNACLE_TABLE } = judicialBinnacleModel;
 
-const JudicialBinFileSchema: ModelAttributes<
-  JudicialBinFile,
-  JudicialBinFileType
+const JudicialBinDefendantProceduralActionSchema: ModelAttributes<
+  JudicialBinDefendantProceduralAction,
+  JudicialBinDefendantProceduralActionType
 > = {
   id: {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    field: "id_judicial_bin_file",
+    field: "id_defendant_procedural_action",
     type: DataTypes.INTEGER,
-  },
-  judicialBinnacleId: {
-    allowNull: false,
-    field: "judicial_binnacle_id_judicial_binnacle",
-    type: DataTypes.INTEGER,
-    references: {
-      model: JUDICIAL_BINNACLE_TABLE,
-      key: "id_judicial_binnacle",
-    },
-  },
-  size: {
-    allowNull: false,
-    field: "size",
-    type: DataTypes.NUMBER,
-  },
-  nameOriginAws: {
-    allowNull: false,
-    field: "name_origin_aws",
-    type: DataTypes.STRING,
-  },
-  originalName: {
-    allowNull: false,
-    field: "original_name",
-    type: DataTypes.STRING,
   },
   createdAt: {
     allowNull: false,
@@ -55,7 +30,11 @@ const JudicialBinFileSchema: ModelAttributes<
     field: "created_at",
     defaultValue: DataTypes.NOW,
   },
-
+  defendantProceduralAction: {
+    allowNull: false,
+    field: "defendant_procedural_action",
+    type: DataTypes.STRING(150),
+  },
   updatedAt: {
     allowNull: false,
     type: DataTypes.DATE,
@@ -78,20 +57,16 @@ const JudicialBinFileSchema: ModelAttributes<
   },
 };
 
-class JudicialBinFile extends Model {
+class JudicialBinDefendantProceduralAction extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
-    this.belongsTo(models.JUDICIAL_BINNACLE, {
-      as: "judicialBinnacle",
-      foreignKey: "judicialBinnacleId",
-    });
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
   }
 
   static config(sequelize: Sequelize) {
     return {
       sequelize,
-      tableName: JUDICIAL_BIN_FILE,
-      modelName: JUDICIAL_BIN_FILE,
+      tableName: JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE,
+      modelName: JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE,
       timestamps: true,
       paranoid: true,
       deleteAt: "deleted_at",
@@ -100,7 +75,7 @@ class JudicialBinFile extends Model {
 }
 
 export default {
-  JUDICIAL_BIN_FILE,
-  JudicialBinFileSchema,
-  JudicialBinFile,
+  JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE,
+  JudicialBinDefendantProceduralActionSchema,
+  JudicialBinDefendantProceduralAction,
 };
