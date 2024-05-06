@@ -67,7 +67,7 @@ class JudicialBinTypeBinnacle extends Model {
       sequelize,
       tableName: JUDICIAL_BIN_TYPE_BINNACLE_TABLE,
       modelName: JUDICIAL_BIN_TYPE_BINNACLE_TABLE,
-      timestamps: false,
+      timestamps: true,
       paranoid: true,
       deleteAt: "deleted_at",
     };

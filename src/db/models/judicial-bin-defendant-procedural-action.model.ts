@@ -5,22 +5,23 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { JudicialBinProceduralStageType } from "../../app/judicial/types/judicial-bin-procedural-stage.type";
+import { JudicialBinDefendantProceduralActionType } from "../../app/judicial/types/judicial-bin-defendant-procedural-action.type";
 import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 
-const JUDICIAL_BIN_PROCEDURAL_STAGE_TABLE = "JUDICIAL_BIN_PROCEDURAL_STAGE";
+const JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE =
+  "JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION";
 
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 
-const JudicialBinProceduralStageSchema: ModelAttributes<
-  JudicialBinProceduralStage,
-  JudicialBinProceduralStageType
+const JudicialBinDefendantProceduralActionSchema: ModelAttributes<
+  JudicialBinDefendantProceduralAction,
+  JudicialBinDefendantProceduralActionType
 > = {
   id: {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    field: "id_judicial_bin_procedural_stage",
+    field: "id_defendant_procedural_action",
     type: DataTypes.INTEGER,
   },
   createdAt: {
@@ -29,9 +30,9 @@ const JudicialBinProceduralStageSchema: ModelAttributes<
     field: "created_at",
     defaultValue: DataTypes.NOW,
   },
-  proceduralStage: {
+  defendantProceduralAction: {
     allowNull: false,
-    field: "procedural_stage",
+    field: "defendant_procedural_action",
     type: DataTypes.STRING(150),
   },
   updatedAt: {
@@ -56,7 +57,7 @@ const JudicialBinProceduralStageSchema: ModelAttributes<
   },
 };
 
-class JudicialBinProceduralStage extends Model {
+class JudicialBinDefendantProceduralAction extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
   }
@@ -64,8 +65,8 @@ class JudicialBinProceduralStage extends Model {
   static config(sequelize: Sequelize) {
     return {
       sequelize,
-      tableName: JUDICIAL_BIN_PROCEDURAL_STAGE_TABLE,
-      modelName: JUDICIAL_BIN_PROCEDURAL_STAGE_TABLE,
+      tableName: JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE,
+      modelName: JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE,
       timestamps: true,
       paranoid: true,
       deleteAt: "deleted_at",
@@ -74,7 +75,7 @@ class JudicialBinProceduralStage extends Model {
 }
 
 export default {
-  JUDICIAL_BIN_PROCEDURAL_STAGE_TABLE,
-  JudicialBinProceduralStageSchema,
-  JudicialBinProceduralStage,
+  JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE,
+  JudicialBinDefendantProceduralActionSchema,
+  JudicialBinDefendantProceduralAction,
 };

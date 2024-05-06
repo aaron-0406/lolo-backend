@@ -47,6 +47,7 @@ const judicial_obs_file_model_1 = __importDefault(require("./judicial-obs-file.m
 const ext_product_name_model_1 = __importDefault(require("./ext-product-name.model"));
 const judicial_binnacle_model_1 = __importDefault(require("./judicial-binnacle.model"));
 const judicial_bin_procedural_stage_model_1 = __importDefault(require("./judicial-bin-procedural-stage.model"));
+const judicial_bin_defendant_procedural_action_model_1 = __importDefault(require("./judicial-bin-defendant-procedural-action.model"));
 const judicial_bin_type_binnacle_model_1 = __importDefault(require("./judicial-bin-type-binnacle.model"));
 const judicial_bin_file_model_1 = __importDefault(require("./judicial-bin-file.model"));
 const { Customer, CustomerSchema } = customer_model_1.default;
@@ -92,6 +93,7 @@ const { JudicialObsFile, JudicialObsFileSchema } = judicial_obs_file_model_1.def
 const { ExtProductName, ExtProductNameSchema } = ext_product_name_model_1.default;
 const { JudicialBinnacle, JudicialBinnacleSchema } = judicial_binnacle_model_1.default;
 const { JudicialBinProceduralStage, JudicialBinProceduralStageSchema } = judicial_bin_procedural_stage_model_1.default;
+const { JudicialBinDefendantProceduralAction, JudicialBinDefendantProceduralActionSchema, } = judicial_bin_defendant_procedural_action_model_1.default;
 const { JudicialBinTypeBinnacle, JudicialBinTypeBinnacleSchema } = judicial_bin_type_binnacle_model_1.default;
 const { JudicialBinFile, JudicialBinFileSchema } = judicial_bin_file_model_1.default;
 const setupModels = (sequelize) => {
@@ -138,6 +140,7 @@ const setupModels = (sequelize) => {
     ExtProductName.init(ExtProductNameSchema, ExtProductName.config(sequelize));
     JudicialBinnacle.init(JudicialBinnacleSchema, JudicialBinnacle.config(sequelize));
     JudicialBinProceduralStage.init(JudicialBinProceduralStageSchema, JudicialBinProceduralStage.config(sequelize));
+    JudicialBinDefendantProceduralAction.init(JudicialBinDefendantProceduralActionSchema, JudicialBinDefendantProceduralAction.config(sequelize));
     JudicialBinTypeBinnacle.init(JudicialBinTypeBinnacleSchema, JudicialBinTypeBinnacle.config(sequelize));
     JudicialBinFile.init(JudicialBinFileSchema, JudicialBinFile.config(sequelize));
     Customer.associate(sequelize.models);
@@ -181,6 +184,7 @@ const setupModels = (sequelize) => {
     ExtProductName.associate(sequelize.models);
     JudicialBinnacle.associate(sequelize.models);
     JudicialBinProceduralStage.associate(sequelize.models);
+    JudicialBinDefendantProceduralAction.associate(sequelize.models);
     JudicialBinTypeBinnacle.associate(sequelize.models);
     JudicialBinFile.associate(sequelize.models);
 };

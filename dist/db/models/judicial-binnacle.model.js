@@ -8,9 +8,11 @@ const judicial_case_file_model_1 = __importDefault(require("./judicial-case-file
 const customer_has_bank_model_1 = __importDefault(require("./many-to-many/customer-has-bank.model"));
 const judicial_bin_procedural_stage_model_1 = __importDefault(require("./judicial-bin-procedural-stage.model"));
 const judicial_bin_type_binnacle_model_1 = __importDefault(require("./judicial-bin-type-binnacle.model"));
+const judicial_bin_defendant_procedural_action_model_1 = __importDefault(require("./judicial-bin-defendant-procedural-action.model"));
 const JUDICIAL_BINNACLE_TABLE = "JUDICIAL_BINNACLE";
 const { JUDICIAL_CASE_FILE_TABLE } = judicial_case_file_model_1.default;
 const { JUDICIAL_BIN_PROCEDURAL_STAGE_TABLE } = judicial_bin_procedural_stage_model_1.default;
+const { JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE } = judicial_bin_defendant_procedural_action_model_1.default;
 const { CUSTOMER_HAS_BANK_TABLE } = customer_has_bank_model_1.default;
 const { JUDICIAL_BIN_TYPE_BINNACLE_TABLE } = judicial_bin_type_binnacle_model_1.default;
 const JudicialBinnacleSchema = {
@@ -86,6 +88,17 @@ const JudicialBinnacleSchema = {
         type: sequelize_1.DataTypes.STRING,
         field: "last_performed",
     },
+    judicialDefendantProceduralActionId: {
+        allowNull: true,
+        field: "id_defendant_procedural_action",
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE,
+            key: "defendant_procedural_action_id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
+    },
 };
 class JudicialBinnacle extends sequelize_1.Model {
     static associate(models) {
@@ -102,13 +115,17 @@ class JudicialBinnacle extends sequelize_1.Model {
         this.belongsTo(models.JUDICIAL_BIN_PROCEDURAL_STAGE, {
             as: "judicialBinProceduralStage",
         });
+        this.belongsTo(models.JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION, {
+            as: "judicialBinDefendantProceduralAction",
+            foreignKey: "judicialDefendantProceduralActionId",
+        });
     }
     static config(sequelize) {
         return {
             sequelize,
             tableName: JUDICIAL_BINNACLE_TABLE,
             modelName: JUDICIAL_BINNACLE_TABLE,
-            timestamps: false,
+            timestamps: true,
             paranoid: true,
             deleteAt: "deleted_at",
         };
