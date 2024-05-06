@@ -34,6 +34,11 @@ const JudicialBinFileSchema: ModelAttributes<
       key: "id_judicial_binnacle",
     },
   },
+  size: {
+    allowNull: false,
+    field: "size",
+    type: DataTypes.NUMBER,
+  },
   nameOriginAws: {
     allowNull: false,
     field: "name_origin_aws",

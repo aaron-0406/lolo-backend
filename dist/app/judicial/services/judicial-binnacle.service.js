@@ -89,6 +89,7 @@ class JudicialBinnacleService {
                     originalName: file.originalname,
                     nameOriginAws: "",
                     customerHasBankId: data.customerHasBankId,
+                    size: file.size,
                 });
                 const newFileName = `${newBinFile.dataValues.id}-${file.filename}`;
                 yield (0, helpers_1.renameFile)(`../public/docs/`, file.filename, newFileName);
@@ -116,6 +117,7 @@ class JudicialBinnacleService {
                     originalName: file.originalname,
                     nameOriginAws: "",
                     customerHasBankId: judicialBinnacle.dataValues.customerHasBankId,
+                    size: file.size,
                 });
                 const newFileName = `${newBinFile.dataValues.id}-${file.filename}`;
                 yield (0, helpers_1.renameFile)(`../public/docs/`, file.filename, newFileName);

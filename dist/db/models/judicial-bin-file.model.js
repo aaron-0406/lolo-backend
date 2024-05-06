@@ -26,6 +26,11 @@ const JudicialBinFileSchema = {
             key: "id_judicial_binnacle",
         },
     },
+    size: {
+        allowNull: false,
+        field: "size",
+        type: sequelize_1.DataTypes.NUMBER,
+    },
     nameOriginAws: {
         allowNull: false,
         field: "name_origin_aws",
