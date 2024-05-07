@@ -26,6 +26,11 @@ const JudicialBinFileSchema = {
             key: "id_judicial_binnacle",
         },
     },
+    size: {
+        allowNull: false,
+        field: "size",
+        type: sequelize_1.DataTypes.NUMBER,
+    },
     nameOriginAws: {
         allowNull: false,
         field: "name_origin_aws",
@@ -76,7 +81,7 @@ class JudicialBinFile extends sequelize_1.Model {
             sequelize,
             tableName: JUDICIAL_BIN_FILE,
             modelName: JUDICIAL_BIN_FILE,
-            timestamps: false,
+            timestamps: true,
             paranoid: true,
             deleteAt: "deleted_at",
         };

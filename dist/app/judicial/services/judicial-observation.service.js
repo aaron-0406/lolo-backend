@@ -33,6 +33,7 @@ class JudicialObservationService {
                         as: "judicialObsFile",
                     },
                 ],
+                order: [["id", "DESC"]],
                 where: {
                     judicial_case_file_id_judicial_case_file: fileCase,
                 },
@@ -66,7 +67,7 @@ class JudicialObservationService {
     create(data, files, params) {
         return __awaiter(this, void 0, void 0, function* () {
             const newJudicialObservation = yield models.JUDICIAL_OBSERVATION.create(data);
-            files.forEach((file) => __awaiter(this, void 0, void 0, function* () {
+            const fileCreationPromises = files.map((file) => __awaiter(this, void 0, void 0, function* () {
                 const newObsFile = yield models.JUDICIAL_OBS_FILE.create({
                     judicialObservationId: newJudicialObservation.dataValues.id,
                     originalName: file.originalname,
@@ -88,6 +89,7 @@ class JudicialObservationService {
                 // DELETE TEMP FILE
                 yield (0, helpers_1.deleteFile)("../public/docs", file.filename);
             }));
+            yield Promise.all(fileCreationPromises);
             const observation = yield this.findByID(newJudicialObservation.dataValues.id);
             return observation;
         });
@@ -96,7 +98,7 @@ class JudicialObservationService {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialObservation = yield this.findByID(id);
             yield judicialObservation.update(changes);
-            files.forEach((file) => __awaiter(this, void 0, void 0, function* () {
+            const fileCreationPromises = files.map((file) => __awaiter(this, void 0, void 0, function* () {
                 const newObsFile = yield models.JUDICIAL_OBS_FILE.create({
                     judicialObservationId: id,
                     originalName: file.originalname,
@@ -118,8 +120,9 @@ class JudicialObservationService {
                 // DELETE TEMP FILE
                 yield (0, helpers_1.deleteFile)("../public/docs", file.filename);
             }));
-            const newJudicialObservation = yield this.findByID(id);
-            return newJudicialObservation;
+            yield Promise.all(fileCreationPromises);
+            const observation = yield this.findByID(judicialObservation.dataValues.id);
+            return observation;
         });
     }
     delete(id) {

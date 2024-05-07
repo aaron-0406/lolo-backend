@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import JudicialBinnacleService from "../../app/judicial/services/judicial-binnacle.service";
+import UserLogService from "../../app/dash/services/user-log.service";
+import judicialBinnacleModel from "../../db/models/judicial-binnacle.model";
 
 const service = new JudicialBinnacleService();
+const serviceUserLog = new UserLogService();
+const { JUDICIAL_BINNACLE_TABLE } = judicialBinnacleModel;
 
 export const getJudicialBinnacleByCHBController = async (
   req: Request,
@@ -46,6 +50,14 @@ export const createJudicialBinnacleController = async (
       idCustomer: Number(params.idCustomer),
     });
 
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P13-01-01-01",
+      entity: JUDICIAL_BINNACLE_TABLE,
+      entityId: Number(newJudicialBinnacle.dataValues.id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    });
     res.status(201).json(newJudicialBinnacle);
   } catch (error) {
     next(error);
@@ -64,6 +76,15 @@ export const updateJudicialBinnacleController = async (
       code: params.code,
       idCustomer: Number(params.idCustomer),
     });
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P13-01-01-02",
+      entity: JUDICIAL_BINNACLE_TABLE,
+      entityId: Number(judicialBinnacle.dataValues.id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    });
     res.json(judicialBinnacle);
   } catch (error) {
     next(error);
@@ -78,6 +99,15 @@ export const deleteJudicialBinnacleController = async (
   try {
     const { id } = req.params;
     await service.delete(id);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P13-01-01-03",
+      entity: JUDICIAL_BINNACLE_TABLE,
+      entityId: Number(id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    });
     res.status(201).json({ id: Number(id) });
   } catch (error) {
     next(error);

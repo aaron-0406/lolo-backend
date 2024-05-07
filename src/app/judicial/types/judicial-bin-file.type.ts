@@ -4,6 +4,7 @@ export type JudicialBinFileType = {
   originalName: string;
   judicialBinnacleId: number;
   customerHasBankId: number;
+  size: number;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
