@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteJudicialCaseFileController = exports.updateJudicialCaseFileController = exports.createJudicialCaseFileController = exports.getJudicialCaseFileByIdController = exports.getJudicialCaseFileByNumberCaseFileController = exports.getJudicialCaseFileByCHBIdController = exports.getJudicialCaseFileByClientIdController = exports.getJudicialCaseFileController = void 0;
+exports.deleteJudicialCaseFileController = exports.updateJudicialCaseFileController = exports.createJudicialCaseFileController = exports.getJudicialCaseFileByIdController = exports.getJudicialCaseFileRelatedController = exports.getJudicialCaseFileByNumberCaseFileController = exports.getJudicialCaseFileByCHBIdController = exports.getJudicialCaseFileByClientIdController = exports.getJudicialCaseFileController = void 0;
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const judicial_case_file_service_1 = __importDefault(require("../../app/judicial/services/judicial-case-file.service"));
 const judicial_case_file_model_1 = __importDefault(require("../../db/models/judicial-case-file.model"));
@@ -62,6 +62,17 @@ const getJudicialCaseFileByNumberCaseFileController = (req, res, next) => __awai
     }
 });
 exports.getJudicialCaseFileByNumberCaseFileController = getJudicialCaseFileByNumberCaseFileController;
+const getJudicialCaseFileRelatedController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { numberCaseFile, chb } = req.params;
+        const caseFile = yield service.findRelatedNumberCaseFile(numberCaseFile, Number(chb));
+        res.json(caseFile);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.getJudicialCaseFileRelatedController = getJudicialCaseFileRelatedController;
 const getJudicialCaseFileByIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;

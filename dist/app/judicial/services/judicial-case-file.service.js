@@ -204,6 +204,36 @@ class JudicialCaseFileService {
             return judicialCaseFile;
         });
     }
+    findRelatedNumberCaseFile(numberCaseFile, chb) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const codes = numberCaseFile.split("-");
+            codes[2] = "%";
+            const filterNumberCaseFile = codes.join("-");
+            const judicialCaseFile = yield models.JUDICIAL_CASE_FILE.findAll({
+                include: {
+                    model: models.CLIENT,
+                    as: "client",
+                    include: [
+                        {
+                            model: models.CUSTOMER_USER,
+                            as: "customerUser",
+                            attributes: ["id", "name"],
+                        },
+                    ],
+                },
+                where: {
+                    numberCaseFile: {
+                        [sequelize_2.Op.like]: filterNumberCaseFile,
+                    },
+                    customer_has_bank_id: chb,
+                },
+            });
+            if (!judicialCaseFile) {
+                throw boom_1.default.notFound("Expediente no encontrado");
+            }
+            return judicialCaseFile;
+        });
+    }
     create(data, customerId) {
         return __awaiter(this, void 0, void 0, function* () {
             const existCaseFile = yield this.existNumberCaseFile(customerId, data.numberCaseFile);
