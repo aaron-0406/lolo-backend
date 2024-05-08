@@ -66,6 +66,23 @@ export const getJudicialCaseFileByNumberCaseFileController = async (
   }
 };
 
+export const getJudicialCaseFileRelatedController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { numberCaseFile, chb } = req.params;
+    const caseFile = await service.findRelatedNumberCaseFile(
+      numberCaseFile,
+      Number(chb)
+    );
+    res.json(caseFile);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getJudicialCaseFileByIdController = async (
   req: Request,
   res: Response,
