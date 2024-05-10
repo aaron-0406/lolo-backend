@@ -8,6 +8,7 @@ const client_model_1 = __importDefault(require("./client.model"));
 const judicial_court_model_1 = __importDefault(require("./judicial-court.model"));
 const judicial_procedural_way_model_1 = __importDefault(require("./judicial-procedural-way.model"));
 const judicial_subject_model_1 = __importDefault(require("./judicial-subject.model"));
+const judicial_process_reason_model_1 = __importDefault(require("./judicial-process-reason.model"));
 const customer_user_model_1 = __importDefault(require("./customer-user.model"));
 const customer_has_bank_model_1 = __importDefault(require("./many-to-many/customer-has-bank.model"));
 const JUDICIAL_CASE_FILE_TABLE = "JUDICIAL_CASE_FILE";
@@ -139,6 +140,27 @@ const JudicialCaseFileSchema = {
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
     },
+    processStatus: {
+        allowNull: true,
+        field: "process_status",
+        type: sequelize_1.DataTypes.STRING(150),
+    },
+    processComment: {
+        allowNull: true,
+        field: "process_comment",
+        type: sequelize_1.DataTypes.STRING(150),
+    },
+    processReasonId: {
+        allowNull: true,
+        field: "process_reason_id",
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: judicial_process_reason_model_1.default.JUDICIAL_PROCESS_REASON_TABLE,
+            key: "id_judicial_process_status_reason",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
+    },
 };
 class JudicialCaseFile extends sequelize_1.Model {
     static associate(models) {
@@ -150,6 +172,7 @@ class JudicialCaseFile extends sequelize_1.Model {
         });
         this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
         this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
+        this.belongsTo(models.JUDICIAL, { as: "processReason" });
         this.hasMany(models.PRODUCT, {
             as: "product",
             foreignKey: "judicialCaseFileId",

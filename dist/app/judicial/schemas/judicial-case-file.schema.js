@@ -25,6 +25,9 @@ const judicialCourtId = joi_1.default.number().positive();
 const judicialSubjectId = joi_1.default.number().positive();
 const judicialProceduralWayId = joi_1.default.number().positive();
 const customerHasBankId = joi_1.default.number().positive();
+const processStatus = joi_1.default.string().max(150);
+const processComment = joi_1.default.string().max(150);
+const processReasonId = joi_1.default.number().positive();
 const page = joi_1.default.number().required().messages({
     "number.base": "El campo page es inválido",
     "any.required": "El campo page es requerido.",
@@ -78,6 +81,9 @@ const updateJudicialCaseFileSchema = joi_1.default.object({
     judicialProceduralWayId: judicialProceduralWayId.required(),
     customerHasBankId: customerHasBankId.required(),
     clientId: clientId.required(),
+    processStatus: processStatus.optional().empty("").allow(""),
+    processComment: processComment.optional().empty("").allow(""),
+    processReasonId: processReasonId.optional().empty("").allow(""),
 });
 const getJudicialCaseFileByClientIDSchema = joi_1.default.object({
     clientId: clientId.required(),
