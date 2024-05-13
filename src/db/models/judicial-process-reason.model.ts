@@ -7,7 +7,6 @@ import {
 } from "sequelize";
 import { JudicialProcessReasonType } from "../../app/judicial/types/judicial-process-reason.type";
 import customerHasBankModel from "./many-to-many/customer-has-bank.model";
-import judicialCaseFileModel from "./judicial-case-file.model";
 
 const JUDICIAL_PROCESS_REASON_TABLE = "JUDICIAL_PROCESS_REASON";
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
@@ -71,7 +70,9 @@ class JudicialProcessReason extends Model {
       sequelize,
       tableName: JUDICIAL_PROCESS_REASON_TABLE,
       modelName: JUDICIAL_PROCESS_REASON_TABLE,
-      timestamps: false,
+      timestamps: true,
+      paranoid: true,
+      deletedAt: "deleted_at",
     };
   }
 }
