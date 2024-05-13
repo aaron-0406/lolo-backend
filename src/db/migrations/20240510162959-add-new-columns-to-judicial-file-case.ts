@@ -25,7 +25,7 @@ export async function up(queryInterface: QueryInterface) {
   await queryInterface.addColumn(JUDICIAL_CASE_FILE_TABLE, "process_comment", {
     allowNull: true,
     field: "process_comment",
-    type: DataTypes.STRING(150),
+    type: DataTypes.TEXT("long"),
   });
 
 }

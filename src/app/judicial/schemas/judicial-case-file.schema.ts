@@ -25,8 +25,8 @@ const judicialCourtId = Joi.number().positive();
 const judicialSubjectId = Joi.number().positive();
 const judicialProceduralWayId = Joi.number().positive();
 const customerHasBankId = Joi.number().positive();
-const processStatus = Joi.string().max(150); 
-const processComment = Joi.string().max(150); 
+const processStatus = Joi.string().max(150);
+const processComment = Joi.string();
 const processReasonId = Joi.number().positive();
 
 
@@ -76,7 +76,7 @@ const createJudicialCaseFileSchema = Joi.object<
 });
 
 const updateJudicialCaseFileSchema = Joi.object<
-  Omit<JudicialCaseFileType, "id" | "createdAt">,
+  Omit<JudicialCaseFileType, "id" | "createdAt" | "processStatus" | "processComment" | "processReasonId">,
   true
 >({
   numberCaseFile: numberCaseFile.required(),
@@ -95,14 +95,11 @@ const updateJudicialCaseFileSchema = Joi.object<
   judicialProceduralWayId: judicialProceduralWayId.required(),
   customerHasBankId: customerHasBankId.required(),
   clientId: clientId.required(),
-  processStatus: processStatus.optional().empty("").allow(""), 
-  processComment: processComment.optional().empty("").allow(""), 
-  processReasonId: processReasonId.optional().empty("").allow(""),
 });
 
 const updateJudicialCaseFileProcessStatusSchema = Joi.object<JudicialCasefileProcessStatus, true>({
-  processStatus: processStatus.optional().empty("").allow(""), 
-  processComment: processComment.optional().empty("").allow(""), 
+  processStatus: processStatus.optional().empty("").allow(""),
+  processComment: processComment.optional().empty("").allow(""),
   processReasonId: processReasonId.optional().empty("").allow(""),
 })
 

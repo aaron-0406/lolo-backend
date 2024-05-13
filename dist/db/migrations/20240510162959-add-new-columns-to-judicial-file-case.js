@@ -39,7 +39,7 @@ function up(queryInterface) {
         yield queryInterface.addColumn(JUDICIAL_CASE_FILE_TABLE, "process_comment", {
             allowNull: true,
             field: "process_comment",
-            type: sequelize_1.DataTypes.STRING(150),
+            type: sequelize_1.DataTypes.TEXT("long"),
         });
     });
 }

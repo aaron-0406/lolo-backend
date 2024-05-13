@@ -10,7 +10,7 @@ import clientModel from "./client.model";
 import judicialCourtModel from "./judicial-court.model";
 import judicialProceduralWayModel from "./judicial-procedural-way.model";
 import judicialSubjectModel from "./judicial-subject.model";
-import judicialProcessReasonModel from "./judicial-process-reason.model"; 
+import judicialProcessReasonModel from "./judicial-process-reason.model";
 import customerUserModel from "./customer-user.model";
 import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 
@@ -155,7 +155,7 @@ const JudicialCaseFileSchema: ModelAttributes<
   processComment:{
     allowNull: true,
     field: "process_comment",
-    type: DataTypes.STRING(150),
+    type: DataTypes.TEXT("long"),
   },
   processReasonId: {
     allowNull: true,
