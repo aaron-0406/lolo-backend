@@ -51,13 +51,19 @@ const JudicialProcessReasonSchema = {
 class JudicialProcessReason extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
+        this.hasMany(models.JUDICIAL_CASE_FILE, {
+            as: "judicialCaseFile",
+            foreignKey: "processReasonId",
+        });
     }
     static config(sequelize) {
         return {
             sequelize,
             tableName: JUDICIAL_PROCESS_REASON_TABLE,
             modelName: JUDICIAL_PROCESS_REASON_TABLE,
-            timestamps: false,
+            timestamps: true,
+            paranoid: true,
+            deletedAt: "deleted_at",
         };
     }
 }

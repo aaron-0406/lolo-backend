@@ -148,7 +148,7 @@ const JudicialCaseFileSchema = {
     processComment: {
         allowNull: true,
         field: "process_comment",
-        type: sequelize_1.DataTypes.STRING(150),
+        type: sequelize_1.DataTypes.TEXT("long"),
     },
     processReasonId: {
         allowNull: true,
@@ -172,7 +172,7 @@ class JudicialCaseFile extends sequelize_1.Model {
         });
         this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
         this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
-        this.belongsTo(models.JUDICIAL, { as: "processReason" });
+        this.belongsTo(models.JUDICIAL_PROCESS_REASON, { as: "processReason" });
         this.hasMany(models.PRODUCT, {
             as: "product",
             foreignKey: "judicialCaseFileId",
