@@ -147,6 +147,32 @@ export const updateJudicialCaseFileController = async (
   }
 };
 
+export const updateJudicialCaseProcessStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const caseFile = await service.updateProcessStatus(id, body);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P13-01-04-01",
+      entity: JUDICIAL_CASE_FILE_TABLE,
+      entityId: Number(caseFile.dataValues.id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    });
+
+    res.json(caseFile);
+  } catch (error) {
+    next(error);
+  }
+};
+
+
 export const deleteJudicialCaseFileController = async (
   req: Request,
   res: Response,

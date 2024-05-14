@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteJudicialCaseFileController = exports.updateJudicialCaseFileController = exports.createJudicialCaseFileController = exports.getJudicialCaseFileByIdController = exports.getJudicialCaseFileRelatedController = exports.getJudicialCaseFileByNumberCaseFileController = exports.getJudicialCaseFileByCHBIdController = exports.getJudicialCaseFileByClientIdController = exports.getJudicialCaseFileController = void 0;
+exports.deleteJudicialCaseFileController = exports.updateJudicialCaseProcessStatus = exports.updateJudicialCaseFileController = exports.createJudicialCaseFileController = exports.getJudicialCaseFileByIdController = exports.getJudicialCaseFileRelatedController = exports.getJudicialCaseFileByNumberCaseFileController = exports.getJudicialCaseFileByCHBIdController = exports.getJudicialCaseFileByClientIdController = exports.getJudicialCaseFileController = void 0;
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const judicial_case_file_service_1 = __importDefault(require("../../app/judicial/services/judicial-case-file.service"));
 const judicial_case_file_model_1 = __importDefault(require("../../db/models/judicial-case-file.model"));
@@ -126,18 +126,39 @@ const updateJudicialCaseFileController = (req, res, next) => __awaiter(void 0, v
     }
 });
 exports.updateJudicialCaseFileController = updateJudicialCaseFileController;
-const deleteJudicialCaseFileController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const updateJudicialCaseProcessStatus = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _g, _h, _j;
+    try {
+        const { id } = req.params;
+        const body = req.body;
+        const caseFile = yield service.updateProcessStatus(id, body);
+        yield serviceUserLog.create({
+            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
+            codeAction: "P13-01-04-01",
+            entity: JUDICIAL_CASE_FILE_TABLE,
+            entityId: Number(caseFile.dataValues.id),
+            ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
+            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+        });
+        res.json(caseFile);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.updateJudicialCaseProcessStatus = updateJudicialCaseProcessStatus;
+const deleteJudicialCaseFileController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _k, _l, _m;
     try {
         const { id } = req.params;
         const judicialCaseFile = yield service.delete(id);
         yield serviceUserLog.create({
-            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
+            customerUserId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.id),
             codeAction: "P13-04",
             entity: JUDICIAL_CASE_FILE_TABLE,
             entityId: Number(judicialCaseFile.id),
-            ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
-            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            ip: (_l = req.clientIp) !== null && _l !== void 0 ? _l : "",
+            customerId: Number((_m = req.user) === null || _m === void 0 ? void 0 : _m.customerId),
         });
         res.status(201).json({ id });
     }

@@ -2,6 +2,7 @@ import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
 import { Op } from "sequelize";
 import { JudicialCaseFileType } from "../types/judicial-case-file.type";
+import { JudicialCasefileProcessStatus } from "../types/judicial-case-file-process-status.type";
 
 const { models } = sequelize;
 
@@ -258,6 +259,12 @@ class JudicialCaseFileService {
   }
 
   async update(id: string, changes: JudicialCaseFileType) {
+    const judicialCaseFile = await this.findByID(id);
+    const rta = await judicialCaseFile.update(changes);
+    return rta;
+  }
+  
+  async updateProcessStatus(id:string, changes:JudicialCasefileProcessStatus){
     const judicialCaseFile = await this.findByID(id);
     const rta = await judicialCaseFile.update(changes);
     return rta;

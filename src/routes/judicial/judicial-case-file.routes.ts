@@ -11,6 +11,7 @@ import {
   getJudicialCaseFileByNumberCaseFileController,
   getJudicialCaseFileByCHBIdController,
   getJudicialCaseFileRelatedController,
+  updateJudicialCaseProcessStatus,
 } from "../../controllers/judicial/judicial-case-file.controller";
 import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
@@ -20,6 +21,7 @@ const {
   getJudicialCaseFileByNumberCaseFileSchema,
   createJudicialCaseFileSchema,
   updateJudicialCaseFileSchema,
+  updateJudicialCaseFileProcessStatusSchema,
   getJudicialCaseFileByCHBSchema,
   getJudicialCaseFileByCHBSchemaQuery,
   getJudicialCaseFileByCustomerIdSchema,
@@ -81,6 +83,15 @@ router.patch(
   validatorHandler(getJudicialCaseFileByIDSchema, "params"),
   validatorHandler(updateJudicialCaseFileSchema, "body"),
   updateJudicialCaseFileController
+);
+
+router.patch(
+  "/:id/process-status",
+  JWTAuth,
+  checkPermissions("P13-01-04-01"),
+  validatorHandler(getJudicialCaseFileByIDSchema, "params"),
+  validatorHandler(updateJudicialCaseFileProcessStatusSchema, "body"),
+  updateJudicialCaseProcessStatus
 );
 
 router.delete(

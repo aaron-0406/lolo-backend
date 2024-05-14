@@ -1,5 +1,6 @@
 import Joi from "joi";
 import { JudicialCaseFileType } from "../types/judicial-case-file.type";
+import { JudicialCasefileProcessStatus } from "../types/judicial-case-file-process-status.type";
 
 const regexPatternNumberFileCase =
   /^\d{5}-\d{4}-\d{1,4}-\d{4}-[A-Z]{2}-[A-Z]{2}-\d{2}$/;
@@ -24,6 +25,10 @@ const judicialCourtId = Joi.number().positive();
 const judicialSubjectId = Joi.number().positive();
 const judicialProceduralWayId = Joi.number().positive();
 const customerHasBankId = Joi.number().positive();
+const processStatus = Joi.string().max(150);
+const processComment = Joi.string();
+const processReasonId = Joi.number().positive();
+
 
 const page = Joi.number().required().messages({
   "number.base": "El campo page es inválido",
@@ -49,7 +54,7 @@ const users = Joi.string().required();
 const customerId = Joi.number();
 
 const createJudicialCaseFileSchema = Joi.object<
-  Omit<JudicialCaseFileType, "id" | "createdAt">,
+  Omit<JudicialCaseFileType, "id" | "createdAt" | "processStatus" | "processComment" | "processReasonId" >,
   true
 >({
   numberCaseFile: numberCaseFile.required(),
@@ -71,7 +76,7 @@ const createJudicialCaseFileSchema = Joi.object<
 });
 
 const updateJudicialCaseFileSchema = Joi.object<
-  Omit<JudicialCaseFileType, "id" | "createdAt">,
+  Omit<JudicialCaseFileType, "id" | "createdAt" | "processStatus" | "processComment" | "processReasonId">,
   true
 >({
   numberCaseFile: numberCaseFile.required(),
@@ -91,6 +96,12 @@ const updateJudicialCaseFileSchema = Joi.object<
   customerHasBankId: customerHasBankId.required(),
   clientId: clientId.required(),
 });
+
+const updateJudicialCaseFileProcessStatusSchema = Joi.object<JudicialCasefileProcessStatus, true>({
+  processStatus: processStatus.optional().empty("").allow(""),
+  processComment: processComment.optional().empty("").allow(""),
+  processReasonId: processReasonId.optional().empty("").allow(""),
+})
 
 const getJudicialCaseFileByClientIDSchema = Joi.object<
   { clientId: number },
@@ -135,6 +146,7 @@ const getJudicialCaseFileByCustomerIdSchema = Joi.object<
 export default {
   createJudicialCaseFileSchema,
   updateJudicialCaseFileSchema,
+  updateJudicialCaseFileProcessStatusSchema,
   getJudicialCaseFileByClientIDSchema,
   getJudicialCaseFileByNumberCaseFileSchema,
   getJudicialCaseFileByIDSchema,

@@ -10,6 +10,7 @@ import clientModel from "./client.model";
 import judicialCourtModel from "./judicial-court.model";
 import judicialProceduralWayModel from "./judicial-procedural-way.model";
 import judicialSubjectModel from "./judicial-subject.model";
+import judicialProcessReasonModel from "./judicial-process-reason.model";
 import customerUserModel from "./customer-user.model";
 import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 
@@ -146,6 +147,27 @@ const JudicialCaseFileSchema: ModelAttributes<
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
+  processStatus: {
+    allowNull: true,
+    field: "process_status",
+    type: DataTypes.STRING(150),
+  },
+  processComment:{
+    allowNull: true,
+    field: "process_comment",
+    type: DataTypes.TEXT("long"),
+  },
+  processReasonId: {
+    allowNull: true,
+    field: "process_reason_id",
+    type: DataTypes.INTEGER,
+    references: {
+      model: judicialProcessReasonModel.JUDICIAL_PROCESS_REASON_TABLE,
+      key: "id_judicial_process_status_reason",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
 };
 
 class JudicialCaseFile extends Model {
@@ -158,6 +180,7 @@ class JudicialCaseFile extends Model {
     });
     this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
+    this.belongsTo(models.JUDICIAL_PROCESS_REASON, { as: "processReason" });
 
     this.hasMany(models.PRODUCT, {
       as: "product",
