@@ -254,6 +254,13 @@ class JudicialCaseFileService {
             return rta;
         });
     }
+    updateProcessStatus(id, changes) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const judicialCaseFile = yield this.findByID(id);
+            const rta = yield judicialCaseFile.update(changes);
+            return rta;
+        });
+    }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield this.findByID(id);

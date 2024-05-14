@@ -85,6 +85,11 @@ const updateJudicialCaseFileSchema = joi_1.default.object({
     processComment: processComment.optional().empty("").allow(""),
     processReasonId: processReasonId.optional().empty("").allow(""),
 });
+const updateJudicialCaseFileProcessStatusSchema = joi_1.default.object({
+    processStatus: processStatus.optional().empty("").allow(""),
+    processComment: processComment.optional().empty("").allow(""),
+    processReasonId: processReasonId.optional().empty("").allow(""),
+});
 const getJudicialCaseFileByClientIDSchema = joi_1.default.object({
     clientId: clientId.required(),
 });
@@ -113,6 +118,7 @@ const getJudicialCaseFileByCustomerIdSchema = joi_1.default.object({
 exports.default = {
     createJudicialCaseFileSchema,
     updateJudicialCaseFileSchema,
+    updateJudicialCaseFileProcessStatusSchema,
     getJudicialCaseFileByClientIDSchema,
     getJudicialCaseFileByNumberCaseFileSchema,
     getJudicialCaseFileByIDSchema,
