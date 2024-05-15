@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import judicialProcessReasonService from "../../app/judicial/services/judicial-process-reason.service";
+import judicialProcessReasonModel from "../../db/models/judicial-process-reason.model";
+import UserLogService from "../../app/dash/services/user-log.service";
 
+const { JUDICIAL_PROCESS_REASON_TABLE } = judicialProcessReasonModel
 const service = new judicialProcessReasonService();
+const serviceUserLog = new UserLogService();
 
 export const getJudicialProcessReasonController = async (
   req: Request,
@@ -52,6 +56,16 @@ export const createJudicialProcessReasonController = async (
   try {
     const body = req.body;
     const newJudicialProcessReason = await service.create(body);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P27-01",
+      entity: JUDICIAL_PROCESS_REASON_TABLE,
+      entityId: Number(newJudicialProcessReason.dataValues.id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    });
+
     res.status(201).json(newJudicialProcessReason);
   } catch (error) {
     next(error);
@@ -67,6 +81,17 @@ export const updateJudicialProcessReasonController = async (
     const { id } = req.params;
     const body = req.body;
     const judicialProcessReason = await service.update(Number(id), body);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P27-02",
+      entity: JUDICIAL_PROCESS_REASON_TABLE,
+      entityId: Number(judicialProcessReason.dataValues.id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    });
+
+
     res.json(judicialProcessReason);
   } catch (error) {
     next(error);
@@ -80,7 +105,17 @@ export const deleteJudicialProcessReasonController = async (
 ) => {
   try {
     const { id } = req.params;
-    await service.delete(Number(id));
+    const judicialProcessReason = await service.delete(Number(id));
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P27-03",
+      entity: JUDICIAL_PROCESS_REASON_TABLE,
+      entityId: Number(judicialProcessReason.id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    });
+
     res.status(201).json({ id });
   } catch (error) {
     next(error);

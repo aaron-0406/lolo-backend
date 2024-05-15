@@ -150,7 +150,7 @@ const JudicialCaseFileSchema = {
     processComment: {
         allowNull: true,
         field: "process_comment",
-        type: sequelize_1.DataTypes.STRING(150),
+        type: sequelize_1.DataTypes.TEXT("long"),
     },
     processReasonId: {
         allowNull: true,

@@ -157,7 +157,7 @@ const JudicialCaseFileSchema: ModelAttributes<
   processComment:{
     allowNull: true,
     field: "process_comment",
-    type: DataTypes.STRING(150),
+    type: DataTypes.TEXT("long"),
   },
   processReasonId: {
     allowNull: true,
