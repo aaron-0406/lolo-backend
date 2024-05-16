@@ -6,8 +6,98 @@ import { JudicialCasefileProcessStatus } from "../types/judicial-case-file-proce
 
 const { models } = sequelize;
 
-class JudicialCaseFileService {
+class JudicialCaseFileRelatedProcessService {
   constructor() {}
+
+  async findAllRelatedProcessbyCaseFileId(fileCaseId: string, query: any) {
+    const { limit, page, filter, courts, proceduralWays, subjects, users } =
+      query;
+
+    const limite = parseInt(limit, 10);
+    const pagina = parseInt(page, 10);
+    const clientName = filter as string;
+    const listCourts = JSON.parse(courts);
+    const listProceduralWays = JSON.parse(proceduralWays);
+    const listSubjects = JSON.parse(subjects);
+    const listUsers = JSON.parse(users);
+
+    const filters: any = {};
+    if (listCourts.length) {
+      filters.judicial_court_id_judicial_court = { [Op.in]: listCourts };
+    }
+    if (listProceduralWays.length) {
+      filters.judicial_procedural_way_id_judicial_procedural_way = {
+        [Op.in]: listProceduralWays,
+      };
+    }
+    if (listSubjects.length) {
+      filters.judicial_subject_id_judicial_subject = { [Op.in]: listSubjects };
+    }
+    if (listUsers.length) {
+      filters.customer_user_id_customer_user = { [Op.in]: listUsers };
+    }
+
+    let filtersWhere: any = {
+      id_judicial_case_file_related: fileCaseId,
+    };
+
+    // Agregar filtro por nombre de cliente si se proporciona
+    if (clientName) {
+      filtersWhere = {
+        ...filtersWhere,
+        "$client.name$": { [Op.like]: `%${clientName}%` }, // Filtrar por nombre de cliente (parcialmente coincidente)
+      };
+    }
+
+    // Combinar filtros adicionales si se proporcionan
+    if (Object.keys(filters).length > 0) {
+      filtersWhere = {
+        [Op.and]: [{ [Op.or]: [filters] }, filtersWhere],
+      };
+    }
+
+    const quantity = await models.JUDICIAL_CASE_FILE.count({
+      include: [
+        {
+          model: models.CLIENT,
+          as: "client",
+        },
+      ],
+      where: filtersWhere,
+    });
+
+    const caseFiles = await models.JUDICIAL_CASE_FILE.findAll({
+      include: [
+        {
+          model: models.CUSTOMER_USER,
+          as: "customerUser",
+          attributes: ["id", "name"],
+        },
+        {
+          model: models.JUDICIAL_COURT,
+          as: "judicialCourt",
+        },
+        {
+          model: models.JUDICIAL_PROCEDURAL_WAY,
+          as: "judicialProceduralWay",
+        },
+        {
+          model: models.JUDICIAL_SUBJECT,
+          as: "judicialSubject",
+        },
+        {
+          model: models.CLIENT,
+          as: "client",
+          attributes: ["id", "name"],
+        },
+      ],
+      limit: limite,
+      offset: (pagina - 1) * limite,
+      where: filtersWhere,
+    });
+
+    return { caseFiles, quantity };
+  }
 
   async findAll() {
     const rta = await models.JUDICIAL_CASE_FILE.findAll();
@@ -58,7 +148,6 @@ class JudicialCaseFileService {
 
     let filtersWhere: any = {
       customer_has_bank_id: chb,
-      id_judicial_case_file_related: null,
     };
 
     // Agregar filtro por nombre de cliente si se proporciona
@@ -279,4 +368,5 @@ class JudicialCaseFileService {
   }
 }
 
-export default JudicialCaseFileService;
+export default JudicialCaseFileRelatedProcessService;
+
