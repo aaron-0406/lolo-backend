@@ -18,35 +18,29 @@ const permission_model_1 = __importDefault(require("../models/permission.model")
 const { PERMISSION_TABLE } = permission_model_1.default;
 const newPermissions = [
     {
-        name: "PROCESOS CONEXOS",
-        code: "P13-01-05",
-        icon: "ri-archive-drawer-line",
-        link: "/judicial/:urlIdentifier/expediente/:code/procesos-conexos",
-    },
-    {
-        name: "DETALLE PROCESO CONEXO",
-        code: "P13-01-05-01",
+        name: "BITACORA",
+        code: "P13-01-05-01-01",
         icon: "-",
-        link: "/judicial/:urlIdentifier/expediente/:code/procesos-conexos/:relatedProcessCode",
+        link: "/judicial/:urlIdentifier/expediente/:code/procesos-conexos/:relatedProcessCode/bitacora",
     },
     {
-        name: "AGREGAR PROCESO CONEXO",
-        code: "P13-01-05-02",
+        name: "AGREGAR BITACORA",
+        code: "P13-01-05-01-01-01",
         icon: "-",
         link: "#",
     },
     {
-        name: "EDITAR PROCESO CONEXO",
-        code: "P13-01-05-03",
+        name: "EDITAR BITACORA",
+        code: "P13-01-05-01-01-02",
         icon: "-",
         link: "#",
     },
     {
-        name: "ELIMINAR PROCESO CONEXO",
-        code: "P13-01-05-04",
+        name: "ELIMINAR BITACORA",
+        code: "P13-01-05-01-01-03",
         icon: "-",
         link: "#",
-    }
+    },
 ];
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -58,7 +52,7 @@ function down(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
         const deleteCriteria = {
             code: {
-                [sequelize_1.Op.startsWith]: ["P13-01-05"],
+                [sequelize_1.Op.startsWith]: ["P13-01-05-01-01"],
             },
         };
         yield queryInterface.bulkDelete(PERMISSION_TABLE, deleteCriteria);

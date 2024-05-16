@@ -169,7 +169,7 @@ const JudicialCaseFileSchema = {
         type: sequelize_1.DataTypes.INTEGER,
         references: {
             model: JUDICIAL_CASE_FILE_TABLE,
-            key: "process_reason_id",
+            key: "id_judicial_case_file",
         },
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
@@ -200,10 +200,6 @@ class JudicialCaseFile extends sequelize_1.Model {
         this.hasMany(models.PRODUCT, {
             as: "product",
             foreignKey: "judicialCaseFileId",
-        });
-        this.hasMany(models.JUDICIAL_CASE_FILE, {
-            as: "relatedJudicialCaseFile",
-            foreignKey: "idJudicialCaseFileRelated",
         });
         this.belongsTo(models.BANK, { as: "bank" });
     }
