@@ -23,7 +23,7 @@ const user_app_model_1 = __importDefault(require("../models/user-app.model"));
 const customer_has_bank_model_1 = __importDefault(require("../models/many-to-many/customer-has-bank.model"));
 const funcionario_model_1 = __importDefault(require("../models/funcionario.model"));
 const direction_model_1 = __importDefault(require("../models/direction.model"));
-const guarantor_model_1 = __importDefault(require("../models/guarantor.model"));
+// import guarantorModel from "../models/guarantor.model";
 const comment_model_1 = __importDefault(require("../models/comment.model"));
 const file_model_1 = __importDefault(require("../models/file.model"));
 const negotiation_model_1 = __importDefault(require("../models/negotiation.model"));
@@ -38,7 +38,7 @@ const { FileSchema, FILE_TABLE } = file_model_1.default;
 const { UserAppSchema, USER_APP_TABLE } = user_app_model_1.default;
 const { CustomerHasBankSchema, CUSTOMER_HAS_BANK_TABLE } = customer_has_bank_model_1.default;
 const { DirectionSchema, DIRECTION_TABLE } = direction_model_1.default;
-const { GuarantorSchema, GUARANTOR_TABLE } = guarantor_model_1.default;
+// const { GuarantorSchema, GUARANTOR_TABLE } = guarantorModel;
 const { CommentSchema, COMMENT_TABLE } = comment_model_1.default;
 const { NegotiationSchema, NEGOTIATION_TABLE } = negotiation_model_1.default;
 function up(queryInterface) {
@@ -55,7 +55,7 @@ function up(queryInterface) {
         yield queryInterface.createTable(MODULE_TABLE, ModuleSchema);
         yield queryInterface.createTable(USER_APP_TABLE, UserAppSchema);
         yield queryInterface.createTable(DIRECTION_TABLE, DirectionSchema);
-        yield queryInterface.createTable(GUARANTOR_TABLE, GuarantorSchema);
+        // await queryInterface.createTable(GUARANTOR_TABLE, GuarantorSchema);
         yield queryInterface.createTable(COMMENT_TABLE, CommentSchema);
     });
 }
@@ -73,7 +73,7 @@ function down(queryInterface) {
         yield queryInterface.dropTable(FILE_TABLE);
         yield queryInterface.dropTable(USER_APP_TABLE);
         yield queryInterface.dropTable(DIRECTION_TABLE);
-        yield queryInterface.dropTable(GUARANTOR_TABLE);
+        // await queryInterface.dropTable(GUARANTOR_TABLE);
         yield queryInterface.dropTable(COMMENT_TABLE);
         yield queryInterface.dropTable(CUSTOMER_HAS_BANK_TABLE);
     });

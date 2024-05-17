@@ -7,7 +7,7 @@ import funcionarioRouter from "./dash/funcionario.routes";
 import cityRouter from "./dash/city.routes";
 import customerUserRouter from "./dash/customer-user.routes";
 import clientRouter from "./extrajudicial/client.routes";
-import guarantorRouter from "./extrajudicial/guarantor.routes";
+// import guarantorRouter from "./extrajudicial/guarantor.routes";
 import directionRouter from "./extrajudicial/direction.routes";
 import commentRouter from "./extrajudicial/comment.routes";
 import fileRouter from "./extrajudicial/file.routes";
@@ -52,7 +52,7 @@ const routerApi = (app: Express) => {
   app.use("/api/v1", router);
 
   router.use("/cobranza/client", clientRouter);
-  router.use("/cobranza/guarantor", guarantorRouter);
+  // router.use("/cobranza/guarantor", guarantorRouter);
   router.use("/cobranza/direction", directionRouter);
   router.use("/cobranza/comment", commentRouter);
   router.use("/cobranza/file", fileRouter);

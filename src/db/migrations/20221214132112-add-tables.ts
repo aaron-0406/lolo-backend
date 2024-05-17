@@ -9,7 +9,7 @@ import userAppModel from "../models/user-app.model";
 import customerHasBankModel from "../models/many-to-many/customer-has-bank.model";
 import funcionarioModel from "../models/funcionario.model";
 import directionModel from "../models/direction.model";
-import guarantorModel from "../models/guarantor.model";
+// import guarantorModel from "../models/guarantor.model";
 import commentModel from "../models/comment.model";
 import fileModel from "../models/file.model";
 import negotiationModel from "../models/negotiation.model";
@@ -26,7 +26,7 @@ const { UserAppSchema, USER_APP_TABLE } = userAppModel;
 
 const { CustomerHasBankSchema, CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 const { DirectionSchema, DIRECTION_TABLE } = directionModel;
-const { GuarantorSchema, GUARANTOR_TABLE } = guarantorModel;
+// const { GuarantorSchema, GUARANTOR_TABLE } = guarantorModel;
 const { CommentSchema, COMMENT_TABLE } = commentModel;
 const { NegotiationSchema, NEGOTIATION_TABLE } = negotiationModel;
 
@@ -46,7 +46,7 @@ export async function up(queryInterface: QueryInterface) {
   await queryInterface.createTable(MODULE_TABLE, ModuleSchema);
   await queryInterface.createTable(USER_APP_TABLE, UserAppSchema);
   await queryInterface.createTable(DIRECTION_TABLE, DirectionSchema);
-  await queryInterface.createTable(GUARANTOR_TABLE, GuarantorSchema);
+  // await queryInterface.createTable(GUARANTOR_TABLE, GuarantorSchema);
   await queryInterface.createTable(COMMENT_TABLE, CommentSchema);
 }
 
@@ -62,7 +62,7 @@ export async function down(queryInterface: QueryInterface) {
   await queryInterface.dropTable(FILE_TABLE);
   await queryInterface.dropTable(USER_APP_TABLE);
   await queryInterface.dropTable(DIRECTION_TABLE);
-  await queryInterface.dropTable(GUARANTOR_TABLE);
+  // await queryInterface.dropTable(GUARANTOR_TABLE);
   await queryInterface.dropTable(COMMENT_TABLE);
   await queryInterface.dropTable(CUSTOMER_HAS_BANK_TABLE);
 }

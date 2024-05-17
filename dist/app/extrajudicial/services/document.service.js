@@ -245,35 +245,47 @@ class DocumentService {
             if (element.tablets &&
                 element.tablets.rows &&
                 ((_b = element.tablets.rows) === null || _b === void 0 ? void 0 : _b.length) > 0) {
-                if (element.tablets.rows[1].children[0].children[0].texts.some((item) => { var _a; return (_a = item.text) === null || _a === void 0 ? void 0 : _a.includes("guarantor"); }) &&
-                    !!client.guarantor) {
-                    const headerRow = JSON.parse(JSON.stringify(element.tablets.rows))[0];
-                    let newElement = [
-                        JSON.parse(JSON.stringify(element.tablets.rows))[1],
-                    ];
-                    let rows = [];
-                    for (let k = 0; k < client.guarantor.length; k++) {
-                        const guarantor = client.guarantor[k];
-                        rows.push(...newElement.map((row) => {
-                            return {
-                                children: row.children.map((cell) => {
-                                    return {
-                                        children: cell.children.map((paragraph) => {
-                                            return {
-                                                texts: paragraph.texts.map((item) => {
-                                                    var _a, _b, _c, _d;
-                                                    return Object.assign(Object.assign({}, item), { text: (_d = (_c = (_b = (_a = item.text) === null || _a === void 0 ? void 0 : _a.replace("[guarantor.id]", guarantor.id)) === null || _b === void 0 ? void 0 : _b.replace("[guarantor.name]", guarantor.name)) === null || _c === void 0 ? void 0 : _c.replace("[guarantor.phone]", guarantor.phone)) === null || _d === void 0 ? void 0 : _d.replace("[guarantor.email]", guarantor.email) });
-                                                }),
-                                            };
-                                        }),
-                                    };
-                                }),
-                            };
-                        }));
-                    }
-                    const table = (0, docx_2.createTable)([headerRow, ...rows]);
-                    paragraphs.push(table);
-                }
+                // if (
+                //   element.tablets.rows[1].children[0].children[0].texts.some((item) =>
+                //     item.text?.includes("guarantor")
+                //   ) &&
+                //   !!client.guarantor
+                // ) {
+                //   const headerRow = JSON.parse(JSON.stringify(element.tablets.rows))[0];
+                //   let newElement = [
+                //     JSON.parse(JSON.stringify(element.tablets.rows))[1],
+                //   ];
+                //   let rows = [];
+                //   for (let k = 0; k < client.guarantor.length; k++) {
+                //     const guarantor = client.guarantor[k];
+                //     rows.push(
+                //       ...newElement.map((row: any) => {
+                //         return {
+                //           children: row.children.map((cell: any) => {
+                //             return {
+                //               children: cell.children.map((paragraph: any) => {
+                //                 return {
+                //                   texts: paragraph.texts.map((item: any) => {
+                //                     return {
+                //                       ...item,
+                //                       text: item.text
+                //                         ?.replace("[guarantor.id]", guarantor.id)
+                //                         ?.replace("[guarantor.name]", guarantor.name)
+                //                         ?.replace("[guarantor.phone]", guarantor.phone)
+                //                         ?.replace("[guarantor.email]", guarantor.email),
+                //                     };
+                //                   }),
+                //                 };
+                //               }),
+                //             };
+                //           }),
+                //         };
+                //       })
+                //     );
+                //   }
+                //   const table = createTable([headerRow, ...rows]);
+                //   paragraphs.push(table);
+                // }
                 if (element.tablets.rows[1].children[0].children[0].texts.some((item) => { var _a; return (_a = item.text) === null || _a === void 0 ? void 0 : _a.includes("direction"); }) &&
                     !!client.direction) {
                     const headerRow = JSON.parse(JSON.stringify(element.tablets.rows))[0];
@@ -365,21 +377,27 @@ class DocumentService {
                 }
             }
             // Fiadores
-            if (element.texts && element.texts.length > 0) {
-                if (element.texts.some((item) => { var _a; return (_a = item.text) === null || _a === void 0 ? void 0 : _a.includes("guarantor"); })) {
-                    for (let k = 0; k < client.guarantor.length; k++) {
-                        const guarantor = client.guarantor[k];
-                        let newElement = JSON.parse(JSON.stringify(element.texts));
-                        newElement = newElement.map((item) => {
-                            var _a, _b, _c, _d;
-                            return Object.assign(Object.assign({}, item), { text: (_d = (_c = (_b = (_a = item.text) === null || _a === void 0 ? void 0 : _a.replace("[guarantor.id]", guarantor.id)) === null || _b === void 0 ? void 0 : _b.replace("[guarantor.name]", guarantor.name)) === null || _c === void 0 ? void 0 : _c.replace("[guarantor.phone]", guarantor.phone)) === null || _d === void 0 ? void 0 : _d.replace("[guarantor.email]", guarantor.email) });
-                        });
-                        const parrafo = (0, docx_2.createParagraph)(newElement, false, element.options);
-                        paragraphs.push(parrafo);
-                    }
-                    continue;
-                }
-            }
+            // if (element.texts && element.texts.length > 0) {
+            //   if (element.texts.some((item) => item.text?.includes("guarantor"))) {
+            //     for (let k = 0; k < client.guarantor.length; k++) {
+            //       const guarantor = client.guarantor[k];
+            //       let newElement = JSON.parse(JSON.stringify(element.texts));
+            //       newElement = newElement.map((item: any) => {
+            //         return {
+            //           ...item,
+            //           text: item.text
+            //             ?.replace("[guarantor.id]", guarantor.id)
+            //             ?.replace("[guarantor.name]", guarantor.name)
+            //             ?.replace("[guarantor.phone]", guarantor.phone)
+            //             ?.replace("[guarantor.email]", guarantor.email),
+            //         };
+            //       });
+            //       const parrafo = createParagraph(newElement, false, element.options);
+            //       paragraphs.push(parrafo);
+            //     }
+            //     continue;
+            //   }
+            // }
             // Direcciones
             if (element.texts && element.texts.length > 0) {
                 if (element.texts.some((item) => { var _a; return (_a = item.text) === null || _a === void 0 ? void 0 : _a.includes("direction"); })) {

@@ -129,10 +129,10 @@ class Client extends sequelize_1.Model {
             as: "files",
             foreignKey: "clientId",
         });
-        this.hasMany(models.GUARANTOR, {
-            as: "guarantor",
-            foreignKey: "clientId",
-        });
+        // this.hasMany(models.GUARANTOR, {
+        //   as: "guarantor",
+        //   foreignKey: "clientId",
+        // });
         this.hasMany(models.DIRECTION, {
             as: "direction",
             foreignKey: "clientId",

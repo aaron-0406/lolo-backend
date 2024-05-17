@@ -9,7 +9,7 @@ import userAppModel from "./user-app.model";
 import customerHasBank from "./many-to-many/customer-has-bank.model";
 import funcionarioModel from "./funcionario.model";
 import directionModel from "./direction.model";
-import guarantorModel from "./guarantor.model";
+// import guarantorModel from "./guarantor.model";
 import managementActionModel from "./management-action.model";
 import commentModel from "./comment.model";
 import extAddressType from "./ext-address-type.model";
@@ -56,7 +56,7 @@ const { City, CitySchema } = cityModel;
 const { Client, ClientSchema } = clientModel;
 const { UserApp, UserAppSchema } = userAppModel;
 const { Direction, DirectionSchema } = directionModel;
-const { Guarantor, GuarantorSchema } = guarantorModel;
+// const { Guarantor, GuarantorSchema } = guarantorModel;
 const { ManagementAction, ManagementActionSchema } = managementActionModel;
 const { Comment, CommentSchema } = commentModel;
 const { ExtAddress, ExtAddressTypeSchema } = extAddressType;
@@ -100,7 +100,8 @@ const {
 const { JudicialBinTypeBinnacle, JudicialBinTypeBinnacleSchema } =
   judicialBinTypeBinnacleModel;
 const { JudicialBinFile, JudicialBinFileSchema } = judicialBinFileModel;
-const { JudicialProcessReason, JudicialProcessReasonSchema  } = judicialProcessReasonModel
+const { JudicialProcessReason, JudicialProcessReasonSchema } =
+  judicialProcessReasonModel;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -112,7 +113,7 @@ export const setupModels = (sequelize: Sequelize) => {
   File.init(FileSchema, File.config(sequelize));
   UserApp.init(UserAppSchema, UserApp.config(sequelize));
   Direction.init(DirectionSchema, Direction.config(sequelize));
-  Guarantor.init(GuarantorSchema, Guarantor.config(sequelize));
+  // Guarantor.init(GuarantorSchema, Guarantor.config(sequelize));
   ManagementAction.init(
     ManagementActionSchema,
     ManagementAction.config(sequelize)
@@ -214,7 +215,7 @@ export const setupModels = (sequelize: Sequelize) => {
   ExtTagGroup.associate(sequelize.models);
   ExtTag.associate(sequelize.models);
   Direction.associate(sequelize.models);
-  Guarantor.associate(sequelize.models);
+  // Guarantor.associate(sequelize.models);
   Funcionario.associate(sequelize.models);
   Negotiation.associate(sequelize.models);
   Template.associate(sequelize.models);

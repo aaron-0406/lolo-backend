@@ -30,7 +30,7 @@ import {
   TemplateDocument,
 } from "../../../libs/docx";
 import { ValuesType } from "../types/values.type";
-import { GuarantorType } from "../../extrajudicial/types/guarantor.type";
+// import { GuarantorType } from "../../extrajudicial/types/guarantor.type";
 import { DirectionType } from "../../extrajudicial/types/direction.type";
 import { ExtAddressType } from "../types/ext-address-type.type";
 import { ClientType } from "../../extrajudicial/types/client.type";
@@ -56,7 +56,7 @@ type TemplateHasValues = TemplateHasValuesType & {
 };
 
 type ClientTypeDoc = ClientType & {
-  guarantor: GuarantorType[];
+  // guarantor: GuarantorType[];
   direction: DirectionType[];
   product: ProductType[];
   customerUser: CustomerUserType;
@@ -442,51 +442,51 @@ class DocumentService {
         element.tablets.rows &&
         element.tablets.rows?.length > 0
       ) {
-        if (
-          element.tablets.rows[1].children[0].children[0].texts.some((item) =>
-            item.text?.includes("guarantor")
-          ) &&
-          !!client.guarantor
-        ) {
-          const headerRow = JSON.parse(JSON.stringify(element.tablets.rows))[0];
-          let newElement = [
-            JSON.parse(JSON.stringify(element.tablets.rows))[1],
-          ];
+        // if (
+        //   element.tablets.rows[1].children[0].children[0].texts.some((item) =>
+        //     item.text?.includes("guarantor")
+        //   ) &&
+        //   !!client.guarantor
+        // ) {
+        //   const headerRow = JSON.parse(JSON.stringify(element.tablets.rows))[0];
+        //   let newElement = [
+        //     JSON.parse(JSON.stringify(element.tablets.rows))[1],
+        //   ];
 
-          let rows = [];
+        //   let rows = [];
 
-          for (let k = 0; k < client.guarantor.length; k++) {
-            const guarantor = client.guarantor[k];
+        //   for (let k = 0; k < client.guarantor.length; k++) {
+        //     const guarantor = client.guarantor[k];
 
-            rows.push(
-              ...newElement.map((row: any) => {
-                return {
-                  children: row.children.map((cell: any) => {
-                    return {
-                      children: cell.children.map((paragraph: any) => {
-                        return {
-                          texts: paragraph.texts.map((item: any) => {
-                            return {
-                              ...item,
-                              text: item.text
-                                ?.replace("[guarantor.id]", guarantor.id)
-                                ?.replace("[guarantor.name]", guarantor.name)
-                                ?.replace("[guarantor.phone]", guarantor.phone)
-                                ?.replace("[guarantor.email]", guarantor.email),
-                            };
-                          }),
-                        };
-                      }),
-                    };
-                  }),
-                };
-              })
-            );
-          }
+        //     rows.push(
+        //       ...newElement.map((row: any) => {
+        //         return {
+        //           children: row.children.map((cell: any) => {
+        //             return {
+        //               children: cell.children.map((paragraph: any) => {
+        //                 return {
+        //                   texts: paragraph.texts.map((item: any) => {
+        //                     return {
+        //                       ...item,
+        //                       text: item.text
+        //                         ?.replace("[guarantor.id]", guarantor.id)
+        //                         ?.replace("[guarantor.name]", guarantor.name)
+        //                         ?.replace("[guarantor.phone]", guarantor.phone)
+        //                         ?.replace("[guarantor.email]", guarantor.email),
+        //                     };
+        //                   }),
+        //                 };
+        //               }),
+        //             };
+        //           }),
+        //         };
+        //       })
+        //     );
+        //   }
 
-          const table = createTable([headerRow, ...rows]);
-          paragraphs.push(table);
-        }
+        //   const table = createTable([headerRow, ...rows]);
+        //   paragraphs.push(table);
+        // }
 
         if (
           element.tablets.rows[1].children[0].children[0].texts.some((item) =>
@@ -648,28 +648,28 @@ class DocumentService {
       }
 
       // Fiadores
-      if (element.texts && element.texts.length > 0) {
-        if (element.texts.some((item) => item.text?.includes("guarantor"))) {
-          for (let k = 0; k < client.guarantor.length; k++) {
-            const guarantor = client.guarantor[k];
-            let newElement = JSON.parse(JSON.stringify(element.texts));
-            newElement = newElement.map((item: any) => {
-              return {
-                ...item,
-                text: item.text
-                  ?.replace("[guarantor.id]", guarantor.id)
-                  ?.replace("[guarantor.name]", guarantor.name)
-                  ?.replace("[guarantor.phone]", guarantor.phone)
-                  ?.replace("[guarantor.email]", guarantor.email),
-              };
-            });
+      // if (element.texts && element.texts.length > 0) {
+      //   if (element.texts.some((item) => item.text?.includes("guarantor"))) {
+      //     for (let k = 0; k < client.guarantor.length; k++) {
+      //       const guarantor = client.guarantor[k];
+      //       let newElement = JSON.parse(JSON.stringify(element.texts));
+      //       newElement = newElement.map((item: any) => {
+      //         return {
+      //           ...item,
+      //           text: item.text
+      //             ?.replace("[guarantor.id]", guarantor.id)
+      //             ?.replace("[guarantor.name]", guarantor.name)
+      //             ?.replace("[guarantor.phone]", guarantor.phone)
+      //             ?.replace("[guarantor.email]", guarantor.email),
+      //         };
+      //       });
 
-            const parrafo = createParagraph(newElement, false, element.options);
-            paragraphs.push(parrafo);
-          }
-          continue;
-        }
-      }
+      //       const parrafo = createParagraph(newElement, false, element.options);
+      //       paragraphs.push(parrafo);
+      //     }
+      //     continue;
+      //   }
+      // }
 
       // Direcciones
       if (element.texts && element.texts.length > 0) {

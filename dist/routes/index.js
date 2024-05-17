@@ -11,7 +11,7 @@ const funcionario_routes_1 = __importDefault(require("./dash/funcionario.routes"
 const city_routes_1 = __importDefault(require("./dash/city.routes"));
 const customer_user_routes_1 = __importDefault(require("./dash/customer-user.routes"));
 const client_routes_1 = __importDefault(require("./extrajudicial/client.routes"));
-const guarantor_routes_1 = __importDefault(require("./extrajudicial/guarantor.routes"));
+// import guarantorRouter from "./extrajudicial/guarantor.routes";
 const direction_routes_1 = __importDefault(require("./extrajudicial/direction.routes"));
 const comment_routes_1 = __importDefault(require("./extrajudicial/comment.routes"));
 const file_routes_1 = __importDefault(require("./extrajudicial/file.routes"));
@@ -54,7 +54,7 @@ const routerApi = (app) => {
     const router = express_1.default.Router();
     app.use("/api/v1", router);
     router.use("/cobranza/client", client_routes_1.default);
-    router.use("/cobranza/guarantor", guarantor_routes_1.default);
+    // router.use("/cobranza/guarantor", guarantorRouter);
     router.use("/cobranza/direction", direction_routes_1.default);
     router.use("/cobranza/comment", comment_routes_1.default);
     router.use("/cobranza/file", file_routes_1.default);

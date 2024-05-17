@@ -2,7 +2,7 @@ import { QueryInterface } from "sequelize";
 import commentModel from "../models/comment.model";
 import directionModel from "../models/direction.model";
 import fileModel from "../models/file.model";
-import guarantorModel from "../models/guarantor.model";
+// import guarantorModel from "../models/guarantor.model";
 import productModel from "../models/product.model";
 import goalUserModel from "../models/goal-user.model";
 import goalModel from "../models/goal.model";
@@ -17,7 +17,7 @@ const { COMMENT_TABLE } = commentModel;
 const { CUSTOMER_USER_TABLE } = customerUserModel;
 const { DIRECTION_TABLE } = directionModel;
 const { FILE_TABLE } = fileModel;
-const { GUARANTOR_TABLE } = guarantorModel;
+// const { GUARANTOR_TABLE } = guarantorModel;
 const { PRODUCT_TABLE } = productModel;
 const { CUSTOMER_TABLE } = customerModel;
 const { GOAL_USER_TABLE } = goalUserModel;
@@ -119,18 +119,18 @@ export async function up(queryInterface: QueryInterface) {
     onDelete: "NO ACTION",
   });
 
-  await queryInterface.removeConstraint(GUARANTOR_TABLE, "GUARANTOR_ibfk_1");
-  await queryInterface.addConstraint(GUARANTOR_TABLE, {
-    fields: ["client_id_client"],
-    type: "foreign key",
-    name: "GUARANTOR_ibfk_1",
-    references: {
-      table: CLIENT_TABLE,
-      field: "id_client",
-    },
-    onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
-  });
+  // await queryInterface.removeConstraint(GUARANTOR_TABLE, "GUARANTOR_ibfk_1");
+  // await queryInterface.addConstraint(GUARANTOR_TABLE, {
+  //   fields: ["client_id_client"],
+  //   type: "foreign key",
+  //   name: "GUARANTOR_ibfk_1",
+  //   references: {
+  //     table: CLIENT_TABLE,
+  //     field: "id_client",
+  //   },
+  //   onUpdate: "CASCADE",
+  //   onDelete: "NO ACTION",
+  // });
 
   await queryInterface.removeConstraint(PRODUCT_TABLE, "PRODUCT_ibfk_2");
   await queryInterface.addConstraint(PRODUCT_TABLE, {
@@ -177,7 +177,7 @@ export async function down(queryInterface: QueryInterface) {
     "fk_goal_user_customer_user"
   );
   await queryInterface.removeConstraint(GOAL_TABLE, "fk_goal_customer");
-  await queryInterface.removeConstraint(GUARANTOR_TABLE, "GUARANTOR_ibfk_1");
+  // await queryInterface.removeConstraint(GUARANTOR_TABLE, "GUARANTOR_ibfk_1");
   await queryInterface.removeConstraint(PRODUCT_TABLE, "customer_id_customer");
   await queryInterface.removeConstraint(
     TEMPLATE_IMG_TABLE,
@@ -268,17 +268,17 @@ export async function down(queryInterface: QueryInterface) {
     onDelete: "CASCADE",
   });
 
-  await queryInterface.addConstraint(GUARANTOR_TABLE, {
-    fields: ["client_id_client"],
-    type: "foreign key",
-    name: "GUARANTOR_ibfk_1",
-    references: {
-      table: CLIENT_TABLE,
-      field: "id_client",
-    },
-    onUpdate: "NO ACTION",
-    onDelete: "CASCADE",
-  });
+  // await queryInterface.addConstraint(GUARANTOR_TABLE, {
+  //   fields: ["client_id_client"],
+  //   type: "foreign key",
+  //   name: "GUARANTOR_ibfk_1",
+  //   references: {
+  //     table: CLIENT_TABLE,
+  //     field: "id_client",
+  //   },
+  //   onUpdate: "NO ACTION",
+  //   onDelete: "CASCADE",
+  // });
 
   await queryInterface.addConstraint(PRODUCT_TABLE, {
     fields: ["customer_id_customer"],
