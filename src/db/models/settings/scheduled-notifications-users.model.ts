@@ -79,7 +79,7 @@ const ScheduledNotificationsUsersSchema: ModelAttributes<
 class ScheduledNotificationsUsers extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
-    this.belongsTo(models.SCHELUDED_NOTIFICATION, { as: "scheduledNotification" });
+    this.belongsTo(models.SCHEDULED_NOTIFICATION, { as: "scheduledNotification" });
     this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
   }
 

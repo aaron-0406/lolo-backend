@@ -83,7 +83,7 @@ class CustomerHasBank extends Model {
 
     this.belongsTo(models.BANK, { as: "bank", foreignKey: "idBank" });
 
-    this.hasMany(models.SCHELUDED_NOTIFICATIONS_USERS, {
+    this.hasMany(models.SCHEDULED_NOTIFICATIONS_USERS, {
       as: 'scheduledNotifications',
       foreignKey: 'customerHasBankId',
     });

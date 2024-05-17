@@ -85,7 +85,7 @@ const ScheduledNotificationSchema: ModelAttributes<
 class ScheduledNotification extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
-    this.hasMany(models.SCHELUDED_NOTIFICATIONS_USERS , {
+    this.hasMany(models.SCHEDULED_NOTIFICATIONS_USERS , {
       as: 'scheduledNotificationsUsers',
       foreignKey: 'scheduledNotificationId'
     });
