@@ -29,7 +29,7 @@ function up(queryInterface) {
                 primaryKey: true,
                 allowNull: false,
                 autoIncrement: true,
-                field: "id_scheduled_notification",
+                field: "customer_has_bank_id_customer_has_bank",
                 type: sequelize_1.DataTypes.INTEGER,
             },
             customerHasBankId: {

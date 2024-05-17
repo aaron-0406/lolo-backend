@@ -27,7 +27,7 @@ export async function up(queryInterface: QueryInterface) {
     frequencyToNotify: {
       allowNull: false,
       field: "frequency_to_notify",
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
     },
     hourTimeToNotify: {
       allowNull: false,

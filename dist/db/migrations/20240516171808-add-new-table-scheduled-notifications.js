@@ -41,7 +41,7 @@ function up(queryInterface) {
             frequencyToNotify: {
                 allowNull: false,
                 field: "frequency_to_notify",
-                type: sequelize_1.DataTypes.NUMBER,
+                type: sequelize_1.DataTypes.INTEGER,
             },
             hourTimeToNotify: {
                 allowNull: false,

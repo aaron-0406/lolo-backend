@@ -15,7 +15,7 @@ export async function up(queryInterface: QueryInterface) {
       primaryKey: true,
       allowNull: false,
       autoIncrement: true,
-      field: "id_scheduled_notification",
+      field: "customer_has_bank_id_customer_has_bank",
       type: DataTypes.INTEGER,
     },
 

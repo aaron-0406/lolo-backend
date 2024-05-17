@@ -1,16 +1,22 @@
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
 import { ScheduledNotificationType } from "../types/scheduled-notification.type";
-import { createFolder } from "../../../libs/aws_bucket";
-import config from "../../../config/config";
 
 const { models } = sequelize;
-
 class ScheduledNotificationService {
   constructor() {}
 
   async findAll() {
     const rta = await models.SCHEDULED_NOTIFICATION.findAll();
+    return rta;
+  }
+
+  async findOne (id: string) {
+    const rta = await models.SCHEDULED_NOTIFICATION.findByPk(id);
+
+    if (!rta) {
+      throw boom.notFound("Notificación programada no encontrada");
+    }
     return rta;
   }
 
@@ -24,10 +30,10 @@ class ScheduledNotificationService {
     return scheduledNotification;
   }
 
-  async findAllByCustomerId(customerId: string) {
+  async findAllByChb(chb: string) {
     const rta = await models.SCHEDULED_NOTIFICATION.findAll({
       where: {
-        customer_id_customer: customerId,
+        customer_has_bank_id_customer_has_bank: chb,
       },
       // include: ["notification"],
     });
@@ -37,6 +43,25 @@ class ScheduledNotificationService {
     }
 
     return rta;
+  }
+
+  async findAllByLogicKey(logicKey: string) {
+    const rta = await models.SCHEDULED_NOTIFICATION.findAll({
+      where: {
+        logic_key: logicKey,
+      },
+    });
+
+    if (!rta) {
+      throw boom.notFound("No se encontraron notificaciones programadas");
+    }
+
+    return rta;
+  }
+
+  async create (data: ScheduledNotificationType) {
+    const newScheduledNotification = await models.SCHEDULED_NOTIFICATION.create(data);
+    return newScheduledNotification;
   }
 
   async update (id: string, data: ScheduledNotificationType) {

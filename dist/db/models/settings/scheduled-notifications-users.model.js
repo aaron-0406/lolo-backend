@@ -16,7 +16,7 @@ const ScheduledNotificationsUsersSchema = {
         primaryKey: true,
         allowNull: false,
         autoIncrement: true,
-        field: "id_scheduled_notification",
+        field: "id_scheduled_notification_user",
         type: sequelize_1.DataTypes.INTEGER,
     },
     customerHasBankId: {

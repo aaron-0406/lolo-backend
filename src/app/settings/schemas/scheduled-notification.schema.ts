@@ -38,7 +38,7 @@ const updateScheduledNotificationSchema = Joi.object<
   state: state.required(),
 });
 
-const getScheduledNotificationSchemaByID = Joi.object<{ id: number }, true>({
+const getScheduledNotificationSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
 
@@ -58,7 +58,7 @@ const deleteScheduledNotificationSchema = Joi.object<{ id: number }, true>({
 export default {
   createScheduledNotificationSchema,
   updateScheduledNotificationSchema,
-  getScheduledNotificationSchemaByID,
+  getScheduledNotificationSchema,
   getScheduledNotificationSchemaByCHBSchema,
   getScheduledNotificationSchemaByLogicKeySchema,
   deleteScheduledNotificationSchema,
