@@ -1,0 +1,46 @@
+import Joi from "joi";
+import { ScheduledNotificationsUsersType } from "../types/scheduled-notifications-users.type"
+
+const id = Joi.number();
+const customerUserId = Joi.number();
+const scheduledNotificationId = Joi.number();
+const customerHasBankId = Joi.number();
+const createAt = Joi.date();
+
+const createScheduledNotificationsUsersSchema = Joi.object<
+  Omit< ScheduledNotificationsUsersType , "id" | "createdAt" | "updatedAt" | "deletedAt">,
+  true
+>({
+  customerUserId: customerUserId.required(),
+  customerHasBankId: customerHasBankId.required(),
+  scheduledNotificationId: scheduledNotificationId.required(),
+});
+
+const getScheduledNotificationsUsersByChbSchema = Joi.object<
+  { id: number },
+  true
+>({
+  id: id.required(),
+});
+
+const getScheduledNotificationsUsersByCustomerIdSchema = Joi.object<
+  { customerUserId: number },
+  true
+>({
+  customerUserId: customerUserId.required(),
+});
+
+const getScheduledNotificationsUsersBySchuldeNotificationIdSchema = Joi.object<
+  { scheduledNotificationId: number },
+  true
+>({
+  scheduledNotificationId: scheduledNotificationId.required(),
+});
+
+
+export default {
+  getScheduledNotificationsUsersByChbSchema,
+  getScheduledNotificationsUsersByCustomerIdSchema,
+  getScheduledNotificationsUsersBySchuldeNotificationIdSchema,
+  createScheduledNotificationsUsersSchema,
+};

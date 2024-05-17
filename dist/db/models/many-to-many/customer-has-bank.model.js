@@ -69,6 +69,10 @@ class CustomerHasBank extends sequelize_1.Model {
             foreignKey: "customerHasBankId",
         });
         this.belongsTo(models.BANK, { as: "bank", foreignKey: "idBank" });
+        this.hasMany(models.SCHELUDED_NOTIFICATIONS_USERS, {
+            as: 'scheduledNotifications',
+            foreignKey: 'customerHasBankId',
+        });
     }
     static config(sequelize) {
         return {

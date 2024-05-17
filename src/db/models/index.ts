@@ -46,6 +46,8 @@ import judicialBinDefendantProceduralActionModel from "./judicial-bin-defendant-
 import judicialBinTypeBinnacleModel from "./judicial-bin-type-binnacle.model";
 import judicialBinFileModel from "./judicial-bin-file.model";
 import judicialProcessReasonModel from "./judicial-process-reason.model";
+import scheduledNotificationModel from "./settings/scheduled-notification.model.";
+import scheduledNotificationsUsersModel from "./settings/scheduled-notifications-users.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
@@ -101,6 +103,8 @@ const { JudicialBinTypeBinnacle, JudicialBinTypeBinnacleSchema } =
   judicialBinTypeBinnacleModel;
 const { JudicialBinFile, JudicialBinFileSchema } = judicialBinFileModel;
 const { JudicialProcessReason, JudicialProcessReasonSchema  } = judicialProcessReasonModel
+const { ScheduledNotification, ScheduledNotificationSchema } = scheduledNotificationModel;
+const { ScheduledNotificationsUsers, ScheduledNotificationsUsersSchema} = scheduledNotificationsUsersModel;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -200,6 +204,9 @@ export const setupModels = (sequelize: Sequelize) => {
     JudicialProcessReason.config(sequelize)
   );
 
+  ScheduledNotification.init(ScheduledNotificationSchema, ScheduledNotification.config(sequelize));
+  ScheduledNotificationsUsers.init(ScheduledNotificationsUsersSchema, ScheduledNotificationsUsers.config(sequelize));
+
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
   Bank.associate(sequelize.models);
@@ -245,4 +252,6 @@ export const setupModels = (sequelize: Sequelize) => {
   JudicialBinDefendantProceduralAction.associate(sequelize.models);
   JudicialBinTypeBinnacle.associate(sequelize.models);
   JudicialBinFile.associate(sequelize.models);
+  ScheduledNotification.associate(sequelize.models);
+  ScheduledNotificationsUsers.associate(sequelize.models);
 };
