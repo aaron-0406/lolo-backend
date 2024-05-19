@@ -81,6 +81,8 @@ class ScheduledNotificationsUsersService {
       },
     });
 
+    // const assingNotifications = scheludeNotificationsUsers.filter((scheludeNotificationsUsers) => notifications.some((notification) => notification === scheludeNotificationsUsers.customerUserId));
+
 
     const rta = await models.SCHEDULED_NOTIFICATIONS_USERS.bulkCreate(scheludeNotificationsUsers);
     return rta;
