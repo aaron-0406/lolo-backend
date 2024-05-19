@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { ScheduledNotificationType } from "../types/scheduled-notification.type";
+import { ScheduledNotificationType } from "../types/scheduled-notifications.type";
 
 const id = Joi.number();
 const customerHasBankId = Joi.number();

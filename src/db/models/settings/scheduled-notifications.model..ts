@@ -5,14 +5,14 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { ScheduledNotificationType } from "../../../app/settings/types/scheduled-notification.type";
+import { ScheduledNotificationType } from "../../../app/settings/types/scheduled-notifications.type";
 import customerHasBankModel from "../many-to-many/customer-has-bank.model";
 
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
-const SCHEDULED_NOTIFICATION_TABLE = "SCHEDULED_NOTIFICATION";
+const SCHEDULED_NOTIFICATIONS_TABLE = "SCHEDULED_NOTIFICATIONS";
 
-const ScheduledNotificationSchema: ModelAttributes<
-  ScheduledNotification,
+const ScheduledNotificationsSchema: ModelAttributes<
+  ScheduledNotifications,
   ScheduledNotificationType
 > = {
   id: {
@@ -82,7 +82,7 @@ const ScheduledNotificationSchema: ModelAttributes<
   },
 };
 
-class ScheduledNotification extends Model {
+class ScheduledNotifications extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
     this.hasMany(models.SCHEDULED_NOTIFICATIONS_USERS , {
@@ -94,15 +94,15 @@ class ScheduledNotification extends Model {
   static config(sequelize: Sequelize) {
     return {
       sequelize,
-      tableName: SCHEDULED_NOTIFICATION_TABLE,
-      modelName: SCHEDULED_NOTIFICATION_TABLE,
+      tableName: SCHEDULED_NOTIFICATIONS_TABLE,
+      modelName: SCHEDULED_NOTIFICATIONS_TABLE,
       timestamps: false,
     };
   }
 }
 
 export default {
-  SCHEDULED_NOTIFICATION_TABLE,
-  ScheduledNotificationSchema,
-  ScheduledNotification,
+  SCHEDULED_NOTIFICATIONS_TABLE,
+  ScheduledNotificationsSchema,
+  ScheduledNotifications,
 };

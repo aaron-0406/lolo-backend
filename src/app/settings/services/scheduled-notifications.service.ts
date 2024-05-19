@@ -1,18 +1,18 @@
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
-import { ScheduledNotificationType } from "../types/scheduled-notification.type";
+import { ScheduledNotificationType } from "../types/scheduled-notifications.type";
 
 const { models } = sequelize;
-class ScheduledNotificationService {
+class ScheduledNotificationsService {
   constructor() {}
 
   async findAll() {
-    const rta = await models.SCHEDULED_NOTIFICATION.findAll();
+    const rta = await models.SCHEDULED_NOTIFICATIONS.findAll();
     return rta;
   }
 
   async findOne (id: string) {
-    const rta = await models.SCHEDULED_NOTIFICATION.findByPk(id);
+    const rta = await models.SCHEDULED_NOTIFICATIONS.findByPk(id);
 
     if (!rta) {
       throw boom.notFound("Notificación programada no encontrada");
@@ -21,7 +21,7 @@ class ScheduledNotificationService {
   }
 
   async findOneById(id: string) {
-    const scheduledNotification = await models.SCHEDULED_NOTIFICATION.findByPk(id);
+    const scheduledNotification = await models.SCHEDULED_NOTIFICATIONS.findByPk(id);
 
     if (!scheduledNotification) {
       throw boom.notFound("Notificación programada no encontrada");
@@ -31,7 +31,7 @@ class ScheduledNotificationService {
   }
 
   async findAllByChb(chb: string) {
-    const rta = await models.SCHEDULED_NOTIFICATION.findAll({
+    const rta = await models.SCHEDULED_NOTIFICATIONS.findAll({
       where: {
         customer_has_bank_id_customer_has_bank: chb,
       },
@@ -46,7 +46,7 @@ class ScheduledNotificationService {
   }
 
   async findAllByLogicKey(logicKey: string) {
-    const rta = await models.SCHEDULED_NOTIFICATION.findAll({
+    const rta = await models.SCHEDULED_NOTIFICATIONS.findAll({
       where: {
         logic_key: logicKey,
       },
@@ -60,12 +60,12 @@ class ScheduledNotificationService {
   }
 
   async create (data: ScheduledNotificationType) {
-    const newScheduledNotification = await models.SCHEDULED_NOTIFICATION.create(data);
+    const newScheduledNotification = await models.SCHEDULED_NOTIFICATIONS.create(data);
     return newScheduledNotification;
   }
 
   async update (id: string, data: ScheduledNotificationType) {
-    const scheduledNotification = await models.SCHEDULED_NOTIFICATION.findByPk(id);
+    const scheduledNotification = await models.SCHEDULED_NOTIFICATIONS.findByPk(id);
 
     if (!scheduledNotification) {
       throw boom.notFound("Notificación programada no encontrada");
@@ -76,7 +76,7 @@ class ScheduledNotificationService {
   }
 
   async delete (id: string) {
-    const scheduledNotification = await models.SCHEDULED_NOTIFICATION.findByPk(id);
+    const scheduledNotification = await models.SCHEDULED_NOTIFICATIONS.findByPk(id);
 
     if (!scheduledNotification) {
       throw boom.notFound("Notificación programada no encontrada");
@@ -87,4 +87,4 @@ class ScheduledNotificationService {
   }
 }
 
-export default ScheduledNotificationService;
+export default ScheduledNotificationsService;

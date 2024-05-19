@@ -46,7 +46,7 @@ import extTagRouter from "./extrajudicial/ext-tag.routes";
 import extAddresType from "./extrajudicial/ext-address-type.routes";
 import extContactTypeRouter from "./extrajudicial/ext-contact-type.routes";
 import extProductNameRouter from "./extrajudicial/ext-product-name.routes";
-import schedudedNotificationRouter from "./config/scheduled-notification.routes";
+import schedudedNotificationRouter from "./config/scheduled-notifications.routes";
 import schedudedNotificationsUsersRouter from "./config/scheduled-notifications-users.routes";
 
 const routerApi = (app: Express) => {
@@ -109,7 +109,7 @@ const routerApi = (app: Express) => {
   router.use("/dash/city", cityRouter);
   router.use("/dash/user-log", userLogRouter);
 
-  router.use("/config/scheduled-notification", schedudedNotificationRouter);
+  router.use("/config/scheduled-notifications", schedudedNotificationRouter);
   router.use(
     "/config/scheduled-notifications-users",
     schedudedNotificationsUsersRouter

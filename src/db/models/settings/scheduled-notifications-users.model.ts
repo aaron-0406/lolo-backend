@@ -7,11 +7,11 @@ import {
 } from "sequelize";
 import { ScheduledNotificationsUsersType } from "../../../app/settings/types/scheduled-notifications-users.type";
 import customerHasBankModel from "../many-to-many/customer-has-bank.model";
-import scheduledNotificationModel from "./scheduled-notification.model.";
+import scheduledNotificationsModel from "./scheduled-notifications.model.";
 import customerUserModel from "../customer-user.model";
 
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
-const { SCHEDULED_NOTIFICATION_TABLE } = scheduledNotificationModel;
+const { SCHEDULED_NOTIFICATIONS_TABLE } = scheduledNotificationsModel;
 const { CUSTOMER_USER_TABLE } = customerUserModel
 
 const SCHEDULED_NOTIFICATIONS_USERS_TABLE = "SCHEDULED_NOTIFICATIONS_USERS";
@@ -42,7 +42,7 @@ const ScheduledNotificationsUsersSchema: ModelAttributes<
   scheduledNotificationId: {
     allowNull: false,
     references:{
-      model: SCHEDULED_NOTIFICATION_TABLE,
+      model: SCHEDULED_NOTIFICATIONS_TABLE,
       key: "id_scheduled_notification",
     },
     field: "scheduled_notification_id_scheduled_notification",
@@ -79,7 +79,7 @@ const ScheduledNotificationsUsersSchema: ModelAttributes<
 class ScheduledNotificationsUsers extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
-    this.belongsTo(models.SCHEDULED_NOTIFICATION, { as: "scheduledNotification" });
+    this.belongsTo(models.SCHEDULED_NOTIFICATIONS, { as: "scheduledNotification" });
     this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
   }
 

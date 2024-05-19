@@ -1,11 +1,11 @@
 import { DataTypes, QueryInterface } from "sequelize";
-import scheduledNotificationsModel from "../models/settings/scheduled-notification.model.";
+import scheduledNotificationsModel from "../models/settings/scheduled-notifications.model.";
 import scheduledNotificationsUsersModel from "../models/settings/scheduled-notifications-users.model";
 import customerHasBankModel from "../models/many-to-many/customer-has-bank.model";
 import customerUserModel from "../models/customer-user.model";
 
 const { SCHEDULED_NOTIFICATIONS_USERS_TABLE } = scheduledNotificationsUsersModel;
-const { SCHEDULED_NOTIFICATION_TABLE } = scheduledNotificationsModel;
+const { SCHEDULED_NOTIFICATIONS_TABLE } = scheduledNotificationsModel;
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 const { CUSTOMER_USER_TABLE } = customerUserModel
 
@@ -33,7 +33,7 @@ export async function up(queryInterface: QueryInterface) {
     scheduledNotificationId: {
       allowNull: false,
       references:{
-        model: SCHEDULED_NOTIFICATION_TABLE,
+        model: SCHEDULED_NOTIFICATIONS_TABLE,
         key: "id_scheduled_notification",
       },
       field: "scheduled_notification_id_scheduled_notification",
@@ -69,5 +69,5 @@ export async function up(queryInterface: QueryInterface) {
 }
 
 export async function down(queryInterface: QueryInterface) {
-  await queryInterface.dropTable(SCHEDULED_NOTIFICATION_TABLE);
+  await queryInterface.dropTable(SCHEDULED_NOTIFICATIONS_USERS_TABLE);
 }

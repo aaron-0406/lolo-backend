@@ -1,12 +1,12 @@
 import { DataTypes, QueryInterface } from "sequelize";
-import scheduledNotificationsModel from "../models/settings/scheduled-notification.model.";
+import scheduledNotificationsModel from "../models/settings/scheduled-notifications.model.";
 import customerHasBankModel from "../models/many-to-many/customer-has-bank.model";
 
-const { SCHEDULED_NOTIFICATION_TABLE } = scheduledNotificationsModel;
+const { SCHEDULED_NOTIFICATIONS_TABLE } = scheduledNotificationsModel;
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 
 export async function up(queryInterface: QueryInterface) {
-  await queryInterface.createTable(SCHEDULED_NOTIFICATION_TABLE, {
+  await queryInterface.createTable(SCHEDULED_NOTIFICATIONS_TABLE, {
     id: {
       primaryKey: true,
       allowNull: false,
@@ -76,5 +76,5 @@ export async function up(queryInterface: QueryInterface) {
 }
 
 export async function down(queryInterface: QueryInterface) {
-  await queryInterface.dropTable(SCHEDULED_NOTIFICATION_TABLE);
+  await queryInterface.dropTable(SCHEDULED_NOTIFICATIONS_TABLE);
 }

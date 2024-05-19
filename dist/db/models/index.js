@@ -51,7 +51,7 @@ const judicial_bin_defendant_procedural_action_model_1 = __importDefault(require
 const judicial_bin_type_binnacle_model_1 = __importDefault(require("./judicial-bin-type-binnacle.model"));
 const judicial_bin_file_model_1 = __importDefault(require("./judicial-bin-file.model"));
 const judicial_process_reason_model_1 = __importDefault(require("./judicial-process-reason.model"));
-const scheduled_notification_model_1 = __importDefault(require("./settings/scheduled-notification.model."));
+const scheduled_notifications_model_1 = __importDefault(require("./settings/scheduled-notifications.model."));
 const scheduled_notifications_users_model_1 = __importDefault(require("./settings/scheduled-notifications-users.model"));
 const { Customer, CustomerSchema } = customer_model_1.default;
 const { Funcionario, FuncionarioSchema } = funcionario_model_1.default;
@@ -100,7 +100,7 @@ const { JudicialBinDefendantProceduralAction, JudicialBinDefendantProceduralActi
 const { JudicialBinTypeBinnacle, JudicialBinTypeBinnacleSchema } = judicial_bin_type_binnacle_model_1.default;
 const { JudicialBinFile, JudicialBinFileSchema } = judicial_bin_file_model_1.default;
 const { JudicialProcessReason, JudicialProcessReasonSchema } = judicial_process_reason_model_1.default;
-const { ScheduledNotification, ScheduledNotificationSchema } = scheduled_notification_model_1.default;
+const { ScheduledNotifications, ScheduledNotificationsSchema } = scheduled_notifications_model_1.default;
 const { ScheduledNotificationsUsers, ScheduledNotificationsUsersSchema } = scheduled_notifications_users_model_1.default;
 const setupModels = (sequelize) => {
     Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -150,7 +150,7 @@ const setupModels = (sequelize) => {
     JudicialBinTypeBinnacle.init(JudicialBinTypeBinnacleSchema, JudicialBinTypeBinnacle.config(sequelize));
     JudicialBinFile.init(JudicialBinFileSchema, JudicialBinFile.config(sequelize));
     JudicialProcessReason.init(JudicialProcessReasonSchema, JudicialProcessReason.config(sequelize));
-    ScheduledNotification.init(ScheduledNotificationSchema, ScheduledNotification.config(sequelize));
+    ScheduledNotifications.init(ScheduledNotificationsSchema, ScheduledNotifications.config(sequelize));
     ScheduledNotificationsUsers.init(ScheduledNotificationsUsersSchema, ScheduledNotificationsUsers.config(sequelize));
     Customer.associate(sequelize.models);
     CustomerUser.associate(sequelize.models);
@@ -197,7 +197,7 @@ const setupModels = (sequelize) => {
     JudicialBinDefendantProceduralAction.associate(sequelize.models);
     JudicialBinTypeBinnacle.associate(sequelize.models);
     JudicialBinFile.associate(sequelize.models);
-    ScheduledNotification.associate(sequelize.models);
+    ScheduledNotifications.associate(sequelize.models);
     ScheduledNotificationsUsers.associate(sequelize.models);
 };
 exports.setupModels = setupModels;

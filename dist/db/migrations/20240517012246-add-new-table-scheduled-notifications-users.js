@@ -14,12 +14,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.down = exports.up = void 0;
 const sequelize_1 = require("sequelize");
-const scheduled_notification_model_1 = __importDefault(require("../models/settings/scheduled-notification.model."));
+const scheduled_notifications_model_1 = __importDefault(require("../models/settings/scheduled-notifications.model."));
 const scheduled_notifications_users_model_1 = __importDefault(require("../models/settings/scheduled-notifications-users.model"));
 const customer_has_bank_model_1 = __importDefault(require("../models/many-to-many/customer-has-bank.model"));
 const customer_user_model_1 = __importDefault(require("../models/customer-user.model"));
 const { SCHEDULED_NOTIFICATIONS_USERS_TABLE } = scheduled_notifications_users_model_1.default;
-const { SCHEDULED_NOTIFICATION_TABLE } = scheduled_notification_model_1.default;
+const { SCHEDULED_NOTIFICATIONS_TABLE } = scheduled_notifications_model_1.default;
 const { CUSTOMER_HAS_BANK_TABLE } = customer_has_bank_model_1.default;
 const { CUSTOMER_USER_TABLE } = customer_user_model_1.default;
 function up(queryInterface) {
@@ -46,7 +46,7 @@ function up(queryInterface) {
             scheduledNotificationId: {
                 allowNull: false,
                 references: {
-                    model: SCHEDULED_NOTIFICATION_TABLE,
+                    model: SCHEDULED_NOTIFICATIONS_TABLE,
                     key: "id_scheduled_notification",
                 },
                 field: "scheduled_notification_id_scheduled_notification",
@@ -84,7 +84,7 @@ function up(queryInterface) {
 exports.up = up;
 function down(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield queryInterface.dropTable(SCHEDULED_NOTIFICATION_TABLE);
+        yield queryInterface.dropTable(SCHEDULED_NOTIFICATIONS_USERS_TABLE);
     });
 }
 exports.down = down;

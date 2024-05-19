@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import ScheduledNotificationService from "../../app/settings/services/scheduled-notification.service";
+import ScheduledNotificationsService from "../../app/settings/services/scheduled-notifications.service";
 
-const service = new ScheduledNotificationService();
+const service = new ScheduledNotificationsService();
 
 export const getNotificationsController = async (
   req: Request,

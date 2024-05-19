@@ -49,8 +49,8 @@ const getNotificationsUsersByCustomerIdController = (req, res, next) => __awaite
 exports.getNotificationsUsersByCustomerIdController = getNotificationsUsersByCustomerIdController;
 const getNotificationsUsersByChbController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { idChb } = req.params;
-        const notification = yield service.findAllByChbId(idChb);
+        const { chb } = req.params;
+        const notification = yield service.findAllByChbId(chb);
         res.json(notification);
     }
     catch (error) {

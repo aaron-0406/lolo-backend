@@ -10,9 +10,9 @@ import {
   createNotificationController,
   updateNotificaitonController,
   deleteNotificationController,
-} from "../../controllers/settings/scheduled-notification.controller"
+} from "../../controllers/settings/scheduled-notifications.controller"
 
-import scheduledNotificationSchema from "../../app/settings/schemas/scheduled-notification.schema";
+import scheduledNotificationSchema from "../../app/settings/schemas/scheduled-notifications.schema";
 
 const {
   getScheduledNotificationSchema,

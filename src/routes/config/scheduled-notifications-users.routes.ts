@@ -41,7 +41,7 @@ router.get(
 );
 
 router.get(
-  "/chb/:chbId",
+  "/chb/:chb",
   JWTAuth,
   validatorHandler(getScheduledNotificationsUsersByChbSchema, "params"),
   getNotificationsUsersByChbController
@@ -60,6 +60,13 @@ router.post(
   validatorHandler(createScheduledNotificationsUsersSchema, "body"),
   createNotificationsUsersController
 );
+
+router.post(
+  "/save-/notifications-users",
+  JWTAuth,
+  validatorHandler(createScheduledNotificationsUsersSchema, "body"),
+  createNotificationsUsersController
+)
 
 router.put(
   "/:id",

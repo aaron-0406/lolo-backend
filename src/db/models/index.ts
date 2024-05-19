@@ -46,7 +46,7 @@ import judicialBinDefendantProceduralActionModel from "./judicial-bin-defendant-
 import judicialBinTypeBinnacleModel from "./judicial-bin-type-binnacle.model";
 import judicialBinFileModel from "./judicial-bin-file.model";
 import judicialProcessReasonModel from "./judicial-process-reason.model";
-import scheduledNotificationModel from "./settings/scheduled-notification.model.";
+import scheduledNotificationsModel from "./settings/scheduled-notifications.model.";
 import scheduledNotificationsUsersModel from "./settings/scheduled-notifications-users.model";
 
 const { Customer, CustomerSchema } = customerModel;
@@ -103,7 +103,7 @@ const { JudicialBinTypeBinnacle, JudicialBinTypeBinnacleSchema } =
   judicialBinTypeBinnacleModel;
 const { JudicialBinFile, JudicialBinFileSchema } = judicialBinFileModel;
 const { JudicialProcessReason, JudicialProcessReasonSchema  } = judicialProcessReasonModel
-const { ScheduledNotification, ScheduledNotificationSchema } = scheduledNotificationModel;
+const { ScheduledNotifications, ScheduledNotificationsSchema } = scheduledNotificationsModel;
 const { ScheduledNotificationsUsers, ScheduledNotificationsUsersSchema} = scheduledNotificationsUsersModel;
 
 export const setupModels = (sequelize: Sequelize) => {
@@ -204,7 +204,7 @@ export const setupModels = (sequelize: Sequelize) => {
     JudicialProcessReason.config(sequelize)
   );
 
-  ScheduledNotification.init(ScheduledNotificationSchema, ScheduledNotification.config(sequelize));
+  ScheduledNotifications.init(ScheduledNotificationsSchema, ScheduledNotifications.config(sequelize));
   ScheduledNotificationsUsers.init(ScheduledNotificationsUsersSchema, ScheduledNotificationsUsers.config(sequelize));
 
   Customer.associate(sequelize.models);
@@ -252,6 +252,6 @@ export const setupModels = (sequelize: Sequelize) => {
   JudicialBinDefendantProceduralAction.associate(sequelize.models);
   JudicialBinTypeBinnacle.associate(sequelize.models);
   JudicialBinFile.associate(sequelize.models);
-  ScheduledNotification.associate(sequelize.models);
+  ScheduledNotifications.associate(sequelize.models);
   ScheduledNotificationsUsers.associate(sequelize.models);
 };

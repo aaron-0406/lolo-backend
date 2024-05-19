@@ -50,8 +50,8 @@ export const getNotificationsUsersByChbController = async (
   next: NextFunction
 ) => {
   try {
-    const { idChb } = req.params;
-    const notification = await service.findAllByChbId(idChb);
+    const { chb } = req.params;
+    const notification = await service.findAllByChbId(chb);
     res.json(notification);
   } catch (error) {
     next(error);
