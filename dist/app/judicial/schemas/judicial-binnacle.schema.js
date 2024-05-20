@@ -7,7 +7,6 @@ const joi_1 = __importDefault(require("joi"));
 const id = joi_1.default.number();
 const lastPerformed = joi_1.default.string();
 const judicialBinProceduralStageId = joi_1.default.number();
-const judicialDefendantProceduralActionId = joi_1.default.number();
 const customerHasBankId = joi_1.default.number();
 const binnacleTypeId = joi_1.default.number();
 const judicialFileCaseId = joi_1.default.number();
@@ -19,13 +18,11 @@ const createJudicialBinnacleSchema = joi_1.default.object({
     lastPerformed: lastPerformed.required(),
     date: date.required(),
     judicialFileCaseId: judicialFileCaseId.required(),
-    judicialDefendantProceduralActionId: judicialDefendantProceduralActionId.required(),
 });
 const updateJudicialBinnacleSchema = joi_1.default.object({
     lastPerformed: lastPerformed.required(),
     judicialBinProceduralStageId: judicialBinProceduralStageId.required(),
     binnacleTypeId: binnacleTypeId.required(),
-    judicialDefendantProceduralActionId: judicialDefendantProceduralActionId.required(),
     date: date.required(),
 });
 const getJudicialBinnacleByIDSchema = joi_1.default.object({

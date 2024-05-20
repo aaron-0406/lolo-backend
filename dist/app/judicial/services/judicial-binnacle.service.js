@@ -29,10 +29,6 @@ class JudicialBinnacleService {
                         as: "binnacleType",
                     },
                     {
-                        model: models.JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION,
-                        as: "judicialBinDefendantProceduralAction",
-                    },
-                    {
                         model: models.JUDICIAL_BIN_PROCEDURAL_STAGE,
                         as: "judicialBinProceduralStage",
                     },
@@ -60,10 +56,6 @@ class JudicialBinnacleService {
                     {
                         model: models.JUDICIAL_BIN_PROCEDURAL_STAGE,
                         as: "judicialBinProceduralStage",
-                    },
-                    {
-                        model: models.JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION,
-                        as: "judicialBinDefendantProceduralAction",
                     },
                     {
                         model: models.JUDICIAL_BIN_FILE,

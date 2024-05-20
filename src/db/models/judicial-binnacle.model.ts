@@ -100,18 +100,6 @@ const JudicialBinnacleSchema: ModelAttributes<
     type: DataTypes.STRING,
     field: "last_performed",
   },
-
-  judicialDefendantProceduralActionId: {
-    allowNull: true,
-    field: "id_defendant_procedural_action",
-    type: DataTypes.INTEGER,
-    references: {
-      model: JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE,
-      key: "defendant_procedural_action_id",
-    },
-    onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
-  },
 };
 
 class JudicialBinnacle extends Model {
@@ -128,10 +116,6 @@ class JudicialBinnacle extends Model {
     this.belongsTo(models.JUDICIAL_BIN_TYPE_BINNACLE, { as: "binnacleType" });
     this.belongsTo(models.JUDICIAL_BIN_PROCEDURAL_STAGE, {
       as: "judicialBinProceduralStage",
-    });
-    this.belongsTo(models.JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION, {
-      as: "judicialBinDefendantProceduralAction",
-      foreignKey: "judicialDefendantProceduralActionId",
     });
   }
 

@@ -35,7 +35,6 @@ const judicial_obs_file_routes_1 = __importDefault(require("./judicial/judicial-
 const judicial_obs_type_routes_1 = __importDefault(require("./judicial/judicial-obs-type.routes"));
 const judicial_bin_type_binnacle_routes_1 = __importDefault(require("./judicial/judicial-bin-type-binnacle.routes"));
 const judicial_bin_procedural_stage_routes_1 = __importDefault(require("./judicial/judicial-bin-procedural-stage.routes"));
-const judicial_bin_defendant_procedural_action_routes_1 = __importDefault(require("./judicial/judicial-bin-defendant-procedural-action.routes"));
 const judicial_binnacle_routes_1 = __importDefault(require("./judicial/judicial-binnacle.routes"));
 const judicial_bin_file_routes_1 = __importDefault(require("./judicial/judicial-bin-file.routes"));
 const management_action_routes_1 = __importDefault(require("./dash/management-action.routes"));
@@ -86,7 +85,6 @@ const routerApi = (app) => {
     router.use("/judicial/binnacle", judicial_binnacle_routes_1.default);
     router.use("/judicial/bin-file", judicial_bin_file_routes_1.default);
     router.use("/judicial/bin-procedural-stage", judicial_bin_procedural_stage_routes_1.default);
-    router.use("/judicial/bin-defendant-procedural-action", judicial_bin_defendant_procedural_action_routes_1.default);
     router.use("/dash/auth", auth_routes_2.default);
     router.use("/dash/role", role_routes_1.default);
     router.use("/dash/permission", permission_routes_1.default);

@@ -4,14 +4,13 @@ import { JudicialBinnacleType } from "../types/judicial-binnacle.type";
 const id = Joi.number();
 const lastPerformed = Joi.string();
 const judicialBinProceduralStageId = Joi.number();
-const judicialDefendantProceduralActionId = Joi.number();
 const customerHasBankId = Joi.number();
 const binnacleTypeId = Joi.number();
 const judicialFileCaseId = Joi.number();
 const date = Joi.date();
 
 const createJudicialBinnacleSchema = Joi.object<
-  Omit<JudicialBinnacleType, "id" | "createdAt" | "updatedAt" | "deletedAt">,
+  Omit<JudicialBinnacleType, "id" | "judicialDefendantProceduralActionId" |  "createdAt" | "updatedAt" | "deletedAt">,
   true
 >({
   binnacleTypeId: binnacleTypeId.required(),
@@ -20,14 +19,13 @@ const createJudicialBinnacleSchema = Joi.object<
   lastPerformed: lastPerformed.required(),
   date: date.required(),
   judicialFileCaseId: judicialFileCaseId.required(),
-  judicialDefendantProceduralActionId:
-    judicialDefendantProceduralActionId.required(),
 });
 
 const updateJudicialBinnacleSchema = Joi.object<
   Omit<
     JudicialBinnacleType,
     | "id"
+    | "judicialDefendantProceduralActionId"
     | "customerHasBankId"
     | "judicialFileCaseId"
     | "createdAt"
@@ -39,8 +37,6 @@ const updateJudicialBinnacleSchema = Joi.object<
   lastPerformed: lastPerformed.required(),
   judicialBinProceduralStageId: judicialBinProceduralStageId.required(),
   binnacleTypeId: binnacleTypeId.required(),
-  judicialDefendantProceduralActionId:
-    judicialDefendantProceduralActionId.required(),
   date: date.required(),
 });
 
