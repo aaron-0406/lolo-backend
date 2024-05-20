@@ -18,6 +18,9 @@ const updateScheduledNotificationsUsersSchema = joi_1.default.object({
     customerUserId: customerUserId,
     scheduledNotificationId: scheduledNotificationId,
 });
+const changeNotificationsUsersSchema = joi_1.default.object({
+    data: joi_1.default.string().required(),
+});
 const getScheduledNotificationsUsersSchema = joi_1.default.object({
     chb: customerHasBankId.required(),
 });
@@ -37,4 +40,5 @@ exports.default = {
     getScheduledNotificationsUsersBySchuldeNotificationIdSchema,
     createScheduledNotificationsUsersSchema,
     updateScheduledNotificationsUsersSchema,
+    changeNotificationsUsersSchema,
 };

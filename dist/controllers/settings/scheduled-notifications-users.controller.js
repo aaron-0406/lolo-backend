@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteNotificationsUsersController = exports.updateNotificaitonsUsersController = exports.createNotificationsUsersController = exports.getNotificationsUsersBySchuldeNotificationIdController = exports.getNotificationsUsersByChbController = exports.getNotificationsUsersByCustomerIdController = exports.getNotificationsUsersByIdController = exports.getNotificationsUsersController = void 0;
+exports.deleteNotificationsUsersController = exports.updateNotificaitonsUsersController = exports.changeNotificationsUsersController = exports.createNotificationsUsersController = exports.getNotificationsUsersBySchuldeNotificationIdController = exports.getNotificationsUsersByChbController = exports.getNotificationsUsersByCustomerIdController = exports.getNotificationsUsersByIdController = exports.getNotificationsUsersController = void 0;
 const scheduled_notifications_users_service_1 = __importDefault(require("../../app/settings/services/scheduled-notifications-users.service"));
 const service = new scheduled_notifications_users_service_1.default();
 const getNotificationsUsersController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -72,14 +72,28 @@ exports.getNotificationsUsersBySchuldeNotificationIdController = getNotification
 const createNotificationsUsersController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const body = req.body;
-        const newNotification = yield service.create(body);
-        res.status(201).json(newNotification);
+        // const newNotification = await service.create(body);
+        // res.status(201).json(newNotification);
     }
     catch (error) {
         next(error);
     }
 });
 exports.createNotificationsUsersController = createNotificationsUsersController;
+const changeNotificationsUsersController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const body = req.body;
+        const newbO = JSON.parse(body.data);
+        console.log(newbO);
+        const notificationsUsers = yield service.changeNotificationsUsers(newbO);
+        console.log(notificationsUsers);
+        res.json(notificationsUsers);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.changeNotificationsUsersController = changeNotificationsUsersController;
 const updateNotificaitonsUsersController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;

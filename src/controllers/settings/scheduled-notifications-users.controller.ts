@@ -64,23 +64,25 @@ export const getNotificationsUsersBySchuldeNotificationIdController = async (
   next: NextFunction
 ) => {
   try {
-    const { idSchuldeNotification } = req.params;
-    const notification = await service.findOneById(idSchuldeNotification);
+    const { scheduledNotificationId } = req.params;
+    const notification = await service.findAllByScheduledNotificationId(scheduledNotificationId);
     res.json(notification);
   } catch (error) {
     next(error);
   }
 }
 
-export const createNotificationsUsersController = async (
+export const changeNotificationsUsersController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
+    const { idNotification } = req.params;
     const body = req.body;
-    const newNotification = await service.create(body);
-    res.status(201).json(newNotification);
+    const notifications = JSON.parse(body.data);
+    const notificationsUsers = await service.changeNotificationsUsers(idNotification, body.data);
+    res.json(notificationsUsers);
   } catch (error) {
     next(error);
   }

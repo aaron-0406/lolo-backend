@@ -74,25 +74,55 @@ class ScheduledNotificationsUsersService {
     return rta;
   }
 
-  async save( notificationID:number ,scheludeNotificationsUsers: ScheduledNotificationsUsersType[]) {
+  async changeNotificationsUsers(idNotification: string, scheludeNotificationsUsers: string) {
+    const newScheludeNotificationsUsers: ScheduledNotificationsUsersType[] =
+      JSON.parse(scheludeNotificationsUsers);
     const notifications = await models.SCHEDULED_NOTIFICATIONS_USERS.findAll({
       where: {
-        id_scheduled_notification_user: notificationID,
+        scheduledNotificationId: idNotification,
       },
     });
+    if (notifications.length) {
+      const newNotifications = newScheludeNotificationsUsers.filter(
+        (scheludeNotificationsUser: ScheduledNotificationsUsersType) =>
+          !notifications.some(
+            (notification) =>
+              notification.dataValues.customerUserId ===
+              scheludeNotificationsUser.customerUserId
+          )
+      );
+      const notificationsToDelete = notifications.filter(
+        (notification) =>
+          !newScheludeNotificationsUsers.some(
+            (scheludeNotificationsUser) =>
+              notification.dataValues.customerUserId ===
+              scheludeNotificationsUser.customerUserId
+          )
+      );
 
-    // const assingNotifications = scheludeNotificationsUsers.filter((scheludeNotificationsUsers) => notifications.some((notification) => notification === scheludeNotificationsUsers.customerUserId));
+      try {
+        for (const notification of notificationsToDelete) {
+          await models.SCHEDULED_NOTIFICATIONS_USERS.destroy({
+            where: { customerUserId: notification.dataValues.customerUserId },
+          });
+        }
 
-
-    const rta = await models.SCHEDULED_NOTIFICATIONS_USERS.bulkCreate(scheludeNotificationsUsers);
-    return rta;
-
+        for (const newNotification of newNotifications) {
+          await models.SCHEDULED_NOTIFICATIONS_USERS.create(newNotification);
+        }
+        return newScheludeNotificationsUsers
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    }
+    else{
+      for (const newNotification of newScheludeNotificationsUsers) {
+        await models.SCHEDULED_NOTIFICATIONS_USERS.create(newNotification);
+      }
+    }
   }
 
-  async create (data: ScheduledNotificationType) {
-    const newScheduledNotification = await models.SCHEDULED_NOTIFICATIONS_USERS.create(data);
-    return newScheduledNotification;
-  }
 
   async update (id: string, data: ScheduledNotificationType) {
     const scheduledNotification = await models.SCHEDULED_NOTIFICATIONS_USERS.findByPk(id);

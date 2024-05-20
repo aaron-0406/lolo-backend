@@ -19,13 +19,13 @@ class ScheduledNotificationsUsersService {
     constructor() { }
     findAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.SCHEDULED_NOTIFICATION.findAll();
+            const rta = yield models.SCHEDULED_NOTIFICATIONS_USERS.findAll();
             return rta;
         });
     }
     findOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const scheduledNotification = yield models.SCHEDULED_NOTIFICATION.findByPk(id);
+            const scheduledNotification = yield models.SCHEDULED_NOTIFICATIONS_USERS.findByPk(id);
             if (!scheduledNotification) {
                 throw boom_1.default.notFound("Scheduled Notification no encontrado");
             }
@@ -34,7 +34,7 @@ class ScheduledNotificationsUsersService {
     }
     findOneById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const scheduledNotification = yield models.SCHEDULED_NOTIFICATION.findByPk(id);
+            const scheduledNotification = yield models.SCHEDULED_NOTIFICATIONS_USERS.findByPk(id);
             if (!scheduledNotification) {
                 throw boom_1.default.notFound("Scheduled Notification no encontrado");
             }
@@ -43,7 +43,7 @@ class ScheduledNotificationsUsersService {
     }
     findAllByCustomerId(customerId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.SCHEDULED_NOTIFICATION.findAll({
+            const rta = yield models.SCHEDULED_NOTIFICATIONS_USERS.findAll({
                 where: {
                     customerHasBankId: customerId,
                 },
@@ -56,7 +56,7 @@ class ScheduledNotificationsUsersService {
     }
     findAllByChbId(customerHasBankId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.SCHEDULED_NOTIFICATION.findAll({
+            const rta = yield models.SCHEDULED_NOTIFICATIONS_USERS.findAll({
                 where: {
                     customerHasBankId: customerHasBankId,
                 },
@@ -69,7 +69,7 @@ class ScheduledNotificationsUsersService {
     }
     findAllByScheduledNotificationId(scheduledNotificationId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.SCHEDULED_NOTIFICATION.findAll({
+            const rta = yield models.SCHEDULED_NOTIFICATIONS_USERS.findAll({
                 where: {
                     scheduledNotificationId: scheduledNotificationId,
                 },
@@ -80,15 +80,32 @@ class ScheduledNotificationsUsersService {
             return rta;
         });
     }
-    create(data) {
+    changeNotificationsUsers(scheludeNotificationsUsers) {
         return __awaiter(this, void 0, void 0, function* () {
-            const newScheduledNotification = yield models.SCHEDULED_NOTIFICATION.create(data);
-            return newScheduledNotification;
+            const notifications = yield models.SCHEDULED_NOTIFICATIONS_USERS.findAll();
+            const newNotifications = scheludeNotificationsUsers.filter((scheludeNotificationsUser) => !notifications.some((notification) => notification.dataValues.customerUserId ===
+                scheludeNotificationsUser.customerUserId));
+            const notificationsToDelete = notifications.filter((notification) => !scheludeNotificationsUsers.some((scheludeNotificationsUser) => notification.dataValues.customerUserId ===
+                scheludeNotificationsUser.customerUserId));
+            try {
+                for (const notification of notificationsToDelete) {
+                    yield models.SCHEDULED_NOTIFICATIONS_USERS.destroy({
+                        where: { customerUserId: notification.dataValues.customerUserId },
+                    });
+                }
+                for (const newNotification of newNotifications) {
+                    yield models.SCHEDULED_NOTIFICATIONS_USERS.create(newNotification);
+                }
+                return scheludeNotificationsUsers;
+            }
+            catch (error) {
+                throw error;
+            }
         });
     }
     update(id, data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const scheduledNotification = yield models.SCHEDULED_NOTIFICATION.findByPk(id);
+            const scheduledNotification = yield models.SCHEDULED_NOTIFICATIONS_USERS.findByPk(id);
             if (!scheduledNotification) {
                 throw boom_1.default.notFound("Scheduled Notification no encontrado");
             }
@@ -98,7 +115,7 @@ class ScheduledNotificationsUsersService {
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const scheduledNotification = yield models.SCHEDULED_NOTIFICATION.findByPk(id);
+            const scheduledNotification = yield models.SCHEDULED_NOTIFICATIONS_USERS.findByPk(id);
             if (!scheduledNotification) {
                 throw boom_1.default.notFound("Scheduled Notification no encontrado");
             }

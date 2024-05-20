@@ -24,13 +24,9 @@ const updateScheduledNotificationsUsersSchema = Joi.object<
   scheduledNotificationId: scheduledNotificationId,
 })
 
-const saveNotificationsUsersSchema = Joi.array().items(
-  Joi.object({
-    customerUserId: Joi.number().required(),
-    customerHasBankId: Joi.number().required(),
-    scheduledNotificationId: Joi.number().required(),
-  })
-);
+const changeNotificationsUsersSchema: Joi.ObjectSchema = Joi.object({
+  data: Joi.string().required(),
+});
 
 const getScheduledNotificationsUsersSchema = Joi.object<
   { chb: number },
@@ -68,5 +64,5 @@ export default {
   getScheduledNotificationsUsersBySchuldeNotificationIdSchema,
   createScheduledNotificationsUsersSchema,
   updateScheduledNotificationsUsersSchema,
-  saveNotificationsUsersSchema,
+  changeNotificationsUsersSchema,
 };

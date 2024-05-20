@@ -7,20 +7,20 @@ import {
   getNotificationsUsersByCustomerIdController,
   getNotificationsUsersBySchuldeNotificationIdController,
   getNotificationsUsersByChbController,
-  createNotificationsUsersController,
   updateNotificaitonsUsersController,
   deleteNotificationsUsersController,
+  changeNotificationsUsersController,
 } from "../../controllers/settings/scheduled-notifications-users.controller"
 import { JWTAuth } from "../../middlewares/auth.handler";
 import scheduledNotificationsUsersSchema from "../../app/settings/schemas/scheduled-notifications-users.schema";
 
 const {
   getScheduledNotificationsUsersSchema,
-  createScheduledNotificationsUsersSchema,
   updateScheduledNotificationsUsersSchema,
   getScheduledNotificationsUsersByCustomerIdSchema,
   getScheduledNotificationsUsersByChbSchema,
   getScheduledNotificationsUsersBySchuldeNotificationIdSchema,
+  changeNotificationsUsersSchema
 } = scheduledNotificationsUsersSchema;
 const router = express.Router();
 
@@ -55,17 +55,10 @@ router.get(
 );
 
 router.post(
-  "/",
+  "/change-notifications-users/:idNotification",
   JWTAuth,
-  validatorHandler(createScheduledNotificationsUsersSchema, "body"),
-  createNotificationsUsersController
-);
-
-router.post(
-  "/save-/notifications-users",
-  JWTAuth,
-  validatorHandler(createScheduledNotificationsUsersSchema, "body"),
-  createNotificationsUsersController
+  validatorHandler(changeNotificationsUsersSchema, "body"),
+  changeNotificationsUsersController
 )
 
 router.put(
