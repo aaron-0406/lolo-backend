@@ -7,7 +7,7 @@ export type JudicialCaseFileType = {
   amountDemandedDollars: number;
   cautionaryCode: string;
   errandCode: string;
-  judicialVenue: string;
+  judicialSedeId: number;
   judge: string;
   demandDate: Date;
   createdAt: Date;

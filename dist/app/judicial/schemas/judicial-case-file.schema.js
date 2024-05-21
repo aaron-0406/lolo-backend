@@ -15,7 +15,7 @@ const amountDemandedSoles = joi_1.default.number();
 const amountDemandedDollars = joi_1.default.number();
 const cautionaryCode = joi_1.default.string().max(150);
 const errandCode = joi_1.default.string().max(150);
-const judicialVenue = joi_1.default.string().max(150);
+const judicialSedeId = joi_1.default.number().positive();
 const judge = joi_1.default.string().max(150);
 const demandDate = joi_1.default.date();
 const clientId = joi_1.default.number();
@@ -54,7 +54,7 @@ const createJudicialCaseFileSchema = joi_1.default.object({
     amountDemandedDollars: amountDemandedDollars.optional().empty("").allow(""),
     cautionaryCode: cautionaryCode.optional().empty("").allow(""),
     errandCode: errandCode.optional().empty("").allow(""),
-    judicialVenue: judicialVenue.optional().empty("").allow(""),
+    judicialSedeId: judicialSedeId.optional().empty("").allow(""),
     judge: judge.optional().empty("").allow(""),
     demandDate: demandDate.optional().empty("").allow(""),
     judicialCourtId: judicialCourtId.required(),
@@ -72,7 +72,7 @@ const updateJudicialCaseFileSchema = joi_1.default.object({
     amountDemandedDollars: amountDemandedDollars.optional().empty("").allow(""),
     cautionaryCode: cautionaryCode.optional().empty("").allow(""),
     errandCode: errandCode.optional().empty("").allow(""),
-    judicialVenue: judicialVenue.optional().empty("").allow(""),
+    judicialSedeId: judicialSedeId.optional().empty("").allow(""),
     judge: judge.optional().empty("").allow(""),
     demandDate: demandDate.optional().empty("").allow(""),
     customerUserId: customerUserId.required(),

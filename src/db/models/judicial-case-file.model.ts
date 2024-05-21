@@ -6,7 +6,9 @@ import {
   ModelCtor,
 } from "sequelize";
 import { JudicialCaseFileType } from "../../app/judicial/types/judicial-case-file.type";
+
 import clientModel from "./client.model";
+import judicialSedeModel from "./judicial-sede.model";
 import judicialCourtModel from "./judicial-court.model";
 import judicialProceduralWayModel from "./judicial-procedural-way.model";
 import judicialSubjectModel from "./judicial-subject.model";
@@ -61,10 +63,16 @@ const JudicialCaseFileSchema: ModelAttributes<
     field: "errand_code",
     type: DataTypes.STRING(150),
   },
-  judicialVenue: {
-    field: "judicial_venue",
+  judicialSedeId: {
     allowNull: true,
-    type: DataTypes.STRING(150),
+    field: "judicial_sede_id_judicial_sede",
+    type: DataTypes.INTEGER,
+    references: {
+      model: judicialSedeModel.JUDICIAL_SEDE_TABLE,
+      key: "id_judicial_sede",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
   },
   judge: {
     allowNull: true,
@@ -152,7 +160,7 @@ const JudicialCaseFileSchema: ModelAttributes<
     field: "process_status",
     type: DataTypes.STRING(150),
   },
-  processComment:{
+  processComment: {
     allowNull: true,
     field: "process_comment",
     type: DataTypes.TEXT("long"),
@@ -178,6 +186,7 @@ class JudicialCaseFile extends Model {
     this.belongsTo(models.JUDICIAL_PROCEDURAL_WAY, {
       as: "judicialProceduralWay",
     });
+    this.belongsTo(models.JUDICIAL_SEDE, { as: "judicialSede" });
     this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
     this.belongsTo(models.JUDICIAL_PROCESS_REASON, { as: "processReason" });

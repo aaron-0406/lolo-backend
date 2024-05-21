@@ -105,6 +105,10 @@ class JudicialCaseFileService {
           as: "judicialSubject",
         },
         {
+          model: models.JUDICIAL_SEDE,
+          as: "judicialSede",
+        },
+        {
           model: models.CLIENT,
           as: "client",
           attributes: ["id", "name"],
@@ -168,6 +172,10 @@ class JudicialCaseFileService {
         {
           model: models.JUDICIAL_SUBJECT,
           as: "judicialSubject",
+        },
+        {
+          model: models.JUDICIAL_SEDE,
+          as: "judicialSede",
         },
         {
           model: models.CLIENT,
@@ -263,8 +271,11 @@ class JudicialCaseFileService {
     const rta = await judicialCaseFile.update(changes);
     return rta;
   }
-  
-  async updateProcessStatus(id:string, changes:JudicialCasefileProcessStatus){
+
+  async updateProcessStatus(
+    id: string,
+    changes: JudicialCasefileProcessStatus
+  ) {
     const judicialCaseFile = await this.findByID(id);
     const rta = await judicialCaseFile.update(changes);
     return rta;
