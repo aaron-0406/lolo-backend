@@ -19,6 +19,7 @@ const judicialSedeId = Joi.number().positive();
 const judge = Joi.string().max(150);
 const demandDate = Joi.date();
 const clientId = Joi.number();
+const cityId = Joi.number();
 const chb = Joi.number();
 const customerUserId = Joi.number();
 const judicialCourtId = Joi.number().positive();
@@ -28,7 +29,6 @@ const customerHasBankId = Joi.number().positive();
 const processStatus = Joi.string().max(150);
 const processComment = Joi.string();
 const processReasonId = Joi.number().positive();
-
 
 const page = Joi.number().required().messages({
   "number.base": "El campo page es inválido",
@@ -54,7 +54,10 @@ const users = Joi.string().required();
 const customerId = Joi.number();
 
 const createJudicialCaseFileSchema = Joi.object<
-  Omit<JudicialCaseFileType, "id" | "createdAt" | "processStatus" | "processComment" | "processReasonId" >,
+  Omit<
+    JudicialCaseFileType,
+    "id" | "createdAt" | "processStatus" | "processComment" | "processReasonId"
+  >,
   true
 >({
   numberCaseFile: numberCaseFile.required(),
@@ -71,12 +74,16 @@ const createJudicialCaseFileSchema = Joi.object<
   judicialSubjectId: judicialSubjectId.required(),
   judicialProceduralWayId: judicialProceduralWayId.required(),
   clientId: clientId.required(),
+  cityId: cityId.required(),
   customerUserId: customerUserId.required(),
   customerHasBankId: customerHasBankId.required(),
 });
 
 const updateJudicialCaseFileSchema = Joi.object<
-  Omit<JudicialCaseFileType, "id" | "createdAt" | "processStatus" | "processComment" | "processReasonId">,
+  Omit<
+    JudicialCaseFileType,
+    "id" | "createdAt" | "processStatus" | "processComment" | "processReasonId"
+  >,
   true
 >({
   numberCaseFile: numberCaseFile.required(),
@@ -95,13 +102,17 @@ const updateJudicialCaseFileSchema = Joi.object<
   judicialProceduralWayId: judicialProceduralWayId.required(),
   customerHasBankId: customerHasBankId.required(),
   clientId: clientId.required(),
+  cityId: cityId.required(),
 });
 
-const updateJudicialCaseFileProcessStatusSchema = Joi.object<JudicialCasefileProcessStatus, true>({
+const updateJudicialCaseFileProcessStatusSchema = Joi.object<
+  JudicialCasefileProcessStatus,
+  true
+>({
   processStatus: processStatus.optional().empty("").allow(""),
   processComment: processComment.optional().empty("").allow(""),
   processReasonId: processReasonId.optional().empty("").allow(""),
-})
+});
 
 const getJudicialCaseFileByClientIDSchema = Joi.object<
   { clientId: number },

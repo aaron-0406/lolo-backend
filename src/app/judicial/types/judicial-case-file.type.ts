@@ -12,12 +12,13 @@ export type JudicialCaseFileType = {
   demandDate: Date;
   createdAt: Date;
   clientId: number;
+  cityId: number;
   customerUserId: number;
   judicialCourtId: number;
   judicialSubjectId: number;
   judicialProceduralWayId: number;
   customerHasBankId: number;
-  processStatus:string;
-  processComment:string;
-  processReasonId:number;
+  processStatus: string;
+  processComment: string;
+  processReasonId: number;
 };

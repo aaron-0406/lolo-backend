@@ -19,6 +19,7 @@ const judicialSedeId = joi_1.default.number().positive();
 const judge = joi_1.default.string().max(150);
 const demandDate = joi_1.default.date();
 const clientId = joi_1.default.number();
+const cityId = joi_1.default.number();
 const chb = joi_1.default.number();
 const customerUserId = joi_1.default.number();
 const judicialCourtId = joi_1.default.number().positive();
@@ -61,6 +62,7 @@ const createJudicialCaseFileSchema = joi_1.default.object({
     judicialSubjectId: judicialSubjectId.required(),
     judicialProceduralWayId: judicialProceduralWayId.required(),
     clientId: clientId.required(),
+    cityId: cityId.required(),
     customerUserId: customerUserId.required(),
     customerHasBankId: customerHasBankId.required(),
 });
@@ -81,6 +83,7 @@ const updateJudicialCaseFileSchema = joi_1.default.object({
     judicialProceduralWayId: judicialProceduralWayId.required(),
     customerHasBankId: customerHasBankId.required(),
     clientId: clientId.required(),
+    cityId: cityId.required(),
 });
 const updateJudicialCaseFileProcessStatusSchema = joi_1.default.object({
     processStatus: processStatus.optional().empty("").allow(""),

@@ -8,6 +8,7 @@ import {
 import { JudicialCaseFileType } from "../../app/judicial/types/judicial-case-file.type";
 
 import clientModel from "./client.model";
+import cityModel from "./city.model";
 import judicialSedeModel from "./judicial-sede.model";
 import judicialCourtModel from "./judicial-court.model";
 import judicialProceduralWayModel from "./judicial-procedural-way.model";
@@ -96,6 +97,17 @@ const JudicialCaseFileSchema: ModelAttributes<
     references: {
       model: clientModel.CLIENT_TABLE,
       key: "id_client",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
+  cityId: {
+    allowNull: false,
+    field: "city_id_city",
+    type: DataTypes.INTEGER,
+    references: {
+      model: cityModel.CITY_TABLE,
+      key: "id_city",
     },
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
@@ -190,6 +202,7 @@ class JudicialCaseFile extends Model {
     this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
     this.belongsTo(models.JUDICIAL_PROCESS_REASON, { as: "processReason" });
+    this.belongsTo(models.CITY, { as: "city" });
 
     this.hasMany(models.PRODUCT, {
       as: "product",
