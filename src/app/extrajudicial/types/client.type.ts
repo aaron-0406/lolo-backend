@@ -13,4 +13,5 @@ export type ClientType = {
   funcionarioId: number;
   customerUserId: number;
   customerHasBankId: number;
+  memoAssignmentDate: Date;
 };

@@ -16,6 +16,7 @@ const funcionarioId = Joi.number();
 const customerUserId = Joi.number();
 const customerHasBankId = Joi.number();
 const idCustomer = Joi.number();
+const memoAssignmentDate = Joi.date();
 
 const page = Joi.number().required().messages({
   "number.base": "El campo page es inválido",
@@ -92,6 +93,7 @@ const saveClientSchema = Joi.object<ClientType, true>({
   funcionarioId: funcionarioId.required(),
   customerUserId: customerUserId.required(),
   customerHasBankId: customerHasBankId.required(),
+  memoAssignmentDate: memoAssignmentDate.optional().empty("").allow(""),
 });
 
 const transferClientToAnotherBankSchema = Joi.object<
