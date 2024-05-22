@@ -109,6 +109,11 @@ const ClientSchema = {
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
     },
+    memoAssignmentDate: {
+        allowNull: true,
+        field: "memo_assignment_date",
+        type: sequelize_1.DataTypes.DATEONLY,
+    }
 };
 class Client extends sequelize_1.Model {
     static associate(models) {
