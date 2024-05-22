@@ -52,7 +52,10 @@ const users = Joi.string().required();
 const customerId = Joi.number();
 
 const createJudicialCaseFileRelatedProcessSchema = Joi.object<
-  Omit<JudicialCaseFileType, "id" | "createdAt" | "processStatus" | "processComment" | "processReasonId">,
+  Omit<
+    JudicialCaseFileType,
+    "id" | "createdAt" | "processStatus" | "processComment" | "processReasonId"
+  >,
   true
 >({
   numberCaseFile: numberCaseFile.required(),
@@ -71,12 +74,18 @@ const createJudicialCaseFileRelatedProcessSchema = Joi.object<
   clientId: clientId.required(),
   customerUserId: customerUserId.required(),
   customerHasBankId: customerHasBankId.required(),
-  idJudicialCaseFileRelated: idJudicialCaseFileRelated.optional().empty("").allow(""),
+  idJudicialCaseFileRelated: idJudicialCaseFileRelated
+    .optional()
+    .empty("")
+    .allow(""),
   bankId: bankId.optional().empty("").allow(""),
 });
 
 const updateJudicialCaseFileRelatedProcessSchema = Joi.object<
-  Omit<JudicialCaseFileType, "id" | "createdAt" | "processStatus" | "processComment" | "processReasonId">,
+  Omit<
+    JudicialCaseFileType,
+    "id" | "createdAt" | "processStatus" | "processComment" | "processReasonId"
+  >,
   true
 >({
   numberCaseFile: numberCaseFile.required(),
@@ -95,11 +104,17 @@ const updateJudicialCaseFileRelatedProcessSchema = Joi.object<
   judicialProceduralWayId: judicialProceduralWayId.required(),
   customerHasBankId: customerHasBankId.required(),
   clientId: clientId.required(),
-  idJudicialCaseFileRelated: idJudicialCaseFileRelated.optional().empty("").allow(""),
+  idJudicialCaseFileRelated: idJudicialCaseFileRelated
+    .optional()
+    .empty("")
+    .allow(""),
   bankId: bankId.optional().empty("").allow(""),
 });
 
-const getRelatedProcessByCaseFileIdSchema = Joi.object<{ caseFileId: number }, true>({
+const getRelatedProcessByCaseFileIdSchema = Joi.object<
+  { caseFileId: number },
+  true
+>({
   caseFileId: caseFileId.required(),
 });
 
@@ -110,7 +125,10 @@ const getJudicialCaseFileRelatedProcesByClientIDSchema = Joi.object<
   clientId: clientId.required(),
 });
 
-const getJudicialCaseFileRelatedProcesByCHBSchema = Joi.object<{ chb: number }, true>({
+const getJudicialCaseFileRelatedProcesByCHBSchema = Joi.object<
+  { chb: number },
+  true
+>({
   chb: chb.required(),
 });
 
@@ -124,7 +142,10 @@ const getJudicialCaseFileRelatedProcesByCHBSchemaQuery = Joi.object({
   users,
 }).options({ abortEarly: true });
 
-const getJudicialCaseFileRelatedProcesByIDSchema = Joi.object<{ id: number }, true>({
+const getJudicialCaseFileRelatedProcesByIDSchema = Joi.object<
+  { id: number },
+  true
+>({
   id: id.required(),
 });
 
@@ -153,4 +174,4 @@ export default {
   getJudicialCaseFileRelatedProcesByIDSchema,
   getJudicialCaseFileRelatedProcesByNumberCaseFileSchema,
   getJudicialCaseFileRelatedProcesByCustomerIdSchema,
-}
+};

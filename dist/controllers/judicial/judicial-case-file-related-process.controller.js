@@ -103,7 +103,7 @@ const createJudicialCaseFileRelatedProcessController = (req, res, next) => __awa
         const newJudicialCaseFile = yield service.create(body, customerId);
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
-            codeAction: "P13-02",
+            codeAction: "P13-01-05-02",
             entity: JUDICIAL_CASE_FILE_TABLE,
             entityId: Number(newJudicialCaseFile.dataValues.id),
             ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
@@ -116,7 +116,6 @@ const createJudicialCaseFileRelatedProcessController = (req, res, next) => __awa
     }
 });
 exports.createJudicialCaseFileRelatedProcessController = createJudicialCaseFileRelatedProcessController;
-// todo
 const updateJudicialCaseFileRelatedProcessController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _d, _e, _f;
     try {
@@ -125,7 +124,7 @@ const updateJudicialCaseFileRelatedProcessController = (req, res, next) => __awa
         const caseFile = yield service.update(id, body);
         yield serviceUserLog.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
-            codeAction: "P13-03",
+            codeAction: "P13-01-05-03",
             entity: JUDICIAL_CASE_FILE_TABLE,
             entityId: Number(caseFile.dataValues.id),
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
@@ -138,7 +137,6 @@ const updateJudicialCaseFileRelatedProcessController = (req, res, next) => __awa
     }
 });
 exports.updateJudicialCaseFileRelatedProcessController = updateJudicialCaseFileRelatedProcessController;
-// todo
 const deleteJudicialCaseFileRelatedProcessController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _g, _h, _j;
     try {
@@ -146,7 +144,7 @@ const deleteJudicialCaseFileRelatedProcessController = (req, res, next) => __awa
         const judicialCaseFile = yield service.delete(id);
         yield serviceUserLog.create({
             customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
-            codeAction: "P13-04",
+            codeAction: "P13-01-05-04",
             entity: JUDICIAL_CASE_FILE_TABLE,
             entityId: Number(judicialCaseFile.id),
             ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",

@@ -354,7 +354,10 @@ class JudicialCaseFileRelatedProcessService {
     return rta;
   }
 
-  async updateProcessStatus(id:string, changes:JudicialCasefileProcessStatus){
+  async updateProcessStatus(
+    id: string,
+    changes: JudicialCasefileProcessStatus
+  ) {
     const judicialCaseFile = await this.findByID(id);
     const rta = await judicialCaseFile.update(changes);
     return rta;
@@ -369,4 +372,3 @@ class JudicialCaseFileRelatedProcessService {
 }
 
 export default JudicialCaseFileRelatedProcessService;
-

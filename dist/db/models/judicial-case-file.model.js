@@ -184,7 +184,7 @@ const JudicialCaseFileSchema = {
         },
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
-    }
+    },
 };
 class JudicialCaseFile extends sequelize_1.Model {
     static associate(models) {

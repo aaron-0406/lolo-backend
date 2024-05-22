@@ -46,7 +46,7 @@ const newPermissions = [
         code: "P13-01-05-04",
         icon: "-",
         link: "#",
-    }
+    },
 ];
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {

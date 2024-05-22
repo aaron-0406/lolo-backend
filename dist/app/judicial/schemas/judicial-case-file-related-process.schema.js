@@ -63,7 +63,10 @@ const createJudicialCaseFileRelatedProcessSchema = joi_1.default.object({
     clientId: clientId.required(),
     customerUserId: customerUserId.required(),
     customerHasBankId: customerHasBankId.required(),
-    idJudicialCaseFileRelated: idJudicialCaseFileRelated.optional().empty("").allow(""),
+    idJudicialCaseFileRelated: idJudicialCaseFileRelated
+        .optional()
+        .empty("")
+        .allow(""),
     bankId: bankId.optional().empty("").allow(""),
 });
 const updateJudicialCaseFileRelatedProcessSchema = joi_1.default.object({
@@ -83,7 +86,10 @@ const updateJudicialCaseFileRelatedProcessSchema = joi_1.default.object({
     judicialProceduralWayId: judicialProceduralWayId.required(),
     customerHasBankId: customerHasBankId.required(),
     clientId: clientId.required(),
-    idJudicialCaseFileRelated: idJudicialCaseFileRelated.optional().empty("").allow(""),
+    idJudicialCaseFileRelated: idJudicialCaseFileRelated
+        .optional()
+        .empty("")
+        .allow(""),
     bankId: bankId.optional().empty("").allow(""),
 });
 const getRelatedProcessByCaseFileIdSchema = joi_1.default.object({

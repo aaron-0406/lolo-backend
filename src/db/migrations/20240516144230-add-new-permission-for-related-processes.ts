@@ -30,7 +30,6 @@ const newPermissions = [
   },
 ];
 
-
 export async function up(queryInterface: QueryInterface) {
   await queryInterface.bulkInsert(PERMISSION_TABLE, newPermissions);
 }

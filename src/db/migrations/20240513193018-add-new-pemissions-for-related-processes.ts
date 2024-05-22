@@ -33,9 +33,8 @@ const newPermissions = [
     code: "P13-01-05-04",
     icon: "-",
     link: "#",
-  }
+  },
 ];
-
 
 export async function up(queryInterface: QueryInterface) {
   await queryInterface.bulkInsert(PERMISSION_TABLE, newPermissions);

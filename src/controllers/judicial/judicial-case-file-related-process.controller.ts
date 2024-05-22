@@ -15,7 +15,10 @@ export const getJudicialCaseFileRelatedProcessbyCaseFileIdController = async (
 ) => {
   try {
     const { caseFileId } = req.params;
-    const caseFiles = await service.findAllRelatedProcessbyCaseFileId(caseFileId ,req.query);
+    const caseFiles = await service.findAllRelatedProcessbyCaseFileId(
+      caseFileId,
+      req.query
+    );
     res.json(caseFiles);
   } catch (error) {
     next(error);
@@ -63,22 +66,19 @@ export const getJudicialCaseFileRelatedProcessByCHBIdController = async (
   }
 };
 
-export const getJudicialCaseFileRelatedProcessByNumberCaseFileController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { numberCaseFile, chb } = req.params;
-    const caseFile = await service.findByNumberCaseFile(
-      numberCaseFile,
-      Number(chb)
-    );
-    res.json(caseFile);
-  } catch (error) {
-    next(error);
-  }
-};
+export const getJudicialCaseFileRelatedProcessByNumberCaseFileController =
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { numberCaseFile, chb } = req.params;
+      const caseFile = await service.findByNumberCaseFile(
+        numberCaseFile,
+        Number(chb)
+      );
+      res.json(caseFile);
+    } catch (error) {
+      next(error);
+    }
+  };
 
 export const getJudicialCaseFileRelatedProcessRelatedController = async (
   req: Request,
@@ -123,7 +123,7 @@ export const createJudicialCaseFileRelatedProcessController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P13-02",
+      codeAction: "P13-01-05-02",
       entity: JUDICIAL_CASE_FILE_TABLE,
       entityId: Number(newJudicialCaseFile.dataValues.id),
       ip: req.clientIp ?? "",
@@ -135,7 +135,7 @@ export const createJudicialCaseFileRelatedProcessController = async (
     next(error);
   }
 };
-// todo
+
 export const updateJudicialCaseFileRelatedProcessController = async (
   req: Request,
   res: Response,
@@ -148,7 +148,7 @@ export const updateJudicialCaseFileRelatedProcessController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P13-03",
+      codeAction: "P13-01-05-03",
       entity: JUDICIAL_CASE_FILE_TABLE,
       entityId: Number(caseFile.dataValues.id),
       ip: req.clientIp ?? "",
@@ -161,7 +161,6 @@ export const updateJudicialCaseFileRelatedProcessController = async (
   }
 };
 
-// todo
 export const deleteJudicialCaseFileRelatedProcessController = async (
   req: Request,
   res: Response,
@@ -173,7 +172,7 @@ export const deleteJudicialCaseFileRelatedProcessController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P13-04",
+      codeAction: "P13-01-05-04",
       entity: JUDICIAL_CASE_FILE_TABLE,
       entityId: Number(judicialCaseFile.id),
       ip: req.clientIp ?? "",

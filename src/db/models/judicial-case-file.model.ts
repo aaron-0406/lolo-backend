@@ -154,7 +154,7 @@ const JudicialCaseFileSchema: ModelAttributes<
     field: "process_status",
     type: DataTypes.STRING(150),
   },
-  processComment:{
+  processComment: {
     allowNull: true,
     field: "process_comment",
     type: DataTypes.TEXT("long"),
@@ -181,7 +181,7 @@ const JudicialCaseFileSchema: ModelAttributes<
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
-  bankId:{
+  bankId: {
     allowNull: true,
     field: "id_bank",
     type: DataTypes.INTEGER,
@@ -191,7 +191,7 @@ const JudicialCaseFileSchema: ModelAttributes<
     },
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
-  }
+  },
 };
 
 class JudicialCaseFile extends Model {
@@ -211,7 +211,7 @@ class JudicialCaseFile extends Model {
       foreignKey: "judicialCaseFileId",
     });
 
-    this.belongsTo(models.BANK, { as: "bank" })
+    this.belongsTo(models.BANK, { as: "bank" });
   }
 
   static config(sequelize: Sequelize) {
