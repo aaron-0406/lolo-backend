@@ -19,31 +19,31 @@ const { PERMISSION_TABLE } = permission_model_1.default;
 const newPermissions = [
     {
         name: "NOTIFICACIONES PROGRAMADAS",
-        code: "P28",
+        code: "P29",
         icon: "ri-notification-2-fill",
         link: "/configuracion/:urlIdentifier/notificationes-programadas",
     },
     {
         name: "AGREGAR NOTIFICACION PROGRAMADA",
-        code: "P28-01",
+        code: "P29-01",
         icon: "-",
         link: "#",
     },
     {
         name: "EDITAR NOTIFICACION PROGRAMADA",
-        code: "P28-02",
+        code: "P29-02",
         icon: "-",
         link: "#",
     },
     {
         name: "ELIMINAR NOTIFICACION PROGRAMADA",
-        code: "P28-03",
+        code: "P29-03",
         icon: "-",
         link: "#",
     },
     {
         name: "ASIGNAR NOTIFICACION PROGRAMADA",
-        code: "P28-04",
+        code: "P29-04",
         icon: "-",
         link: "#",
     }
@@ -58,7 +58,7 @@ function down(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
         const deleteCriteria = {
             code: {
-                [sequelize_1.Op.startsWith]: ["P13-01-04", "P27"],
+                [sequelize_1.Op.startsWith]: ["P29"],
             },
         };
         yield queryInterface.bulkDelete(PERMISSION_TABLE, deleteCriteria);

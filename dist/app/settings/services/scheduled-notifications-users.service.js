@@ -80,26 +80,38 @@ class ScheduledNotificationsUsersService {
             return rta;
         });
     }
-    changeNotificationsUsers(scheludeNotificationsUsers) {
+    changeNotificationsUsers(idNotification, scheludeNotificationsUsers) {
         return __awaiter(this, void 0, void 0, function* () {
-            const notifications = yield models.SCHEDULED_NOTIFICATIONS_USERS.findAll();
-            const newNotifications = scheludeNotificationsUsers.filter((scheludeNotificationsUser) => !notifications.some((notification) => notification.dataValues.customerUserId ===
-                scheludeNotificationsUser.customerUserId));
-            const notificationsToDelete = notifications.filter((notification) => !scheludeNotificationsUsers.some((scheludeNotificationsUser) => notification.dataValues.customerUserId ===
-                scheludeNotificationsUser.customerUserId));
-            try {
-                for (const notification of notificationsToDelete) {
-                    yield models.SCHEDULED_NOTIFICATIONS_USERS.destroy({
-                        where: { customerUserId: notification.dataValues.customerUserId },
-                    });
+            const newScheludeNotificationsUsers = JSON.parse(scheludeNotificationsUsers);
+            const notifications = yield models.SCHEDULED_NOTIFICATIONS_USERS.findAll({
+                where: {
+                    scheduledNotificationId: idNotification,
+                },
+            });
+            if (notifications.length) {
+                const newNotifications = newScheludeNotificationsUsers.filter((scheludeNotificationsUser) => !notifications.some((notification) => notification.dataValues.customerUserId ===
+                    scheludeNotificationsUser.customerUserId));
+                const notificationsToDelete = notifications.filter((notification) => !newScheludeNotificationsUsers.some((scheludeNotificationsUser) => notification.dataValues.customerUserId ===
+                    scheludeNotificationsUser.customerUserId));
+                try {
+                    for (const notification of notificationsToDelete) {
+                        yield models.SCHEDULED_NOTIFICATIONS_USERS.destroy({
+                            where: { customerUserId: notification.dataValues.customerUserId },
+                        });
+                    }
+                    for (const newNotification of newNotifications) {
+                        yield models.SCHEDULED_NOTIFICATIONS_USERS.create(newNotification);
+                    }
+                    return newScheludeNotificationsUsers;
                 }
-                for (const newNotification of newNotifications) {
+                catch (error) {
+                    throw error;
+                }
+            }
+            else {
+                for (const newNotification of newScheludeNotificationsUsers) {
                     yield models.SCHEDULED_NOTIFICATIONS_USERS.create(newNotification);
                 }
-                return scheludeNotificationsUsers;
-            }
-            catch (error) {
-                throw error;
             }
         });
     }

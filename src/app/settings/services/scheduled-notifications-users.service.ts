@@ -112,7 +112,6 @@ class ScheduledNotificationsUsersService {
         }
         return newScheludeNotificationsUsers
       } catch (error) {
-        console.log(error);
         throw error;
       }
     }

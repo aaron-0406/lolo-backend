@@ -6,31 +6,31 @@ const { PERMISSION_TABLE } = permissionModel;
 const newPermissions = [
   {
     name: "NOTIFICACIONES PROGRAMADAS",
-    code: "P28",
+    code: "P29",
     icon: "ri-notification-2-fill",
     link: "/configuracion/:urlIdentifier/notificationes-programadas",
   },
   {
     name: "AGREGAR NOTIFICACION PROGRAMADA",
-    code: "P28-01",
+    code: "P29-01",
     icon: "-",
     link: "#",
   },
   {
     name: "EDITAR NOTIFICACION PROGRAMADA",
-    code: "P28-02",
+    code: "P29-02",
     icon: "-",
     link: "#",
   },
   {
     name: "ELIMINAR NOTIFICACION PROGRAMADA",
-    code: "P28-03",
+    code: "P29-03",
     icon: "-",
     link: "#",
   },
   {
     name: "ASIGNAR NOTIFICACION PROGRAMADA",
-    code: "P28-04",
+    code: "P29-04",
     icon: "-",
     link: "#",
   }
@@ -44,7 +44,7 @@ export async function up(queryInterface: QueryInterface) {
 export async function down(queryInterface: QueryInterface) {
   const deleteCriteria = {
     code: {
-      [Op.startsWith]: ["P13-01-04", "P27"],
+      [Op.startsWith]: ["P29"],
     },
   };
   await queryInterface.bulkDelete(PERMISSION_TABLE, deleteCriteria);
