@@ -36,6 +36,10 @@ class Bank extends sequelize_1.Model {
             as: "funcionario",
             foreignKey: "bankId",
         });
+        this.hasMany(models.JUDICIAL_CASE_FILE, {
+            as: "judicialCaseFile",
+            foreignKey: "id_bank",
+        });
     }
     static config(sequelize) {
         return {

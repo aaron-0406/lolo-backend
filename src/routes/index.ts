@@ -22,6 +22,7 @@ import valuesRouter from "./extrajudicial/values.routes";
 import dashboardRouter from "./extrajudicial/dashboard.routes";
 import productRouter from "./extrajudicial/product.routes";
 import judicialCaseFileRouter from "./judicial/judicial-case-file.routes";
+import judicialCaseFileRelatedProcessRouter from "./judicial/judicial-case-file-related-process.routes";
 import judicialCourtRouter from "./judicial/judicial-court.routes";
 import judicialProceduralWayRouter from "./judicial/judicial-procedural-way.routes";
 import judicialSubjectRouter from "./judicial/judicial-subject.routes";
@@ -73,6 +74,7 @@ const routerApi = (app: Express) => {
   router.use("/cobranza/ext-product-name", extProductNameRouter);
 
   router.use("/judicial/case-file", judicialCaseFileRouter);
+  router.use("/judicial/related-process", judicialCaseFileRelatedProcessRouter);
   router.use("/judicial/court", judicialCourtRouter);
   router.use("/judicial/procedural-way", judicialProceduralWayRouter);
   router.use("/judicial/subject", judicialSubjectRouter);

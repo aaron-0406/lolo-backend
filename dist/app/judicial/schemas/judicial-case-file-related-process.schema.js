@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const joi_1 = __importDefault(require("joi"));
+const caseFileId = joi_1.default.number().required();
 const regexPatternNumberFileCase = /^\d{5}-\d{4}-\d{1,4}-\d{4}-[A-Z]{2}-[A-Z]{2}-\d{2}$/;
 const id = joi_1.default.number();
 const numberCaseFile = joi_1.default.string().regex(regexPatternNumberFileCase).messages({
@@ -25,9 +26,6 @@ const judicialCourtId = joi_1.default.number().positive();
 const judicialSubjectId = joi_1.default.number().positive();
 const judicialProceduralWayId = joi_1.default.number().positive();
 const customerHasBankId = joi_1.default.number().positive();
-const processStatus = joi_1.default.string().max(150);
-const processComment = joi_1.default.string();
-const processReasonId = joi_1.default.number().positive();
 const bankId = joi_1.default.number();
 const idJudicialCaseFileRelated = joi_1.default.number();
 const page = joi_1.default.number().required().messages({
@@ -48,7 +46,7 @@ const proceduralWays = joi_1.default.string().required();
 const subjects = joi_1.default.string().required();
 const users = joi_1.default.string().required();
 const customerId = joi_1.default.number();
-const createJudicialCaseFileSchema = joi_1.default.object({
+const createJudicialCaseFileRelatedProcessSchema = joi_1.default.object({
     numberCaseFile: numberCaseFile.required(),
     judgmentNumber: judgmentNumber.optional().empty("").allow(""),
     secretary: secretary.optional().empty("").allow(""),
@@ -71,7 +69,7 @@ const createJudicialCaseFileSchema = joi_1.default.object({
         .allow(""),
     bankId: bankId.optional().empty("").allow(""),
 });
-const updateJudicialCaseFileSchema = joi_1.default.object({
+const updateJudicialCaseFileRelatedProcessSchema = joi_1.default.object({
     numberCaseFile: numberCaseFile.required(),
     judgmentNumber: judgmentNumber.optional().empty("").allow(""),
     secretary: secretary.optional().empty("").allow(""),
@@ -94,18 +92,16 @@ const updateJudicialCaseFileSchema = joi_1.default.object({
         .allow(""),
     bankId: bankId.optional().empty("").allow(""),
 });
-const updateJudicialCaseFileProcessStatusSchema = joi_1.default.object({
-    processStatus: processStatus.optional().empty("").allow(""),
-    processComment: processComment.optional().empty("").allow(""),
-    processReasonId: processReasonId.optional().empty("").allow(""),
+const getRelatedProcessByCaseFileIdSchema = joi_1.default.object({
+    caseFileId: caseFileId.required(),
 });
-const getJudicialCaseFileByClientIDSchema = joi_1.default.object({
+const getJudicialCaseFileRelatedProcesByClientIDSchema = joi_1.default.object({
     clientId: clientId.required(),
 });
-const getJudicialCaseFileByCHBSchema = joi_1.default.object({
+const getJudicialCaseFileRelatedProcesByCHBSchema = joi_1.default.object({
     chb: chb.required(),
 });
-const getJudicialCaseFileByCHBSchemaQuery = joi_1.default.object({
+const getJudicialCaseFileRelatedProcesByCHBSchemaQuery = joi_1.default.object({
     page,
     limit,
     filter,
@@ -114,24 +110,24 @@ const getJudicialCaseFileByCHBSchemaQuery = joi_1.default.object({
     subjects,
     users,
 }).options({ abortEarly: true });
-const getJudicialCaseFileByIDSchema = joi_1.default.object({
+const getJudicialCaseFileRelatedProcesByIDSchema = joi_1.default.object({
     id: id.required(),
 });
-const getJudicialCaseFileByNumberCaseFileSchema = joi_1.default.object({
+const getJudicialCaseFileRelatedProcesByNumberCaseFileSchema = joi_1.default.object({
     numberCaseFile: numberCaseFile.required(),
     chb: customerHasBankId.required(),
 });
-const getJudicialCaseFileByCustomerIdSchema = joi_1.default.object({
+const getJudicialCaseFileRelatedProcesByCustomerIdSchema = joi_1.default.object({
     customerId: customerId.required(),
 });
 exports.default = {
-    createJudicialCaseFileSchema,
-    updateJudicialCaseFileSchema,
-    updateJudicialCaseFileProcessStatusSchema,
-    getJudicialCaseFileByClientIDSchema,
-    getJudicialCaseFileByNumberCaseFileSchema,
-    getJudicialCaseFileByIDSchema,
-    getJudicialCaseFileByCHBSchema,
-    getJudicialCaseFileByCHBSchemaQuery,
-    getJudicialCaseFileByCustomerIdSchema,
+    getRelatedProcessByCaseFileIdSchema,
+    createJudicialCaseFileRelatedProcessSchema,
+    updateJudicialCaseFileRelatedProcessSchema,
+    getJudicialCaseFileRelatedProcesByClientIDSchema,
+    getJudicialCaseFileRelatedProcesByCHBSchema,
+    getJudicialCaseFileRelatedProcesByCHBSchemaQuery,
+    getJudicialCaseFileRelatedProcesByIDSchema,
+    getJudicialCaseFileRelatedProcesByNumberCaseFileSchema,
+    getJudicialCaseFileRelatedProcesByCustomerIdSchema,
 };
