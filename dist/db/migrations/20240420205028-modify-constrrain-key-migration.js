@@ -16,7 +16,7 @@ exports.down = exports.up = void 0;
 const comment_model_1 = __importDefault(require("../models/comment.model"));
 const direction_model_1 = __importDefault(require("../models/direction.model"));
 const file_model_1 = __importDefault(require("../models/file.model"));
-const guarantor_model_1 = __importDefault(require("../models/guarantor.model"));
+// import guarantorModel from "../models/guarantor.model";
 const product_model_1 = __importDefault(require("../models/product.model"));
 const goal_user_model_1 = __importDefault(require("../models/goal-user.model"));
 const goal_model_1 = __importDefault(require("../models/goal.model"));
@@ -30,7 +30,7 @@ const { COMMENT_TABLE } = comment_model_1.default;
 const { CUSTOMER_USER_TABLE } = customer_user_model_1.default;
 const { DIRECTION_TABLE } = direction_model_1.default;
 const { FILE_TABLE } = file_model_1.default;
-const { GUARANTOR_TABLE } = guarantor_model_1.default;
+// const { GUARANTOR_TABLE } = guarantorModel;
 const { PRODUCT_TABLE } = product_model_1.default;
 const { CUSTOMER_TABLE } = customer_model_1.default;
 const { GOAL_USER_TABLE } = goal_user_model_1.default;
@@ -125,18 +125,18 @@ function up(queryInterface) {
             onUpdate: "CASCADE",
             onDelete: "NO ACTION",
         });
-        yield queryInterface.removeConstraint(GUARANTOR_TABLE, "GUARANTOR_ibfk_1");
-        yield queryInterface.addConstraint(GUARANTOR_TABLE, {
-            fields: ["client_id_client"],
-            type: "foreign key",
-            name: "GUARANTOR_ibfk_1",
-            references: {
-                table: CLIENT_TABLE,
-                field: "id_client",
-            },
-            onUpdate: "CASCADE",
-            onDelete: "NO ACTION",
-        });
+        // await queryInterface.removeConstraint(GUARANTOR_TABLE, "GUARANTOR_ibfk_1");
+        // await queryInterface.addConstraint(GUARANTOR_TABLE, {
+        //   fields: ["client_id_client"],
+        //   type: "foreign key",
+        //   name: "GUARANTOR_ibfk_1",
+        //   references: {
+        //     table: CLIENT_TABLE,
+        //     field: "id_client",
+        //   },
+        //   onUpdate: "CASCADE",
+        //   onDelete: "NO ACTION",
+        // });
         yield queryInterface.removeConstraint(PRODUCT_TABLE, "PRODUCT_ibfk_2");
         yield queryInterface.addConstraint(PRODUCT_TABLE, {
             fields: ["customer_id_customer"],
@@ -174,7 +174,7 @@ function down(queryInterface) {
         yield queryInterface.removeConstraint(FILE_TABLE, "FILE_ibfk_1");
         yield queryInterface.removeConstraint(GOAL_USER_TABLE, "fk_goal_user_customer_user");
         yield queryInterface.removeConstraint(GOAL_TABLE, "fk_goal_customer");
-        yield queryInterface.removeConstraint(GUARANTOR_TABLE, "GUARANTOR_ibfk_1");
+        // await queryInterface.removeConstraint(GUARANTOR_TABLE, "GUARANTOR_ibfk_1");
         yield queryInterface.removeConstraint(PRODUCT_TABLE, "customer_id_customer");
         yield queryInterface.removeConstraint(TEMPLATE_IMG_TABLE, "template_id_template");
         yield queryInterface.addConstraint(COMMENT_TABLE, {
@@ -254,17 +254,17 @@ function down(queryInterface) {
             onUpdate: "NO ACTION",
             onDelete: "CASCADE",
         });
-        yield queryInterface.addConstraint(GUARANTOR_TABLE, {
-            fields: ["client_id_client"],
-            type: "foreign key",
-            name: "GUARANTOR_ibfk_1",
-            references: {
-                table: CLIENT_TABLE,
-                field: "id_client",
-            },
-            onUpdate: "NO ACTION",
-            onDelete: "CASCADE",
-        });
+        // await queryInterface.addConstraint(GUARANTOR_TABLE, {
+        //   fields: ["client_id_client"],
+        //   type: "foreign key",
+        //   name: "GUARANTOR_ibfk_1",
+        //   references: {
+        //     table: CLIENT_TABLE,
+        //     field: "id_client",
+        //   },
+        //   onUpdate: "NO ACTION",
+        //   onDelete: "CASCADE",
+        // });
         yield queryInterface.addConstraint(PRODUCT_TABLE, {
             fields: ["customer_id_customer"],
             type: "foreign key",

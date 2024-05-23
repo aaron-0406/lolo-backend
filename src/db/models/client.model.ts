@@ -147,10 +147,10 @@ class Client extends Model {
       foreignKey: "clientId",
     });
 
-    this.hasMany(models.GUARANTOR, {
-      as: "guarantor",
-      foreignKey: "clientId",
-    });
+    // this.hasMany(models.GUARANTOR, {
+    //   as: "guarantor",
+    //   foreignKey: "clientId",
+    // });
 
     this.hasMany(models.DIRECTION, {
       as: "direction",
