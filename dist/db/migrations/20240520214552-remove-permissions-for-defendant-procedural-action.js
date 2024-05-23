@@ -17,11 +17,10 @@ const sequelize_1 = require("sequelize");
 const permission_model_1 = __importDefault(require("../models/permission.model"));
 const role_permission_model_1 = __importDefault(require("../models/many-to-many/role-permission.model"));
 const judicial_binnacle_model_1 = __importDefault(require("../models/judicial-binnacle.model"));
-const judicial_bin_defendant_procedural_action_model_1 = __importDefault(require("../models/judicial-bin-defendant-procedural-action.model"));
 const { PERMISSION_TABLE } = permission_model_1.default;
 const { ROLE_PERMISSION_TABLE } = role_permission_model_1.default;
 const { JUDICIAL_BINNACLE_TABLE } = judicial_binnacle_model_1.default;
-const { JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE } = judicial_bin_defendant_procedural_action_model_1.default;
+const JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE = "JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION";
 const removePermissions = [
     {
         name: "ACTUACIÓN PROCESAL DEMANDADO",
