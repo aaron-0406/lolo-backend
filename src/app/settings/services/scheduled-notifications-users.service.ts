@@ -1,7 +1,7 @@
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
 import { ScheduledNotificationType } from "../types/scheduled-notifications.type";
-import { ScheduledNotificationsUsersType } from '../types/scheduled-notifications-users.type';
+import { ScheduledNotificationsUsersType } from "../types/scheduled-notifications-users.type";
 
 const { models } = sequelize;
 class ScheduledNotificationsUsersService {
@@ -12,38 +12,15 @@ class ScheduledNotificationsUsersService {
     return rta;
   }
 
-  async findOne (id:string) {
-    const scheduledNotification = await models.SCHEDULED_NOTIFICATIONS_USERS.findByPk(id);
+  async findOne(id: string) {
+    const scheduledNotification =
+      await models.SCHEDULED_NOTIFICATIONS_USERS.findByPk(id);
 
     if (!scheduledNotification) {
-      throw boom.notFound("Scheduled Notification no encontrado");
+      throw boom.notFound("Notificación Programada no encontrada");
     }
 
     return scheduledNotification;
-  }
-
-  async findOneById(id: string) {
-    const scheduledNotification = await models.SCHEDULED_NOTIFICATIONS_USERS.findByPk(id);
-
-    if (!scheduledNotification) {
-      throw boom.notFound("Scheduled Notification no encontrado");
-    }
-
-    return scheduledNotification;
-  }
-
-  async findAllByCustomerId(customerId: string) {
-    const rta = await models.SCHEDULED_NOTIFICATIONS_USERS.findAll({
-      where: {
-        customerHasBankId: customerId,
-      },
-    });
-
-    if (!rta) {
-      throw boom.notFound("El cliente no tiene notificaciones programadas");
-    }
-
-    return rta;
   }
 
   async findAllByChbId(customerHasBankId: string) {
@@ -54,7 +31,7 @@ class ScheduledNotificationsUsersService {
     });
 
     if (!rta) {
-      throw boom.notFound("El cliente no tiene notificaciones programadas");
+      throw boom.notFound("No existen notificaciones programadas");
     }
 
     return rta;
@@ -74,7 +51,10 @@ class ScheduledNotificationsUsersService {
     return rta;
   }
 
-  async changeNotificationsUsers(idNotification: string, scheludeNotificationsUsers: string) {
+  async changeNotificationsUsers(
+    idNotification: string,
+    scheludeNotificationsUsers: string
+  ) {
     const newScheludeNotificationsUsers: ScheduledNotificationsUsersType[] =
       JSON.parse(scheludeNotificationsUsers);
     const notifications = await models.SCHEDULED_NOTIFICATIONS_USERS.findAll({
@@ -110,21 +90,20 @@ class ScheduledNotificationsUsersService {
         for (const newNotification of newNotifications) {
           await models.SCHEDULED_NOTIFICATIONS_USERS.create(newNotification);
         }
-        return newScheludeNotificationsUsers
+        return newScheludeNotificationsUsers;
       } catch (error) {
         throw error;
       }
-    }
-    else{
+    } else {
       for (const newNotification of newScheludeNotificationsUsers) {
         await models.SCHEDULED_NOTIFICATIONS_USERS.create(newNotification);
       }
     }
   }
 
-
-  async update (id: string, data: ScheduledNotificationType) {
-    const scheduledNotification = await models.SCHEDULED_NOTIFICATIONS_USERS.findByPk(id);
+  async update(id: string, data: ScheduledNotificationType) {
+    const scheduledNotification =
+      await models.SCHEDULED_NOTIFICATIONS_USERS.findByPk(id);
 
     if (!scheduledNotification) {
       throw boom.notFound("Scheduled Notification no encontrado");
@@ -135,7 +114,8 @@ class ScheduledNotificationsUsersService {
   }
 
   async delete(id: string) {
-    const scheduledNotification = await models.SCHEDULED_NOTIFICATIONS_USERS.findByPk(id);
+    const scheduledNotification =
+      await models.SCHEDULED_NOTIFICATIONS_USERS.findByPk(id);
 
     if (!scheduledNotification) {
       throw boom.notFound("Scheduled Notification no encontrado");

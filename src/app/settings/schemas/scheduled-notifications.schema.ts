@@ -11,7 +11,10 @@ const logicKey = Joi.string();
 const state = Joi.boolean();
 
 const createScheduledNotificationSchema = Joi.object<
-  Omit<ScheduledNotificationType, "id" | "createdAt" | "updatedAt" | "deletedAt">,
+  Omit<
+    ScheduledNotificationType,
+    "id" | "createdAt" | "updatedAt" | "deletedAt"
+  >,
   true
 >({
   nameNotification: nameNotification.required(),
@@ -25,7 +28,7 @@ const createScheduledNotificationSchema = Joi.object<
 
 const updateScheduledNotificationSchema = Joi.object<
   Omit<
-  ScheduledNotificationType,
+    ScheduledNotificationType,
     "id" | "customerHasBankId" | "createdAt" | "updatedAt" | "deletedAt"
   >,
   true
@@ -42,24 +45,21 @@ const getScheduledNotificationSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
 
-const getScheduledNotificationSchemaByCHBSchema = Joi.object<{ chb: number }, true>({
+const getScheduledNotificationSchemaByCHBSchema = Joi.object<
+  { chb: number },
+  true
+>({
   chb: customerHasBankId.required(),
-})
-
-const getScheduledNotificationSchemaByLogicKeySchema = Joi.object<{ logicKey: string }, true>({
-  logicKey: logicKey.required(),
-})
+});
 
 const deleteScheduledNotificationSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
-})
-
+});
 
 export default {
   createScheduledNotificationSchema,
   updateScheduledNotificationSchema,
   getScheduledNotificationSchema,
   getScheduledNotificationSchemaByCHBSchema,
-  getScheduledNotificationSchemaByLogicKeySchema,
   deleteScheduledNotificationSchema,
 };

@@ -11,7 +11,7 @@ class ScheduledNotificationsService {
     return rta;
   }
 
-  async findOne (id: string) {
+  async findOne(id: string) {
     const rta = await models.SCHEDULED_NOTIFICATIONS.findByPk(id);
 
     if (!rta) {
@@ -20,26 +20,15 @@ class ScheduledNotificationsService {
     return rta;
   }
 
-  async findOneById(id: string) {
-    const scheduledNotification = await models.SCHEDULED_NOTIFICATIONS.findByPk(id);
-
-    if (!scheduledNotification) {
-      throw boom.notFound("Notificación programada no encontrada");
-    }
-
-    return scheduledNotification;
-  }
-
   async findAllByChb(chb: string) {
     const rta = await models.SCHEDULED_NOTIFICATIONS.findAll({
       where: {
         customer_has_bank_id_customer_has_bank: chb,
       },
-      // include: ["notification"],
     });
 
     if (!rta) {
-      throw boom.notFound("El cliente no tiene notificaciones programadas");
+      throw boom.notFound("No existen notificaciones programadas");
     }
 
     return rta;
@@ -59,13 +48,16 @@ class ScheduledNotificationsService {
     return rta;
   }
 
-  async create (data: ScheduledNotificationType) {
-    const newScheduledNotification = await models.SCHEDULED_NOTIFICATIONS.create(data);
+  async create(data: ScheduledNotificationType) {
+    const newScheduledNotification =
+      await models.SCHEDULED_NOTIFICATIONS.create(data);
     return newScheduledNotification;
   }
 
-  async update (id: string, data: ScheduledNotificationType) {
-    const scheduledNotification = await models.SCHEDULED_NOTIFICATIONS.findByPk(id);
+  async update(id: string, data: ScheduledNotificationType) {
+    const scheduledNotification = await models.SCHEDULED_NOTIFICATIONS.findByPk(
+      id
+    );
 
     if (!scheduledNotification) {
       throw boom.notFound("Notificación programada no encontrada");
@@ -75,8 +67,10 @@ class ScheduledNotificationsService {
     return scheduledNotification;
   }
 
-  async delete (id: string) {
-    const scheduledNotification = await models.SCHEDULED_NOTIFICATIONS.findByPk(id);
+  async delete(id: string) {
+    const scheduledNotification = await models.SCHEDULED_NOTIFICATIONS.findByPk(
+      id
+    );
 
     if (!scheduledNotification) {
       throw boom.notFound("Notificación programada no encontrada");
