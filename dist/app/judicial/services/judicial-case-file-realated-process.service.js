@@ -16,8 +16,87 @@ const sequelize_1 = __importDefault(require("../../../libs/sequelize"));
 const boom_1 = __importDefault(require("@hapi/boom"));
 const sequelize_2 = require("sequelize");
 const { models } = sequelize_1.default;
-class JudicialCaseFileService {
+class JudicialCaseFileRelatedProcessService {
     constructor() { }
+    findAllRelatedProcessbyCaseFileId(fileCaseId, query) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { limit, page, filter, courts, proceduralWays, subjects, users } = query;
+            const limite = parseInt(limit, 10);
+            const pagina = parseInt(page, 10);
+            const clientName = filter;
+            const listCourts = JSON.parse(courts);
+            const listProceduralWays = JSON.parse(proceduralWays);
+            const listSubjects = JSON.parse(subjects);
+            const listUsers = JSON.parse(users);
+            const filters = {};
+            if (listCourts.length) {
+                filters.judicial_court_id_judicial_court = { [sequelize_2.Op.in]: listCourts };
+            }
+            if (listProceduralWays.length) {
+                filters.judicial_procedural_way_id_judicial_procedural_way = {
+                    [sequelize_2.Op.in]: listProceduralWays,
+                };
+            }
+            if (listSubjects.length) {
+                filters.judicial_subject_id_judicial_subject = { [sequelize_2.Op.in]: listSubjects };
+            }
+            if (listUsers.length) {
+                filters.customer_user_id_customer_user = { [sequelize_2.Op.in]: listUsers };
+            }
+            let filtersWhere = {
+                id_judicial_case_file_related: fileCaseId,
+            };
+            // Agregar filtro por nombre de cliente si se proporciona
+            if (clientName) {
+                filtersWhere = Object.assign(Object.assign({}, filtersWhere), { "$client.name$": { [sequelize_2.Op.like]: `%${clientName}%` } });
+            }
+            // Combinar filtros adicionales si se proporcionan
+            if (Object.keys(filters).length > 0) {
+                filtersWhere = {
+                    [sequelize_2.Op.and]: [{ [sequelize_2.Op.or]: [filters] }, filtersWhere],
+                };
+            }
+            const quantity = yield models.JUDICIAL_CASE_FILE.count({
+                include: [
+                    {
+                        model: models.CLIENT,
+                        as: "client",
+                    },
+                ],
+                where: filtersWhere,
+            });
+            const caseFiles = yield models.JUDICIAL_CASE_FILE.findAll({
+                include: [
+                    {
+                        model: models.CUSTOMER_USER,
+                        as: "customerUser",
+                        attributes: ["id", "name"],
+                    },
+                    {
+                        model: models.JUDICIAL_COURT,
+                        as: "judicialCourt",
+                    },
+                    {
+                        model: models.JUDICIAL_PROCEDURAL_WAY,
+                        as: "judicialProceduralWay",
+                    },
+                    {
+                        model: models.JUDICIAL_SUBJECT,
+                        as: "judicialSubject",
+                    },
+                    {
+                        model: models.CLIENT,
+                        as: "client",
+                        attributes: ["id", "name"],
+                    },
+                ],
+                limit: limite,
+                offset: (pagina - 1) * limite,
+                where: filtersWhere,
+            });
+            return { caseFiles, quantity };
+        });
+    }
     findAll() {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.JUDICIAL_CASE_FILE.findAll();
@@ -64,7 +143,6 @@ class JudicialCaseFileService {
             }
             let filtersWhere = {
                 customer_has_bank_id: chb,
-                id_judicial_case_file_related: null,
             };
             // Agregar filtro por nombre de cliente si se proporciona
             if (clientName) {
@@ -270,4 +348,4 @@ class JudicialCaseFileService {
         });
     }
 }
-exports.default = JudicialCaseFileService;
+exports.default = JudicialCaseFileRelatedProcessService;

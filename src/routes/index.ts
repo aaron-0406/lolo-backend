@@ -22,6 +22,7 @@ import valuesRouter from "./extrajudicial/values.routes";
 import dashboardRouter from "./extrajudicial/dashboard.routes";
 import productRouter from "./extrajudicial/product.routes";
 import judicialCaseFileRouter from "./judicial/judicial-case-file.routes";
+import judicialCaseFileRelatedProcessRouter from "./judicial/judicial-case-file-related-process.routes";
 import judicialCourtRouter from "./judicial/judicial-court.routes";
 import judicialProceduralWayRouter from "./judicial/judicial-procedural-way.routes";
 import judicialSubjectRouter from "./judicial/judicial-subject.routes";
@@ -31,7 +32,6 @@ import judicialObsRouter from "./judicial/judicial-obs-file.routes";
 import judicialObsTypeRouter from "./judicial/judicial-obs-type.routes";
 import judicialBinTypeBinnacleRouter from "./judicial/judicial-bin-type-binnacle.routes";
 import judicialBinProceduralStageRouter from "./judicial/judicial-bin-procedural-stage.routes";
-import judicialBinDefendantProceduralActionRouter from "./judicial/judicial-bin-defendant-procedural-action.routes";
 import judicialBinnacleRouter from "./judicial/judicial-binnacle.routes";
 import judicialBinFileRouter from "./judicial/judicial-bin-file.routes";
 import managementActionRouter from "./dash/management-action.routes";
@@ -76,6 +76,7 @@ const routerApi = (app: Express) => {
   router.use("/cobranza/ext-product-name", extProductNameRouter);
 
   router.use("/judicial/case-file", judicialCaseFileRouter);
+  router.use("/judicial/related-process", judicialCaseFileRelatedProcessRouter);
   router.use("/judicial/court", judicialCourtRouter);
   router.use("/judicial/procedural-way", judicialProceduralWayRouter);
   router.use("/judicial/subject", judicialSubjectRouter);
@@ -90,10 +91,6 @@ const routerApi = (app: Express) => {
   router.use(
     "/judicial/bin-procedural-stage",
     judicialBinProceduralStageRouter
-  );
-  router.use(
-    "/judicial/bin-defendant-procedural-action",
-    judicialBinDefendantProceduralActionRouter
   );
 
   router.use("/dash/auth", authDashRouter);

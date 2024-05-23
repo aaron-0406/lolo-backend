@@ -16,11 +16,10 @@ exports.down = exports.up = void 0;
 const sequelize_1 = require("sequelize");
 const judicial_binnacle_model_1 = __importDefault(require("../models/judicial-binnacle.model"));
 ("../models/judicial-binnacle.model");
-const judicial_bin_defendant_procedural_action_model_1 = __importDefault(require("../models/judicial-bin-defendant-procedural-action.model"));
 ("../models/judicial-bin-procedural-stage.model");
 const customer_has_bank_model_1 = __importDefault(require("../models/many-to-many/customer-has-bank.model"));
 const { JUDICIAL_BINNACLE_TABLE } = judicial_binnacle_model_1.default;
-const { JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE } = judicial_bin_defendant_procedural_action_model_1.default;
+const JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE = "JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION";
 const { CUSTOMER_HAS_BANK_TABLE } = customer_has_bank_model_1.default;
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {

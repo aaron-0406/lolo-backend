@@ -1,7 +1,7 @@
 import Joi from "joi";
 import { JudicialCaseFileType } from "../types/judicial-case-file.type";
-import { JudicialCasefileProcessStatus } from "../types/judicial-case-file-process-status.type";
 
+const caseFileId = Joi.number().required();
 const regexPatternNumberFileCase =
   /^\d{5}-\d{4}-\d{1,4}-\d{4}-[A-Z]{2}-[A-Z]{2}-\d{2}$/;
 const id = Joi.number();
@@ -25,9 +25,6 @@ const judicialCourtId = Joi.number().positive();
 const judicialSubjectId = Joi.number().positive();
 const judicialProceduralWayId = Joi.number().positive();
 const customerHasBankId = Joi.number().positive();
-const processStatus = Joi.string().max(150);
-const processComment = Joi.string();
-const processReasonId = Joi.number().positive();
 const bankId = Joi.number();
 const idJudicialCaseFileRelated = Joi.number();
 
@@ -54,7 +51,7 @@ const users = Joi.string().required();
 
 const customerId = Joi.number();
 
-const createJudicialCaseFileSchema = Joi.object<
+const createJudicialCaseFileRelatedProcessSchema = Joi.object<
   Omit<
     JudicialCaseFileType,
     "id" | "createdAt" | "processStatus" | "processComment" | "processReasonId"
@@ -84,7 +81,7 @@ const createJudicialCaseFileSchema = Joi.object<
   bankId: bankId.optional().empty("").allow(""),
 });
 
-const updateJudicialCaseFileSchema = Joi.object<
+const updateJudicialCaseFileRelatedProcessSchema = Joi.object<
   Omit<
     JudicialCaseFileType,
     "id" | "createdAt" | "processStatus" | "processComment" | "processReasonId"
@@ -114,27 +111,28 @@ const updateJudicialCaseFileSchema = Joi.object<
   bankId: bankId.optional().empty("").allow(""),
 });
 
-const updateJudicialCaseFileProcessStatusSchema = Joi.object<
-  JudicialCasefileProcessStatus,
+const getRelatedProcessByCaseFileIdSchema = Joi.object<
+  { caseFileId: number },
   true
 >({
-  processStatus: processStatus.optional().empty("").allow(""),
-  processComment: processComment.optional().empty("").allow(""),
-  processReasonId: processReasonId.optional().empty("").allow(""),
+  caseFileId: caseFileId.required(),
 });
 
-const getJudicialCaseFileByClientIDSchema = Joi.object<
+const getJudicialCaseFileRelatedProcesByClientIDSchema = Joi.object<
   { clientId: number },
   true
 >({
   clientId: clientId.required(),
 });
 
-const getJudicialCaseFileByCHBSchema = Joi.object<{ chb: number }, true>({
+const getJudicialCaseFileRelatedProcesByCHBSchema = Joi.object<
+  { chb: number },
+  true
+>({
   chb: chb.required(),
 });
 
-const getJudicialCaseFileByCHBSchemaQuery = Joi.object({
+const getJudicialCaseFileRelatedProcesByCHBSchemaQuery = Joi.object({
   page,
   limit,
   filter,
@@ -144,11 +142,14 @@ const getJudicialCaseFileByCHBSchemaQuery = Joi.object({
   users,
 }).options({ abortEarly: true });
 
-const getJudicialCaseFileByIDSchema = Joi.object<{ id: number }, true>({
+const getJudicialCaseFileRelatedProcesByIDSchema = Joi.object<
+  { id: number },
+  true
+>({
   id: id.required(),
 });
 
-const getJudicialCaseFileByNumberCaseFileSchema = Joi.object<
+const getJudicialCaseFileRelatedProcesByNumberCaseFileSchema = Joi.object<
   { numberCaseFile: string; chb: number },
   true
 >({
@@ -156,7 +157,7 @@ const getJudicialCaseFileByNumberCaseFileSchema = Joi.object<
   chb: customerHasBankId.required(),
 });
 
-const getJudicialCaseFileByCustomerIdSchema = Joi.object<
+const getJudicialCaseFileRelatedProcesByCustomerIdSchema = Joi.object<
   { customerId: number },
   true
 >({
@@ -164,13 +165,13 @@ const getJudicialCaseFileByCustomerIdSchema = Joi.object<
 });
 
 export default {
-  createJudicialCaseFileSchema,
-  updateJudicialCaseFileSchema,
-  updateJudicialCaseFileProcessStatusSchema,
-  getJudicialCaseFileByClientIDSchema,
-  getJudicialCaseFileByNumberCaseFileSchema,
-  getJudicialCaseFileByIDSchema,
-  getJudicialCaseFileByCHBSchema,
-  getJudicialCaseFileByCHBSchemaQuery,
-  getJudicialCaseFileByCustomerIdSchema,
+  getRelatedProcessByCaseFileIdSchema,
+  createJudicialCaseFileRelatedProcessSchema,
+  updateJudicialCaseFileRelatedProcessSchema,
+  getJudicialCaseFileRelatedProcesByClientIDSchema,
+  getJudicialCaseFileRelatedProcesByCHBSchema,
+  getJudicialCaseFileRelatedProcesByCHBSchemaQuery,
+  getJudicialCaseFileRelatedProcesByIDSchema,
+  getJudicialCaseFileRelatedProcesByNumberCaseFileSchema,
+  getJudicialCaseFileRelatedProcesByCustomerIdSchema,
 };
