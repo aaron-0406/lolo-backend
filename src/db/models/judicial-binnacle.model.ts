@@ -10,14 +10,11 @@ import judicialCaseFileModel from "./judicial-case-file.model";
 import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 import judicialBinProceduralStageModel from "./judicial-bin-procedural-stage.model";
 import judicialBinTypeBinnacleModel from "./judicial-bin-type-binnacle.model";
-import judicialBinDefendantProceduralActionModel from "./judicial-bin-defendant-procedural-action.model";
 
 const JUDICIAL_BINNACLE_TABLE = "JUDICIAL_BINNACLE";
 
 const { JUDICIAL_CASE_FILE_TABLE } = judicialCaseFileModel;
 const { JUDICIAL_BIN_PROCEDURAL_STAGE_TABLE } = judicialBinProceduralStageModel;
-const { JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE } =
-  judicialBinDefendantProceduralActionModel;
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 const { JUDICIAL_BIN_TYPE_BINNACLE_TABLE } = judicialBinTypeBinnacleModel;
 

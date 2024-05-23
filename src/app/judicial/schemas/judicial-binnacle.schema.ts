@@ -10,7 +10,7 @@ const judicialFileCaseId = Joi.number();
 const date = Joi.date();
 
 const createJudicialBinnacleSchema = Joi.object<
-  Omit<JudicialBinnacleType, "id" | "judicialDefendantProceduralActionId" |  "createdAt" | "updatedAt" | "deletedAt">,
+  Omit<JudicialBinnacleType, "id" | "createdAt" | "updatedAt" | "deletedAt">,
   true
 >({
   binnacleTypeId: binnacleTypeId.required(),
@@ -25,7 +25,6 @@ const updateJudicialBinnacleSchema = Joi.object<
   Omit<
     JudicialBinnacleType,
     | "id"
-    | "judicialDefendantProceduralActionId"
     | "customerHasBankId"
     | "judicialFileCaseId"
     | "createdAt"

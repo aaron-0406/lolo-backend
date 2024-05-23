@@ -2,12 +2,12 @@ import { QueryInterface, Op } from "sequelize";
 import permissionModel from "../models/permission.model";
 import rolePermissionModel from "../models/many-to-many/role-permission.model";
 import judicialBinnacleModel from "../models/judicial-binnacle.model";
-import judicialBinDefendantProceduralActionModel from "../models/judicial-bin-defendant-procedural-action.model";
 
 const { PERMISSION_TABLE } = permissionModel;
 const { ROLE_PERMISSION_TABLE } = rolePermissionModel;
 const { JUDICIAL_BINNACLE_TABLE } = judicialBinnacleModel;
-const { JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE } = judicialBinDefendantProceduralActionModel;
+const JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE =
+  "JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION";
 
 const removePermissions = [
   {
@@ -56,7 +56,6 @@ export async function up(queryInterface: QueryInterface) {
     "defendant_procedural_action_id"
   );
   await queryInterface.dropTable(
-    JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE,
+    JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE
   );
 }
-
