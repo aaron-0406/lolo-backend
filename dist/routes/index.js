@@ -26,6 +26,7 @@ const values_routes_1 = __importDefault(require("./extrajudicial/values.routes")
 const dashboard_routes_1 = __importDefault(require("./extrajudicial/dashboard.routes"));
 const product_routes_1 = __importDefault(require("./extrajudicial/product.routes"));
 const judicial_case_file_routes_1 = __importDefault(require("./judicial/judicial-case-file.routes"));
+const judicial_case_file_related_process_routes_1 = __importDefault(require("./judicial/judicial-case-file-related-process.routes"));
 const judicial_court_routes_1 = __importDefault(require("./judicial/judicial-court.routes"));
 const judicial_procedural_way_routes_1 = __importDefault(require("./judicial/judicial-procedural-way.routes"));
 const judicial_subject_routes_1 = __importDefault(require("./judicial/judicial-subject.routes"));
@@ -75,6 +76,7 @@ const routerApi = (app) => {
     router.use("/cobranza/ext-contact-type", ext_contact_type_routes_1.default);
     router.use("/cobranza/ext-product-name", ext_product_name_routes_1.default);
     router.use("/judicial/case-file", judicial_case_file_routes_1.default);
+    router.use("/judicial/related-process", judicial_case_file_related_process_routes_1.default);
     router.use("/judicial/court", judicial_court_routes_1.default);
     router.use("/judicial/procedural-way", judicial_procedural_way_routes_1.default);
     router.use("/judicial/subject", judicial_subject_routes_1.default);

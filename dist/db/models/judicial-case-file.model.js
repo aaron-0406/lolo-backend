@@ -11,7 +11,9 @@ const judicial_subject_model_1 = __importDefault(require("./judicial-subject.mod
 const judicial_process_reason_model_1 = __importDefault(require("./judicial-process-reason.model"));
 const customer_user_model_1 = __importDefault(require("./customer-user.model"));
 const customer_has_bank_model_1 = __importDefault(require("./many-to-many/customer-has-bank.model"));
+const bank_model_1 = __importDefault(require("./bank.model"));
 const JUDICIAL_CASE_FILE_TABLE = "JUDICIAL_CASE_FILE";
+const { BANK_TABLE } = bank_model_1.default;
 const JudicialCaseFileSchema = {
     id: {
         primaryKey: true,
@@ -161,6 +163,28 @@ const JudicialCaseFileSchema = {
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
     },
+    idJudicialCaseFileRelated: {
+        allowNull: true,
+        field: "id_judicial_case_file_related",
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: JUDICIAL_CASE_FILE_TABLE,
+            key: "id_judicial_case_file",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
+    },
+    bankId: {
+        allowNull: true,
+        field: "id_bank",
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: BANK_TABLE,
+            key: "id_bank",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
+    },
 };
 class JudicialCaseFile extends sequelize_1.Model {
     static associate(models) {
@@ -177,6 +201,7 @@ class JudicialCaseFile extends sequelize_1.Model {
             as: "product",
             foreignKey: "judicialCaseFileId",
         });
+        this.belongsTo(models.BANK, { as: "bank" });
     }
     static config(sequelize) {
         return {
