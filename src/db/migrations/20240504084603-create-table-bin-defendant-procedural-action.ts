@@ -1,13 +1,12 @@
 import { DataTypes, QueryInterface } from "sequelize";
 import judicialBinnacleModel from "../models/judicial-binnacle.model";
 ("../models/judicial-binnacle.model");
-import judicialBinDefendantProceduralActionModel from "../models/judicial-bin-defendant-procedural-action.model";
 ("../models/judicial-bin-procedural-stage.model");
 import customerHasBankModel from "../models/many-to-many/customer-has-bank.model";
 
 const { JUDICIAL_BINNACLE_TABLE } = judicialBinnacleModel;
-const { JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE } =
-  judicialBinDefendantProceduralActionModel;
+const JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION_TABLE =
+  "JUDICIAL_BIN_DEFENDANT_PROCEDURAL_ACTION";
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 
 export async function up(queryInterface: QueryInterface) {

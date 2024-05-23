@@ -32,7 +32,6 @@ import judicialObsRouter from "./judicial/judicial-obs-file.routes";
 import judicialObsTypeRouter from "./judicial/judicial-obs-type.routes";
 import judicialBinTypeBinnacleRouter from "./judicial/judicial-bin-type-binnacle.routes";
 import judicialBinProceduralStageRouter from "./judicial/judicial-bin-procedural-stage.routes";
-import judicialBinDefendantProceduralActionRouter from "./judicial/judicial-bin-defendant-procedural-action.routes";
 import judicialBinnacleRouter from "./judicial/judicial-binnacle.routes";
 import judicialBinFileRouter from "./judicial/judicial-bin-file.routes";
 import managementActionRouter from "./dash/management-action.routes";
@@ -90,10 +89,6 @@ const routerApi = (app: Express) => {
   router.use(
     "/judicial/bin-procedural-stage",
     judicialBinProceduralStageRouter
-  );
-  router.use(
-    "/judicial/bin-defendant-procedural-action",
-    judicialBinDefendantProceduralActionRouter
   );
 
   router.use("/dash/auth", authDashRouter);
