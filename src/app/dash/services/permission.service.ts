@@ -22,6 +22,8 @@ class PermissionService {
       code: permission.dataValues.code,
       icon: permission.dataValues.icon,
       link: permission.dataValues.link,
+      idPermissionMain: permission.dataValues.idPermissionMain,
+      isDropdown: permission.dataValues.isDropdown,
     }));
   }
 
@@ -46,6 +48,8 @@ class PermissionService {
       code: permission.dataValues.code,
       icon: permission.dataValues.icon,
       link: permission.dataValues.link,
+      idPermissionMain: permission.dataValues.idPermissionMain,
+      isDropdown: permission.dataValues.isDropdown,
     }));
   }
 

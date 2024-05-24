@@ -46,10 +46,14 @@ passport.use(
         );
         const permissionsObject = permissions.map((permissions) => {
           return {
+            id:permissions.id,
             code: permissions.code,
             link: permissions.link,
             icon: permissions.icon,
             name: permissions.name,
+            idPermissionMain: permissions.idPermissionMain,
+            isDropdown: permissions.isDropdown,
+
           };
         });
         return done(null, {

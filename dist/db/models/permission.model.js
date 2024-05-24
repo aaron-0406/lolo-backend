@@ -14,6 +14,22 @@ const PermissionSchema = {
     code: { type: sequelize_1.DataTypes.STRING(150), unique: true, allowNull: false },
     icon: { type: sequelize_1.DataTypes.STRING(150), allowNull: false },
     link: { type: sequelize_1.DataTypes.STRING(150), allowNull: false, defaultValue: "#" },
+    idPermissionMain: {
+        allowNull: true,
+        field: "id_permission_main",
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: PERMISSION_TABLE,
+            key: "id_permission",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
+    },
+    isDropdown: {
+        allowNull: true,
+        field: "is_dropdown",
+        type: sequelize_1.DataTypes.BOOLEAN,
+    },
 };
 class Permission extends sequelize_1.Model {
     static associate(models) { }
