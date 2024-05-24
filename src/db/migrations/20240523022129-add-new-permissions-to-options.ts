@@ -7,7 +7,7 @@ const newPermissions = [
   {
     name: "OPCIONES CLIENTE",
     code: "P30",
-    icon: "ri-dropdown-list",
+    icon: "-",
     link: "#",
     id_permission_main: 2,
     is_dropdown: true,
@@ -15,15 +15,15 @@ const newPermissions = [
   {
     name: "OPCIONES EXPEDIENTES",
     code: "P31",
-    icon: "ri-dropdown-list",
+    icon: "-",
     link: "#",
     id_permission_main: 60,
     is_dropdown: true,
   },
 ];
 
-const updatePermissionsCustomers = [42, 46, 101, 105];
-const updatePermissionsCaseFiles = [154, 141, 145, 159, 165];
+const updatePermissionsCustomers = [42, 46, 101, 105, 127, 38];
+const updatePermissionsCaseFiles = [154, 141, 145, 159, 165, 115, 119, 123];
 
 export async function up(queryInterface: QueryInterface, Sequelize: typeof DataTypes) {
   await queryInterface.bulkInsert(PERMISSION_TABLE, newPermissions);
