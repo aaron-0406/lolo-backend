@@ -7,7 +7,7 @@ import {
 } from "sequelize";
 import { ScheduledNotificationsUsersType } from "../../../app/settings/types/scheduled-notifications-users.type";
 import customerHasBankModel from "../many-to-many/customer-has-bank.model";
-import scheduledNotificationsModel from "./scheduled-notifications.model.";
+import scheduledNotificationsModel from "./scheduled-notifications.model";
 import customerUserModel from "../customer-user.model";
 
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;

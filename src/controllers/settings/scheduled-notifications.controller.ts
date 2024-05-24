@@ -1,34 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import ScheduledNotificationsService from "../../app/settings/services/scheduled-notifications.service";
+import UserLogService from "../../app/dash/services/user-log.service";
+import shceduledNotificationsModel from "../../db/models/settings/scheduled-notifications.model";
 
 const service = new ScheduledNotificationsService();
-
-export const getNotificationsController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const notifications = await service.findAll();
-    res.json(notifications);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getNotificationByIdController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id } = req.params;
-    const notification = await service.findOne(id);
-    res.json(notification);
-  } catch (error) {
-    next(error);
-  }
-};
+const serviceUserLog = new UserLogService();
+const { SCHEDULED_NOTIFICATIONS_TABLE } = shceduledNotificationsModel
 
 export const getNotificationByChbController = async (
   req: Request,
@@ -44,20 +21,6 @@ export const getNotificationByChbController = async (
   }
 }
 
-export const getNotificationByLogicKeyController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { logicKey } = req.params;
-    const notification = await service.findAllByLogicKey(logicKey);
-    res.json(notification);
-  } catch (error) {
-    next(error);
-  }
-}
-
 export const createNotificationController = async (
   req: Request,
   res: Response,
@@ -66,6 +29,20 @@ export const createNotificationController = async (
   try {
     const body = req.body;
     const newNotification = await service.create(body);
+    const { visible } = req.query;
+
+    if (visible === "true") {
+      await serviceUserLog.create({
+        customerUserId: Number(req.user?.id),
+        codeAction: "P29-01",
+        entity: SCHEDULED_NOTIFICATIONS_TABLE,
+        entityId: Number(newNotification.dataValues.id),
+        ip: req.clientIp ?? "",
+        customerId: Number(req.user?.customerId),
+      });
+    }
+
+
     res.status(201).json(newNotification);
   } catch (error) {
     next(error);
@@ -80,8 +57,22 @@ export const updateNotificaitonController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const bank = await service.update(id, body);
-    res.json(bank);
+    const notification = await service.update(id, body);
+    const { visible } = req.query;
+
+    if (visible === "true") {
+      await serviceUserLog.create({
+        customerUserId: Number(req.user?.id),
+        codeAction: "P29-02",
+        entity: SCHEDULED_NOTIFICATIONS_TABLE,
+        entityId: Number(notification.dataValues.id),
+        ip: req.clientIp ?? "",
+        customerId: Number(req.user?.customerId),
+      });
+    }
+
+
+    res.json(notification);
   } catch (error) {
     next(error);
   }
@@ -95,6 +86,21 @@ export const deleteNotificationController = async (
   try {
     const { id } = req.params;
     await service.delete(id);
+
+    const { visible } = req.query;
+
+    if (visible === "true") {
+      await serviceUserLog.create({
+        customerUserId: Number(req.user?.id),
+        codeAction: "P29-03",
+        entity: SCHEDULED_NOTIFICATIONS_TABLE,
+        entityId: Number(id),
+        ip: req.clientIp ?? "",
+        customerId: Number(req.user?.customerId),
+      });
+    }
+
+
     res.status(201).json({ id });
   } catch (error) {
     next(error);

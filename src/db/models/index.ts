@@ -45,7 +45,7 @@ import judicialBinProceduralStageModel from "./judicial-bin-procedural-stage.mod
 import judicialBinTypeBinnacleModel from "./judicial-bin-type-binnacle.model";
 import judicialBinFileModel from "./judicial-bin-file.model";
 import judicialProcessReasonModel from "./judicial-process-reason.model";
-import scheduledNotificationsModel from "./settings/scheduled-notifications.model.";
+import scheduledNotificationsModel from "./settings/scheduled-notifications.model";
 import scheduledNotificationsUsersModel from "./settings/scheduled-notifications-users.model";
 
 const { Customer, CustomerSchema } = customerModel;

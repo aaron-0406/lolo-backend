@@ -6,20 +6,6 @@ const { models } = sequelize;
 class ScheduledNotificationsService {
   constructor() {}
 
-  async findAll() {
-    const rta = await models.SCHEDULED_NOTIFICATIONS.findAll();
-    return rta;
-  }
-
-  async findOne(id: string) {
-    const rta = await models.SCHEDULED_NOTIFICATIONS.findByPk(id);
-
-    if (!rta) {
-      throw boom.notFound("Notificación programada no encontrada");
-    }
-    return rta;
-  }
-
   async findAllByChb(chb: string) {
     const rta = await models.SCHEDULED_NOTIFICATIONS.findAll({
       where: {
@@ -29,20 +15,6 @@ class ScheduledNotificationsService {
 
     if (!rta) {
       throw boom.notFound("No existen notificaciones programadas");
-    }
-
-    return rta;
-  }
-
-  async findAllByLogicKey(logicKey: string) {
-    const rta = await models.SCHEDULED_NOTIFICATIONS.findAll({
-      where: {
-        logic_key: logicKey,
-      },
-    });
-
-    if (!rta) {
-      throw boom.notFound("No se encontraron notificaciones programadas");
     }
 
     return rta;

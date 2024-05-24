@@ -1,5 +1,5 @@
 import { DataTypes, QueryInterface } from "sequelize";
-import scheduledNotificationsModel from "../models/settings/scheduled-notifications.model.";
+import scheduledNotificationsModel from "../models/settings/scheduled-notifications.model";
 import customerHasBankModel from "../models/many-to-many/customer-has-bank.model";
 
 const { SCHEDULED_NOTIFICATIONS_TABLE } = scheduledNotificationsModel;

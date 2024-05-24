@@ -3,10 +3,7 @@ import validatorHandler from "../../middlewares/validator.handler";
 import { JWTAuth } from "../../middlewares/auth.handler";
 
 import {
-  getNotificationsController,
-  getNotificationByIdController,
   getNotificationByChbController,
-  getNotificationByLogicKeyController,
   createNotificationController,
   updateNotificaitonController,
   deleteNotificationController,
@@ -17,7 +14,6 @@ import scheduledNotificationSchema from "../../app/settings/schemas/scheduled-no
 const {
   getScheduledNotificationSchema,
   getScheduledNotificationSchemaByCHBSchema,
-  getScheduledNotificationSchemaByLogicKeySchema,
   createScheduledNotificationSchema,
   updateScheduledNotificationSchema,
   deleteScheduledNotificationSchema,
@@ -25,27 +21,11 @@ const {
 
 const router = express.Router();
 
-router.get("/", JWTAuth, getNotificationsController);
-
-router.get(
-  "/:id",
-  JWTAuth,
-  validatorHandler(getScheduledNotificationSchema , "params"),
-  getNotificationByIdController
-);
-
 router.get(
   "/chb/:chb",
   JWTAuth,
   validatorHandler(getScheduledNotificationSchemaByCHBSchema, "params"),
   getNotificationByChbController
-);
-
-router.get(
-  "/logic-key/:logicKey",
-  JWTAuth,
-  validatorHandler(getScheduledNotificationSchemaByLogicKeySchema, "params"),
-  getNotificationByLogicKeyController
 );
 
 router.post(

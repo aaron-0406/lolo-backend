@@ -1,62 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import ScheduledNotificationsUsersService from "../../app/settings/services/scheduled-notifications-users.service";
+import UserLogService from "../../app/dash/services/user-log.service";
+import shceduledNotificationsUsersModel from "../../db/models/settings/scheduled-notifications-users.model";
 
 const service = new ScheduledNotificationsUsersService();
-
-export const getNotificationsUsersController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const notifications = await service.findAll();
-    res.json(notifications);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getNotificationsUsersByIdController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id } = req.params;
-    const notification = await service.findOne(id);
-    res.json(notification);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getNotificationsUsersByCustomerIdController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { idCustomer } = req.params;
-    const notification = await service.findAllByCustomerId(idCustomer);
-    res.json(notification);
-  } catch (error) {
-    next(error);
-  }
-}
-
-export const getNotificationsUsersByChbController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { chb } = req.params;
-    const notification = await service.findAllByChbId(chb);
-    res.json(notification);
-  } catch (error) {
-    next(error);
-  }
-}
+const serviceUserLog = new UserLogService();
+const { SCHEDULED_NOTIFICATIONS_USERS_TABLE } = shceduledNotificationsUsersModel
 
 export const getNotificationsUsersBySchuldeNotificationIdController = async (
   req: Request,
@@ -80,38 +29,23 @@ export const changeNotificationsUsersController = async (
   try {
     const { idNotification } = req.params;
     const body = req.body;
-    const notifications = JSON.parse(body.data);
     const notificationsUsers = await service.changeNotificationsUsers(idNotification, body.data);
+
+    const { visible } = req.query;
+
+    if (visible === "true") {
+      await serviceUserLog.create({
+        customerUserId: Number(req.user?.id),
+        codeAction: "P29-04",
+        entity: SCHEDULED_NOTIFICATIONS_USERS_TABLE,
+        entityId: Number(idNotification),
+        ip: req.clientIp ?? "",
+        customerId: Number(req.user?.customerId),
+      });
+    }
+
+
     res.json(notificationsUsers);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const updateNotificaitonsUsersController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id } = req.params;
-    const body = req.body;
-    const bank = await service.update(id, body);
-    res.json(bank);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const deleteNotificationsUsersController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id } = req.params;
-    await service.delete(id);
-    res.status(201).json({ id });
   } catch (error) {
     next(error);
   }
