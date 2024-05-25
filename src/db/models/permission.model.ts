@@ -22,6 +22,22 @@ const PermissionSchema: ModelAttributes<Permission, PermissionType> = {
   code: { type: DataTypes.STRING(150), unique: true, allowNull: false },
   icon: { type: DataTypes.STRING(150), allowNull: false },
   link: { type: DataTypes.STRING(150), allowNull: false, defaultValue: "#" },
+  idPermissionMain: {
+    allowNull: true,
+    field: "id_permission_main",
+    type: DataTypes.INTEGER,
+    references: {
+      model: PERMISSION_TABLE,
+      key: "id_permission",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
+  isDropdown: {
+    allowNull: true,
+    field: "is_dropdown",
+    type: DataTypes.BOOLEAN,
+  },
 };
 
 class Permission extends Model {

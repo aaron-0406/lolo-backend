@@ -6,6 +6,8 @@ const name = Joi.string().min(1).max(150);
 const code = Joi.string().min(1).max(150);
 const icon = Joi.string().min(1).max(150);
 const link = Joi.string().min(1).max(150);
+const idPermissionMain = Joi.number();
+const isDropdown = Joi.boolean();
 
 const createPermissionSchema = Joi.object<
   Omit<PermissionType, "id" | "permissions">,
@@ -15,6 +17,8 @@ const createPermissionSchema = Joi.object<
   code: code.required(),
   icon: icon.required(),
   link: link.required(),
+  idPermissionMain: idPermissionMain.optional(),
+  isDropdown: isDropdown.optional(),
 });
 
 const getPermissionByIdSchema = Joi.object<{ id: number }, true>({
@@ -33,6 +37,8 @@ const updatePermissionSchema = Joi.object<
   code,
   icon,
   link,
+  idPermissionMain: idPermissionMain.optional(),
+  isDropdown: isDropdown.optional(),
 });
 
 export default {
