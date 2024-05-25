@@ -5,7 +5,7 @@ const { PERMISSION_TABLE } = permissionModel;
 
 const newPermissions = [
   {
-    name: "OPT CLIENTE",
+    name: "OPT CLIENTES",
     code: "P30",
     icon: "-",
     link: "#",
