@@ -36,16 +36,20 @@ const newPermissions = [
 ];
 const updatePermissionsCustomers = [42, 46, 101, 105, 127, 38];
 const updatePermissionsCaseFiles = [154, 141, 145, 159, 165, 115, 119, 123];
-function up(queryInterface, Sequelize) {
+function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
         yield queryInterface.bulkInsert(PERMISSION_TABLE, newPermissions);
         const newIdCustomersOptionsResult = yield queryInterface.sequelize.query(`SELECT id_permission FROM ${PERMISSION_TABLE} WHERE code = 'P30'`, { type: sequelize_1.QueryTypes.SELECT });
-        const newIdCustomersOptions = Array.isArray(newIdCustomersOptionsResult) && newIdCustomersOptionsResult.length
-            ? newIdCustomersOptionsResult[0].id_permission
+        const newIdCustomersOptions = Array.isArray(newIdCustomersOptionsResult) &&
+            newIdCustomersOptionsResult.length
+            ? newIdCustomersOptionsResult[0]
+                .id_permission
             : null;
         const newIdCaseFilesOptionsResult = yield queryInterface.sequelize.query(`SELECT id_permission FROM ${PERMISSION_TABLE} WHERE code = 'P31'`, { type: sequelize_1.QueryTypes.SELECT });
-        const newIdCaseFilesOptions = Array.isArray(newIdCaseFilesOptionsResult) && newIdCaseFilesOptionsResult.length
-            ? newIdCaseFilesOptionsResult[0].id_permission
+        const newIdCaseFilesOptions = Array.isArray(newIdCaseFilesOptionsResult) &&
+            newIdCaseFilesOptionsResult.length
+            ? newIdCaseFilesOptionsResult[0]
+                .id_permission
             : null;
         if (newIdCustomersOptions !== null) {
             yield queryInterface.bulkUpdate(PERMISSION_TABLE, { id_permission_main: newIdCustomersOptions }, { id_permission: { [sequelize_1.Op.in]: updatePermissionsCustomers } });

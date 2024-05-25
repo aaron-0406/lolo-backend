@@ -6,7 +6,7 @@ const { PERMISSION_TABLE } = permissionModel;
 export async function up(queryInterface: QueryInterface) {
   await queryInterface.addColumn(PERMISSION_TABLE, "id_permission_main", {
     allowNull: true,
-    field:"id_permission_main",
+    field: "id_permission_main",
     type: DataTypes.INTEGER,
     references: {
       model: PERMISSION_TABLE,

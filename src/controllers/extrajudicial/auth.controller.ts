@@ -94,7 +94,7 @@ export const changeCredentialsController = async (
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
-    
+
     return res.json({
       user: customerUser,
       token,

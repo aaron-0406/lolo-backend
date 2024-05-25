@@ -1,4 +1,4 @@
-import { QueryInterface, Op, DataTypes, QueryTypes } from "sequelize";
+import { QueryInterface, Op, QueryTypes } from "sequelize";
 import permissionModel from "../models/permission.model";
 
 const { PERMISSION_TABLE } = permissionModel;
@@ -25,7 +25,7 @@ const newPermissions = [
 const updatePermissionsCustomers = [42, 46, 101, 105, 127, 38];
 const updatePermissionsCaseFiles = [154, 141, 145, 159, 165, 115, 119, 123];
 
-export async function up(queryInterface: QueryInterface, Sequelize: typeof DataTypes) {
+export async function up(queryInterface: QueryInterface) {
   await queryInterface.bulkInsert(PERMISSION_TABLE, newPermissions);
 
   const newIdCustomersOptionsResult = await queryInterface.sequelize.query(
@@ -33,18 +33,24 @@ export async function up(queryInterface: QueryInterface, Sequelize: typeof DataT
     { type: QueryTypes.SELECT }
   );
 
-  const newIdCustomersOptions = Array.isArray(newIdCustomersOptionsResult) && newIdCustomersOptionsResult.length
-    ? (newIdCustomersOptionsResult[0] as { id_permission: number }).id_permission
-    : null;
+  const newIdCustomersOptions =
+    Array.isArray(newIdCustomersOptionsResult) &&
+    newIdCustomersOptionsResult.length
+      ? (newIdCustomersOptionsResult[0] as { id_permission: number })
+          .id_permission
+      : null;
 
   const newIdCaseFilesOptionsResult = await queryInterface.sequelize.query(
     `SELECT id_permission FROM ${PERMISSION_TABLE} WHERE code = 'P31'`,
     { type: QueryTypes.SELECT }
   );
 
-  const newIdCaseFilesOptions = Array.isArray(newIdCaseFilesOptionsResult) && newIdCaseFilesOptionsResult.length
-    ? (newIdCaseFilesOptionsResult[0] as { id_permission: number }).id_permission
-    : null;
+  const newIdCaseFilesOptions =
+    Array.isArray(newIdCaseFilesOptionsResult) &&
+    newIdCaseFilesOptionsResult.length
+      ? (newIdCaseFilesOptionsResult[0] as { id_permission: number })
+          .id_permission
+      : null;
 
   if (newIdCustomersOptions !== null) {
     await queryInterface.bulkUpdate(
