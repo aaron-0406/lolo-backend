@@ -18,7 +18,7 @@ const permission_model_1 = __importDefault(require("../models/permission.model")
 const { PERMISSION_TABLE } = permission_model_1.default;
 const newPermissions = [
     {
-        name: "OPCIONES CLIENTE",
+        name: "OPT CLIENTE",
         code: "P30",
         icon: "-",
         link: "#",
@@ -26,7 +26,7 @@ const newPermissions = [
         is_dropdown: true,
     },
     {
-        name: "OPCIONES EXPEDIENTES",
+        name: "OPT EXPEDIENTES",
         code: "P31",
         icon: "-",
         link: "#",
