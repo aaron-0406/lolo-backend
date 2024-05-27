@@ -86,6 +86,10 @@ class JudicialCaseFileRelatedProcessService {
           as: "judicialSubject",
         },
         {
+          model: models.JUDICIAL_SEDE,
+          as: "judicialSede",
+        },
+        {
           model: models.CLIENT,
           as: "client",
           attributes: ["id", "name"],
