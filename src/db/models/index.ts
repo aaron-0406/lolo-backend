@@ -45,6 +45,7 @@ import judicialBinProceduralStageModel from "./judicial-bin-procedural-stage.mod
 import judicialBinTypeBinnacleModel from "./judicial-bin-type-binnacle.model";
 import judicialBinFileModel from "./judicial-bin-file.model";
 import judicialProcessReasonModel from "./judicial-process-reason.model";
+import judicialSedeModel from "./judicial-sede.model";
 import scheduledNotificationsModel from "./settings/scheduled-notifications.model";
 import scheduledNotificationsUsersModel from "./settings/scheduled-notifications-users.model";
 
@@ -99,6 +100,7 @@ const { JudicialBinTypeBinnacle, JudicialBinTypeBinnacleSchema } =
 const { JudicialBinFile, JudicialBinFileSchema } = judicialBinFileModel;
 const { JudicialProcessReason, JudicialProcessReasonSchema } =
   judicialProcessReasonModel;
+const { JudicialSede, JudicialSedeSchema } = judicialSedeModel;
 const { ScheduledNotifications, ScheduledNotificationsSchema } =
   scheduledNotificationsModel;
 const { ScheduledNotificationsUsers, ScheduledNotificationsUsersSchema } =
@@ -192,11 +194,11 @@ export const setupModels = (sequelize: Sequelize) => {
     JudicialBinFileSchema,
     JudicialBinFile.config(sequelize)
   );
-
   JudicialProcessReason.init(
     JudicialProcessReasonSchema,
     JudicialProcessReason.config(sequelize)
   );
+  JudicialSede.init(JudicialSedeSchema, JudicialSede.config(sequelize));
 
   ScheduledNotifications.init(
     ScheduledNotificationsSchema,
@@ -251,6 +253,7 @@ export const setupModels = (sequelize: Sequelize) => {
   JudicialBinProceduralStage.associate(sequelize.models);
   JudicialBinTypeBinnacle.associate(sequelize.models);
   JudicialBinFile.associate(sequelize.models);
+  JudicialSede.associate(sequelize.models);
   ScheduledNotifications.associate(sequelize.models);
   ScheduledNotificationsUsers.associate(sequelize.models);
 };
