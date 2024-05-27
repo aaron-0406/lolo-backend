@@ -17,53 +17,15 @@ const boom_1 = __importDefault(require("@hapi/boom"));
 const { models } = sequelize_1.default;
 class ScheduledNotificationsService {
     constructor() { }
-    findAll() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.SCHEDULED_NOTIFICATIONS.findAll();
-            return rta;
-        });
-    }
-    findOne(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.SCHEDULED_NOTIFICATIONS.findByPk(id);
-            if (!rta) {
-                throw boom_1.default.notFound("Notificación programada no encontrada");
-            }
-            return rta;
-        });
-    }
-    findOneById(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const scheduledNotification = yield models.SCHEDULED_NOTIFICATIONS.findByPk(id);
-            if (!scheduledNotification) {
-                throw boom_1.default.notFound("Notificación programada no encontrada");
-            }
-            return scheduledNotification;
-        });
-    }
     findAllByChb(chb) {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.SCHEDULED_NOTIFICATIONS.findAll({
                 where: {
                     customer_has_bank_id_customer_has_bank: chb,
                 },
-                // include: ["notification"],
             });
             if (!rta) {
-                throw boom_1.default.notFound("El cliente no tiene notificaciones programadas");
-            }
-            return rta;
-        });
-    }
-    findAllByLogicKey(logicKey) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.SCHEDULED_NOTIFICATIONS.findAll({
-                where: {
-                    logic_key: logicKey,
-                },
-            });
-            if (!rta) {
-                throw boom_1.default.notFound("No se encontraron notificaciones programadas");
+                throw boom_1.default.notFound("No existen notificaciones programadas");
             }
             return rta;
         });

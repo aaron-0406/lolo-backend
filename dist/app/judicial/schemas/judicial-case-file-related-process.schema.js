@@ -16,10 +16,11 @@ const amountDemandedSoles = joi_1.default.number();
 const amountDemandedDollars = joi_1.default.number();
 const cautionaryCode = joi_1.default.string().max(150);
 const errandCode = joi_1.default.string().max(150);
-const judicialVenue = joi_1.default.string().max(150);
+const judicialSedeId = joi_1.default.number().positive();
 const judge = joi_1.default.string().max(150);
 const demandDate = joi_1.default.date();
 const clientId = joi_1.default.number();
+const cityId = joi_1.default.number();
 const chb = joi_1.default.number();
 const customerUserId = joi_1.default.number();
 const judicialCourtId = joi_1.default.number().positive();
@@ -54,13 +55,14 @@ const createJudicialCaseFileRelatedProcessSchema = joi_1.default.object({
     amountDemandedDollars: amountDemandedDollars.optional().empty("").allow(""),
     cautionaryCode: cautionaryCode.optional().empty("").allow(""),
     errandCode: errandCode.optional().empty("").allow(""),
-    judicialVenue: judicialVenue.optional().empty("").allow(""),
+    judicialSedeId: judicialSedeId.optional().empty("").allow(""),
     judge: judge.optional().empty("").allow(""),
     demandDate: demandDate.optional().empty("").allow(""),
     judicialCourtId: judicialCourtId.required(),
     judicialSubjectId: judicialSubjectId.required(),
     judicialProceduralWayId: judicialProceduralWayId.required(),
     clientId: clientId.required(),
+    cityId: cityId.required(),
     customerUserId: customerUserId.required(),
     customerHasBankId: customerHasBankId.required(),
     idJudicialCaseFileRelated: idJudicialCaseFileRelated
@@ -77,7 +79,7 @@ const updateJudicialCaseFileRelatedProcessSchema = joi_1.default.object({
     amountDemandedDollars: amountDemandedDollars.optional().empty("").allow(""),
     cautionaryCode: cautionaryCode.optional().empty("").allow(""),
     errandCode: errandCode.optional().empty("").allow(""),
-    judicialVenue: judicialVenue.optional().empty("").allow(""),
+    judicialSedeId: judicialSedeId.optional().empty("").allow(""),
     judge: judge.optional().empty("").allow(""),
     demandDate: demandDate.optional().empty("").allow(""),
     customerUserId: customerUserId.required(),
@@ -86,6 +88,7 @@ const updateJudicialCaseFileRelatedProcessSchema = joi_1.default.object({
     judicialProceduralWayId: judicialProceduralWayId.required(),
     customerHasBankId: customerHasBankId.required(),
     clientId: clientId.required(),
+    cityId: cityId.required(),
     idJudicialCaseFileRelated: idJudicialCaseFileRelated
         .optional()
         .empty("")

@@ -5,4 +5,6 @@ export type PermissionType = {
   icon: string;
   link: string;
   permissions?: Array<PermissionType>;
+  idPermissionMain?: number;
+  isDropdown?: boolean;
 };

@@ -5,6 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const client_model_1 = __importDefault(require("./client.model"));
+const city_model_1 = __importDefault(require("./city.model"));
+const judicial_sede_model_1 = __importDefault(require("./judicial-sede.model"));
 const judicial_court_model_1 = __importDefault(require("./judicial-court.model"));
 const judicial_procedural_way_model_1 = __importDefault(require("./judicial-procedural-way.model"));
 const judicial_subject_model_1 = __importDefault(require("./judicial-subject.model"));
@@ -56,10 +58,16 @@ const JudicialCaseFileSchema = {
         field: "errand_code",
         type: sequelize_1.DataTypes.STRING(150),
     },
-    judicialVenue: {
-        field: "judicial_venue",
+    judicialSedeId: {
         allowNull: true,
-        type: sequelize_1.DataTypes.STRING(150),
+        field: "judicial_sede_id_judicial_sede",
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: judicial_sede_model_1.default.JUDICIAL_SEDE_TABLE,
+            key: "id_judicial_sede",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
     },
     judge: {
         allowNull: true,
@@ -83,6 +91,17 @@ const JudicialCaseFileSchema = {
         references: {
             model: client_model_1.default.CLIENT_TABLE,
             key: "id_client",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
+    },
+    cityId: {
+        allowNull: false,
+        field: "city_id_city",
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: city_model_1.default.CITY_TABLE,
+            key: "id_city",
         },
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
@@ -194,9 +213,11 @@ class JudicialCaseFile extends sequelize_1.Model {
         this.belongsTo(models.JUDICIAL_PROCEDURAL_WAY, {
             as: "judicialProceduralWay",
         });
+        this.belongsTo(models.JUDICIAL_SEDE, { as: "judicialSede" });
         this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
         this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
         this.belongsTo(models.JUDICIAL_PROCESS_REASON, { as: "processReason" });
+        this.belongsTo(models.CITY, { as: "city" });
         this.hasMany(models.PRODUCT, {
             as: "product",
             foreignKey: "judicialCaseFileId",

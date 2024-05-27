@@ -106,6 +106,14 @@ class JudicialCaseFileService {
           as: "judicialSubject",
         },
         {
+          model: models.JUDICIAL_SEDE,
+          as: "judicialSede",
+        },
+        {
+          model: models.CITY,
+          as: "city",
+        },
+        {
           model: models.CLIENT,
           as: "client",
           attributes: ["id", "name"],
@@ -169,6 +177,14 @@ class JudicialCaseFileService {
         {
           model: models.JUDICIAL_SUBJECT,
           as: "judicialSubject",
+        },
+        {
+          model: models.JUDICIAL_SEDE,
+          as: "judicialSede",
+        },
+        {
+          model: models.CITY,
+          as: "city",
         },
         {
           model: models.CLIENT,

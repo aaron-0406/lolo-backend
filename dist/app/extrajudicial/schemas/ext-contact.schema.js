@@ -34,7 +34,7 @@ const createExtContactSchema = joi_1.default.object({
     clientId: clientId.required(),
     customerHasBankId: customerHasBankId.required(),
     extContactTypeId: extContactTypeId.optional(),
-    dni: dni.optional(),
+    dni: dni.optional().empty("").allow(""),
 });
 const updateExtContactSchema = joi_1.default.object({
     name: name.required(),
@@ -44,7 +44,7 @@ const updateExtContactSchema = joi_1.default.object({
     clientId: clientId.required(),
     customerHasBankId: customerHasBankId.required(),
     extContactTypeId: extContactTypeId.optional(),
-    dni: dni.optional(),
+    dni: dni.optional().empty("").allow(""),
 });
 const updateExtContactStateSchema = joi_1.default.object({
     state: state.required(),

@@ -49,10 +49,13 @@ passport_1.default.use("local.signin", new passport_local_1.Strategy({
         const permissions = yield servicePermission.findAllByRoleId(user.dataValues.roleId);
         const permissionsObject = permissions.map((permissions) => {
             return {
+                id: permissions.id,
                 code: permissions.code,
                 link: permissions.link,
                 icon: permissions.icon,
                 name: permissions.name,
+                idPermissionMain: permissions.idPermissionMain,
+                isDropdown: permissions.isDropdown,
             };
         });
         return done(null, Object.assign(Object.assign({}, user.dataValues), { permissions: permissionsObject }));

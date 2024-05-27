@@ -17,56 +17,6 @@ const boom_1 = __importDefault(require("@hapi/boom"));
 const { models } = sequelize_1.default;
 class ScheduledNotificationsUsersService {
     constructor() { }
-    findAll() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.SCHEDULED_NOTIFICATIONS_USERS.findAll();
-            return rta;
-        });
-    }
-    findOne(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const scheduledNotification = yield models.SCHEDULED_NOTIFICATIONS_USERS.findByPk(id);
-            if (!scheduledNotification) {
-                throw boom_1.default.notFound("Scheduled Notification no encontrado");
-            }
-            return scheduledNotification;
-        });
-    }
-    findOneById(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const scheduledNotification = yield models.SCHEDULED_NOTIFICATIONS_USERS.findByPk(id);
-            if (!scheduledNotification) {
-                throw boom_1.default.notFound("Scheduled Notification no encontrado");
-            }
-            return scheduledNotification;
-        });
-    }
-    findAllByCustomerId(customerId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.SCHEDULED_NOTIFICATIONS_USERS.findAll({
-                where: {
-                    customerHasBankId: customerId,
-                },
-            });
-            if (!rta) {
-                throw boom_1.default.notFound("El cliente no tiene notificaciones programadas");
-            }
-            return rta;
-        });
-    }
-    findAllByChbId(customerHasBankId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.SCHEDULED_NOTIFICATIONS_USERS.findAll({
-                where: {
-                    customerHasBankId: customerHasBankId,
-                },
-            });
-            if (!rta) {
-                throw boom_1.default.notFound("El cliente no tiene notificaciones programadas");
-            }
-            return rta;
-        });
-    }
     findAllByScheduledNotificationId(scheduledNotificationId) {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.SCHEDULED_NOTIFICATIONS_USERS.findAll({
@@ -113,26 +63,6 @@ class ScheduledNotificationsUsersService {
                     yield models.SCHEDULED_NOTIFICATIONS_USERS.create(newNotification);
                 }
             }
-        });
-    }
-    update(id, data) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const scheduledNotification = yield models.SCHEDULED_NOTIFICATIONS_USERS.findByPk(id);
-            if (!scheduledNotification) {
-                throw boom_1.default.notFound("Scheduled Notification no encontrado");
-            }
-            yield scheduledNotification.update(data);
-            return scheduledNotification;
-        });
-    }
-    delete(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const scheduledNotification = yield models.SCHEDULED_NOTIFICATIONS_USERS.findByPk(id);
-            if (!scheduledNotification) {
-                throw boom_1.default.notFound("Scheduled Notification no encontrado");
-            }
-            yield scheduledNotification.destroy();
-            return { id };
         });
     }
 }
