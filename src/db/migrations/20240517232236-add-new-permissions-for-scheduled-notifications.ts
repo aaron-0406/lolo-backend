@@ -9,6 +9,7 @@ const newPermissions = [
     code: "P32",
     icon: "-",
     link: "#",
+    id_permission_main: 1,
     is_dropdown: true,
   },
   {
