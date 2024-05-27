@@ -5,31 +5,31 @@ const { PERMISSION_TABLE } = permissionModel;
 
 const newPermissions = [
   {
-    name: "NOMBRE DE SEDES",
+    name: "SEDES JUDICIALES",
     code: "P28",
     icon: "ri-community-fill",
     link: "/judicial/:urlIdentifier/sedes",
   },
   {
-    name: "AGREGAR SEDES",
+    name: "AGREGAR SEDE JUDICIAL",
     code: "P28-01",
     icon: "-",
     link: "#",
   },
   {
-    name: "ACTUALIZAR SEDES",
+    name: "ACTUALIZAR SEDE JUDICIAL",
     code: "P28-02",
     icon: "-",
     link: "#",
   },
   {
-    name: "ELIMINAR SEDES",
+    name: "ELIMINAR SEDE JUDICIAL",
     code: "P28-03",
     icon: "-",
     link: "#",
   },
   {
-    name: "VER LISTA DE SEDES",
+    name: "VER LISTA DE SEDES JUDICIALES",
     code: "P28-04",
     icon: "-",
     link: "#",
