@@ -22,6 +22,7 @@ const newPermissions = [
         code: "P28",
         icon: "ri-community-fill",
         link: "/judicial/:urlIdentifier/sedes",
+        id_permission_main: 179,
     },
     {
         name: "AGREGAR SEDE JUDICIAL",
