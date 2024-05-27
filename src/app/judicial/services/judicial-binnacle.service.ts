@@ -9,7 +9,27 @@ const { models } = sequelize;
 
 class JudicialBinnacleService {
   constructor() {}
+  async findAll() {
+    const judicialBinnacle = await models.JUDICIAL_BINNACLE.findAll({
+      include: [
+        {
+          model: models.JUDICIAL_BIN_TYPE_BINNACLE,
+          as: "binnacleType",
+        },
+        {
+          model: models.JUDICIAL_BIN_PROCEDURAL_STAGE,
+          as: "judicialBinProceduralStage",
+        },
+        {
+          model: models.JUDICIAL_BIN_FILE,
+          as: "judicialBinFiles",
+        },
+      ],
+      order: [["id", "DESC"]],
+    });
 
+    return judicialBinnacle;
+  }
   async findAllByCHBAndFileCase(fileCase: number) {
     const rta = await models.JUDICIAL_BINNACLE.findAll({
       include: [

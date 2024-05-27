@@ -6,6 +6,16 @@ const { models } = sequelize;
 class ScheduledNotificationsService {
   constructor() {}
 
+  async findAll() {
+    const rta = await models.SCHEDULED_NOTIFICATIONS.findAll();
+
+    if (!rta) {
+      throw boom.notFound("No existen notificaciones programadas");
+    }
+
+    return rta;
+  }
+
   async findAllByChb(chb: string) {
     const rta = await models.SCHEDULED_NOTIFICATIONS.findAll({
       where: {

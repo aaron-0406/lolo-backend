@@ -12,6 +12,10 @@ import {
   sendWeeklyReportsByEmail,
 } from "./libs/cron_jobs";
 
+import nodemailder from "nodemailer";
+
+import { startCronJobs } from "./jobs";
+
 const { logErrors, ormErrorHandler, boomErrorHandler, errorHandler } =
   errorHandlerr;
 
@@ -93,5 +97,8 @@ app.listen(port, () => {
   fs.mkdir(path.join(__dirname, "./public/download"), () => {});
   deleteDownloadFolderTask();
   sendWeeklyReportsByEmail();
+
+  // JOBS
+  startCronJobs();
   console.log("My port: " + port);
 });
