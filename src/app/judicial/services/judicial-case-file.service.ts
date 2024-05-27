@@ -58,6 +58,7 @@ class JudicialCaseFileService {
 
     let filtersWhere: any = {
       customer_has_bank_id: chb,
+      id_judicial_case_file_related: null,
     };
 
     // Agregar filtro por nombre de cliente si se proporciona

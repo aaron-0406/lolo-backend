@@ -113,6 +113,11 @@ const ClientSchema: ModelAttributes<Client, ClientType> = {
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
+  memoAssignmentDate:{
+    allowNull: true,
+    field: "memo_assignment_date",
+    type: DataTypes.DATEONLY,
+  }
 };
 
 class Client extends Model {

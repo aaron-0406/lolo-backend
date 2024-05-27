@@ -29,6 +29,8 @@ const customerHasBankId = Joi.number().positive();
 const processStatus = Joi.string().max(150);
 const processComment = Joi.string();
 const processReasonId = Joi.number().positive();
+const bankId = Joi.number();
+const idJudicialCaseFileRelated = Joi.number();
 
 const page = Joi.number().required().messages({
   "number.base": "El campo page es inválido",
@@ -77,6 +79,11 @@ const createJudicialCaseFileSchema = Joi.object<
   cityId: cityId.required(),
   customerUserId: customerUserId.required(),
   customerHasBankId: customerHasBankId.required(),
+  idJudicialCaseFileRelated: idJudicialCaseFileRelated
+    .optional()
+    .empty("")
+    .allow(""),
+  bankId: bankId.optional().empty("").allow(""),
 });
 
 const updateJudicialCaseFileSchema = Joi.object<
@@ -103,6 +110,11 @@ const updateJudicialCaseFileSchema = Joi.object<
   customerHasBankId: customerHasBankId.required(),
   clientId: clientId.required(),
   cityId: cityId.required(),
+  idJudicialCaseFileRelated: idJudicialCaseFileRelated
+    .optional()
+    .empty("")
+    .allow(""),
+  bankId: bankId.optional().empty("").allow(""),
 });
 
 const updateJudicialCaseFileProcessStatusSchema = Joi.object<

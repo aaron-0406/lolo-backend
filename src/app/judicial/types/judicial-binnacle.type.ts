@@ -6,7 +6,6 @@ export type JudicialBinnacleType = {
   date: Date;
   judicialFileCaseId: number;
   customerHasBankId: number;
-  judicialDefendantProceduralActionId: number;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;

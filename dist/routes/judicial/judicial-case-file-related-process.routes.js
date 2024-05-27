@@ -1,0 +1,23 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const validator_handler_1 = __importDefault(require("../../middlewares/validator.handler"));
+const judicial_case_file_related_process_controller_1 = require("../../controllers/judicial/judicial-case-file-related-process.controller");
+const auth_handler_1 = require("../../middlewares/auth.handler");
+const judicial_case_file_related_process_schema_1 = __importDefault(require("../../app/judicial/schemas/judicial-case-file-related-process.schema"));
+const { createJudicialCaseFileRelatedProcessSchema, getRelatedProcessByCaseFileIdSchema, updateJudicialCaseFileRelatedProcessSchema, getJudicialCaseFileRelatedProcesByCHBSchema, getJudicialCaseFileRelatedProcesByCHBSchemaQuery, getJudicialCaseFileRelatedProcesByClientIDSchema, getJudicialCaseFileRelatedProcesByCustomerIdSchema, getJudicialCaseFileRelatedProcesByIDSchema, getJudicialCaseFileRelatedProcesByNumberCaseFileSchema } = judicial_case_file_related_process_schema_1.default;
+const router = express_1.default.Router();
+router.get("/", auth_handler_1.JWTAuth, judicial_case_file_related_process_controller_1.getJudicialCaseFileRelatedProcessController);
+router.get("/client/:clientId", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getJudicialCaseFileRelatedProcesByClientIDSchema, "params"), (0, validator_handler_1.default)(getJudicialCaseFileRelatedProcesByCHBSchemaQuery, "query"), judicial_case_file_related_process_controller_1.getJudicialCaseFileRelatedProcessByClientIdController);
+router.get("/case-file/:caseFileId", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getRelatedProcessByCaseFileIdSchema, "params"), judicial_case_file_related_process_controller_1.getJudicialCaseFileRelatedProcessbyCaseFileIdController);
+router.get("/chb/:chb", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getJudicialCaseFileRelatedProcesByCHBSchema, "params"), (0, validator_handler_1.default)(getJudicialCaseFileRelatedProcesByCHBSchemaQuery, "query"), judicial_case_file_related_process_controller_1.getJudicialCaseFileRelatedProcessByCHBIdController);
+router.get("/number-case/:numberCaseFile/:chb", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getJudicialCaseFileRelatedProcesByNumberCaseFileSchema, "params"), judicial_case_file_related_process_controller_1.getJudicialCaseFileRelatedProcessByNumberCaseFileController);
+router.get("/related/:numberCaseFile/:chb", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getJudicialCaseFileRelatedProcesByNumberCaseFileSchema, "params"), judicial_case_file_related_process_controller_1.getJudicialCaseFileRelatedProcessRelatedController);
+router.get("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getJudicialCaseFileRelatedProcesByIDSchema, "params"), judicial_case_file_related_process_controller_1.getJudicialCaseFileRelatedProcessByIdController);
+router.post("/:customerId", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P13-01-05-02"), (0, validator_handler_1.default)(getJudicialCaseFileRelatedProcesByCustomerIdSchema, "params"), (0, validator_handler_1.default)(createJudicialCaseFileRelatedProcessSchema, "body"), judicial_case_file_related_process_controller_1.createJudicialCaseFileRelatedProcessController);
+router.patch("/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P13-01-05-03"), (0, validator_handler_1.default)(getJudicialCaseFileRelatedProcesByIDSchema, "params"), (0, validator_handler_1.default)(updateJudicialCaseFileRelatedProcessSchema, "body"), judicial_case_file_related_process_controller_1.updateJudicialCaseFileRelatedProcessController);
+router.delete("/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P13-01-05-04"), (0, validator_handler_1.default)(getJudicialCaseFileRelatedProcesByIDSchema, "params"), judicial_case_file_related_process_controller_1.deleteJudicialCaseFileRelatedProcessController);
+exports.default = router;

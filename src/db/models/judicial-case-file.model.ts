@@ -16,8 +16,10 @@ import judicialSubjectModel from "./judicial-subject.model";
 import judicialProcessReasonModel from "./judicial-process-reason.model";
 import customerUserModel from "./customer-user.model";
 import customerHasBankModel from "./many-to-many/customer-has-bank.model";
+import bankModel from "./bank.model";
 
 const JUDICIAL_CASE_FILE_TABLE = "JUDICIAL_CASE_FILE";
+const { BANK_TABLE } = bankModel;
 
 const JudicialCaseFileSchema: ModelAttributes<
   JudicialCaseFile,
@@ -188,6 +190,28 @@ const JudicialCaseFileSchema: ModelAttributes<
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
+  idJudicialCaseFileRelated: {
+    allowNull: true,
+    field: "id_judicial_case_file_related",
+    type: DataTypes.INTEGER,
+    references: {
+      model: JUDICIAL_CASE_FILE_TABLE,
+      key: "id_judicial_case_file",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
+  bankId: {
+    allowNull: true,
+    field: "id_bank",
+    type: DataTypes.INTEGER,
+    references: {
+      model: BANK_TABLE,
+      key: "id_bank",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+  },
 };
 
 class JudicialCaseFile extends Model {
@@ -208,6 +232,8 @@ class JudicialCaseFile extends Model {
       as: "product",
       foreignKey: "judicialCaseFileId",
     });
+
+    this.belongsTo(models.BANK, { as: "bank" });
   }
 
   static config(sequelize: Sequelize) {
