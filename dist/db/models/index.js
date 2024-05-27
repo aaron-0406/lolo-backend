@@ -50,6 +50,7 @@ const judicial_bin_procedural_stage_model_1 = __importDefault(require("./judicia
 const judicial_bin_type_binnacle_model_1 = __importDefault(require("./judicial-bin-type-binnacle.model"));
 const judicial_bin_file_model_1 = __importDefault(require("./judicial-bin-file.model"));
 const judicial_process_reason_model_1 = __importDefault(require("./judicial-process-reason.model"));
+const judicial_sede_model_1 = __importDefault(require("./judicial-sede.model"));
 const { Customer, CustomerSchema } = customer_model_1.default;
 const { Funcionario, FuncionarioSchema } = funcionario_model_1.default;
 const { Bank, BankSchema } = bank_model_1.default;
@@ -96,6 +97,7 @@ const { JudicialBinProceduralStage, JudicialBinProceduralStageSchema } = judicia
 const { JudicialBinTypeBinnacle, JudicialBinTypeBinnacleSchema } = judicial_bin_type_binnacle_model_1.default;
 const { JudicialBinFile, JudicialBinFileSchema } = judicial_bin_file_model_1.default;
 const { JudicialProcessReason, JudicialProcessReasonSchema } = judicial_process_reason_model_1.default;
+const { JudicialSede, JudicialSedeSchema } = judicial_sede_model_1.default;
 const setupModels = (sequelize) => {
     Customer.init(CustomerSchema, Customer.config(sequelize));
     Bank.init(BankSchema, Bank.config(sequelize));
@@ -143,6 +145,7 @@ const setupModels = (sequelize) => {
     JudicialBinTypeBinnacle.init(JudicialBinTypeBinnacleSchema, JudicialBinTypeBinnacle.config(sequelize));
     JudicialBinFile.init(JudicialBinFileSchema, JudicialBinFile.config(sequelize));
     JudicialProcessReason.init(JudicialProcessReasonSchema, JudicialProcessReason.config(sequelize));
+    JudicialSede.init(JudicialSedeSchema, JudicialSede.config(sequelize));
     Customer.associate(sequelize.models);
     CustomerUser.associate(sequelize.models);
     Bank.associate(sequelize.models);
@@ -187,5 +190,6 @@ const setupModels = (sequelize) => {
     JudicialBinProceduralStage.associate(sequelize.models);
     JudicialBinTypeBinnacle.associate(sequelize.models);
     JudicialBinFile.associate(sequelize.models);
+    JudicialSede.associate(sequelize.models);
 };
 exports.setupModels = setupModels;

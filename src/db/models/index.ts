@@ -45,6 +45,7 @@ import judicialBinProceduralStageModel from "./judicial-bin-procedural-stage.mod
 import judicialBinTypeBinnacleModel from "./judicial-bin-type-binnacle.model";
 import judicialBinFileModel from "./judicial-bin-file.model";
 import judicialProcessReasonModel from "./judicial-process-reason.model";
+import judicialSedeModel from "./judicial-sede.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
@@ -97,6 +98,7 @@ const { JudicialBinTypeBinnacle, JudicialBinTypeBinnacleSchema } =
 const { JudicialBinFile, JudicialBinFileSchema } = judicialBinFileModel;
 const { JudicialProcessReason, JudicialProcessReasonSchema } =
   judicialProcessReasonModel;
+const { JudicialSede, JudicialSedeSchema } = judicialSedeModel;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -186,11 +188,11 @@ export const setupModels = (sequelize: Sequelize) => {
     JudicialBinFileSchema,
     JudicialBinFile.config(sequelize)
   );
-
   JudicialProcessReason.init(
     JudicialProcessReasonSchema,
     JudicialProcessReason.config(sequelize)
   );
+  JudicialSede.init(JudicialSedeSchema, JudicialSede.config(sequelize));
 
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
@@ -236,4 +238,5 @@ export const setupModels = (sequelize: Sequelize) => {
   JudicialBinProceduralStage.associate(sequelize.models);
   JudicialBinTypeBinnacle.associate(sequelize.models);
   JudicialBinFile.associate(sequelize.models);
+  JudicialSede.associate(sequelize.models);
 };

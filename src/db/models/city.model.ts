@@ -46,6 +46,11 @@ class City extends Model {
       foreignKey: "cityId",
     });
 
+    this.hasMany(models.CLIENT, {
+      as: "judicialCaseFile",
+      foreignKey: "cityId",
+    });
+
     this.hasMany(models.JUDICIAL_COURT, {
       as: "judicialCourt",
       foreignKey: "cityId",
