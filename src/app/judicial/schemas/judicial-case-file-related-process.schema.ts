@@ -15,10 +15,11 @@ const amountDemandedSoles = Joi.number();
 const amountDemandedDollars = Joi.number();
 const cautionaryCode = Joi.string().max(150);
 const errandCode = Joi.string().max(150);
-const judicialVenue = Joi.string().max(150);
+const judicialSedeId = Joi.number().positive();
 const judge = Joi.string().max(150);
 const demandDate = Joi.date();
 const clientId = Joi.number();
+const cityId = Joi.number();
 const chb = Joi.number();
 const customerUserId = Joi.number();
 const judicialCourtId = Joi.number().positive();
@@ -65,13 +66,14 @@ const createJudicialCaseFileRelatedProcessSchema = Joi.object<
   amountDemandedDollars: amountDemandedDollars.optional().empty("").allow(""),
   cautionaryCode: cautionaryCode.optional().empty("").allow(""),
   errandCode: errandCode.optional().empty("").allow(""),
-  judicialVenue: judicialVenue.optional().empty("").allow(""),
+  judicialSedeId: judicialSedeId.optional().empty("").allow(""),
   judge: judge.optional().empty("").allow(""),
   demandDate: demandDate.optional().empty("").allow(""),
   judicialCourtId: judicialCourtId.required(),
   judicialSubjectId: judicialSubjectId.required(),
   judicialProceduralWayId: judicialProceduralWayId.required(),
   clientId: clientId.required(),
+  cityId: cityId.required(),
   customerUserId: customerUserId.required(),
   customerHasBankId: customerHasBankId.required(),
   idJudicialCaseFileRelated: idJudicialCaseFileRelated
@@ -95,7 +97,7 @@ const updateJudicialCaseFileRelatedProcessSchema = Joi.object<
   amountDemandedDollars: amountDemandedDollars.optional().empty("").allow(""),
   cautionaryCode: cautionaryCode.optional().empty("").allow(""),
   errandCode: errandCode.optional().empty("").allow(""),
-  judicialVenue: judicialVenue.optional().empty("").allow(""),
+  judicialSedeId: judicialSedeId.optional().empty("").allow(""),
   judge: judge.optional().empty("").allow(""),
   demandDate: demandDate.optional().empty("").allow(""),
   customerUserId: customerUserId.required(),
@@ -104,6 +106,7 @@ const updateJudicialCaseFileRelatedProcessSchema = Joi.object<
   judicialProceduralWayId: judicialProceduralWayId.required(),
   customerHasBankId: customerHasBankId.required(),
   clientId: clientId.required(),
+  cityId: cityId.required(),
   idJudicialCaseFileRelated: idJudicialCaseFileRelated
     .optional()
     .empty("")
