@@ -106,6 +106,11 @@ class CustomerUser extends Model {
       as: "comment",
       foreignKey: "customerUserId",
     });
+    this.hasMany(models.SCHEDULED_NOTIFICATIONS_USERS, {
+      as: 'scheduledNotificationsUsers',
+      foreignKey: 'customerUserId'
+    });
+
   }
 
   static config(sequelize: Sequelize) {

@@ -45,6 +45,8 @@ import judicialBinProceduralStageModel from "./judicial-bin-procedural-stage.mod
 import judicialBinTypeBinnacleModel from "./judicial-bin-type-binnacle.model";
 import judicialBinFileModel from "./judicial-bin-file.model";
 import judicialProcessReasonModel from "./judicial-process-reason.model";
+import scheduledNotificationsModel from "./settings/scheduled-notifications.model";
+import scheduledNotificationsUsersModel from "./settings/scheduled-notifications-users.model";
 import judicialSedeModel from "./judicial-sede.model";
 
 const { Customer, CustomerSchema } = customerModel;
@@ -98,6 +100,10 @@ const { JudicialBinTypeBinnacle, JudicialBinTypeBinnacleSchema } =
 const { JudicialBinFile, JudicialBinFileSchema } = judicialBinFileModel;
 const { JudicialProcessReason, JudicialProcessReasonSchema } =
   judicialProcessReasonModel;
+const { ScheduledNotifications, ScheduledNotificationsSchema } =
+  scheduledNotificationsModel;
+const { ScheduledNotificationsUsers, ScheduledNotificationsUsersSchema } =
+  scheduledNotificationsUsersModel;
 const { JudicialSede, JudicialSedeSchema } = judicialSedeModel;
 
 export const setupModels = (sequelize: Sequelize) => {
@@ -194,6 +200,15 @@ export const setupModels = (sequelize: Sequelize) => {
   );
   JudicialSede.init(JudicialSedeSchema, JudicialSede.config(sequelize));
 
+  ScheduledNotifications.init(
+    ScheduledNotificationsSchema,
+    ScheduledNotifications.config(sequelize)
+  );
+  ScheduledNotificationsUsers.init(
+    ScheduledNotificationsUsersSchema,
+    ScheduledNotificationsUsers.config(sequelize)
+  );
+
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
   Bank.associate(sequelize.models);
@@ -238,5 +253,7 @@ export const setupModels = (sequelize: Sequelize) => {
   JudicialBinProceduralStage.associate(sequelize.models);
   JudicialBinTypeBinnacle.associate(sequelize.models);
   JudicialBinFile.associate(sequelize.models);
+  ScheduledNotifications.associate(sequelize.models);
+  ScheduledNotificationsUsers.associate(sequelize.models);
   JudicialSede.associate(sequelize.models);
 };

@@ -51,6 +51,8 @@ const ext_tag_routes_1 = __importDefault(require("./extrajudicial/ext-tag.routes
 const ext_address_type_routes_1 = __importDefault(require("./extrajudicial/ext-address-type.routes"));
 const ext_contact_type_routes_1 = __importDefault(require("./extrajudicial/ext-contact-type.routes"));
 const ext_product_name_routes_1 = __importDefault(require("./extrajudicial/ext-product-name.routes"));
+const scheduled_notifications_routes_1 = __importDefault(require("./config/scheduled-notifications.routes"));
+const scheduled_notifications_users_routes_1 = __importDefault(require("./config/scheduled-notifications-users.routes"));
 const routerApi = (app) => {
     const router = express_1.default.Router();
     app.use("/api/v1", router);
@@ -101,5 +103,7 @@ const routerApi = (app) => {
     router.use("/dash/bank", bank_routes_1.default);
     router.use("/dash/city", city_routes_1.default);
     router.use("/dash/user-log", user_log_routes_1.default);
+    router.use("/config/scheduled-notifications", scheduled_notifications_routes_1.default);
+    router.use("/config/scheduled-notifications-users", scheduled_notifications_users_routes_1.default);
 };
 exports.default = routerApi;
