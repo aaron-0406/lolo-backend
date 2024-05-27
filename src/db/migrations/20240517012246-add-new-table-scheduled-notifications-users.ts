@@ -4,10 +4,11 @@ import scheduledNotificationsUsersModel from "../models/settings/scheduled-notif
 import customerHasBankModel from "../models/many-to-many/customer-has-bank.model";
 import customerUserModel from "../models/customer-user.model";
 
-const { SCHEDULED_NOTIFICATIONS_USERS_TABLE } = scheduledNotificationsUsersModel;
+const { SCHEDULED_NOTIFICATIONS_USERS_TABLE } =
+  scheduledNotificationsUsersModel;
 const { SCHEDULED_NOTIFICATIONS_TABLE } = scheduledNotificationsModel;
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
-const { CUSTOMER_USER_TABLE } = customerUserModel
+const { CUSTOMER_USER_TABLE } = customerUserModel;
 
 export async function up(queryInterface: QueryInterface) {
   await queryInterface.createTable(SCHEDULED_NOTIFICATIONS_USERS_TABLE, {
@@ -18,7 +19,6 @@ export async function up(queryInterface: QueryInterface) {
       field: "id_scheduled_notification_user",
       type: DataTypes.INTEGER,
     },
-
     customerHasBankId: {
       allowNull: false,
       field: "customer_has_bank_id_customer_has_bank",
@@ -32,7 +32,7 @@ export async function up(queryInterface: QueryInterface) {
     },
     scheduledNotificationId: {
       allowNull: false,
-      references:{
+      references: {
         model: SCHEDULED_NOTIFICATIONS_TABLE,
         key: "id_scheduled_notification",
       },

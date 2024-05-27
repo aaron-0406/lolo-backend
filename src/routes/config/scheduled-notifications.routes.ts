@@ -1,13 +1,13 @@
 import express from "express";
 import validatorHandler from "../../middlewares/validator.handler";
-import { JWTAuth } from "../../middlewares/auth.handler";
+import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
 import {
   getNotificationByChbController,
   createNotificationController,
   updateNotificaitonController,
   deleteNotificationController,
-} from "../../controllers/settings/scheduled-notifications.controller"
+} from "../../controllers/settings/scheduled-notifications.controller";
 
 import scheduledNotificationSchema from "../../app/settings/schemas/scheduled-notifications.schema";
 
@@ -31,13 +31,15 @@ router.get(
 router.post(
   "/",
   JWTAuth,
+  checkPermissions("P29-01"),
   validatorHandler(createScheduledNotificationSchema, "body"),
-  createNotificationController,
+  createNotificationController
 );
 
 router.put(
   "/:id",
   JWTAuth,
+  checkPermissions("P29-02"),
   validatorHandler(getScheduledNotificationSchema, "params"),
   validatorHandler(updateScheduledNotificationSchema, "body"),
   updateNotificaitonController
@@ -46,6 +48,7 @@ router.put(
 router.delete(
   "/:id",
   JWTAuth,
+  checkPermissions("P29-03"),
   validatorHandler(deleteScheduledNotificationSchema, "params"),
   deleteNotificationController
 );

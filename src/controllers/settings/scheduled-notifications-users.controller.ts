@@ -5,7 +5,8 @@ import shceduledNotificationsUsersModel from "../../db/models/settings/scheduled
 
 const service = new ScheduledNotificationsUsersService();
 const serviceUserLog = new UserLogService();
-const { SCHEDULED_NOTIFICATIONS_USERS_TABLE } = shceduledNotificationsUsersModel
+const { SCHEDULED_NOTIFICATIONS_USERS_TABLE } =
+  shceduledNotificationsUsersModel;
 
 export const getNotificationsUsersBySchuldeNotificationIdController = async (
   req: Request,
@@ -14,12 +15,14 @@ export const getNotificationsUsersBySchuldeNotificationIdController = async (
 ) => {
   try {
     const { scheduledNotificationId } = req.params;
-    const notification = await service.findAllByScheduledNotificationId(scheduledNotificationId);
+    const notification = await service.findAllByScheduledNotificationId(
+      scheduledNotificationId
+    );
     res.json(notification);
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const changeNotificationsUsersController = async (
   req: Request,
@@ -29,21 +32,20 @@ export const changeNotificationsUsersController = async (
   try {
     const { idNotification } = req.params;
     const body = req.body;
-    const notificationsUsers = await service.changeNotificationsUsers(idNotification, body.data);
 
-    const { visible } = req.query;
+    const notificationsUsers = await service.changeNotificationsUsers(
+      idNotification,
+      body.data
+    );
 
-    if (visible === "true") {
-      await serviceUserLog.create({
-        customerUserId: Number(req.user?.id),
-        codeAction: "P29-04",
-        entity: SCHEDULED_NOTIFICATIONS_USERS_TABLE,
-        entityId: Number(idNotification),
-        ip: req.clientIp ?? "",
-        customerId: Number(req.user?.customerId),
-      });
-    }
-
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P29-04",
+      entity: SCHEDULED_NOTIFICATIONS_USERS_TABLE,
+      entityId: Number(idNotification),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    });
 
     res.json(notificationsUsers);
   } catch (error) {

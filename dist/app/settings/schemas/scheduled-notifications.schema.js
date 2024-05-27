@@ -35,9 +35,6 @@ const getScheduledNotificationSchema = joi_1.default.object({
 const getScheduledNotificationSchemaByCHBSchema = joi_1.default.object({
     chb: customerHasBankId.required(),
 });
-const getScheduledNotificationSchemaByLogicKeySchema = joi_1.default.object({
-    logicKey: logicKey.required(),
-});
 const deleteScheduledNotificationSchema = joi_1.default.object({
     id: id.required(),
 });
@@ -46,6 +43,5 @@ exports.default = {
     updateScheduledNotificationSchema,
     getScheduledNotificationSchema,
     getScheduledNotificationSchemaByCHBSchema,
-    getScheduledNotificationSchemaByLogicKeySchema,
     deleteScheduledNotificationSchema,
 };

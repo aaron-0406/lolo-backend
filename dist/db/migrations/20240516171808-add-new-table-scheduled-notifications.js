@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.down = exports.up = void 0;
 const sequelize_1 = require("sequelize");
-const scheduled_notifications_model_1 = __importDefault(require("../models/settings/scheduled-notifications.model."));
+const scheduled_notifications_model_1 = __importDefault(require("../models/settings/scheduled-notifications.model"));
 const customer_has_bank_model_1 = __importDefault(require("../models/many-to-many/customer-has-bank.model"));
 const { SCHEDULED_NOTIFICATIONS_TABLE } = scheduled_notifications_model_1.default;
 const { CUSTOMER_HAS_BANK_TABLE } = customer_has_bank_model_1.default;
