@@ -35,17 +35,14 @@ const createNotificationController = (req, res, next) => __awaiter(void 0, void 
     try {
         const body = req.body;
         const newNotification = yield service.create(body);
-        const { visible } = req.query;
-        if (visible === "true") {
-            yield serviceUserLog.create({
-                customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
-                codeAction: "P29-01",
-                entity: SCHEDULED_NOTIFICATIONS_TABLE,
-                entityId: Number(newNotification.dataValues.id),
-                ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
-                customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
-            });
-        }
+        yield serviceUserLog.create({
+            customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
+            codeAction: "P29-01",
+            entity: SCHEDULED_NOTIFICATIONS_TABLE,
+            entityId: Number(newNotification.dataValues.id),
+            ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
+            customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
+        });
         res.status(201).json(newNotification);
     }
     catch (error) {
@@ -59,17 +56,14 @@ const updateNotificaitonController = (req, res, next) => __awaiter(void 0, void 
         const { id } = req.params;
         const body = req.body;
         const notification = yield service.update(id, body);
-        const { visible } = req.query;
-        if (visible === "true") {
-            yield serviceUserLog.create({
-                customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
-                codeAction: "P29-02",
-                entity: SCHEDULED_NOTIFICATIONS_TABLE,
-                entityId: Number(notification.dataValues.id),
-                ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
-                customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
-            });
-        }
+        yield serviceUserLog.create({
+            customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
+            codeAction: "P29-02",
+            entity: SCHEDULED_NOTIFICATIONS_TABLE,
+            entityId: Number(notification.dataValues.id),
+            ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
+            customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+        });
         res.json(notification);
     }
     catch (error) {
@@ -82,17 +76,14 @@ const deleteNotificationController = (req, res, next) => __awaiter(void 0, void 
     try {
         const { id } = req.params;
         yield service.delete(id);
-        const { visible } = req.query;
-        if (visible === "true") {
-            yield serviceUserLog.create({
-                customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
-                codeAction: "P29-03",
-                entity: SCHEDULED_NOTIFICATIONS_TABLE,
-                entityId: Number(id),
-                ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
-                customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
-            });
-        }
+        yield serviceUserLog.create({
+            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
+            codeAction: "P29-03",
+            entity: SCHEDULED_NOTIFICATIONS_TABLE,
+            entityId: Number(id),
+            ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
+            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+        });
         res.status(201).json({ id });
     }
     catch (error) {

@@ -78,8 +78,8 @@ class ScheduledNotifications extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
         this.hasMany(models.SCHEDULED_NOTIFICATIONS_USERS, {
-            as: 'scheduledNotificationsUsers',
-            foreignKey: 'scheduledNotificationId'
+            as: "scheduledNotificationsUsers",
+            foreignKey: "scheduledNotificationId",
         });
     }
     static config(sequelize) {
@@ -87,7 +87,9 @@ class ScheduledNotifications extends sequelize_1.Model {
             sequelize,
             tableName: SCHEDULED_NOTIFICATIONS_TABLE,
             modelName: SCHEDULED_NOTIFICATIONS_TABLE,
-            timestamps: false,
+            timestamps: true,
+            paranoid: true,
+            deletedAt: "deleted_at",
         };
     }
 }

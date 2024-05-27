@@ -12,7 +12,7 @@ import customerUserModel from "../customer-user.model";
 
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 const { SCHEDULED_NOTIFICATIONS_TABLE } = scheduledNotificationsModel;
-const { CUSTOMER_USER_TABLE } = customerUserModel
+const { CUSTOMER_USER_TABLE } = customerUserModel;
 
 const SCHEDULED_NOTIFICATIONS_USERS_TABLE = "SCHEDULED_NOTIFICATIONS_USERS";
 
@@ -27,7 +27,6 @@ const ScheduledNotificationsUsersSchema: ModelAttributes<
     field: "id_scheduled_notification_user",
     type: DataTypes.INTEGER,
   },
-
   customerHasBankId: {
     allowNull: false,
     field: "customer_has_bank_id_customer_has_bank",
@@ -41,7 +40,7 @@ const ScheduledNotificationsUsersSchema: ModelAttributes<
   },
   scheduledNotificationId: {
     allowNull: false,
-    references:{
+    references: {
       model: SCHEDULED_NOTIFICATIONS_TABLE,
       key: "id_scheduled_notification",
     },
@@ -79,7 +78,9 @@ const ScheduledNotificationsUsersSchema: ModelAttributes<
 class ScheduledNotificationsUsers extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
-    this.belongsTo(models.SCHEDULED_NOTIFICATIONS, { as: "scheduledNotification" });
+    this.belongsTo(models.SCHEDULED_NOTIFICATIONS, {
+      as: "scheduledNotification",
+    });
     this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
   }
 

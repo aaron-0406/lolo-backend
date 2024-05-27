@@ -5,10 +5,18 @@ const { PERMISSION_TABLE } = permissionModel;
 
 const newPermissions = [
   {
+    name: "CONFIGURACIONES",
+    code: "P32",
+    icon: "-",
+    link: "#",
+    is_dropdown: true,
+  },
+  {
     name: "NOTIFICACIONES PROGRAMADAS",
     code: "P29",
     icon: "ri-notification-2-fill",
     link: "/configuracion/:urlIdentifier/notificationes-programadas",
+    id_permission_main: 185,
   },
   {
     name: "AGREGAR NOTIFICACION PROGRAMADA",
@@ -33,9 +41,8 @@ const newPermissions = [
     code: "P29-04",
     icon: "-",
     link: "#",
-  }
+  },
 ];
-
 
 export async function up(queryInterface: QueryInterface) {
   await queryInterface.bulkInsert(PERMISSION_TABLE, newPermissions);

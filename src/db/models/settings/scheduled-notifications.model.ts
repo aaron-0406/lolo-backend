@@ -85,9 +85,9 @@ const ScheduledNotificationsSchema: ModelAttributes<
 class ScheduledNotifications extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
-    this.hasMany(models.SCHEDULED_NOTIFICATIONS_USERS , {
-      as: 'scheduledNotificationsUsers',
-      foreignKey: 'scheduledNotificationId'
+    this.hasMany(models.SCHEDULED_NOTIFICATIONS_USERS, {
+      as: "scheduledNotificationsUsers",
+      foreignKey: "scheduledNotificationId",
     });
   }
 
@@ -96,7 +96,9 @@ class ScheduledNotifications extends Model {
       sequelize,
       tableName: SCHEDULED_NOTIFICATIONS_TABLE,
       modelName: SCHEDULED_NOTIFICATIONS_TABLE,
-      timestamps: false,
+      timestamps: true,
+      paranoid: true,
+      deletedAt: "deleted_at",
     };
   }
 }

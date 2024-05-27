@@ -36,17 +36,14 @@ const changeNotificationsUsersController = (req, res, next) => __awaiter(void 0,
         const { idNotification } = req.params;
         const body = req.body;
         const notificationsUsers = yield service.changeNotificationsUsers(idNotification, body.data);
-        const { visible } = req.query;
-        if (visible === "true") {
-            yield serviceUserLog.create({
-                customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
-                codeAction: "P29-04",
-                entity: SCHEDULED_NOTIFICATIONS_USERS_TABLE,
-                entityId: Number(idNotification),
-                ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
-                customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
-            });
-        }
+        yield serviceUserLog.create({
+            customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
+            codeAction: "P29-04",
+            entity: SCHEDULED_NOTIFICATIONS_USERS_TABLE,
+            entityId: Number(idNotification),
+            ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
+            customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
+        });
         res.json(notificationsUsers);
     }
     catch (error) {

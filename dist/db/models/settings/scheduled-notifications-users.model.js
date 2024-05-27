@@ -69,7 +69,9 @@ const ScheduledNotificationsUsersSchema = {
 class ScheduledNotificationsUsers extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
-        this.belongsTo(models.SCHEDULED_NOTIFICATIONS, { as: "scheduledNotification" });
+        this.belongsTo(models.SCHEDULED_NOTIFICATIONS, {
+            as: "scheduledNotification",
+        });
         this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
     }
     static config(sequelize) {

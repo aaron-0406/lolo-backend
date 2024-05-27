@@ -18,10 +18,18 @@ const permission_model_1 = __importDefault(require("../models/permission.model")
 const { PERMISSION_TABLE } = permission_model_1.default;
 const newPermissions = [
     {
+        name: "CONFIGURACIONES",
+        code: "P32",
+        icon: "-",
+        link: "#",
+        is_dropdown: true,
+    },
+    {
         name: "NOTIFICACIONES PROGRAMADAS",
         code: "P29",
         icon: "ri-notification-2-fill",
         link: "/configuracion/:urlIdentifier/notificationes-programadas",
+        id_permission_main: 185,
     },
     {
         name: "AGREGAR NOTIFICACION PROGRAMADA",
@@ -46,7 +54,7 @@ const newPermissions = [
         code: "P29-04",
         icon: "-",
         link: "#",
-    }
+    },
 ];
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
