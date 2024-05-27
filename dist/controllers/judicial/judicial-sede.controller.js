@@ -38,7 +38,7 @@ const getJudicialSedeByCHBController = (req, res, next) => __awaiter(void 0, voi
         if (visible === "true") {
             yield serviceUserLog.create({
                 customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
-                codeAction: "P23-04",
+                codeAction: "P28-04",
                 entity: JUDICIAL_SEDE_TABLE,
                 entityId: Number(chb),
                 ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
@@ -70,7 +70,7 @@ const createJudicialSedeController = (req, res, next) => __awaiter(void 0, void 
         const newJudicialSede = yield service.create(body);
         yield serviceUserLog.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
-            codeAction: "P23-01",
+            codeAction: "P28-01",
             entity: JUDICIAL_SEDE_TABLE,
             entityId: Number(newJudicialSede.dataValues.id),
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
@@ -91,7 +91,7 @@ const updateJudicialSedeController = (req, res, next) => __awaiter(void 0, void 
         const judicialSede = yield service.update(id, body);
         yield serviceUserLog.create({
             customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
-            codeAction: "P23-02",
+            codeAction: "P28-02",
             entity: JUDICIAL_SEDE_TABLE,
             entityId: Number(judicialSede.dataValues.id),
             ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
@@ -111,7 +111,7 @@ const deleteJudicialSedeController = (req, res, next) => __awaiter(void 0, void 
         yield service.delete(id);
         yield serviceUserLog.create({
             customerUserId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.id),
-            codeAction: "P23-03",
+            codeAction: "P28-03",
             entity: JUDICIAL_SEDE_TABLE,
             entityId: Number(id),
             ip: (_l = req.clientIp) !== null && _l !== void 0 ? _l : "",

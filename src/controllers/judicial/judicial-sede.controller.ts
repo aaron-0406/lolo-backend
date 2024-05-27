@@ -34,7 +34,7 @@ export const getJudicialSedeByCHBController = async (
     if (visible === "true") {
       await serviceUserLog.create({
         customerUserId: Number(req.user?.id),
-        codeAction: "P23-04",
+        codeAction: "P28-04",
         entity: JUDICIAL_SEDE_TABLE,
         entityId: Number(chb),
         ip: req.clientIp ?? "",
@@ -73,7 +73,7 @@ export const createJudicialSedeController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P23-01",
+      codeAction: "P28-01",
       entity: JUDICIAL_SEDE_TABLE,
       entityId: Number(newJudicialSede.dataValues.id),
       ip: req.clientIp ?? "",
@@ -98,7 +98,7 @@ export const updateJudicialSedeController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P23-02",
+      codeAction: "P28-02",
       entity: JUDICIAL_SEDE_TABLE,
       entityId: Number(judicialSede.dataValues.id),
       ip: req.clientIp ?? "",
@@ -122,7 +122,7 @@ export const deleteJudicialSedeController = async (
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P23-03",
+      codeAction: "P28-03",
       entity: JUDICIAL_SEDE_TABLE,
       entityId: Number(id),
       ip: req.clientIp ?? "",
