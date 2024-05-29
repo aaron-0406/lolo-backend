@@ -90,9 +90,8 @@ const JudicialBinnacleSchema = {
 class JudicialBinnacle extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
-        this.hasOne(models.JUDICIAL_CASE_FILE, {
-            as: "judicialCaseFile",
-            foreignKey: "id_judicial_case_file",
+        this.belongsTo(models.JUDICIAL_CASE_FILE, {
+            as: "judicialFileCase",
         });
         this.hasMany(models.JUDICIAL_BIN_FILE, {
             as: "judicialBinFiles",

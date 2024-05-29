@@ -11,6 +11,7 @@ import {
   deleteDownloadFolderTask,
   sendWeeklyReportsByEmail,
 } from "./libs/cron_jobs";
+import { startJudicialCronJobs } from "./jobs";
 
 const { logErrors, ormErrorHandler, boomErrorHandler, errorHandler } =
   errorHandlerr;
@@ -93,5 +94,9 @@ app.listen(port, () => {
   fs.mkdir(path.join(__dirname, "./public/download"), () => {});
   deleteDownloadFolderTask();
   sendWeeklyReportsByEmail();
+
+  // JOBS
+  startJudicialCronJobs();
+
   console.log("My port: " + port);
 });

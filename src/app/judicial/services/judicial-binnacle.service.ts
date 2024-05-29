@@ -4,11 +4,35 @@ import { JudicialBinnacleType } from "../types/judicial-binnacle.type";
 import config from "../../../config/config";
 import { uploadFile } from "../../../libs/aws_bucket";
 import { deleteFile, renameFile } from "../../../libs/helpers";
+import moment from "moment";
+import { Op } from "sequelize";
 
 const { models } = sequelize;
 
 class JudicialBinnacleService {
   constructor() {}
+
+  async findAll() {
+    const judicialBinnacle = await models.JUDICIAL_BINNACLE.findAll({
+      include: [
+        {
+          model: models.JUDICIAL_BIN_TYPE_BINNACLE,
+          as: "binnacleType",
+        },
+        {
+          model: models.JUDICIAL_BIN_PROCEDURAL_STAGE,
+          as: "judicialBinProceduralStage",
+        },
+        {
+          model: models.JUDICIAL_BIN_FILE,
+          as: "judicialBinFiles",
+        },
+      ],
+      order: [["id", "DESC"]],
+    });
+
+    return judicialBinnacle;
+  }
 
   async findAllByCHBAndFileCase(fileCase: number) {
     const rta = await models.JUDICIAL_BINNACLE.findAll({
@@ -146,6 +170,79 @@ class JudicialBinnacleService {
     await judicialBinnacle.destroy();
 
     return { id };
+  }
+
+  // INFO: LOGIC FOR JOBS
+  async findAllBinnaclesByCHBJob(chb: number) {
+    try {
+      const currentDate = moment().format("YYYY-MM-DD HH:mm:ss");
+
+      const subqueryResults = await sequelize.query(
+        `
+          SELECT jb1.id_judicial_binnacle
+          FROM JUDICIAL_BINNACLE AS jb1
+          JOIN (
+            SELECT judicial_file_case_id_judicial_file_case AS judicialFileCaseId, 
+                   MIN(ABS(TIMESTAMPDIFF(SECOND, date, '${currentDate}'))) AS minDiff
+            FROM JUDICIAL_BINNACLE
+            WHERE deleted_at IS NULL
+            GROUP BY judicial_file_case_id_judicial_file_case
+          ) AS jb2
+          ON jb1.judicial_file_case_id_judicial_file_case = jb2.judicialFileCaseId
+          AND ABS(TIMESTAMPDIFF(SECOND, jb1.date, '${currentDate}')) = jb2.minDiff
+          WHERE jb1.customer_has_bank_id_customer_has_bank = ? AND jb1.deleted_at IS NULL
+        `,
+        {
+          replacements: [chb],
+        }
+      );
+
+      const relevantIds = subqueryResults[0].map(
+        (result: any) => result.id_judicial_binnacle
+      );
+
+      const rta = await models.JUDICIAL_BINNACLE.findAll({
+        where: {
+          id: {
+            [Op.in]: relevantIds,
+          },
+          customer_has_bank_id_customer_has_bank: chb,
+          deleted_at: null,
+        },
+        include: [
+          {
+            model: models.JUDICIAL_CASE_FILE,
+            as: "judicialFileCase",
+            include: [
+              {
+                model: models.CLIENT,
+                as: "client",
+              },
+              {
+                model: models.JUDICIAL_COURT,
+                as: "judicialCourt",
+              },
+            ],
+          },
+          {
+            model: models.CUSTOMER_HAS_BANK,
+            as: "customerHasBank",
+            include: [
+              {
+                model: models.BANK,
+                as: "bank",
+              },
+            ],
+          },
+        ],
+        raw: true,
+      });
+
+      return rta;
+    } catch (error) {
+      console.error("Error in findAllBinnaclesByCHBJob:", error);
+      throw error;
+    }
   }
 }
 
