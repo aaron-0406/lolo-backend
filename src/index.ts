@@ -11,10 +11,7 @@ import {
   deleteDownloadFolderTask,
   sendWeeklyReportsByEmail,
 } from "./libs/cron_jobs";
-
-import nodemailder from "nodemailer";
-
-import { startCronJobs } from "./jobs";
+import { startJudicialCronJobs } from "./jobs";
 
 const { logErrors, ormErrorHandler, boomErrorHandler, errorHandler } =
   errorHandlerr;
@@ -99,6 +96,7 @@ app.listen(port, () => {
   sendWeeklyReportsByEmail();
 
   // JOBS
-  startCronJobs();
+  startJudicialCronJobs();
+
   console.log("My port: " + port);
 });

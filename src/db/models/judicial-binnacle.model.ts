@@ -102,9 +102,8 @@ const JudicialBinnacleSchema: ModelAttributes<
 class JudicialBinnacle extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
-    this.hasOne(models.JUDICIAL_CASE_FILE, {
-      as: "judicialCaseFile",
-      foreignKey: "id_judicial_case_file",
+    this.belongsTo(models.JUDICIAL_CASE_FILE, {
+      as: "judicialFileCase",
     });
     this.hasMany(models.JUDICIAL_BIN_FILE, {
       as: "judicialBinFiles",

@@ -1,13 +1,27 @@
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
 import { ScheduledNotificationType } from "../types/scheduled-notifications.type";
+import updateCronJobs from "../../../jobs/judicial/judicial-scheduled-notifications.job";
 
 const { models } = sequelize;
 class ScheduledNotificationsService {
   constructor() {}
 
   async findAll() {
-    const rta = await models.SCHEDULED_NOTIFICATIONS.findAll();
+    const rta = await models.SCHEDULED_NOTIFICATIONS.findAll({
+      include: [
+        {
+          model: models.SCHEDULED_NOTIFICATIONS_USERS,
+          as: "scheduledNotificationsUsers",
+          include: [
+            {
+              model: models.CUSTOMER_USER,
+              as: "customerUser",
+            },
+          ],
+        },
+      ],
+    });
 
     if (!rta) {
       throw boom.notFound("No existen notificaciones programadas");
@@ -33,6 +47,8 @@ class ScheduledNotificationsService {
   async create(data: ScheduledNotificationType) {
     const newScheduledNotification =
       await models.SCHEDULED_NOTIFICATIONS.create(data);
+
+    updateCronJobs();
     return newScheduledNotification;
   }
 
@@ -46,6 +62,8 @@ class ScheduledNotificationsService {
     }
 
     await scheduledNotification.update(data);
+
+    updateCronJobs();
     return scheduledNotification;
   }
 
@@ -59,6 +77,8 @@ class ScheduledNotificationsService {
     }
 
     await scheduledNotification.destroy();
+
+    updateCronJobs();
     return scheduledNotification;
   }
 }
