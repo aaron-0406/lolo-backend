@@ -14,9 +14,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = __importDefault(require("../../../libs/sequelize"));
 const boom_1 = __importDefault(require("@hapi/boom"));
+const judicial_scheduled_notifications_job_1 = __importDefault(require("../../../jobs/judicial/judicial-scheduled-notifications.job"));
 const { models } = sequelize_1.default;
 class ScheduledNotificationsService {
     constructor() { }
+    findAll() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rta = yield models.SCHEDULED_NOTIFICATIONS.findAll({
+                include: [
+                    {
+                        model: models.SCHEDULED_NOTIFICATIONS_USERS,
+                        as: "scheduledNotificationsUsers",
+                        include: [
+                            {
+                                model: models.CUSTOMER_USER,
+                                as: "customerUser",
+                            },
+                        ],
+                    },
+                ],
+            });
+            if (!rta) {
+                throw boom_1.default.notFound("No existen notificaciones programadas");
+            }
+            return rta;
+        });
+    }
     findAllByChb(chb) {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.SCHEDULED_NOTIFICATIONS.findAll({
@@ -33,6 +56,7 @@ class ScheduledNotificationsService {
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const newScheduledNotification = yield models.SCHEDULED_NOTIFICATIONS.create(data);
+            (0, judicial_scheduled_notifications_job_1.default)();
             return newScheduledNotification;
         });
     }
@@ -43,6 +67,7 @@ class ScheduledNotificationsService {
                 throw boom_1.default.notFound("Notificación programada no encontrada");
             }
             yield scheduledNotification.update(data);
+            (0, judicial_scheduled_notifications_job_1.default)();
             return scheduledNotification;
         });
     }
@@ -53,6 +78,7 @@ class ScheduledNotificationsService {
                 throw boom_1.default.notFound("Notificación programada no encontrada");
             }
             yield scheduledNotification.destroy();
+            (0, judicial_scheduled_notifications_job_1.default)();
             return scheduledNotification;
         });
     }

@@ -13,6 +13,7 @@ const fs_1 = __importDefault(require("fs"));
 require("./libs/passport");
 const ip_handler_1 = __importDefault(require("./middlewares/ip.handler"));
 const cron_jobs_1 = require("./libs/cron_jobs");
+const jobs_1 = require("./jobs");
 const { logErrors, ormErrorHandler, boomErrorHandler, errorHandler } = error_handler_1.default;
 const app = (0, express_1.default)();
 const port = process.env.PORT || 5000;
@@ -61,5 +62,7 @@ app.listen(port, () => {
     fs_1.default.mkdir(path_1.default.join(__dirname, "./public/download"), () => { });
     (0, cron_jobs_1.deleteDownloadFolderTask)();
     (0, cron_jobs_1.sendWeeklyReportsByEmail)();
+    // JOBS
+    (0, jobs_1.startJudicialCronJobs)();
     console.log("My port: " + port);
 });
