@@ -81,7 +81,7 @@ const updateCronJobs = async () => {
                   <div class="cliente">
                       <h2>Cliente: ${
                         judicialBinnacle["judicialFileCase.client.name"]
-                      } (${judicialBinnacle["customerHasBank.bank.name"]})</h2>
+                      } (${judicialBinnacle["customerHasBank.bank.name"]}) - (${judicialBinnacle["judicialFileCase.client.city.name"]})</h2>
                       <p class="expediente"><strong>Exp.:</strong> ${
                         judicialBinnacle["judicialFileCase.numberCaseFile"]
                       }</p>

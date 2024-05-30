@@ -182,7 +182,7 @@ class JudicialBinnacleService {
           SELECT jb1.id_judicial_binnacle
           FROM JUDICIAL_BINNACLE AS jb1
           JOIN (
-            SELECT judicial_file_case_id_judicial_file_case AS judicialFileCaseId, 
+            SELECT judicial_file_case_id_judicial_file_case AS judicialFileCaseId,
                    MIN(ABS(TIMESTAMPDIFF(SECOND, date, '${currentDate}'))) AS minDiff
             FROM JUDICIAL_BINNACLE
             WHERE deleted_at IS NULL
@@ -190,8 +190,7 @@ class JudicialBinnacleService {
           ) AS jb2
           ON jb1.judicial_file_case_id_judicial_file_case = jb2.judicialFileCaseId
           AND ABS(TIMESTAMPDIFF(SECOND, jb1.date, '${currentDate}')) = jb2.minDiff
-          WHERE jb1.customer_has_bank_id_customer_has_bank = ? AND jb1.deleted_at IS NULL
-        `,
+          WHERE jb1.customer_has_bank_id_customer_has_bank = ? AND jb1.deleted_at IS NULL`,
         {
           replacements: [chb],
         }
@@ -217,6 +216,12 @@ class JudicialBinnacleService {
               {
                 model: models.CLIENT,
                 as: "client",
+                include: [
+                  {
+                    model: models.CITY,
+                    as: "city",
+                  },
+                ],
               },
               {
                 model: models.JUDICIAL_COURT,
