@@ -63,12 +63,12 @@ class ClientService {
     ];
 
     let filtersWhere: any = {
-      customer_has_bank_id_customer_has_bank: chb,
+      chb_transferred: chb,
     };
     if (filters.length > 0) {
       filtersWhere = {
         [Op.or]: [...filters],
-        customer_has_bank_id_customer_has_bank: chb,
+        chb_transferred: chb,
       };
     }
 

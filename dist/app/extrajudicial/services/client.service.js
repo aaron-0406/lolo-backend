@@ -74,12 +74,12 @@ class ClientService {
                 { code: { [sequelize_2.Op.substring]: filtro } },
             ];
             let filtersWhere = {
-                customer_has_bank_id_customer_has_bank: chb,
+                chb_transferred: chb,
             };
             if (filters.length > 0) {
                 filtersWhere = {
                     [sequelize_2.Op.or]: [...filters],
-                    customer_has_bank_id_customer_has_bank: chb,
+                    chb_transferred: chb,
                 };
             }
             const clients = yield models.CLIENT.findAll({
