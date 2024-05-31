@@ -65,14 +65,22 @@ class ClientService {
     let filtersWhere: any = {
       customer_has_bank_id_customer_has_bank: chb,
     };
+
     if (filters.length > 0) {
       filtersWhere = {
         [Op.or]: [...filters],
-        customer_has_bank_id_customer_has_bank: chb,
+        [Op.and]: [
+          {
+            [Op.or]: [
+              { chb_transferred: chb },
+              { customer_has_bank_id_customer_has_bank: chb },
+            ],
+          },
+        ],
       };
     }
 
-    const clients = await models.CLIENT.findAll({
+    let clients = await models.CLIENT.findAll({
       include: [
         {
           model: models.CUSTOMER_USER,

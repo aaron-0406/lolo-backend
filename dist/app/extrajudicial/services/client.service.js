@@ -79,10 +79,17 @@ class ClientService {
             if (filters.length > 0) {
                 filtersWhere = {
                     [sequelize_2.Op.or]: [...filters],
-                    customer_has_bank_id_customer_has_bank: chb,
+                    [sequelize_2.Op.and]: [
+                        {
+                            [sequelize_2.Op.or]: [
+                                { chb_transferred: chb },
+                                { customer_has_bank_id_customer_has_bank: chb },
+                            ],
+                        },
+                    ],
                 };
             }
-            const clients = yield models.CLIENT.findAll({
+            let clients = yield models.CLIENT.findAll({
                 include: [
                     {
                         model: models.CUSTOMER_USER,

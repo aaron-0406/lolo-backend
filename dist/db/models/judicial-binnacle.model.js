@@ -83,7 +83,7 @@ const JudicialBinnacleSchema = {
     },
     lastPerformed: {
         allowNull: false,
-        type: sequelize_1.DataTypes.STRING,
+        type: sequelize_1.DataTypes.TEXT("long"),
         field: "last_performed",
     },
 };

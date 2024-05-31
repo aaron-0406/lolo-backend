@@ -94,7 +94,7 @@ const JudicialBinnacleSchema: ModelAttributes<
 
   lastPerformed: {
     allowNull: false,
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT("long"),
     field: "last_performed",
   },
 };
