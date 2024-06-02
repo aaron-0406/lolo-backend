@@ -70,6 +70,23 @@ class AuthService {
             return qrCodeUrl;
         });
     }
+    getQrCode(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const userCustomer = yield models.CUSTOMER_USER.findOne({
+                where: { id: userId },
+            });
+            if (!(userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.dataValues.code2fa))
+                throw boom_1.default.notFound("Usuario no tiene habilitado doble factor");
+            const email = userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.dataValues.email;
+            const secret = userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.dataValues.code2fa;
+            const qrCodeUrl = speakeasy_1.default.otpauthURL({
+                secret: secret,
+                label: email,
+                issuer: "LoloBank",
+            });
+            return qrCodeUrl;
+        });
+    }
     verify2fa(token, userId) {
         return __awaiter(this, void 0, void 0, function* () {
             const userCustomer = yield models.CUSTOMER_USER.findOne({
@@ -83,8 +100,13 @@ class AuthService {
                 window: 6,
             });
             if (!verificationResult) {
-                throw boom_1.default.notFound("Autenticación de doble factor fallida");
+                return false;
             }
+            if (verificationResult && !(userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.dataValues.firstAccess)) {
+                yield models.CUSTOMER_USER.update({ firstAccess: true }, { where: { id: userId } });
+                return true;
+            }
+            return true;
         });
     }
 }

@@ -36,6 +36,7 @@ const createCustomerUserSchema = Joi.object<
   customerId: customerId.required(),
   roleId: roleId.required(),
   loginAttempts: loginAttempts.optional(),
+  firstAccess: Joi.boolean().optional(),
 });
 
 const updateCustomerUserStateSchema = Joi.object<{ state: boolean }, true>({
@@ -62,6 +63,7 @@ const updateCustomerUserSchema = Joi.object<
   state: state.required(),
   password: password.optional(),
   roleId: roleId.required(),
+  firstAccess: Joi.boolean().optional(),
 });
 
 const getCustomerUserSchema = Joi.object<{ id: number }, true>({

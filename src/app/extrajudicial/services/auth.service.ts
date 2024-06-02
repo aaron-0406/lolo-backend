@@ -70,6 +70,25 @@ class AuthService {
       { code2fa: secret },
       { where: { id: userId } }
     );
+    return qrCodeUrl;
+  }
+
+  async getQrCode(userId: number) {
+    const userCustomer = await models.CUSTOMER_USER.findOne({
+      where: { id: userId },
+    });
+
+    if (!userCustomer?.dataValues.code2fa)
+      throw boom.notFound("Usuario no tiene habilitado doble factor");
+
+    const email = userCustomer?.dataValues.email;
+    const secret = userCustomer?.dataValues.code2fa;
+
+    const qrCodeUrl = speakeasy.otpauthURL({
+      secret: secret,
+      label: email,
+      issuer: "LoloBank",
+    });
 
     return qrCodeUrl;
   }
@@ -89,8 +108,16 @@ class AuthService {
     });
 
     if (!verificationResult) {
-      throw boom.notFound("Autenticación de doble factor fallida");
+      return false;
     }
+    if(verificationResult && !userCustomer?.dataValues.firstAccess){
+      await models.CUSTOMER_USER.update(
+        { firstAccess: true },
+        { where: { id: userId } }
+      );
+      return true;
+    }
+    return true;
   }
 }
 

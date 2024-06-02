@@ -9,6 +9,7 @@ import {
   updateCustomerUserStateController,
   updateCustomerUserController,
   deleteCustomerUserController,
+  removeCode2faController,
 } from "../../controllers/dash/customer-user.controller";
 import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
@@ -61,6 +62,14 @@ router.patch(
   validatorHandler(getCustomerUserSchema, "params"),
   validatorHandler(updateCustomerUserSchema, "body"),
   updateCustomerUserController
+);
+
+router.patch(
+  "/code2fa/:id",
+  JWTAuth,
+  checkPermissions("P10-05"),
+  validatorHandler(getCustomerUserSchema, "params"),
+  removeCode2faController
 );
 
 router.delete(
