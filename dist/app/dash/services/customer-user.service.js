@@ -115,5 +115,12 @@ class CustomerUserService {
             return { id };
         });
     }
+    removeCode2fa(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield this.findOne(id);
+            const rta = yield user.update(Object.assign(Object.assign({}, user), { code2fa: null, firstAccess: false }));
+            return rta;
+        });
+    }
 }
 exports.default = CustomerUserService;

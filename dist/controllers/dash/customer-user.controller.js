@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCustomerUserController = exports.updateCustomerUserController = exports.updateCustomerUserStateController = exports.createCustomerUserController = exports.getCustomerUserByIdController = exports.getCustomerUserByCustomerIdController = exports.getCustomerUsersController = void 0;
+exports.removeCode2faController = exports.deleteCustomerUserController = exports.updateCustomerUserController = exports.updateCustomerUserStateController = exports.createCustomerUserController = exports.getCustomerUserByIdController = exports.getCustomerUserByCustomerIdController = exports.getCustomerUsersController = void 0;
 const customer_user_service_1 = __importDefault(require("../../app/dash/services/customer-user.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const customer_user_model_1 = __importDefault(require("../../db/models/customer-user.model"));
@@ -135,3 +135,23 @@ const deleteCustomerUserController = (req, res, next) => __awaiter(void 0, void 
     }
 });
 exports.deleteCustomerUserController = deleteCustomerUserController;
+const removeCode2faController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _o, _p, _q;
+    try {
+        const { id } = req.params;
+        const user = yield service.removeCode2fa(id);
+        yield serviceUserLog.create({
+            customerUserId: Number((_o = req.user) === null || _o === void 0 ? void 0 : _o.id),
+            codeAction: "P10-05",
+            entity: CUSTOMER_USER_TABLE,
+            entityId: Number(id),
+            ip: (_p = req.clientIp) !== null && _p !== void 0 ? _p : "",
+            customerId: Number((_q = req.user) === null || _q === void 0 ? void 0 : _q.customerId),
+        });
+        res.status(201).json(user);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.removeCode2faController = removeCode2faController;
