@@ -89,6 +89,12 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
     allowNull: true,
     type: DataTypes.STRING(70),
   },
+  firstAccess: {
+    allowNull: false,
+    field: "first_access",
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
 };
 
 class CustomerUser extends Model {

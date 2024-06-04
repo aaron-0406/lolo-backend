@@ -147,3 +147,28 @@ export const deleteCustomerUserController = async (
     next(error);
   }
 };
+
+export const removeCode2faController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try{
+    const { id } = req.params;
+    const user = await service.removeCode2fa(id);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P10-05",
+      entity: CUSTOMER_USER_TABLE,
+      entityId: Number(id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    });
+
+    res.status(201).json(user);
+  }
+  catch (error) {
+    next(error);
+  }
+}

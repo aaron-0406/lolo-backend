@@ -107,6 +107,13 @@ class CustomerUserService {
 
     return { id };
   }
+
+  async removeCode2fa(id: string) {
+    const user = await this.findOne(id);
+    const rta = await user.update({ ...user, code2fa: null, firstAccess: false });
+
+    return rta;
+  }
 }
 
 export default CustomerUserService;

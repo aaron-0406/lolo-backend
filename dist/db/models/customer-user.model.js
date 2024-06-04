@@ -85,6 +85,12 @@ const CustomerUserSchema = {
         allowNull: true,
         type: sequelize_1.DataTypes.STRING(70),
     },
+    firstAccess: {
+        allowNull: false,
+        field: "first_access",
+        type: sequelize_1.DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
 };
 class CustomerUser extends sequelize_1.Model {
     static associate(models) {

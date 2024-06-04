@@ -18,4 +18,5 @@ export type CustomerUserType = {
   customerId: number;
   loginAttempts?: number;
   code2fa?: string;
+  firstAccess: boolean;
 };

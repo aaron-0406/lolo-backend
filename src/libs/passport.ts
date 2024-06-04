@@ -28,9 +28,20 @@ passport.use(
           customerId,
           code2fa,
         });
-
-        if (!!user.dataValues.code2fa) {
-          await service.verify2fa(code2fa, user.dataValues.id);
+        if (user.dataValues.code2fa && user.dataValues.firstAccess) {
+          const isValid = await service.verify2fa(code2fa, user.dataValues.id);
+          if (!isValid) {
+            throw boom.badRequest('Código 2fa incorrecto');
+          }
+        }
+        else if (user.dataValues.code2fa && !user.dataValues.firstAccess) {
+          const isValid = await service.verify2fa(code2fa, user.dataValues.id);
+          if (!isValid) {
+            const qrCodeUrl = await service.getQrCode(user.dataValues.id);
+            return done(null, {
+              qr: qrCodeUrl,
+            });
+          }
         } else {
           const qrCodeUrl = await service.generate2fa(
             user.dataValues.email,

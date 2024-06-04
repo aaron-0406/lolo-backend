@@ -16,5 +16,6 @@ router.get("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getC
 router.post("/", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P10-01"), (0, validator_handler_1.default)(createCustomerUserSchema, "body"), customer_user_controller_1.createCustomerUserController);
 router.patch("/state/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P10-04"), (0, validator_handler_1.default)(getCustomerUserSchema, "params"), (0, validator_handler_1.default)(updateCustomerUserStateSchema, "body"), customer_user_controller_1.updateCustomerUserStateController);
 router.patch("/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P10-02"), (0, validator_handler_1.default)(getCustomerUserSchema, "params"), (0, validator_handler_1.default)(updateCustomerUserSchema, "body"), customer_user_controller_1.updateCustomerUserController);
+router.patch("/code2fa/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P10-05"), (0, validator_handler_1.default)(getCustomerUserSchema, "params"), customer_user_controller_1.removeCode2faController);
 router.delete("/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P10-03"), (0, validator_handler_1.default)(getCustomerUserSchema, "params"), customer_user_controller_1.deleteCustomerUserController);
 exports.default = router;

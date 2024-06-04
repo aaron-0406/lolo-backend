@@ -37,8 +37,20 @@ passport_1.default.use("local.signin", new passport_local_1.Strategy({
             customerId,
             code2fa,
         });
-        if (!!user.dataValues.code2fa) {
-            yield service.verify2fa(code2fa, user.dataValues.id);
+        if (user.dataValues.code2fa && user.dataValues.firstAccess) {
+            const isValid = yield service.verify2fa(code2fa, user.dataValues.id);
+            if (!isValid) {
+                throw boom_1.default.badRequest('Código 2fa incorrecto');
+            }
+        }
+        else if (user.dataValues.code2fa && !user.dataValues.firstAccess) {
+            const isValid = yield service.verify2fa(code2fa, user.dataValues.id);
+            if (!isValid) {
+                const qrCodeUrl = yield service.getQrCode(user.dataValues.id);
+                return done(null, {
+                    qr: qrCodeUrl,
+                });
+            }
         }
         else {
             const qrCodeUrl = yield service.generate2fa(user.dataValues.email, user.dataValues.id);
