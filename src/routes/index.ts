@@ -49,6 +49,7 @@ import extContactTypeRouter from "./extrajudicial/ext-contact-type.routes";
 import extProductNameRouter from "./extrajudicial/ext-product-name.routes";
 import schedudedNotificationRouter from "./config/scheduled-notifications.routes";
 import schedudedNotificationsUsersRouter from "./config/scheduled-notifications-users.routes";
+import compareExcelsRouter from "./config/compare-excels.routes";
 
 const routerApi = (app: Express) => {
   const router = express.Router();
@@ -112,6 +113,10 @@ const routerApi = (app: Express) => {
   router.use(
     "/config/scheduled-notifications-users",
     schedudedNotificationsUsersRouter
+  )
+  router.use(
+    "/config/compare-excels",
+    compareExcelsRouter
   )
 };
 
