@@ -1,8 +1,8 @@
 import path from "path";
-import { Data } from "../../app/settings/types/compare-excels.type";
-import { DataResult } from "../../app/settings/types/compare-excels.type";
+import { CompareExcelType } from "../../app/settings/types/compare-excels.type";
+import { CompareExcelResult } from '../../app/settings/services/compare-excels.service';
 import Excel from 'exceljs';
-
+import fs from 'fs';
 const headers = ['IDC', 'CODCUENTACOBRANZA', 'NOMBRECLIENTE', 'ESTADO_CARTERA'];
 
 const patternActivA = /\bACTIVA\b/;
@@ -13,7 +13,7 @@ const filters = {
   ACTIVE_WITHOUT_STATUS: 'SIN CLASIFICACIÓN (CUENTA CORRIENTE)',
 }
 
-const removeDuplicates = (list: Data[], attribute: keyof Data): Data[] => {
+const removeDuplicates = (list: CompareExcelType[], attribute: keyof CompareExcelType): CompareExcelType[] => {
   const seen = new Set();
   return list.filter(item => {
       const value = item[attribute];
@@ -35,13 +35,13 @@ const modifyString = (s: string): string => {
   return s;
 }
 
-const generateExcelReport = (result: DataResult) => {
+const generateExcelReport = async(result: CompareExcelResult) => {
 
   const newWorkbook = new Excel.Workbook();
   newWorkbook.description = 'Reporte de comparación de Excel';
   newWorkbook.creator = 'Javier';
   newWorkbook.created = new Date();
-
+  const fileName = 'reporte.xlsx';
 
   const newClientsWorksheet = newWorkbook.addWorksheet('CLIENTES NUEVOS');
   const removedClientsWorksheet = newWorkbook.addWorksheet('CLIENTES REMOVIDOS');
@@ -364,9 +364,16 @@ const generateExcelReport = (result: DataResult) => {
     };
   });
 
-  const reportPath = path.join(__dirname, '../../docs', 'report.xlsx');
-  newWorkbook.xlsx.writeFile(reportPath)
-  return reportPath
+  fs.mkdirSync(path.join(__dirname, '../../public/download/compare-excels'), { recursive: true });
+  const reportPath = path.join(__dirname, '../../public/download/compare-excels', fileName);
+  await newWorkbook.xlsx.writeFile(reportPath)
+  const stats = fs.statSync(reportPath);
+  const fileSize = stats.size;
+
+  return {
+    fileName,
+    fileSize
+  }
 }
 
 

@@ -30,6 +30,12 @@ const newPermissions = [
         icon: "-",
         link: "#",
     },
+    {
+        name: "ENVIAR REPORTE",
+        code: "P33-02",
+        icon: "-",
+        link: "#",
+    }
 ];
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {

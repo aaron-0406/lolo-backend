@@ -1,9 +1,10 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import boom from '@hapi/boom';
 import { JWTAuth } from '../../middlewares/auth.handler';
-import { compareExcelsController } from '../../controllers/settings/compare-excels.controller';
+import { compareExcelsController, sendReportByEmailController } from '../../controllers/settings/compare-excels.controller';
 import { archivosExcel } from '../../middlewares/multer.handler';
-
+import { compareExcelToSendEmailSchemas } from '../../app/settings/schemas/compare-excels.schema';
+import validatorHandler from '../../middlewares/validator.handler';
 const router = Router();
 
 const multerFiles = archivosExcel.fields([
@@ -26,6 +27,13 @@ router.post(
   multerFiles,
   checkFiles,
   compareExcelsController,
+);
+
+router.post(
+  '/send-report-by-email',
+  JWTAuth,
+  validatorHandler(compareExcelToSendEmailSchemas, 'body'),
+  sendReportByEmailController,
 );
 
 export default router;

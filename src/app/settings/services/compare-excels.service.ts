@@ -1,9 +1,24 @@
 import { Workbook } from "exceljs";
-import { Data } from "../types/compare-excels.type";
 import { modifyString, removeDuplicates, filters, headers, generateExcelReport } from "../../../utils/config/compare-excels.util";
-import { Client, Product, ProductWithStatus, DataResult } from "../types/compare-excels.type";
+import { CompareExcelToSendEmailType, CompareExcelType } from "../types/compare-excels.type";
+import fs from "fs";
 import * as path from 'path';
+import * as nodemailer from 'nodemailer';
+import config from "../../../config/config";
 
+type Client = Omit<CompareExcelType, "codCuentaCobranza" | "estadoCartera">;
+type ProductWithStatus = CompareExcelType & { status: string };
+export type CompareExcelResult = {
+  newClients: Client[];
+  deletedClients: Client[];
+  deletedProducts: CompareExcelType[];
+  newProducts: CompareExcelType[];
+  unchangedProducts: CompareExcelType[];
+  repeatedProducts: CompareExcelType[];
+  productsChangedStatusToPenalty: ProductWithStatus[];
+  productsChangedStatusToActive: ProductWithStatus[];
+  productsWithoutStatus: CompareExcelType[];
+}
 
 class CompareExcelsService {
   constructor(){}
@@ -11,8 +26,8 @@ class CompareExcelsService {
   getSortingAndData = async(pathname: string) => {
     const workbook = new Workbook();
     const readWorkbook = await workbook.xlsx.readFile(pathname);
-    let data:Data[] = [];
-    const orderData: { [key:string] : Data[] } = {};
+    let data:CompareExcelType[] = [];
+    const orderData: { [key:string] : CompareExcelType[] } = {};
 
     if (workbook.worksheets.length) {
       const sheetIds: number[] = [];
@@ -36,7 +51,7 @@ class CompareExcelsService {
                   rowData.push(cell.value as string);
                 });
                 if (rowData.length) {
-                  const dataRow: Data = {
+                  const dataRow: CompareExcelType = {
                     idc: parseInt(rowData[0]),
                     codCuentaCobranza: rowData[1] as string,
                     nombreCliente: rowData[2]
@@ -83,9 +98,6 @@ class CompareExcelsService {
     const data1 = prevData?.data!;
     const data2 = newData?.data!;
 
-    console.log(data1.length);
-    console.log(data2.length);
-
     const orderData1 = prevData?.orderData!;
     const orderData2 = newData?.orderData!;
     const orderData1Keys = Object.keys(prevData?.orderData!);
@@ -116,15 +128,15 @@ class CompareExcelsService {
     // ? uno que muestre productos repetidos
     // ? Uno que muestre que productos pasaron de activa a castigo  o viseversa
 
-    let deletedProducts: Product[] = [];
-    let newProducts: Product[] = [];
-    let unchangedProducts: Product[] = [];
-    let repeatedProducts: Product[] = [];
+    let deletedProducts: CompareExcelType[] = [];
+    let newProducts: CompareExcelType[] = [];
+    let unchangedProducts: CompareExcelType[] = [];
+    let repeatedProducts: CompareExcelType[] = [];
 
 
     const productsChangedStatusToPenalty: ProductWithStatus[] = [];
     const productsChangedStatusToActive: ProductWithStatus[] = [];
-    const productsWithoutStatus: Product[] = [];
+    const productsWithoutStatus: CompareExcelType[] = [];
 
     const dontRepeatData1 =  removeDuplicates(data1, 'codCuentaCobranza');
     const dontRepeatData2 =  removeDuplicates(data2, 'codCuentaCobranza');
@@ -185,7 +197,7 @@ class CompareExcelsService {
       }
     });
 
-    const result: DataResult = {
+    const result: CompareExcelResult = {
       newClients,
       deletedClients,
       deletedProducts,
@@ -197,8 +209,58 @@ class CompareExcelsService {
       productsWithoutStatus,
     }
 
-    const pathDownload = generateExcelReport(result);
-    return pathDownload;
+    const fileData = generateExcelReport(result);
+    return fileData;
+  }
+
+  sendReportByEmail = async (data: CompareExcelToSendEmailType) => {
+    const reportPath = path.join(__dirname, '../../../public/download/compare-excels', data.fileData.fileName);
+    const fileData = fs.readFileSync(reportPath);
+    const transport = nodemailer.createTransport({
+      // host: config.AWS_EMAIL_HOST,
+      host: 'smtp.ethereal.email',
+      port: 587,
+      secure: false,
+      auth: {
+        user: 'yvaxqjaesko7klvx@ethereal.email',
+        pass: 'W31TrqCz3qbvDtdjUZ',
+        // user: config.AWS_EMAIL_USER,
+        // pass: config.AWS_EMAIL_PASSWORD,
+      },
+    });
+    const emails = data.users.map((user) => user.email);
+
+    const mailOptions = {
+      // from: config.AWS_EMAIL_USER,
+      to: emails.join(', '),
+      subject: 'Reporte de comparación de excels',
+      text: 'Reporte de comparación de excels',
+      attachments: [
+        {
+          filename: data.fileData.fileName,
+          content: fileData,
+        },
+      ],
+    };
+
+    transport.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        const previewUrl = nodemailer.getTestMessageUrl(info);
+        console.log('Preview URL: %s', previewUrl);
+        console.log('Email sent: ' + info.response);
+      }
+    });
+
+    // {
+    //   user: 'yvaxqjaesko7klvx@ethereal.email',
+    //   pass: 'W31TrqCz3qbvDtdjUZ',
+    //   smtp: { host: 'smtp.ethereal.email', port: 587, secure: false },
+    //   imap: { host: 'imap.ethereal.email', port: 993, secure: true },
+    //   pop3: { host: 'pop3.ethereal.email', port: 995, secure: true },
+    //   web: 'https://ethereal.email'
+    // }
   }
 }
 

@@ -1,25 +1,25 @@
-type Data = {
+type CompareExcelType = {
   idc: number;
   codCuentaCobranza: string;
   nombreCliente: string;
   estadoCartera: string;
 }
 
-type Client = Omit<Data, "codCuentaCobranza" | "estadoCartera">;
-type Product = Data;
-type ProductWithStatus = Product & { status: string };
+type CompareExcelToSendEmailType = {
+  fileData: {
+    fileName: string;
+    fileSize: number;
+  };
+  users: {
+    id: number;
+    name: string;
+    lastName: string;
+    phone?: string;
+    dni?: string;
+    email: string;
+    state?: number;
+  }[];
+};
 
-type DataResult = {
-  newClients: Client[];
-  deletedClients: Client[];
-  deletedProducts: Product[];
-  newProducts: Product[];
-  unchangedProducts: Product[];
-  repeatedProducts: Product[];
-  productsChangedStatusToPenalty: ProductWithStatus[];
-  productsChangedStatusToActive: ProductWithStatus[];
-  productsWithoutStatus: Product[];
-}
-
-export type { Data, Client, Product, ProductWithStatus, DataResult };
+export type { CompareExcelType, CompareExcelToSendEmailType };
 

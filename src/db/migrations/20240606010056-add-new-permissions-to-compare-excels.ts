@@ -17,6 +17,12 @@ const newPermissions = [
     icon: "-",
     link: "#",
   },
+  {
+    name: "ENVIAR REPORTE",
+    code: "P33-02",
+    icon: "-",
+    link: "#",
+  }
 ];
 
 export async function up(queryInterface: QueryInterface) {
