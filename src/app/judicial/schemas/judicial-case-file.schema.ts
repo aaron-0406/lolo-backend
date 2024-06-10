@@ -31,7 +31,7 @@ const processComment = Joi.string();
 const processReasonId = Joi.number().positive();
 const bankId = Joi.number();
 const idJudicialCaseFileRelated = Joi.number();
-
+const qrCode = Joi.string();
 const page = Joi.number().required().messages({
   "number.base": "El campo page es inválido",
   "any.required": "El campo page es requerido.",
@@ -84,6 +84,7 @@ const createJudicialCaseFileSchema = Joi.object<
     .empty("")
     .allow(""),
   bankId: bankId.optional().empty("").allow(""),
+  qrCode: qrCode.optional().empty("").allow(""),
 });
 
 const updateJudicialCaseFileSchema = Joi.object<
@@ -115,6 +116,7 @@ const updateJudicialCaseFileSchema = Joi.object<
     .empty("")
     .allow(""),
   bankId: bankId.optional().empty("").allow(""),
+  qrCode: qrCode.optional().empty("").allow(""),
 });
 
 const updateJudicialCaseFileProcessStatusSchema = Joi.object<
@@ -159,6 +161,13 @@ const getJudicialCaseFileByNumberCaseFileSchema = Joi.object<
   chb: customerHasBankId.required(),
 });
 
+const createQrCodeSchema = Joi.object<
+  { numberCaseFile: string; },
+  true
+>({
+  numberCaseFile: numberCaseFile.required(),
+});
+
 const getJudicialCaseFileByCustomerIdSchema = Joi.object<
   { customerId: number },
   true
@@ -176,4 +185,5 @@ export default {
   getJudicialCaseFileByCHBSchema,
   getJudicialCaseFileByCHBSchemaQuery,
   getJudicialCaseFileByCustomerIdSchema,
+  createQrCodeSchema,
 };

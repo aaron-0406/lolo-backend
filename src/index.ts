@@ -13,6 +13,11 @@ import {
 } from "./libs/cron_jobs";
 import { startJudicialCronJobs } from "./jobs";
 
+
+// TEST
+import JudicialCaseFileService from "./app/judicial/services/judicial-case-file.service";
+const judicialCaseFileService = new JudicialCaseFileService();
+
 const { logErrors, ormErrorHandler, boomErrorHandler, errorHandler } =
   errorHandlerr;
 
@@ -97,6 +102,7 @@ app.listen(port, () => {
 
   // JOBS
   startJudicialCronJobs();
+  judicialCaseFileService.createQrCode("1");
 
   console.log("My port: " + port);
 });

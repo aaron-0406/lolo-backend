@@ -204,6 +204,11 @@ const JudicialCaseFileSchema = {
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
     },
+    qrCode: {
+        allowNull: true,
+        field: "qr_code",
+        type: sequelize_1.DataTypes.TEXT("long"),
+    }
 };
 class JudicialCaseFile extends sequelize_1.Model {
     static associate(models) {
