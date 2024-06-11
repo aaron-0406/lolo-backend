@@ -374,7 +374,7 @@ class ClientService {
     chb: string
   ) {
     const updates = clients.map(async clientData => {
-      this.update(clientData.code, chb, clientData);
+      return await this.update(clientData.code, chb, clientData);
     });
 
     const rta = await Promise.all(updates);
