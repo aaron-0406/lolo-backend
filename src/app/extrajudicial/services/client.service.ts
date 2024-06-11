@@ -209,7 +209,7 @@ class ClientService {
   }
 
   async findAllCHB(chb: string, query: any) {
-    const { limit, page, filter, negotiations, funcionarios, users, cities } =
+    const { limit, page, filter, negotiations, funcionarios, users, cities, archived } =
       query;
 
     const limite = parseInt(limit, 10);
@@ -219,6 +219,7 @@ class ClientService {
     const listFuncionarios = JSON.parse(funcionarios);
     const listUsers = JSON.parse(users);
     const listCities = JSON.parse(cities);
+    const isArchived = JSON.parse(archived);
 
     const filters: any = {};
     if (filter !== "" && filter !== undefined) {
@@ -236,6 +237,7 @@ class ClientService {
     if (listCities.length) {
       filters.city_id_city = { [Op.in]: listCities };
     }
+    filters.is_archived = isArchived;
 
     let filtersWhere: any = {
       [Op.or]: [
@@ -365,6 +367,18 @@ class ClientService {
     });
 
     return { id: client.dataValues.id, chbTransferred };
+  }
+
+  async updateClients(
+  clients: Omit<ClientType, "id" | "createdAt">[],
+    chb: string
+  ) {
+    const updates = clients.map(async clientData => {
+      this.update(clientData.code, chb, clientData);
+    });
+
+    const rta = await Promise.all(updates);
+    return rta;
   }
 
   async update(
