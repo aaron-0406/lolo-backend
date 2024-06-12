@@ -28,6 +28,7 @@ const judicialProceduralWayId = Joi.number().positive();
 const customerHasBankId = Joi.number().positive();
 const bankId = Joi.number();
 const idJudicialCaseFileRelated = Joi.number();
+const qrCode = Joi.string();
 
 const page = Joi.number().required().messages({
   "number.base": "El campo page es inválido",
@@ -81,6 +82,7 @@ const createJudicialCaseFileRelatedProcessSchema = Joi.object<
     .empty("")
     .allow(""),
   bankId: bankId.optional().empty("").allow(""),
+  qrCode: qrCode.optional().empty("").allow(""),
 });
 
 const updateJudicialCaseFileRelatedProcessSchema = Joi.object<
@@ -112,6 +114,7 @@ const updateJudicialCaseFileRelatedProcessSchema = Joi.object<
     .empty("")
     .allow(""),
   bankId: bankId.optional().empty("").allow(""),
+  qrCode: qrCode.optional().empty("").allow(""),
 });
 
 const getRelatedProcessByCaseFileIdSchema = Joi.object<
