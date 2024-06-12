@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = __importDefault(require("../../../libs/sequelize"));
 const boom_1 = __importDefault(require("@hapi/boom"));
 const sequelize_2 = require("sequelize");
+const qrcode_1 = require("qrcode");
 const { models } = sequelize_1.default;
 class JudicialCaseFileService {
     constructor() { }
@@ -283,6 +284,26 @@ class JudicialCaseFileService {
             const client = yield this.findByID(id);
             yield client.destroy();
             return { id };
+        });
+    }
+    createQrCode(numberCaseFile, chb) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const qrCodeImg64 = yield (0, qrcode_1.toDataURL)(numberCaseFile, { version: 2 });
+                const judicialCaseFile = yield models.JUDICIAL_CASE_FILE.findOne({
+                    where: {
+                        numberCaseFile,
+                        customerHasBankId: chb,
+                    },
+                });
+                if (!judicialCaseFile)
+                    return boom_1.default.notFound("Expediente no encontrado");
+                yield judicialCaseFile.update({ qrCode: qrCodeImg64 });
+                return qrCodeImg64;
+            }
+            catch (err) {
+                throw boom_1.default.badRequest("Error al generar el código QR");
+            }
         });
     }
 }

@@ -26,7 +26,7 @@ const {
   getJudicialCaseFileByCHBSchema,
   getJudicialCaseFileByCHBSchemaQuery,
   getJudicialCaseFileByCustomerIdSchema,
-  createQrCodeSchema
+  createQrCodeSchema,
 } = judicialCaseFileSchema;
 
 const router = express.Router();
@@ -79,7 +79,7 @@ router.post(
 );
 
 router.post(
-  "/qr-code/:numberCaseFile",
+  "/qr-code/:numberCaseFile/:chb",
   JWTAuth,
   validatorHandler(createQrCodeSchema, "params"),
   createQrCode

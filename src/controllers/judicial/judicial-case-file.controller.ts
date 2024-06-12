@@ -128,13 +128,13 @@ export const createQrCode = async (
   next: NextFunction
 ) => {
   try {
-    const { numberCaseFile } = req.params;
-    const qrCode = await service.createQrCode(numberCaseFile);
+    const { numberCaseFile, chb } = req.params;
+    const qrCode = await service.createQrCode(numberCaseFile, parseInt(chb));
     res.json(qrCode);
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const updateJudicialCaseFileController = async (
   req: Request,
@@ -185,7 +185,6 @@ export const updateJudicialCaseProcessStatus = async (
     next(error);
   }
 };
-
 
 export const deleteJudicialCaseFileController = async (
   req: Request,
