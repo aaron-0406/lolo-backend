@@ -25,20 +25,36 @@ class UserLogService {
   }
 
   async findByCustomerId(customerId: string, query: any) {
-    const { limit, page, actions, users } = query;
-
+    const { limit, page, actions, users, initialDate, finalDate } = query;
     const limite = parseInt(limit, 10);
     const pagina = parseInt(page, 10);
     const listActions = JSON.parse(actions);
     const listUsers = JSON.parse(users);
+    const initial = JSON.parse(initialDate)
+      ? new Date(initialDate).setHours(0, 0, 0, 0)
+      : undefined;
+    const final = JSON.parse(finalDate)
+      ? new Date(finalDate).setHours(0, 0, 0, 0)
+      : undefined;
 
     const filters: any = {};
+
+    console.log("listActions", initial, final);
 
     if (listActions.length) {
       filters.codeAction = { [Op.in]: listActions };
     }
     if (listUsers.length) {
       filters.customer_user_id_customer_user = { [Op.in]: listUsers };
+    }
+    if (initial && final) {
+      filters.createAt = { [Op.between]: [initial, final] };
+    }
+    if (final && !initial) {
+      filters.createAt = { [Op.lte]: final };
+    }
+    if (initial && !final) {
+      filters.createAt = { [Op.gte]: initial };
     }
     let filtersWhere: any = {
       customer_id_customer: customerId,

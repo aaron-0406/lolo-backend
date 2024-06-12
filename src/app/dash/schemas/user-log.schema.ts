@@ -3,6 +3,8 @@ import Joi from "joi";
 const customerId = Joi.number();
 const users = Joi.string().required();
 const actions = Joi.string().required();
+const initialDate = Joi.string().required();
+const finalDate = Joi.string().required();
 const page = Joi.number().required().messages({
   "number.base": "El campo page es inválido",
   "any.required": "El campo page es requerido.",
@@ -29,6 +31,8 @@ const getUserLogsFilterByCustomerIdQuery = Joi.object({
   limit,
   actions,
   users,
+  initialDate,
+  finalDate,
 }).options({ abortEarly: true });
 
 export default {
