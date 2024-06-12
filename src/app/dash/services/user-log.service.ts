@@ -39,8 +39,6 @@ class UserLogService {
 
     const filters: any = {};
 
-    console.log("listActions", initial, final);
-
     if (listActions.length) {
       filters.codeAction = { [Op.in]: listActions };
     }
