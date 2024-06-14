@@ -14,6 +14,7 @@ import {
   getJudicialCaseFileRelatedProcessByIdController,
   getJudicialCaseFileRelatedProcessByNumberCaseFileController,
   getJudicialCaseFileRelatedProcessRelatedController,
+  createQrCodeRelatedProcessController
 } from "../../controllers/judicial/judicial-case-file-related-process.controller"
 import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 import judicialCaseFileRelatedProcessSchema from "../../app/judicial/schemas/judicial-case-file-related-process.schema";
@@ -27,7 +28,8 @@ const {
   getJudicialCaseFileRelatedProcesByClientIDSchema,
   getJudicialCaseFileRelatedProcesByCustomerIdSchema,
   getJudicialCaseFileRelatedProcesByIDSchema,
-  getJudicialCaseFileRelatedProcesByNumberCaseFileSchema
+  getJudicialCaseFileRelatedProcesByNumberCaseFileSchema,
+  createQrCodeRelatedProcessSchema,
 } = judicialCaseFileRelatedProcessSchema;
 
 const router = express.Router();
@@ -96,6 +98,12 @@ router.patch(
   updateJudicialCaseFileRelatedProcessController,
 );
 
+router.post(
+  "/qr-code/:numberCaseFile/:chb",
+  JWTAuth,
+  validatorHandler(createQrCodeRelatedProcessSchema, "params"),
+  createQrCodeRelatedProcessController
+);
 
 router.delete(
   "/:id",

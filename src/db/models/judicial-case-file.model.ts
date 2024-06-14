@@ -239,6 +239,11 @@ class JudicialCaseFile extends Model {
     });
 
     this.belongsTo(models.BANK, { as: "bank" });
+    this.belongsTo(models.JUDICIAL_CASE_FILE, {
+      as: "relatedJudicialCaseFile",
+      foreignKey: "idJudicialCaseFileRelated"
+    });
+
   }
 
   static config(sequelize: Sequelize) {

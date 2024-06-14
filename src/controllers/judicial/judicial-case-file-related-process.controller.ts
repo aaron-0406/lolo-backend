@@ -136,6 +136,20 @@ export const createJudicialCaseFileRelatedProcessController = async (
   }
 };
 
+export const createQrCodeRelatedProcessController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { numberCaseFile, chb } = req.params;
+    const qrCode = await service.createQrCode(numberCaseFile, parseInt(chb));
+    res.json(qrCode);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const updateJudicialCaseFileRelatedProcessController = async (
   req: Request,
   res: Response,

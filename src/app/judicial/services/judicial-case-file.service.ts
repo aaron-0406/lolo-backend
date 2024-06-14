@@ -3,7 +3,7 @@ import boom from "@hapi/boom";
 import { Op } from "sequelize";
 import { JudicialCaseFileType } from "../types/judicial-case-file.type";
 import { JudicialCasefileProcessStatus } from "../types/judicial-case-file-process-status.type";
-import { toDataURL, toCanvas, toString } from "qrcode";
+import { toDataURL } from "qrcode";
 
 const { models } = sequelize;
 
@@ -204,17 +204,26 @@ class JudicialCaseFileService {
 
   async findByNumberCaseFile(numberCaseFile: string, chb: number) {
     const judicialCaseFile = await models.JUDICIAL_CASE_FILE.findOne({
-      include: {
-        model: models.CLIENT,
-        as: "client",
-        include: [
-          {
-            model: models.CUSTOMER_USER,
-            as: "customerUser",
-            attributes: ["id", "name"],
-          },
-        ],
-      },
+      include: [
+
+        {
+          model: models.CLIENT,
+          as: "client",
+          include: [
+            {
+              model: models.CUSTOMER_USER,
+              as: "customerUser",
+              attributes: ["id", "name"],
+            },
+          ],
+        },
+        {
+          model: models.JUDICIAL_CASE_FILE,
+          as: "relatedJudicialCaseFile",
+          attributes: ["numberCaseFile"],
+        }
+      ],
+
       where: {
         numberCaseFile,
         customer_has_bank_id: chb,

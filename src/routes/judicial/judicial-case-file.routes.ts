@@ -11,7 +11,7 @@ import {
   getJudicialCaseFileByNumberCaseFileController,
   getJudicialCaseFileByCHBIdController,
   getJudicialCaseFileRelatedController,
-  createQrCode,
+  createQrCodeToCaseFileController,
   updateJudicialCaseProcessStatus,
 } from "../../controllers/judicial/judicial-case-file.controller";
 import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
@@ -82,7 +82,7 @@ router.post(
   "/qr-code/:numberCaseFile/:chb",
   JWTAuth,
   validatorHandler(createQrCodeSchema, "params"),
-  createQrCode
+  createQrCodeToCaseFileController
 );
 
 router.patch(
