@@ -18,6 +18,7 @@ const {
   createJudicialBinnacleParamSchema,
   getJudicialBinnacleByCHBSchema,
   updateJudicialBinnacleParamSchema,
+  getJudicialBinnacleByCHBSchemaQuery,
 } = judicialBinnacleSchema;
 
 const router = express.Router();
@@ -33,6 +34,7 @@ router.get(
   "/file-case/:fileCase",
   JWTAuth,
   validatorHandler(getJudicialBinnacleByCHBSchema, "params"),
+  validatorHandler(getJudicialBinnacleByCHBSchemaQuery, "query"),
   getJudicialBinnacleByCHBController
 );
 

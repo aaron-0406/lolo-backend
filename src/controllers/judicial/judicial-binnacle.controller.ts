@@ -15,7 +15,8 @@ export const getJudicialBinnacleByCHBController = async (
   try {
     const { fileCase } = req.params;
     const judicialBinnacles = await service.findAllByCHBAndFileCase(
-      Number(fileCase)
+      Number(fileCase),
+      req.query
     );
     res.json(judicialBinnacles);
   } catch (error) {
