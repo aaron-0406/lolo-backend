@@ -16,8 +16,6 @@ export const getAllPermissionController = async (
       code ? String(code) : undefined
     );
 
-    console.log(permissions)
-
     const tree = buildTree(permissions, code ? String(code).length : 3);
     if (code) {
       res.json(tree[0].permissions);
