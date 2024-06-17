@@ -8,6 +8,8 @@ const customerHasBankId = Joi.number();
 const binnacleTypeId = Joi.number();
 const judicialFileCaseId = Joi.number();
 const date = Joi.date();
+const sortBy = Joi.string().optional().empty("").allow("");
+const order = Joi.string().optional().empty("").allow("");
 
 const createJudicialBinnacleSchema = Joi.object<
   Omit<JudicialBinnacleType, "id" | "createdAt" | "updatedAt" | "deletedAt">,
@@ -63,6 +65,11 @@ const getJudicialBinnacleByCHBSchema = Joi.object<{ fileCase: number }, true>({
   fileCase: Joi.number().required(),
 });
 
+const getJudicialBinnacleByCHBSchemaQuery = Joi.object({
+  sortBy,
+  order,
+}).options({ abortEarly : true });
+
 export default {
   createJudicialBinnacleSchema,
   updateJudicialBinnacleSchema,
@@ -70,4 +77,5 @@ export default {
   getJudicialBinnacleByIDSchema,
   createJudicialBinnacleParamSchema,
   updateJudicialBinnacleParamSchema,
+  getJudicialBinnacleByCHBSchemaQuery,
 };

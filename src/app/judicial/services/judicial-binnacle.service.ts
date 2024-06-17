@@ -5,7 +5,7 @@ import config from "../../../config/config";
 import { uploadFile } from "../../../libs/aws_bucket";
 import { deleteFile, renameFile } from "../../../libs/helpers";
 import moment from "moment";
-import { Op } from "sequelize";
+import { FindOptions, Model, Op, ModelCtor } from 'sequelize';
 
 const { models } = sequelize;
 
@@ -34,29 +34,53 @@ class JudicialBinnacleService {
     return judicialBinnacle;
   }
 
-  async findAllByCHBAndFileCase(fileCase: number) {
+  async findAllByCHBAndFileCase(fileCase: number, query: any) {
+    const { sortBy, order } = query;
+
+    let orderConfig: FindOptions<any>['order'] = [];
+
+    if (sortBy && order) {
+        const sortByFields = (sortBy as string).split(',');
+        const orderDirections = (order as string).split(',');
+
+        orderConfig = sortByFields.map((field, index) => {
+            let sortField: string;
+
+            switch (field.trim()) {
+                case 'FECHA':
+                    sortField = 'createdAt';
+                    break;
+
+                default:
+                    sortField = field.trim();
+            }
+
+            return [sortField, (orderDirections[index] || 'ASC').trim().toUpperCase()];
+        });
+    }
+
     const rta = await models.JUDICIAL_BINNACLE.findAll({
-      include: [
-        {
-          model: models.JUDICIAL_BIN_TYPE_BINNACLE,
-          as: "binnacleType",
+        include: [
+            {
+                model: models.JUDICIAL_BIN_TYPE_BINNACLE,
+                as: "binnacleType",
+            },
+            {
+                model: models.JUDICIAL_BIN_PROCEDURAL_STAGE,
+                as: "judicialBinProceduralStage",
+            },
+            {
+                model: models.JUDICIAL_BIN_FILE,
+                as: "judicialBinFiles",
+            },
+        ],
+        order: orderConfig,
+        where: {
+            judicialFileCaseId: fileCase,
         },
-        {
-          model: models.JUDICIAL_BIN_PROCEDURAL_STAGE,
-          as: "judicialBinProceduralStage",
-        },
-        {
-          model: models.JUDICIAL_BIN_FILE,
-          as: "judicialBinFiles",
-        },
-      ],
-      order: [["id", "DESC"]],
-      where: {
-        judicialFileCaseId: fileCase,
-      },
     });
     return rta;
-  }
+}
 
   async findByID(id: string) {
     const judicialBinnacle = await models.JUDICIAL_BINNACLE.findOne({
