@@ -21,8 +21,9 @@ const serviceUserLog = new user_log_service_1.default();
 const { FILE_TABLE } = file_model_1.default;
 const findFileByClientIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
-        const files = yield service.find(Number(id));
+        const { id, chb } = req.params;
+        const query = req.query;
+        const files = yield service.find(Number(id), Number(chb), query);
         res.json(files);
     }
     catch (error) {
