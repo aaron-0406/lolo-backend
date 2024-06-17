@@ -40,6 +40,7 @@ const compare_excels_util_1 = require("../../../utils/config/compare-excels.util
 const fs_1 = __importDefault(require("fs"));
 const path = __importStar(require("path"));
 const nodemailer = __importStar(require("nodemailer"));
+const config_1 = __importDefault(require("../../../config/config"));
 class CompareExcelsService {
     constructor() {
         this.getSortingAndData = (pathname) => __awaiter(this, void 0, void 0, function* () {
@@ -56,7 +57,9 @@ class CompareExcelsService {
                     var _a;
                     const worksheet = readWorkbook.getWorksheet(id);
                     const headersValues = (_a = worksheet === null || worksheet === void 0 ? void 0 : worksheet.getRow(1)) === null || _a === void 0 ? void 0 : _a.values;
-                    if (headersValues && Array.isArray(headersValues) && headersValues.length > 0) {
+                    if (headersValues &&
+                        Array.isArray(headersValues) &&
+                        headersValues.length > 0) {
                         const headersAreValid = compare_excels_util_1.headers.every((header) => headersValues.includes(header.trim()));
                         if (!headersAreValid) {
                             // throw new Error(`Las cabeceras de la hoja ${id} no son válidas`);
@@ -75,9 +78,11 @@ class CompareExcelsService {
                                             nombreCliente: rowData[2]
                                                 ? rowData[2]
                                                 : "NO REGISTRADO",
-                                            estadoCartera: rowData[3] ? (0, compare_excels_util_1.modifyString)(rowData[3]).trim() : "SIN CLASIFICACIÓN (CUENTA CORRIENTE)",
+                                            estadoCartera: rowData[3]
+                                                ? (0, compare_excels_util_1.modifyString)(rowData[3]).trim()
+                                                : "SIN CLASIFICACIÓN (CUENTA CORRIENTE)",
                                         };
-                                        if (dataRow.codCuentaCobranza.trim() !== '') {
+                                        if (dataRow.codCuentaCobranza.trim() !== "") {
                                             data.push(dataRow);
                                         }
                                     }
@@ -96,7 +101,7 @@ class CompareExcelsService {
                 });
                 return {
                     data,
-                    orderData
+                    orderData,
                 };
             }
         });
@@ -131,10 +136,10 @@ class CompareExcelsService {
                     });
                 }
             });
-            // ? Uno que muestre si se eliminaron productos
-            // ? Uno que muestre si se agregaron nuevos productos
-            // ? uno que muestre productos repetidos
-            // ? Uno que muestre que productos pasaron de activa a castigo  o viseversa
+            // INFO: Uno que muestre si se eliminaron productos
+            // INFO: Uno que muestre si se agregaron nuevos productos
+            // INFO: uno que muestre productos repetidos
+            // INFO: Uno que muestre que productos pasaron de activa a castigo  o viseversa
             let deletedProducts = [];
             let newProducts = [];
             let unchangedProducts = [];
@@ -142,8 +147,8 @@ class CompareExcelsService {
             const productsChangedStatusToPenalty = [];
             const productsChangedStatusToActive = [];
             const productsWithoutStatus = [];
-            const dontRepeatData1 = (0, compare_excels_util_1.removeDuplicates)(data1, 'codCuentaCobranza');
-            const dontRepeatData2 = (0, compare_excels_util_1.removeDuplicates)(data2, 'codCuentaCobranza');
+            const dontRepeatData1 = (0, compare_excels_util_1.removeDuplicates)(data1, "codCuentaCobranza");
+            const dontRepeatData2 = (0, compare_excels_util_1.removeDuplicates)(data2, "codCuentaCobranza");
             dontRepeatData1.forEach((product) => {
                 if (!dontRepeatData2.some((data) => data.codCuentaCobranza.trim() === product.codCuentaCobranza.trim())) {
                     deletedProducts.push(product);
@@ -197,26 +202,23 @@ class CompareExcelsService {
             return fileData;
         });
         this.sendReportByEmail = (data) => __awaiter(this, void 0, void 0, function* () {
-            const reportPath = path.join(__dirname, '../../../public/download/compare-excels', data.fileData.fileName);
+            const reportPath = path.join(__dirname, "../../../public/download/compare-excels", data.fileData.fileName);
             const fileData = fs_1.default.readFileSync(reportPath);
             const transport = nodemailer.createTransport({
-                // host: config.AWS_EMAIL_HOST,
-                host: 'smtp.ethereal.email',
+                host: config_1.default.AWS_EMAIL_HOST,
                 port: 587,
                 secure: false,
                 auth: {
-                    user: 'yvaxqjaesko7klvx@ethereal.email',
-                    pass: 'W31TrqCz3qbvDtdjUZ',
-                    // user: config.AWS_EMAIL_USER,
-                    // pass: config.AWS_EMAIL_PASSWORD,
+                    user: config_1.default.AWS_EMAIL_USER,
+                    pass: config_1.default.AWS_EMAIL_PASSWORD,
                 },
             });
             const emails = data.users.map((user) => user.email);
             const mailOptions = {
-                // from: config.AWS_EMAIL_USER,
-                to: emails.join(', '),
-                subject: 'Reporte de comparación de excels',
-                text: 'Reporte de comparación de excels',
+                from: config_1.default.AWS_EMAIL,
+                to: emails.join(", "),
+                subject: "Reporte de comparación de excels",
+                text: "Reporte de comparación de excels",
                 attachments: [
                     {
                         filename: data.fileData.fileName,
@@ -230,18 +232,10 @@ class CompareExcelsService {
                 }
                 else {
                     const previewUrl = nodemailer.getTestMessageUrl(info);
-                    console.log('Preview URL: %s', previewUrl);
-                    console.log('Email sent: ' + info.response);
+                    console.log("Preview URL: %s", previewUrl);
+                    console.log("Email sent: " + info.response);
                 }
             });
-            // {
-            //   user: 'yvaxqjaesko7klvx@ethereal.email',
-            //   pass: 'W31TrqCz3qbvDtdjUZ',
-            //   smtp: { host: 'smtp.ethereal.email', port: 587, secure: false },
-            //   imap: { host: 'imap.ethereal.email', port: 993, secure: true },
-            //   pop3: { host: 'pop3.ethereal.email', port: 995, secure: true },
-            //   web: 'https://ethereal.email'
-            // }
         });
     }
 }
