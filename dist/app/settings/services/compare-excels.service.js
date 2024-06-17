@@ -31,10 +31,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const exceljs_1 = require("exceljs");
 const compare_excels_util_1 = require("../../../utils/config/compare-excels.util");
+const fs_1 = __importDefault(require("fs"));
 const path = __importStar(require("path"));
+const nodemailer = __importStar(require("nodemailer"));
 class CompareExcelsService {
     constructor() {
         this.getSortingAndData = (pathname) => __awaiter(this, void 0, void 0, function* () {
@@ -188,8 +193,55 @@ class CompareExcelsService {
                 productsChangedStatusToActive,
                 productsWithoutStatus,
             };
-            const pathDownload = (0, compare_excels_util_1.generateExcelReport)(result);
-            return pathDownload;
+            const fileData = (0, compare_excels_util_1.generateExcelReport)(result);
+            return fileData;
+        });
+        this.sendReportByEmail = (data) => __awaiter(this, void 0, void 0, function* () {
+            const reportPath = path.join(__dirname, '../../../public/download/compare-excels', data.fileData.fileName);
+            const fileData = fs_1.default.readFileSync(reportPath);
+            const transport = nodemailer.createTransport({
+                // host: config.AWS_EMAIL_HOST,
+                host: 'smtp.ethereal.email',
+                port: 587,
+                secure: false,
+                auth: {
+                    user: 'yvaxqjaesko7klvx@ethereal.email',
+                    pass: 'W31TrqCz3qbvDtdjUZ',
+                    // user: config.AWS_EMAIL_USER,
+                    // pass: config.AWS_EMAIL_PASSWORD,
+                },
+            });
+            const emails = data.users.map((user) => user.email);
+            const mailOptions = {
+                // from: config.AWS_EMAIL_USER,
+                to: emails.join(', '),
+                subject: 'Reporte de comparación de excels',
+                text: 'Reporte de comparación de excels',
+                attachments: [
+                    {
+                        filename: data.fileData.fileName,
+                        content: fileData,
+                    },
+                ],
+            };
+            transport.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.log(error);
+                }
+                else {
+                    const previewUrl = nodemailer.getTestMessageUrl(info);
+                    console.log('Preview URL: %s', previewUrl);
+                    console.log('Email sent: ' + info.response);
+                }
+            });
+            // {
+            //   user: 'yvaxqjaesko7klvx@ethereal.email',
+            //   pass: 'W31TrqCz3qbvDtdjUZ',
+            //   smtp: { host: 'smtp.ethereal.email', port: 587, secure: false },
+            //   imap: { host: 'imap.ethereal.email', port: 993, secure: true },
+            //   pop3: { host: 'pop3.ethereal.email', port: 995, secure: true },
+            //   web: 'https://ethereal.email'
+            // }
         });
     }
 }

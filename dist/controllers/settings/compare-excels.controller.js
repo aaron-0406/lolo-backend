@@ -12,53 +12,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.compareExcelsController = void 0;
+exports.sendReportByEmailController = exports.compareExcelsController = void 0;
 const compare_excels_service_1 = __importDefault(require("../../app/settings/services/compare-excels.service"));
 const fs_1 = __importDefault(require("fs"));
 const service = new compare_excels_service_1.default();
 const compareExcelsController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const files = req.files;
-        const prevFile = files.prevFile[0];
-        const newFile = files.newFile[0];
-        const reportPath = yield service.compareExcels(prevFile, newFile);
-        res.download(reportPath, 'report.xlsx');
-        const file = fs_1.default.createReadStream(reportPath);
-        file.pipe(res);
-        // res.download(reportPath)
-        // console.log('File sent', reportPath)
-        // fs.rm(reportPath, (err) => {
-        //   if (err) console.error('Error deleting the report file:', err)
-        // })
-        // fs.rm(prevFile.path, (err) => {
-        //   if (err) console.error('Error deleting the previous file:', err)
-        // })
-        // fs.rm(newFile.path, (err) => {
-        //   if (err) console.error('Error deleting the new file:', err)
-        // })
-        // ========================================
-        // res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        // const fileStream = fs.createReadStream(reportPath)
-        // fileStream.pipe(res)
-        // fileStream.on('finish', () => {
-        //   fs.rm(reportPath, (err) => {
-        //     if (err) console.error('Error deleting the report file:', err)
-        //   })
-        //   fs.rm(prevFile.path, (err) => {
-        //     if (err) console.error('Error deleting the previous file:', err)
-        //   })
-        //   fs.rm(newFile.path, (err) => {
-        //     if (err) console.error('Error deleting the new file:', err)
-        //   })
-        // })
-        // fileStream.on('error', (err) => {
-        //   console.error('Error sending file:', err)
-        //   next(err)
-        // })
-    }
-    catch (error) {
-        console.error('Error in compareExcelsController:', error);
-        res.status(500).json({ error: error });
-    }
+    const files = req.files;
+    const prevFile = files.prevFile[0];
+    const newFile = files.newFile[0];
+    const data = yield service.compareExcels(prevFile, newFile);
+    res.status(200).json(data);
+    fs_1.default.unlinkSync(prevFile.path);
+    fs_1.default.unlinkSync(newFile.path);
 });
 exports.compareExcelsController = compareExcelsController;
+const sendReportByEmailController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = req.body;
+    yield service.sendReportByEmail(data);
+    res.status(200).json({ success: "Reporte enviado" });
+});
+exports.sendReportByEmailController = sendReportByEmailController;

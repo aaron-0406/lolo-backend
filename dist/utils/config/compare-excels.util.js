@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -6,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateExcelReport = exports.headers = exports.filters = exports.modifyString = exports.removeDuplicates = void 0;
 const path_1 = __importDefault(require("path"));
 const exceljs_1 = __importDefault(require("exceljs"));
+const fs_1 = __importDefault(require("fs"));
 const headers = ['IDC', 'CODCUENTACOBRANZA', 'NOMBRECLIENTE', 'ESTADO_CARTERA'];
 exports.headers = headers;
 const patternActivA = /\bACTIVA\b/;
@@ -40,11 +50,12 @@ const modifyString = (s) => {
     return s;
 };
 exports.modifyString = modifyString;
-const generateExcelReport = (result) => {
+const generateExcelReport = (result) => __awaiter(void 0, void 0, void 0, function* () {
     const newWorkbook = new exceljs_1.default.Workbook();
     newWorkbook.description = 'Reporte de comparación de Excel';
     newWorkbook.creator = 'Javier';
     newWorkbook.created = new Date();
+    const fileName = 'reporte.xlsx';
     const newClientsWorksheet = newWorkbook.addWorksheet('CLIENTES NUEVOS');
     const removedClientsWorksheet = newWorkbook.addWorksheet('CLIENTES REMOVIDOS');
     const newProductsWorksheet = newWorkbook.addWorksheet('PRODUCTOS NUEVOS');
@@ -344,8 +355,14 @@ const generateExcelReport = (result) => {
             alignment: { horizontal: 'center' },
         };
     });
-    const reportPath = path_1.default.join(__dirname, '../../docs', 'report.xlsx');
-    newWorkbook.xlsx.writeFile(reportPath);
-    return reportPath;
-};
+    fs_1.default.mkdirSync(path_1.default.join(__dirname, '../../public/download/compare-excels'), { recursive: true });
+    const reportPath = path_1.default.join(__dirname, '../../public/download/compare-excels', fileName);
+    yield newWorkbook.xlsx.writeFile(reportPath);
+    const stats = fs_1.default.statSync(reportPath);
+    const fileSize = stats.size;
+    return {
+        fileName,
+        fileSize
+    };
+});
 exports.generateExcelReport = generateExcelReport;
