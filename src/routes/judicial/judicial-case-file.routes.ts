@@ -11,6 +11,7 @@ import {
   getJudicialCaseFileByNumberCaseFileController,
   getJudicialCaseFileByCHBIdController,
   getJudicialCaseFileRelatedController,
+  createQrCode,
   updateJudicialCaseProcessStatus,
 } from "../../controllers/judicial/judicial-case-file.controller";
 import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
@@ -25,6 +26,7 @@ const {
   getJudicialCaseFileByCHBSchema,
   getJudicialCaseFileByCHBSchemaQuery,
   getJudicialCaseFileByCustomerIdSchema,
+  createQrCodeSchema,
 } = judicialCaseFileSchema;
 
 const router = express.Router();
@@ -74,6 +76,13 @@ router.post(
   validatorHandler(getJudicialCaseFileByCustomerIdSchema, "params"),
   validatorHandler(createJudicialCaseFileSchema, "body"),
   createJudicialCaseFileController
+);
+
+router.post(
+  "/qr-code/:numberCaseFile/:chb",
+  JWTAuth,
+  validatorHandler(createQrCodeSchema, "params"),
+  createQrCode
 );
 
 router.patch(
