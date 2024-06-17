@@ -20,7 +20,6 @@ const getAllPermissionController = (req, res, next) => __awaiter(void 0, void 0,
     try {
         const { code } = req.query;
         const permissions = yield service.findAll(code ? String(code) : undefined);
-        console.log(permissions);
         const tree = (0, helpers_1.buildTree)(permissions, code ? String(code).length : 3);
         if (code) {
             res.json(tree[0].permissions);
