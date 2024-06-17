@@ -1,9 +1,18 @@
 import { Workbook } from "exceljs";
-import { modifyString, removeDuplicates, filters, headers, generateExcelReport } from "../../../utils/config/compare-excels.util";
-import { CompareExcelToSendEmailType, CompareExcelType } from "../types/compare-excels.type";
+import {
+  modifyString,
+  removeDuplicates,
+  filters,
+  headers,
+  generateExcelReport,
+} from "../../../utils/config/compare-excels.util";
+import {
+  CompareExcelToSendEmailType,
+  CompareExcelType,
+} from "../types/compare-excels.type";
 import fs from "fs";
-import * as path from 'path';
-import * as nodemailer from 'nodemailer';
+import * as path from "path";
+import * as nodemailer from "nodemailer";
 import config from "../../../config/config";
 
 type Client = Omit<CompareExcelType, "codCuentaCobranza" | "estadoCartera">;
@@ -18,16 +27,16 @@ export type CompareExcelResult = {
   productsChangedStatusToPenalty: ProductWithStatus[];
   productsChangedStatusToActive: ProductWithStatus[];
   productsWithoutStatus: CompareExcelType[];
-}
+};
 
 class CompareExcelsService {
-  constructor(){}
+  constructor() {}
 
-  getSortingAndData = async(pathname: string) => {
+  getSortingAndData = async (pathname: string) => {
     const workbook = new Workbook();
     const readWorkbook = await workbook.xlsx.readFile(pathname);
-    let data:CompareExcelType[] = [];
-    const orderData: { [key:string] : CompareExcelType[] } = {};
+    let data: CompareExcelType[] = [];
+    const orderData: { [key: string]: CompareExcelType[] } = {};
 
     if (workbook.worksheets.length) {
       const sheetIds: number[] = [];
@@ -37,14 +46,18 @@ class CompareExcelsService {
       sheetIds.forEach((id) => {
         const worksheet = readWorkbook.getWorksheet(id);
         const headersValues = worksheet?.getRow(1)?.values;
-        if (headersValues && Array.isArray(headersValues) && headersValues.length > 0) {
+        if (
+          headersValues &&
+          Array.isArray(headersValues) &&
+          headersValues.length > 0
+        ) {
           const headersAreValid = headers.every((header) =>
             headersValues.includes(header.trim())
           );
           if (!headersAreValid) {
             // throw new Error(`Las cabeceras de la hoja ${id} no son válidas`);
-          }else{
-            worksheet.eachRow({ includeEmpty: true },(row, rowNumber) => {
+          } else {
+            worksheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
               if (rowNumber > 1) {
                 const rowData: string[] = [];
                 row.eachCell({ includeEmpty: true }, (cell) => {
@@ -57,36 +70,39 @@ class CompareExcelsService {
                     nombreCliente: rowData[2]
                       ? (rowData[2] as string)
                       : "NO REGISTRADO",
-                    estadoCartera: rowData[3] ? modifyString(rowData[3]).trim() as string : "SIN CLASIFICACIÓN (CUENTA CORRIENTE)",
+                    estadoCartera: rowData[3]
+                      ? (modifyString(rowData[3]).trim() as string)
+                      : "SIN CLASIFICACIÓN (CUENTA CORRIENTE)",
                   };
-                  if (dataRow.codCuentaCobranza.trim() !== '') {
+                  if (dataRow.codCuentaCobranza.trim() !== "") {
                     data.push(dataRow);
                   }
                 }
               }
-            })
+            });
 
-            data.forEach((data)=>{
-              if(orderData[data.idc]){
+            data.forEach((data) => {
+              if (orderData[data.idc]) {
                 orderData[data.idc].push(data);
-              }else{
+              } else {
                 orderData[data.idc] = [data];
               }
-            })
+            });
           }
         }
-      })
+      });
 
       return {
         data,
-        orderData
+        orderData,
       };
     }
-  }
+  };
 
-
-
-  compareExcels = async (prevFile: Express.Multer.File, newFile: Express.Multer.File) => {
+  compareExcels = async (
+    prevFile: Express.Multer.File,
+    newFile: Express.Multer.File
+  ) => {
     const prevFileName = prevFile.filename;
     const newFileName = newFile.filename;
 
@@ -121,55 +137,74 @@ class CompareExcelsService {
           nombreCliente: orderData1[key][0].nombreCliente,
         });
       }
-    })
+    });
 
-    // ? Uno que muestre si se eliminaron productos
-    // ? Uno que muestre si se agregaron nuevos productos
-    // ? uno que muestre productos repetidos
-    // ? Uno que muestre que productos pasaron de activa a castigo  o viseversa
+    // INFO: Uno que muestre si se eliminaron productos
+    // INFO: Uno que muestre si se agregaron nuevos productos
+    // INFO: uno que muestre productos repetidos
+    // INFO: Uno que muestre que productos pasaron de activa a castigo  o viseversa
 
     let deletedProducts: CompareExcelType[] = [];
     let newProducts: CompareExcelType[] = [];
     let unchangedProducts: CompareExcelType[] = [];
     let repeatedProducts: CompareExcelType[] = [];
 
-
     const productsChangedStatusToPenalty: ProductWithStatus[] = [];
     const productsChangedStatusToActive: ProductWithStatus[] = [];
     const productsWithoutStatus: CompareExcelType[] = [];
 
-    const dontRepeatData1 =  removeDuplicates(data1, 'codCuentaCobranza');
-    const dontRepeatData2 =  removeDuplicates(data2, 'codCuentaCobranza');
-
+    const dontRepeatData1 = removeDuplicates(data1, "codCuentaCobranza");
+    const dontRepeatData2 = removeDuplicates(data2, "codCuentaCobranza");
 
     dontRepeatData1.forEach((product) => {
-      if (!dontRepeatData2.some((data) => data.codCuentaCobranza.trim() === product.codCuentaCobranza.trim())) {
-      deletedProducts.push(product);
+      if (
+        !dontRepeatData2.some(
+          (data) =>
+            data.codCuentaCobranza.trim() === product.codCuentaCobranza.trim()
+        )
+      ) {
+        deletedProducts.push(product);
       }
     });
 
     dontRepeatData2.forEach((product) => {
-      if (!dontRepeatData1.some((data) => data.codCuentaCobranza.trim() === product.codCuentaCobranza.trim())) {
+      if (
+        !dontRepeatData1.some(
+          (data) =>
+            data.codCuentaCobranza.trim() === product.codCuentaCobranza.trim()
+        )
+      ) {
         newProducts.push(product);
       }
     });
 
     dontRepeatData2.forEach((product) => {
-      if (dontRepeatData1.some((data) => data.codCuentaCobranza.trim() === product.codCuentaCobranza.trim())) {
+      if (
+        dontRepeatData1.some(
+          (data) =>
+            data.codCuentaCobranza.trim() === product.codCuentaCobranza.trim()
+        )
+      ) {
         unchangedProducts.push(product);
       }
     });
 
     data2.forEach((product) => {
-      if(data2.filter((data) => data.codCuentaCobranza.trim() === product.codCuentaCobranza.trim()).length > 1) {
+      if (
+        data2.filter(
+          (data) =>
+            data.codCuentaCobranza.trim() === product.codCuentaCobranza.trim()
+        ).length > 1
+      ) {
         repeatedProducts.push(product);
       }
     });
 
-
-
     unchangedProducts.forEach((product) => {
-      const productInData1 = data1.find((data) => data.codCuentaCobranza.trim() === product.codCuentaCobranza.trim());
+      const productInData1 = data1.find(
+        (data) =>
+          data.codCuentaCobranza.trim() === product.codCuentaCobranza.trim()
+      );
       if (productInData1) {
         if (
           product.estadoCartera === filters.PENALTY &&
@@ -207,34 +242,35 @@ class CompareExcelsService {
       productsChangedStatusToPenalty,
       productsChangedStatusToActive,
       productsWithoutStatus,
-    }
+    };
 
     const fileData = generateExcelReport(result);
     return fileData;
-  }
+  };
 
   sendReportByEmail = async (data: CompareExcelToSendEmailType) => {
-    const reportPath = path.join(__dirname, '../../../public/download/compare-excels', data.fileData.fileName);
+    const reportPath = path.join(
+      __dirname,
+      "../../../public/download/compare-excels",
+      data.fileData.fileName
+    );
     const fileData = fs.readFileSync(reportPath);
     const transport = nodemailer.createTransport({
-      // host: config.AWS_EMAIL_HOST,
-      host: 'smtp.ethereal.email',
+      host: config.AWS_EMAIL_HOST,
       port: 587,
       secure: false,
       auth: {
-        user: 'yvaxqjaesko7klvx@ethereal.email',
-        pass: 'W31TrqCz3qbvDtdjUZ',
-        // user: config.AWS_EMAIL_USER,
-        // pass: config.AWS_EMAIL_PASSWORD,
+        user: config.AWS_EMAIL_USER,
+        pass: config.AWS_EMAIL_PASSWORD,
       },
     });
     const emails = data.users.map((user) => user.email);
 
     const mailOptions = {
-      // from: config.AWS_EMAIL_USER,
-      to: emails.join(', '),
-      subject: 'Reporte de comparación de excels',
-      text: 'Reporte de comparación de excels',
+      from: config.AWS_EMAIL,
+      to: emails.join(", "),
+      subject: "Reporte de comparación de excels",
+      text: "Reporte de comparación de excels",
       attachments: [
         {
           filename: data.fileData.fileName,
@@ -248,20 +284,11 @@ class CompareExcelsService {
         console.log(error);
       } else {
         const previewUrl = nodemailer.getTestMessageUrl(info);
-        console.log('Preview URL: %s', previewUrl);
-        console.log('Email sent: ' + info.response);
+        console.log("Preview URL: %s", previewUrl);
+        console.log("Email sent: " + info.response);
       }
     });
-
-    // {
-    //   user: 'yvaxqjaesko7klvx@ethereal.email',
-    //   pass: 'W31TrqCz3qbvDtdjUZ',
-    //   smtp: { host: 'smtp.ethereal.email', port: 587, secure: false },
-    //   imap: { host: 'imap.ethereal.email', port: 993, secure: true },
-    //   pop3: { host: 'pop3.ethereal.email', port: 995, secure: true },
-    //   web: 'https://ethereal.email'
-    // }
-  }
+  };
 }
 
 export default CompareExcelsService;
