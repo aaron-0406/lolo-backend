@@ -1,5 +1,6 @@
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
+import { Op } from "sequelize";
 import { FileType } from "../types/file.type";
 import { deleteFile, isFileStoredIn } from "../../../libs/helpers";
 import {
@@ -24,19 +25,18 @@ type CreateParam = {
 class FileService {
   constructor() {}
 
-  async find(clientId: number) {
+  async find(clientId: number, chb:number, query:any) {
+    const { filter } = query;
     const rta = await models.FILE.findAll({
-      include: [
-        {
-          model: models.EXT_TAG,
-          as: "classificationTag",
-          foreignKey: "tagId",
-          identifier: "id",
-          attributes: ["name", "color"],
-        },
-      ],
+      include: [{
+        model: models.EXT_TAG,
+        as: "classificationTag",
+        foreignKey: "tagId",
+        attributes: ["name", "color"],
+      }],
       where: {
         clientId,
+        ...(filter ? { name: { [Op.like]: `%${filter}%` } } : {})
       },
     });
     return rta;
@@ -74,7 +74,7 @@ class FileService {
   async create(data: CreateParam) {
     const { clientId, code, idCustomer, chb } = data;
     const filesAdded = [];
-    
+
     for (let i = 0; i < data.files.length; i++) {
       const { filename, originalname } = data.files[i];
 
