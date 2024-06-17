@@ -44,8 +44,25 @@ class JudicialBinnacleService {
             return judicialBinnacle;
         });
     }
-    findAllByCHBAndFileCase(fileCase) {
+    findAllByCHBAndFileCase(fileCase, query) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { sortBy, order } = query;
+            let orderConfig = [];
+            if (sortBy && order) {
+                const sortByFields = sortBy.split(',');
+                const orderDirections = order.split(',');
+                orderConfig = sortByFields.map((field, index) => {
+                    let sortField;
+                    switch (field.trim()) {
+                        case 'FECHA':
+                            sortField = 'createdAt';
+                            break;
+                        default:
+                            sortField = field.trim();
+                    }
+                    return [sortField, (orderDirections[index] || 'ASC').trim().toUpperCase()];
+                });
+            }
             const rta = yield models.JUDICIAL_BINNACLE.findAll({
                 include: [
                     {
@@ -61,7 +78,7 @@ class JudicialBinnacleService {
                         as: "judicialBinFiles",
                     },
                 ],
-                order: [["id", "DESC"]],
+                order: orderConfig,
                 where: {
                     judicialFileCaseId: fileCase,
                 },
