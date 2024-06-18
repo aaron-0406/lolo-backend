@@ -49,18 +49,21 @@ class JudicialBinnacleService {
             const { sortBy, order } = query;
             let orderConfig = [];
             if (sortBy && order) {
-                const sortByFields = sortBy.split(',');
-                const orderDirections = order.split(',');
+                const sortByFields = sortBy.split(",");
+                const orderDirections = order.split(",");
                 orderConfig = sortByFields.map((field, index) => {
                     let sortField;
                     switch (field.trim()) {
-                        case 'FECHA':
-                            sortField = 'createdAt';
+                        case "FECHA":
+                            sortField = "date";
                             break;
                         default:
                             sortField = field.trim();
                     }
-                    return [sortField, (orderDirections[index] || 'ASC').trim().toUpperCase()];
+                    return [
+                        sortField,
+                        (orderDirections[index] || "ASC").trim().toUpperCase(),
+                    ];
                 });
             }
             const rta = yield models.JUDICIAL_BINNACLE.findAll({
