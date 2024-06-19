@@ -48,6 +48,9 @@ import judicialProcessReasonModel from "./judicial-process-reason.model";
 import judicialSedeModel from "./judicial-sede.model";
 import scheduledNotificationsModel from "./settings/scheduled-notifications.model";
 import scheduledNotificationsUsersModel from "./settings/scheduled-notifications-users.model";
+import departmentModel from "./settings/department.model";
+import provinceModel from "./settings/province.model";
+import districtModel from "./settings/district.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
@@ -105,6 +108,9 @@ const { ScheduledNotifications, ScheduledNotificationsSchema } =
   scheduledNotificationsModel;
 const { ScheduledNotificationsUsers, ScheduledNotificationsUsersSchema } =
   scheduledNotificationsUsersModel;
+const { Department, DepartmentSchema } = departmentModel;
+const { Province, ProvinceSchema } = provinceModel;
+const { District, DistrictSchema } = districtModel;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -209,6 +215,10 @@ export const setupModels = (sequelize: Sequelize) => {
     ScheduledNotificationsUsers.config(sequelize)
   );
 
+  Department.init(DepartmentSchema, Department.config(sequelize));
+  Province.init(ProvinceSchema, Province.config(sequelize));
+  District.init(DistrictSchema, District.config(sequelize));
+
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
   Bank.associate(sequelize.models);
@@ -256,4 +266,7 @@ export const setupModels = (sequelize: Sequelize) => {
   JudicialSede.associate(sequelize.models);
   ScheduledNotifications.associate(sequelize.models);
   ScheduledNotificationsUsers.associate(sequelize.models);
+  Department.associate(sequelize.models);
+  Province.associate(sequelize.models);
+  District.associate(sequelize.models);
 };

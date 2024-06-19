@@ -50,7 +50,9 @@ import extProductNameRouter from "./extrajudicial/ext-product-name.routes";
 import schedudedNotificationRouter from "./config/scheduled-notifications.routes";
 import schedudedNotificationsUsersRouter from "./config/scheduled-notifications-users.routes";
 import compareExcelsRouter from "./config/compare-excels.routes";
-
+import departmentRouter from "./config/department.routes";
+import districtRouter from "./config/districts.routes";
+import provinceRouter from "./config/province.routes";
 const routerApi = (app: Express) => {
   const router = express.Router();
   app.use("/api/v1", router);
@@ -118,6 +120,9 @@ const routerApi = (app: Express) => {
     "/config/compare-excels",
     compareExcelsRouter
   )
+  router.use("/config/departments", departmentRouter)
+  router.use("/config/districts", districtRouter)
+  router.use("/config/provinces", provinceRouter)
 };
 
 export default routerApi;

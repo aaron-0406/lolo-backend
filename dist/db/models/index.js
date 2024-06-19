@@ -53,6 +53,9 @@ const judicial_process_reason_model_1 = __importDefault(require("./judicial-proc
 const judicial_sede_model_1 = __importDefault(require("./judicial-sede.model"));
 const scheduled_notifications_model_1 = __importDefault(require("./settings/scheduled-notifications.model"));
 const scheduled_notifications_users_model_1 = __importDefault(require("./settings/scheduled-notifications-users.model"));
+const department_model_1 = __importDefault(require("./settings/department.model"));
+const province_model_1 = __importDefault(require("./settings/province.model"));
+const district_model_1 = __importDefault(require("./settings/district.model"));
 const { Customer, CustomerSchema } = customer_model_1.default;
 const { Funcionario, FuncionarioSchema } = funcionario_model_1.default;
 const { Bank, BankSchema } = bank_model_1.default;
@@ -102,6 +105,9 @@ const { JudicialProcessReason, JudicialProcessReasonSchema } = judicial_process_
 const { JudicialSede, JudicialSedeSchema } = judicial_sede_model_1.default;
 const { ScheduledNotifications, ScheduledNotificationsSchema } = scheduled_notifications_model_1.default;
 const { ScheduledNotificationsUsers, ScheduledNotificationsUsersSchema } = scheduled_notifications_users_model_1.default;
+const { Department, DepartmentSchema } = department_model_1.default;
+const { Province, ProvinceSchema } = province_model_1.default;
+const { District, DistrictSchema } = district_model_1.default;
 const setupModels = (sequelize) => {
     Customer.init(CustomerSchema, Customer.config(sequelize));
     Bank.init(BankSchema, Bank.config(sequelize));
@@ -152,6 +158,9 @@ const setupModels = (sequelize) => {
     JudicialSede.init(JudicialSedeSchema, JudicialSede.config(sequelize));
     ScheduledNotifications.init(ScheduledNotificationsSchema, ScheduledNotifications.config(sequelize));
     ScheduledNotificationsUsers.init(ScheduledNotificationsUsersSchema, ScheduledNotificationsUsers.config(sequelize));
+    Department.init(DepartmentSchema, Department.config(sequelize));
+    Province.init(ProvinceSchema, Province.config(sequelize));
+    District.init(DistrictSchema, District.config(sequelize));
     Customer.associate(sequelize.models);
     CustomerUser.associate(sequelize.models);
     Bank.associate(sequelize.models);
@@ -199,5 +208,8 @@ const setupModels = (sequelize) => {
     JudicialSede.associate(sequelize.models);
     ScheduledNotifications.associate(sequelize.models);
     ScheduledNotificationsUsers.associate(sequelize.models);
+    Department.associate(sequelize.models);
+    Province.associate(sequelize.models);
+    District.associate(sequelize.models);
 };
 exports.setupModels = setupModels;
