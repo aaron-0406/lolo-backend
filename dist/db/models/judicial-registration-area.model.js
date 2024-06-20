@@ -4,35 +4,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
-const province_model_1 = __importDefault(require("./province.model"));
-const DISTRICT_TABLE = "DISTRICT";
-const { PROVINCE_TABLE } = province_model_1.default;
-const DistrictSchema = {
+const customer_has_bank_model_1 = __importDefault(require("./many-to-many/customer-has-bank.model"));
+const JUDICIAL_REGISTRATION_AREA_TABLE = "JUDICIAL_REGISTRATION_AREA";
+const { CUSTOMER_HAS_BANK_TABLE } = customer_has_bank_model_1.default;
+const JudicialRegistrationAreaSchema = {
     id: {
         primaryKey: true,
         allowNull: false,
         autoIncrement: true,
-        field: "id_district",
+        field: "id_judicial_registration_area",
         type: sequelize_1.DataTypes.INTEGER,
     },
     name: {
         allowNull: false,
-        field: "name",
-        type: sequelize_1.DataTypes.STRING(150),
+        type: sequelize_1.DataTypes.STRING(200),
     },
-    code: {
+    customerHasBankId: {
         allowNull: false,
-        field: "code",
-        type: sequelize_1.DataTypes.STRING(10),
-    },
-    provinceId: {
-        allowNull: false,
-        field: "province_id_province",
-        references: {
-            model: PROVINCE_TABLE,
-            key: "id_province",
-        },
+        field: "customer_has_bank_id_customer_has_bank",
         type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: CUSTOMER_HAS_BANK_TABLE,
+            key: "id_customer_has_bank",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
     },
     createdAt: {
         allowNull: false,
@@ -52,26 +48,27 @@ const DistrictSchema = {
         type: sequelize_1.DataTypes.DATE,
     },
 };
-class District extends sequelize_1.Model {
+class JudicialRegistrationArea extends sequelize_1.Model {
     static associate(models) {
-        this.belongsTo(models.PROVINCE, { as: "province" });
+        this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
         this.hasMany(models.JUDICIAL_COLLATERAL, {
             as: "judicialCollateral",
-            foreignKey: "districtId",
+            foreignKey: "registrationAreaId",
         });
     }
     static config(sequelize) {
         return {
             sequelize,
-            tableName: DISTRICT_TABLE,
-            modelName: DISTRICT_TABLE,
-            timestamps: false,
+            tableName: JUDICIAL_REGISTRATION_AREA_TABLE,
+            modelName: JUDICIAL_REGISTRATION_AREA_TABLE,
+            timestamps: true,
+            paranoid: true,
             deletedAt: "deleted_at",
         };
     }
 }
 exports.default = {
-    DISTRICT_TABLE,
-    DistrictSchema,
-    District,
+    JudicialRegistrationArea,
+    JudicialRegistrationAreaSchema,
+    JUDICIAL_REGISTRATION_AREA_TABLE,
 };

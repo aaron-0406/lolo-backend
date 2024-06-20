@@ -227,6 +227,10 @@ class JudicialCaseFile extends sequelize_1.Model {
             as: "product",
             foreignKey: "judicialCaseFileId",
         });
+        this.hasMany(models.JUDICIAL_CASE_FILE_HAS_COLLATERAL, {
+            as: "judicialCaseFileHasCollateral",
+            foreignKey: "judicialCaseFileId",
+        });
         this.belongsTo(models.BANK, { as: "bank" });
     }
     static config(sequelize) {

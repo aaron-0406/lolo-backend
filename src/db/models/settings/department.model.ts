@@ -47,7 +47,14 @@ const DepartmentSchema: ModelAttributes<Department, DepartmentType> = {
 
 class Department extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
-    this.hasMany(models.PROVINCE, { as: "province", foreignKey:"departmentId"});
+    this.hasMany(models.PROVINCE, {
+      as: "province",
+      foreignKey: "departmentId",
+    });
+    this.hasMany(models.JUDICIAL_COLLATERAL, {
+      as: "judicialCollateral",
+      foreignKey: "departmentId",
+    });
   }
   static config(sequelize: Sequelize) {
     return {

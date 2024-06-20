@@ -56,6 +56,7 @@ const scheduled_notifications_users_routes_1 = __importDefault(require("./config
 const compare_excels_routes_1 = __importDefault(require("./config/compare-excels.routes"));
 const department_routes_1 = __importDefault(require("./config/department.routes"));
 const districts_routes_1 = __importDefault(require("./config/districts.routes"));
+const province_routes_1 = __importDefault(require("./config/province.routes"));
 const routerApi = (app) => {
     const router = express_1.default.Router();
     app.use("/api/v1", router);
@@ -111,5 +112,6 @@ const routerApi = (app) => {
     router.use("/config/compare-excels", compare_excels_routes_1.default);
     router.use("/config/departments", department_routes_1.default);
     router.use("/config/districts", districts_routes_1.default);
+    router.use("/config/provinces", province_routes_1.default);
 };
 exports.default = routerApi;

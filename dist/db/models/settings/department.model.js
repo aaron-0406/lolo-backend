@@ -39,7 +39,14 @@ const DepartmentSchema = {
 };
 class Department extends sequelize_1.Model {
     static associate(models) {
-        this.hasMany(models.PROVINCE, { as: "province" });
+        this.hasMany(models.PROVINCE, {
+            as: "province",
+            foreignKey: "departmentId",
+        });
+        this.hasMany(models.JUDICIAL_COLLATERAL, {
+            as: "judicialCollateral",
+            foreignKey: "departmentId",
+        });
     }
     static config(sequelize) {
         return {

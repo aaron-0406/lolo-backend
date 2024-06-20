@@ -55,7 +55,11 @@ const ProvinceSchema = {
 class Province extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.DEPARTMENT, { as: "department" });
-        this.hasMany(models.DISTRICT, { as: "district" });
+        this.hasMany(models.DISTRICT, { as: "district", foreignKey: "provinceId" });
+        this.hasMany(models.JUDICIAL_COLLATERAL, {
+            as: "judicialCollateral",
+            foreignKey: "provinceId",
+        });
     }
     static config(sequelize) {
         return {

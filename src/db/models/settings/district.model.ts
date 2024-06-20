@@ -60,6 +60,10 @@ const DistrictSchema: ModelAttributes<District, DistrictType> = {
 class District extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.PROVINCE, { as: "province" });
+    this.hasMany(models.JUDICIAL_COLLATERAL, {
+      as: "judicialCollateral",
+      foreignKey: "districtId",
+    });
   }
   static config(sequelize: Sequelize) {
     return {

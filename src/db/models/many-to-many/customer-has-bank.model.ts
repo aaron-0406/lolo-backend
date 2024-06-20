@@ -87,6 +87,26 @@ class CustomerHasBank extends Model {
       as: "scheduledNotifications",
       foreignKey: "customerHasBankId",
     });
+    this.hasMany(models.JUDICIAL_NOTARY, {
+      as: "judicialNotary",
+      foreignKey: "customerHasBankId",
+    });
+    this.hasMany(models.JUDICIAL_REGISTER_OFFICE, {
+      as: "judicialRegisterOffice",
+      foreignKey: "customerHasBankId",
+    });
+    this.hasMany(models.JUDICIAL_REGISTRATION_AREA, {
+      as: "judicialRegistrationArea",
+      foreignKey: "customerHasBankId",
+    });
+    this.hasMany(models.JUDICIAL_USE_OF_PROPERTY, {
+      as: "judicialUseOfProperty",
+      foreignKey: "customerHasBankId",
+    });
+    this.hasMany(models.JUDICIAL_COLLATERAL, {
+      as: "judicialCollateral",
+      foreignKey: "customerHasBankId",
+    });
   }
 
   static config(sequelize: Sequelize) {

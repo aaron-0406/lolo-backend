@@ -53,6 +53,12 @@ import compareExcelsRouter from "./config/compare-excels.routes";
 import departmentRouter from "./config/department.routes";
 import districtRouter from "./config/districts.routes";
 import provinceRouter from "./config/province.routes";
+import judicialCollateralRouter from "./judicial/judicial-collateral.routes";
+import judicialNotaryRouter from "./judicial/judicial-notary.routes";
+import judicialRegisterOfficeRouter from "./judicial/judicial-register-office.routes";
+import judicialRegistrationAreaRouter from "./judicial/judicial-registration-area.routes";
+import judicialUseOfPropertyRouter from "./judicial/judicial-use-of-property.routes";
+
 const routerApi = (app: Express) => {
   const router = express.Router();
   app.use("/api/v1", router);
@@ -97,6 +103,11 @@ const routerApi = (app: Express) => {
     "/judicial/bin-procedural-stage",
     judicialBinProceduralStageRouter
   );
+  router.use("/judicial/collateral", judicialCollateralRouter);
+  router.use("/judicial/notary", judicialNotaryRouter);
+  router.use("/judicial/register-office", judicialRegisterOfficeRouter);
+  router.use("/judicial/registration-area", judicialRegistrationAreaRouter);
+  router.use("/judicial/use-of-property", judicialUseOfPropertyRouter);
 
   router.use("/dash/auth", authDashRouter);
   router.use("/dash/role", roleRouter);

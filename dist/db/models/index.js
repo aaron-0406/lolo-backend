@@ -56,6 +56,12 @@ const scheduled_notifications_users_model_1 = __importDefault(require("./setting
 const department_model_1 = __importDefault(require("./settings/department.model"));
 const province_model_1 = __importDefault(require("./settings/province.model"));
 const district_model_1 = __importDefault(require("./settings/district.model"));
+const judicial_notary_model_1 = __importDefault(require("./judicial-notary.model"));
+const judicial_register_office_model_1 = __importDefault(require("./judicial-register-office.model"));
+const judicial_registration_area_model_1 = __importDefault(require("./judicial-registration-area.model"));
+const judicial_use_of_property_model_1 = __importDefault(require("./judicial-use-of-property.model"));
+const judicial_collateral_model_1 = __importDefault(require("./judicial-collateral.model"));
+const judicial_case_file_has_collateral_model_1 = __importDefault(require("./judicial-case-file-has-collateral.model"));
 const { Customer, CustomerSchema } = customer_model_1.default;
 const { Funcionario, FuncionarioSchema } = funcionario_model_1.default;
 const { Bank, BankSchema } = bank_model_1.default;
@@ -108,6 +114,12 @@ const { ScheduledNotificationsUsers, ScheduledNotificationsUsersSchema } = sched
 const { Department, DepartmentSchema } = department_model_1.default;
 const { Province, ProvinceSchema } = province_model_1.default;
 const { District, DistrictSchema } = district_model_1.default;
+const { JudicialNotary, JudicialNotarySchema } = judicial_notary_model_1.default;
+const { JudicialRegisterOffice, JudicialRegisterOfficeSchema } = judicial_register_office_model_1.default;
+const { JudicialRegistrationArea, JudicialRegistrationAreaSchema } = judicial_registration_area_model_1.default;
+const { JudicialUseOfProperty, JudicialUseOfPropertySchema } = judicial_use_of_property_model_1.default;
+const { JudicialCollateral, JudicialCollateralSchema } = judicial_collateral_model_1.default;
+const { JudicialCaseFileHasCollateral, JudicialCaseFileHasCollateralSchema } = judicial_case_file_has_collateral_model_1.default;
 const setupModels = (sequelize) => {
     Customer.init(CustomerSchema, Customer.config(sequelize));
     Bank.init(BankSchema, Bank.config(sequelize));
@@ -161,6 +173,12 @@ const setupModels = (sequelize) => {
     Department.init(DepartmentSchema, Department.config(sequelize));
     Province.init(ProvinceSchema, Province.config(sequelize));
     District.init(DistrictSchema, District.config(sequelize));
+    JudicialNotary.init(JudicialNotarySchema, JudicialNotary.config(sequelize));
+    JudicialRegisterOffice.init(JudicialRegisterOfficeSchema, JudicialRegisterOffice.config(sequelize));
+    JudicialRegistrationArea.init(JudicialRegistrationAreaSchema, JudicialRegistrationArea.config(sequelize));
+    JudicialUseOfProperty.init(JudicialUseOfPropertySchema, JudicialUseOfProperty.config(sequelize));
+    JudicialCollateral.init(JudicialCollateralSchema, JudicialCollateral.config(sequelize));
+    JudicialCaseFileHasCollateral.init(JudicialCaseFileHasCollateralSchema, JudicialCaseFileHasCollateral.config(sequelize));
     Customer.associate(sequelize.models);
     CustomerUser.associate(sequelize.models);
     Bank.associate(sequelize.models);
@@ -211,5 +229,11 @@ const setupModels = (sequelize) => {
     Department.associate(sequelize.models);
     Province.associate(sequelize.models);
     District.associate(sequelize.models);
+    JudicialNotary.associate(sequelize.models);
+    JudicialRegisterOffice.associate(sequelize.models);
+    JudicialRegistrationArea.associate(sequelize.models);
+    JudicialUseOfProperty.associate(sequelize.models);
+    JudicialCollateral.associate(sequelize.models);
+    JudicialCaseFileHasCollateral.associate(sequelize.models);
 };
 exports.setupModels = setupModels;
