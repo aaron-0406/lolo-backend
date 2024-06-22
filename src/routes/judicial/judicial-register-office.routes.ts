@@ -1,13 +1,13 @@
 import express from "express";
 import validatorHandler from "../../middlewares/validator.handler";
-import { JWTAuth } from "../../middlewares/auth.handler";
+import { checkPermissions, JWTAuth } from "../../middlewares/auth.handler";
 import judicialRegisterOfficeSchema from "../../app/judicial/schemas/judicial-register-office.schema";
 import {
   createRegisterOfficeController,
   deletedRegisterOfficeController,
   findAllRegisterOfficesByCHBController,
-  findAllRegisterOfficesController,
   updateRegisterOfficeController,
+  findRegisterOfficeByIdController,
 } from "../../controllers/judicial/judicial-register-office.controller";
 
 const {
@@ -20,6 +20,13 @@ const {
 const router = express.Router();
 
 router.get(
+  "/:id",
+  JWTAuth,
+  validatorHandler(getJudicialRegisterOfficeByIDSchema, "params"),
+  findRegisterOfficeByIdController
+)
+
+router.get(
   "/chb/:chb",
   JWTAuth,
   validatorHandler(getJudicialRegisterOfficeByCHBSchema, "params"),
@@ -29,6 +36,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
+  checkPermissions("P40-01"),
   validatorHandler(createJudicialRegisterOfficeSchema, "body"),
   createRegisterOfficeController
 );
@@ -36,6 +44,7 @@ router.post(
 router.patch(
   "/:id",
   JWTAuth,
+  checkPermissions("P40-02"),
   validatorHandler(updateJudicialRegisterOfficeSchema, "body"),
   updateRegisterOfficeController
 );
@@ -43,6 +52,7 @@ router.patch(
 router.delete(
   "/:id",
   JWTAuth,
+  checkPermissions("P40-03"),
   validatorHandler(getJudicialRegisterOfficeByIDSchema, "params"),
   deletedRegisterOfficeController
 );

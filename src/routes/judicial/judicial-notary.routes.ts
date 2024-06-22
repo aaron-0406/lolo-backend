@@ -1,12 +1,12 @@
 import express from "express";
 import validatorHandler from "../../middlewares/validator.handler";
-import { JWTAuth } from "../../middlewares/auth.handler";
+import { checkPermissions, JWTAuth } from "../../middlewares/auth.handler";
 import judicialNotarySchema from "../../app/judicial/schemas/judicial-notary.schema";
 import {
+  findNotaryByIdController, 
+  findAllNotariesByCHBController,
   createNotaryController,
   deletedNotaryController,
-  findAllNotariesByCHBController,
-  findAllNotariesController,
   updateNotaryController,
 } from "../../controllers/judicial/judicial-notary.controller";
 
@@ -20,6 +20,13 @@ const {
 const router = express.Router();
 
 router.get(
+  "/:id",
+  JWTAuth,
+  validatorHandler(getJudicialNotaryByIDSchema, "params"),
+  findNotaryByIdController
+);
+
+router.get(
   "/chb/:chb",
   JWTAuth,
   validatorHandler(getJudicialNotaryByCHBSchema, "params"),
@@ -29,6 +36,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
+  checkPermissions("P41-01"),
   validatorHandler(createJudicialNotarySchema, "body"),
   createNotaryController
 );
@@ -36,6 +44,7 @@ router.post(
 router.patch(
   "/:id",
   JWTAuth,
+  checkPermissions("P41-02"),
   validatorHandler(updateJudicialNotarySchema, "body"),
   updateNotaryController
 );
@@ -43,6 +52,7 @@ router.patch(
 router.delete(
   "/:id",
   JWTAuth,
+  checkPermissions("P41-03"),
   validatorHandler(getJudicialNotaryByIDSchema, "params"),
   deletedNotaryController
 );

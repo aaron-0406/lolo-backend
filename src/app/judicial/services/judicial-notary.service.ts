@@ -7,21 +7,9 @@ const { models } = sequelize;
 class JudicialNotaryService {
   constructor() {}
 
-  async findAll() {
-    const rta = await models.JUDICIAL_NOTARY.findAll();
-    return rta;
-  }
-
   async findAllByCHB(chb: number) {
     const rta = await models.JUDICIAL_NOTARY.findAll({
       where: { customerHasBankId: chb },
-      include: [
-        {
-          model: models.JUDICIAL_CASE_FILE_HAS_NOTARY,
-          as: "judicialCaseFileHasNotary",
-          attributes: ["id", "judicialCaseFileId", "judicialNotaryId"],
-        },
-      ],
     });
     return rta;
   }
@@ -31,13 +19,6 @@ class JudicialNotaryService {
       where: {
         id,
       },
-      include: [
-        {
-          model: models.JUDICIAL_CASE_FILE_HAS_NOTARY,
-          as: "judicialCaseFileHasNotary",
-          attributes: ["id", "judicialCaseFileId", "judicialNotaryId"],
-        },
-      ],
     });
 
     if (!judicialNotary) {
@@ -49,30 +30,12 @@ class JudicialNotaryService {
 
   async create(data: JudicialNotaryType) {
     const newJudicialNotary = await models.JUDICIAL_NOTARY.create(data);
-    await newJudicialNotary.reload({
-      include: [
-        {
-          model: models.JUDICIAL_CASE_FILE_HAS_NOTARY,
-          as: "judicialCaseFileHasNotary",
-          attributes: ["id", "judicialCaseFileId", "judicialNotaryId"],
-        },
-      ],
-    });
     return newJudicialNotary;
   }
 
   async update(id: string, changes: JudicialNotaryType) {
     const judicialNotary = await this.findByID(id);
     const rta = await judicialNotary.update(changes);
-    await rta.reload({
-      include: [
-        {
-          model: models.JUDICIAL_CASE_FILE_HAS_NOTARY,
-          as: "judicialCaseFileHasNotary",
-          attributes: ["id", "judicialCaseFileId", "judicialNotaryId"],
-        },
-      ],
-    });
     return rta;
   }
 

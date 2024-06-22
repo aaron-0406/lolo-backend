@@ -15,13 +15,6 @@ class JudicialUseOfPropertyService {
   async findAllByCHB(chb: number) {
     const rta = await models.JUDICIAL_USE_OF_PROPERTY.findAll({
       where: { customerHasBankId: chb },
-      include: [
-        {
-          model: models.JUDICIAL_CASE_FILE_HAS_USE_OF_PROPERTY,
-          as: "judicialCaseFileHasUseOfProperty",
-          attributes: ["id", "judicialCaseFileId", "judicialUseOfPropertyId"],
-        },
-      ],
     });
     return rta;
   }
@@ -31,13 +24,6 @@ class JudicialUseOfPropertyService {
       where: {
         id,
       },
-      include: [
-        {
-          model: models.JUDICIAL_CASE_FILE_HAS_USE_OF_PROPERTY,
-          as: "judicialCaseFileHasUseOfProperty",
-          attributes: ["id", "judicialCaseFileId", "judicialUseOfPropertyId"],
-        },
-      ],
     });
 
     if (!judicialUseOfProperty) {
@@ -49,30 +35,12 @@ class JudicialUseOfPropertyService {
 
   async create(data: JudicialUseOfPropertyType) {
     const newJudicialUseOfProperty = await models.JUDICIAL_USE_OF_PROPERTY.create(data);
-    await newJudicialUseOfProperty.reload({
-      include: [
-        {
-          model: models.JUDICIAL_CASE_FILE_HAS_USE_OF_PROPERTY,
-          as: "judicialCaseFileHasUseOfProperty",
-          attributes: ["id", "judicialCaseFileId", "judicialUseOfPropertyId"],
-        },
-      ],
-    });
     return newJudicialUseOfProperty;
   }
 
   async update(id: string, changes: JudicialUseOfPropertyType) {
     const judicialUseOfProperty = await this.findByID(id);
     const rta = await judicialUseOfProperty.update(changes);
-    await rta.reload({
-      include: [
-        {
-          model: models.JUDICIAL_CASE_FILE_HAS_USE_OF_PROPERTY,
-          as: "judicialCaseFileHasUseOfProperty",
-          attributes: ["id", "judicialCaseFileId", "judicialUseOfPropertyId"],
-        },
-      ],
-    });
     return rta;
   }
 
@@ -84,4 +52,4 @@ class JudicialUseOfPropertyService {
   }
 }
 
-export default JudicialUseOfPropertyService;  
+export default JudicialUseOfPropertyService;

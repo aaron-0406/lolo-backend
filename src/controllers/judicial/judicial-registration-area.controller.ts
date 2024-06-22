@@ -1,16 +1,22 @@
 import { Request, Response, NextFunction } from "express";
 import JudicialRegistrationAreaService from "../../app/judicial/services/judicial-registration-area.service";
+import UserLogService from "../../app/dash/services/user-log.service";
+import judicialRegistrationAreaModel from "../../db/models/judicial-registration-area.model";
 
 const service = new JudicialRegistrationAreaService();
+const serviceUserLog = new UserLogService();
 
-export const findAllRegistrationAreasController = async (
+const { JUDICIAL_REGISTRATION_AREA_TABLE } = judicialRegistrationAreaModel;
+
+export const findRegistrationAreaByIdController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
+  const { id } = req.params;
   try {
-    const registrationAreas = await service.findAll();
-    res.json(registrationAreas);
+    const registrationArea = await service.findByID(id);
+    res.json(registrationArea);
   } catch (error) {
     next(error);
   }
@@ -38,6 +44,16 @@ export const createRegistrationAreaController = async (
   try {
     const body = req.body;
     const newRegistrationArea = await service.create(body);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P39-01",
+      entity: JUDICIAL_REGISTRATION_AREA_TABLE,
+      entityId: Number(newRegistrationArea.dataValues.id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    });
+
     res.json(newRegistrationArea);
   } catch (error) {
     next(error);
@@ -54,6 +70,16 @@ export const updateRegistrationAreaController = async (
     const { id } = req.params;
     const body = req.body;
     const registrationArea = await service.update(id, body);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P39-02",
+      entity: JUDICIAL_REGISTRATION_AREA_TABLE,
+      entityId: Number(registrationArea.dataValues.id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    });
+
     res.json(registrationArea);
   } catch (error) {
     next(error);
@@ -68,8 +94,18 @@ export const deletedRegistrationAreaController = async (
   try {
     const { id } = req.params;
     const registrationArea = await service.delete(id);
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P39-03",
+      entity: JUDICIAL_REGISTRATION_AREA_TABLE,
+      entityId: Number(registrationArea.id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    });
+
     res.json(registrationArea);
   } catch (error) {
     next(error);
   }
-}   
+}
