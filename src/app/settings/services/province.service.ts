@@ -17,6 +17,20 @@ class ProvinceService {
     return rta;
   }
 
+  async findAllByDepartment(departmentId: string) {
+    const rta = await models.PROVINCE.findAll({
+      where: {
+        departmentId,
+      },
+    });
+
+    if (!rta) {
+      throw boom.notFound("No existen provincias");
+    }
+
+    return rta;
+  }
+
   async create(data: ProvinceType) {
     const newProvince = await models.PROVINCE.create(data);
 

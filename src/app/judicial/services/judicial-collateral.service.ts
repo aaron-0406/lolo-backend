@@ -31,13 +31,6 @@ class JudicialCollateralService {
       where: {
         id,
       },
-      include: [
-        {
-          model: models.JUDICIAL_CASE_FILE_HAS_COLLATERAL,
-          as: "judicialCaseFileHasCollateral",
-          attributes: ["id", "judicialCaseFileId", "judicialCollateralId"],
-        },
-      ],
     });
 
     if (!judicialCollateral) {
@@ -49,15 +42,6 @@ class JudicialCollateralService {
 
   async create(data: JudicialCollateralType) {
     const newJudicialCollateral = await models.JUDICIAL_COLLATERAL.create(data);
-    await newJudicialCollateral.reload({
-      include: [
-        {
-          model: models.JUDICIAL_CASE_FILE_HAS_COLLATERAL,
-          as: "judicialCaseFileHasCollateral",
-          attributes: ["id", "judicialCaseFileId", "judicialCollateralId"],
-        },
-      ],
-    });
     return newJudicialCollateral;
   }
 

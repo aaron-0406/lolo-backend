@@ -10,8 +10,9 @@ const judicial_registration_area_schema_1 = __importDefault(require("../../app/j
 const judicial_registration_area_controller_1 = require("../../controllers/judicial/judicial-registration-area.controller");
 const { createJudicialRegistrationAreaSchema, getJudicialRegistrationAreaByCHBSchema, getJudicialRegistrationAreaByIDSchema, updateJudicialRegistrationAreaSchema, } = judicial_registration_area_schema_1.default;
 const router = express_1.default.Router();
+router.get("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getJudicialRegistrationAreaByIDSchema, "params"), judicial_registration_area_controller_1.findRegistrationAreaByIdController);
 router.get("/chb/:chb", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getJudicialRegistrationAreaByCHBSchema, "params"), judicial_registration_area_controller_1.findAllRegistrationAreasByCHBController);
-router.post("/", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(createJudicialRegistrationAreaSchema, "body"), judicial_registration_area_controller_1.createRegistrationAreaController);
-router.patch("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(updateJudicialRegistrationAreaSchema, "body"), judicial_registration_area_controller_1.updateRegistrationAreaController);
-router.delete("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getJudicialRegistrationAreaByIDSchema, "params"), judicial_registration_area_controller_1.deletedRegistrationAreaController);
+router.post("/", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P39-01"), (0, validator_handler_1.default)(createJudicialRegistrationAreaSchema, "body"), judicial_registration_area_controller_1.createRegistrationAreaController);
+router.patch("/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P39-02"), (0, validator_handler_1.default)(updateJudicialRegistrationAreaSchema, "body"), judicial_registration_area_controller_1.updateRegistrationAreaController);
+router.delete("/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P39-03"), (0, validator_handler_1.default)(getJudicialRegistrationAreaByIDSchema, "params"), judicial_registration_area_controller_1.deletedRegistrationAreaController);
 exports.default = router;

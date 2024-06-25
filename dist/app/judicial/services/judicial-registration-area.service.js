@@ -27,13 +27,6 @@ class JudicialRegistrationAreaService {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.JUDICIAL_REGISTRATION_AREA.findAll({
                 where: { customerHasBankId: chb },
-                include: [
-                    {
-                        model: models.JUDICIAL_CASE_FILE_HAS_REGISTRATION_AREA,
-                        as: "judicialCaseFileHasRegistrationArea",
-                        attributes: ["id", "judicialCaseFileId", "judicialRegistrationAreaId"],
-                    },
-                ],
             });
             return rta;
         });
@@ -44,13 +37,6 @@ class JudicialRegistrationAreaService {
                 where: {
                     id,
                 },
-                include: [
-                    {
-                        model: models.JUDICIAL_CASE_FILE_HAS_REGISTRATION_AREA,
-                        as: "judicialCaseFileHasRegistrationArea",
-                        attributes: ["id", "judicialCaseFileId", "judicialRegistrationAreaId"],
-                    },
-                ],
             });
             if (!judicialRegistrationArea) {
                 throw boom_1.default.notFound("Región de Registro no encontrado");
@@ -61,15 +47,6 @@ class JudicialRegistrationAreaService {
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const newJudicialRegistrationArea = yield models.JUDICIAL_REGISTRATION_AREA.create(data);
-            yield newJudicialRegistrationArea.reload({
-                include: [
-                    {
-                        model: models.JUDICIAL_CASE_FILE_HAS_REGISTRATION_AREA,
-                        as: "judicialCaseFileHasRegistrationArea",
-                        attributes: ["id", "judicialCaseFileId", "judicialRegistrationAreaId"],
-                    },
-                ],
-            });
             return newJudicialRegistrationArea;
         });
     }
@@ -77,15 +54,6 @@ class JudicialRegistrationAreaService {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialRegistrationArea = yield this.findByID(id);
             const rta = yield judicialRegistrationArea.update(changes);
-            yield rta.reload({
-                include: [
-                    {
-                        model: models.JUDICIAL_CASE_FILE_HAS_REGISTRATION_AREA,
-                        as: "judicialCaseFileHasRegistrationArea",
-                        attributes: ["id", "judicialCaseFileId", "judicialRegistrationAreaId"],
-                    },
-                ],
-            });
             return rta;
         });
     }

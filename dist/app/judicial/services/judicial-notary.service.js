@@ -17,23 +17,10 @@ const boom_1 = __importDefault(require("@hapi/boom"));
 const { models } = sequelize_1.default;
 class JudicialNotaryService {
     constructor() { }
-    findAll() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.JUDICIAL_NOTARY.findAll();
-            return rta;
-        });
-    }
     findAllByCHB(chb) {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.JUDICIAL_NOTARY.findAll({
                 where: { customerHasBankId: chb },
-                include: [
-                    {
-                        model: models.JUDICIAL_CASE_FILE_HAS_NOTARY,
-                        as: "judicialCaseFileHasNotary",
-                        attributes: ["id", "judicialCaseFileId", "judicialNotaryId"],
-                    },
-                ],
             });
             return rta;
         });
@@ -44,13 +31,6 @@ class JudicialNotaryService {
                 where: {
                     id,
                 },
-                include: [
-                    {
-                        model: models.JUDICIAL_CASE_FILE_HAS_NOTARY,
-                        as: "judicialCaseFileHasNotary",
-                        attributes: ["id", "judicialCaseFileId", "judicialNotaryId"],
-                    },
-                ],
             });
             if (!judicialNotary) {
                 throw boom_1.default.notFound("Notario no encontrado");
@@ -61,15 +41,6 @@ class JudicialNotaryService {
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const newJudicialNotary = yield models.JUDICIAL_NOTARY.create(data);
-            yield newJudicialNotary.reload({
-                include: [
-                    {
-                        model: models.JUDICIAL_CASE_FILE_HAS_NOTARY,
-                        as: "judicialCaseFileHasNotary",
-                        attributes: ["id", "judicialCaseFileId", "judicialNotaryId"],
-                    },
-                ],
-            });
             return newJudicialNotary;
         });
     }
@@ -77,15 +48,6 @@ class JudicialNotaryService {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialNotary = yield this.findByID(id);
             const rta = yield judicialNotary.update(changes);
-            yield rta.reload({
-                include: [
-                    {
-                        model: models.JUDICIAL_CASE_FILE_HAS_NOTARY,
-                        as: "judicialCaseFileHasNotary",
-                        attributes: ["id", "judicialCaseFileId", "judicialNotaryId"],
-                    },
-                ],
-            });
             return rta;
         });
     }

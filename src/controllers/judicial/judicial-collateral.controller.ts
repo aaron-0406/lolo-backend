@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import JudicialCollateralService from "../../app/judicial/services/judicial-collateral.service";
+import UserLogService from "../../app/dash/services/user-log.service";
+import judicialCaseFileHasCollateralModel from "../../db/models/judicial-case-file-has-collateral.model";
 
 const service = new JudicialCollateralService();
+const userLogService = new UserLogService();
+const { JUDICIAL_CASE_FILE_HAS_COLLATERAL_TABLE } = judicialCaseFileHasCollateralModel
 
 export const findAllCollateralController = async (
   req: Request,
@@ -38,6 +42,15 @@ export const createCollateralController = async (
   try {
     const body = req.body;
     const newCollateral = await service.create(body);
+
+    await userLogService.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P13-01-06-02",
+      entity: JUDICIAL_CASE_FILE_HAS_COLLATERAL_TABLE,
+      entityId: Number(newCollateral.dataValues.id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    })
     res.json(newCollateral);
   } catch (error) {
     next(error);

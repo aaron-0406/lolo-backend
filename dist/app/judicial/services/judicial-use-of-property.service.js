@@ -27,13 +27,6 @@ class JudicialUseOfPropertyService {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.JUDICIAL_USE_OF_PROPERTY.findAll({
                 where: { customerHasBankId: chb },
-                include: [
-                    {
-                        model: models.JUDICIAL_CASE_FILE_HAS_USE_OF_PROPERTY,
-                        as: "judicialCaseFileHasUseOfProperty",
-                        attributes: ["id", "judicialCaseFileId", "judicialUseOfPropertyId"],
-                    },
-                ],
             });
             return rta;
         });
@@ -44,13 +37,6 @@ class JudicialUseOfPropertyService {
                 where: {
                     id,
                 },
-                include: [
-                    {
-                        model: models.JUDICIAL_CASE_FILE_HAS_USE_OF_PROPERTY,
-                        as: "judicialCaseFileHasUseOfProperty",
-                        attributes: ["id", "judicialCaseFileId", "judicialUseOfPropertyId"],
-                    },
-                ],
             });
             if (!judicialUseOfProperty) {
                 throw boom_1.default.notFound("Uso de Propiedad no encontrado");
@@ -61,15 +47,6 @@ class JudicialUseOfPropertyService {
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const newJudicialUseOfProperty = yield models.JUDICIAL_USE_OF_PROPERTY.create(data);
-            yield newJudicialUseOfProperty.reload({
-                include: [
-                    {
-                        model: models.JUDICIAL_CASE_FILE_HAS_USE_OF_PROPERTY,
-                        as: "judicialCaseFileHasUseOfProperty",
-                        attributes: ["id", "judicialCaseFileId", "judicialUseOfPropertyId"],
-                    },
-                ],
-            });
             return newJudicialUseOfProperty;
         });
     }
@@ -77,15 +54,6 @@ class JudicialUseOfPropertyService {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialUseOfProperty = yield this.findByID(id);
             const rta = yield judicialUseOfProperty.update(changes);
-            yield rta.reload({
-                include: [
-                    {
-                        model: models.JUDICIAL_CASE_FILE_HAS_USE_OF_PROPERTY,
-                        as: "judicialCaseFileHasUseOfProperty",
-                        attributes: ["id", "judicialCaseFileId", "judicialUseOfPropertyId"],
-                    },
-                ],
-            });
             return rta;
         });
     }

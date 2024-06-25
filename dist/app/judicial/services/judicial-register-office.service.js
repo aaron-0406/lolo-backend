@@ -17,23 +17,10 @@ const boom_1 = __importDefault(require("@hapi/boom"));
 const { models } = sequelize_1.default;
 class JudicialRegisterOfficeService {
     constructor() { }
-    findAll() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.JUDICIAL_REGISTER_OFFICE.findAll();
-            return rta;
-        });
-    }
     findAllByCHB(chb) {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.JUDICIAL_REGISTER_OFFICE.findAll({
                 where: { customerHasBankId: chb },
-                include: [
-                    {
-                        model: models.JUDICIAL_CASE_FILE_HAS_REGISTER_OFFICE,
-                        as: "judicialCaseFileHasRegisterOffice",
-                        attributes: ["id", "judicialCaseFileId", "judicialRegisterOfficeId"],
-                    },
-                ],
             });
             return rta;
         });
@@ -44,16 +31,9 @@ class JudicialRegisterOfficeService {
                 where: {
                     id,
                 },
-                include: [
-                    {
-                        model: models.JUDICIAL_CASE_FILE_HAS_REGISTER_OFFICE,
-                        as: "judicialCaseFileHasRegisterOffice",
-                        attributes: ["id", "judicialCaseFileId", "judicialRegisterOfficeId"],
-                    },
-                ],
             });
             if (!judicialRegisterOffice) {
-                throw boom_1.default.notFound("Registro de Oficina no encontrado");
+                throw boom_1.default.notFound("Oficina registral no encontrada");
             }
             return judicialRegisterOffice;
         });
@@ -61,15 +41,6 @@ class JudicialRegisterOfficeService {
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const newJudicialRegisterOffice = yield models.JUDICIAL_REGISTER_OFFICE.create(data);
-            yield newJudicialRegisterOffice.reload({
-                include: [
-                    {
-                        model: models.JUDICIAL_CASE_FILE_HAS_REGISTER_OFFICE,
-                        as: "judicialCaseFileHasRegisterOffice",
-                        attributes: ["id", "judicialCaseFileId", "judicialRegisterOfficeId"],
-                    },
-                ],
-            });
             return newJudicialRegisterOffice;
         });
     }
@@ -77,15 +48,6 @@ class JudicialRegisterOfficeService {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialRegisterOffice = yield this.findByID(id);
             const rta = yield judicialRegisterOffice.update(changes);
-            yield rta.reload({
-                include: [
-                    {
-                        model: models.JUDICIAL_CASE_FILE_HAS_REGISTER_OFFICE,
-                        as: "judicialCaseFileHasRegisterOffice",
-                        attributes: ["id", "judicialCaseFileId", "judicialRegisterOfficeId"],
-                    },
-                ],
-            });
             return rta;
         });
     }

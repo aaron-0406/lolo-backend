@@ -1,6 +1,6 @@
 import express from "express";
 import validatorHandler from "../../middlewares/validator.handler";
-import { JWTAuth } from "../../middlewares/auth.handler";
+import { checkPermissions, JWTAuth } from "../../middlewares/auth.handler";
 import judicialCollateralSchema from "../../app/judicial/schemas/judicial-collateral.schema";
 import {
   findAllCollateralByCHBController,
@@ -28,6 +28,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
+  checkPermissions("P13-01-06-02"), 
   validatorHandler(createJudicialCollateralSchema, "body"),
   createCollateralController
 );

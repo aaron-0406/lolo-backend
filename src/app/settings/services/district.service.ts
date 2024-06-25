@@ -13,10 +13,24 @@ class DistrictService {
     }
     return rta;
   }
+
+  async findAllByProvince(provinceId: string) {
+    const rta = await models.DISTRICT.findAll({
+      where: {
+        provinceId,
+      },
+    });
+    if (!rta) {
+      throw boom.notFound("No existen distritos");
+    }
+    return rta;
+  }
+
   async create(data: DistrictType) {
     const newDistrict = await models.DISTRICT.create(data);
     return newDistrict;
   }
+
   async update(id: string, data: DistrictType) {
     const district = await models.DISTRICT.findByPk(id);
     if (!district) {
@@ -25,6 +39,7 @@ class DistrictService {
     await district.update(data);
     return district;
   }
+
   async delete(id: string) {
     const district = await models.DISTRICT.findByPk(id);
     if (!district) {
