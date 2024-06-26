@@ -34,14 +34,43 @@ export const findAllCollateralByCHBController = async (
   }
 }
 
+export const findCollateralByIDController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const collateral = await service.findByID(id);
+    res.json(collateral);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export const findCollateralByJudicialCaseFileIdController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { JudicialCaseFileId } = req.params;
+    const collateral = await service.findAllCollateralByCaseFile(JudicialCaseFileId);
+    res.json(collateral);
+  } catch (error) {
+    next(error);
+  }
+}
+
 export const createCollateralController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
+    const { JudicialCaseFileId } = req.params;
     const body = req.body;
-    const newCollateral = await service.create(body);
+    const newCollateral = await service.create(body, JudicialCaseFileId);
 
     await userLogService.create({
       customerUserId: Number(req.user?.id),

@@ -26,6 +26,19 @@ class ProvinceService {
             return rta;
         });
     }
+    findAllByDepartment(departmentId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rta = yield models.PROVINCE.findAll({
+                where: {
+                    departmentId,
+                },
+            });
+            if (!rta) {
+                throw boom_1.default.notFound("No existen provincias");
+            }
+            return rta;
+        });
+    }
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const newProvince = yield models.PROVINCE.create(data);

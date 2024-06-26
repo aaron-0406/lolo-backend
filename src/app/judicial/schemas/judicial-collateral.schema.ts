@@ -74,9 +74,14 @@ const getJudicialCollateralByCHBSchema = Joi.object<{ chb: number }, true>({
   chb: customerHasBankId.required(),
 });
 
+const getJudicialCollateralByJudicialCaseFileIdSchema = Joi.object<{ JudicialCaseFileId: number }, true>({
+  JudicialCaseFileId: id.required(),
+})
+
 export default {
   createJudicialCollateralSchema,
   updateJudicialCollateralSchema,
   getJudicialCollateralByCHBSchema,
   getJudicialCollateralByIDSchema,
+  getJudicialCollateralByJudicialCaseFileIdSchema
 };

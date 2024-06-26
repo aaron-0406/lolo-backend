@@ -44,13 +44,6 @@ class JudicialCollateralService {
                 where: {
                     id,
                 },
-                include: [
-                    {
-                        model: models.JUDICIAL_CASE_FILE_HAS_COLLATERAL,
-                        as: "judicialCaseFileHasCollateral",
-                        attributes: ["id", "judicialCaseFileId", "judicialCollateralId"],
-                    },
-                ],
             });
             if (!judicialCollateral) {
                 throw boom_1.default.notFound("Collateral no encontrado");
@@ -61,15 +54,6 @@ class JudicialCollateralService {
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const newJudicialCollateral = yield models.JUDICIAL_COLLATERAL.create(data);
-            yield newJudicialCollateral.reload({
-                include: [
-                    {
-                        model: models.JUDICIAL_CASE_FILE_HAS_COLLATERAL,
-                        as: "judicialCaseFileHasCollateral",
-                        attributes: ["id", "judicialCaseFileId", "judicialCollateralId"],
-                    },
-                ],
-            });
             return newJudicialCollateral;
         });
     }

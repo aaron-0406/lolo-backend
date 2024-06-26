@@ -21,8 +21,12 @@ const updateDistrictSchema = joi_1.default.object({
 const getDistrictSchema = joi_1.default.object({
     id: id.required(),
 });
+const getDistrictByProvinceSchema = joi_1.default.object({
+    provinceId: provinceId.required(),
+});
 exports.default = {
     createDistrictSchema,
     updateDistrictSchema,
     getDistrictSchema,
+    getDistrictByProvinceSchema
 };

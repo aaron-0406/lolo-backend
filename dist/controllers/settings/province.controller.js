@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProvincesController = void 0;
+exports.getAllProvincesByDepartmentController = exports.getProvincesController = void 0;
 const province_service_1 = __importDefault(require("../../app/settings/services/province.service"));
 const service = new province_service_1.default();
 const getProvincesController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -20,3 +20,9 @@ const getProvincesController = (req, res, next) => __awaiter(void 0, void 0, voi
     res.status(200).json(data);
 });
 exports.getProvincesController = getProvincesController;
+const getAllProvincesByDepartmentController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { departmentId } = req.params;
+    const data = yield service.findAllByDepartment(departmentId);
+    res.status(200).json(data);
+});
+exports.getAllProvincesByDepartmentController = getAllProvincesByDepartmentController;

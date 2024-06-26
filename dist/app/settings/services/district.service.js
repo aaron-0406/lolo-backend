@@ -26,6 +26,19 @@ class DistrictService {
             return rta;
         });
     }
+    findAllByProvince(provinceId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rta = yield models.DISTRICT.findAll({
+                where: {
+                    provinceId,
+                },
+            });
+            if (!rta) {
+                throw boom_1.default.notFound("No existen distritos");
+            }
+            return rta;
+        });
+    }
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const newDistrict = yield models.DISTRICT.create(data);

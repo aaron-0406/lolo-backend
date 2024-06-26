@@ -37,22 +37,22 @@ export async function up (queryInterface: QueryInterface) {
     propertyAddress: {
       allowNull: false,
       field: "property_address",
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT("long"),
     },
     propertyFeatures: {
       allowNull: false,
       field: "property_features",
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT("long"),
     },
     landArea: {
       allowNull: false,
       field: "land_area",
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT("long"),
     },
     constructionArea: {
       allowNull: false,
       field: "construction_area",
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT("long"),
     },
     electronicRecord: {
       allowNull: false,

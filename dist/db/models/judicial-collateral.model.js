@@ -37,22 +37,22 @@ const JudicialCollateralSchema = {
     propertyAddress: {
         allowNull: false,
         field: "property_address",
-        type: sequelize_1.DataTypes.STRING,
+        type: sequelize_1.DataTypes.TEXT("long"),
     },
     propertyFeatures: {
         allowNull: false,
         field: "property_features",
-        type: sequelize_1.DataTypes.STRING,
+        type: sequelize_1.DataTypes.TEXT("long"),
     },
     landArea: {
         allowNull: false,
         field: "land_area",
-        type: sequelize_1.DataTypes.STRING,
+        type: sequelize_1.DataTypes.TEXT("long"),
     },
     constructionArea: {
         allowNull: false,
         field: "construction_area",
-        type: sequelize_1.DataTypes.STRING,
+        type: sequelize_1.DataTypes.TEXT("long"),
     },
     electronicRecord: {
         allowNull: false,
