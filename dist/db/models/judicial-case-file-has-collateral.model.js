@@ -68,8 +68,6 @@ class JudicialCaseFileHasCollateral extends sequelize_1.Model {
             tableName: JUDICIAL_CASE_FILE_HAS_COLLATERAL_TABLE,
             modelName: JUDICIAL_CASE_FILE_HAS_COLLATERAL_TABLE,
             timestamps: true,
-            paranoid: true,
-            deletedAt: "deleted_at",
         };
     }
 }

@@ -54,6 +54,7 @@ router.post(
 router.patch(
   "/:id",
   JWTAuth,
+  checkPermissions("P13-01-06-03"),
   validatorHandler(updateJudicialCollateralSchema, "body"),
   updateCollateralController
 );
@@ -61,6 +62,7 @@ router.patch(
 router.delete(
   "/:id",
   JWTAuth,
+  checkPermissions("P13-01-06-04"),
   validatorHandler(getJudicialCollateralByIDSchema, "params"),
   deletedCollateralController
 );

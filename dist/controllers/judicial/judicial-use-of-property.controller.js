@@ -45,7 +45,6 @@ const createUseOfPropertyController = (req, res, next) => __awaiter(void 0, void
     var _a, _b, _c;
     try {
         const body = req.body;
-        console.log(body);
         const newUseOfProperty = yield service.create(body);
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),

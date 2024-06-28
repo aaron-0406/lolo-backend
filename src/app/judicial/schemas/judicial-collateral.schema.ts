@@ -2,23 +2,54 @@ import Joi from "joi";
 import { JudicialCollateralType } from "../types/judicial-collateral.type";
 
 const id = Joi.number();
-const kindOfProperty = Joi.string().min(1).max(150);
-const propertyAddress = Joi.string().min(1).max(150);
-const propertyFeatures = Joi.string().min(1).max(150);
-const landArea = Joi.string().min(1).max(150);
-const constructionArea = Joi.string().min(1).max(150);
-const electronicRecord = Joi.string().min(1).max(150);
-const dateOfPublicDeed = Joi.date()
-const numberOfCollateral = Joi.number();
-const registrationSeat = Joi.string().min(1).max(150);
-const customerHasBankId = Joi.number();
-const departmentId = Joi.number();
-const provinceId = Joi.number();
-const districtId = Joi.number();
-const useOfPropertyId = Joi.number();
-const registrationAreaId = Joi.number();
-const registerOfficeId = Joi.number();
-const notaryId = Joi.number();
+const kindOfProperty = Joi.string().min(1).max(150).messages({
+  "string.empty": `El campo 'Tipo de propiedad' no puede estar vacío`
+});
+const propertyAddress = Joi.string().min(1).max(150).messages({
+  "string.empty": `El campo 'Dirección de la propiedad' no puede estar vacío`}) ;
+const propertyFeatures = Joi.string().min(1).max(150).messages({
+  "string.empty": `El campo 'Características de la propiedad' no puede estar vacío`}) ;
+const landArea = Joi.string().min(1).max(150).messages({
+  "string.empty": `El campo 'Área de terreno' no puede estar vacío`}) ;
+const constructionArea = Joi.string().min(1).max(150).messages({
+  "string.empty": `El campo 'Área de construcción' no puede estar vacío`
+});
+const electronicRecord = Joi.string().min(1).max(150).messages({
+  "string.empty": `El campo 'Registro electrónico' no puede estar vacío`
+});
+const dateOfPublicDeed = Joi.date().messages({
+  "date.base": `El campo 'Fecha de escritura pública' debe ser una fecha válida`
+});
+const numberOfCollateral = Joi.number().messages({
+  "number.base": `El campo 'Número de garantía' debe ser un número`
+});
+const registrationSeat = Joi.string().min(1).max(150).messages({
+  "string.empty": `El campo 'Asiento de registro' no puede estar vacío`
+});
+const customerHasBankId = Joi.number().messages({
+  "number.base": `El campo 'Banco del cliente' debe ser un número`
+});
+const departmentId = Joi.number().messages({
+  "number.base": `Debe seleccionar un departamento`
+});
+const provinceId = Joi.number().messages({
+  "number.base": `Debe seleccionar una provincia`
+});
+const districtId = Joi.number().messages({
+  "number.base": `Debe seleccionar un distrito`
+});
+const useOfPropertyId = Joi.number().messages({
+  "number.base": `Debe seleccionar un uso del bien`
+}) ;
+const registrationAreaId = Joi.number().messages({
+  "number.base": `Debe seleccionar una zona registral`
+});
+const registerOfficeId = Joi.number().messages({
+  "number.base": `Debe seleccionar una oficina registral`
+});
+const notaryId = Joi.number().messages({
+  "number.base": `Debe seleccionar un notario`
+});
 
 const createJudicialCollateralSchema = Joi.object<
   Omit<JudicialCollateralType, "id" | "createdAt" | "updatedAt" | "deletedAt">,

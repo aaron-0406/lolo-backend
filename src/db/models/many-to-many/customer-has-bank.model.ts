@@ -107,6 +107,14 @@ class CustomerHasBank extends Model {
       as: "judicialCollateral",
       foreignKey: "customerHasBankId",
     });
+    this.hasMany(models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD, {
+      as: "judicialCollateralChargesEncumbrancesTypeLoad",
+      foreignKey: "customerHasBankId",
+    });
+    this.hasMany(models.JUDICIAL_COLLATERAL_FILES, {
+      as: "judicialCollateralFiles",
+      foreignKey: "customerHasBankId",
+    });
   }
 
   static config(sequelize: Sequelize) {

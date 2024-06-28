@@ -32,7 +32,7 @@ const JudicialCollateralSchema = {
     kindOfProperty: {
         allowNull: false,
         field: "kind_of_property",
-        type: sequelize_1.DataTypes.STRING,
+        type: sequelize_1.DataTypes.STRING(150),
     },
     propertyAddress: {
         allowNull: false,
@@ -57,7 +57,7 @@ const JudicialCollateralSchema = {
     electronicRecord: {
         allowNull: false,
         field: "electronic_record",
-        type: sequelize_1.DataTypes.STRING,
+        type: sequelize_1.DataTypes.STRING(150),
     },
     dateOfPublicDeed: {
         allowNull: false,
@@ -72,7 +72,7 @@ const JudicialCollateralSchema = {
     registrationSeat: {
         allowNull: false,
         field: "registration_seat",
-        type: sequelize_1.DataTypes.STRING,
+        type: sequelize_1.DataTypes.STRING(150),
     },
     customerHasBankId: {
         allowNull: false,
@@ -193,6 +193,14 @@ class JudicialCollateral extends sequelize_1.Model {
         this.hasMany(models.JUDICIAL_CASE_FILE_HAS_COLLATERAL, {
             as: "judicialCaseFileHasCollateral",
             foreignKey: "judicialCollateralId",
+        });
+        this.hasMany(models.JUDICIAL_COLLATERAL_FILES, {
+            as: "judicialCollateralFiles",
+            foreignKey: "judicialCollateralIdJudicialCollateral",
+        });
+        this.hasMany(models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES, {
+            as: "judicialCollateralChargesEncumbrance",
+            foreignKey: "judicialCollateralIdJudicialCollateral",
         });
     }
     static config(sequelize) {

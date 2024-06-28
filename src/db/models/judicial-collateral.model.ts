@@ -41,7 +41,7 @@ const JudicialCollateralSchema: ModelAttributes<
   kindOfProperty: {
     allowNull: false,
     field: "kind_of_property",
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(150),
   },
   propertyAddress: {
     allowNull: false,
@@ -66,7 +66,7 @@ const JudicialCollateralSchema: ModelAttributes<
   electronicRecord: {
     allowNull: false,
     field: "electronic_record",
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(150),
   },
   dateOfPublicDeed: {
     allowNull: false,
@@ -81,7 +81,7 @@ const JudicialCollateralSchema: ModelAttributes<
   registrationSeat: {
     allowNull: false,
     field: "registration_seat",
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(150),
   },
   customerHasBankId: {
     allowNull: false,
@@ -204,6 +204,14 @@ class JudicialCollateral extends Model {
     this.hasMany(models.JUDICIAL_CASE_FILE_HAS_COLLATERAL, {
       as: "judicialCaseFileHasCollateral",
       foreignKey: "judicialCollateralId",
+    });
+    this.hasMany(models.JUDICIAL_COLLATERAL_FILES, {
+      as: "judicialCollateralFiles",
+      foreignKey: "judicialCollateralIdJudicialCollateral",
+    });
+    this.hasMany(models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES, {
+      as: "judicialCollateralChargesEncumbrance",
+      foreignKey: "judicialCollateralIdJudicialCollateral",
     });
   }
 

@@ -1,12 +1,8 @@
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
 import { JudicialCollateralType } from "../types/judicial-collateral.type";
-import JudicialCaseFileHasCollateralService from "./judicial-case-file-has-collateral.service";
 
 const { models } = sequelize;
-
-const judicialCaseFileHasCollateralService = new JudicialCaseFileHasCollateralService();
-
 class JudicialCollateralService {
   constructor() {}
 
@@ -71,7 +67,6 @@ class JudicialCollateralService {
     if (!judicialCollateral) {
       throw boom.notFound("Collateral no encontrado");
     }
-    console.log(judicialCollateral);
     return judicialCollateral;
   }
 
@@ -83,7 +78,7 @@ class JudicialCollateralService {
           model: models.JUDICIAL_COLLATERAL,
           as: "judicialCollateral",
           where: {
-            deletedAt: null, 
+            deletedAt: null,
           }
         },
       ],

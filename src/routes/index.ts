@@ -35,6 +35,15 @@ import judicialBinTypeBinnacleRouter from "./judicial/judicial-bin-type-binnacle
 import judicialBinProceduralStageRouter from "./judicial/judicial-bin-procedural-stage.routes";
 import judicialBinnacleRouter from "./judicial/judicial-binnacle.routes";
 import judicialBinFileRouter from "./judicial/judicial-bin-file.routes";
+import judicialCollateralRouter from "./judicial/judicial-collateral.routes";
+import judicialNotaryRouter from "./judicial/judicial-notary.routes";
+import judicialRegisterOfficeRouter from "./judicial/judicial-register-office.routes";
+import judicialRegistrationAreaRouter from "./judicial/judicial-registration-area.routes";
+import judicialUseOfPropertyRouter from "./judicial/judicial-use-of-property.routes";
+import judicialCaseFileHasCollateralRouter from "./judicial/judicial-case-file-has-collateral.routes";
+import judicialCollateralChargesEncumbrancesRouter from "./judicial/judicial-collateral-charges-encumbrances.routes";
+import judicialCollateralChargesEncumbrancesTypeLoadRouter from "./judicial/judicial-collateral-charges-encumbrances-type-load.routes";
+import judicialCollateralFilesRouter from "./judicial/judicial-collateral-files.routes";
 import managementActionRouter from "./dash/management-action.routes";
 import goalRouter from "./extrajudicial/goal.routes";
 import roleRouter from "./dash/role.routes";
@@ -53,11 +62,7 @@ import compareExcelsRouter from "./config/compare-excels.routes";
 import departmentRouter from "./config/department.routes";
 import districtRouter from "./config/districts.routes";
 import provinceRouter from "./config/province.routes";
-import judicialCollateralRouter from "./judicial/judicial-collateral.routes";
-import judicialNotaryRouter from "./judicial/judicial-notary.routes";
-import judicialRegisterOfficeRouter from "./judicial/judicial-register-office.routes";
-import judicialRegistrationAreaRouter from "./judicial/judicial-registration-area.routes";
-import judicialUseOfPropertyRouter from "./judicial/judicial-use-of-property.routes";
+
 
 const routerApi = (app: Express) => {
   const router = express.Router();
@@ -104,10 +109,14 @@ const routerApi = (app: Express) => {
     judicialBinProceduralStageRouter
   );
   router.use("/judicial/collateral", judicialCollateralRouter);
+  router.use("/judicial/case-file-has-collateral", judicialCaseFileHasCollateralRouter);
   router.use("/judicial/notary", judicialNotaryRouter);
   router.use("/judicial/register-office", judicialRegisterOfficeRouter);
   router.use("/judicial/registration-area", judicialRegistrationAreaRouter);
   router.use("/judicial/use-of-property", judicialUseOfPropertyRouter);
+  router.use("/judicial/collateral-charges-encumbrances", judicialCollateralChargesEncumbrancesRouter);
+  router.use("/judicial/collateral-charges-encumbrances-type-load", judicialCollateralChargesEncumbrancesTypeLoadRouter);
+  router.use("/judicial/collateral-files", judicialCollateralFilesRouter);
 
   router.use("/dash/auth", authDashRouter);
   router.use("/dash/role", roleRouter);

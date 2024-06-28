@@ -32,7 +32,7 @@ export async function up (queryInterface: QueryInterface) {
     kindOfProperty: {
       allowNull: false,
       field: "kind_of_property",
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(150),
     },
     propertyAddress: {
       allowNull: false,
@@ -57,7 +57,7 @@ export async function up (queryInterface: QueryInterface) {
     electronicRecord: {
       allowNull: false,
       field: "electronic_record",
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(150),
     },
     dateOfPublicDeed: {
       allowNull: false,
@@ -72,7 +72,7 @@ export async function up (queryInterface: QueryInterface) {
     registrationSeat: {
       allowNull: false,
       field: "registration_seat",
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(150),
     },
     customerHasBankId: {
       allowNull: false,

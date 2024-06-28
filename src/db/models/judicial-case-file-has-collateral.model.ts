@@ -75,8 +75,6 @@ class JudicialCaseFileHasCollateral extends Model {
       tableName: JUDICIAL_CASE_FILE_HAS_COLLATERAL_TABLE,
       modelName: JUDICIAL_CASE_FILE_HAS_COLLATERAL_TABLE,
       timestamps: true,
-      paranoid: true,
-      deletedAt: "deleted_at",
     };
   }
 }

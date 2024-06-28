@@ -45,7 +45,7 @@ function up(queryInterface) {
             kindOfProperty: {
                 allowNull: false,
                 field: "kind_of_property",
-                type: sequelize_1.DataTypes.STRING,
+                type: sequelize_1.DataTypes.STRING(150),
             },
             propertyAddress: {
                 allowNull: false,
@@ -70,7 +70,7 @@ function up(queryInterface) {
             electronicRecord: {
                 allowNull: false,
                 field: "electronic_record",
-                type: sequelize_1.DataTypes.STRING,
+                type: sequelize_1.DataTypes.STRING(150),
             },
             dateOfPublicDeed: {
                 allowNull: false,
@@ -85,7 +85,7 @@ function up(queryInterface) {
             registrationSeat: {
                 allowNull: false,
                 field: "registration_seat",
-                type: sequelize_1.DataTypes.STRING,
+                type: sequelize_1.DataTypes.STRING(150),
             },
             customerHasBankId: {
                 allowNull: false,

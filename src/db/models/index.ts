@@ -57,6 +57,9 @@ import judicialRegistrationAreaModel from "./judicial-registration-area.model";
 import judicialUseOfPropertyModel from "./judicial-use-of-property.model";
 import judicialCollateralModel from "./judicial-collateral.model";
 import judicialCaseFileHasCollateralModel from "./judicial-case-file-has-collateral.model";
+import judicialCollateralChargesEncumbrancesModel from "./judicial-collateral-charges-encumbrances.model";
+import judicialCollateralChargesEncumbrancesTypeLoadModel from "./judicial-collateral-charges-encumbrances-type-load.model";
+import judicialCollateralFilesModel from "./judicial-collateral-files.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
@@ -126,6 +129,9 @@ const { JudicialUseOfProperty, JudicialUseOfPropertySchema } =
   judicialUseOfPropertyModel;
 const { JudicialCollateral, JudicialCollateralSchema } = judicialCollateralModel;
 const { JudicialCaseFileHasCollateral, JudicialCaseFileHasCollateralSchema } = judicialCaseFileHasCollateralModel;
+const { JudicialCollateralChargesEncumbrances, JudicialCollateralChargesEncumbrancesSchema } = judicialCollateralChargesEncumbrancesModel;
+const { JudicialCollateralChargesEncumbrancesTypeLoad, JudicialCollateralChargesEncumbrancesTypeLoadSchema } = judicialCollateralChargesEncumbrancesTypeLoadModel;
+const { JudicialCollateralFiles, JudicialCollateralFilesSchema } = judicialCollateralFilesModel;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -256,6 +262,21 @@ export const setupModels = (sequelize: Sequelize) => {
     JudicialCaseFileHasCollateral.config(sequelize)
   );
 
+  JudicialCollateralChargesEncumbrances.init(
+    JudicialCollateralChargesEncumbrancesSchema,
+    JudicialCollateralChargesEncumbrances.config(sequelize)
+  );
+
+  JudicialCollateralChargesEncumbrancesTypeLoad.init(
+    JudicialCollateralChargesEncumbrancesTypeLoadSchema,
+    JudicialCollateralChargesEncumbrancesTypeLoad.config(sequelize)
+  );
+
+  JudicialCollateralFiles.init(
+    JudicialCollateralFilesSchema,
+    JudicialCollateralFiles.config(sequelize)
+  );
+
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
   Bank.associate(sequelize.models);
@@ -312,4 +333,7 @@ export const setupModels = (sequelize: Sequelize) => {
   JudicialUseOfProperty.associate(sequelize.models);
   JudicialCollateral.associate(sequelize.models);
   JudicialCaseFileHasCollateral.associate(sequelize.models);
+  JudicialCollateralChargesEncumbrances.associate(sequelize.models);
+  JudicialCollateralChargesEncumbrancesTypeLoad.associate(sequelize.models);
+  JudicialCollateralFiles.associate(sequelize.models);
 };

@@ -88,25 +88,25 @@ const newPermissions = [
     link: "#",
   },
   {
-    name: "NOTARÍA",
+    name: "NOTARIA",
     code: "P41",
     icon: "ri-article-fill",
     link: "/judicial/:urlIdentifier/notaria",
   },
   {
-    name: "AGREGAR NOTARÍA",
+    name: "AGREGAR NOTARIA",
     code: "P41-01",
     icon: "-",
     link: "#",
   },
   {
-    name: "ACTUALIZAR NOTARÍA",
+    name: "ACTUALIZAR NOTARIA",
     code: "P41-02",
     icon: "-",
     link: "#",
   },
   {
-    name: "ELIMINAR NOTARÍA",
+    name: "ELIMINAR NOTARIA",
     code: "P41-03",
     icon: "-",
     link: "#",
@@ -144,12 +144,6 @@ const newPermissions = [
   {
     name: "ELIMINAR GARANTÍA",
     code: "P13-01-06-04",
-    icon: "-",
-    link: "#",
-  },
-  {
-    name: "ASIGNAR GARANTÍAS",
-    code: "P13-01-06-05",
     icon: "-",
     link: "#",
   },

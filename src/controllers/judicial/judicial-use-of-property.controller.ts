@@ -43,7 +43,6 @@ export const createUseOfPropertyController = async (
 ) => {
   try {
     const body = req.body;
-    console.log(body)
     const newUseOfProperty = await service.create(body);
 
     await serviceUserLog.create({
