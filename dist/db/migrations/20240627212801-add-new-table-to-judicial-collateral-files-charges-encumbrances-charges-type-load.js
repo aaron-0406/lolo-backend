@@ -51,7 +51,9 @@ function up(queryInterface) {
                 references: {
                     model: JUDICIAL_COLLATERAL_TABLE,
                     key: "id_judicial_collateral",
-                }
+                },
+                onUpdate: "CASCADE",
+                onDelete: "NO ACTION",
             },
             customerHasBankId: {
                 type: sequelize_1.DataTypes.INTEGER,
@@ -60,7 +62,9 @@ function up(queryInterface) {
                 references: {
                     model: CUSTOMER_HAS_BANK_TABLE,
                     key: "id_customer_has_bank",
-                }
+                },
+                onUpdate: "CASCADE",
+                onDelete: "NO ACTION",
             },
             createdAt: {
                 allowNull: false,
@@ -83,10 +87,10 @@ function up(queryInterface) {
         yield queryInterface.createTable(JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE, {
             id: {
                 type: sequelize_1.DataTypes.INTEGER,
+                field: "id_type_of_load",
                 allowNull: false,
                 primaryKey: true,
                 autoIncrement: true,
-                field: "id_judicial_collateral_charges_encumbrances_type_load",
             },
             name: {
                 type: sequelize_1.DataTypes.STRING(150),
@@ -98,9 +102,11 @@ function up(queryInterface) {
                 allowNull: false,
                 field: "customer_has_bank_id_customer_has_bank",
                 references: {
-                    model: "CUSTOMER_HAS_BANK",
+                    model: CUSTOMER_HAS_BANK_TABLE,
                     key: "id_customer_has_bank",
-                }
+                },
+                onUpdate: "CASCADE",
+                onDelete: "NO ACTION",
             },
             createdAt: {
                 allowNull: false,
@@ -135,16 +141,20 @@ function up(queryInterface) {
                 references: {
                     model: JUDICIAL_COLLATERAL_TABLE,
                     key: "id_judicial_collateral",
-                }
+                },
+                onUpdate: "CASCADE",
+                onDelete: "NO ACTION",
             },
-            idTypeOfLoad: {
+            typeOfLoadId: {
                 type: sequelize_1.DataTypes.INTEGER,
                 allowNull: false,
-                field: "id_type_of_load",
+                field: "type_of_load_id",
                 references: {
                     model: JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE,
                     key: "id_judicial_collateral_charges_encumbrances_type_load",
-                }
+                },
+                onUpdate: "CASCADE",
+                onDelete: "NO ACTION",
             },
             amountOfImpactSoles: {
                 type: sequelize_1.DataTypes.DECIMAL,
@@ -172,7 +182,7 @@ function up(queryInterface) {
                 field: "registration_date",
             },
             range: {
-                type: sequelize_1.DataTypes.STRING,
+                type: sequelize_1.DataTypes.INTEGER,
                 allowNull: false,
                 field: "range",
             },

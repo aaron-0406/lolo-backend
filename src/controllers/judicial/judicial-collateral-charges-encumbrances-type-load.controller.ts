@@ -7,7 +7,7 @@ const service = new JudicialCollateralChargesEncumbrancesTypeLoadService();
 const userLogService = new UserLogService();
 const { JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE } = judicialCollateralChargesEncumbrancesTypeLoadModel
 
-export const findAllCollateralChargesEncumbrancesTypeLoadController = async (
+export const getAllCollateralChargesEncumbrancesTypeLoadController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -20,7 +20,7 @@ export const findAllCollateralChargesEncumbrancesTypeLoadController = async (
   }
 }
 
-export const findCollateralChargesEncumbrancesTypeLoadByIDController = async (
+export const getCollateralChargesEncumbrancesTypeLoadByIDController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -45,7 +45,7 @@ export const createCollateralChargesEncumbrancesTypeLoadController = async (
 
     await userLogService.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P13-01-06-02",
+      codeAction: "P42-01",
       entity: JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE,
       entityId: Number(newCollateralChargesEncumbrancesTypeLoad.dataValues.id),
       ip: req.clientIp ?? "",
@@ -68,7 +68,7 @@ export const updateCollateralChargesEncumbrancesTypeLoadController = async (
     const collateralChargesEncumbrancesTypeLoad = await service.update(id, body);
     await userLogService.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P13-01-06-03",
+      codeAction: "P42-02",
       entity: JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE,
       entityId: Number(collateralChargesEncumbrancesTypeLoad.dataValues.id),
       ip: req.clientIp ?? "",
@@ -92,7 +92,7 @@ export const deletedCollateralChargesEncumbrancesTypeLoadController = async (
 
     await userLogService.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P13-01-06-04",
+      codeAction: "P42-03",
       entity: JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE,
       entityId: Number(collateralChargesEncumbrancesTypeLoad.id),
       ip: req.clientIp ?? "",
@@ -103,4 +103,4 @@ export const deletedCollateralChargesEncumbrancesTypeLoadController = async (
   } catch (error) {
     next(error);
   }
-}   
+}

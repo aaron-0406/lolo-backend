@@ -197,7 +197,9 @@ class JudicialCollateral extends Model {
     this.belongsTo(models.DEPARTMENT, { as: "department" });
     this.belongsTo(models.PROVINCE, { as: "province" });
     this.belongsTo(models.DISTRICT, { as: "district" });
-    this.belongsTo(models.JUDICIAL_REGISTRATION_AREA, { as: "registrationArea" });
+    this.belongsTo(models.JUDICIAL_REGISTRATION_AREA, {
+      as: "registrationArea",
+    });
     this.belongsTo(models.JUDICIAL_REGISTER_OFFICE, { as: "registerOffice" });
     this.belongsTo(models.JUDICIAL_NOTARY, { as: "notary" });
 
@@ -210,7 +212,7 @@ class JudicialCollateral extends Model {
       foreignKey: "judicialCollateralIdJudicialCollateral",
     });
     this.hasMany(models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES, {
-      as: "judicialCollateralChargesEncumbrance",
+      as: "judicialCollateralChargesEncumbrances",
       foreignKey: "judicialCollateralIdJudicialCollateral",
     });
   }

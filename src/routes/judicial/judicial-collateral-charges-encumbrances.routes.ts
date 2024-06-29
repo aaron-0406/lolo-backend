@@ -3,13 +3,17 @@ import validatorHandler from "../../middlewares/validator.handler";
 import { checkPermissions, JWTAuth } from "../../middlewares/auth.handler";
 import judicialCollateralChargesEncumbrancesSchema from "../../app/judicial/schemas/judicial-collateral-charges-encumbrances.schema";
 import {
-  findAllCollateralChargesEncumbrancesController,
-  findCollateralChargesEncumbrancesByIDController,
+  getAllChargesEncumbrancesByCollateralController,
+  getCollateralChargesEncumbrancesByIDController,
   createCollateralChargesEncumbrancesController,
   updateCollateralChargesEncumbrancesController,
+  deleteCollateralChargesEncumbrancesController,
 } from "../../controllers/judicial/judicial-collateral-charges-encumbrances.controller";
 
 const {
+  getJudicialCollateralChargesEncumbrancesByJudicialCollateralIdSchema,
+  getJudicialCollateralChargesEncumbrancesByCHBSchema,
+  upadteJudicialCollateralChargesEncumbrancesSchema,
   getJudicialCollateralChargesEncumbrancesByIDSchema,
   createJudicialCollateralChargesEncumbrancesSchema,
 } = judicialCollateralChargesEncumbrancesSchema;
@@ -17,24 +21,23 @@ const {
 const router = express.Router();
 
 router.get(
-  "/chb/:chb",
+  "/all-charges-encumbrances/:collateralId",
   JWTAuth,
-  // validatorHandler(getJudicialCollateralChargesEncumbrancesByCHBSchema, "params"),
-  findAllCollateralChargesEncumbrancesController
+  validatorHandler(getJudicialCollateralChargesEncumbrancesByJudicialCollateralIdSchema, "params"),
+  getAllChargesEncumbrancesByCollateralController
 );
 
 router.get(
   "/:id",
   JWTAuth,
   validatorHandler(getJudicialCollateralChargesEncumbrancesByIDSchema, "params"),
-  findCollateralChargesEncumbrancesByIDController
+  getCollateralChargesEncumbrancesByIDController
 );
 
 router.post(
-  "/:JudicialCaseFileId",
+  "/",
   JWTAuth,
   checkPermissions("P13-01-06-02"),
-  // validatorHandler(getJudicialCollateralChargesEncumbrancesByJudicialCaseFileIdSchema, "params"),
   validatorHandler(createJudicialCollateralChargesEncumbrancesSchema, "body"),
   createCollateralChargesEncumbrancesController
 );
@@ -42,7 +45,7 @@ router.post(
 router.patch(
   "/:id",
   JWTAuth,
-  // validatorHandler(updateJudicialCollateralChargesEncumbrancesSchema, "body"),
+  validatorHandler(upadteJudicialCollateralChargesEncumbrancesSchema, "body"),
   updateCollateralChargesEncumbrancesController
 );
 
@@ -50,7 +53,7 @@ router.delete(
   "/:id",
   JWTAuth,
   validatorHandler(getJudicialCollateralChargesEncumbrancesByIDSchema, "params"),
-  // deletedCollateralChargesEncumbrancesController
+  deleteCollateralChargesEncumbrancesController
 );
 
 export default router;

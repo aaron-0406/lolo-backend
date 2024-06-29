@@ -33,16 +33,20 @@ const JudicialCollateralChargesEncumbrancesSchema: ModelAttributes<
     references: {
       model: JUDICIAL_COLLATERAL_TABLE,
       key: "id_judicial_collateral",
-    }
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
   },
-  idTypeOfLoad: {
+  typeOfLoadId: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    field: "id_type_of_load",
+    field: "type_of_load_id",
     references:{
       model: JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE,
       key: "id_judicial_collateral_charges_encumbrances_type_load",
-    }
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
   },
   amountOfImpactSoles: {
     type: DataTypes.DECIMAL,
@@ -95,10 +99,13 @@ const JudicialCollateralChargesEncumbrancesSchema: ModelAttributes<
 
 class JudicialCollateralChargesEncumbrances extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
-    this.belongsTo(
-      models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD,
-      { as: "judicialCollateralChargesEncumbrancesTypeLoad" }
-    );
+    this.belongsTo(models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD, {
+      as: "judicialCollateralChargesEncumbrancesTypeLoad",
+    });
+    this.belongsTo(models.JUDICIAL_COLLATERAL, {
+      as: "judicialCollateralChargesEncumbrances",
+      // foreignKey: "judicialCollateralIdJudicialCollateral",
+    });
   }
 
   static config(sequelize: Sequelize) {

@@ -13,7 +13,7 @@ const { JUDICIAL_COLLATERAL_TABLE } = judicialCollateralModel;
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 
 export async function up(queryInterface: QueryInterface) {
-  await queryInterface.createTable( JUDICIAL_COLLATERAL_FILES_TABLE, {
+  await queryInterface.createTable(JUDICIAL_COLLATERAL_FILES_TABLE, {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -38,7 +38,9 @@ export async function up(queryInterface: QueryInterface) {
       references: {
         model: JUDICIAL_COLLATERAL_TABLE,
         key: "id_judicial_collateral",
-      }
+      },
+      onUpdate: "CASCADE",
+      onDelete: "NO ACTION",
     },
     customerHasBankId: {
       type: DataTypes.INTEGER,
@@ -47,7 +49,9 @@ export async function up(queryInterface: QueryInterface) {
       references: {
         model: CUSTOMER_HAS_BANK_TABLE,
         key: "id_customer_has_bank",
-      }
+      },
+      onUpdate: "CASCADE",
+      onDelete: "NO ACTION",
     },
     createdAt: {
       allowNull: false,
@@ -71,10 +75,10 @@ export async function up(queryInterface: QueryInterface) {
   await queryInterface.createTable(JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE, {
     id: {
       type: DataTypes.INTEGER,
+      field: "id_type_of_load",
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
-      field: "id_judicial_collateral_charges_encumbrances_type_load",
     },
     name: {
       type: DataTypes.STRING(150),
@@ -86,9 +90,11 @@ export async function up(queryInterface: QueryInterface) {
       allowNull: false,
       field: "customer_has_bank_id_customer_has_bank",
       references: {
-        model: "CUSTOMER_HAS_BANK",
+        model: CUSTOMER_HAS_BANK_TABLE,
         key: "id_customer_has_bank",
-      }
+      },
+      onUpdate: "CASCADE",
+      onDelete: "NO ACTION",
     },
     createdAt: {
       allowNull: false,
@@ -109,80 +115,87 @@ export async function up(queryInterface: QueryInterface) {
     },
   });
 
-  await queryInterface.createTable( JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TABLE, {
-    id: {
-      type: DataTypes.INTEGER,
-      field: "id_judicial_collateral_charges_encumbrances",
-      allowNull: false,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    judicialCollateralIdJudicialCollateral:{
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      field: "judicial_collateral_id_judicial_collateral",
-      references: {
-        model: JUDICIAL_COLLATERAL_TABLE,
-        key: "id_judicial_collateral",
-      }
-    },
-    idTypeOfLoad: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      field: "id_type_of_load",
-      references:{
-        model: JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE,
-        key: "id_judicial_collateral_charges_encumbrances_type_load",
-      }
-    },
-    amountOfImpactSoles: {
-      type: DataTypes.DECIMAL,
-      allowNull: false,
-      field: "amount_of_impact_soles",
-    },
-    amountOfImpactDollars: {
-      type: DataTypes.DECIMAL,
-      allowNull: false,
-      field: "amount_of_impact_dollars",
-    },
-    descriptionOfLoad:{
-      type: DataTypes.TEXT("long"),
-      allowNull: false,
-      field: "description_of_load",
-    },
-    registrationSeat:{
-      type: DataTypes.STRING(150),
-      allowNull: false,
-      field: "registration_seat",
-    },
-    registrationDate: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      field: "registration_date",
-    },
-    range:{
-      type: DataTypes.STRING,
-      allowNull: false,
-      field: "range",
-    },
-    createdAt: {
-      allowNull: false,
-      field: "created_at",
-      defaultValue: DataTypes.NOW,
-      type: DataTypes.DATE,
-    },
-    updatedAt: {
-      allowNull: false,
-      field: "updated_at",
-      defaultValue: DataTypes.NOW,
-      type: DataTypes.DATE,
-    },
-    deletedAt: {
-      allowNull: true,
-      field: "deleted_at",
-      type: DataTypes.DATE,
-    },
-  });
+  await queryInterface.createTable(
+    JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TABLE,
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        field: "id_judicial_collateral_charges_encumbrances",
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      judicialCollateralIdJudicialCollateral: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: "judicial_collateral_id_judicial_collateral",
+        references: {
+          model: JUDICIAL_COLLATERAL_TABLE,
+          key: "id_judicial_collateral",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
+      },
+      typeOfLoadId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: "type_of_load_id",
+        references: {
+          model: JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE,
+          key: "id_judicial_collateral_charges_encumbrances_type_load",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
+      },
+      amountOfImpactSoles: {
+        type: DataTypes.DECIMAL,
+        allowNull: false,
+        field: "amount_of_impact_soles",
+      },
+      amountOfImpactDollars: {
+        type: DataTypes.DECIMAL,
+        allowNull: false,
+        field: "amount_of_impact_dollars",
+      },
+      descriptionOfLoad: {
+        type: DataTypes.TEXT("long"),
+        allowNull: false,
+        field: "description_of_load",
+      },
+      registrationSeat: {
+        type: DataTypes.STRING(150),
+        allowNull: false,
+        field: "registration_seat",
+      },
+      registrationDate: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        field: "registration_date",
+      },
+      range: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: "range",
+      },
+      createdAt: {
+        allowNull: false,
+        field: "created_at",
+        defaultValue: DataTypes.NOW,
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        field: "updated_at",
+        defaultValue: DataTypes.NOW,
+        type: DataTypes.DATE,
+      },
+      deletedAt: {
+        allowNull: true,
+        field: "deleted_at",
+        type: DataTypes.DATE,
+      },
+    }
+  );
 
 }
 

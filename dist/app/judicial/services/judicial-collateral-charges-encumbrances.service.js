@@ -17,10 +17,28 @@ const boom_1 = __importDefault(require("@hapi/boom"));
 const { models } = sequelize_1.default;
 class JudicialCollateralChargesEncumbrancesService {
     constructor() { }
-    findAll() {
+    findAllByCollateralId(collateralId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES.findAll();
-            return rta;
+            try {
+                const rta = yield models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES.findAll({
+                    where: {
+                        judicialCollateralIdJudicialCollateral: collateralId,
+                    },
+                    attributes: {
+                        exclude: [
+                            "judicialCollateralChargesEncumbrancesTypeLoadId",
+                            "judicialCollateralChargesEncumbrancesId",
+                        ],
+                    },
+                });
+                if (!rta) {
+                    throw boom_1.default.notFound("Collateral cargas y gravantes no encontradas");
+                }
+                return rta;
+            }
+            catch (error) {
+                console.error(error);
+            }
         });
     }
     findByID(id) {
@@ -28,6 +46,12 @@ class JudicialCollateralChargesEncumbrancesService {
             const judicialCollateralChargesEncumbrances = yield models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES.findOne({
                 where: {
                     id,
+                },
+                attributes: {
+                    exclude: [
+                        "judicialCollateralChargesEncumbrancesTypeLoadId",
+                        "judicialCollateralChargesEncumbrancesId",
+                    ],
                 },
             });
             if (!judicialCollateralChargesEncumbrances) {

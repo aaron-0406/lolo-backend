@@ -34,7 +34,9 @@ const JudicialCollateralFilesSchema = {
         references: {
             model: JUDICIAL_COLLATERAL_TABLE,
             key: "id_judicial_collateral",
-        }
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
     },
     customerHasBankIdCustomerHasBank: {
         type: sequelize_1.DataTypes.STRING,
@@ -43,7 +45,9 @@ const JudicialCollateralFilesSchema = {
         references: {
             model: CUSTOMER_HAS_BANK_TABLE,
             key: "id_customer_has_bank",
-        }
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
     },
     createdAt: {
         allowNull: false,

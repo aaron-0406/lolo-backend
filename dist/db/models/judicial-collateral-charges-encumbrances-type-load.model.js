@@ -10,7 +10,7 @@ const { CUSTOMER_HAS_BANK_TABLE } = customer_has_bank_model_1.default;
 const JudicialCollateralChargesEncumbrancesTypeLoadSchema = {
     id: {
         type: sequelize_1.DataTypes.INTEGER,
-        field: "id_judicial_collateral_charges_encumbrances_type_load",
+        field: "id_type_of_load",
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
@@ -21,13 +21,15 @@ const JudicialCollateralChargesEncumbrancesTypeLoadSchema = {
         field: "name",
     },
     customerHasBankId: {
-        type: sequelize_1.DataTypes.NUMBER,
+        type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
         field: "customer_has_bank_id_customer_has_bank",
         references: {
             model: CUSTOMER_HAS_BANK_TABLE,
             key: "id_customer_has_bank",
-        }
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
     },
     createdAt: {
         allowNull: false,
@@ -50,8 +52,8 @@ const JudicialCollateralChargesEncumbrancesTypeLoadSchema = {
 class JudicialCollateralChargesEncumbrancesTypeLoad extends sequelize_1.Model {
     static associate(models) {
         this.hasMany(models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES, {
-            as: "judicialCollateralChargesEncumbrance",
-            foreignKey: "idTypeOfLoad",
+            as: "judicialCollateralChangesEncumbrances",
+            foreignKey: "typeOfLoadId",
         });
     }
     static config(sequelize) {

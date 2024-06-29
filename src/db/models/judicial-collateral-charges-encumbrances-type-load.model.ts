@@ -18,7 +18,7 @@ const JudicialCollateralChargesEncumbrancesTypeLoadSchema: ModelAttributes<
 > = {
   id: {
     type: DataTypes.INTEGER,
-    field: "id_judicial_collateral_charges_encumbrances_type_load",
+    field: "id_type_of_load",
     allowNull: false,
     primaryKey: true,
     autoIncrement: true,
@@ -29,13 +29,15 @@ const JudicialCollateralChargesEncumbrancesTypeLoadSchema: ModelAttributes<
     field: "name",
   },
   customerHasBankId: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     allowNull: false,
     field: "customer_has_bank_id_customer_has_bank",
     references: {
       model: CUSTOMER_HAS_BANK_TABLE,
       key: "id_customer_has_bank",
-    }
+    },
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
   },
   createdAt: {
     allowNull: false,
@@ -59,8 +61,8 @@ const JudicialCollateralChargesEncumbrancesTypeLoadSchema: ModelAttributes<
 class JudicialCollateralChargesEncumbrancesTypeLoad extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.hasMany(models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES, {
-      as: "judicialCollateralChargesEncumbrance",
-      foreignKey: "idTypeOfLoad",
+      as: "judicialCollateralChangesEncumbrances",
+      foreignKey: "typeOfLoadId",
     });
   }
 

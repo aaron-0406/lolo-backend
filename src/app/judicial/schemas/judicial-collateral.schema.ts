@@ -5,13 +5,13 @@ const id = Joi.number();
 const kindOfProperty = Joi.string().min(1).max(150).messages({
   "string.empty": `El campo 'Tipo de propiedad' no puede estar vacío`
 });
-const propertyAddress = Joi.string().min(1).max(150).messages({
+const propertyAddress = Joi.string().min(1).messages({
   "string.empty": `El campo 'Dirección de la propiedad' no puede estar vacío`}) ;
-const propertyFeatures = Joi.string().min(1).max(150).messages({
+const propertyFeatures = Joi.string().min(1).messages({
   "string.empty": `El campo 'Características de la propiedad' no puede estar vacío`}) ;
-const landArea = Joi.string().min(1).max(150).messages({
+const landArea = Joi.string().min(1).messages({
   "string.empty": `El campo 'Área de terreno' no puede estar vacío`}) ;
-const constructionArea = Joi.string().min(1).max(150).messages({
+const constructionArea = Joi.string().min(1).messages({
   "string.empty": `El campo 'Área de construcción' no puede estar vacío`
 });
 const electronicRecord = Joi.string().min(1).max(150).messages({
@@ -30,25 +30,32 @@ const customerHasBankId = Joi.number().messages({
   "number.base": `El campo 'Banco del cliente' debe ser un número`
 });
 const departmentId = Joi.number().messages({
-  "number.base": `Debe seleccionar un departamento`
+  "number.base": `Debe seleccionar un departamento`,
+  "any.required": `Debe seleccionar un departamento`
 });
 const provinceId = Joi.number().messages({
-  "number.base": `Debe seleccionar una provincia`
+  "number.base": `Debe seleccionar una provincia`,
+  "any.required": `Debe seleccionar una provincia`
 });
 const districtId = Joi.number().messages({
-  "number.base": `Debe seleccionar un distrito`
+  "number.base": `Debe seleccionar un distrito`,
+  "any.required": `Debe seleccionar un distrito`
 });
 const useOfPropertyId = Joi.number().messages({
-  "number.base": `Debe seleccionar un uso del bien`
+  "number.base": `Debe seleccionar un uso del bien`,
+  "any.required": `Debe seleccionar un uso del bien`
 }) ;
 const registrationAreaId = Joi.number().messages({
-  "number.base": `Debe seleccionar una zona registral`
+  "number.base": `Debe seleccionar una zona registral`,
+  "any.required": "El campo 'Zona registral' es obligatorio",
 });
 const registerOfficeId = Joi.number().messages({
-  "number.base": `Debe seleccionar una oficina registral`
+  "number.base": `Debe seleccionar una oficina registral`,
+  "any.required": `Debe seleccionar una oficina registral`
 });
 const notaryId = Joi.number().messages({
-  "number.base": `Debe seleccionar un notario`
+  "number.base": `Debe seleccionar un notario`,
+  "any.required": `Debe seleccionar un notario`
 });
 
 const createJudicialCollateralSchema = Joi.object<

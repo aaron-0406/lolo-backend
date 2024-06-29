@@ -7,20 +7,21 @@ const service = new JudicialCollateralChargesEncumbrancesService();
 const userLogService = new UserLogService();
 const { JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TABLE } = judicialCollateralChargesEncumbrancesModel
 
-export const findAllCollateralChargesEncumbrancesController = async (
+export const getAllChargesEncumbrancesByCollateralController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const collateralChargesEncumbrances = await service.findAll();
+    const { collateralId } = req.params;
+    const collateralChargesEncumbrances = await service.findAllByCollateralId(Number(collateralId));
     res.json(collateralChargesEncumbrances);
   } catch (error) {
     next(error);
   }
 }
 
-export const findCollateralChargesEncumbrancesByIDController = async (
+export const getCollateralChargesEncumbrancesByIDController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -45,7 +46,7 @@ export const createCollateralChargesEncumbrancesController = async (
 
     await userLogService.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P13-01-06-02",
+      codeAction: "P13-01-06-01-02-01",
       entity: JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TABLE,
       entityId: Number(newCollateralChargesEncumbrances.dataValues.id),
       ip: req.clientIp ?? "",
@@ -68,9 +69,32 @@ export const updateCollateralChargesEncumbrancesController = async (
     const collateralChargesEncumbrances = await service.update(id, body);
     await userLogService.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P13-01-06-03",
+      codeAction: "P13-01-06-01-02-02",
       entity: JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TABLE,
       entityId: Number(collateralChargesEncumbrances.dataValues.id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    })
+
+    res.json(collateralChargesEncumbrances);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export const deleteCollateralChargesEncumbrancesController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const collateralChargesEncumbrances = await service.delete(id);
+    await userLogService.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P13-01-06-01-02-03",
+      entity: JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TABLE,
+      entityId: Number(id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     })

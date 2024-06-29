@@ -3,8 +3,8 @@ import validatorHandler from "../../middlewares/validator.handler";
 import { checkPermissions, JWTAuth } from "../../middlewares/auth.handler";
 import judicialCollateralChargesEncumbrancesTypeLoadSchema from "../../app/judicial/schemas/judicial-collateral-charges-encumbrances-type-load.schema";
 import {
-  findAllCollateralChargesEncumbrancesTypeLoadController,
-  findCollateralChargesEncumbrancesTypeLoadByIDController,
+  getAllCollateralChargesEncumbrancesTypeLoadController,
+  getCollateralChargesEncumbrancesTypeLoadByIDController,
   createCollateralChargesEncumbrancesTypeLoadController,
   deletedCollateralChargesEncumbrancesTypeLoadController,
   updateCollateralChargesEncumbrancesTypeLoadController,
@@ -23,21 +23,20 @@ router.get(
   "/chb/:chb",
   JWTAuth,
   validatorHandler(getJudicialCollateralChargesEncumbrancesTypeLoadByCHBSchema, "params"),
-  findAllCollateralChargesEncumbrancesTypeLoadController
+  getAllCollateralChargesEncumbrancesTypeLoadController
 );
 
 router.get(
   "/:id",
   JWTAuth,
   validatorHandler(getJudicialCollateralChargesEncumbrancesTypeLoadByIDSchema, "params"),
-  findCollateralChargesEncumbrancesTypeLoadByIDController
+  getCollateralChargesEncumbrancesTypeLoadByIDController
 );
 
 router.post(
-  "/:JudicialCaseFileId",
+  "/",
   JWTAuth,
-  checkPermissions("P13-01-06-02"),
-  // validatorHandler(getJudicialCollateralChargesEncumbrancesTypeLoadByJudicialCaseFileIdSchema, "params"),
+  checkPermissions("P42-01"),
   validatorHandler(createJudicialCollateralChargesEncumbrancesTypeLoadSchema, "body"),
   createCollateralChargesEncumbrancesTypeLoadController
 );
@@ -45,15 +44,17 @@ router.post(
 router.patch(
   "/:id",
   JWTAuth,
-  // validatorHandler(updateJudicialCollateralChargesEncumbrancesTypeLoadSchema, "body"),
+  checkPermissions("P42-02"),
+  validatorHandler(updateJudicialCollateralChargesEncumbrancesTypeLoadSchema, "body"),
   updateCollateralChargesEncumbrancesTypeLoadController
 );
 
 router.delete(
   "/:id",
   JWTAuth,
+  checkPermissions("P42-03"),
   validatorHandler(getJudicialCollateralChargesEncumbrancesTypeLoadByIDSchema, "params"),
-  // deletedCollateralChargesEncumbrancesTypeLoadController
+  deletedCollateralChargesEncumbrancesTypeLoadController
 );
 
 export default router;

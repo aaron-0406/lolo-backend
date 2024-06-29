@@ -1,6 +1,6 @@
 export type JudicialCollateralChargesEncumbrancesType = {
   id: number;
-  idTypeOfLoad: number;
+  typeOfLoadId: number;
   judicialCollateralIdJudicialCollateral: number;
   amountOfImpactSoles: number;
   amountOfImpactDollars: number;
