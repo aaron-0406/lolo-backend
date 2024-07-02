@@ -7,11 +7,6 @@ const { models } = sequelize;
 class JudicialUseOfPropertyService {
   constructor() {}
 
-  async findAll() {
-    const rta = await models.JUDICIAL_USE_OF_PROPERTY.findAll();
-    return rta;
-  }
-
   async findAllByCHB(chb: number) {
     const rta = await models.JUDICIAL_USE_OF_PROPERTY.findAll({
       where: { customerHasBankId: chb },

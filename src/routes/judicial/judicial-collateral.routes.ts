@@ -3,12 +3,11 @@ import validatorHandler from "../../middlewares/validator.handler";
 import { checkPermissions, JWTAuth } from "../../middlewares/auth.handler";
 import judicialCollateralSchema from "../../app/judicial/schemas/judicial-collateral.schema";
 import {
-  findAllCollateralByCHBController,
-  findCollateralByIDController,
+  getCollateralByIDController,
   createCollateralController,
   deletedCollateralController,
   updateCollateralController,
-  findCollateralByJudicialCaseFileIdController
+  getCollateralByJudicialCaseFileIdController
 } from "../../controllers/judicial/judicial-collateral.controller";
 
 const {
@@ -22,24 +21,17 @@ const {
 const router = express.Router();
 
 router.get(
-  "/chb/:chb",
-  JWTAuth,
-  validatorHandler(getJudicialCollateralByCHBSchema, "params"),
-  findAllCollateralByCHBController
-);
-
-router.get(
   "/:id",
   JWTAuth,
   validatorHandler(getJudicialCollateralByIDSchema, "params"),
-  findCollateralByIDController
+  getCollateralByIDController
 );
 
 router.get(
   "/all/:JudicialCaseFileId",
   JWTAuth,
   validatorHandler(getJudicialCollateralByJudicialCaseFileIdSchema, "params"),
-  findCollateralByJudicialCaseFileIdController
+  getCollateralByJudicialCaseFileIdController
 );
 
 router.post(

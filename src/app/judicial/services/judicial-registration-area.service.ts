@@ -6,12 +6,7 @@ const { models } = sequelize;
 
 class JudicialRegistrationAreaService {
   constructor() {}
-
-  async findAll() {
-    const rta = await models.JUDICIAL_REGISTRATION_AREA.findAll();
-    return rta;
-  }
-
+  
   async findAllByCHB(chb: number) {
     const rta = await models.JUDICIAL_REGISTRATION_AREA.findAll({
       where: { customerHasBankId: chb },

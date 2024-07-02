@@ -9,34 +9,7 @@ const userLogService = new UserLogService();
 const { JUDICIAL_CASE_FILE_HAS_COLLATERAL_TABLE } = judicialCaseFileHasCollateralModel
 const { JUDICIAL_COLLATERAL_TABLE } = judicialCollateralModel
 
-export const findAllCollateralController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const collaterals = await service.findAll();
-    res.json(collaterals);
-  } catch (error) {
-    next(error);
-  }
-}
-
-export const findAllCollateralByCHBController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { chb } = req.params;
-    const collaterals = await service.findAllByCHB(parseInt(chb));
-    res.json(collaterals);
-  } catch (error) {
-    next(error);
-  }
-}
-
-export const findCollateralByIDController = async (
+export const getCollateralByIDController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -50,7 +23,7 @@ export const findCollateralByIDController = async (
   }
 }
 
-export const findCollateralByJudicialCaseFileIdController = async (
+export const getCollateralByJudicialCaseFileIdController = async (
   req: Request,
   res: Response,
   next: NextFunction

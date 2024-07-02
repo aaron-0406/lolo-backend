@@ -8,18 +8,6 @@ const { models } = sequelize;
 class JudicialCaseFileHasCollateralService {
   constructor() {}
 
-  async findAll() {
-    const rta = await models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.findAll();
-    return rta;
-  }
-
-  async findAllByCHB(chb: number) {
-    const rta = await models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.findAll({
-      where: { customerHasBankId: chb }
-    });
-    return rta;
-  }
-
   async findAllRelatedCaseFileAssingCollateral(numberCaseFile: string, collateralId:string, chb: number) {
     const codes = numberCaseFile.split("-");
     codes[2] = "%";

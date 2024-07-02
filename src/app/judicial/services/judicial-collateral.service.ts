@@ -6,16 +6,22 @@ const { models } = sequelize;
 class JudicialCollateralService {
   constructor() {}
 
-  async findAll() {
-    const rta = await models.JUDICIAL_COLLATERAL.findAll();
-    return rta;
-  }
-
-  async findAllByCHB(chb: number) {
-    const rta = await models.JUDICIAL_COLLATERAL.findAll({
-      where: { customerHasBankId: chb },
+  async findAllCollateralByCaseFile (judicialCaseFileId: string) {
+    const rta = await models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.findAll({
+      where: { judicialCaseFileId },
+      include: [
+        {
+          model: models.JUDICIAL_COLLATERAL,
+          as: "judicialCollateral",
+          where: {
+            deletedAt: null,
+          }
+        },
+      ],
     });
-    return rta;
+
+    const collaterals = rta.map((item) => item.dataValues.judicialCollateral);
+    return collaterals;
   }
 
   async findByID(id: string) {
@@ -70,23 +76,6 @@ class JudicialCollateralService {
     return judicialCollateral;
   }
 
-  async findAllCollateralByCaseFile (judicialCaseFileId: string) {
-    const rta = await models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.findAll({
-      where: { judicialCaseFileId },
-      include: [
-        {
-          model: models.JUDICIAL_COLLATERAL,
-          as: "judicialCollateral",
-          where: {
-            deletedAt: null,
-          }
-        },
-      ],
-    });
-
-    const collaterals = rta.map((item) => item.dataValues.judicialCollateral);
-    return collaterals;
-  }
 
   async create(data: JudicialCollateralType, judicialCaseFileid: string) {
     const newJudicialCollateral = await models.JUDICIAL_COLLATERAL.create(data);
