@@ -20,7 +20,7 @@ const { JUDICIAL_REGISTER_OFFICE_TABLE } = judicialRegisterOfficeModel;
 const { JUDICIAL_REGISTRATION_AREA_TABLE } = judicialRegistrationAreaModel;
 const { JUDICIAL_USE_OF_PROPERTY_TABLE } = judicialUseOfPropertyModel;
 
-export async function up (queryInterface: QueryInterface) {
+export async function up(queryInterface: QueryInterface) {
   await queryInterface.createTable(JUDICIAL_COLLATERAL_TABLE, {
     id: {
       primaryKey: true,
@@ -179,7 +179,7 @@ export async function up (queryInterface: QueryInterface) {
       field: "deleted_at",
       type: DataTypes.DATE,
     },
-  })
+  });
 }
 
 export async function down(queryInterface: QueryInterface) {

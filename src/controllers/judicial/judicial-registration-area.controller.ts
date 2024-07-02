@@ -20,7 +20,7 @@ export const findRegistrationAreaByIdController = async (
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const findAllRegistrationAreasByCHBController = async (
   req: Request,
@@ -34,7 +34,7 @@ export const findAllRegistrationAreasByCHBController = async (
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const createRegistrationAreaController = async (
   req: Request,
@@ -58,8 +58,7 @@ export const createRegistrationAreaController = async (
   } catch (error) {
     next(error);
   }
-}
-
+};
 
 export const updateRegistrationAreaController = async (
   req: Request,
@@ -84,7 +83,7 @@ export const updateRegistrationAreaController = async (
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const deletedRegistrationAreaController = async (
   req: Request,
@@ -108,4 +107,4 @@ export const deletedRegistrationAreaController = async (
   } catch (error) {
     next(error);
   }
-}
+};

@@ -5,4 +5,4 @@ export type JudicialUseOfPropertyType = {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
-}
+};

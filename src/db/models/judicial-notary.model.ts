@@ -12,7 +12,10 @@ import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 const JUDICIAL_NOTARY_TABLE = "JUDICIAL_NOTARY";
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 
-const JudicialNotarySchema: ModelAttributes<JudicialNotary, JudicialNotaryType> = {
+const JudicialNotarySchema: ModelAttributes<
+  JudicialNotary,
+  JudicialNotaryType
+> = {
   id: {
     primaryKey: true,
     allowNull: false,
@@ -79,4 +82,4 @@ export default {
   JudicialNotary,
   JudicialNotarySchema,
   JUDICIAL_NOTARY_TABLE,
-}
+};

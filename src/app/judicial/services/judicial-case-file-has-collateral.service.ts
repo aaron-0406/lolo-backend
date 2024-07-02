@@ -1,14 +1,18 @@
-import { Op } from 'sequelize';
+import { Op } from "sequelize";
 import sequelize from "../../../libs/sequelize";
-import boom from '@hapi/boom';
-import { JudicialCaseFileHasCollateralType } from '../types/judicial-case-file-has-collateral.type';
+import boom from "@hapi/boom";
+import { JudicialCaseFileHasCollateralType } from "../types/judicial-case-file-has-collateral.type";
 
 const { models } = sequelize;
 
 class JudicialCaseFileHasCollateralService {
   constructor() {}
 
-  async findAllRelatedCaseFileAssingCollateral(numberCaseFile: string, collateralId:string, chb: number) {
+  async findAllRelatedCaseFileAssingCollateral(
+    numberCaseFile: string,
+    collateralId: string,
+    chb: number
+  ) {
     const codes = numberCaseFile.split("-");
     codes[2] = "%";
     const filterNumberCaseFile = codes.join("-");
@@ -26,52 +30,63 @@ class JudicialCaseFileHasCollateralService {
       },
     });
 
-    const judicialCollaterals = await models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.findAll({
-      where: {
-        judicialCollateralId: collateralId
-      }
-    });
-
+    const judicialCollaterals =
+      await models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.findAll({
+        where: {
+          judicialCollateralId: collateralId,
+        },
+      });
 
     if (!judicialCaseFile) {
       throw boom.notFound("Expediente no encontrado");
     }
 
-    const currentCaseFileHasCollaterals = judicialCollaterals.map((collateral) => collateral.dataValues);
-    const judicialCaseFiles =  judicialCaseFile.map((judicialCaseFile) => judicialCaseFile.dataValues);
+    const currentCaseFileHasCollaterals = judicialCollaterals.map(
+      (collateral) => collateral.dataValues
+    );
+    const judicialCaseFiles = judicialCaseFile.map(
+      (judicialCaseFile) => judicialCaseFile.dataValues
+    );
 
-    const judicialCaseFilesWithCollateral = judicialCaseFiles.map((judicialCaseFile) => {
-      const collateral = currentCaseFileHasCollaterals.some(
-        (currentCaseFileHasCollateral) =>
-          currentCaseFileHasCollateral.judicialCaseFileId ===
-          judicialCaseFile.id
-      );
-      if (collateral) {
+    const judicialCaseFilesWithCollateral = judicialCaseFiles.map(
+      (judicialCaseFile) => {
+        const collateral = currentCaseFileHasCollaterals.some(
+          (currentCaseFileHasCollateral) =>
+            currentCaseFileHasCollateral.judicialCaseFileId ===
+            judicialCaseFile.id
+        );
+        if (collateral) {
+          return {
+            ...judicialCaseFile,
+            hasCollateral: true,
+          };
+        }
         return {
           ...judicialCaseFile,
-          hasCollateral: true
-        }
+          hasCollateral: false,
+        };
       }
-      return {
-        ...judicialCaseFile,
-        hasCollateral: false
-      };
-    });
+    );
 
     return judicialCaseFilesWithCollateral;
   }
 
-  async assingCollateralToCaseFile ( data: JudicialCaseFileHasCollateralType[], collateralId: string) {
+  async assingCollateralToCaseFile(
+    data: JudicialCaseFileHasCollateralType[],
+    collateralId: string
+  ) {
     if (!data.length) {
-      throw boom.badRequest("La garantía debe estar asignada al menos a un expediente");
+      throw boom.badRequest(
+        "La garantía debe estar asignada al menos a un expediente"
+      );
     }
-    const judicialCollaterals = await models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.findAll({
-      where: {
-        judicialCollateralId: collateralId,
-        deletedAt: null
-      }
-    });
-
+    const judicialCollaterals =
+      await models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.findAll({
+        where: {
+          judicialCollateralId: collateralId,
+          deletedAt: null,
+        },
+      });
 
     const currentJudicialCaseFileHasCollaterals = judicialCollaterals.map(
       (judicialCollateral) => judicialCollateral.dataValues
@@ -79,15 +94,15 @@ class JudicialCaseFileHasCollateralService {
 
     // JudicialCaseFilesHasCollaterals
 
-    const JudicialCaseFileHasCollateralsToDelete = currentJudicialCaseFileHasCollaterals.filter(
-      (currentCollateral) =>
-        !data.some(
-          (collateral) =>
-            collateral.judicialCaseFileId ===
-            currentCollateral.judicialCaseFileId
-        )
-    );
-
+    const JudicialCaseFileHasCollateralsToDelete =
+      currentJudicialCaseFileHasCollaterals.filter(
+        (currentCollateral) =>
+          !data.some(
+            (collateral) =>
+              collateral.judicialCaseFileId ===
+              currentCollateral.judicialCaseFileId
+          )
+      );
 
     const JudicialCaseFileHasCollateralsToCreate = data.filter(
       (collateral) =>
@@ -101,9 +116,9 @@ class JudicialCaseFileHasCollateralService {
     try {
       for (const collateral of JudicialCaseFileHasCollateralsToDelete) {
         await models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.destroy({
-          where: { judicialCaseFileId: collateral.judicialCaseFileId,
-            judicialCollateralId: collateralId
-
+          where: {
+            judicialCaseFileId: collateral.judicialCaseFileId,
+            judicialCollateralId: collateralId,
           },
         });
       }
@@ -116,7 +131,6 @@ class JudicialCaseFileHasCollateralService {
       throw error;
     }
   }
-
 }
 
 export default JudicialCaseFileHasCollateralService;

@@ -12,7 +12,6 @@ import {
 
 const {
   getJudicialCollateralChargesEncumbrancesByJudicialCollateralIdSchema,
-  getJudicialCollateralChargesEncumbrancesByCHBSchema,
   upadteJudicialCollateralChargesEncumbrancesSchema,
   getJudicialCollateralChargesEncumbrancesByIDSchema,
   createJudicialCollateralChargesEncumbrancesSchema,
@@ -23,14 +22,20 @@ const router = express.Router();
 router.get(
   "/all-charges-encumbrances/:collateralId",
   JWTAuth,
-  validatorHandler(getJudicialCollateralChargesEncumbrancesByJudicialCollateralIdSchema, "params"),
+  validatorHandler(
+    getJudicialCollateralChargesEncumbrancesByJudicialCollateralIdSchema,
+    "params"
+  ),
   getAllChargesEncumbrancesByCollateralController
 );
 
 router.get(
   "/:id",
   JWTAuth,
-  validatorHandler(getJudicialCollateralChargesEncumbrancesByIDSchema, "params"),
+  validatorHandler(
+    getJudicialCollateralChargesEncumbrancesByIDSchema,
+    "params"
+  ),
   getCollateralChargesEncumbrancesByIDController
 );
 
@@ -52,7 +57,10 @@ router.patch(
 router.delete(
   "/:id",
   JWTAuth,
-  validatorHandler(getJudicialCollateralChargesEncumbrancesByIDSchema, "params"),
+  validatorHandler(
+    getJudicialCollateralChargesEncumbrancesByIDSchema,
+    "params"
+  ),
   deleteCollateralChargesEncumbrancesController
 );
 

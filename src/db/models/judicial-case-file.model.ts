@@ -212,11 +212,11 @@ const JudicialCaseFileSchema: ModelAttributes<
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
-  qrCode:{
+  qrCode: {
     allowNull: true,
     field: "qr_code",
     type: DataTypes.TEXT("long"),
-  }
+  },
 };
 
 class JudicialCaseFile extends Model {

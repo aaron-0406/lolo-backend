@@ -10,11 +10,15 @@ import { JudicialCaseFileHasCollateralType } from "../../app/judicial/types/judi
 import judicialCollateralModel from "./judicial-collateral.model";
 import judicialCaseFileModel from "./judicial-case-file.model";
 
-const JUDICIAL_CASE_FILE_HAS_COLLATERAL_TABLE = "JUDICIAL_CASE_FILE_HAS_COLLATERAL";
+const JUDICIAL_CASE_FILE_HAS_COLLATERAL_TABLE =
+  "JUDICIAL_CASE_FILE_HAS_COLLATERAL";
 const { JUDICIAL_COLLATERAL_TABLE } = judicialCollateralModel;
 const { JUDICIAL_CASE_FILE_TABLE } = judicialCaseFileModel;
 
-const JudicialCaseFileHasCollateralSchema: ModelAttributes<JudicialCaseFileHasCollateral, JudicialCaseFileHasCollateralType> = {
+const JudicialCaseFileHasCollateralSchema: ModelAttributes<
+  JudicialCaseFileHasCollateral,
+  JudicialCaseFileHasCollateralType
+> = {
   id: {
     primaryKey: true,
     allowNull: false,
@@ -83,5 +87,4 @@ export default {
   JudicialCaseFileHasCollateral,
   JudicialCaseFileHasCollateralSchema,
   JUDICIAL_CASE_FILE_HAS_COLLATERAL_TABLE,
-}
-
+};

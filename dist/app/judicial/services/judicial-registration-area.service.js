@@ -17,12 +17,6 @@ const boom_1 = __importDefault(require("@hapi/boom"));
 const { models } = sequelize_1.default;
 class JudicialRegistrationAreaService {
     constructor() { }
-    findAll() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.JUDICIAL_REGISTRATION_AREA.findAll();
-            return rta;
-        });
-    }
     findAllByCHB(chb) {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.JUDICIAL_REGISTRATION_AREA.findAll({
@@ -39,7 +33,7 @@ class JudicialRegistrationAreaService {
                 },
             });
             if (!judicialRegistrationArea) {
-                throw boom_1.default.notFound("Región de Registro no encontrado");
+                throw boom_1.default.notFound("Zona Registral no encontrada");
             }
             return judicialRegistrationArea;
         });

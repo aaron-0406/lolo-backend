@@ -123,8 +123,8 @@ const { JudicialRegistrationArea, JudicialRegistrationAreaSchema } = judicial_re
 const { JudicialUseOfProperty, JudicialUseOfPropertySchema } = judicial_use_of_property_model_1.default;
 const { JudicialCollateral, JudicialCollateralSchema } = judicial_collateral_model_1.default;
 const { JudicialCaseFileHasCollateral, JudicialCaseFileHasCollateralSchema } = judicial_case_file_has_collateral_model_1.default;
-const { JudicialCollateralChargesEncumbrances, JudicialCollateralChargesEncumbrancesSchema } = judicial_collateral_charges_encumbrances_model_1.default;
-const { JudicialCollateralChargesEncumbrancesTypeLoad, JudicialCollateralChargesEncumbrancesTypeLoadSchema } = judicial_collateral_charges_encumbrances_type_load_model_1.default;
+const { JudicialCollateralChargesEncumbrances, JudicialCollateralChargesEncumbrancesSchema, } = judicial_collateral_charges_encumbrances_model_1.default;
+const { JudicialCollateralChargesEncumbrancesTypeLoad, JudicialCollateralChargesEncumbrancesTypeLoadSchema, } = judicial_collateral_charges_encumbrances_type_load_model_1.default;
 const { JudicialCollateralFiles, JudicialCollateralFilesSchema } = judicial_collateral_files_model_1.default;
 const setupModels = (sequelize) => {
     Customer.init(CustomerSchema, Customer.config(sequelize));

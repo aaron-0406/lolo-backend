@@ -83,7 +83,7 @@ const newPermissions = [
     code: "P13-01-06-01-03-04",
     icon: "-",
     link: "#",
-  }
+  },
 ];
 
 export async function up(queryInterface: QueryInterface) {
@@ -94,8 +94,7 @@ export async function up(queryInterface: QueryInterface) {
   );
 
   const newIdPermissionDropdownGarantias =
-    Array.isArray(dropdownGarantiasId) &&
-    dropdownGarantiasId.length
+    Array.isArray(dropdownGarantiasId) && dropdownGarantiasId.length
       ? (dropdownGarantiasId[0] as { id_permission: number }).id_permission
       : null;
 

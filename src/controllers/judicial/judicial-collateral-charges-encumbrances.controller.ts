@@ -5,7 +5,8 @@ import judicialCollateralChargesEncumbrancesModel from "../../db/models/judicial
 
 const service = new JudicialCollateralChargesEncumbrancesService();
 const userLogService = new UserLogService();
-const { JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TABLE } = judicialCollateralChargesEncumbrancesModel
+const { JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TABLE } =
+  judicialCollateralChargesEncumbrancesModel;
 
 export const getAllChargesEncumbrancesByCollateralController = async (
   req: Request,
@@ -14,12 +15,14 @@ export const getAllChargesEncumbrancesByCollateralController = async (
 ) => {
   try {
     const { collateralId } = req.params;
-    const collateralChargesEncumbrances = await service.findAllByCollateralId(Number(collateralId));
+    const collateralChargesEncumbrances = await service.findAllByCollateralId(
+      Number(collateralId)
+    );
     res.json(collateralChargesEncumbrances);
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const getCollateralChargesEncumbrancesByIDController = async (
   req: Request,
@@ -33,7 +36,7 @@ export const getCollateralChargesEncumbrancesByIDController = async (
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const createCollateralChargesEncumbrancesController = async (
   req: Request,
@@ -51,12 +54,12 @@ export const createCollateralChargesEncumbrancesController = async (
       entityId: Number(newCollateralChargesEncumbrances.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-    })
+    });
     res.json(newCollateralChargesEncumbrances);
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const updateCollateralChargesEncumbrancesController = async (
   req: Request,
@@ -74,13 +77,13 @@ export const updateCollateralChargesEncumbrancesController = async (
       entityId: Number(collateralChargesEncumbrances.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-    })
+    });
 
     res.json(collateralChargesEncumbrances);
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const deleteCollateralChargesEncumbrancesController = async (
   req: Request,
@@ -97,10 +100,10 @@ export const deleteCollateralChargesEncumbrancesController = async (
       entityId: Number(id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-    })
+    });
 
     res.json(collateralChargesEncumbrances);
   } catch (error) {
     next(error);
   }
-}
+};

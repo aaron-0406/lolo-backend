@@ -1,13 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import JudicialCollateralService from "../../app/judicial/services/judicial-collateral.service";
 import UserLogService from "../../app/dash/services/user-log.service";
-import judicialCaseFileHasCollateralModel from "../../db/models/judicial-case-file-has-collateral.model";
 import judicialCollateralModel from "../../db/models/judicial-collateral.model";
 
 const service = new JudicialCollateralService();
 const userLogService = new UserLogService();
-const { JUDICIAL_CASE_FILE_HAS_COLLATERAL_TABLE } = judicialCaseFileHasCollateralModel
-const { JUDICIAL_COLLATERAL_TABLE } = judicialCollateralModel
+const { JUDICIAL_COLLATERAL_TABLE } = judicialCollateralModel;
 
 export const getCollateralByIDController = async (
   req: Request,
@@ -21,7 +19,7 @@ export const getCollateralByIDController = async (
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const getCollateralByJudicialCaseFileIdController = async (
   req: Request,
@@ -30,12 +28,14 @@ export const getCollateralByJudicialCaseFileIdController = async (
 ) => {
   try {
     const { JudicialCaseFileId } = req.params;
-    const collateral = await service.findAllCollateralByCaseFile(JudicialCaseFileId);
+    const collateral = await service.findAllCollateralByCaseFile(
+      JudicialCaseFileId
+    );
     res.json(collateral);
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const createCollateralController = async (
   req: Request,
@@ -54,12 +54,12 @@ export const createCollateralController = async (
       entityId: Number(newCollateral.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-    })
+    });
     res.json(newCollateral);
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const updateCollateralController = async (
   req: Request,
@@ -77,14 +77,13 @@ export const updateCollateralController = async (
       entityId: Number(collateral.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-    })
+    });
 
     res.json(collateral);
   } catch (error) {
     next(error);
   }
-}
-
+};
 
 export const deletedCollateralController = async (
   req: Request,
@@ -102,12 +101,10 @@ export const deletedCollateralController = async (
       entityId: Number(collateral.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-    })
+    });
 
     res.json(collateral);
   } catch (error) {
     next(error);
   }
-}
-
-
+};

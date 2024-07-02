@@ -12,37 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletedCollateralController = exports.updateCollateralController = exports.createCollateralController = exports.findCollateralByJudicialCaseFileIdController = exports.findCollateralByIDController = exports.findAllCollateralByCHBController = exports.findAllCollateralController = void 0;
+exports.deletedCollateralController = exports.updateCollateralController = exports.createCollateralController = exports.getCollateralByJudicialCaseFileIdController = exports.getCollateralByIDController = void 0;
 const judicial_collateral_service_1 = __importDefault(require("../../app/judicial/services/judicial-collateral.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
-const judicial_case_file_has_collateral_model_1 = __importDefault(require("../../db/models/judicial-case-file-has-collateral.model"));
 const judicial_collateral_model_1 = __importDefault(require("../../db/models/judicial-collateral.model"));
 const service = new judicial_collateral_service_1.default();
 const userLogService = new user_log_service_1.default();
-const { JUDICIAL_CASE_FILE_HAS_COLLATERAL_TABLE } = judicial_case_file_has_collateral_model_1.default;
 const { JUDICIAL_COLLATERAL_TABLE } = judicial_collateral_model_1.default;
-const findAllCollateralController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const collaterals = yield service.findAll();
-        res.json(collaterals);
-    }
-    catch (error) {
-        next(error);
-    }
-});
-exports.findAllCollateralController = findAllCollateralController;
-const findAllCollateralByCHBController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { chb } = req.params;
-        const collaterals = yield service.findAllByCHB(parseInt(chb));
-        res.json(collaterals);
-    }
-    catch (error) {
-        next(error);
-    }
-});
-exports.findAllCollateralByCHBController = findAllCollateralByCHBController;
-const findCollateralByIDController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const getCollateralByIDController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
         const collateral = yield service.findByID(id);
@@ -52,8 +29,8 @@ const findCollateralByIDController = (req, res, next) => __awaiter(void 0, void 
         next(error);
     }
 });
-exports.findCollateralByIDController = findCollateralByIDController;
-const findCollateralByJudicialCaseFileIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getCollateralByIDController = getCollateralByIDController;
+const getCollateralByJudicialCaseFileIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { JudicialCaseFileId } = req.params;
         const collateral = yield service.findAllCollateralByCaseFile(JudicialCaseFileId);
@@ -63,7 +40,7 @@ const findCollateralByJudicialCaseFileIdController = (req, res, next) => __await
         next(error);
     }
 });
-exports.findCollateralByJudicialCaseFileIdController = findCollateralByJudicialCaseFileIdController;
+exports.getCollateralByJudicialCaseFileIdController = getCollateralByJudicialCaseFileIdController;
 const createCollateralController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c;
     try {

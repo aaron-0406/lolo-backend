@@ -6,8 +6,10 @@ import judicialCollateralFilesModel from "../models/judicial-collateral-files.mo
 import judicialCollateralModel from "../models/judicial-collateral.model";
 import customerHasBankModel from "../models/many-to-many/customer-has-bank.model";
 
-const { JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE } = judicialCollateralChargesEncumbrancesTypeLoadModel;
-const { JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TABLE } = judicialCollateralChargesEncumbrancesModel;
+const { JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE } =
+  judicialCollateralChargesEncumbrancesTypeLoadModel;
+const { JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TABLE } =
+  judicialCollateralChargesEncumbrancesModel;
 const { JUDICIAL_COLLATERAL_FILES_TABLE } = judicialCollateralFilesModel;
 const { JUDICIAL_COLLATERAL_TABLE } = judicialCollateralModel;
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
@@ -72,48 +74,51 @@ export async function up(queryInterface: QueryInterface) {
     },
   });
 
-  await queryInterface.createTable(JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE, {
-    id: {
-      type: DataTypes.INTEGER,
-      field: "id_type_of_load",
-      allowNull: false,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    name: {
-      type: DataTypes.STRING(150),
-      allowNull: false,
-      field: "name",
-    },
-    customerHasBankId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      field: "customer_has_bank_id_customer_has_bank",
-      references: {
-        model: CUSTOMER_HAS_BANK_TABLE,
-        key: "id_customer_has_bank",
+  await queryInterface.createTable(
+    JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE,
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        field: "id_type_of_load",
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
       },
-      onUpdate: "CASCADE",
-      onDelete: "NO ACTION",
-    },
-    createdAt: {
-      allowNull: false,
-      field: "created_at",
-      defaultValue: DataTypes.NOW,
-      type: DataTypes.DATE,
-    },
-    updatedAt: {
-      allowNull: false,
-      field: "updated_at",
-      defaultValue: DataTypes.NOW,
-      type: DataTypes.DATE,
-    },
-    deletedAt: {
-      allowNull: true,
-      field: "deleted_at",
-      type: DataTypes.DATE,
-    },
-  });
+      name: {
+        type: DataTypes.STRING(150),
+        allowNull: false,
+        field: "name",
+      },
+      customerHasBankId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: "customer_has_bank_id_customer_has_bank",
+        references: {
+          model: CUSTOMER_HAS_BANK_TABLE,
+          key: "id_customer_has_bank",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
+      },
+      createdAt: {
+        allowNull: false,
+        field: "created_at",
+        defaultValue: DataTypes.NOW,
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        field: "updated_at",
+        defaultValue: DataTypes.NOW,
+        type: DataTypes.DATE,
+      },
+      deletedAt: {
+        allowNull: true,
+        field: "deleted_at",
+        type: DataTypes.DATE,
+      },
+    }
+  );
 
   await queryInterface.createTable(
     JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TABLE,
@@ -196,11 +201,14 @@ export async function up(queryInterface: QueryInterface) {
       },
     }
   );
-
 }
 
 export async function down(queryInterface: QueryInterface) {
-  await queryInterface.dropTable(JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE);
-  await queryInterface.dropTable(JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TABLE);
+  await queryInterface.dropTable(
+    JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE
+  );
+  await queryInterface.dropTable(
+    JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TABLE
+  );
   await queryInterface.dropTable(JUDICIAL_COLLATERAL_FILES_TABLE);
 }

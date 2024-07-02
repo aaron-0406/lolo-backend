@@ -20,7 +20,7 @@ export const findUseOfPropertyByIdController = async (
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const findAllUseOfPropertiesByCHBController = async (
   req: Request,
@@ -34,7 +34,7 @@ export const findAllUseOfPropertiesByCHBController = async (
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const createUseOfPropertyController = async (
   req: Request,
@@ -58,7 +58,7 @@ export const createUseOfPropertyController = async (
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const updateUseOfPropertyController = async (
   req: Request,
@@ -83,8 +83,7 @@ export const updateUseOfPropertyController = async (
   } catch (error) {
     next(error);
   }
-}
-
+};
 
 export const deletedUseOfPropertyController = async (
   req: Request,
@@ -108,4 +107,4 @@ export const deletedUseOfPropertyController = async (
   } catch (error) {
     next(error);
   }
-}
+};

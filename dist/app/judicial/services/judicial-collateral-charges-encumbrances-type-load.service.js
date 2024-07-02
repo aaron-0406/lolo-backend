@@ -17,9 +17,13 @@ const boom_1 = __importDefault(require("@hapi/boom"));
 const { models } = sequelize_1.default;
 class JudicialCollateralChargesEncumbrancesTypeLoadService {
     constructor() { }
-    findAll() {
+    findAll(chb) {
         return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD.findAll();
+            const rta = yield models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD.findAll({
+                where: {
+                    customer_has_bank_id_customer_has_bank: chb,
+                },
+            });
             return rta;
         });
     }
@@ -31,7 +35,7 @@ class JudicialCollateralChargesEncumbrancesTypeLoadService {
                 },
             });
             if (!judicialCollateralChargesEncumbrancesTypeLoad) {
-                throw boom_1.default.notFound("Collateral charges encumbrances type load no encontrado");
+                throw boom_1.default.notFound("Tipo de carga y gravamen no encontrado");
             }
             return judicialCollateralChargesEncumbrancesTypeLoad;
         });

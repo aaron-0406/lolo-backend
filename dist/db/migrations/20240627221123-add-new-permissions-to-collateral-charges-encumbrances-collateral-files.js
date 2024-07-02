@@ -95,14 +95,13 @@ const newPermissions = [
         code: "P13-01-06-01-03-04",
         icon: "-",
         link: "#",
-    }
+    },
 ];
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
         let permissionsOpt = [];
         const dropdownGarantiasId = yield queryInterface.sequelize.query(`SELECT id_permission FROM ${PERMISSION_TABLE} WHERE code = 'P37'`, { type: sequelize_1.QueryTypes.SELECT });
-        const newIdPermissionDropdownGarantias = Array.isArray(dropdownGarantiasId) &&
-            dropdownGarantiasId.length
+        const newIdPermissionDropdownGarantias = Array.isArray(dropdownGarantiasId) && dropdownGarantiasId.length
             ? dropdownGarantiasId[0].id_permission
             : null;
         if (newIdPermissionDropdownGarantias) {

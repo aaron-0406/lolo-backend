@@ -4,11 +4,12 @@ import judicialCaseFileHasCollateralModel from "../models/judicial-case-file-has
 import judicialCollateralModel from "../models/judicial-collateral.model";
 import judicialCaseFileModel from "../models/judicial-case-file.model";
 
-const { JUDICIAL_CASE_FILE_HAS_COLLATERAL_TABLE } = judicialCaseFileHasCollateralModel;
+const { JUDICIAL_CASE_FILE_HAS_COLLATERAL_TABLE } =
+  judicialCaseFileHasCollateralModel;
 const { JUDICIAL_COLLATERAL_TABLE } = judicialCollateralModel;
 const { JUDICIAL_CASE_FILE_TABLE } = judicialCaseFileModel;
 
-export async function up (queryInterface: QueryInterface) {
+export async function up(queryInterface: QueryInterface) {
   await queryInterface.createTable(JUDICIAL_CASE_FILE_HAS_COLLATERAL_TABLE, {
     id: {
       primaryKey: true,

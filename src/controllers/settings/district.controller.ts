@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express'
-import DistrictService from '../../app/settings/services/district.service'
+import { Request, Response, NextFunction } from "express";
+import DistrictService from "../../app/settings/services/district.service";
 
-const service = new DistrictService()
+const service = new DistrictService();
 
 export const getDistrictsController = async (
   req: Request,

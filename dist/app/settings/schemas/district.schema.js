@@ -28,5 +28,5 @@ exports.default = {
     createDistrictSchema,
     updateDistrictSchema,
     getDistrictSchema,
-    getDistrictByProvinceSchema
+    getDistrictByProvinceSchema,
 };

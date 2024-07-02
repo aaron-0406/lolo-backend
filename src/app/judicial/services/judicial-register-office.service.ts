@@ -15,11 +15,12 @@ class JudicialRegisterOfficeService {
   }
 
   async findByID(id: string) {
-    const judicialRegisterOffice = await models.JUDICIAL_REGISTER_OFFICE.findOne({
-      where: {
-        id,
-      },
-    });
+    const judicialRegisterOffice =
+      await models.JUDICIAL_REGISTER_OFFICE.findOne({
+        where: {
+          id,
+        },
+      });
 
     if (!judicialRegisterOffice) {
       throw boom.notFound("Oficina registral no encontrada");
@@ -29,7 +30,8 @@ class JudicialRegisterOfficeService {
   }
 
   async create(data: JudicialRegisterOfficeType) {
-    const newJudicialRegisterOffice = await models.JUDICIAL_REGISTER_OFFICE.create(data);
+    const newJudicialRegisterOffice =
+      await models.JUDICIAL_REGISTER_OFFICE.create(data);
     return newJudicialRegisterOffice;
   }
 

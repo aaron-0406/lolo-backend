@@ -24,7 +24,7 @@ router.get(
   JWTAuth,
   validatorHandler(getJudicialRegisterOfficeByIDSchema, "params"),
   findRegisterOfficeByIdController
-)
+);
 
 router.get(
   "/chb/:chb",

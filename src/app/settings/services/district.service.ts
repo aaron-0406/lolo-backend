@@ -5,7 +5,7 @@ import { DistrictType } from "../types/district.type";
 const { models } = sequelize;
 
 class DistrictService {
-  constructor(){}
+  constructor() {}
   async findAll() {
     const rta = await models.DISTRICT.findAll();
     if (!rta) {

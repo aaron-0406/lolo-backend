@@ -7,7 +7,7 @@ import {
   deletedRegistrationAreaController,
   findAllRegistrationAreasByCHBController,
   updateRegistrationAreaController,
-  findRegistrationAreaByIdController
+  findRegistrationAreaByIdController,
 } from "../../controllers/judicial/judicial-registration-area.controller";
 
 const {

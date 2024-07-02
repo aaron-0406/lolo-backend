@@ -9,7 +9,8 @@ import {
 import { JudicialCollateralChargesEncumbrancesTypeLoadType } from "../../app/judicial/types/judicial-collateral-charges-encumbrances-type-load.type";
 import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 
-const JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE = "JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD"
+const JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE =
+  "JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD";
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 
 const JudicialCollateralChargesEncumbrancesTypeLoadSchema: ModelAttributes<
@@ -56,7 +57,7 @@ const JudicialCollateralChargesEncumbrancesTypeLoadSchema: ModelAttributes<
     field: "deleted_at",
     type: DataTypes.DATE,
   },
-}
+};
 
 class JudicialCollateralChargesEncumbrancesTypeLoad extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {

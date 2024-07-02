@@ -15,21 +15,24 @@ class JudicialUseOfPropertyService {
   }
 
   async findByID(id: string) {
-    const judicialUseOfProperty = await models.JUDICIAL_USE_OF_PROPERTY.findOne({
-      where: {
-        id,
-      },
-    });
+    const judicialUseOfProperty = await models.JUDICIAL_USE_OF_PROPERTY.findOne(
+      {
+        where: {
+          id,
+        },
+      }
+    );
 
     if (!judicialUseOfProperty) {
-      throw boom.notFound("Uso de Propiedad no encontrado");
+      throw boom.notFound("Uso del Bien no encontrada");
     }
 
     return judicialUseOfProperty;
   }
 
   async create(data: JudicialUseOfPropertyType) {
-    const newJudicialUseOfProperty = await models.JUDICIAL_USE_OF_PROPERTY.create(data);
+    const newJudicialUseOfProperty =
+      await models.JUDICIAL_USE_OF_PROPERTY.create(data);
     return newJudicialUseOfProperty;
   }
 

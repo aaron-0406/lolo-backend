@@ -127,11 +127,20 @@ const { JudicialRegistrationArea, JudicialRegistrationAreaSchema } =
   judicialRegistrationAreaModel;
 const { JudicialUseOfProperty, JudicialUseOfPropertySchema } =
   judicialUseOfPropertyModel;
-const { JudicialCollateral, JudicialCollateralSchema } = judicialCollateralModel;
-const { JudicialCaseFileHasCollateral, JudicialCaseFileHasCollateralSchema } = judicialCaseFileHasCollateralModel;
-const { JudicialCollateralChargesEncumbrances, JudicialCollateralChargesEncumbrancesSchema } = judicialCollateralChargesEncumbrancesModel;
-const { JudicialCollateralChargesEncumbrancesTypeLoad, JudicialCollateralChargesEncumbrancesTypeLoadSchema } = judicialCollateralChargesEncumbrancesTypeLoadModel;
-const { JudicialCollateralFiles, JudicialCollateralFilesSchema } = judicialCollateralFilesModel;
+const { JudicialCollateral, JudicialCollateralSchema } =
+  judicialCollateralModel;
+const { JudicialCaseFileHasCollateral, JudicialCaseFileHasCollateralSchema } =
+  judicialCaseFileHasCollateralModel;
+const {
+  JudicialCollateralChargesEncumbrances,
+  JudicialCollateralChargesEncumbrancesSchema,
+} = judicialCollateralChargesEncumbrancesModel;
+const {
+  JudicialCollateralChargesEncumbrancesTypeLoad,
+  JudicialCollateralChargesEncumbrancesTypeLoadSchema,
+} = judicialCollateralChargesEncumbrancesTypeLoadModel;
+const { JudicialCollateralFiles, JudicialCollateralFilesSchema } =
+  judicialCollateralFilesModel;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));

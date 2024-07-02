@@ -5,7 +5,7 @@ import judicialCollateralFilesModel from "../../db/models/judicial-collateral-fi
 
 const service = new JudicialCollateralFilesService();
 const userLogService = new UserLogService();
-const { JUDICIAL_COLLATERAL_FILES_TABLE } = judicialCollateralFilesModel
+const { JUDICIAL_COLLATERAL_FILES_TABLE } = judicialCollateralFilesModel;
 
 export const findAllCollateralFilesController = async (
   req: Request,
@@ -18,7 +18,7 @@ export const findAllCollateralFilesController = async (
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const findCollateralFileByIDController = async (
   req: Request,
@@ -32,7 +32,7 @@ export const findCollateralFileByIDController = async (
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const createCollateralFileController = async (
   req: Request,
@@ -50,12 +50,12 @@ export const createCollateralFileController = async (
       entityId: Number(newCollateralFile.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-    })
+    });
     res.json(newCollateralFile);
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const updateCollateralFileController = async (
   req: Request,
@@ -74,13 +74,13 @@ export const updateCollateralFileController = async (
       entityId: Number(collateralFile.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-    })
+    });
 
     res.json(collateralFile);
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const deletedCollateralFileController = async (
   req: Request,
@@ -98,10 +98,10 @@ export const deletedCollateralFileController = async (
       entityId: Number(collateralFile.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-    })
+    });
 
     res.json(collateralFile);
   } catch (error) {
     next(error);
   }
-}
+};

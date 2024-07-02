@@ -3,7 +3,7 @@ import validatorHandler from "../../middlewares/validator.handler";
 import { checkPermissions, JWTAuth } from "../../middlewares/auth.handler";
 import judicialNotarySchema from "../../app/judicial/schemas/judicial-notary.schema";
 import {
-  findNotaryByIdController, 
+  findNotaryByIdController,
   findAllNotariesByCHBController,
   createNotaryController,
   deletedNotaryController,

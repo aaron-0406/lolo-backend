@@ -34,8 +34,7 @@ export const findAllRegisterOfficesByCHBController = async (
   } catch (error) {
     next(error);
   }
-}
-
+};
 
 export const createRegisterOfficeController = async (
   req: Request,
@@ -59,7 +58,7 @@ export const createRegisterOfficeController = async (
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const updateRegisterOfficeController = async (
   req: Request,
@@ -84,7 +83,7 @@ export const updateRegisterOfficeController = async (
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const deletedRegisterOfficeController = async (
   req: Request,
@@ -108,5 +107,4 @@ export const deletedRegisterOfficeController = async (
   } catch (error) {
     next(error);
   }
-}
-
+};

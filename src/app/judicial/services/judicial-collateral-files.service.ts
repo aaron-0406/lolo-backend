@@ -12,11 +12,12 @@ class JudicialCollateralFilesService {
   }
 
   async findByID(id: string) {
-    const judicialCollateralFile = await models.JUDICIAL_COLLATERAL_FILE.findOne({
-      where: {
-        id,
-      },
-    });
+    const judicialCollateralFile =
+      await models.JUDICIAL_COLLATERAL_FILE.findOne({
+        where: {
+          id,
+        },
+      });
 
     if (!judicialCollateralFile) {
       throw boom.notFound("Collateral file no encontrado");
@@ -25,7 +26,8 @@ class JudicialCollateralFilesService {
   }
 
   async create(data: any) {
-    const newJudicialCollateralFile = await models.JUDICIAL_COLLATERAL_FILE.create(data);
+    const newJudicialCollateralFile =
+      await models.JUDICIAL_COLLATERAL_FILE.create(data);
     return newJudicialCollateralFile;
   }
 

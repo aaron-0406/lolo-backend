@@ -208,7 +208,7 @@ const JudicialCaseFileSchema = {
         allowNull: true,
         field: "qr_code",
         type: sequelize_1.DataTypes.TEXT("long"),
-    }
+    },
 };
 class JudicialCaseFile extends sequelize_1.Model {
     static associate(models) {

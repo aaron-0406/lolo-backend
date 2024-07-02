@@ -7,15 +7,14 @@ import {
   createCollateralController,
   deletedCollateralController,
   updateCollateralController,
-  getCollateralByJudicialCaseFileIdController
+  getCollateralByJudicialCaseFileIdController,
 } from "../../controllers/judicial/judicial-collateral.controller";
 
 const {
   getJudicialCollateralByIDSchema,
-  getJudicialCollateralByCHBSchema,
   createJudicialCollateralSchema,
   updateJudicialCollateralSchema,
-  getJudicialCollateralByJudicialCaseFileIdSchema
+  getJudicialCollateralByJudicialCaseFileIdSchema,
 } = judicialCollateralSchema;
 
 const router = express.Router();

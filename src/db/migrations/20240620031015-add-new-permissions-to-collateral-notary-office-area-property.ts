@@ -158,26 +158,24 @@ export async function up(queryInterface: QueryInterface) {
   );
 
   const newIdPermissionDropdownGarantias =
-  Array.isArray(dropdownGarantiasId) &&
-  dropdownGarantiasId.length
-    ? (dropdownGarantiasId[0] as { id_permission: number })
-        .id_permission
-    : null;
+    Array.isArray(dropdownGarantiasId) && dropdownGarantiasId.length
+      ? (dropdownGarantiasId[0] as { id_permission: number }).id_permission
+      : null;
 
-    if (newIdPermissionDropdownGarantias) {
-      newPermissions.forEach((permission) => {
-        if (codesOptGarantias.includes(permission.code)) {
-          permissionsOpt.push({
-            ...permission,
-            id_permission_main: newIdPermissionDropdownGarantias,
-          });
-        }
-      });
-    }
+  if (newIdPermissionDropdownGarantias) {
+    newPermissions.forEach((permission) => {
+      if (codesOptGarantias.includes(permission.code)) {
+        permissionsOpt.push({
+          ...permission,
+          id_permission_main: newIdPermissionDropdownGarantias,
+        });
+      }
+    });
+  }
 
-    const permissionsActions = newPermissions.filter(
-      (permission) => !codesOptGarantias.includes(permission.code)
-    );
+  const permissionsActions = newPermissions.filter(
+    (permission) => !codesOptGarantias.includes(permission.code)
+  );
   await queryInterface.bulkInsert(PERMISSION_TABLE, permissionsOpt);
   await queryInterface.bulkInsert(PERMISSION_TABLE, permissionsActions);
 }

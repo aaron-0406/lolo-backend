@@ -17,12 +17,6 @@ const boom_1 = __importDefault(require("@hapi/boom"));
 const { models } = sequelize_1.default;
 class JudicialUseOfPropertyService {
     constructor() { }
-    findAll() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.JUDICIAL_USE_OF_PROPERTY.findAll();
-            return rta;
-        });
-    }
     findAllByCHB(chb) {
         return __awaiter(this, void 0, void 0, function* () {
             const rta = yield models.JUDICIAL_USE_OF_PROPERTY.findAll({
@@ -39,7 +33,7 @@ class JudicialUseOfPropertyService {
                 },
             });
             if (!judicialUseOfProperty) {
-                throw boom_1.default.notFound("Uso de Propiedad no encontrado");
+                throw boom_1.default.notFound("Uso del Bien no encontrada");
             }
             return judicialUseOfProperty;
         });

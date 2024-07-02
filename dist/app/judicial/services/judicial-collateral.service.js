@@ -17,18 +17,22 @@ const boom_1 = __importDefault(require("@hapi/boom"));
 const { models } = sequelize_1.default;
 class JudicialCollateralService {
     constructor() { }
-    findAll() {
+    findAllCollateralByCaseFile(judicialCaseFileId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.JUDICIAL_COLLATERAL.findAll();
-            return rta;
-        });
-    }
-    findAllByCHB(chb) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.JUDICIAL_COLLATERAL.findAll({
-                where: { customerHasBankId: chb },
+            const rta = yield models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.findAll({
+                where: { judicialCaseFileId },
+                include: [
+                    {
+                        model: models.JUDICIAL_COLLATERAL,
+                        as: "judicialCollateral",
+                        where: {
+                            deletedAt: null,
+                        },
+                    },
+                ],
             });
-            return rta;
+            const collaterals = rta.map((item) => item.dataValues.judicialCollateral);
+            return collaterals;
         });
     }
     findByID(id) {
@@ -73,30 +77,12 @@ class JudicialCollateralService {
                         as: "district",
                         attributes: ["id", "name"],
                     },
-                ]
+                ],
             });
             if (!judicialCollateral) {
                 throw boom_1.default.notFound("Collateral no encontrado");
             }
             return judicialCollateral;
-        });
-    }
-    findAllCollateralByCaseFile(judicialCaseFileId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.findAll({
-                where: { judicialCaseFileId },
-                include: [
-                    {
-                        model: models.JUDICIAL_COLLATERAL,
-                        as: "judicialCollateral",
-                        where: {
-                            deletedAt: null,
-                        }
-                    },
-                ],
-            });
-            const collaterals = rta.map((item) => item.dataValues.judicialCollateral);
-            return collaterals;
         });
     }
     create(data, judicialCaseFileid) {

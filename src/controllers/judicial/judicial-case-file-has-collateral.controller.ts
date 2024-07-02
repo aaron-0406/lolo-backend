@@ -6,7 +6,8 @@ import judicialCaseFileHasCollateralModel from "../../db/models/judicial-case-fi
 const service = new JudicialCaseFileHasCollateralService();
 const userLogService = new UserLogService();
 
-const { JUDICIAL_CASE_FILE_HAS_COLLATERAL_TABLE } = judicialCaseFileHasCollateralModel
+const { JUDICIAL_CASE_FILE_HAS_COLLATERAL_TABLE } =
+  judicialCaseFileHasCollateralModel;
 
 export const getAllRelatedCaseFileAssociatedToCollateral = async (
   req: Request,
@@ -24,17 +25,20 @@ export const getAllRelatedCaseFileAssociatedToCollateral = async (
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const assingCollateralToCaseFile = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  try{
-    const { collateralId } = req.params
+  try {
+    const { collateralId } = req.params;
     const { newJudicialCasefileHasCollateral } = req.body;
-    const result = await service.assingCollateralToCaseFile(newJudicialCasefileHasCollateral, collateralId);
+    const result = await service.assingCollateralToCaseFile(
+      newJudicialCasefileHasCollateral,
+      collateralId
+    );
 
     await userLogService.create({
       customerUserId: Number(req.user?.id),
@@ -43,12 +47,10 @@ export const assingCollateralToCaseFile = async (
       entityId: Number(collateralId),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-    })
+    });
 
     res.json(result);
-
-  }catch(error){
+  } catch (error) {
     next(error);
   }
-}
-
+};

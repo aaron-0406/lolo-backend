@@ -12,7 +12,10 @@ import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 const JUDICIAL_REGISTRATION_AREA_TABLE = "JUDICIAL_REGISTRATION_AREA";
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 
-const JudicialRegistrationAreaSchema: ModelAttributes<JudicialRegistrationArea, JudicialRegistrationAreaType> = {
+const JudicialRegistrationAreaSchema: ModelAttributes<
+  JudicialRegistrationArea,
+  JudicialRegistrationAreaType
+> = {
   id: {
     primaryKey: true,
     allowNull: false,
@@ -79,4 +82,4 @@ export default {
   JudicialRegistrationArea,
   JudicialRegistrationAreaSchema,
   JUDICIAL_REGISTRATION_AREA_TABLE,
-}
+};

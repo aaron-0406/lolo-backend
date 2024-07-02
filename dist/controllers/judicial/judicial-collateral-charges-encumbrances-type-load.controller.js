@@ -21,7 +21,8 @@ const userLogService = new user_log_service_1.default();
 const { JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE } = judicial_collateral_charges_encumbrances_type_load_model_1.default;
 const getAllCollateralChargesEncumbrancesTypeLoadController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const collateralChargesEncumbrancesTypeLoad = yield service.findAll();
+        const { chb } = req.params;
+        const collateralChargesEncumbrancesTypeLoad = yield service.findAll(chb);
         res.json(collateralChargesEncumbrancesTypeLoad);
     }
     catch (error) {
