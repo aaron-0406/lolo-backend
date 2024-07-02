@@ -5,7 +5,7 @@ import judicialCollateralFilesModel from "../../db/models/judicial-collateral-fi
 
 const service = new JudicialCollateralFilesService();
 const userLogService = new UserLogService();
-const { JUDICIAL_COLLATERAL_FILES_TABLE } = judicialCollateralFilesModel
+const { JUDICIAL_COLLATERAL_FILES_TABLE } = judicialCollateralFilesModel;
 
 export const getAllCollateralFilesController = async (
   req: Request,
@@ -19,7 +19,7 @@ export const getAllCollateralFilesController = async (
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const getCollateralFileByIDController = async (
   req: Request,
@@ -43,7 +43,7 @@ export const getCollateralFileByIDController = async (
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const createCollateralFileController = async (
   req: Request,
@@ -67,12 +67,12 @@ export const createCollateralFileController = async (
       entityId: Number(collateralId),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-    })
+    });
     res.json(newCollateralFile);
   } catch (error) {
     next(error);
   }
-}
+};
 
 
 export const deletedCollateralFileController = async (
@@ -91,10 +91,10 @@ export const deletedCollateralFileController = async (
       entityId: Number(id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-    })
+    });
 
     res.json(collateralFile);
   } catch (error) {
     next(error);
   }
-}
+};

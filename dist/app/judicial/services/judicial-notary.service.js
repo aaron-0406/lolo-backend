@@ -33,7 +33,7 @@ class JudicialNotaryService {
                 },
             });
             if (!judicialNotary) {
-                throw boom_1.default.notFound("Notario no encontrado");
+                throw boom_1.default.notFound("Notaria no encontrada");
             }
             return judicialNotary;
         });

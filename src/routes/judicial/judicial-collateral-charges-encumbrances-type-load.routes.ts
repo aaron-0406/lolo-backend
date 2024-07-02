@@ -22,14 +22,20 @@ const router = express.Router();
 router.get(
   "/chb/:chb",
   JWTAuth,
-  validatorHandler(getJudicialCollateralChargesEncumbrancesTypeLoadByCHBSchema, "params"),
+  validatorHandler(
+    getJudicialCollateralChargesEncumbrancesTypeLoadByCHBSchema,
+    "params"
+  ),
   getAllCollateralChargesEncumbrancesTypeLoadController
 );
 
 router.get(
   "/:id",
   JWTAuth,
-  validatorHandler(getJudicialCollateralChargesEncumbrancesTypeLoadByIDSchema, "params"),
+  validatorHandler(
+    getJudicialCollateralChargesEncumbrancesTypeLoadByIDSchema,
+    "params"
+  ),
   getCollateralChargesEncumbrancesTypeLoadByIDController
 );
 
@@ -37,7 +43,10 @@ router.post(
   "/",
   JWTAuth,
   checkPermissions("P42-01"),
-  validatorHandler(createJudicialCollateralChargesEncumbrancesTypeLoadSchema, "body"),
+  validatorHandler(
+    createJudicialCollateralChargesEncumbrancesTypeLoadSchema,
+    "body"
+  ),
   createCollateralChargesEncumbrancesTypeLoadController
 );
 
@@ -45,7 +54,10 @@ router.patch(
   "/:id",
   JWTAuth,
   checkPermissions("P42-02"),
-  validatorHandler(updateJudicialCollateralChargesEncumbrancesTypeLoadSchema, "body"),
+  validatorHandler(
+    updateJudicialCollateralChargesEncumbrancesTypeLoadSchema,
+    "body"
+  ),
   updateCollateralChargesEncumbrancesTypeLoadController
 );
 
@@ -53,7 +65,10 @@ router.delete(
   "/:id",
   JWTAuth,
   checkPermissions("P42-03"),
-  validatorHandler(getJudicialCollateralChargesEncumbrancesTypeLoadByIDSchema, "params"),
+  validatorHandler(
+    getJudicialCollateralChargesEncumbrancesTypeLoadByIDSchema,
+    "params"
+  ),
   deletedCollateralChargesEncumbrancesTypeLoadController
 );
 

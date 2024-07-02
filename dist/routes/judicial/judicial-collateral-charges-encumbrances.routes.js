@@ -8,7 +8,7 @@ const validator_handler_1 = __importDefault(require("../../middlewares/validator
 const auth_handler_1 = require("../../middlewares/auth.handler");
 const judicial_collateral_charges_encumbrances_schema_1 = __importDefault(require("../../app/judicial/schemas/judicial-collateral-charges-encumbrances.schema"));
 const judicial_collateral_charges_encumbrances_controller_1 = require("../../controllers/judicial/judicial-collateral-charges-encumbrances.controller");
-const { getJudicialCollateralChargesEncumbrancesByJudicialCollateralIdSchema, getJudicialCollateralChargesEncumbrancesByCHBSchema, upadteJudicialCollateralChargesEncumbrancesSchema, getJudicialCollateralChargesEncumbrancesByIDSchema, createJudicialCollateralChargesEncumbrancesSchema, } = judicial_collateral_charges_encumbrances_schema_1.default;
+const { getJudicialCollateralChargesEncumbrancesByJudicialCollateralIdSchema, upadteJudicialCollateralChargesEncumbrancesSchema, getJudicialCollateralChargesEncumbrancesByIDSchema, createJudicialCollateralChargesEncumbrancesSchema, } = judicial_collateral_charges_encumbrances_schema_1.default;
 const router = express_1.default.Router();
 router.get("/all-charges-encumbrances/:collateralId", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getJudicialCollateralChargesEncumbrancesByJudicialCollateralIdSchema, "params"), judicial_collateral_charges_encumbrances_controller_1.getAllChargesEncumbrancesByCollateralController);
 router.get("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getJudicialCollateralChargesEncumbrancesByIDSchema, "params"), judicial_collateral_charges_encumbrances_controller_1.getCollateralChargesEncumbrancesByIDController);

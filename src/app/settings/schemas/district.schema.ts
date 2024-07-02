@@ -30,11 +30,11 @@ const getDistrictSchema = Joi.object<{ id: number }, true>({
 
 const getDistrictByProvinceSchema = Joi.object<{ provinceId: number }, true>({
   provinceId: provinceId.required(),
-})
+});
 
 export default {
   createDistrictSchema,
   updateDistrictSchema,
   getDistrictSchema,
-  getDistrictByProvinceSchema
+  getDistrictByProvinceSchema,
 };

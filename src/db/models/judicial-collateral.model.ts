@@ -6,7 +6,7 @@ import {
   ModelCtor,
 } from "sequelize";
 
-import { JudicialCollateralType } from '../../app/judicial/types/judicial-collateral.type';
+import { JudicialCollateralType } from "../../app/judicial/types/judicial-collateral.type";
 import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 import judicialUseOfPropertyModel from "./judicial-use-of-property.model";
 import departmentModel from "./settings/department.model";
@@ -188,7 +188,7 @@ const JudicialCollateralSchema: ModelAttributes<
     field: "deleted_at",
     type: DataTypes.DATE,
   },
-}
+};
 
 class JudicialCollateral extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {

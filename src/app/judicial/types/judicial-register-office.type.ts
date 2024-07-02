@@ -5,4 +5,4 @@ export type JudicialRegisterOfficeType = {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
-}
+};

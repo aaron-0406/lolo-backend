@@ -23,7 +23,7 @@ router.get(
   "/:id",
   JWTAuth,
   findUseOfPropertyByIdController,
-  validatorHandler(getJudicialUseOfPropertyByIDSchema, "params"),
+  validatorHandler(getJudicialUseOfPropertyByIDSchema, "params")
 );
 
 router.get(

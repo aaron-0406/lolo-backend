@@ -12,11 +12,12 @@ class JudicialCollateralFilesService {
 
   async findByID(id: string) {
     const judicialCollateralFile =
+
       await models.JUDICIAL_COLLATERAL_FILE.findOne({
-        where: {
-          id,
-        },
-      });
+          where: {
+            id,
+          },
+        });
 
     if (!judicialCollateralFile) {
       throw boom.notFound("Collateral file no encontrado");

@@ -28,14 +28,16 @@ const getProvinceSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
 
-const getProvinceByDepartmentSchema = Joi.object<{ departmentId: number }, true>({
+const getProvinceByDepartmentSchema = Joi.object<
+  { departmentId: number },
+  true
+>({
   departmentId: departmentId.required(),
-})
-
+});
 
 export default {
   createProvinceSchema,
   updateProvinceSchema,
   getProvinceSchema,
-  getProvinceByDepartmentSchema
+  getProvinceByDepartmentSchema,
 };

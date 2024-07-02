@@ -12,7 +12,10 @@ import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 const JUDICIAL_USE_OF_PROPERTY_TABLE = "JUDICIAL_USE_OF_PROPERTY";
 const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 
-const JudicialUseOfPropertySchema: ModelAttributes<JudicialUseOfProperty, JudicialUseOfPropertyType> = {
+const JudicialUseOfPropertySchema: ModelAttributes<
+  JudicialUseOfProperty,
+  JudicialUseOfPropertyType
+> = {
   id: {
     primaryKey: true,
     allowNull: false,
@@ -79,4 +82,4 @@ export default {
   JudicialUseOfProperty,
   JudicialUseOfPropertySchema,
   JUDICIAL_USE_OF_PROPERTY_TABLE,
-}
+};

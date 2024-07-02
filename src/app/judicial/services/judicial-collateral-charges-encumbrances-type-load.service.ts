@@ -7,41 +7,59 @@ const { models } = sequelize;
 class JudicialCollateralChargesEncumbrancesTypeLoadService {
   constructor() {}
 
-  async findAll() {
-    const rta = await models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD.findAll();
+  async findAll(chb: string) {
+    const rta =
+      await models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD.findAll({
+        where: {
+          customer_has_bank_id_customer_has_bank: chb,
+        },
+      });
     return rta;
   }
 
   async findByID(id: string) {
-    const judicialCollateralChargesEncumbrancesTypeLoad = await models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD.findOne({
-      where: {
-        id,
-      },
-    });
+    const judicialCollateralChargesEncumbrancesTypeLoad =
+      await models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD.findOne({
+        where: {
+          id,
+        },
+      });
 
     if (!judicialCollateralChargesEncumbrancesTypeLoad) {
-      throw boom.notFound("Collateral charges encumbrances type load no encontrado");
+      throw boom.notFound("Tipo de carga y gravamen no encontrado");
     }
     return judicialCollateralChargesEncumbrancesTypeLoad;
   }
 
   async create(data: JudicialCollateralChargesEncumbrancesTypeLoadType) {
-    const newJudicialCollateralChargesEncumbrancesTypeLoad = await models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD.create(data);
+    const newJudicialCollateralChargesEncumbrancesTypeLoad =
+      await models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD.create(
+        data
+      );
     return newJudicialCollateralChargesEncumbrancesTypeLoad;
   }
 
-  async update(id: string, changes: JudicialCollateralChargesEncumbrancesTypeLoadType) {
-    const judicialCollateralChargesEncumbrancesTypeLoad = await this.findByID(id);
-    const rta = await judicialCollateralChargesEncumbrancesTypeLoad.update(changes);
+  async update(
+    id: string,
+    changes: JudicialCollateralChargesEncumbrancesTypeLoadType
+  ) {
+    const judicialCollateralChargesEncumbrancesTypeLoad = await this.findByID(
+      id
+    );
+    const rta = await judicialCollateralChargesEncumbrancesTypeLoad.update(
+      changes
+    );
     return rta;
   }
 
   async delete(id: string) {
-    const judicialCollateralChargesEncumbrancesTypeLoad = await this.findByID(id);
+    const judicialCollateralChargesEncumbrancesTypeLoad = await this.findByID(
+      id
+    );
     await judicialCollateralChargesEncumbrancesTypeLoad.destroy();
 
     return { id };
   }
 }
 
-export default JudicialCollateralChargesEncumbrancesTypeLoadService;    
+export default JudicialCollateralChargesEncumbrancesTypeLoadService;

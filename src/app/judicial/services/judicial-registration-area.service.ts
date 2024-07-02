@@ -7,11 +7,6 @@ const { models } = sequelize;
 class JudicialRegistrationAreaService {
   constructor() {}
 
-  async findAll() {
-    const rta = await models.JUDICIAL_REGISTRATION_AREA.findAll();
-    return rta;
-  }
-
   async findAllByCHB(chb: number) {
     const rta = await models.JUDICIAL_REGISTRATION_AREA.findAll({
       where: { customerHasBankId: chb },
@@ -20,21 +15,23 @@ class JudicialRegistrationAreaService {
   }
 
   async findByID(id: string) {
-    const judicialRegistrationArea = await models.JUDICIAL_REGISTRATION_AREA.findOne({
-      where: {
-        id,
-      },
-    });
+    const judicialRegistrationArea =
+      await models.JUDICIAL_REGISTRATION_AREA.findOne({
+        where: {
+          id,
+        },
+      });
 
     if (!judicialRegistrationArea) {
-      throw boom.notFound("Región de Registro no encontrado");
+      throw boom.notFound("Zona Registral no encontrada");
     }
 
     return judicialRegistrationArea;
   }
 
   async create(data: JudicialRegistrationAreaType) {
-    const newJudicialRegistrationArea = await models.JUDICIAL_REGISTRATION_AREA.create(data);
+    const newJudicialRegistrationArea =
+      await models.JUDICIAL_REGISTRATION_AREA.create(data);
     return newJudicialRegistrationArea;
   }
 

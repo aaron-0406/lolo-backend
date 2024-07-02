@@ -18,20 +18,6 @@ const boom_1 = __importDefault(require("@hapi/boom"));
 const { models } = sequelize_2.default;
 class JudicialCaseFileHasCollateralService {
     constructor() { }
-    findAll() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.findAll();
-            return rta;
-        });
-    }
-    findAllByCHB(chb) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.findAll({
-                where: { customerHasBankId: chb }
-            });
-            return rta;
-        });
-    }
     findAllRelatedCaseFileAssingCollateral(numberCaseFile, collateralId, chb) {
         return __awaiter(this, void 0, void 0, function* () {
             const codes = numberCaseFile.split("-");
@@ -52,8 +38,8 @@ class JudicialCaseFileHasCollateralService {
             });
             const judicialCollaterals = yield models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.findAll({
                 where: {
-                    judicialCollateralId: collateralId
-                }
+                    judicialCollateralId: collateralId,
+                },
             });
             if (!judicialCaseFile) {
                 throw boom_1.default.notFound("Expediente no encontrado");
@@ -79,8 +65,8 @@ class JudicialCaseFileHasCollateralService {
             const judicialCollaterals = yield models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.findAll({
                 where: {
                     judicialCollateralId: collateralId,
-                    deletedAt: null
-                }
+                    deletedAt: null,
+                },
             });
             const currentJudicialCaseFileHasCollaterals = judicialCollaterals.map((judicialCollateral) => judicialCollateral.dataValues);
             // JudicialCaseFilesHasCollaterals
@@ -91,8 +77,9 @@ class JudicialCaseFileHasCollateralService {
             try {
                 for (const collateral of JudicialCaseFileHasCollateralsToDelete) {
                     yield models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.destroy({
-                        where: { judicialCaseFileId: collateral.judicialCaseFileId,
-                            judicialCollateralId: collateralId
+                        where: {
+                            judicialCaseFileId: collateral.judicialCaseFileId,
+                            judicialCollateralId: collateralId,
                         },
                     });
                 }

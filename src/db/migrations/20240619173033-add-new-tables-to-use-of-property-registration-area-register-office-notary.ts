@@ -10,9 +10,9 @@ const { JUDICIAL_NOTARY_TABLE } = judicialNotaryModel;
 const { JUDICIAL_REGISTER_OFFICE_TABLE } = judicialRegisterOfficeModel;
 const { JUDICIAL_REGISTRATION_AREA_TABLE } = judicialRegistrationAreaModel;
 const { JUDICIAL_USE_OF_PROPERTY_TABLE } = judicialUseOfPropertyModel;
-const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel
+const { CUSTOMER_HAS_BANK_TABLE } = customerHasBankModel;
 
-export async function up (queryInterface: QueryInterface) {
+export async function up(queryInterface: QueryInterface) {
   await queryInterface.createTable(JUDICIAL_NOTARY_TABLE, {
     id: {
       primaryKey: true,
@@ -137,7 +137,7 @@ export async function up (queryInterface: QueryInterface) {
       field: "deleted_at",
       type: DataTypes.DATE,
     },
-  })
+  });
 
   await queryInterface.createTable(JUDICIAL_USE_OF_PROPERTY_TABLE, {
     id: {

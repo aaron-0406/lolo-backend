@@ -5,4 +5,4 @@ export type JudicialNotaryType = {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
-}
+};

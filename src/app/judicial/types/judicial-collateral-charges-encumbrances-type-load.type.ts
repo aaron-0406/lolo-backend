@@ -5,4 +5,4 @@ export type JudicialCollateralChargesEncumbrancesTypeLoadType = {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
-}
+};

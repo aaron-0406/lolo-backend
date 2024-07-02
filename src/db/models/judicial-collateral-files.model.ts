@@ -74,7 +74,7 @@ const JudicialCollateralFilesSchema: ModelAttributes<
     field: "deleted_at",
     type: DataTypes.DATE,
   },
-}
+};
 
 class JudicialCollateralFiles extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {

@@ -10,10 +10,12 @@ import { JudicialCollateralChargesEncumbrancesType } from "../../app/judicial/ty
 import judicialCollateralChargesEncumbrancesTypeLoadModel from "./judicial-collateral-charges-encumbrances-type-load.model";
 import judicialCollateralModel from "./judicial-collateral.model";
 
-const JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TABLE = "JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES"
+const JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TABLE =
+  "JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES";
 
 const { JUDICIAL_COLLATERAL_TABLE } = judicialCollateralModel;
-const { JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE } = judicialCollateralChargesEncumbrancesTypeLoadModel;
+const { JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE } =
+  judicialCollateralChargesEncumbrancesTypeLoadModel;
 
 const JudicialCollateralChargesEncumbrancesSchema: ModelAttributes<
   JudicialCollateralChargesEncumbrances,
@@ -26,7 +28,7 @@ const JudicialCollateralChargesEncumbrancesSchema: ModelAttributes<
     primaryKey: true,
     autoIncrement: true,
   },
-  judicialCollateralIdJudicialCollateral:{
+  judicialCollateralIdJudicialCollateral: {
     type: DataTypes.INTEGER,
     allowNull: false,
     field: "judicial_collateral_id_judicial_collateral",
@@ -41,7 +43,7 @@ const JudicialCollateralChargesEncumbrancesSchema: ModelAttributes<
     type: DataTypes.INTEGER,
     allowNull: false,
     field: "type_of_load_id",
-    references:{
+    references: {
       model: JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE,
       key: "id_judicial_collateral_charges_encumbrances_type_load",
     },
@@ -58,12 +60,12 @@ const JudicialCollateralChargesEncumbrancesSchema: ModelAttributes<
     allowNull: false,
     field: "amount_of_impact_dollars",
   },
-  descriptionOfLoad:{
+  descriptionOfLoad: {
     type: DataTypes.TEXT("long"),
     allowNull: false,
     field: "description_of_load",
   },
-  registrationSeat:{
+  registrationSeat: {
     type: DataTypes.STRING(150),
     allowNull: false,
     field: "registration_seat",
@@ -73,7 +75,7 @@ const JudicialCollateralChargesEncumbrancesSchema: ModelAttributes<
     allowNull: false,
     field: "registration_date",
   },
-  range:{
+  range: {
     type: DataTypes.INTEGER,
     allowNull: false,
     field: "range",
@@ -104,7 +106,6 @@ class JudicialCollateralChargesEncumbrances extends Model {
     });
     this.belongsTo(models.JUDICIAL_COLLATERAL, {
       as: "judicialCollateralChargesEncumbrances",
-      // foreignKey: "judicialCollateralIdJudicialCollateral",
     });
   }
 
@@ -122,4 +123,4 @@ export default {
   JudicialCollateralChargesEncumbrances,
   JudicialCollateralChargesEncumbrancesSchema,
   JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TABLE,
-}
+};

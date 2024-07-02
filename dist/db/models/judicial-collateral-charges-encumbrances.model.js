@@ -94,7 +94,6 @@ class JudicialCollateralChargesEncumbrances extends sequelize_1.Model {
         });
         this.belongsTo(models.JUDICIAL_COLLATERAL, {
             as: "judicialCollateralChargesEncumbrances",
-            // foreignKey: "judicialCollateralIdJudicialCollateral",
         });
     }
     static config(sequelize) {

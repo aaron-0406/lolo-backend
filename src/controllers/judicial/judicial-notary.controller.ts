@@ -20,7 +20,7 @@ export const findNotaryByIdController = async (
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const findAllNotariesByCHBController = async (
   req: Request,
@@ -34,7 +34,7 @@ export const findAllNotariesByCHBController = async (
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const createNotaryController = async (
   req: Request,
@@ -58,7 +58,7 @@ export const createNotaryController = async (
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const updateNotaryController = async (
   req: Request,
@@ -83,7 +83,7 @@ export const updateNotaryController = async (
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const deletedNotaryController = async (
   req: Request,
@@ -107,4 +107,4 @@ export const deletedNotaryController = async (
   } catch (error) {
     next(error);
   }
-}
+};

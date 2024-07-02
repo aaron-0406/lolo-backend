@@ -7,8 +7,8 @@ const { models } = sequelize;
 class JudicialCollateralChargesEncumbrancesService {
   constructor() {}
 
-  async  findAllByCollateralId( collateralId: number) {
-    try{
+  async findAllByCollateralId(collateralId: number) {
+    try {
       const rta = await models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES.findAll(
         {
           where: {
@@ -27,10 +27,9 @@ class JudicialCollateralChargesEncumbrancesService {
         throw boom.notFound("Collateral cargas y gravantes no encontradas");
       }
       return rta;
-    }catch(error){
+    } catch (error) {
       console.error(error);
     }
-
   }
 
   async findByID(id: string) {
@@ -54,7 +53,8 @@ class JudicialCollateralChargesEncumbrancesService {
   }
 
   async create(data: JudicialCollateralChargesEncumbrancesType) {
-    const newJudicialCollateralChargesEncumbrances = await models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES.create(data);
+    const newJudicialCollateralChargesEncumbrances =
+      await models.JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES.create(data);
     return newJudicialCollateralChargesEncumbrances;
   }
 

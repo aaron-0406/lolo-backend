@@ -164,10 +164,8 @@ function up(queryInterface) {
         let permissionsOpt = [];
         yield queryInterface.bulkInsert(PERMISSION_TABLE, [dropdownGarantias]);
         const dropdownGarantiasId = yield queryInterface.sequelize.query(`SELECT id_permission FROM ${PERMISSION_TABLE} WHERE code = 'P37'`, { type: sequelize_1.QueryTypes.SELECT });
-        const newIdPermissionDropdownGarantias = Array.isArray(dropdownGarantiasId) &&
-            dropdownGarantiasId.length
-            ? dropdownGarantiasId[0]
-                .id_permission
+        const newIdPermissionDropdownGarantias = Array.isArray(dropdownGarantiasId) && dropdownGarantiasId.length
+            ? dropdownGarantiasId[0].id_permission
             : null;
         if (newIdPermissionDropdownGarantias) {
             newPermissions.forEach((permission) => {
