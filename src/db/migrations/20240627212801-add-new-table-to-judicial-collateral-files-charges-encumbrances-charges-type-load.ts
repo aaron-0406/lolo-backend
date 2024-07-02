@@ -147,7 +147,7 @@ export async function up(queryInterface: QueryInterface) {
         field: "type_of_load_id",
         references: {
           model: JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE,
-          key: "id_judicial_collateral_charges_encumbrances_type_load",
+          key: "id_type_of_load",
         },
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
