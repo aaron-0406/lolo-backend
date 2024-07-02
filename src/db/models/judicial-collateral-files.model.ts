@@ -46,7 +46,7 @@ const JudicialCollateralFilesSchema: ModelAttributes<
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
-  customerHasBankIdCustomerHasBank: {
+  customerHasBankId: {
     type: DataTypes.STRING,
     allowNull: false,
     field: "customer_has_bank_id_customer_has_bank",

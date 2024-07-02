@@ -148,7 +148,6 @@ class JudicialBinnacleService {
       await deleteFile("../public/docs", file.filename);
     });
     const binnacle = await this.findByID(newJudicialBinnacle.dataValues.id);
-
     return binnacle;
   }
 

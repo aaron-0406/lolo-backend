@@ -1,9 +1,9 @@
 export type JudicialCollateralFilesType = {
-  id:string;
+  id:number;
   nameOriginAws:string;
   originalName:string;
-  judicialCollateralIdJudicialCollateral:string;
-  customerHasBankIdCustomerHasBank:string;
+  judicialCollateralIdJudicialCollateral:number;
+  customerHasBankId:number;
   createdAt:Date;
   updatedAt:Date;
   deletedAt:Date;

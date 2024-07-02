@@ -1,43 +1,37 @@
 import Joi from "joi";
 import { JudicialCollateralFilesType } from '../types/judicial-collateral-files.type';
 
-const id = Joi.string();
+const id = Joi.number();
 const nameOriginAws = Joi.string();
 const originalName = Joi.string();
-const judicialCollateralIdJudicialCollateral = Joi.string();
-const customerHasBankIdCustomerHasBank = Joi.string();
+const judicialCollateralIdJudicialCollateral = Joi.number();
+const customerHasBankId = Joi.number();
+const idCustomer = Joi.number();
 
-const createJudicialCollateralFilesSchema = Joi.object<
-  Omit<JudicialCollateralFilesType, "id" | "createdAt" | "updatedAt" | "deletedAt">,
-  true
->({
-  nameOriginAws: nameOriginAws.required(),
-  originalName: originalName.required(),
-  judicialCollateralIdJudicialCollateral: judicialCollateralIdJudicialCollateral.required(),
-  customerHasBankIdCustomerHasBank: customerHasBankIdCustomerHasBank.required(),
-});
 
-const updateJudicialCollateralFilesSchema = Joi.object<
-  Omit<JudicialCollateralFilesType, "id" | "createdAt" | "updatedAt" | "deletedAt">,
-  true
->({
-  nameOriginAws: nameOriginAws.required(),
-  originalName: originalName.required(),
-  judicialCollateralIdJudicialCollateral: judicialCollateralIdJudicialCollateral.required(),
-  customerHasBankIdCustomerHasBank: customerHasBankIdCustomerHasBank.required(),
-});
-
-const getJudicialCollateralFilesByIDSchema = Joi.object<{ id: string }, true>({
+const getJudicialCollateralFilesByIDSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
 });
 
-const getJudicialCollateralFilesByJudicialCollateralIdSchema = Joi.object<{ judicialCollateralId: string }, true>({
-  judicialCollateralId: judicialCollateralIdJudicialCollateral.required(),
+const getCollateralFileByIDSchema = Joi.object<{ id: number, chb: number, collateralId: number }, true>({
+  id: id.required(),
+  chb: customerHasBankId.required(),
+  collateralId: judicialCollateralIdJudicialCollateral.required(),
+});
+
+const getJudicialCollateralFilesByJudicialCollateralIdSchema = Joi.object<{ collateralId: number, chb: number }, true>({
+  collateralId: judicialCollateralIdJudicialCollateral.required(),
+  chb: customerHasBankId.required(),
+});
+
+const createJudicialCollateralFilesParamSchema = Joi.object<{ chb: number, collateralId: number }, true>({
+  chb: customerHasBankId.required(),
+  collateralId: judicialCollateralIdJudicialCollateral.required(),
 });
 
 export default {
-  createJudicialCollateralFilesSchema,
-  updateJudicialCollateralFilesSchema,
   getJudicialCollateralFilesByIDSchema,
   getJudicialCollateralFilesByJudicialCollateralIdSchema,
+  createJudicialCollateralFilesParamSchema,
+  getCollateralFileByIDSchema
 };
