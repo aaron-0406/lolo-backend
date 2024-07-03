@@ -106,23 +106,14 @@ class JudicialCollateralFilesService {
         );
 
         // UPDATE NAME IN DATABASE
-        await newJudicialCollateralFile.update({
+        const updatedJudicialCollateralFile = await newJudicialCollateralFile.update({
           nameOriginAws: file.filename,
-        });
-
-        const judicialCollateralFile = await models.JUDICIAL_COLLATERAL_FILES.findOne({
-          where: {
-            id: newJudicialCollateralFile.dataValues.id,
-          },
-          attributes: {
-            exclude: ["judicialCollateralId"],
-          },
         });
 
         // DELETE TEMP FILE
         await deleteFile("../public/docs", file.filename);
 
-        return judicialCollateralFile;
+        return updatedJudicialCollateralFile;
       }));
       return filesData;
     } catch (error) {
