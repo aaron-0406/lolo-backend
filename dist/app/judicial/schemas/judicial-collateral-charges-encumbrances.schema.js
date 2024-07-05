@@ -16,6 +16,7 @@ const registrationSeat = joi_1.default.string().messages({
     "string.empty": `El campo 'Asiento de registro' no puede estar vacío`,
 });
 const registrationDate = joi_1.default.date();
+const appraisalDate = joi_1.default.date();
 const range = joi_1.default.number();
 const chb = joi_1.default.number();
 const createJudicialCollateralChargesEncumbrancesSchema = joi_1.default.object({
@@ -27,6 +28,7 @@ const createJudicialCollateralChargesEncumbrancesSchema = joi_1.default.object({
     registrationSeat: registrationSeat.required(),
     registrationDate: registrationDate.required(),
     range: range.required(),
+    appraisalDate: appraisalDate.required(),
 });
 const upadteJudicialCollateralChargesEncumbrancesSchema = joi_1.default.object({
     typeOfLoadId: typeOfLoadId.required(),
@@ -37,6 +39,7 @@ const upadteJudicialCollateralChargesEncumbrancesSchema = joi_1.default.object({
     registrationSeat: registrationSeat.required(),
     registrationDate: registrationDate.required(),
     range: range.required(),
+    appraisalDate: appraisalDate.required(),
 });
 const getJudicialCollateralChargesEncumbrancesByIDSchema = joi_1.default.object({
     id: id.required(),

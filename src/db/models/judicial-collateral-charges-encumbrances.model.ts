@@ -80,6 +80,11 @@ const JudicialCollateralChargesEncumbrancesSchema: ModelAttributes<
     allowNull: false,
     field: "range",
   },
+  appraisalDate: {
+    allowNull: true,
+    field: "appraisal_date",
+    type: DataTypes.DATE,
+  },
   createdAt: {
     allowNull: false,
     field: "created_at",
