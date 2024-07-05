@@ -6,6 +6,7 @@ export type ScheduledNotificationType = {
   hourTimeToNotify: Date;
   customerHasBankId: number;
   logicKey: string;
+  daysToNotify: string;
   state: boolean;
   createdAt: Date;
   updatedAt: Date;
