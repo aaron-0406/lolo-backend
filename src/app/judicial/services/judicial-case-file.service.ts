@@ -15,6 +15,69 @@ class JudicialCaseFileService {
     return rta;
   }
 
+  async findAllActive (chb: number) {
+    const judicialCaseFiles = await models.JUDICIAL_CASE_FILE.findAll({
+      where: {
+        customerHasBankId: chb,
+        processStatus: "Activo",
+      },
+      include: [
+        {
+          model: models.JUDICIAL_BINNACLE,
+          as: "judicialBinnacle",
+        },
+        {
+          model: models.CLIENT,
+          as: "client",
+          include: [
+            {
+              model: models.CITY,
+              as: "city",
+            },
+          ],
+        },
+        {
+          model: models.CUSTOMER_USER,
+          as: "customerUser",
+        },
+        {
+          model: models.JUDICIAL_COURT,
+          as: "judicialCourt",
+        },
+        {
+          model: models.JUDICIAL_PROCEDURAL_WAY,
+          as: "judicialProceduralWay",
+        },
+        {
+          model: models.JUDICIAL_SUBJECT,
+          as: "judicialSubject",
+        },
+        {
+          model: models.JUDICIAL_SEDE,
+          as: "judicialSede",
+        },
+        {
+          model: models.CITY,
+          as: "city",
+        },
+        {
+          model: models.CUSTOMER_HAS_BANK,
+          as: "customerHasBank",
+          include: [
+            {
+              model: models.BANK,
+              as: "bank",
+            },
+          ],
+        },
+      ]
+    });
+
+    if (!judicialCaseFiles) throw boom.notFound("No se encontraron expedientes");
+
+    return judicialCaseFiles;
+  }
+
   async findAllByClient(clientId: string) {
     const judicialCaseFile = await models.JUDICIAL_CASE_FILE.findAll({
       where: {
@@ -121,13 +184,21 @@ class JudicialCaseFileService {
 
       const caseFiles = await models.JUDICIAL_CASE_FILE.findAll({
         include: [
-          { model: models.CUSTOMER_USER, as: "customerUser", attributes: ["id", "name"] },
+          {
+            model: models.CUSTOMER_USER,
+            as: "customerUser",
+            attributes: ["id", "name"],
+          },
           { model: models.JUDICIAL_COURT, as: "judicialCourt" },
-          { model: models.JUDICIAL_PROCEDURAL_WAY, as: "judicialProceduralWay" },
+          {
+            model: models.JUDICIAL_PROCEDURAL_WAY,
+            as: "judicialProceduralWay",
+          },
           { model: models.JUDICIAL_SUBJECT, as: "judicialSubject" },
           { model: models.JUDICIAL_SEDE, as: "judicialSede" },
           { model: models.CITY, as: "city" },
           { model: models.CLIENT, as: "client", attributes: ["id", "name"] },
+          { model: models.JUDICIAL_BINNACLE, as: "judicialBinnacle" },
         ],
         limit: limite,
         offset: (pagina - 1) * limite,
