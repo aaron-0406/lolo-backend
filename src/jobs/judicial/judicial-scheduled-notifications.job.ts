@@ -102,8 +102,6 @@ const updateCronJobs = async () => {
                       </ul>
                   </div>
                 `;
-
-                console.log(emailBody)
                   const message = {
                     from: config.AWS_EMAIL,
                     to: emails,
