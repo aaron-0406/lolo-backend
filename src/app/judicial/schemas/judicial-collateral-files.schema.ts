@@ -1,13 +1,8 @@
 import Joi from "joi";
-import { JudicialCollateralFilesType } from '../types/judicial-collateral-files.type';
 
 const id = Joi.number();
-const nameOriginAws = Joi.string();
-const originalName = Joi.string();
 const judicialCollateralIdJudicialCollateral = Joi.number();
 const customerHasBankId = Joi.number();
-const idCustomer = Joi.number();
-
 
 const getJudicialCollateralFilesByIDSchema = Joi.object<{ id: number }, true>({
   id: id.required(),

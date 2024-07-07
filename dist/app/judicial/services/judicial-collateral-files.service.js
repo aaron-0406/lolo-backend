@@ -29,7 +29,7 @@ class JudicialCollateralFilesService {
                 },
             });
             if (!judicialCollateralFile) {
-                throw boom_1.default.notFound("Collateral file no encontrado");
+                throw boom_1.default.notFound("Archivo de garantía no encontrado");
             }
             return judicialCollateralFile;
         });
@@ -42,8 +42,8 @@ class JudicialCollateralFilesService {
                         id,
                     },
                     attributes: {
-                        exclude: ["judicialCollateralId"]
-                    }
+                        exclude: ["judicialCollateralId"],
+                    },
                 });
                 if (!file) {
                     throw boom_1.default.notFound("Archivo no encontrado");
@@ -68,8 +68,8 @@ class JudicialCollateralFilesService {
                         customerHasBankId: chb,
                     },
                     attributes: {
-                        exclude: ["judicialCollateralId"]
-                    }
+                        exclude: ["judicialCollateralId"],
+                    },
                 });
                 if (!judicialCollateralFile) {
                     throw boom_1.default.notFound("Collateral file no encontrado");
@@ -122,7 +122,7 @@ class JudicialCollateralFilesService {
                     },
                     attributes: {
                         exclude: ["judicialCollateralId"],
-                    }
+                    },
                 });
                 if (!judicialCollateralFile)
                     throw boom_1.default.notFound("Archivo no encontrado");

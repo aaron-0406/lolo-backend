@@ -1,6 +1,10 @@
 import path from "path";
 import config from "../../../config/config";
-import { deleteFileBucket, readFile, uploadFile } from "../../../libs/aws_bucket";
+import {
+  deleteFileBucket,
+  readFile,
+  uploadFile,
+} from "../../../libs/aws_bucket";
 import { deleteFile, isFileStoredIn, renameFile } from "../../../libs/helpers";
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
@@ -12,32 +16,27 @@ class JudicialCollateralFilesService {
 
   async findByID(id: string) {
     const judicialCollateralFile =
-
       await models.JUDICIAL_COLLATERAL_FILE.findOne({
-          where: {
-            id,
-          },
-        });
+        where: {
+          id,
+        },
+      });
 
     if (!judicialCollateralFile) {
-      throw boom.notFound("Collateral file no encontrado");
+      throw boom.notFound("Archivo de garantía no encontrado");
     }
     return judicialCollateralFile;
   }
 
-  async findOne(
-    chb: number,
-    collateralId: number,
-    id: number
-  ){
-    try{
+  async findOne(chb: number, collateralId: number, id: number) {
+    try {
       const file = await models.JUDICIAL_COLLATERAL_FILES.findOne({
         where: {
           id,
         },
         attributes: {
-          exclude: ["judicialCollateralId"]
-        }
+          exclude: ["judicialCollateralId"],
+        },
       });
 
       if (!file) {
@@ -54,67 +53,67 @@ class JudicialCollateralFilesService {
         );
       }
       return file;
-
-    } catch(error){
+    } catch (error) {
       console.log(error);
     }
   }
 
   async findAllByCollateralId(collateralId: number, chb: number) {
-    try{
-      const judicialCollateralFile = await models.JUDICIAL_COLLATERAL_FILES.findAll({
-        where: {
-          judicialCollateralIdJudicialCollateral: collateralId,
-          customerHasBankId: chb,
-        },
-        attributes:{
-          exclude: ["judicialCollateralId"]
-        }
-      });
+    try {
+      const judicialCollateralFile =
+        await models.JUDICIAL_COLLATERAL_FILES.findAll({
+          where: {
+            judicialCollateralIdJudicialCollateral: collateralId,
+            customerHasBankId: chb,
+          },
+          attributes: {
+            exclude: ["judicialCollateralId"],
+          },
+        });
       if (!judicialCollateralFile) {
         throw boom.notFound("Collateral file no encontrado");
       }
       return judicialCollateralFile;
-    } catch(error){
+    } catch (error) {
       console.log(error);
     }
   }
 
-  async create(
-    files: Array<any>,
-    chb: number,
-    collateralId: number,
-  ) {
+  async create(files: Array<any>, chb: number, collateralId: number) {
     try {
-      const filesData = await Promise.all(files.map(async (file) => {
-        const newJudicialCollateralFile = await models.JUDICIAL_COLLATERAL_FILES.create({
-          originalName: file.originalname,
-          nameOriginAws: "",
-          judicialCollateralIdJudicialCollateral: collateralId,
-          customerHasBankId: chb,
-        });
-        const date = new Date();
-        const month = date.getMonth() + 1;
-        const year = date.getFullYear();
-        const nameOriginAws = `${collateralId}-${month}-${year}-${file.originalname}`;
-        await renameFile(`../public/docs/`, file.filename, nameOriginAws);
-        file.filename = nameOriginAws;
+      const filesData = await Promise.all(
+        files.map(async (file) => {
+          const newJudicialCollateralFile =
+            await models.JUDICIAL_COLLATERAL_FILES.create({
+              originalName: file.originalname,
+              nameOriginAws: "",
+              judicialCollateralIdJudicialCollateral: collateralId,
+              customerHasBankId: chb,
+            });
+          const date = new Date();
+          const month = date.getMonth() + 1;
+          const year = date.getFullYear();
+          const nameOriginAws = `${collateralId}-${month}-${year}-${file.originalname}`;
+          await renameFile(`../public/docs/`, file.filename, nameOriginAws);
+          file.filename = nameOriginAws;
 
-        await uploadFile(
-          file,
-          `${config.AWS_CHB_PATH}${chb}/collaterals/${collateralId}`
-        );
+          await uploadFile(
+            file,
+            `${config.AWS_CHB_PATH}${chb}/collaterals/${collateralId}`
+          );
 
-        // UPDATE NAME IN DATABASE
-        const updatedJudicialCollateralFile = await newJudicialCollateralFile.update({
-          nameOriginAws: file.filename,
-        });
+          // UPDATE NAME IN DATABASE
+          const updatedJudicialCollateralFile =
+            await newJudicialCollateralFile.update({
+              nameOriginAws: file.filename,
+            });
 
-        // DELETE TEMP FILE
-        await deleteFile("../public/docs", file.filename);
+          // DELETE TEMP FILE
+          await deleteFile("../public/docs", file.filename);
 
-        return updatedJudicialCollateralFile;
-      }));
+          return updatedJudicialCollateralFile;
+        })
+      );
       return filesData;
     } catch (error) {
       console.log(error);
@@ -123,14 +122,15 @@ class JudicialCollateralFilesService {
 
   async delete(id: string, chb: number, collateralId: number) {
     try {
-      const judicialCollateralFile = await models.JUDICIAL_COLLATERAL_FILES.findOne({
-        where: {
-          id,
-        },
-        attributes: {
-          exclude: ["judicialCollateralId"],
-        }
-      });
+      const judicialCollateralFile =
+        await models.JUDICIAL_COLLATERAL_FILES.findOne({
+          where: {
+            id,
+          },
+          attributes: {
+            exclude: ["judicialCollateralId"],
+          },
+        });
       if (!judicialCollateralFile) throw boom.notFound("Archivo no encontrado");
       await judicialCollateralFile.destroy();
       await deleteFileBucket(
