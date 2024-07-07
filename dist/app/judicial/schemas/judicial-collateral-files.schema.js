@@ -4,32 +4,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const joi_1 = __importDefault(require("joi"));
-const id = joi_1.default.string();
-const nameOriginAws = joi_1.default.string();
-const originalName = joi_1.default.string();
-const judicialCollateralIdJudicialCollateral = joi_1.default.string();
-const customerHasBankIdCustomerHasBank = joi_1.default.string();
-const createJudicialCollateralFilesSchema = joi_1.default.object({
-    nameOriginAws: nameOriginAws.required(),
-    originalName: originalName.required(),
-    judicialCollateralIdJudicialCollateral: judicialCollateralIdJudicialCollateral.required(),
-    customerHasBankIdCustomerHasBank: customerHasBankIdCustomerHasBank.required(),
-});
-const updateJudicialCollateralFilesSchema = joi_1.default.object({
-    nameOriginAws: nameOriginAws.required(),
-    originalName: originalName.required(),
-    judicialCollateralIdJudicialCollateral: judicialCollateralIdJudicialCollateral.required(),
-    customerHasBankIdCustomerHasBank: customerHasBankIdCustomerHasBank.required(),
-});
+const id = joi_1.default.number();
+const judicialCollateralIdJudicialCollateral = joi_1.default.number();
+const customerHasBankId = joi_1.default.number();
 const getJudicialCollateralFilesByIDSchema = joi_1.default.object({
     id: id.required(),
 });
+const getCollateralFileByIDSchema = joi_1.default.object({
+    id: id.required(),
+    chb: customerHasBankId.required(),
+    collateralId: judicialCollateralIdJudicialCollateral.required(),
+});
 const getJudicialCollateralFilesByJudicialCollateralIdSchema = joi_1.default.object({
-    judicialCollateralId: judicialCollateralIdJudicialCollateral.required(),
+    collateralId: judicialCollateralIdJudicialCollateral.required(),
+    chb: customerHasBankId.required(),
+});
+const createJudicialCollateralFilesParamSchema = joi_1.default.object({
+    chb: customerHasBankId.required(),
+    collateralId: judicialCollateralIdJudicialCollateral.required(),
 });
 exports.default = {
-    createJudicialCollateralFilesSchema,
-    updateJudicialCollateralFilesSchema,
     getJudicialCollateralFilesByIDSchema,
     getJudicialCollateralFilesByJudicialCollateralIdSchema,
+    createJudicialCollateralFilesParamSchema,
+    getCollateralFileByIDSchema
 };

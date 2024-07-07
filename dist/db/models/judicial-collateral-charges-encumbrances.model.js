@@ -69,6 +69,11 @@ const JudicialCollateralChargesEncumbrancesSchema = {
         allowNull: false,
         field: "range",
     },
+    appraisalDate: {
+        allowNull: true,
+        field: "appraisal_date",
+        type: sequelize_1.DataTypes.DATE,
+    },
     createdAt: {
         allowNull: false,
         field: "created_at",

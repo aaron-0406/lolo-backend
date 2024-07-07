@@ -1,58 +1,61 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import validatorHandler from "../../middlewares/validator.handler";
 import { checkPermissions, JWTAuth } from "../../middlewares/auth.handler";
 import judicialCollateralFilesSchema from "../../app/judicial/schemas/judicial-collateral-files.schema";
 import {
-  findAllCollateralFilesController,
-  findCollateralFileByIDController,
+  getAllCollateralFilesController,
+  getCollateralFileByIDController,
   createCollateralFileController,
-  deletedCollateralFileController,
-  updateCollateralFileController,
+  deletedCollateralFileController
 } from "../../controllers/judicial/judicial-collateral-files.controller";
+import { archivosCollateral } from "../../middlewares/multer.handler";
+import boom from '@hapi/boom';
 
 const {
   getJudicialCollateralFilesByIDSchema,
   getJudicialCollateralFilesByJudicialCollateralIdSchema,
-  createJudicialCollateralFilesSchema,
-  updateJudicialCollateralFilesSchema,
+  createJudicialCollateralFilesParamSchema,
+  getCollateralFileByIDSchema
 } = judicialCollateralFilesSchema;
+
+const multerFile = (req: Request, res: Response, next: NextFunction) => {
+  archivosCollateral.array("file")(req, res, (err) => {
+    if (err) return next(boom.badRequest(err));
+    return next();
+  });
+};
 
 const router = express.Router();
 
 router.get(
-  "/chb/:chb",
+  "/:chb/:collateralId",
   JWTAuth,
-  // validatorHandler(getJudicialCollateralFilesByCHBSchema, "params"),
-  findAllCollateralFilesController
+  validatorHandler(getJudicialCollateralFilesByJudicialCollateralIdSchema, "params"),
+  getAllCollateralFilesController
 );
 
 router.get(
-  "/:id",
+  "/:chb/:collateralId/:id",
   JWTAuth,
-  validatorHandler(getJudicialCollateralFilesByIDSchema, "params"),
-  findCollateralFileByIDController
+  checkPermissions("P13-01-06-01-03-01"),
+  validatorHandler(getCollateralFileByIDSchema, "params"),
+  getCollateralFileByIDController
 );
 
 router.post(
-  "/:JudicialCaseFileId",
+  "/:chb/:collateralId",
   JWTAuth,
-  checkPermissions("P13-01-06-02"),
-  // validatorHandler(getJudicialCollateralFilesByJudicialCaseFileIdSchema, "params"),
-  validatorHandler(createJudicialCollateralFilesSchema, "body"),
+  checkPermissions("P13-01-06-01-03-02"),
+  validatorHandler(createJudicialCollateralFilesParamSchema, "params"),
+  multerFile,
   createCollateralFileController
 );
 
-router.patch(
-  "/:id",
-  JWTAuth,
-  validatorHandler(updateJudicialCollateralFilesSchema, "body"),
-  updateCollateralFileController
-);
-
 router.delete(
-  "/:id",
+  "/:chb/:collateralId/:id",
   JWTAuth,
-  validatorHandler(getJudicialCollateralFilesByIDSchema, "params"),
+  checkPermissions("P13-01-06-01-03-04"),
+  validatorHandler(getCollateralFileByIDSchema, "params"),
   deletedCollateralFileController
 );
 

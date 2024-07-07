@@ -38,7 +38,7 @@ const JudicialCollateralFilesSchema = {
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
     },
-    customerHasBankIdCustomerHasBank: {
+    customerHasBankId: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
         field: "customer_has_bank_id_customer_has_bank",

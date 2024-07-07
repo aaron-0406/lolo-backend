@@ -7,27 +7,38 @@ const service = new JudicialCollateralFilesService();
 const userLogService = new UserLogService();
 const { JUDICIAL_COLLATERAL_FILES_TABLE } = judicialCollateralFilesModel;
 
-export const findAllCollateralFilesController = async (
+export const getAllCollateralFilesController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const collateralFiles = await service.findAll();
+    const { collateralId, chb } = req.params;
+    const collateralFiles = await service.findAllByCollateralId(Number(collateralId), Number(chb));
     res.json(collateralFiles);
   } catch (error) {
     next(error);
   }
 };
 
-export const findCollateralFileByIDController = async (
+export const getCollateralFileByIDController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
-    const collateralFile = await service.findByID(id);
+    const { id, chb, collateralId } = req.params;
+    const collateralFile = await service.findOne(Number(chb), Number(collateralId), Number(id));
+
+    await userLogService.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P13-01-06-01-03-01",
+      entity: JUDICIAL_COLLATERAL_FILES_TABLE,
+      entityId: Number(id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+    })
+
     res.json(collateralFile);
   } catch (error) {
     next(error);
@@ -40,14 +51,20 @@ export const createCollateralFileController = async (
   next: NextFunction
 ) => {
   try {
-    const body = req.body;
-    const newCollateralFile = await service.create(body);
+    const { chb, collateralId } = req.params;
+    const { files } = req;
+
+    const newCollateralFile = await service.create(
+      files as [],
+      Number(chb),
+      Number(collateralId),
+    );
 
     await userLogService.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P13-01-06-02",
+      codeAction: "P13-01-06-01-03-02",
       entity: JUDICIAL_COLLATERAL_FILES_TABLE,
-      entityId: Number(newCollateralFile.dataValues.id),
+      entityId: Number(collateralId),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
@@ -57,30 +74,6 @@ export const createCollateralFileController = async (
   }
 };
 
-export const updateCollateralFileController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id } = req.params;
-    const body = req.body;
-    const collateralFile = await service.update(id, body);
-
-    await userLogService.create({
-      customerUserId: Number(req.user?.id),
-      codeAction: "P13-01-06-03",
-      entity: JUDICIAL_COLLATERAL_FILES_TABLE,
-      entityId: Number(collateralFile.dataValues.id),
-      ip: req.clientIp ?? "",
-      customerId: Number(req.user?.customerId),
-    });
-
-    res.json(collateralFile);
-  } catch (error) {
-    next(error);
-  }
-};
 
 export const deletedCollateralFileController = async (
   req: Request,
@@ -88,14 +81,14 @@ export const deletedCollateralFileController = async (
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
-    const collateralFile = await service.delete(id);
+    const { id, chb, collateralId } = req.params;
+    const collateralFile = await service.delete(id, Number(chb), Number(collateralId));
 
     await userLogService.create({
       customerUserId: Number(req.user?.id),
-      codeAction: "P13-01-06-04",
+      codeAction: "P13-01-06-01-03-04",
       entity: JUDICIAL_COLLATERAL_FILES_TABLE,
-      entityId: Number(collateralFile.id),
+      entityId: Number(id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
