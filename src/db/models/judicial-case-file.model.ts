@@ -212,11 +212,11 @@ const JudicialCaseFileSchema: ModelAttributes<
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
-  qrCode:{
+  qrCode: {
     allowNull: true,
     field: "qr_code",
     type: DataTypes.TEXT("long"),
-  }
+  },
 };
 
 class JudicialCaseFile extends Model {
@@ -235,6 +235,10 @@ class JudicialCaseFile extends Model {
 
     this.hasMany(models.PRODUCT, {
       as: "product",
+      foreignKey: "judicialCaseFileId",
+    });
+    this.hasMany(models.JUDICIAL_CASE_FILE_HAS_COLLATERAL, {
+      as: "judicialCaseFileHasCollateral",
       foreignKey: "judicialCaseFileId",
     });
 

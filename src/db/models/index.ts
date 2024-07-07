@@ -48,6 +48,18 @@ import judicialProcessReasonModel from "./judicial-process-reason.model";
 import judicialSedeModel from "./judicial-sede.model";
 import scheduledNotificationsModel from "./settings/scheduled-notifications.model";
 import scheduledNotificationsUsersModel from "./settings/scheduled-notifications-users.model";
+import departmentModel from "./settings/department.model";
+import provinceModel from "./settings/province.model";
+import districtModel from "./settings/district.model";
+import judicialNotaryModel from "./judicial-notary.model";
+import judicialRegisterOfficeModel from "./judicial-register-office.model";
+import judicialRegistrationAreaModel from "./judicial-registration-area.model";
+import judicialUseOfPropertyModel from "./judicial-use-of-property.model";
+import judicialCollateralModel from "./judicial-collateral.model";
+import judicialCaseFileHasCollateralModel from "./judicial-case-file-has-collateral.model";
+import judicialCollateralChargesEncumbrancesModel from "./judicial-collateral-charges-encumbrances.model";
+import judicialCollateralChargesEncumbrancesTypeLoadModel from "./judicial-collateral-charges-encumbrances-type-load.model";
+import judicialCollateralFilesModel from "./judicial-collateral-files.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
@@ -105,6 +117,30 @@ const { ScheduledNotifications, ScheduledNotificationsSchema } =
   scheduledNotificationsModel;
 const { ScheduledNotificationsUsers, ScheduledNotificationsUsersSchema } =
   scheduledNotificationsUsersModel;
+const { Department, DepartmentSchema } = departmentModel;
+const { Province, ProvinceSchema } = provinceModel;
+const { District, DistrictSchema } = districtModel;
+const { JudicialNotary, JudicialNotarySchema } = judicialNotaryModel;
+const { JudicialRegisterOffice, JudicialRegisterOfficeSchema } =
+  judicialRegisterOfficeModel;
+const { JudicialRegistrationArea, JudicialRegistrationAreaSchema } =
+  judicialRegistrationAreaModel;
+const { JudicialUseOfProperty, JudicialUseOfPropertySchema } =
+  judicialUseOfPropertyModel;
+const { JudicialCollateral, JudicialCollateralSchema } =
+  judicialCollateralModel;
+const { JudicialCaseFileHasCollateral, JudicialCaseFileHasCollateralSchema } =
+  judicialCaseFileHasCollateralModel;
+const {
+  JudicialCollateralChargesEncumbrances,
+  JudicialCollateralChargesEncumbrancesSchema,
+} = judicialCollateralChargesEncumbrancesModel;
+const {
+  JudicialCollateralChargesEncumbrancesTypeLoad,
+  JudicialCollateralChargesEncumbrancesTypeLoadSchema,
+} = judicialCollateralChargesEncumbrancesTypeLoadModel;
+const { JudicialCollateralFiles, JudicialCollateralFilesSchema } =
+  judicialCollateralFilesModel;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -209,6 +245,47 @@ export const setupModels = (sequelize: Sequelize) => {
     ScheduledNotificationsUsers.config(sequelize)
   );
 
+  Department.init(DepartmentSchema, Department.config(sequelize));
+  Province.init(ProvinceSchema, Province.config(sequelize));
+  District.init(DistrictSchema, District.config(sequelize));
+
+  JudicialNotary.init(JudicialNotarySchema, JudicialNotary.config(sequelize));
+  JudicialRegisterOffice.init(
+    JudicialRegisterOfficeSchema,
+    JudicialRegisterOffice.config(sequelize)
+  );
+  JudicialRegistrationArea.init(
+    JudicialRegistrationAreaSchema,
+    JudicialRegistrationArea.config(sequelize)
+  );
+  JudicialUseOfProperty.init(
+    JudicialUseOfPropertySchema,
+    JudicialUseOfProperty.config(sequelize)
+  );
+  JudicialCollateral.init(
+    JudicialCollateralSchema,
+    JudicialCollateral.config(sequelize)
+  );
+  JudicialCaseFileHasCollateral.init(
+    JudicialCaseFileHasCollateralSchema,
+    JudicialCaseFileHasCollateral.config(sequelize)
+  );
+
+  JudicialCollateralChargesEncumbrances.init(
+    JudicialCollateralChargesEncumbrancesSchema,
+    JudicialCollateralChargesEncumbrances.config(sequelize)
+  );
+
+  JudicialCollateralChargesEncumbrancesTypeLoad.init(
+    JudicialCollateralChargesEncumbrancesTypeLoadSchema,
+    JudicialCollateralChargesEncumbrancesTypeLoad.config(sequelize)
+  );
+
+  JudicialCollateralFiles.init(
+    JudicialCollateralFilesSchema,
+    JudicialCollateralFiles.config(sequelize)
+  );
+
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
   Bank.associate(sequelize.models);
@@ -256,4 +333,16 @@ export const setupModels = (sequelize: Sequelize) => {
   JudicialSede.associate(sequelize.models);
   ScheduledNotifications.associate(sequelize.models);
   ScheduledNotificationsUsers.associate(sequelize.models);
+  Department.associate(sequelize.models);
+  Province.associate(sequelize.models);
+  District.associate(sequelize.models);
+  JudicialNotary.associate(sequelize.models);
+  JudicialRegisterOffice.associate(sequelize.models);
+  JudicialRegistrationArea.associate(sequelize.models);
+  JudicialUseOfProperty.associate(sequelize.models);
+  JudicialCollateral.associate(sequelize.models);
+  JudicialCaseFileHasCollateral.associate(sequelize.models);
+  JudicialCollateralChargesEncumbrances.associate(sequelize.models);
+  JudicialCollateralChargesEncumbrancesTypeLoad.associate(sequelize.models);
+  JudicialCollateralFiles.associate(sequelize.models);
 };
