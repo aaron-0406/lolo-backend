@@ -106,7 +106,9 @@ class JudicialCollateralChargesEncumbrances extends sequelize_1.Model {
             sequelize,
             tableName: JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TABLE,
             modelName: JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TABLE,
-            timestamps: false,
+            timestamps: true,
+            paranoid: true,
+            deletedAt: "deleted_at",
         };
     }
 }
