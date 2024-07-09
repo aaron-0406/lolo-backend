@@ -208,7 +208,7 @@ const JudicialCaseFileSchema = {
         allowNull: true,
         field: "qr_code",
         type: sequelize_1.DataTypes.TEXT("long"),
-    }
+    },
 };
 class JudicialCaseFile extends sequelize_1.Model {
     static associate(models) {
@@ -225,6 +225,10 @@ class JudicialCaseFile extends sequelize_1.Model {
         this.belongsTo(models.CITY, { as: "city" });
         this.hasMany(models.PRODUCT, {
             as: "product",
+            foreignKey: "judicialCaseFileId",
+        });
+        this.hasMany(models.JUDICIAL_CASE_FILE_HAS_COLLATERAL, {
+            as: "judicialCaseFileHasCollateral",
             foreignKey: "judicialCaseFileId",
         });
         this.belongsTo(models.BANK, { as: "bank" });
