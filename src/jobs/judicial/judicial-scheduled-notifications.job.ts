@@ -93,6 +93,9 @@ const updateCronJobs = async () => {
               );
 
               const emailBody = filteredRta
+                .filter((rta: any) => {
+                  return rta["judicialFileCase.processStatus"] === "Activo";
+                })
                 .map((judicialBinnacle: any) => {
                   return `
                   <div class="cliente">

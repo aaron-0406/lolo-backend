@@ -94,6 +94,9 @@ const updateCronJobs = () => __awaiter(void 0, void 0, void 0, function* () {
                             return ((_d = (_c = (_b = (_a = scheduleNotificationUser === null || scheduleNotificationUser === void 0 ? void 0 : scheduleNotificationUser.dataValues) === null || _a === void 0 ? void 0 : _a.customerUser) === null || _b === void 0 ? void 0 : _b.dataValues) === null || _c === void 0 ? void 0 : _c.email) !== null && _d !== void 0 ? _d : "");
                         });
                         const emailBody = filteredRta
+                            .filter((rta) => {
+                            return rta["judicialFileCase.processStatus"] === "Activo";
+                        })
                             .map((judicialBinnacle) => {
                             return `
                   <div class="cliente">
