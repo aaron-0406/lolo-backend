@@ -25,6 +25,69 @@ class JudicialCaseFileService {
             return rta;
         });
     }
+    findAllActive(chb) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const judicialCaseFiles = yield models.JUDICIAL_CASE_FILE.findAll({
+                where: {
+                    customerHasBankId: chb,
+                    processStatus: "Activo",
+                },
+                include: [
+                    {
+                        model: models.JUDICIAL_BINNACLE,
+                        as: "judicialBinnacle",
+                    },
+                    {
+                        model: models.CLIENT,
+                        as: "client",
+                        include: [
+                            {
+                                model: models.CITY,
+                                as: "city",
+                            },
+                        ],
+                    },
+                    {
+                        model: models.CUSTOMER_USER,
+                        as: "customerUser",
+                    },
+                    {
+                        model: models.JUDICIAL_COURT,
+                        as: "judicialCourt",
+                    },
+                    {
+                        model: models.JUDICIAL_PROCEDURAL_WAY,
+                        as: "judicialProceduralWay",
+                    },
+                    {
+                        model: models.JUDICIAL_SUBJECT,
+                        as: "judicialSubject",
+                    },
+                    {
+                        model: models.JUDICIAL_SEDE,
+                        as: "judicialSede",
+                    },
+                    {
+                        model: models.CITY,
+                        as: "city",
+                    },
+                    {
+                        model: models.CUSTOMER_HAS_BANK,
+                        as: "customerHasBank",
+                        include: [
+                            {
+                                model: models.BANK,
+                                as: "bank",
+                            },
+                        ],
+                    },
+                ]
+            });
+            if (!judicialCaseFiles)
+                throw boom_1.default.notFound("No se encontraron expedientes");
+            return judicialCaseFiles;
+        });
+    }
     findAllByClient(clientId) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialCaseFile = yield models.JUDICIAL_CASE_FILE.findAll({
@@ -118,9 +181,16 @@ class JudicialCaseFileService {
                 });
                 const caseFiles = yield models.JUDICIAL_CASE_FILE.findAll({
                     include: [
-                        { model: models.CUSTOMER_USER, as: "customerUser", attributes: ["id", "name"] },
+                        {
+                            model: models.CUSTOMER_USER,
+                            as: "customerUser",
+                            attributes: ["id", "name"],
+                        },
                         { model: models.JUDICIAL_COURT, as: "judicialCourt" },
-                        { model: models.JUDICIAL_PROCEDURAL_WAY, as: "judicialProceduralWay" },
+                        {
+                            model: models.JUDICIAL_PROCEDURAL_WAY,
+                            as: "judicialProceduralWay",
+                        },
                         { model: models.JUDICIAL_SUBJECT, as: "judicialSubject" },
                         { model: models.JUDICIAL_SEDE, as: "judicialSede" },
                         { model: models.CITY, as: "city" },

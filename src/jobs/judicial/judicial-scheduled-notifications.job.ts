@@ -2,19 +2,24 @@ import moment from "moment";
 import cron from "node-cron";
 import * as nodemailer from "nodemailer";
 import ScheduledNotificationsService from "../../app/settings/services/scheduled-notifications.service";
-import JudicialBinnacleService from "../../app/judicial/services/judicial-binnacle.service";
 import config from "../../config/config";
-import JudicialCaseFileService from "../../app/judicial/services/judicial-case-file.service";
-import boom from '@hapi/boom';
+import JudicialBinnacleService from "../../app/judicial/services/judicial-binnacle.service";
 
 let scheduledJobs: { [key: number]: cron.ScheduledTask } = {};
-const daysOfTheWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const daysOfTheWeek = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 
 const updateCronJobs = async () => {
   try {
     const scheduledNotificationsService = new ScheduledNotificationsService();
     const judicialBinnacleService = new JudicialBinnacleService();
-    const judicialCaseFiles = new JudicialCaseFileService();
 
     for (const key in scheduledJobs) {
       scheduledJobs[key].stop();
@@ -34,7 +39,7 @@ const updateCronJobs = async () => {
         logicKey,
         state,
         scheduledNotificationsUsers,
-        daysToNotify
+        daysToNotify,
       } = schedule.dataValues;
 
       const now = new Date();
@@ -44,115 +49,130 @@ const updateCronJobs = async () => {
       const currentDay = daysOfTheWeek[now.getDay()];
 
       const cronTime = `${minute} ${hour} * * *`;
-      const parseDaysToNotify = JSON.parse(daysToNotify)
+      const parseDaysToNotify = JSON.parse(daysToNotify);
 
       scheduledJobs[id] = cron.schedule(
         cronTime,
         async () => {
-          if (logicKey === "key-job-impulse-pending-processes" && state && parseDaysToNotify.includes(currentDay)) {
+          if (
+            logicKey === "key-job-impulse-pending-processes" &&
+            state &&
+            parseDaysToNotify.includes(currentDay)
+          ) {
+            const judicialBinnacles =
+              await judicialBinnacleService.findAllBinnaclesByCHBJob(
+                customerHasBankId
+              );
 
-            const fileCases = await judicialCaseFiles.findAllActive(customerHasBankId);
-            if (!fileCases) throw boom.notFound("No se encontraron expedientes");
+            const filteredRta = judicialBinnacles.filter(
+              (judicialBinnacle: any) => {
+                const date = moment.utc(judicialBinnacle.date);
+                const diffDays = moment.utc().diff(date, "days");
+                return diffDays >= frequencyToNotify;
+              }
+            );
 
-            fileCases.forEach((fileCase) => {
-              const hasBinacles = fileCase.dataValues.judicialBinnacle.length;
-              if (!hasBinacles) return
-              const lastBinnacle = fileCase.dataValues.judicialBinnacle[hasBinacles - 1];
-              const date = moment.utc(lastBinnacle.date);
-              const diffDays = moment.utc().diff(date, "days");
+            if (filteredRta.length) {
+              const transport = nodemailer.createTransport({
+                host: config.AWS_EMAIL_HOST,
+                port: 587,
+                secure: false,
+                auth: {
+                  user: config.AWS_EMAIL_USER,
+                  pass: config.AWS_EMAIL_PASSWORD,
+                },
+              });
 
-              if (diffDays >= frequencyToNotify) {
-                const transport = nodemailer.createTransport({
-                  host: config.AWS_EMAIL_HOST,
-                  port: 587,
-                  secure: false,
-                  auth: {
-                    user: config.AWS_EMAIL_USER,
-                    pass: config.AWS_EMAIL_PASSWORD,
-                  },
-                });
+              const emails = scheduledNotificationsUsers.map(
+                (scheduleNotificationUser: any) => {
+                  return (
+                    scheduleNotificationUser?.dataValues?.customerUser
+                      ?.dataValues?.email ?? ""
+                  );
+                }
+              );
 
-                const emails = scheduledNotificationsUsers.map(
-                  (scheduleNotificationUser: any) => {
-                    return (
-                      scheduleNotificationUser?.dataValues?.customerUser
-                        ?.dataValues?.email ?? ""
-                    );
-                  }
-                );
-
-                const emailBody = `
+              const emailBody = filteredRta
+                .map((judicialBinnacle: any) => {
+                  return `
                   <div class="cliente">
-                      <h2>Cliente: ${fileCase.dataValues.client.name} (${
-                  fileCase.dataValues.customerHasBank.bank.name
-                }) - (${fileCase.dataValues.client.city.name})</h2>
+                      <h2>Cliente: ${
+                        judicialBinnacle["judicialFileCase.client.name"]
+                      } (${judicialBinnacle["customerHasBank.bank.name"]}) - (${
+                    judicialBinnacle["judicialFileCase.client.city.name"]
+                  })</h2>
                       <p class="expediente"><strong>Exp.:</strong> ${
-                        fileCase.dataValues.numberCaseFile
+                        judicialBinnacle["judicialFileCase.numberCaseFile"]
                       }</p>
                       <p class="especialista"><strong>Esp.:</strong> ${
-                        fileCase.dataValues.secretary
-                      } - ${fileCase.dataValues.judicialCourt.court}</p>
+                        judicialBinnacle["judicialFileCase.secretary"]
+                      } - ${
+                    judicialBinnacle["judicialFileCase.judicialCourt.court"]
+                  }</p>
                       <p><strong>Escritos SIN PROVEÍDO a la fecha:</strong></p>
                       <ul class="detalles">
                           <li>${moment
-                            .utc(lastBinnacle.date)
+                            .utc(judicialBinnacle.date)
                             .format("DD-MM-YYYY")} - ${
-                  lastBinnacle.lastPerformed
-                }</li>
+                    judicialBinnacle.lastPerformed
+                  }</li>
                       </ul>
                   </div>
-                `;
-                  const message = {
-                    from: config.AWS_EMAIL,
-                    to: emails,
-                    subject: "PROCESOS PENDIENTE DE IMPULSO",
-                    html: `
-                        <!DOCTYPE html>
-                        <html lang="es">
-                        <head>
-                            <meta charset="UTF-8">
-                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                            <title>Procesos Pendientes</title>
-                            <style>
-                                body {
-                                    font-family: Arial, sans-serif;
-                                    margin: 20px;
-                                }
-                                h1 {
-                                    text-align: center;
-                                }
-                                .cliente {
-                                    margin-bottom: 20px;
-                                }
-                                .cliente h2 {
-                                    color: #2E86C1;
-                                }
-                                .cliente p {
-                                    margin: 5px 0;
-                                }
-                                .expediente, .especialista, .detalles {
-                                    margin-left: 20px;
-                                }
-                                .detalles {
-                                    list-style-type: disc;
-                                }
-                            </style>
-                        </head>
-                        <body>
-                          <h1>Procesos Pendientes de Impulso</h1>
-                          ${emailBody}
-                          <p>Saludos.</p>
-                        </body>
-                        </html>
-                        `,
-                  };
-                  transport.sendMail(message, (error, info) => {
-                        //TODO: We need to record this info in a table to show to the user if the email was send or no.
-                        if (error) console.log(error);
-                        if (info) console.log(info);
-                  });
-                }
-            })
+              `;
+                })
+                .join("");
+
+              const message = {
+                from: config.AWS_EMAIL,
+                to: emails,
+                subject: "PROCESOS PENDIENTE DE IMPULSO",
+                html: `
+                    <!DOCTYPE html>
+                    <html lang="es">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Procesos Pendientes</title>
+                        <style>
+                            body {
+                                font-family: Arial, sans-serif;
+                                margin: 20px;
+                            }
+                            h1 {
+                                text-align: center;
+                            }
+                            .cliente {
+                                margin-bottom: 20px;
+                            }
+                            .cliente h2 {
+                                color: #2E86C1;
+                            }
+                            .cliente p {
+                                margin: 5px 0;
+                            }
+                            .expediente, .especialista, .detalles {
+                                margin-left: 20px;
+                            }
+                            .detalles {
+                                list-style-type: disc;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                      <h1>Procesos Pendientes de Impulso</h1>
+                      ${emailBody}
+                      <p>Saludos.</p>
+                    </body>
+                    </html>
+                    `,
+              };
+
+              transport.sendMail(message, (error, info) => {
+                //TODO: We need to record this info in a table to show to the user if the email was send or no.
+                if (error) console.log(error);
+                if (info) console.log(info);
+              });
+            }
 
             console.log("JOB FINISH");
           } else {
