@@ -35,7 +35,7 @@ export const createNotificationController = async (
       customerUserId: Number(req.user?.id),
       codeAction: "P29-01",
       entity: SCHEDULED_NOTIFICATIONS_TABLE,
-      entityId: Number(newNotification.dataValues.id),
+      entityId: Number(newNotification.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });
@@ -60,7 +60,7 @@ export const updateNotificaitonController = async (
       customerUserId: Number(req.user?.id),
       codeAction: "P29-02",
       entity: SCHEDULED_NOTIFICATIONS_TABLE,
-      entityId: Number(notification.dataValues.id),
+      entityId: Number(notification.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
     });

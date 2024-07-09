@@ -39,9 +39,18 @@ const moment_1 = __importDefault(require("moment"));
 const node_cron_1 = __importDefault(require("node-cron"));
 const nodemailer = __importStar(require("nodemailer"));
 const scheduled_notifications_service_1 = __importDefault(require("../../app/settings/services/scheduled-notifications.service"));
-const judicial_binnacle_service_1 = __importDefault(require("../../app/judicial/services/judicial-binnacle.service"));
 const config_1 = __importDefault(require("../../config/config"));
+const judicial_binnacle_service_1 = __importDefault(require("../../app/judicial/services/judicial-binnacle.service"));
 let scheduledJobs = {};
+const daysOfTheWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+];
 const updateCronJobs = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const scheduledNotificationsService = new scheduled_notifications_service_1.default();
@@ -52,13 +61,18 @@ const updateCronJobs = () => __awaiter(void 0, void 0, void 0, function* () {
         scheduledJobs = {};
         const scheduledNotifications = yield scheduledNotificationsService.findAll();
         scheduledNotifications.forEach((schedule) => {
-            const { id, hourTimeToNotify, customerHasBankId, frequencyToNotify, logicKey, state, scheduledNotificationsUsers, } = schedule.dataValues;
+            const { id, hourTimeToNotify, customerHasBankId, frequencyToNotify, logicKey, state, scheduledNotificationsUsers, daysToNotify, } = schedule.dataValues;
+            const now = new Date();
             const date = moment_1.default.utc(hourTimeToNotify, "YYYY-MM-DD HH:mm:ss");
             const minute = date.format("mm");
             const hour = date.format("HH");
+            const currentDay = daysOfTheWeek[now.getDay()];
             const cronTime = `${minute} ${hour} * * *`;
+            const parseDaysToNotify = JSON.parse(daysToNotify);
             scheduledJobs[id] = node_cron_1.default.schedule(cronTime, () => __awaiter(void 0, void 0, void 0, function* () {
-                if (logicKey === "key-job-impulse-pending-processes" && state) {
+                if (logicKey === "key-job-impulse-pending-processes" &&
+                    state &&
+                    parseDaysToNotify.includes(currentDay)) {
                     const judicialBinnacles = yield judicialBinnacleService.findAllBinnaclesByCHBJob(customerHasBankId);
                     const filteredRta = judicialBinnacles.filter((judicialBinnacle) => {
                         const date = moment_1.default.utc(judicialBinnacle.date);
@@ -80,6 +94,9 @@ const updateCronJobs = () => __awaiter(void 0, void 0, void 0, function* () {
                             return ((_d = (_c = (_b = (_a = scheduleNotificationUser === null || scheduleNotificationUser === void 0 ? void 0 : scheduleNotificationUser.dataValues) === null || _a === void 0 ? void 0 : _a.customerUser) === null || _b === void 0 ? void 0 : _b.dataValues) === null || _c === void 0 ? void 0 : _c.email) !== null && _d !== void 0 ? _d : "");
                         });
                         const emailBody = filteredRta
+                            .filter((rta) => {
+                            return rta["judicialFileCase.processStatus"] === "Activo";
+                        })
                             .map((judicialBinnacle) => {
                             return `
                   <div class="cliente">
