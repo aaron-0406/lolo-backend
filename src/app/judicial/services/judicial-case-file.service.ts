@@ -121,9 +121,16 @@ class JudicialCaseFileService {
 
       const caseFiles = await models.JUDICIAL_CASE_FILE.findAll({
         include: [
-          { model: models.CUSTOMER_USER, as: "customerUser", attributes: ["id", "name"] },
+          {
+            model: models.CUSTOMER_USER,
+            as: "customerUser",
+            attributes: ["id", "name"],
+          },
           { model: models.JUDICIAL_COURT, as: "judicialCourt" },
-          { model: models.JUDICIAL_PROCEDURAL_WAY, as: "judicialProceduralWay" },
+          {
+            model: models.JUDICIAL_PROCEDURAL_WAY,
+            as: "judicialProceduralWay",
+          },
           { model: models.JUDICIAL_SUBJECT, as: "judicialSubject" },
           { model: models.JUDICIAL_SEDE, as: "judicialSede" },
           { model: models.CITY, as: "city" },

@@ -40,8 +40,14 @@ class ScheduledNotificationsService {
     if (!rta) {
       throw boom.notFound("No existen notificaciones programadas");
     }
+    const formatData = rta.map((item) => {
+      return({
+        ...item.dataValues,
+        daysToNotify: JSON.parse(item.dataValues.daysToNotify)
+      })
+    })
 
-    return rta;
+    return formatData;
   }
 
   async create(data: ScheduledNotificationType) {
@@ -49,7 +55,10 @@ class ScheduledNotificationsService {
       await models.SCHEDULED_NOTIFICATIONS.create(data);
 
     updateCronJobs();
-    return newScheduledNotification;
+    return {
+      ...newScheduledNotification.dataValues,
+      daysToNotify: JSON.parse(newScheduledNotification.dataValues.daysToNotify)
+    }
   }
 
 
@@ -61,8 +70,15 @@ class ScheduledNotificationsService {
     }
     const oldNotification = { ...notification.get() };
     const newNotification = await notification.update(data);
+    console.log(oldNotification);
     updateCronJobs();
-    return { oldNotification, newNotification };
+    return {
+      oldNotification,
+      newNotification: {
+        ...newNotification.dataValues,
+        daysToNotify: JSON.parse(newNotification.dataValues.daysToNotify),
+      },
+    };
   }
 
   async delete(id: string) {

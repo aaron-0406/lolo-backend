@@ -50,14 +50,17 @@ class ScheduledNotificationsService {
             if (!rta) {
                 throw boom_1.default.notFound("No existen notificaciones programadas");
             }
-            return rta;
+            const formatData = rta.map((item) => {
+                return (Object.assign(Object.assign({}, item.dataValues), { daysToNotify: JSON.parse(item.dataValues.daysToNotify) }));
+            });
+            return formatData;
         });
     }
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const newScheduledNotification = yield models.SCHEDULED_NOTIFICATIONS.create(data);
             (0, judicial_scheduled_notifications_job_1.default)();
-            return newScheduledNotification;
+            return Object.assign(Object.assign({}, newScheduledNotification.dataValues), { daysToNotify: JSON.parse(newScheduledNotification.dataValues.daysToNotify) });
         });
     }
     update(id, data) {
@@ -69,7 +72,10 @@ class ScheduledNotificationsService {
             const oldNotification = Object.assign({}, notification.get());
             const newNotification = yield notification.update(data);
             (0, judicial_scheduled_notifications_job_1.default)();
-            return { oldNotification, newNotification };
+            return {
+                oldNotification,
+                newNotification: Object.assign(Object.assign({}, newNotification.dataValues), { daysToNotify: JSON.parse(newNotification.dataValues.daysToNotify) }),
+            };
         });
     }
     delete(id) {

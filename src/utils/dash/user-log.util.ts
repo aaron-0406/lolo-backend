@@ -27,7 +27,7 @@ const generateLogSummary = ({ method, oldData, newData, withoutChanges, name, id
       if (!Array.isArray(dataPost)) {
         for (const key in dataPost) {
           let newValue = dataPost[key];
-          if (isDate(newValue)) {
+          if (isDate(newValue) ) {
             newValue = formatDate(newValue);
           }
           changes.push(JSON.stringify({ key, newValue }));

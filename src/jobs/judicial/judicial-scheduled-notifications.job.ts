@@ -2,10 +2,19 @@ import moment from "moment";
 import cron from "node-cron";
 import * as nodemailer from "nodemailer";
 import ScheduledNotificationsService from "../../app/settings/services/scheduled-notifications.service";
-import JudicialBinnacleService from "../../app/judicial/services/judicial-binnacle.service";
 import config from "../../config/config";
+import JudicialBinnacleService from "../../app/judicial/services/judicial-binnacle.service";
 
 let scheduledJobs: { [key: number]: cron.ScheduledTask } = {};
+const daysOfTheWeek = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 
 const updateCronJobs = async () => {
   try {
@@ -30,18 +39,26 @@ const updateCronJobs = async () => {
         logicKey,
         state,
         scheduledNotificationsUsers,
+        daysToNotify,
       } = schedule.dataValues;
 
+      const now = new Date();
       const date = moment.utc(hourTimeToNotify, "YYYY-MM-DD HH:mm:ss");
       const minute = date.format("mm");
       const hour = date.format("HH");
+      const currentDay = daysOfTheWeek[now.getDay()];
 
       const cronTime = `${minute} ${hour} * * *`;
+      const parseDaysToNotify = JSON.parse(daysToNotify);
 
       scheduledJobs[id] = cron.schedule(
         cronTime,
         async () => {
-          if (logicKey === "key-job-impulse-pending-processes" && state) {
+          if (
+            logicKey === "key-job-impulse-pending-processes" &&
+            state &&
+            parseDaysToNotify.includes(currentDay)
+          ) {
             const judicialBinnacles =
               await judicialBinnacleService.findAllBinnaclesByCHBJob(
                 customerHasBankId
@@ -76,12 +93,17 @@ const updateCronJobs = async () => {
               );
 
               const emailBody = filteredRta
+                .filter((rta: any) => {
+                  return rta["judicialFileCase.processStatus"] === "Activo";
+                })
                 .map((judicialBinnacle: any) => {
                   return `
                   <div class="cliente">
                       <h2>Cliente: ${
                         judicialBinnacle["judicialFileCase.client.name"]
-                      } (${judicialBinnacle["customerHasBank.bank.name"]}) - (${judicialBinnacle["judicialFileCase.client.city.name"]})</h2>
+                      } (${judicialBinnacle["customerHasBank.bank.name"]}) - (${
+                    judicialBinnacle["judicialFileCase.client.city.name"]
+                  })</h2>
                       <p class="expediente"><strong>Exp.:</strong> ${
                         judicialBinnacle["judicialFileCase.numberCaseFile"]
                       }</p>

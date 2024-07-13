@@ -45,7 +45,7 @@ export const createNotificationController = async (
       customerUserId: Number(req.user?.id),
       codeAction: "P29-01",
       entity: SCHEDULED_NOTIFICATIONS_TABLE,
-      entityId: Number(newNotification.dataValues.id),
+      entityId: Number(newNotification.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
       methodSumary: sumary,
@@ -70,16 +70,15 @@ export const updateNotificaitonController = async (
     const sumary = generateLogSummary({
       method: req.method,
       oldData: oldNotification,
-      newData: newNotification.dataValues,
-      name: newNotification.dataValues.name,
-      id: newNotification.dataValues.id,
+      newData: newNotification,
+      id: newNotification.id,
     });
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P29-02",
       entity: SCHEDULED_NOTIFICATIONS_TABLE,
-      entityId: Number(newNotification.dataValues.id),
+      entityId: Number(id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
       methodSumary: sumary,
