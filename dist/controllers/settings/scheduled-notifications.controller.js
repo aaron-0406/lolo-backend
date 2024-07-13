@@ -16,9 +16,11 @@ exports.deleteNotificationController = exports.updateNotificaitonController = ex
 const scheduled_notifications_service_1 = __importDefault(require("../../app/settings/services/scheduled-notifications.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const scheduled_notifications_model_1 = __importDefault(require("../../db/models/settings/scheduled-notifications.model"));
+const user_log_util_1 = __importDefault(require("../../utils/dash/user-log.util"));
 const service = new scheduled_notifications_service_1.default();
 const serviceUserLog = new user_log_service_1.default();
 const { SCHEDULED_NOTIFICATIONS_TABLE } = scheduled_notifications_model_1.default;
+const { generateLogSummary } = user_log_util_1.default;
 const getNotificationByChbController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { chb } = req.params;
@@ -35,6 +37,13 @@ const createNotificationController = (req, res, next) => __awaiter(void 0, void 
     try {
         const body = req.body;
         const newNotification = yield service.create(body);
+        const sumary = generateLogSummary({
+            method: req.method,
+            oldData: newNotification.dataValues,
+            newData: newNotification.dataValues,
+            name: newNotification.dataValues.name,
+            id: newNotification.dataValues.id,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
             codeAction: "P29-01",
@@ -42,6 +51,7 @@ const createNotificationController = (req, res, next) => __awaiter(void 0, void 
             entityId: Number(newNotification.dataValues.id),
             ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
             customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
+            methodSumary: sumary,
         });
         res.status(201).json(newNotification);
     }
@@ -55,18 +65,27 @@ const updateNotificaitonController = (req, res, next) => __awaiter(void 0, void 
     try {
         const { id } = req.params;
         const body = req.body;
-        const notification = yield service.update(id, body);
+        const { oldNotification, newNotification } = yield service.update(id, body);
+        const sumary = generateLogSummary({
+            method: req.method,
+            oldData: oldNotification,
+            newData: newNotification.dataValues,
+            name: newNotification.dataValues.name,
+            id: newNotification.dataValues.id,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
             codeAction: "P29-02",
             entity: SCHEDULED_NOTIFICATIONS_TABLE,
-            entityId: Number(notification.dataValues.id),
+            entityId: Number(newNotification.dataValues.id),
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
             customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+            methodSumary: sumary,
         });
-        res.json(notification);
+        res.json(newNotification);
     }
     catch (error) {
+        console.log(error);
         next(error);
     }
 });
@@ -75,7 +94,14 @@ const deleteNotificationController = (req, res, next) => __awaiter(void 0, void 
     var _g, _h, _j;
     try {
         const { id } = req.params;
-        yield service.delete(id);
+        const notifiaction = yield service.delete(id);
+        const sumary = generateLogSummary({
+            method: req.method,
+            oldData: notifiaction.dataValues,
+            newData: notifiaction.dataValues,
+            name: notifiaction.dataValues.name,
+            id: notifiaction.dataValues.id,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
             codeAction: "P29-03",
@@ -83,6 +109,7 @@ const deleteNotificationController = (req, res, next) => __awaiter(void 0, void 
             entityId: Number(id),
             ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
             customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            methodSumary: sumary,
         });
         res.status(201).json({ id });
     }

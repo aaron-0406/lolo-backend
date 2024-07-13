@@ -58,6 +58,11 @@ const UserLogSchema = {
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
     },
+    methodSumary: {
+        allowNull: true,
+        field: "method_summary",
+        type: sequelize_1.DataTypes.TEXT("long"),
+    }
 };
 class UserLog extends sequelize_1.Model {
     static associate(models) {

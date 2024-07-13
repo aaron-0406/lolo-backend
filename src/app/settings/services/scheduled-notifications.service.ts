@@ -52,19 +52,17 @@ class ScheduledNotificationsService {
     return newScheduledNotification;
   }
 
-  async update(id: string, data: ScheduledNotificationType) {
-    const scheduledNotification = await models.SCHEDULED_NOTIFICATIONS.findByPk(
-      id
-    );
 
-    if (!scheduledNotification) {
+  async update(id: string, data: ScheduledNotificationType) {
+    const notification = await models.SCHEDULED_NOTIFICATIONS.findByPk(id);
+
+    if (!notification) {
       throw boom.notFound("Notificación programada no encontrada");
     }
-
-    await scheduledNotification.update(data);
-
+    const oldNotification = { ...notification.get() };
+    const newNotification = await notification.update(data);
     updateCronJobs();
-    return scheduledNotification;
+    return { oldNotification, newNotification };
   }
 
   async delete(id: string) {
