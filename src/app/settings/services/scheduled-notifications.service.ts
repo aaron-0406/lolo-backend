@@ -70,7 +70,6 @@ class ScheduledNotificationsService {
     }
     const oldNotification = { ...notification.get() };
     const newNotification = await notification.update(data);
-    console.log(oldNotification);
     updateCronJobs();
     return {
       oldNotification,
