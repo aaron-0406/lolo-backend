@@ -243,7 +243,13 @@ class JudicialCaseFileService {
     });
 
     if (!judicialCaseFile) {
-      throw boom.notFound("Expediente no encontrado");
+      const judicialCaseFileWithoutCHB = await models.JUDICIAL_CASE_FILE.findOne({
+        where: {
+          numberCaseFile,
+        },
+      });
+      if (!judicialCaseFileWithoutCHB) throw boom.notFound("Expediente no encontrado");
+      return judicialCaseFileWithoutCHB;
     }
     return judicialCaseFile;
   }
