@@ -3,6 +3,11 @@ import Joi from "joi";
 const id = Joi.number();
 const judicialCollateralIdJudicialCollateral = Joi.number();
 const customerHasBankId = Joi.number();
+const filter = Joi.string().optional().messages({
+  "string.base": "El campo filter es inválido",
+  "any.required": "El campo filter es requerido.",
+  "string.empty": "El campo filter no puede estar vácio",
+});
 
 const getJudicialCollateralFilesByIDSchema = Joi.object<{ id: number }, true>({
   id: id.required(),
@@ -24,9 +29,14 @@ const createJudicialCollateralFilesParamSchema = Joi.object<{ chb: number, colla
   collateralId: judicialCollateralIdJudicialCollateral.required(),
 });
 
+const getJudicialCaseFileByCHBSchemaQuery = Joi.object({
+  filter,
+}).options({ abortEarly: true });
+
 export default {
   getJudicialCollateralFilesByIDSchema,
   getJudicialCollateralFilesByJudicialCollateralIdSchema,
   createJudicialCollateralFilesParamSchema,
-  getCollateralFileByIDSchema
+  getCollateralFileByIDSchema,
+  getJudicialCaseFileByCHBSchemaQuery
 };

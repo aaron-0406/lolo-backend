@@ -12,10 +12,10 @@ import { archivosCollateral } from "../../middlewares/multer.handler";
 import boom from '@hapi/boom';
 
 const {
-  getJudicialCollateralFilesByIDSchema,
   getJudicialCollateralFilesByJudicialCollateralIdSchema,
   createJudicialCollateralFilesParamSchema,
-  getCollateralFileByIDSchema
+  getCollateralFileByIDSchema,
+  getJudicialCaseFileByCHBSchemaQuery
 } = judicialCollateralFilesSchema;
 
 const multerFile = (req: Request, res: Response, next: NextFunction) => {
@@ -31,6 +31,7 @@ router.get(
   "/:chb/:collateralId",
   JWTAuth,
   validatorHandler(getJudicialCollateralFilesByJudicialCollateralIdSchema, "params"),
+  validatorHandler(getJudicialCaseFileByCHBSchemaQuery, "query"),
   getAllCollateralFilesController
 );
 
