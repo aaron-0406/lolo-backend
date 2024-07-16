@@ -124,7 +124,7 @@ const updateCronJobs = async () => {
 
               if(binnaclesByCity[city].length) {
                 const message = {
-                  from: "pq53susrn6t7mscg@ethereal.email",
+                  from: config.AWS_EMAIL,
                   to: emails,
                   subject: `PROCESOS PENDIENTE DE IMPULSO - ${city.toUpperCase()}`,
                   html: `

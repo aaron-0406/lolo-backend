@@ -18,6 +18,7 @@ const aws_bucket_1 = require("../../../libs/aws_bucket");
 const helpers_1 = require("../../../libs/helpers");
 const sequelize_1 = __importDefault(require("../../../libs/sequelize"));
 const boom_1 = __importDefault(require("@hapi/boom"));
+const sequelize_2 = require("sequelize");
 const { models } = sequelize_1.default;
 class JudicialCollateralFilesService {
     constructor() { }
@@ -59,14 +60,20 @@ class JudicialCollateralFilesService {
             }
         });
     }
-    findAllByCollateralId(collateralId, chb) {
+    findAllByCollateralId(collateralId, chb, query) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { filter } = query;
+            const fileName = filter;
+            let filtersWhere = {
+                judicialCollateralIdJudicialCollateral: collateralId,
+                customerHasBankId: chb,
+            };
+            if (fileName) {
+                filtersWhere = Object.assign(Object.assign({}, filtersWhere), { originalName: { [sequelize_2.Op.like]: `%${fileName}%` } });
+            }
             try {
                 const judicialCollateralFile = yield models.JUDICIAL_COLLATERAL_FILES.findAll({
-                    where: {
-                        judicialCollateralIdJudicialCollateral: collateralId,
-                        customerHasBankId: chb,
-                    },
+                    where: filtersWhere,
                     attributes: {
                         exclude: ["judicialCollateralId"],
                     },
