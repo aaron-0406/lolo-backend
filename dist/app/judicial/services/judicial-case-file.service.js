@@ -40,7 +40,7 @@ class JudicialCaseFileService {
     }
     findAllByCHB(chb, query) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { limit, page, filter, courts, proceduralWays, subjects, users, sortBy, order } = query;
+            const { limit, page, filter, courts, sedes, proceduralWays, subjects, users, sortBy, order } = query;
             const limite = parseInt(limit, 10);
             const pagina = parseInt(page, 10);
             const clientName = filter;
@@ -48,6 +48,7 @@ class JudicialCaseFileService {
             const listProceduralWays = JSON.parse(proceduralWays);
             const listSubjects = JSON.parse(subjects);
             const listUsers = JSON.parse(users);
+            const listSedes = JSON.parse(sedes);
             const sortByField = sortBy;
             const filters = {};
             if (listCourts.length) {
@@ -63,6 +64,9 @@ class JudicialCaseFileService {
             }
             if (listUsers.length) {
                 filters.customer_user_id_customer_user = { [sequelize_2.Op.in]: listUsers };
+            }
+            if (listSedes.length) {
+                filters.judicial_sede_id_judicial_sede = { [sequelize_2.Op.in]: listSedes };
             }
             let sortField;
             let orderConfig;

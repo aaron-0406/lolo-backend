@@ -30,7 +30,7 @@ class JudicialCaseFileService {
   }
 
   async findAllByCHB(chb: string, query: any) {
-    const { limit, page, filter, courts, proceduralWays, subjects, users, sortBy, order } =
+    const { limit, page, filter, courts, sedes, proceduralWays, subjects, users, sortBy, order } =
       query;
 
     const limite = parseInt(limit, 10);
@@ -40,6 +40,7 @@ class JudicialCaseFileService {
     const listProceduralWays = JSON.parse(proceduralWays);
     const listSubjects = JSON.parse(subjects);
     const listUsers = JSON.parse(users);
+    const listSedes = JSON.parse(sedes);
     const sortByField = sortBy as string;
 
     const filters: any = {};
@@ -56,6 +57,9 @@ class JudicialCaseFileService {
     }
     if (listUsers.length) {
       filters.customer_user_id_customer_user = { [Op.in]: listUsers };
+    }
+    if (listSedes.length) {
+      filters.judicial_sede_id_judicial_sede = { [Op.in]: listSedes };
     }
 
     let sortField: string;
