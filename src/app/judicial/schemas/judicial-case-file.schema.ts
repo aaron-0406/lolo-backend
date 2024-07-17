@@ -31,7 +31,7 @@ const processComment = Joi.string();
 const processReasonId = Joi.number().positive();
 const bankId = Joi.number();
 const idJudicialCaseFileRelated = Joi.number();
-
+const qrCode = Joi.string();
 const page = Joi.number().required().messages({
   "number.base": "El campo page es inválido",
   "any.required": "El campo page es requerido.",
@@ -52,6 +52,9 @@ const courts = Joi.string().required();
 const proceduralWays = Joi.string().required();
 const subjects = Joi.string().required();
 const users = Joi.string().required();
+const sedes = Joi.string().required();
+const sortBy = Joi.string().optional().empty("").allow("");
+const order = Joi.string().optional().empty("").allow("");
 
 const customerId = Joi.number();
 
@@ -84,6 +87,7 @@ const createJudicialCaseFileSchema = Joi.object<
     .empty("")
     .allow(""),
   bankId: bankId.optional().empty("").allow(""),
+  qrCode: qrCode.optional().empty("").allow(""),
 });
 
 const updateJudicialCaseFileSchema = Joi.object<
@@ -115,6 +119,7 @@ const updateJudicialCaseFileSchema = Joi.object<
     .empty("")
     .allow(""),
   bankId: bankId.optional().empty("").allow(""),
+  qrCode: qrCode.optional().empty("").allow(""),
 });
 
 const updateJudicialCaseFileProcessStatusSchema = Joi.object<
@@ -145,6 +150,9 @@ const getJudicialCaseFileByCHBSchemaQuery = Joi.object({
   proceduralWays,
   subjects,
   users,
+  sedes,
+  sortBy,
+  order,
 }).options({ abortEarly: true });
 
 const getJudicialCaseFileByIDSchema = Joi.object<{ id: number }, true>({
@@ -152,6 +160,14 @@ const getJudicialCaseFileByIDSchema = Joi.object<{ id: number }, true>({
 });
 
 const getJudicialCaseFileByNumberCaseFileSchema = Joi.object<
+  { numberCaseFile: string; chb: number },
+  true
+>({
+  numberCaseFile: numberCaseFile.required(),
+  chb: customerHasBankId.required(),
+});
+
+const createQrCodeSchema = Joi.object<
   { numberCaseFile: string; chb: number },
   true
 >({
@@ -176,4 +192,5 @@ export default {
   getJudicialCaseFileByCHBSchema,
   getJudicialCaseFileByCHBSchemaQuery,
   getJudicialCaseFileByCustomerIdSchema,
+  createQrCodeSchema,
 };

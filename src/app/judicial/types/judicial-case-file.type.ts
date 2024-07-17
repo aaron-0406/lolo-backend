@@ -23,4 +23,5 @@ export type JudicialCaseFileType = {
   processReasonId: number;
   idJudicialCaseFileRelated: number;
   bankId: number;
+  qrCode: string;
 };

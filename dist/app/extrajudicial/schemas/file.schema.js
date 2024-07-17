@@ -10,6 +10,15 @@ const idCustomer = joi_1.default.number();
 const chb = joi_1.default.number();
 const tagId = joi_1.default.number();
 const originalName = joi_1.default.string();
+const page = joi_1.default.number().required().messages({
+    "number.base": "El campo page es inválido",
+    "any.required": "El campo page es requerido.",
+});
+const limit = joi_1.default.number().required().messages({
+    "number.base": "El campo limit es inválido",
+    "any.required": "El campo limit es requerido.",
+});
+const filter = joi_1.default.string().optional();
 const createFileSchema = joi_1.default.object({
     idCustomer,
     chb,
@@ -36,10 +45,21 @@ const getFileSchema = joi_1.default.object({
 const getFileByIdSchema = joi_1.default.object({
     id,
 });
+const getFileFilterByIdAndChbSchema = joi_1.default.object({
+    id,
+    chb,
+});
+const getUserLogsFilterByCustomerIdQuery = joi_1.default.object({
+    page,
+    limit,
+    filter
+}).options({ abortEarly: true });
 exports.default = {
     createFileSchema,
     updateFileSchema,
     deleteFileSchema,
     getFileSchema,
     getFileByIdSchema,
+    getFileFilterByIdAndChbSchema,
+    getUserLogsFilterByCustomerIdQuery
 };

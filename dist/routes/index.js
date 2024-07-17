@@ -39,6 +39,15 @@ const judicial_bin_type_binnacle_routes_1 = __importDefault(require("./judicial/
 const judicial_bin_procedural_stage_routes_1 = __importDefault(require("./judicial/judicial-bin-procedural-stage.routes"));
 const judicial_binnacle_routes_1 = __importDefault(require("./judicial/judicial-binnacle.routes"));
 const judicial_bin_file_routes_1 = __importDefault(require("./judicial/judicial-bin-file.routes"));
+const judicial_collateral_routes_1 = __importDefault(require("./judicial/judicial-collateral.routes"));
+const judicial_notary_routes_1 = __importDefault(require("./judicial/judicial-notary.routes"));
+const judicial_register_office_routes_1 = __importDefault(require("./judicial/judicial-register-office.routes"));
+const judicial_registration_area_routes_1 = __importDefault(require("./judicial/judicial-registration-area.routes"));
+const judicial_use_of_property_routes_1 = __importDefault(require("./judicial/judicial-use-of-property.routes"));
+const judicial_case_file_has_collateral_routes_1 = __importDefault(require("./judicial/judicial-case-file-has-collateral.routes"));
+const judicial_collateral_charges_encumbrances_routes_1 = __importDefault(require("./judicial/judicial-collateral-charges-encumbrances.routes"));
+const judicial_collateral_charges_encumbrances_type_load_routes_1 = __importDefault(require("./judicial/judicial-collateral-charges-encumbrances-type-load.routes"));
+const judicial_collateral_files_routes_1 = __importDefault(require("./judicial/judicial-collateral-files.routes"));
 const management_action_routes_1 = __importDefault(require("./dash/management-action.routes"));
 const goal_routes_1 = __importDefault(require("./extrajudicial/goal.routes"));
 const role_routes_1 = __importDefault(require("./dash/role.routes"));
@@ -53,6 +62,10 @@ const ext_contact_type_routes_1 = __importDefault(require("./extrajudicial/ext-c
 const ext_product_name_routes_1 = __importDefault(require("./extrajudicial/ext-product-name.routes"));
 const scheduled_notifications_routes_1 = __importDefault(require("./config/scheduled-notifications.routes"));
 const scheduled_notifications_users_routes_1 = __importDefault(require("./config/scheduled-notifications-users.routes"));
+const compare_excels_routes_1 = __importDefault(require("./config/compare-excels.routes"));
+const department_routes_1 = __importDefault(require("./config/department.routes"));
+const districts_routes_1 = __importDefault(require("./config/districts.routes"));
+const province_routes_1 = __importDefault(require("./config/province.routes"));
 const routerApi = (app) => {
     const router = express_1.default.Router();
     app.use("/api/v1", router);
@@ -91,6 +104,15 @@ const routerApi = (app) => {
     router.use("/judicial/binnacle", judicial_binnacle_routes_1.default);
     router.use("/judicial/bin-file", judicial_bin_file_routes_1.default);
     router.use("/judicial/bin-procedural-stage", judicial_bin_procedural_stage_routes_1.default);
+    router.use("/judicial/collateral", judicial_collateral_routes_1.default);
+    router.use("/judicial/case-file-has-collateral", judicial_case_file_has_collateral_routes_1.default);
+    router.use("/judicial/notary", judicial_notary_routes_1.default);
+    router.use("/judicial/register-office", judicial_register_office_routes_1.default);
+    router.use("/judicial/registration-area", judicial_registration_area_routes_1.default);
+    router.use("/judicial/use-of-property", judicial_use_of_property_routes_1.default);
+    router.use("/judicial/collateral-charges-encumbrances", judicial_collateral_charges_encumbrances_routes_1.default);
+    router.use("/judicial/collateral-charges-encumbrances-type-load", judicial_collateral_charges_encumbrances_type_load_routes_1.default);
+    router.use("/judicial/collateral-files", judicial_collateral_files_routes_1.default);
     router.use("/dash/auth", auth_routes_2.default);
     router.use("/dash/role", role_routes_1.default);
     router.use("/dash/permission", permission_routes_1.default);
@@ -105,5 +127,9 @@ const routerApi = (app) => {
     router.use("/dash/user-log", user_log_routes_1.default);
     router.use("/config/scheduled-notifications", scheduled_notifications_routes_1.default);
     router.use("/config/scheduled-notifications-users", scheduled_notifications_users_routes_1.default);
+    router.use("/config/compare-excels", compare_excels_routes_1.default);
+    router.use("/config/departments", department_routes_1.default);
+    router.use("/config/districts", districts_routes_1.default);
+    router.use("/config/provinces", province_routes_1.default);
 };
 exports.default = routerApi;

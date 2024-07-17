@@ -20,6 +20,7 @@ const storageArchivosBinnacle = multer.diskStorage({
     cb(null, `${name_origin_aws}`);
   },
 });
+
 // Filter documents
 const filterDocuments = async (req: any, file: any, cb: any) => {
   const filetypes =
@@ -60,4 +61,8 @@ export const archivosBinnacle = multer({
 export const archivosExcel = multer({
   storage: storageExcelArchivos,
   fileFilter: filterExcelDocuments,
+});
+
+export const archivosCollateral = multer({
+  storage: storageArchivos,
 });

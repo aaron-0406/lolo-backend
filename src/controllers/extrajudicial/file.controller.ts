@@ -14,8 +14,9 @@ export const findFileByClientIdController = async (
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
-    const files = await service.find(Number(id));
+    const { id, chb } = req.params;
+    const query = req.query;
+    const files = await service.find(Number(id), Number(chb), query);
     res.json(files);
   } catch (error) {
     next(error);

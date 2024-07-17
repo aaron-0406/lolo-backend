@@ -122,6 +122,20 @@ export const createJudicialCaseFileController = async (
   }
 };
 
+export const createQrCode = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { numberCaseFile, chb } = req.params;
+    const qrCode = await service.createQrCode(numberCaseFile, parseInt(chb));
+    res.json(qrCode);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const updateJudicialCaseFileController = async (
   req: Request,
   res: Response,
@@ -171,7 +185,6 @@ export const updateJudicialCaseProcessStatus = async (
     next(error);
   }
 };
-
 
 export const deleteJudicialCaseFileController = async (
   req: Request,

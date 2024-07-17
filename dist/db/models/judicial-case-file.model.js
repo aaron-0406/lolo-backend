@@ -204,6 +204,11 @@ const JudicialCaseFileSchema = {
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
     },
+    qrCode: {
+        allowNull: true,
+        field: "qr_code",
+        type: sequelize_1.DataTypes.TEXT("long"),
+    },
 };
 class JudicialCaseFile extends sequelize_1.Model {
     static associate(models) {
@@ -218,11 +223,19 @@ class JudicialCaseFile extends sequelize_1.Model {
         this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
         this.belongsTo(models.JUDICIAL_PROCESS_REASON, { as: "processReason" });
         this.belongsTo(models.CITY, { as: "city" });
+        this.belongsTo(models.BANK, { as: "bank" });
         this.hasMany(models.PRODUCT, {
             as: "product",
             foreignKey: "judicialCaseFileId",
         });
-        this.belongsTo(models.BANK, { as: "bank" });
+        this.hasMany(models.JUDICIAL_BINNACLE, {
+            as: "judicialBinnacle",
+            foreignKey: "judicialFileCaseId",
+        });
+        this.hasMany(models.JUDICIAL_CASE_FILE_HAS_COLLATERAL, {
+            as: "judicialCaseFileHasCollateral",
+            foreignKey: "judicialCaseFileId",
+        });
     }
     static config(sequelize) {
         return {

@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = __importDefault(require("../../../libs/sequelize"));
 const boom_1 = __importDefault(require("@hapi/boom"));
+const sequelize_2 = require("sequelize");
 const helpers_1 = require("../../../libs/helpers");
 const aws_bucket_1 = require("../../../libs/aws_bucket");
 const config_1 = __importDefault(require("../../../config/config"));
@@ -21,21 +22,17 @@ const path_1 = __importDefault(require("path"));
 const { models } = sequelize_1.default;
 class FileService {
     constructor() { }
-    find(clientId) {
+    find(clientId, chb, query) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { filter } = query;
             const rta = yield models.FILE.findAll({
-                include: [
-                    {
+                include: [{
                         model: models.EXT_TAG,
                         as: "classificationTag",
                         foreignKey: "tagId",
-                        identifier: "id",
                         attributes: ["name", "color"],
-                    },
-                ],
-                where: {
-                    clientId,
-                },
+                    }],
+                where: Object.assign({ clientId }, (filter ? { name: { [sequelize_2.Op.like]: `%${filter}%` } } : {})),
             });
             return rta;
         });
