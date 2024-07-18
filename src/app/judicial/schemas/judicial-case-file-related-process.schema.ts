@@ -50,8 +50,10 @@ const courts = Joi.string().required();
 const proceduralWays = Joi.string().required();
 const subjects = Joi.string().required();
 const users = Joi.string().required();
+const responsibles = Joi.string().required();
 
 const customerId = Joi.number();
+const responsibleUserId = Joi.number();
 
 const createJudicialCaseFileRelatedProcessSchema = Joi.object<
   Omit<
@@ -83,6 +85,7 @@ const createJudicialCaseFileRelatedProcessSchema = Joi.object<
     .allow(""),
   bankId: bankId.optional().empty("").allow(""),
   qrCode: qrCode.optional().empty("").allow(""),
+  responsibleUserId: responsibleUserId.optional().empty("").allow(""),
 });
 
 const updateJudicialCaseFileRelatedProcessSchema = Joi.object<
@@ -115,6 +118,7 @@ const updateJudicialCaseFileRelatedProcessSchema = Joi.object<
     .allow(""),
   bankId: bankId.optional().empty("").allow(""),
   qrCode: qrCode.optional().empty("").allow(""),
+  responsibleUserId: responsibleUserId.optional().empty("").allow(""),
 });
 
 const getRelatedProcessByCaseFileIdSchema = Joi.object<
@@ -148,12 +152,23 @@ const getJudicialCaseFileRelatedProcesByCHBSchemaQuery = Joi.object({
   users,
 }).options({ abortEarly: true });
 
+const getJudicialCaseFileRelatedProcesByCaseFileId = Joi.object({
+  page,
+  limit,
+  filter,
+  courts,
+  proceduralWays,
+  subjects,
+  users,
+  responsibles
+}).options({ abortEarly: true });
 const getJudicialCaseFileRelatedProcesByIDSchema = Joi.object<
   { id: number },
   true
 >({
   id: id.required(),
 });
+
 
 const getJudicialCaseFileRelatedProcesByNumberCaseFileSchema = Joi.object<
   { numberCaseFile: string; chb: number },
@@ -179,5 +194,6 @@ export default {
   getJudicialCaseFileRelatedProcesByCHBSchemaQuery,
   getJudicialCaseFileRelatedProcesByIDSchema,
   getJudicialCaseFileRelatedProcesByNumberCaseFileSchema,
+  getJudicialCaseFileRelatedProcesByCaseFileId,
   getJudicialCaseFileRelatedProcesByCustomerIdSchema,
 };

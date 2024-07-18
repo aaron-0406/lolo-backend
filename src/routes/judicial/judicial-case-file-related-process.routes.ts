@@ -27,7 +27,8 @@ const {
   getJudicialCaseFileRelatedProcesByClientIDSchema,
   getJudicialCaseFileRelatedProcesByCustomerIdSchema,
   getJudicialCaseFileRelatedProcesByIDSchema,
-  getJudicialCaseFileRelatedProcesByNumberCaseFileSchema
+  getJudicialCaseFileRelatedProcesByNumberCaseFileSchema,
+  getJudicialCaseFileRelatedProcesByCaseFileId
 } = judicialCaseFileRelatedProcessSchema;
 
 const router = express.Router();
@@ -46,6 +47,7 @@ router.get(
   "/case-file/:caseFileId",
   JWTAuth,
   validatorHandler(getRelatedProcessByCaseFileIdSchema, "params"),
+  validatorHandler(getJudicialCaseFileRelatedProcesByCaseFileId, "query"),
   getJudicialCaseFileRelatedProcessbyCaseFileIdController,
 );
 

@@ -41,12 +41,12 @@ const JudicialCaseFileSchema = {
     amountDemandedSoles: {
         allowNull: true,
         field: "amount_demanded_soles",
-        type: sequelize_1.DataTypes.DECIMAL(10, 3),
+        type: sequelize_1.DataTypes.DECIMAL(10, 2),
     },
     amountDemandedDollars: {
         allowNull: true,
         field: "amount_demanded_dollars",
-        type: sequelize_1.DataTypes.DECIMAL(10, 3),
+        type: sequelize_1.DataTypes.DECIMAL(10, 2),
     },
     cautionaryCode: {
         allowNull: true,
@@ -109,6 +109,17 @@ const JudicialCaseFileSchema = {
     customerUserId: {
         allowNull: false,
         field: "customer_user_id_customer_user",
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: customer_user_model_1.default.CUSTOMER_USER_TABLE,
+            key: "id_customer_user",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "NO ACTION",
+    },
+    responsibleUserId: {
+        allowNull: true,
+        field: "responsible_user_id",
         type: sequelize_1.DataTypes.INTEGER,
         references: {
             model: customer_user_model_1.default.CUSTOMER_USER_TABLE,
@@ -220,6 +231,7 @@ class JudicialCaseFile extends sequelize_1.Model {
         });
         this.belongsTo(models.JUDICIAL_SEDE, { as: "judicialSede" });
         this.belongsTo(models.CUSTOMER_USER, { as: "customerUser" });
+        this.belongsTo(models.CUSTOMER_USER, { as: "responsibleUser" });
         this.belongsTo(models.CUSTOMER_HAS_BANK, { as: "customerHasBank" });
         this.belongsTo(models.JUDICIAL_PROCESS_REASON, { as: "processReason" });
         this.belongsTo(models.CITY, { as: "city" });

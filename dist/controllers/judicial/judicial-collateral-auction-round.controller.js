@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteJudicialCollateralAuctionRoundController = exports.updateJudicialCollateralAuctionRoundController = exports.createJudicialCollateralAuctionRoundController = exports.getJudicialCollateralAuctionRoundById = exports.getAllJudicialCollateralAuctionRoundController = void 0;
+exports.deleteJudicialCollateralAuctionRoundController = exports.updateJudicialCollateralAuctionRoundController = exports.createJudicialCollateralAuctionRoundController = exports.getJudicialCollateralAuctionRoundById = exports.getAllJudicialAuctionsByCaseFileIdController = exports.getAllJudicialCollateralAuctionRoundController = void 0;
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const judicial_collateral_auction_round_service_1 = __importDefault(require("../../app/judicial/services/judicial-collateral-auction-round.service"));
 const judicial_collateral_auction_round_model_1 = __importDefault(require("../../db/models/judicial-collateral-auction-round.model"));
@@ -30,6 +30,17 @@ const getAllJudicialCollateralAuctionRoundController = (req, res, next) => __awa
     }
 });
 exports.getAllJudicialCollateralAuctionRoundController = getAllJudicialCollateralAuctionRoundController;
+const getAllJudicialAuctionsByCaseFileIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { caseFileId } = req.params;
+        const collateralAuctionRounds = yield service.findAllAuctionbyCaseFileId(Number(caseFileId));
+        res.json(collateralAuctionRounds);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.getAllJudicialAuctionsByCaseFileIdController = getAllJudicialAuctionsByCaseFileIdController;
 const getJudicialCollateralAuctionRoundById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { chb, collateralId, id } = req.params;
@@ -75,7 +86,7 @@ const updateJudicialCollateralAuctionRoundController = (req, res, next) => __awa
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
             customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
         });
-        res.json(judicialCollateralAuctionRound);
+        res.json(judicialCollateralAuctionRound === null || judicialCollateralAuctionRound === void 0 ? void 0 : judicialCollateralAuctionRound.newData);
     }
     catch (error) {
         next(error);

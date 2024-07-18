@@ -30,7 +30,7 @@ class JudicialCaseFileService {
   }
 
   async findAllByCHB(chb: string, query: any) {
-    const { limit, page, filter, courts, sedes, proceduralWays, subjects, users, sortBy, order } =
+    const { limit, page, filter, courts, sedes, proceduralWays, subjects, users, responsibles, sortBy, order } =
       query;
 
     const limite = parseInt(limit, 10);
@@ -40,8 +40,10 @@ class JudicialCaseFileService {
     const listProceduralWays = JSON.parse(proceduralWays);
     const listSubjects = JSON.parse(subjects);
     const listUsers = JSON.parse(users);
+    const listResponsibles = JSON.parse(responsibles);
     const listSedes = JSON.parse(sedes);
     const sortByField = sortBy as string;
+
 
     const filters: any = {};
     if (listCourts.length) {
@@ -57,6 +59,9 @@ class JudicialCaseFileService {
     }
     if (listUsers.length) {
       filters.customer_user_id_customer_user = { [Op.in]: listUsers };
+    }
+    if (listResponsibles.length) {
+      filters.responsible_user_id = { [Op.in]: listResponsibles };
     }
     if (listSedes.length) {
       filters.judicial_sede_id_judicial_sede = { [Op.in]: listSedes };
@@ -130,6 +135,11 @@ class JudicialCaseFileService {
             as: "customerUser",
             attributes: ["id", "name"],
           },
+          {
+            model: models.CUSTOMER_USER,
+            as: "responsibleUser",
+            attributes: ["id", "name"],
+          },
           { model: models.JUDICIAL_COURT, as: "judicialCourt" },
           {
             model: models.JUDICIAL_PROCEDURAL_WAY,
@@ -193,6 +203,11 @@ class JudicialCaseFileService {
           attributes: ["id", "name"],
         },
         {
+          model: models.CUSTOMER_USER,
+          as: "responsibleUser",
+          attributes: ["id", "name"],
+        },
+        {
           model: models.JUDICIAL_COURT,
           as: "judicialCourt",
         },
@@ -229,7 +244,13 @@ class JudicialCaseFileService {
 
   async findByNumberCaseFile(numberCaseFile: string, chb: number) {
     const judicialCaseFile = await models.JUDICIAL_CASE_FILE.findOne({
-      include: {
+      include: [
+        {
+          model: models.CUSTOMER_USER,
+          as: "responsibleUser",
+          attributes: ["id", "name"],
+        },
+        {
         model: models.CLIENT,
         as: "client",
         include: [
@@ -239,7 +260,7 @@ class JudicialCaseFileService {
             attributes: ["id", "name"],
           },
         ],
-      },
+      }],
       where: {
         numberCaseFile,
         customer_has_bank_id: chb,

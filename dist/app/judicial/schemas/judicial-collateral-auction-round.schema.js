@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const joi_1 = __importDefault(require("joi"));
 const id = joi_1.default.number();
+const caseFileId = joi_1.default.number();
 const customerHasBankId = joi_1.default.number().positive().messages({
     "number.base": "The value '{{value}}' is not a valid number",
     "number.min": "The value '{{value}}' is not allowed to be lower than 0",
@@ -38,17 +39,17 @@ const thirdCallSoles = joi_1.default.number();
 const thirdCallDollars = joi_1.default.number();
 const appraisalExperts = joi_1.default.string().messages({
     "string.base": "El valor '{{value}}' no es una cadena de texto válida",
-    "string.empty": "El valor no puede estar vacío",
+    "string.empty": "Peritos tasadores no pueden estar vacíos",
     "any.required": "El valor es requerido",
 });
 const auctionType = joi_1.default.string().messages({
     "string.base": "El valor '{{value}}' no es una cadena de texto válida",
-    "string.empty": "El valor no puede estar vacío",
+    "string.empty": "El tipo de colección no puede estar vacío",
     "any.required": "El valor es requerido",
 });
 const auctionerName = joi_1.default.string().messages({
     "string.base": "El valor '{{value}}' no es una cadena de texto válida",
-    "string.empty": "El valor no puede estar vacío",
+    "string.empty": "El nombre del martillero puede estar vacío",
     "any.required": "El valor es requerido",
 });
 const createJudicialCollateralAuctionRoundSchema = joi_1.default.object({
@@ -113,9 +114,13 @@ const getJudicialCollateralAuctionRoundByIdSchema = joi_1.default.object({
     chb: customerHasBankId.required(),
     collateralId: judicialCollateralIdJudicialCollateral.required(),
 });
+const getJudicialCollateralAuctionRoundByCaseFileIdSchema = joi_1.default.object({
+    caseFileId: caseFileId.required(),
+});
 exports.default = {
     createJudicialCollateralAuctionRoundSchema,
     updateJudicialCollateralAuctionRoundSchema,
     deleteJudicialCollateralAuctionRoundSchema,
     getJudicialCollateralAuctionRoundByIdSchema,
+    getJudicialCollateralAuctionRoundByCaseFileIdSchema
 };

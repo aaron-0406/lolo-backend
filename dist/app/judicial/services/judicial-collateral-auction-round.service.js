@@ -40,6 +40,46 @@ class JudicialCollateralAuctionRoundService {
             }
         });
     }
+    findAllAuctionbyCaseFileId(caseFileId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const rta = yield models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.findAll({
+                    where: {
+                        judicialCaseFileId: caseFileId,
+                    },
+                    include: [
+                        {
+                            model: models.JUDICIAL_COLLATERAL,
+                            as: "judicialCollateral",
+                            where: {
+                                deletedAt: null,
+                            },
+                            include: [
+                                {
+                                    model: models.JUDICIAL_COLLATERAL_AUCTION_ROUND,
+                                    as: "judicialCollateralAuctionRound",
+                                    where: {
+                                        deletedAt: null,
+                                    },
+                                    attributes: {
+                                        exclude: ["judicialCollateralId"]
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                });
+                const judicialCollateralAuctionRounds = rta.flatMap((item) => item.dataValues.judicialCollateral.dataValues.judicialCollateralAuctionRound);
+                if (!judicialCollateralAuctionRounds || judicialCollateralAuctionRounds.length === 0) {
+                    throw boom_1.default.notFound("No se encontraron rondas de remate");
+                }
+                return judicialCollateralAuctionRounds;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+    }
     getAuctionById(chb, collateralId, id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -90,7 +130,7 @@ class JudicialCollateralAuctionRoundService {
                     throw boom_1.default.notFound("Ronda de remate no encontrada");
                 }
                 const oldData = Object.assign({}, judicialCollateralAuctionRound === null || judicialCollateralAuctionRound === void 0 ? void 0 : judicialCollateralAuctionRound.get());
-                const newData = judicialCollateralAuctionRound.update(data);
+                const newData = yield judicialCollateralAuctionRound.update(data);
                 return { oldData, newData };
             }
             catch (error) {
