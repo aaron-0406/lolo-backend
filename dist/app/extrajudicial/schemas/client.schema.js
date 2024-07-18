@@ -20,6 +20,8 @@ const customerUserId = joi_1.default.number();
 const customerHasBankId = joi_1.default.number();
 const idCustomer = joi_1.default.number();
 const memoAssignmentDate = joi_1.default.date();
+const isArchived = joi_1.default.boolean();
+const archived = joi_1.default.boolean();
 const page = joi_1.default.number().required().messages({
     "number.base": "El campo page es inválido",
     "any.required": "El campo page es requerido.",
@@ -54,6 +56,7 @@ const getClientByCustomer = joi_1.default.object({
     idCustomer,
 });
 const getClientByCHBSchemaQuery = joi_1.default.object({
+    archived,
     page,
     filter,
     limit,
@@ -85,6 +88,7 @@ const saveClientSchema = joi_1.default.object({
     customerUserId: customerUserId.required(),
     customerHasBankId: customerHasBankId.required(),
     memoAssignmentDate: memoAssignmentDate.optional().empty("").allow(""),
+    isArchived: isArchived.optional(),
 });
 const transferClientToAnotherBankSchema = joi_1.default.object({
     code: code.required(),
@@ -94,6 +98,9 @@ const deleteClientByCodeSchema = joi_1.default.object({
     code: code.required(),
     chb: customerHasBankId.required(),
     idCustomer,
+});
+const updateClientsSchema = joi_1.default.object({
+    clients: joi_1.default.array().items(saveClientSchema).required(),
 });
 exports.default = {
     getClientByCustomer,
@@ -105,4 +112,5 @@ exports.default = {
     saveClientSchema,
     transferClientToAnotherBankSchema,
     deleteClientByCodeSchema,
+    updateClientsSchema,
 };
