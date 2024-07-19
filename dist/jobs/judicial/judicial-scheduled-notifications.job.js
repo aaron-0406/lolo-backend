@@ -63,7 +63,7 @@ const updateCronJobs = () => __awaiter(void 0, void 0, void 0, function* () {
         scheduledNotifications.forEach((schedule) => {
             const { id, hourTimeToNotify, customerHasBankId, frequencyToNotify, logicKey, state, scheduledNotificationsUsers, daysToNotify, } = schedule.dataValues;
             const now = new Date();
-            const date = moment_1.default.utc(hourTimeToNotify, "YYYY-MM-DD HH:mm:ss");
+            const date = moment_1.default.utc(hourTimeToNotify, "YYYY-MM-DD HH:mm:ss", "America/Lima");
             const minute = date.format("mm");
             const hour = date.format("HH");
             const currentDay = daysOfTheWeek[now.getDay()];
@@ -93,77 +93,88 @@ const updateCronJobs = () => __awaiter(void 0, void 0, void 0, function* () {
                             var _a, _b, _c, _d;
                             return ((_d = (_c = (_b = (_a = scheduleNotificationUser === null || scheduleNotificationUser === void 0 ? void 0 : scheduleNotificationUser.dataValues) === null || _a === void 0 ? void 0 : _a.customerUser) === null || _b === void 0 ? void 0 : _b.dataValues) === null || _c === void 0 ? void 0 : _c.email) !== null && _d !== void 0 ? _d : "");
                         });
-                        const emailBody = filteredRta
-                            .filter((rta) => {
-                            return rta["judicialFileCase.processStatus"] === "Activo";
-                        })
-                            .map((judicialBinnacle) => {
-                            return `
+                        const binnaclesByCity = filteredRta.reduce((acc, judicialBinnacle) => {
+                            const city = judicialBinnacle["judicialFileCase.client.city.name"];
+                            if (!acc[city]) {
+                                acc[city] = [];
+                            }
+                            if (judicialBinnacle["judicialFileCase.processStatus"] === "Activo") {
+                                acc[city].push(judicialBinnacle);
+                            }
+                            return acc;
+                        }, {});
+                        for (const city in binnaclesByCity) {
+                            const emailBody = binnaclesByCity[city]
+                                .map((judicialBinnacle) => {
+                                return `
                   <div class="cliente">
-                      <h2>Cliente: ${judicialBinnacle["judicialFileCase.client.name"]} (${judicialBinnacle["customerHasBank.bank.name"]}) - (${judicialBinnacle["judicialFileCase.client.city.name"]})</h2>
+                      <h2>Cliente: ${judicialBinnacle["judicialFileCase.client.name"]} (${judicialBinnacle["customerHasBank.bank.name"]}) - (${city.toUpperCase()})</h2>
                       <p class="expediente"><strong>Exp.:</strong> ${judicialBinnacle["judicialFileCase.numberCaseFile"]}</p>
                       <p class="especialista"><strong>Esp.:</strong> ${judicialBinnacle["judicialFileCase.secretary"]} - ${judicialBinnacle["judicialFileCase.judicialCourt.court"]}</p>
                       <p><strong>Escritos SIN PROVEÍDO a la fecha:</strong></p>
                       <ul class="detalles">
-                          <li>${moment_1.default
-                                .utc(judicialBinnacle.date)
-                                .format("DD-MM-YYYY")} - ${judicialBinnacle.lastPerformed}</li>
+                          <li>${moment_1.default.utc(judicialBinnacle.date).format("DD-MM-YYYY")} - ${judicialBinnacle.lastPerformed}</li>
                       </ul>
+                      <p>Procesos pendientes de impulso:</p>
                   </div>
-              `;
-                        })
-                            .join("");
-                        const message = {
-                            from: config_1.default.AWS_EMAIL,
-                            to: emails,
-                            subject: "PROCESOS PENDIENTE DE IMPULSO",
-                            html: `
-                    <!DOCTYPE html>
-                    <html lang="es">
-                    <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>Procesos Pendientes</title>
-                        <style>
-                            body {
-                                font-family: Arial, sans-serif;
-                                margin: 20px;
+                `;
+                            })
+                                .join("");
+                            if (binnaclesByCity[city].length) {
+                                const message = {
+                                    from: config_1.default.AWS_EMAIL,
+                                    to: emails,
+                                    subject: `PROCESOS PENDIENTE DE IMPULSO - ${city.toUpperCase()}`,
+                                    html: `
+                      <!DOCTYPE html>
+                      <html lang="es">
+                      <head>
+                          <meta charset="UTF-8">
+                          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                          <title>Procesos Pendientes</title>
+                          <style>
+                              body {
+                                  font-family: Arial, sans-serif;
+                                  margin: 20px;
+                              }
+                              h1 {
+                                  text-align: center;
+                              }
+                              .cliente {
+                                  margin-bottom: 20px;
+                              }
+                              .cliente h2 {
+                                  color: #2E86C1;
+                              }
+                              .cliente p {
+                                  margin: 5px 0;
+                              }
+                              .expediente, .especialista, .detalles {
+                                  margin-left: 20px;
+                              }
+                              .detalles {
+                                  list-style-type: disc;
+                              }
+                          </style>
+                      </head>
+                      <body>
+                        <h1>Procesos Pendientes de Impulso - ${city.toUpperCase()}</h1>
+                        <h2>Cantidad de casos: ${binnaclesByCity[city].length}</h2>
+                        ${emailBody}
+                        <p>Saludos.</p>
+                      </body>
+                      </html>
+                      `,
+                                };
+                                transport.sendMail(message, (error, info) => {
+                                    //TODO: We need to record this info in a table to show to the user if the email was send or no.
+                                    if (error)
+                                        console.log(error);
+                                    if (info)
+                                        console.log(info);
+                                });
                             }
-                            h1 {
-                                text-align: center;
-                            }
-                            .cliente {
-                                margin-bottom: 20px;
-                            }
-                            .cliente h2 {
-                                color: #2E86C1;
-                            }
-                            .cliente p {
-                                margin: 5px 0;
-                            }
-                            .expediente, .especialista, .detalles {
-                                margin-left: 20px;
-                            }
-                            .detalles {
-                                list-style-type: disc;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                      <h1>Procesos Pendientes de Impulso</h1>
-                      ${emailBody}
-                      <p>Saludos.</p>
-                    </body>
-                    </html>
-                    `,
-                        };
-                        transport.sendMail(message, (error, info) => {
-                            //TODO: We need to record this info in a table to show to the user if the email was send or no.
-                            if (error)
-                                console.log(error);
-                            if (info)
-                                console.log(info);
-                        });
+                        }
                     }
                     console.log("JOB FINISH");
                 }

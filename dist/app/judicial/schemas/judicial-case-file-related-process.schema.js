@@ -123,6 +123,10 @@ const getJudicialCaseFileRelatedProcesByNumberCaseFileSchema = joi_1.default.obj
     numberCaseFile: numberCaseFile.required(),
     chb: customerHasBankId.required(),
 });
+const createQrCodeRelatedProcessSchema = joi_1.default.object({
+    numberCaseFile: numberCaseFile.required(),
+    chb: customerHasBankId.required(),
+});
 const getJudicialCaseFileRelatedProcesByCustomerIdSchema = joi_1.default.object({
     customerId: customerId.required(),
 });
@@ -136,4 +140,5 @@ exports.default = {
     getJudicialCaseFileRelatedProcesByIDSchema,
     getJudicialCaseFileRelatedProcesByNumberCaseFileSchema,
     getJudicialCaseFileRelatedProcesByCustomerIdSchema,
+    createQrCodeRelatedProcessSchema,
 };

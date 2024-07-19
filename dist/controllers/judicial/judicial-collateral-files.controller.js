@@ -22,7 +22,7 @@ const { JUDICIAL_COLLATERAL_FILES_TABLE } = judicial_collateral_files_model_1.de
 const getAllCollateralFilesController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { collateralId, chb } = req.params;
-        const collateralFiles = yield service.findAllByCollateralId(Number(collateralId), Number(chb));
+        const collateralFiles = yield service.findAllByCollateralId(Number(collateralId), Number(chb), req.query);
         res.json(collateralFiles);
     }
     catch (error) {

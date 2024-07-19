@@ -12,11 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteJudicialCaseFileRelatedProcessController = exports.updateJudicialCaseFileRelatedProcessController = exports.createJudicialCaseFileRelatedProcessController = exports.getJudicialCaseFileRelatedProcessByIdController = exports.getJudicialCaseFileRelatedProcessRelatedController = exports.getJudicialCaseFileRelatedProcessByNumberCaseFileController = exports.getJudicialCaseFileRelatedProcessByCHBIdController = exports.getJudicialCaseFileRelatedProcessByClientIdController = exports.getJudicialCaseFileRelatedProcessController = exports.getJudicialCaseFileRelatedProcessbyCaseFileIdController = void 0;
+exports.deleteJudicialCaseFileRelatedProcessController = exports.updateJudicialCaseFileRelatedProcessController = exports.createQrCodeRelatedProcessController = exports.createJudicialCaseFileRelatedProcessController = exports.getJudicialCaseFileRelatedProcessByIdController = exports.getJudicialCaseFileRelatedProcessRelatedController = exports.getJudicialCaseFileRelatedProcessByNumberCaseFileController = exports.getJudicialCaseFileRelatedProcessByCHBIdController = exports.getJudicialCaseFileRelatedProcessByClientIdController = exports.getJudicialCaseFileRelatedProcessController = exports.getJudicialCaseFileRelatedProcessbyCaseFileIdController = void 0;
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const judicial_case_file_model_1 = __importDefault(require("../../db/models/judicial-case-file.model"));
 const judicial_case_file_realated_process_service_1 = __importDefault(require("../../app/judicial/services/judicial-case-file-realated-process.service"));
+const judicial_case_file_service_1 = __importDefault(require("../../app/judicial/services/judicial-case-file.service"));
 const service = new judicial_case_file_realated_process_service_1.default();
+const serviceCaseFile = new judicial_case_file_service_1.default();
 const serviceUserLog = new user_log_service_1.default();
 const { JUDICIAL_CASE_FILE_TABLE } = judicial_case_file_model_1.default;
 const getJudicialCaseFileRelatedProcessbyCaseFileIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -116,6 +118,17 @@ const createJudicialCaseFileRelatedProcessController = (req, res, next) => __awa
     }
 });
 exports.createJudicialCaseFileRelatedProcessController = createJudicialCaseFileRelatedProcessController;
+const createQrCodeRelatedProcessController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { numberCaseFile, chb } = req.params;
+        const qrCode = yield serviceCaseFile.createQrCode(numberCaseFile, parseInt(chb));
+        res.json(qrCode);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.createQrCodeRelatedProcessController = createQrCodeRelatedProcessController;
 const updateJudicialCaseFileRelatedProcessController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _d, _e, _f;
     try {

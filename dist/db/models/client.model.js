@@ -113,7 +113,13 @@ const ClientSchema = {
         allowNull: true,
         field: "memo_assignment_date",
         type: sequelize_1.DataTypes.DATEONLY,
-    }
+    },
+    isArchived: {
+        allowNull: false,
+        field: "is_archived",
+        type: sequelize_1.DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
 };
 class Client extends sequelize_1.Model {
     static associate(models) {

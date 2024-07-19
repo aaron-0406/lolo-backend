@@ -8,6 +8,7 @@ import {
 import { deleteFile, isFileStoredIn, renameFile } from "../../../libs/helpers";
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
+import { Op } from "sequelize";
 
 const { models } = sequelize;
 
@@ -58,14 +59,23 @@ class JudicialCollateralFilesService {
     }
   }
 
-  async findAllByCollateralId(collateralId: number, chb: number) {
+  async findAllByCollateralId(collateralId: number, chb: number, query: any) {
+    const { filter } = query;
+    const fileName = filter as string;
+    let filtersWhere: any = {
+      judicialCollateralIdJudicialCollateral: collateralId,
+      customerHasBankId: chb,
+    };
+    if (fileName) {
+      filtersWhere = {
+        ...filtersWhere,
+        originalName: { [Op.like]: `%${fileName}%` },
+      };
+    }
     try {
       const judicialCollateralFile =
         await models.JUDICIAL_COLLATERAL_FILES.findAll({
-          where: {
-            judicialCollateralIdJudicialCollateral: collateralId,
-            customerHasBankId: chb,
-          },
+          where: filtersWhere,
           attributes: {
             exclude: ["judicialCollateralId"],
           },
