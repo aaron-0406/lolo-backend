@@ -11,6 +11,7 @@ import {
   getClientsByCHBController,
   getClientsByCHBDetailsController,
   getClientsByNameOrCodeController,
+  updateClientsController,
 } from "../../controllers/extrajudicial/client.controller";
 import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 
@@ -24,6 +25,7 @@ const {
   saveClientSchema,
   transferClientToAnotherBankSchema,
   deleteClientByCodeSchema,
+  updateClientsSchema
 } = clientSchema;
 
 const router = express.Router();
@@ -84,6 +86,15 @@ router.post(
   validatorHandler(transferClientToAnotherBankSchema, "body"),
   transferClientToAnotherBankController
 );
+
+router.patch(
+  "/:chb",
+  JWTAuth,
+  checkPermissions("P02-04"),
+  validatorHandler(getClientByCHBSchema, "params"),
+  validatorHandler(updateClientsSchema, "body"),
+  updateClientsController
+)
 
 router.delete(
   "/:code/:chb/:idCustomer",
