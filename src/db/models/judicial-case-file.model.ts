@@ -238,6 +238,12 @@ class JudicialCaseFile extends Model {
       as: "product",
       foreignKey: "judicialCaseFileId",
     });
+
+    this.belongsTo(models.JUDICIAL_CASE_FILE, {
+      as: "relatedJudicialCaseFile",
+      foreignKey: "idJudicialCaseFileRelated",
+    });
+
     this.hasMany(models.JUDICIAL_BINNACLE, {
       as: "judicialBinnacle",
       foreignKey: "judicialFileCaseId",

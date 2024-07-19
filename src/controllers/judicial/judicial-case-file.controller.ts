@@ -122,7 +122,7 @@ export const createJudicialCaseFileController = async (
   }
 };
 
-export const createQrCode = async (
+export const createQrCodeToCaseFileController = async (
   req: Request,
   res: Response,
   next: NextFunction
