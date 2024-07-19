@@ -228,17 +228,24 @@ class JudicialCaseFileService {
     findByNumberCaseFile(numberCaseFile, chb) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialCaseFile = yield models.JUDICIAL_CASE_FILE.findOne({
-                include: {
-                    model: models.CLIENT,
-                    as: "client",
-                    include: [
-                        {
-                            model: models.CUSTOMER_USER,
-                            as: "customerUser",
-                            attributes: ["id", "name"],
-                        },
-                    ],
-                },
+                include: [
+                    {
+                        model: models.CLIENT,
+                        as: "client",
+                        include: [
+                            {
+                                model: models.CUSTOMER_USER,
+                                as: "customerUser",
+                                attributes: ["id", "name"],
+                            },
+                        ],
+                    },
+                    {
+                        model: models.JUDICIAL_CASE_FILE,
+                        as: "relatedJudicialCaseFile",
+                        attributes: ["numberCaseFile"],
+                    }
+                ],
                 where: {
                     numberCaseFile,
                     customer_has_bank_id: chb,

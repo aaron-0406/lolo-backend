@@ -2,8 +2,10 @@ import { Request, Response, NextFunction } from "express";
 import UserLogService from "../../app/dash/services/user-log.service";
 import judicialCaseFileModel from "../../db/models/judicial-case-file.model";
 import JudicialCaseFileRelatedProcessService from "../../app/judicial/services/judicial-case-file-realated-process.service";
+import JudicialCaseFileService from "../../app/judicial/services/judicial-case-file.service";
 
 const service = new JudicialCaseFileRelatedProcessService();
+const serviceCaseFile = new JudicialCaseFileService();
 const serviceUserLog = new UserLogService();
 
 const { JUDICIAL_CASE_FILE_TABLE } = judicialCaseFileModel;
@@ -131,6 +133,23 @@ export const createJudicialCaseFileRelatedProcessController = async (
     });
 
     res.status(201).json(newJudicialCaseFile);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const createQrCodeRelatedProcessController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { numberCaseFile, chb } = req.params;
+    const qrCode = await serviceCaseFile.createQrCode(
+      numberCaseFile,
+      parseInt(chb)
+    );
+    res.json(qrCode);
   } catch (error) {
     next(error);
   }
