@@ -7,6 +7,8 @@ const joi_1 = __importDefault(require("joi"));
 const customerId = joi_1.default.number();
 const users = joi_1.default.string().required();
 const actions = joi_1.default.string().required();
+const initialDate = joi_1.default.string().required();
+const finalDate = joi_1.default.string().required();
 const page = joi_1.default.number().required().messages({
     "number.base": "El campo page es inválido",
     "any.required": "El campo page es requerido.",
@@ -26,6 +28,8 @@ const getUserLogsFilterByCustomerIdQuery = joi_1.default.object({
     limit,
     actions,
     users,
+    initialDate,
+    finalDate,
 }).options({ abortEarly: true });
 exports.default = {
     getUserLogsByCustomerIdchema,
