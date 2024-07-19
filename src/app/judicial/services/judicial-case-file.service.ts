@@ -96,7 +96,10 @@ class JudicialCaseFileService {
     }
 
     let filtersWhere: any = {
-      customer_has_bank_id: chb,
+      [Op.or]: [
+        { customer_has_bank_id: chb },
+        { chb_transferred: chb },
+      ],
       id_judicial_case_file_related: null,
     };
 
@@ -242,7 +245,10 @@ class JudicialCaseFileService {
       },
       where: {
         numberCaseFile,
-        customer_has_bank_id: chb,
+        [Op.or]: [
+          { customer_has_bank_id: chb },
+          { chb_transferred: chb },
+        ],
       },
     });
 

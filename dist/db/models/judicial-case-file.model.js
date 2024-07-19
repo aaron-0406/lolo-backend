@@ -209,6 +209,11 @@ const JudicialCaseFileSchema = {
         field: "qr_code",
         type: sequelize_1.DataTypes.TEXT("long"),
     },
+    chbTransferred: {
+        allowNull: true,
+        field: "chb_transferred",
+        type: sequelize_1.DataTypes.INTEGER,
+    },
 };
 class JudicialCaseFile extends sequelize_1.Model {
     static associate(models) {

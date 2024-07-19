@@ -167,7 +167,7 @@ export const transferClientToAnotherBankController = async (
       customerId: Number(req.user?.customerId),
     });
 
-    res.status(201).json({ id: data.id, chbTransferred: data.chbTransferred });
+    res.status(201).json({ id: data?.id, chbTransferred: data?.chbTransferred });
   } catch (error) {
     next(error);
   }

@@ -358,13 +358,29 @@ class ClientService {
     chb: string,
     chbTransferred: string
   ) {
-    const client = await this.findCode(code, chb);
-    await client.update({
-      ...client,
-      chbTransferred: chb == chbTransferred ? null : chbTransferred,
-    });
+    try{
+      const client = await this.findCode(code, chb);
+      await client.update({
+        ...client,
+        chbTransferred: chb == chbTransferred ? null : chbTransferred,
+      });
+      const caseFiles = await models.JUDICIAL_CASE_FILE.findAll({
+        where: {
+          clientId: client.dataValues.id,
+        },
+      });
 
-    return { id: client.dataValues.id, chbTransferred };
+      caseFiles.forEach(async (caseFile) => {
+        await caseFile.update({
+          ...caseFile,
+          chbTransferred: caseFile.dataValues.customerHasBankId == chbTransferred ? null : chbTransferred,
+        });
+      }); 
+
+      return { id: client.dataValues.id, chbTransferred };
+    } catch(e){
+      console.log(e)
+    }
   }
 
   async update(

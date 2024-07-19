@@ -48,6 +48,7 @@ const proceduralWays = joi_1.default.string().required();
 const subjects = joi_1.default.string().required();
 const users = joi_1.default.string().required();
 const customerId = joi_1.default.number();
+const chbTransferred = joi_1.default.number();
 const createJudicialCaseFileRelatedProcessSchema = joi_1.default.object({
     numberCaseFile: numberCaseFile.required(),
     judgmentNumber: judgmentNumber.optional().empty("").allow(""),
@@ -72,6 +73,7 @@ const createJudicialCaseFileRelatedProcessSchema = joi_1.default.object({
         .allow(""),
     bankId: bankId.optional().empty("").allow(""),
     qrCode: qrCode.optional().empty("").allow(""),
+    chbTransferred: chbTransferred.optional().empty("").allow(""),
 });
 const updateJudicialCaseFileRelatedProcessSchema = joi_1.default.object({
     numberCaseFile: numberCaseFile.required(),
@@ -97,6 +99,7 @@ const updateJudicialCaseFileRelatedProcessSchema = joi_1.default.object({
         .allow(""),
     bankId: bankId.optional().empty("").allow(""),
     qrCode: qrCode.optional().empty("").allow(""),
+    chbTransferred: chbTransferred.optional().empty("").allow(""),
 });
 const getRelatedProcessByCaseFileIdSchema = joi_1.default.object({
     caseFileId: caseFileId.required(),

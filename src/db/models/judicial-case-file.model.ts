@@ -217,6 +217,11 @@ const JudicialCaseFileSchema: ModelAttributes<
     field: "qr_code",
     type: DataTypes.TEXT("long"),
   },
+  chbTransferred: {
+    allowNull: true,
+    field: "chb_transferred",
+    type: DataTypes.INTEGER,
+  },
 };
 
 class JudicialCaseFile extends Model {

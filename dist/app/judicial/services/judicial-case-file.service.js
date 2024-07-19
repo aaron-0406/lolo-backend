@@ -86,7 +86,7 @@ class JudicialCaseFileService {
                         model = models.JUDICIAL_PROCEDURAL_WAY;
                         break;
                     default:
-                        sortField = 'createdAt';
+                        sortField = 'createdAt';    
                         model = undefined;
                 }
                 if (model) {
@@ -100,7 +100,10 @@ class JudicialCaseFileService {
                 orderConfig = undefined;
             }
             let filtersWhere = {
-                customer_has_bank_id: chb,
+                [sequelize_2.Op.or]: [
+                    { customer_has_bank_id: chb },
+                    { chb_transferred: chb },
+                ],
                 id_judicial_case_file_related: null,
             };
             // Agregar filtro por nombre de cliente si se proporciona
