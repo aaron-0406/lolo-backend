@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteClientController = exports.transferClientToAnotherBankController = exports.saveClientController = exports.getClientByCodeCHBController = exports.getClientsByCHBDetailsController = exports.getClientsByNameOrCodeController = exports.getClientsByCHBController = exports.downloadExcelDailyManagementController = exports.getAllClientsController = void 0;
+exports.deleteClientController = exports.transferClientToAnotherBankController = exports.updateClientsController = exports.saveClientController = exports.getClientByCodeCHBController = exports.getClientsByCHBDetailsController = exports.getClientsByNameOrCodeController = exports.getClientsByCHBController = exports.downloadExcelDailyManagementController = exports.getAllClientsController = void 0;
 const client_service_1 = __importDefault(require("../../app/extrajudicial/services/client.service"));
 const fs = __importStar(require("fs"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
@@ -150,19 +150,42 @@ const saveClientController = (req, res, next) => __awaiter(void 0, void 0, void 
     }
 });
 exports.saveClientController = saveClientController;
+const updateClientsController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { chb } = req.params;
+        const body = req.body;
+        const clients = yield service.updateClients(body.clients, chb);
+        body.clients.forEach((client) => __awaiter(void 0, void 0, void 0, function* () {
+            var _g, _h, _j;
+            yield serviceUserLog.create({
+                customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
+                codeAction: "P02-04",
+                entity: CLIENT_TABLE,
+                entityId: Number(client.id),
+                ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
+                customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            });
+        }));
+        res.status(201).json(clients);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.updateClientsController = updateClientsController;
 const transferClientToAnotherBankController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _g, _h, _j;
+    var _k, _l, _m;
     try {
         const { chb } = req.params;
         const body = req.body;
         const data = yield service.transferToAnotherBank(body.code, chb, body.chbTransferred);
         yield serviceUserLog.create({
-            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
+            customerUserId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.id),
             codeAction: "P02-06",
             entity: CLIENT_TABLE,
             entityId: Number(body.code),
-            ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
-            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            ip: (_l = req.clientIp) !== null && _l !== void 0 ? _l : "",
+            customerId: Number((_m = req.user) === null || _m === void 0 ? void 0 : _m.customerId),
         });
         res.status(201).json({ id: data === null || data === void 0 ? void 0 : data.id, chbTransferred: data === null || data === void 0 ? void 0 : data.chbTransferred });
     }
@@ -172,17 +195,17 @@ const transferClientToAnotherBankController = (req, res, next) => __awaiter(void
 });
 exports.transferClientToAnotherBankController = transferClientToAnotherBankController;
 const deleteClientController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _k, _l, _m;
+    var _o, _p, _q;
     try {
         const { code, chb, idCustomer } = req.params;
         const client = yield service.delete(code, chb, Number(idCustomer));
         yield serviceUserLog.create({
-            customerUserId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.id),
+            customerUserId: Number((_o = req.user) === null || _o === void 0 ? void 0 : _o.id),
             codeAction: "P02-05",
             entity: CLIENT_TABLE,
             entityId: Number(client.id),
-            ip: (_l = req.clientIp) !== null && _l !== void 0 ? _l : "",
-            customerId: Number((_m = req.user) === null || _m === void 0 ? void 0 : _m.customerId),
+            ip: (_p = req.clientIp) !== null && _p !== void 0 ? _p : "",
+            customerId: Number((_q = req.user) === null || _q === void 0 ? void 0 : _q.customerId),
         });
         res.status(201).json({ code, chb, id: client.id });
     }

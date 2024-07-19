@@ -37,17 +37,32 @@ class UserLogService {
     }
     findByCustomerId(customerId, query) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { limit, page, actions, users } = query;
+            const { limit, page, actions, users, initialDate, finalDate } = query;
             const limite = parseInt(limit, 10);
             const pagina = parseInt(page, 10);
             const listActions = JSON.parse(actions);
             const listUsers = JSON.parse(users);
+            const initial = JSON.parse(initialDate)
+                ? new Date(initialDate).setHours(0, 0, 0, 0)
+                : undefined;
+            const final = JSON.parse(finalDate)
+                ? new Date(finalDate).setHours(0, 0, 0, 0)
+                : undefined;
             const filters = {};
             if (listActions.length) {
                 filters.codeAction = { [sequelize_1.Op.in]: listActions };
             }
             if (listUsers.length) {
                 filters.customer_user_id_customer_user = { [sequelize_1.Op.in]: listUsers };
+            }
+            if (initial && final) {
+                filters.createAt = { [sequelize_1.Op.between]: [initial, final] };
+            }
+            if (final && !initial) {
+                filters.createAt = { [sequelize_1.Op.lte]: final };
+            }
+            if (initial && !final) {
+                filters.createAt = { [sequelize_1.Op.gte]: initial };
             }
             let filtersWhere = {
                 customer_id_customer: customerId,
