@@ -56,6 +56,11 @@ const ScheduledNotificationsSchema = {
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
     },
+    daysToNotify: {
+        allowNull: true,
+        field: "days_to_notify",
+        type: sequelize_1.DataTypes.STRING,
+    },
     createdAt: {
         allowNull: false,
         field: "created_at",

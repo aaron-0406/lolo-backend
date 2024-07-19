@@ -40,7 +40,7 @@ class JudicialCaseFileService {
     }
     findAllByCHB(chb, query) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { limit, page, filter, courts, proceduralWays, subjects, users } = query;
+            const { limit, page, filter, courts, sedes, proceduralWays, subjects, users, sortBy, order } = query;
             const limite = parseInt(limit, 10);
             const pagina = parseInt(page, 10);
             const clientName = filter;
@@ -48,6 +48,8 @@ class JudicialCaseFileService {
             const listProceduralWays = JSON.parse(proceduralWays);
             const listSubjects = JSON.parse(subjects);
             const listUsers = JSON.parse(users);
+            const listSedes = JSON.parse(sedes);
+            const sortByField = sortBy;
             const filters = {};
             if (listCourts.length) {
                 filters.judicial_court_id_judicial_court = { [sequelize_2.Op.in]: listCourts };
@@ -63,6 +65,40 @@ class JudicialCaseFileService {
             if (listUsers.length) {
                 filters.customer_user_id_customer_user = { [sequelize_2.Op.in]: listUsers };
             }
+            if (listSedes.length) {
+                filters.judicial_sede_id_judicial_sede = { [sequelize_2.Op.in]: listSedes };
+            }
+            let sortField;
+            let orderConfig;
+            let model;
+            if (sortBy && order) {
+                switch (sortByField) {
+                    case 'CLIENTE':
+                        sortField = 'name';
+                        model = models.CLIENT;
+                        break;
+                    case 'judicialCourt':
+                        sortField = 'name';
+                        model = models.JUDICIAL_COURT;
+                        break;
+                    case 'proceduralWay':
+                        sortField = 'name';
+                        model = models.JUDICIAL_PROCEDURAL_WAY;
+                        break;
+                    default:
+                        sortField = 'createdAt';
+                        model = undefined;
+                }
+                if (model) {
+                    orderConfig = [[{ model, as: model.name.toLowerCase() }, sortField, order]];
+                }
+                else {
+                    orderConfig = [[sortField, order]];
+                }
+            }
+            else {
+                orderConfig = undefined;
+            }
             let filtersWhere = {
                 customer_has_bank_id: chb,
                 id_judicial_case_file_related: null,
@@ -77,55 +113,44 @@ class JudicialCaseFileService {
                     [sequelize_2.Op.and]: [{ [sequelize_2.Op.or]: [filters] }, filtersWhere],
                 };
             }
-            const quantity = yield models.JUDICIAL_CASE_FILE.count({
-                include: [
-                    {
-                        model: models.CLIENT,
-                        as: "client",
-                    },
-                ],
-                where: filtersWhere,
-            });
-            const caseFiles = yield models.JUDICIAL_CASE_FILE.findAll({
-                include: [
-                    {
-                        model: models.CUSTOMER_USER,
-                        as: "customerUser",
-                        attributes: ["id", "name"],
-                    },
-                    {
-                        model: models.JUDICIAL_COURT,
-                        as: "judicialCourt",
-                    },
-                    {
-                        model: models.JUDICIAL_PROCEDURAL_WAY,
-                        as: "judicialProceduralWay",
-                    },
-                    {
-                        model: models.JUDICIAL_SUBJECT,
-                        as: "judicialSubject",
-                    },
-                    {
-                        model: models.JUDICIAL_SEDE,
-                        as: "judicialSede",
-                    },
-                    {
-                        model: models.CITY,
-                        as: "city",
-                    },
-                    {
-                        model: models.CLIENT,
-                        as: "client",
-                        attributes: ["id", "name"],
-                    },
-                ],
-                limit: limite,
-                offset: (pagina - 1) * limite,
-                where: filtersWhere,
-            });
-            return { caseFiles, quantity };
+            try {
+                const quantity = yield models.JUDICIAL_CASE_FILE.count({
+                    include: [
+                        { model: models.CLIENT, as: "client" },
+                    ],
+                    where: filtersWhere,
+                });
+                const caseFiles = yield models.JUDICIAL_CASE_FILE.findAll({
+                    include: [
+                        {
+                            model: models.CUSTOMER_USER,
+                            as: "customerUser",
+                            attributes: ["id", "name"],
+                        },
+                        { model: models.JUDICIAL_COURT, as: "judicialCourt" },
+                        {
+                            model: models.JUDICIAL_PROCEDURAL_WAY,
+                            as: "judicialProceduralWay",
+                        },
+                        { model: models.JUDICIAL_SUBJECT, as: "judicialSubject" },
+                        { model: models.JUDICIAL_SEDE, as: "judicialSede" },
+                        { model: models.CITY, as: "city" },
+                        { model: models.CLIENT, as: "client", attributes: ["id", "name"] },
+                    ],
+                    limit: limite,
+                    offset: (pagina - 1) * limite,
+                    where: filtersWhere,
+                    order: orderConfig, // Orden configurado dinámicamente según sortBy y order
+                });
+                return { caseFiles, quantity };
+            }
+            catch (error) {
+                console.error("Error en findAllByCHB:", error);
+                throw boom_1.default.badImplementation("Error al consultar los expedientes");
+            }
         });
     }
+    // Métodos adicionales del servicio aquí...
     existNumberCaseFile(customerId, numberCaseFile) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialCaseFile = yield models.JUDICIAL_CASE_FILE.findOne({

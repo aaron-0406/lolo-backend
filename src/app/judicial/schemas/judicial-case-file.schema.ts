@@ -52,6 +52,9 @@ const courts = Joi.string().required();
 const proceduralWays = Joi.string().required();
 const subjects = Joi.string().required();
 const users = Joi.string().required();
+const sedes = Joi.string().required();
+const sortBy = Joi.string().optional().empty("").allow("");
+const order = Joi.string().optional().empty("").allow("");
 
 const customerId = Joi.number();
 
@@ -147,6 +150,9 @@ const getJudicialCaseFileByCHBSchemaQuery = Joi.object({
   proceduralWays,
   subjects,
   users,
+  sedes,
+  sortBy,
+  order,
 }).options({ abortEarly: true });
 
 const getJudicialCaseFileByIDSchema = Joi.object<{ id: number }, true>({
