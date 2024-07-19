@@ -5,7 +5,7 @@ import config from "../../../config/config";
 import { uploadFile } from "../../../libs/aws_bucket";
 import { deleteFile, renameFile } from "../../../libs/helpers";
 import moment from "moment";
-import { Op } from "sequelize";
+import { FindOptions, Model, Op, ModelCtor } from "sequelize";
 
 const { models } = sequelize;
 
@@ -34,7 +34,34 @@ class JudicialBinnacleService {
     return judicialBinnacle;
   }
 
-  async findAllByCHBAndFileCase(fileCase: number) {
+  async findAllByCHBAndFileCase(fileCase: number, query: any) {
+    const { sortBy, order } = query;
+
+    let orderConfig: FindOptions<any>["order"] = [];
+
+    if (sortBy && order) {
+      const sortByFields = (sortBy as string).split(",");
+      const orderDirections = (order as string).split(",");
+
+      orderConfig = sortByFields.map((field, index) => {
+        let sortField: string;
+
+        switch (field.trim()) {
+          case "FECHA":
+            sortField = "date";
+            break;
+
+          default:
+            sortField = field.trim();
+        }
+
+        return [
+          sortField,
+          (orderDirections[index] || "ASC").trim().toUpperCase(),
+        ];
+      });
+    }
+
     const rta = await models.JUDICIAL_BINNACLE.findAll({
       include: [
         {
@@ -50,7 +77,7 @@ class JudicialBinnacleService {
           as: "judicialBinFiles",
         },
       ],
-      order: [["id", "DESC"]],
+      order: orderConfig,
       where: {
         judicialFileCaseId: fileCase,
       },
@@ -121,7 +148,6 @@ class JudicialBinnacleService {
       await deleteFile("../public/docs", file.filename);
     });
     const binnacle = await this.findByID(newJudicialBinnacle.dataValues.id);
-
     return binnacle;
   }
 

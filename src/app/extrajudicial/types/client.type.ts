@@ -14,4 +14,5 @@ export type ClientType = {
   customerUserId: number;
   customerHasBankId: number;
   memoAssignmentDate: Date;
+  isArchived: boolean;
 };

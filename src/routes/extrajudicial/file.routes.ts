@@ -18,6 +18,8 @@ const {
   deleteFileSchema,
   getFileSchema,
   getFileByIdSchema,
+  getFileFilterByIdAndChbSchema,
+  getUserLogsFilterByCustomerIdQuery
 } = fileSchema;
 const router = express.Router();
 
@@ -29,9 +31,10 @@ const multerFile = (req: Request, res: Response, next: NextFunction) => {
 };
 
 router.get(
-  "/:id",
+  "/:id/chb/:chb",
   JWTAuth,
-  validatorHandler(getFileSchema, "params"),
+  validatorHandler(getFileFilterByIdAndChbSchema, "params"),
+  validatorHandler(getUserLogsFilterByCustomerIdQuery, "query"),
   findFileByClientIdController
 );
 

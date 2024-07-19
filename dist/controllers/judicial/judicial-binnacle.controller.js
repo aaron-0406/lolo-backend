@@ -22,7 +22,7 @@ const { JUDICIAL_BINNACLE_TABLE } = judicial_binnacle_model_1.default;
 const getJudicialBinnacleByCHBController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { fileCase } = req.params;
-        const judicialBinnacles = yield service.findAllByCHBAndFileCase(Number(fileCase));
+        const judicialBinnacles = yield service.findAllByCHBAndFileCase(Number(fileCase), req.query);
         res.json(judicialBinnacles);
     }
     catch (error) {

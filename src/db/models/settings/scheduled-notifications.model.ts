@@ -63,6 +63,11 @@ const ScheduledNotificationsSchema: ModelAttributes<
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
+  daysToNotify: {
+    allowNull: true,
+    field: "days_to_notify",
+    type: DataTypes.STRING,
+  },
   createdAt: {
     allowNull: false,
     field: "created_at",

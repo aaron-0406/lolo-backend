@@ -8,7 +8,7 @@ const validator_handler_1 = __importDefault(require("../../middlewares/validator
 const client_schema_1 = __importDefault(require("../../app/extrajudicial/schemas/client.schema"));
 const client_controller_1 = require("../../controllers/extrajudicial/client.controller");
 const auth_handler_1 = require("../../middlewares/auth.handler");
-const { getClientByCHBSchema, getClientByCodeSchema, getClientByCustomer, getClientByCHBSchemaQuery, getClientByNameOrCodeSchemaQuery, getDateSchema, saveClientSchema, transferClientToAnotherBankSchema, deleteClientByCodeSchema, } = client_schema_1.default;
+const { getClientByCHBSchema, getClientByCodeSchema, getClientByCustomer, getClientByCHBSchemaQuery, getClientByNameOrCodeSchemaQuery, getDateSchema, saveClientSchema, transferClientToAnotherBankSchema, deleteClientByCodeSchema, updateClientsSchema } = client_schema_1.default;
 const router = express_1.default.Router();
 router.get("/", auth_handler_1.JWTAuth, client_controller_1.getAllClientsController);
 router.get("/download-excel-daily-management", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P02-01"), (0, validator_handler_1.default)(getDateSchema, "query"), client_controller_1.downloadExcelDailyManagementController);
@@ -18,5 +18,6 @@ router.get("/:chb/details", auth_handler_1.JWTAuth, (0, validator_handler_1.defa
 router.get("/:code/:chb", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getClientByCodeSchema, "params"), client_controller_1.getClientByCodeCHBController);
 router.post("/:idCustomer", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getClientByCustomer, "params"), (0, validator_handler_1.default)(saveClientSchema, "body"), client_controller_1.saveClientController);
 router.post("/transfer-client-to-another-bank/:chb", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P02-06"), (0, validator_handler_1.default)(getClientByCHBSchema, "params"), (0, validator_handler_1.default)(transferClientToAnotherBankSchema, "body"), client_controller_1.transferClientToAnotherBankController);
+router.patch("/:chb", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P02-04"), (0, validator_handler_1.default)(getClientByCHBSchema, "params"), (0, validator_handler_1.default)(updateClientsSchema, "body"), client_controller_1.updateClientsController);
 router.delete("/:code/:chb/:idCustomer", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P02-05"), (0, validator_handler_1.default)(deleteClientByCodeSchema, "params"), client_controller_1.deleteClientController);
 exports.default = router;

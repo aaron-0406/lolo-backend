@@ -9,7 +9,7 @@ const frequencyToNotify = Joi.number();
 const hourTimeToNotify = Joi.date();
 const logicKey = Joi.string();
 const state = Joi.boolean();
-
+const daysToNotyfy = Joi.string();
 const createScheduledNotificationSchema = Joi.object<
   Omit<
     ScheduledNotificationType,
@@ -24,6 +24,7 @@ const createScheduledNotificationSchema = Joi.object<
   logicKey: logicKey.required(),
   state: state.required(),
   customerHasBankId: customerHasBankId.required(),
+  daysToNotify: daysToNotyfy.required(),
 });
 
 const updateScheduledNotificationSchema = Joi.object<
@@ -39,6 +40,7 @@ const updateScheduledNotificationSchema = Joi.object<
   hourTimeToNotify: hourTimeToNotify.required(),
   logicKey: logicKey.required(),
   state: state.required(),
+  daysToNotify: daysToNotyfy.required(),
 });
 
 const getScheduledNotificationSchema = Joi.object<{ id: number }, true>({
