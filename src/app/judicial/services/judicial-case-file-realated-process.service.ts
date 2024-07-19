@@ -3,7 +3,6 @@ import boom from "@hapi/boom";
 import { Op } from "sequelize";
 import { JudicialCaseFileType } from "../types/judicial-case-file.type";
 import { JudicialCasefileProcessStatus } from "../types/judicial-case-file-process-status.type";
-import { toDataURL } from "qrcode";
 
 const { models } = sequelize;
 
@@ -373,24 +372,6 @@ class JudicialCaseFileRelatedProcessService {
     await client.destroy();
 
     return { id };
-  }
-
-  async createQrCode(numberCaseFile: string, chb: number) {
-    try {
-      const qrCodeImg64 = await toDataURL(numberCaseFile, { version: 2 });
-
-      const judicialCaseFile = await models.JUDICIAL_CASE_FILE.findOne({
-        where: {
-          numberCaseFile,
-          customerHasBankId: chb,
-        },
-      });
-      if (!judicialCaseFile) return boom.notFound("Expediente no encontrado");
-      await judicialCaseFile.update({ qrCode: qrCodeImg64 });
-      return qrCodeImg64;
-    } catch (err) {
-      throw boom.badRequest("Error al generar el código QR");
-    }
   }
 }
 
