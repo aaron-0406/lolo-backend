@@ -16,7 +16,26 @@ const sequelize_1 = __importDefault(require("../../../libs/sequelize"));
 const boom_1 = __importDefault(require("@hapi/boom"));
 const sequelize_2 = require("sequelize");
 const qrcode_1 = require("qrcode");
+const scheduled_notifications_service_1 = __importDefault(require("../../settings/services/scheduled-notifications.service"));
+const moment_1 = __importDefault(require("moment"));
+const scheduledNotificationsService = new scheduled_notifications_service_1.default();
 const { models } = sequelize_1.default;
+const findClosestBinacle = (binacles) => {
+    if (!binacles || binacles.length === 0)
+        return null;
+    const now = moment_1.default.utc();
+    let closestBinacle = null;
+    let smallestDiff = Infinity;
+    binacles.forEach(binnacle => {
+        const createdAt = moment_1.default.utc(binnacle.createdAt);
+        const diff = Math.abs(now.diff(createdAt, 'days'));
+        if (diff < smallestDiff) {
+            smallestDiff = diff;
+            closestBinacle = binnacle;
+        }
+    });
+    return closestBinacle;
+};
 class JudicialCaseFileService {
     constructor() { }
     findAll() {
@@ -38,6 +57,147 @@ class JudicialCaseFileService {
             return judicialCaseFile;
         });
     }
+    // async findAllByCHB(chb: string, query: any) {
+    //   const { limit, page, filter, courts, sedes, proceduralWays, subjects, users, sortBy, order } =
+    //     query;
+    //   const limite = parseInt(limit, 10);
+    //   const pagina = parseInt(page, 10);
+    //   const clientName = filter as string;
+    //   const listCourts = JSON.parse(courts);
+    //   const listProceduralWays = JSON.parse(proceduralWays);
+    //   const listSubjects = JSON.parse(subjects);
+    //   const listUsers = JSON.parse(users);
+    //   const listSedes = JSON.parse(sedes);
+    //   const sortByField = sortBy as string;
+    //   const { frequencyToNotify } = (await scheduledNotificationsService.findByLogicKey("key-job-impulse-pending-processes")).dataValues;
+    //   const filters: any = {};
+    //   if (listCourts.length) {
+    //     filters.judicial_court_id_judicial_court = { [Op.in]: listCourts };
+    //   }
+    //   if (listProceduralWays.length) {
+    //     filters.judicial_procedural_way_id_judicial_procedural_way = {
+    //       [Op.in]: listProceduralWays,
+    //     };
+    //   }
+    //   if (listSubjects.length) {
+    //     filters.judicial_subject_id_judicial_subject = { [Op.in]: listSubjects };
+    //   }
+    //   if (listUsers.length) {
+    //     filters.customer_user_id_customer_user = { [Op.in]: listUsers };
+    //   }
+    //   if (listSedes.length) {
+    //     filters.judicial_sede_id_judicial_sede = { [Op.in]: listSedes };
+    //   }
+    //   let sortField: string;
+    //   let orderConfig: FindOptions<any>['order'];
+    //   let model: ModelCtor<Model<any, any>> | undefined;
+    //   if (sortBy && order) {
+    //     switch (sortByField) {
+    //       case 'CLIENTE':
+    //         sortField = 'name';
+    //         model = models.CLIENT;
+    //         break;
+    //       case 'judicialCourt':
+    //         sortField = 'name';
+    //         model = models.JUDICIAL_COURT;
+    //         break;
+    //       case 'proceduralWay':
+    //         sortField = 'name';
+    //         model = models.JUDICIAL_PROCEDURAL_WAY;
+    //         break
+    //       default:
+    //         sortField = 'createdAt';
+    //         model = undefined;
+    //     }
+    //     if (model) {
+    //       orderConfig = [[{ model, as: model.name.toLowerCase() }, sortField, order as 'ASC' | 'DESC']];
+    //     } else {
+    //       orderConfig = [[sortField, order as 'ASC' | 'DESC']];
+    //     }
+    //   } else {
+    //     orderConfig = undefined;
+    //   }
+    //   let filtersWhere: any = {
+    //     customer_has_bank_id: chb,
+    //     id_judicial_case_file_related: null,
+    //   };
+    //   // Agregar filtro por nombre de cliente si se proporciona
+    //   if (clientName) {
+    //     filtersWhere = {
+    //       ...filtersWhere,
+    //       "$client.name$": { [Op.like]: `%${clientName}%` }, // Filtrar por nombre de cliente (parcialmente coincidente)
+    //     };
+    //   }
+    //   // Combinar filtros adicionales si se proporcionan
+    //   if (Object.keys(filters).length > 0) {
+    //     filtersWhere = {
+    //       [Op.and]: [{ [Op.or]: [filters] }, filtersWhere],
+    //     };
+    //   }
+    //   try {
+    //     const quantity = await models.JUDICIAL_CASE_FILE.count({
+    //       include: [
+    //         { model: models.CLIENT, as: "client" },
+    //       ],
+    //       where: filtersWhere,
+    //     });
+    //     const caseFilesData = await models.JUDICIAL_CASE_FILE.findAll({
+    //       include: [
+    //         {
+    //           model: models.CUSTOMER_USER,
+    //           as: "customerUser",
+    //           attributes: ["id", "name"],
+    //         },
+    //         { model: models.JUDICIAL_COURT, as: "judicialCourt" },
+    //         {
+    //           model: models.JUDICIAL_PROCEDURAL_WAY,
+    //           as: "judicialProceduralWay",
+    //         },
+    //         { model: models.JUDICIAL_SUBJECT, as: "judicialSubject" },
+    //         { model: models.JUDICIAL_SEDE, as: "judicialSede" },
+    //         { model: models.CITY, as: "city" },
+    //         { model: models.CLIENT, as: "client", attributes: ["id", "name"] },
+    //         {
+    //           model: models.JUDICIAL_BINNACLE, as: "judicialBinnacle",
+    //           attributes: ["createdAt"]
+    //         }
+    //       ],
+    //       limit: limite,
+    //       offset: (pagina - 1) * limite,
+    //       where: filtersWhere,
+    //       order: orderConfig, // Orden configurado dinámicamente según sortBy y order
+    //     });
+    //     const now = new Date();
+    //     const interval = Math.floor(frequencyToNotify/3);
+    //     const caseFiles = caseFilesData.map((caseFile) => {
+    //       const binacleDates = caseFile.dataValues.judicialBinnacle
+    //       const lastbinacle:any = findClosestBinacle(binacleDates);
+    //       if (!lastbinacle) return caseFile;
+    //       const diffDays = moment.utc(lastbinacle.createdAt).diff(now, "days");
+    //       if (diffDays < interval) {
+    //         return {
+    //           ...caseFile.dataValues,
+    //           impulseStatus: 0,
+    //         };
+    //       }
+    //       else if (diffDays >= interval && diffDays < interval * 2) {
+    //         return {
+    //           ...caseFile.dataValues,
+    //           impulseStatus: 1,
+    //         };
+    //       } else if (diffDays >= interval * 2 && diffDays < interval * 3) {
+    //         return {
+    //           ...caseFile.dataValues,
+    //           impulseStatus: 2,
+    //         };
+    //       }
+    //     })
+    //     return { caseFiles, quantity };
+    //   } catch (error) {
+    //     console.error("Error en findAllByCHB:", error);
+    //     throw boom.badImplementation("Error al consultar los expedientes");
+    //   }
+    // }
     findAllByCHB(chb, query) {
         return __awaiter(this, void 0, void 0, function* () {
             const { limit, page, filter, courts, sedes, proceduralWays, subjects, users, sortBy, order } = query;
@@ -50,14 +210,13 @@ class JudicialCaseFileService {
             const listUsers = JSON.parse(users);
             const listSedes = JSON.parse(sedes);
             const sortByField = sortBy;
+            const { frequencyToNotify } = (yield scheduledNotificationsService.findByLogicKey("key-job-impulse-pending-processes")).dataValues;
             const filters = {};
             if (listCourts.length) {
                 filters.judicial_court_id_judicial_court = { [sequelize_2.Op.in]: listCourts };
             }
             if (listProceduralWays.length) {
-                filters.judicial_procedural_way_id_judicial_procedural_way = {
-                    [sequelize_2.Op.in]: listProceduralWays,
-                };
+                filters.judicial_procedural_way_id_judicial_procedural_way = { [sequelize_2.Op.in]: listProceduralWays };
             }
             if (listSubjects.length) {
                 filters.judicial_subject_id_judicial_subject = { [sequelize_2.Op.in]: listSubjects };
@@ -103,11 +262,9 @@ class JudicialCaseFileService {
                 customer_has_bank_id: chb,
                 id_judicial_case_file_related: null,
             };
-            // Agregar filtro por nombre de cliente si se proporciona
             if (clientName) {
                 filtersWhere = Object.assign(Object.assign({}, filtersWhere), { "$client.name$": { [sequelize_2.Op.like]: `%${clientName}%` } });
             }
-            // Combinar filtros adicionales si se proporcionan
             if (Object.keys(filters).length > 0) {
                 filtersWhere = {
                     [sequelize_2.Op.and]: [{ [sequelize_2.Op.or]: [filters] }, filtersWhere],
@@ -120,7 +277,7 @@ class JudicialCaseFileService {
                     ],
                     where: filtersWhere,
                 });
-                const caseFiles = yield models.JUDICIAL_CASE_FILE.findAll({
+                const caseFilesData = yield models.JUDICIAL_CASE_FILE.findAll({
                     include: [
                         {
                             model: models.CUSTOMER_USER,
@@ -136,13 +293,60 @@ class JudicialCaseFileService {
                         { model: models.JUDICIAL_SEDE, as: "judicialSede" },
                         { model: models.CITY, as: "city" },
                         { model: models.CLIENT, as: "client", attributes: ["id", "name"] },
+                        {
+                            model: models.JUDICIAL_BINNACLE,
+                            as: "judicialBinnacle",
+                            attributes: ["createdAt"]
+                        }
                     ],
                     limit: limite,
                     offset: (pagina - 1) * limite,
                     where: filtersWhere,
-                    order: orderConfig, // Orden configurado dinámicamente según sortBy y order
+                    order: orderConfig,
                 });
-                return { caseFiles, quantity };
+                const now = new Date();
+                const interval = Math.floor(frequencyToNotify / 3);
+                const findClosestBinacle = (binacles) => {
+                    if (!binacles || binacles.length === 0)
+                        return null;
+                    const now = moment_1.default.utc();
+                    let closestBinacle = null;
+                    let smallestDiff = Infinity;
+                    binacles.forEach(binnacle => {
+                        const createdAt = moment_1.default.utc(binnacle.createdAt);
+                        const diff = Math.abs(now.diff(createdAt, 'days'));
+                        if (diff < smallestDiff) {
+                            smallestDiff = diff;
+                            closestBinacle = binnacle;
+                        }
+                    });
+                    return closestBinacle;
+                };
+                caseFilesData.map((caseFile) => {
+                    const binacleDates = caseFile.dataValues.judicialBinnacle;
+                    const lastBinacle = findClosestBinacle(binacleDates);
+                    if (!lastBinacle && caseFile.dataValues.impulseStatus !== 0) {
+                        caseFile.update({
+                            impulseStatus: 0,
+                        });
+                    }
+                    const diffDays = moment_1.default.utc().diff(lastBinacle.createdAt, 'days');
+                    let impulseStatus = 0;
+                    if (diffDays < interval && caseFile.dataValues.impulseStatus !== 1) {
+                        caseFile.update({
+                            impulseStatus: 1,
+                        });
+                    }
+                    else if (diffDays >= interval && diffDays < interval * 2 && caseFile.dataValues.impulseStatus !== 2) {
+                        caseFile.update({
+                            impulseStatus: 2,
+                        });
+                    }
+                    else if (diffDays >= interval * 3 && caseFile.dataValues.impulseStatus !== 2) {
+                        impulseStatus = 3;
+                    }
+                });
+                return { caseFilesData, quantity };
             }
             catch (error) {
                 console.error("Error en findAllByCHB:", error);

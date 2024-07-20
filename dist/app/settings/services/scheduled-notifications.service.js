@@ -56,6 +56,19 @@ class ScheduledNotificationsService {
             return formatData;
         });
     }
+    findByLogicKey(logicKey) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rta = yield models.SCHEDULED_NOTIFICATIONS.findOne({
+                where: {
+                    logic_key: logicKey,
+                },
+            });
+            if (!rta) {
+                throw boom_1.default.notFound("No existen notificaciones programadas");
+            }
+            return rta;
+        });
+    }
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const newScheduledNotification = yield models.SCHEDULED_NOTIFICATIONS.create(data);
