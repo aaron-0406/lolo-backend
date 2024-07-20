@@ -4,9 +4,32 @@ import { Op, FindOptions, Model, ModelCtor } from 'sequelize';
 import { JudicialCaseFileType } from "../types/judicial-case-file.type";
 import { JudicialCasefileProcessStatus } from "../types/judicial-case-file-process-status.type";
 import { toDataURL } from "qrcode";
+import ScheduledNotificationsService from "../../settings/services/scheduled-notifications.service";
+import moment from "moment";
 
+const scheduledNotificationsService = new ScheduledNotificationsService();
 const { models } = sequelize;
 type OrderItem = [string, 'ASC' | 'DESC'];
+
+const findClosestBinacle = (binacles:any[]) => {
+  if (!binacles || binacles.length === 0) return null;
+
+  const now = moment.utc();
+  let closestBinacle = null;
+  let smallestDiff = Infinity;
+
+  binacles.forEach(binnacle => {
+    const createdAt = moment.utc(binnacle.createdAt);
+    const diff = Math.abs(now.diff(createdAt, 'days'));
+
+    if (diff < smallestDiff) {
+      smallestDiff = diff;
+      closestBinacle = binnacle;
+    }
+  });
+
+  return closestBinacle;
+};
 class JudicialCaseFileService {
   constructor() {}
 
@@ -30,8 +53,19 @@ class JudicialCaseFileService {
   }
 
   async findAllByCHB(chb: string, query: any) {
-    const { limit, page, filter, courts, sedes, proceduralWays, subjects, users, sortBy, order } =
-      query;
+    const {
+      limit,
+      page,
+      filter,
+      courts,
+      sedes,
+      proceduralWays,
+      subjects,
+      users,
+      impulse,
+      sortBy,
+      order
+    } = query;
 
     const limite = parseInt(limit, 10);
     const pagina = parseInt(page, 10);
@@ -41,16 +75,17 @@ class JudicialCaseFileService {
     const listSubjects = JSON.parse(subjects);
     const listUsers = JSON.parse(users);
     const listSedes = JSON.parse(sedes);
+    const listImpulse = JSON.parse(impulse);
     const sortByField = sortBy as string;
+
+    const { frequencyToNotify } = (await scheduledNotificationsService.findByLogicKey("key-job-impulse-pending-processes")).dataValues;
 
     const filters: any = {};
     if (listCourts.length) {
       filters.judicial_court_id_judicial_court = { [Op.in]: listCourts };
     }
     if (listProceduralWays.length) {
-      filters.judicial_procedural_way_id_judicial_procedural_way = {
-        [Op.in]: listProceduralWays,
-      };
+      filters.judicial_procedural_way_id_judicial_procedural_way = { [Op.in]: listProceduralWays };
     }
     if (listSubjects.length) {
       filters.judicial_subject_id_judicial_subject = { [Op.in]: listSubjects };
@@ -61,11 +96,13 @@ class JudicialCaseFileService {
     if (listSedes.length) {
       filters.judicial_sede_id_judicial_sede = { [Op.in]: listSedes };
     }
+    if (listImpulse.length) {
+      filters.impulse_status = { [Op.in]: listImpulse };
+    }
 
     let sortField: string;
     let orderConfig: FindOptions<any>['order'];
     let model: ModelCtor<Model<any, any>> | undefined;
-
 
     if (sortBy && order) {
       switch (sortByField) {
@@ -80,7 +117,7 @@ class JudicialCaseFileService {
         case 'proceduralWay':
           sortField = 'name';
           model = models.JUDICIAL_PROCEDURAL_WAY;
-          break
+          break;
         default:
           sortField = 'createdAt';
           model = undefined;
@@ -100,15 +137,13 @@ class JudicialCaseFileService {
       id_judicial_case_file_related: null,
     };
 
-    // Agregar filtro por nombre de cliente si se proporciona
     if (clientName) {
       filtersWhere = {
         ...filtersWhere,
-        "$client.name$": { [Op.like]: `%${clientName}%` }, // Filtrar por nombre de cliente (parcialmente coincidente)
+        "$client.name$": { [Op.like]: `%${clientName}%` },
       };
     }
 
-    // Combinar filtros adicionales si se proporcionan
     if (Object.keys(filters).length > 0) {
       filtersWhere = {
         [Op.and]: [{ [Op.or]: [filters] }, filtersWhere],
@@ -139,11 +174,61 @@ class JudicialCaseFileService {
           { model: models.JUDICIAL_SEDE, as: "judicialSede" },
           { model: models.CITY, as: "city" },
           { model: models.CLIENT, as: "client", attributes: ["id", "name"] },
+          {
+            model: models.JUDICIAL_BINNACLE,
+            as: "judicialBinnacle",
+            attributes: ["createdAt"]
+          }
         ],
         limit: limite,
         offset: (pagina - 1) * limite,
         where: filtersWhere,
-        order: orderConfig, // Orden configurado dinámicamente según sortBy y order
+        order: orderConfig,
+      });
+
+      const interval = Math.floor(frequencyToNotify / 3);
+
+      const findClosestBinacle = (binacles: any[]) => {
+        if (!binacles || binacles.length === 0) return null;
+
+        const now = moment.utc();
+        let closestBinacle = null;
+        let smallestDiff = Infinity;
+
+        binacles.forEach(binnacle => {
+          const createdAt = moment.utc(binnacle.createdAt);
+          const diff = Math.abs(now.diff(createdAt, 'days'));
+
+          if (diff < smallestDiff) {
+            smallestDiff = diff;
+            closestBinacle = binnacle;
+          }
+        });
+
+        return closestBinacle;
+      };
+
+      caseFiles.map((caseFile) => {
+        const binacleDates = caseFile.dataValues.judicialBinnacle;
+        const lastBinacle:any = findClosestBinacle(binacleDates);
+
+        if (!lastBinacle) return
+
+        const diffDays = moment.utc().diff(lastBinacle.dataValues.createdAt, 'days');
+
+        if (diffDays < interval && caseFile.dataValues.impulseStatus !== 1) {
+          caseFile.update({
+            impulseStatus: 1,
+          });
+        } else if (diffDays >= interval && diffDays <= interval * 2 && caseFile.dataValues.impulseStatus !== 2) {
+          caseFile.update({
+            impulseStatus: 2,
+          });
+        } else if (diffDays > interval * 2 && caseFile.dataValues.impulseStatus !== 3) {
+          caseFile.update({
+            impulseStatus: 3,
+          });
+        }
       });
 
       return { caseFiles, quantity };
@@ -152,6 +237,7 @@ class JudicialCaseFileService {
       throw boom.badImplementation("Error al consultar los expedientes");
     }
   }
+
   // Métodos adicionales del servicio aquí...
   async existNumberCaseFile(customerId: string, numberCaseFile: string) {
     const judicialCaseFile = await models.JUDICIAL_CASE_FILE.findOne({

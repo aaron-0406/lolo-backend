@@ -32,6 +32,7 @@ const processReasonId = joi_1.default.number().positive();
 const bankId = joi_1.default.number();
 const idJudicialCaseFileRelated = joi_1.default.number();
 const qrCode = joi_1.default.string();
+const impulseStatus = joi_1.default.number();
 const page = joi_1.default.number().required().messages({
     "number.base": "El campo page es inválido",
     "any.required": "El campo page es requerido.",
@@ -77,6 +78,7 @@ const createJudicialCaseFileSchema = joi_1.default.object({
         .allow(""),
     bankId: bankId.optional().empty("").allow(""),
     qrCode: qrCode.optional().empty("").allow(""),
+    impulseStatus: impulseStatus.optional().empty("").allow(""),
 });
 const updateJudicialCaseFileSchema = joi_1.default.object({
     numberCaseFile: numberCaseFile.required(),
@@ -102,6 +104,7 @@ const updateJudicialCaseFileSchema = joi_1.default.object({
         .allow(""),
     bankId: bankId.optional().empty("").allow(""),
     qrCode: qrCode.optional().empty("").allow(""),
+    impulseStatus: impulseStatus.optional().empty("").allow(""),
 });
 const updateJudicialCaseFileProcessStatusSchema = joi_1.default.object({
     processStatus: processStatus.optional().empty("").allow(""),

@@ -217,6 +217,11 @@ const JudicialCaseFileSchema: ModelAttributes<
     field: "qr_code",
     type: DataTypes.TEXT("long"),
   },
+  impulseStatus: {
+    allowNull: true,
+    field: "impulse_status",
+    type: DataTypes.INTEGER,
+  },
 };
 
 class JudicialCaseFile extends Model {

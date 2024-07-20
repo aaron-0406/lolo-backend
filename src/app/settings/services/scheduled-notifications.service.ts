@@ -50,6 +50,20 @@ class ScheduledNotificationsService {
     return formatData;
   }
 
+  async findByLogicKey(logicKey: string) {
+    const rta = await models.SCHEDULED_NOTIFICATIONS.findOne({
+      where: {
+        logic_key: logicKey,
+      },
+    });
+
+    if (!rta) {
+      throw boom.notFound("No existen notificaciones programadas");
+    }
+
+    return rta;
+  }
+
   async create(data: ScheduledNotificationType) {
     const newScheduledNotification =
       await models.SCHEDULED_NOTIFICATIONS.create(data);

@@ -209,6 +209,11 @@ const JudicialCaseFileSchema = {
         field: "qr_code",
         type: sequelize_1.DataTypes.TEXT("long"),
     },
+    impulseStatus: {
+        allowNull: true,
+        field: "impulse_status",
+        type: sequelize_1.DataTypes.INTEGER,
+    },
 };
 class JudicialCaseFile extends sequelize_1.Model {
     static associate(models) {
