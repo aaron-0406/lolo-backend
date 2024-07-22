@@ -41,14 +41,14 @@ const createNotificationController = (req, res, next) => __awaiter(void 0, void 
             method: req.method,
             oldData: newNotification.dataValues,
             newData: newNotification.dataValues,
-            name: newNotification.dataValues.name,
+            name: newNotification.dataValues.nameNotification,
             id: newNotification.dataValues.id,
         });
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
             codeAction: "P29-01",
             entity: SCHEDULED_NOTIFICATIONS_TABLE,
-            entityId: Number(newNotification.id),
+            entityId: Number(newNotification.dataValues.id),
             ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
             customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
             methodSumary: sumary,
@@ -69,15 +69,14 @@ const updateNotificaitonController = (req, res, next) => __awaiter(void 0, void 
         const sumary = generateLogSummary({
             method: req.method,
             oldData: oldNotification,
-            newData: newNotification.dataValues,
-            name: newNotification.dataValues.name,
-            id: newNotification.dataValues.id,
+            newData: newNotification,
+            id: newNotification.id,
         });
         yield serviceUserLog.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
             codeAction: "P29-02",
             entity: SCHEDULED_NOTIFICATIONS_TABLE,
-            entityId: Number(newNotification.id),
+            entityId: Number(id),
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
             customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
             methodSumary: sumary,
@@ -85,7 +84,6 @@ const updateNotificaitonController = (req, res, next) => __awaiter(void 0, void 
         res.json(newNotification);
     }
     catch (error) {
-        console.log(error);
         next(error);
     }
 });

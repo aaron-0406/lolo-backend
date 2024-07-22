@@ -37,7 +37,7 @@ export const createNotificationController = async (
       method: req.method,
       oldData: newNotification.dataValues,
       newData: newNotification.dataValues,
-      name: newNotification.dataValues.name,
+      name: newNotification.dataValues.nameNotification,
       id: newNotification.dataValues.id,
     });
 
@@ -45,7 +45,7 @@ export const createNotificationController = async (
       customerUserId: Number(req.user?.id),
       codeAction: "P29-01",
       entity: SCHEDULED_NOTIFICATIONS_TABLE,
-      entityId: Number(newNotification.id),
+      entityId: Number(newNotification.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
       methodSumary: sumary,
@@ -86,7 +86,6 @@ export const updateNotificaitonController = async (
 
     res.json(newNotification);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

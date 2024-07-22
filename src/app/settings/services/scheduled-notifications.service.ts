@@ -55,10 +55,7 @@ class ScheduledNotificationsService {
       await models.SCHEDULED_NOTIFICATIONS.create(data);
 
     updateCronJobs();
-    return {
-      ...newScheduledNotification.dataValues,
-      daysToNotify: JSON.parse(newScheduledNotification.dataValues.daysToNotify)
-    }
+    return newScheduledNotification
   }
 
 

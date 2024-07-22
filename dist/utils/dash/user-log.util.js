@@ -5,34 +5,47 @@ const formatDate = (date) => {
     return d.toISOString();
 };
 const isDate = (value) => {
-    return value instanceof Date || (typeof value === 'string' && !isNaN(Date.parse(value)));
+    if (value instanceof Date) {
+        return !isNaN(value.getTime());
+    }
+    if (typeof value === "string") {
+        const date = new Date(value);
+        return !isNaN(date.getTime()) && value.includes("-");
+    }
+    return false;
 };
-const generateLogSummary = ({ method, oldData, newData, withoutChanges, name, id }) => {
+const generateLogSummary = ({ method, oldData, newData, withoutChanges, name, id, }) => {
     let summary = `${method}\n`;
     let changes = [];
     switch (method.toUpperCase()) {
-        case 'POST':
+        case "POST":
             summary += `${id}\n`;
-            const dataPost = newData;
-            if (!Array.isArray(dataPost)) {
-                for (const key in dataPost) {
-                    let newValue = dataPost[key];
+            if (newData && !Array.isArray(newData)) {
+                for (const key in newData) {
+                    let newValue = newData[key];
                     if (isDate(newValue)) {
                         newValue = formatDate(newValue);
                     }
                     changes.push(JSON.stringify({ key, newValue }));
                 }
             }
-            if (Array.isArray(dataPost)) {
-                changes.push(JSON.stringify({ oldValue: oldData, newValue: newData, withoutChanges: withoutChanges }));
+            else if (Array.isArray(newData)) {
+                changes.push(JSON.stringify({
+                    oldValue: oldData,
+                    newValue: newData,
+                    withoutChanges,
+                }));
             }
             break;
-        case 'PUT':
-        case 'PATCH':
+        case "PUT":
+        case "PATCH":
             summary += `${id}\n`;
-            if (!Array.isArray(newData) && !Array.isArray(oldData)) {
+            if (newData &&
+                oldData &&
+                !Array.isArray(newData) &&
+                !Array.isArray(oldData)) {
                 for (const key in newData) {
-                    let oldValue = oldData === null || oldData === void 0 ? void 0 : oldData[key];
+                    let oldValue = oldData[key];
                     let newValue = newData[key];
                     if (isDate(oldValue) && isDate(newValue)) {
                         oldValue = formatDate(oldValue);
@@ -44,12 +57,11 @@ const generateLogSummary = ({ method, oldData, newData, withoutChanges, name, id
                 }
             }
             break;
-        case 'DELETE':
+        case "DELETE":
             summary += `${id}\n`;
-            const dataDelete = oldData;
-            if (!Array.isArray(dataDelete)) {
-                for (const key in dataDelete) {
-                    let oldValue = dataDelete[key];
+            if (oldData && !Array.isArray(oldData)) {
+                for (const key in oldData) {
+                    let oldValue = oldData[key];
                     if (isDate(oldValue)) {
                         oldValue = formatDate(oldValue);
                     }
@@ -61,7 +73,7 @@ const generateLogSummary = ({ method, oldData, newData, withoutChanges, name, id
             summary += `Método desconocido: ${method}\n`;
     }
     if (changes.length > 0) {
-        summary += `CHANGES\n${changes.join('\n')}`;
+        summary += `CHANGES\n${changes.join("\n")}`;
     }
     return summary;
 };
