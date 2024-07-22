@@ -62,6 +62,11 @@ const UserLogSchema: ModelAttributes<UserLog, UserLogType> = {
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
+  methodSumary: {
+    allowNull: true,
+    field: "method_summary",
+    type: DataTypes.TEXT("long"),
+  }
 };
 
 class UserLog extends Model {

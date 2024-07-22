@@ -117,7 +117,13 @@ const ClientSchema: ModelAttributes<Client, ClientType> = {
     allowNull: true,
     field: "memo_assignment_date",
     type: DataTypes.DATEONLY,
-  }
+  },
+  isArchived: {
+    allowNull: false,
+    field: "is_archived",
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
 };
 
 class Client extends Model {

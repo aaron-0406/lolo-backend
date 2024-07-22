@@ -1,12 +1,12 @@
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
-import { Op, FindOptions, Model, ModelCtor } from 'sequelize';
+import { Op, FindOptions, Model, ModelCtor } from "sequelize";
 import { JudicialCaseFileType } from "../types/judicial-case-file.type";
 import { JudicialCasefileProcessStatus } from "../types/judicial-case-file-process-status.type";
 import { toDataURL } from "qrcode";
 
 const { models } = sequelize;
-type OrderItem = [string, 'ASC' | 'DESC'];
+type OrderItem = [string, "ASC" | "DESC"];
 class JudicialCaseFileService {
   constructor() {}
 
@@ -30,8 +30,19 @@ class JudicialCaseFileService {
   }
 
   async findAllByCHB(chb: string, query: any) {
-    const { limit, page, filter, courts, sedes, proceduralWays, subjects, users, responsibles, sortBy, order } =
-      query;
+    const {
+      limit,
+      page,
+      filter,
+      courts,
+      sedes,
+      proceduralWays,
+      subjects,
+      users,
+      responsibles,
+      sortBy,
+      order,
+    } = query;
 
     const limite = parseInt(limit, 10);
     const pagina = parseInt(page, 10);
@@ -43,7 +54,6 @@ class JudicialCaseFileService {
     const listResponsibles = JSON.parse(responsibles);
     const listSedes = JSON.parse(sedes);
     const sortByField = sortBy as string;
-
 
     const filters: any = {};
     if (listCourts.length) {
@@ -68,33 +78,38 @@ class JudicialCaseFileService {
     }
 
     let sortField: string;
-    let orderConfig: FindOptions<any>['order'];
+    let orderConfig: FindOptions<any>["order"];
     let model: ModelCtor<Model<any, any>> | undefined;
-
 
     if (sortBy && order) {
       switch (sortByField) {
-        case 'CLIENTE':
-          sortField = 'name';
+        case "CLIENTE":
+          sortField = "name";
           model = models.CLIENT;
           break;
-        case 'judicialCourt':
-          sortField = 'name';
+        case "judicialCourt":
+          sortField = "name";
           model = models.JUDICIAL_COURT;
           break;
-        case 'proceduralWay':
-          sortField = 'name';
+        case "proceduralWay":
+          sortField = "name";
           model = models.JUDICIAL_PROCEDURAL_WAY;
-          break
+          break;
         default:
-          sortField = 'createdAt';
+          sortField = "createdAt";
           model = undefined;
       }
 
       if (model) {
-        orderConfig = [[{ model, as: model.name.toLowerCase() }, sortField, order as 'ASC' | 'DESC']];
+        orderConfig = [
+          [
+            { model, as: model.name.toLowerCase() },
+            sortField,
+            order as "ASC" | "DESC",
+          ],
+        ];
       } else {
-        orderConfig = [[sortField, order as 'ASC' | 'DESC']];
+        orderConfig = [[sortField, order as "ASC" | "DESC"]];
       }
     } else {
       orderConfig = undefined;
@@ -122,9 +137,7 @@ class JudicialCaseFileService {
 
     try {
       const quantity = await models.JUDICIAL_CASE_FILE.count({
-        include: [
-          { model: models.CLIENT, as: "client" },
-        ],
+        include: [{ model: models.CLIENT, as: "client" }],
         where: filtersWhere,
       });
 
@@ -251,16 +264,22 @@ class JudicialCaseFileService {
           attributes: ["id", "name"],
         },
         {
-        model: models.CLIENT,
-        as: "client",
-        include: [
-          {
-            model: models.CUSTOMER_USER,
-            as: "customerUser",
-            attributes: ["id", "name"],
-          },
-        ],
-      }],
+          model: models.JUDICIAL_CASE_FILE,
+          as: "relatedJudicialCaseFile",
+          attributes: ["numberCaseFile"],
+        },
+        {
+          model: models.CLIENT,
+          as: "client",
+          include: [
+            {
+              model: models.CUSTOMER_USER,
+              as: "customerUser",
+              attributes: ["id", "name"],
+            },
+          ],
+        },
+      ],
       where: {
         numberCaseFile,
         customer_has_bank_id: chb,

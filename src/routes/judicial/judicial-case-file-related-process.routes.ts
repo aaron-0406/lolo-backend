@@ -2,7 +2,6 @@ import express from "express";
 import validatorHandler from "../../middlewares/validator.handler";
 import judicialCaseFileSchema from "../../app/judicial/schemas/judicial-case-file.schema";
 
-
 import {
   createJudicialCaseFileRelatedProcessController,
   deleteJudicialCaseFileRelatedProcessController,
@@ -14,7 +13,8 @@ import {
   getJudicialCaseFileRelatedProcessByIdController,
   getJudicialCaseFileRelatedProcessByNumberCaseFileController,
   getJudicialCaseFileRelatedProcessRelatedController,
-} from "../../controllers/judicial/judicial-case-file-related-process.controller"
+  createQrCodeRelatedProcessController,
+} from "../../controllers/judicial/judicial-case-file-related-process.controller";
 import { JWTAuth, checkPermissions } from "../../middlewares/auth.handler";
 import judicialCaseFileRelatedProcessSchema from "../../app/judicial/schemas/judicial-case-file-related-process.schema";
 
@@ -28,7 +28,8 @@ const {
   getJudicialCaseFileRelatedProcesByCustomerIdSchema,
   getJudicialCaseFileRelatedProcesByIDSchema,
   getJudicialCaseFileRelatedProcesByNumberCaseFileSchema,
-  getJudicialCaseFileRelatedProcesByCaseFileId
+  getJudicialCaseFileRelatedProcesByCaseFileId,
+  createQrCodeRelatedProcessSchema,
 } = judicialCaseFileRelatedProcessSchema;
 
 const router = express.Router();
@@ -38,9 +39,9 @@ router.get("/", JWTAuth, getJudicialCaseFileRelatedProcessController);
 router.get(
   "/client/:clientId",
   JWTAuth,
-  validatorHandler( getJudicialCaseFileRelatedProcesByClientIDSchema, "params"),
+  validatorHandler(getJudicialCaseFileRelatedProcesByClientIDSchema, "params"),
   validatorHandler(getJudicialCaseFileRelatedProcesByCHBSchemaQuery, "query"),
-  getJudicialCaseFileRelatedProcessByClientIdController,
+  getJudicialCaseFileRelatedProcessByClientIdController
 );
 
 router.get(
@@ -48,7 +49,7 @@ router.get(
   JWTAuth,
   validatorHandler(getRelatedProcessByCaseFileIdSchema, "params"),
   validatorHandler(getJudicialCaseFileRelatedProcesByCaseFileId, "query"),
-  getJudicialCaseFileRelatedProcessbyCaseFileIdController,
+  getJudicialCaseFileRelatedProcessbyCaseFileIdController
 );
 
 router.get(
@@ -56,20 +57,26 @@ router.get(
   JWTAuth,
   validatorHandler(getJudicialCaseFileRelatedProcesByCHBSchema, "params"),
   validatorHandler(getJudicialCaseFileRelatedProcesByCHBSchemaQuery, "query"),
-  getJudicialCaseFileRelatedProcessByCHBIdController,
+  getJudicialCaseFileRelatedProcessByCHBIdController
 );
 
 router.get(
   "/number-case/:numberCaseFile/:chb",
   JWTAuth,
-  validatorHandler(getJudicialCaseFileRelatedProcesByNumberCaseFileSchema, "params"),
-  getJudicialCaseFileRelatedProcessByNumberCaseFileController,
+  validatorHandler(
+    getJudicialCaseFileRelatedProcesByNumberCaseFileSchema,
+    "params"
+  ),
+  getJudicialCaseFileRelatedProcessByNumberCaseFileController
 );
 
 router.get(
   "/related/:numberCaseFile/:chb",
   JWTAuth,
-  validatorHandler(getJudicialCaseFileRelatedProcesByNumberCaseFileSchema, "params"),
+  validatorHandler(
+    getJudicialCaseFileRelatedProcesByNumberCaseFileSchema,
+    "params"
+  ),
   getJudicialCaseFileRelatedProcessRelatedController
 );
 
@@ -77,16 +84,19 @@ router.get(
   "/:id",
   JWTAuth,
   validatorHandler(getJudicialCaseFileRelatedProcesByIDSchema, "params"),
-  getJudicialCaseFileRelatedProcessByIdController,
+  getJudicialCaseFileRelatedProcessByIdController
 );
 
 router.post(
   "/:customerId",
   JWTAuth,
   checkPermissions("P13-01-05-02"),
-  validatorHandler(getJudicialCaseFileRelatedProcesByCustomerIdSchema, "params"),
+  validatorHandler(
+    getJudicialCaseFileRelatedProcesByCustomerIdSchema,
+    "params"
+  ),
   validatorHandler(createJudicialCaseFileRelatedProcessSchema, "body"),
-  createJudicialCaseFileRelatedProcessController,
+  createJudicialCaseFileRelatedProcessController
 );
 
 router.patch(
@@ -95,9 +105,15 @@ router.patch(
   checkPermissions("P13-01-05-03"),
   validatorHandler(getJudicialCaseFileRelatedProcesByIDSchema, "params"),
   validatorHandler(updateJudicialCaseFileRelatedProcessSchema, "body"),
-  updateJudicialCaseFileRelatedProcessController,
+  updateJudicialCaseFileRelatedProcessController
 );
 
+router.post(
+  "/qr-code/:numberCaseFile/:chb",
+  JWTAuth,
+  validatorHandler(createQrCodeRelatedProcessSchema, "params"),
+  createQrCodeRelatedProcessController
+);
 
 router.delete(
   "/:id",

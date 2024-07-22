@@ -219,7 +219,7 @@ class ClientService {
     }
     findAllCHB(chb, query) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { limit, page, filter, negotiations, funcionarios, users, cities } = query;
+            const { limit, page, filter, negotiations, funcionarios, users, cities, archived } = query;
             const limite = parseInt(limit, 10);
             const pagina = parseInt(page, 10);
             const filtro = filter;
@@ -227,6 +227,7 @@ class ClientService {
             const listFuncionarios = JSON.parse(funcionarios);
             const listUsers = JSON.parse(users);
             const listCities = JSON.parse(cities);
+            const isArchived = JSON.parse(archived);
             const filters = {};
             if (filter !== "" && filter !== undefined) {
                 filters.name = { [sequelize_2.Op.substring]: filtro };
@@ -243,6 +244,7 @@ class ClientService {
             if (listCities.length) {
                 filters.city_id_city = { [sequelize_2.Op.in]: listCities };
             }
+            filters.is_archived = isArchived;
             let filtersWhere = {
                 [sequelize_2.Op.or]: [
                     { chb_transferred: chb },
@@ -353,6 +355,15 @@ class ClientService {
             const client = yield this.findCode(code, chb);
             yield client.update(Object.assign(Object.assign({}, client), { chbTransferred: chb == chbTransferred ? null : chbTransferred }));
             return { id: client.dataValues.id, chbTransferred };
+        });
+    }
+    updateClients(clients, chb) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const updates = clients.map((clientData) => __awaiter(this, void 0, void 0, function* () {
+                return yield this.update(clientData.code, chb, clientData);
+            }));
+            const rta = yield Promise.all(updates);
+            return rta;
         });
     }
     update(code, chb, changes) {

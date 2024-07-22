@@ -255,6 +255,11 @@ class JudicialCaseFileService {
                                 attributes: ["id", "name"],
                             },
                         ],
+                    },
+                    {
+                        model: models.JUDICIAL_CASE_FILE,
+                        as: "relatedJudicialCaseFile",
+                        attributes: ["numberCaseFile"],
                     }
                 ],
                 where: {

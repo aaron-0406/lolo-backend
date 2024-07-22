@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteJudicialCaseFileController = exports.updateJudicialCaseProcessStatus = exports.updateJudicialCaseFileController = exports.createQrCode = exports.createJudicialCaseFileController = exports.getJudicialCaseFileByIdController = exports.getJudicialCaseFileRelatedController = exports.getJudicialCaseFileByNumberCaseFileController = exports.getJudicialCaseFileByCHBIdController = exports.getJudicialCaseFileByClientIdController = exports.getJudicialCaseFileController = void 0;
+exports.deleteJudicialCaseFileController = exports.updateJudicialCaseProcessStatus = exports.updateJudicialCaseFileController = exports.createQrCodeToCaseFileController = exports.createJudicialCaseFileController = exports.getJudicialCaseFileByIdController = exports.getJudicialCaseFileRelatedController = exports.getJudicialCaseFileByNumberCaseFileController = exports.getJudicialCaseFileByCHBIdController = exports.getJudicialCaseFileByClientIdController = exports.getJudicialCaseFileController = void 0;
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const judicial_case_file_service_1 = __importDefault(require("../../app/judicial/services/judicial-case-file.service"));
 const judicial_case_file_model_1 = __importDefault(require("../../db/models/judicial-case-file.model"));
@@ -105,7 +105,7 @@ const createJudicialCaseFileController = (req, res, next) => __awaiter(void 0, v
     }
 });
 exports.createJudicialCaseFileController = createJudicialCaseFileController;
-const createQrCode = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const createQrCodeToCaseFileController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { numberCaseFile, chb } = req.params;
         const qrCode = yield service.createQrCode(numberCaseFile, parseInt(chb));
@@ -115,7 +115,7 @@ const createQrCode = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         next(error);
     }
 });
-exports.createQrCode = createQrCode;
+exports.createQrCodeToCaseFileController = createQrCodeToCaseFileController;
 const updateJudicialCaseFileController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _d, _e, _f;
     try {
