@@ -60,18 +60,22 @@ class ScheduledNotificationsService {
         return __awaiter(this, void 0, void 0, function* () {
             const newScheduledNotification = yield models.SCHEDULED_NOTIFICATIONS.create(data);
             (0, judicial_scheduled_notifications_job_1.default)();
-            return Object.assign(Object.assign({}, newScheduledNotification.dataValues), { daysToNotify: JSON.parse(newScheduledNotification.dataValues.daysToNotify) });
+            return newScheduledNotification;
         });
     }
     update(id, data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const scheduledNotification = yield models.SCHEDULED_NOTIFICATIONS.findByPk(id);
-            if (!scheduledNotification) {
+            const notification = yield models.SCHEDULED_NOTIFICATIONS.findByPk(id);
+            if (!notification) {
                 throw boom_1.default.notFound("Notificación programada no encontrada");
             }
-            yield scheduledNotification.update(data);
+            const oldNotification = Object.assign({}, notification.get());
+            const newNotification = yield notification.update(data);
             (0, judicial_scheduled_notifications_job_1.default)();
-            return Object.assign(Object.assign({}, scheduledNotification.dataValues), { daysToNotify: JSON.parse(scheduledNotification.dataValues.daysToNotify) });
+            return {
+                oldNotification,
+                newNotification: Object.assign(Object.assign({}, newNotification.dataValues), { daysToNotify: JSON.parse(newNotification.dataValues.daysToNotify) }),
+            };
         });
     }
     delete(id) {
