@@ -67,6 +67,11 @@ class Customer extends Model {
       foreignKey: "idCustomer",
       otherKey: "idBank",
     });
+
+    this.hasMany(models.CUSTOMER_HAS_BANK, {
+      as: "customerHasBank",
+      foreignKey: "idCustomer",
+    });
   }
 
   static config(sequelize: Sequelize) {

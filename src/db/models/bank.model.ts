@@ -45,6 +45,11 @@ class Bank extends Model {
       foreignKey: "bankId",
     });
 
+    this.hasMany(models.CUSTOMER_HAS_BANK, {
+      as: "customerHasBank",
+      foreignKey: "idBank",
+    });
+
     this.hasMany(models.JUDICIAL_CASE_FILE, {
       as: "judicialCaseFile",
       foreignKey: "id_bank",

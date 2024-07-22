@@ -56,6 +56,9 @@ const CustomerHasBankSchema: ModelAttributes<
 
 class CustomerHasBank extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
+
+    this.belongsTo(models.CUSTOMER, { as: "customer", foreignKey: "idCustomer" });
+
     this.hasMany(models.CLIENT, {
       as: "client",
       foreignKey: "customerHasBankId",

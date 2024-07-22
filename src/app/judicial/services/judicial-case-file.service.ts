@@ -30,7 +30,7 @@ class JudicialCaseFileService {
   }
 
   async findAllByCHB(chb: string, query: any) {
-    const { limit, page, filter, courts, sedes, proceduralWays, subjects, users, sortBy, order } =
+    const { limit, page, filter, courts, proceduralWays, subjects, users, sortBy, order } =
       query;
 
     const limite = parseInt(limit, 10);
@@ -40,7 +40,6 @@ class JudicialCaseFileService {
     const listProceduralWays = JSON.parse(proceduralWays);
     const listSubjects = JSON.parse(subjects);
     const listUsers = JSON.parse(users);
-    const listSedes = JSON.parse(sedes);
     const sortByField = sortBy as string;
 
     const filters: any = {};
@@ -57,9 +56,6 @@ class JudicialCaseFileService {
     }
     if (listUsers.length) {
       filters.customer_user_id_customer_user = { [Op.in]: listUsers };
-    }
-    if (listSedes.length) {
-      filters.judicial_sede_id_judicial_sede = { [Op.in]: listSedes };
     }
 
     let sortField: string;
@@ -228,27 +224,44 @@ class JudicialCaseFileService {
   }
 
   async findByNumberCaseFile(numberCaseFile: string, chb: number) {
-    const judicialCaseFile = await models.JUDICIAL_CASE_FILE.findOne({
+    const customer = await models.CUSTOMER_HAS_BANK.findOne({
+      where: {
+        id: chb,
+      },
       include: [
-
         {
-          model: models.CLIENT,
-          as: "client",
-          include: [
-            {
-              model: models.CUSTOMER_USER,
-              as: "customerUser",
-              attributes: ["id", "name"],
-            },
-          ],
+          model: models.CUSTOMER,
+          as: "customer",
+          attributes: ["id", "companyName"],
         },
-        {
-          model: models.JUDICIAL_CASE_FILE,
-          as: "relatedJudicialCaseFile",
-          attributes: ["numberCaseFile"],
-        }
       ],
+    })
 
+    if (!customer) throw boom.notFound("Customer no encontrado");
+
+    const allChbByCustomer = await models.CUSTOMER_HAS_BANK.findAll({
+      where: {
+        idCustomer: customer.dataValues.customer.dataValues.id,
+      },
+    });
+
+
+    if (!allChbByCustomer.length) throw boom.notFound("Receptor no encontrado");
+
+    const formatAllChbByCustomer = allChbByCustomer.map((chb) => chb.dataValues.id);
+
+    const judicialCaseFile = await models.JUDICIAL_CASE_FILE.findOne({
+      include: {
+        model: models.CLIENT,
+        as: "client",
+        include: [
+          {
+            model: models.CUSTOMER_USER,
+            as: "customerUser",
+            attributes: ["id", "name"],
+          },
+        ],
+      },
       where: {
         numberCaseFile,
         customer_has_bank_id: chb,
@@ -256,13 +269,22 @@ class JudicialCaseFileService {
     });
 
     if (!judicialCaseFile) {
-      const judicialCaseFileWithoutCHB = await models.JUDICIAL_CASE_FILE.findOne({
+      const judicialCaseFileWithoutCHB = await models.JUDICIAL_CASE_FILE.findAll({
         where: {
           numberCaseFile,
         },
       });
-      if (!judicialCaseFileWithoutCHB) throw boom.notFound("Expediente no encontrado");
-      return judicialCaseFileWithoutCHB;
+
+      if (!judicialCaseFileWithoutCHB.length) throw boom.notFound("Expediente no encontrado");
+
+      const validJudicialCaseFile = judicialCaseFileWithoutCHB.find((file) => {
+        return formatAllChbByCustomer.includes(file.dataValues.customerHasBankId);
+      });
+
+      if (!validJudicialCaseFile) throw boom.notFound("Expediente no encontrado");
+
+      return validJudicialCaseFile;
+
     }
     return judicialCaseFile;
   }
