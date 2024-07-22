@@ -4,6 +4,7 @@ import * as fs from "fs";
 import UserLogService from "../../app/dash/services/user-log.service";
 import cityModel from "../../db/models/city.model";
 import clientModel from "../../db/models/client.model";
+import { ClientType } from "../../app/extrajudicial/types/client.type";
 
 const service = new ClientService();
 const serviceUserLog = new UserLogService();
@@ -142,6 +143,33 @@ export const saveClientController = async (
     next(error);
   }
 };
+
+export const updateClientsController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { chb } = req.params;
+    const body = req.body;
+    const clients = await service.updateClients(body.clients, chb);
+
+    body.clients.forEach(async (client: ClientType) => {
+      await serviceUserLog.create({
+        customerUserId: Number(req.user?.id),
+        codeAction: "P02-04",
+        entity: CLIENT_TABLE,
+        entityId: Number(client.id),
+        ip: req.clientIp ?? "",
+        customerId: Number(req.user?.customerId),
+      });
+    });
+
+    res.status(201).json(clients);
+  } catch (error) {
+    next(error);
+  }
+}
 
 export const transferClientToAnotherBankController = async (
   req: Request,

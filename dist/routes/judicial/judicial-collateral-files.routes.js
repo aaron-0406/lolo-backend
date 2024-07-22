@@ -10,7 +10,7 @@ const judicial_collateral_files_schema_1 = __importDefault(require("../../app/ju
 const judicial_collateral_files_controller_1 = require("../../controllers/judicial/judicial-collateral-files.controller");
 const multer_handler_1 = require("../../middlewares/multer.handler");
 const boom_1 = __importDefault(require("@hapi/boom"));
-const { getJudicialCollateralFilesByIDSchema, getJudicialCollateralFilesByJudicialCollateralIdSchema, createJudicialCollateralFilesParamSchema, getCollateralFileByIDSchema } = judicial_collateral_files_schema_1.default;
+const { getJudicialCollateralFilesByJudicialCollateralIdSchema, createJudicialCollateralFilesParamSchema, getCollateralFileByIDSchema, getJudicialCaseFileByCHBSchemaQuery } = judicial_collateral_files_schema_1.default;
 const multerFile = (req, res, next) => {
     multer_handler_1.archivosCollateral.array("file")(req, res, (err) => {
         if (err)
@@ -19,7 +19,7 @@ const multerFile = (req, res, next) => {
     });
 };
 const router = express_1.default.Router();
-router.get("/:chb/:collateralId", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getJudicialCollateralFilesByJudicialCollateralIdSchema, "params"), judicial_collateral_files_controller_1.getAllCollateralFilesController);
+router.get("/:chb/:collateralId", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getJudicialCollateralFilesByJudicialCollateralIdSchema, "params"), (0, validator_handler_1.default)(getJudicialCaseFileByCHBSchemaQuery, "query"), judicial_collateral_files_controller_1.getAllCollateralFilesController);
 router.get("/:chb/:collateralId/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P13-01-06-01-03-01"), (0, validator_handler_1.default)(getCollateralFileByIDSchema, "params"), judicial_collateral_files_controller_1.getCollateralFileByIDController);
 router.post("/:chb/:collateralId", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P13-01-06-01-03-02"), (0, validator_handler_1.default)(createJudicialCollateralFilesParamSchema, "params"), multerFile, judicial_collateral_files_controller_1.createCollateralFileController);
 router.delete("/:chb/:collateralId/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P13-01-06-01-03-04"), (0, validator_handler_1.default)(getCollateralFileByIDSchema, "params"), judicial_collateral_files_controller_1.deletedCollateralFileController);

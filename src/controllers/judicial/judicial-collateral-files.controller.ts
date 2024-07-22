@@ -14,7 +14,7 @@ export const getAllCollateralFilesController = async (
 ) => {
   try {
     const { collateralId, chb } = req.params;
-    const collateralFiles = await service.findAllByCollateralId(Number(collateralId), Number(chb));
+    const collateralFiles = await service.findAllByCollateralId(Number(collateralId), Number(chb), req.query);
     res.json(collateralFiles);
   } catch (error) {
     next(error);
