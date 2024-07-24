@@ -312,8 +312,9 @@ class JudicialCaseFileService {
 
   async update(id: string, changes: JudicialCaseFileType) {
     const judicialCaseFile = await this.findByID(id);
-    const rta = await judicialCaseFile.update(changes);
-    return rta;
+    const oldJudicialCaseFile = {...judicialCaseFile.get()};
+    const newJudicialCaseFile = await judicialCaseFile.update(changes);
+    return { oldJudicialCaseFile, newJudicialCaseFile };
   }
 
   async updateProcessStatus(
@@ -321,15 +322,17 @@ class JudicialCaseFileService {
     changes: JudicialCasefileProcessStatus
   ) {
     const judicialCaseFile = await this.findByID(id);
-    const rta = await judicialCaseFile.update(changes);
-    return rta;
+    const oldJudicialCaseFile = {...judicialCaseFile.get()};
+    const newJudicialCaseFile = await judicialCaseFile.update(changes);
+    return { oldJudicialCaseFile, newJudicialCaseFile };
   }
 
   async delete(id: string) {
     const client = await this.findByID(id);
+    const oldJudicialCaseFile = {...client.get()};
     await client.destroy();
 
-    return { id };
+    return oldJudicialCaseFile;
   }
 
   async createQrCode(numberCaseFile: string, chb: number) {

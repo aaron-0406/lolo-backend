@@ -37,15 +37,17 @@ class JudicialBinProceduralStageService {
 
   async update(id: string, changes: JudicialBinProceduralStageType) {
     const judicialBinProceduralStage = await this.findByID(id);
-    const rta = await judicialBinProceduralStage.update(changes);
-    return rta;
+    const oldData = {...judicialBinProceduralStage.get()};
+    const newData = (await judicialBinProceduralStage.update(changes)).dataValues;
+    return { oldData, newData };
   }
 
   async delete(id: string) {
     const proceduralStage = await this.findByID(id);
+    const oldData = {...proceduralStage.get()};
     await proceduralStage.destroy();
 
-    return { id };
+    return { oldData };
   }
 }
 

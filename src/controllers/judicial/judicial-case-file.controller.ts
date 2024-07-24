@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import UserLogService from "../../app/dash/services/user-log.service";
 import JudicialCaseFileService from "../../app/judicial/services/judicial-case-file.service";
 import judicialCaseFileModel from "../../db/models/judicial-case-file.model";
+import { generateLogSummary } from "../../utils/dash/user-log";
 
 const service = new JudicialCaseFileService();
 const serviceUserLog = new UserLogService();
@@ -107,6 +108,12 @@ export const createJudicialCaseFileController = async (
     const body = req.body;
     const newJudicialCaseFile = await service.create(body, customerId);
 
+    const sumary = generateLogSummary({
+      method: req.method,
+      newData: newJudicialCaseFile.dataValues,
+      id: newJudicialCaseFile.dataValues.id,
+    })
+
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P13-02",
@@ -114,6 +121,7 @@ export const createJudicialCaseFileController = async (
       entityId: Number(newJudicialCaseFile.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
+      methodSumary: sumary,
     });
 
     res.status(201).json(newJudicialCaseFile);
@@ -144,18 +152,26 @@ export const updateJudicialCaseFileController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const caseFile = await service.update(id, body);
+    const { oldJudicialCaseFile, newJudicialCaseFile } = await service.update(id, body);
+
+    const sumary = generateLogSummary({
+      method: req.method,
+      oldData: oldJudicialCaseFile,
+      newData: newJudicialCaseFile.dataValues,
+      id: newJudicialCaseFile.dataValues.id,
+    })
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P13-03",
       entity: JUDICIAL_CASE_FILE_TABLE,
-      entityId: Number(caseFile.dataValues.id),
+      entityId: Number(newJudicialCaseFile.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
+      methodSumary: sumary,
     });
 
-    res.json(caseFile);
+    res.json(newJudicialCaseFile);
   } catch (error) {
     next(error);
   }
@@ -169,18 +185,26 @@ export const updateJudicialCaseProcessStatus = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const caseFile = await service.updateProcessStatus(id, body);
+    const { oldJudicialCaseFile, newJudicialCaseFile } = await service.updateProcessStatus(id, body);
+
+    const sumary = generateLogSummary({
+      method: req.method,
+      oldData: oldJudicialCaseFile,
+      newData: newJudicialCaseFile.dataValues,
+      id: newJudicialCaseFile.dataValues.id,
+    })
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P13-01-04-01",
       entity: JUDICIAL_CASE_FILE_TABLE,
-      entityId: Number(caseFile.dataValues.id),
+      entityId: Number(newJudicialCaseFile.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
+      methodSumary: sumary,
     });
 
-    res.json(caseFile);
+    res.json(newJudicialCaseFile.dataValues.id);
   } catch (error) {
     next(error);
   }
@@ -193,15 +217,22 @@ export const deleteJudicialCaseFileController = async (
 ) => {
   try {
     const { id } = req.params;
-    const judicialCaseFile = await service.delete(id);
+    const oldJudicialCaseFile = await service.delete(id);
+
+    const sumary = generateLogSummary({
+      method: req.method,
+      oldData: oldJudicialCaseFile,
+      id: oldJudicialCaseFile.id,
+    })
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P13-04",
       entity: JUDICIAL_CASE_FILE_TABLE,
-      entityId: Number(judicialCaseFile.id),
+      entityId: Number(oldJudicialCaseFile.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
+      methodSumary: sumary,
     });
 
     res.status(201).json({ id });
