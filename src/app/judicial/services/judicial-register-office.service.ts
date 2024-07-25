@@ -37,15 +37,17 @@ class JudicialRegisterOfficeService {
 
   async update(id: string, changes: JudicialRegisterOfficeType) {
     const judicialRegisterOffice = await this.findByID(id);
-    const rta = await judicialRegisterOffice.update(changes);
-    return rta;
+    const oldJudicialRegisterOffice = { ...judicialRegisterOffice.get() };
+    const newJudicialRegisterOffice = await judicialRegisterOffice.update(changes);
+    return { oldJudicialRegisterOffice, newJudicialRegisterOffice };
   }
 
   async delete(id: string) {
     const registerOffice = await this.findByID(id);
+    const oldJudicialRegisterOffice = { ...registerOffice.get() };
     await registerOffice.destroy();
 
-    return { id };
+    return oldJudicialRegisterOffice;
   }
 }
 

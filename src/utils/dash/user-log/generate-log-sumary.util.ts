@@ -39,13 +39,35 @@ export const generateLogSummary = ({
   switch (method.toUpperCase()) {
     case "POST":
       summary += `${id}\n`;
-      if (newData && !Array.isArray(newData)) {
+      if (
+        newData &&
+        !oldData &&
+        !withoutChanges &&
+        !Array.isArray(newData) &&
+        !Array.isArray(withoutChanges) &&
+        !Array.isArray(oldData)
+      ) {
         for (const key in newData) {
           let newValue = newData[key];
           if (isDate(newValue)) {
             newValue = formatDate(newValue);
           }
           changes.push(JSON.stringify({ key, newValue }));
+        }
+      } else if (
+        oldData &&
+        !newData &&
+        !withoutChanges &&
+        !Array.isArray(oldData) &&
+        !Array.isArray(newData) &&
+        !Array.isArray(withoutChanges)
+      ) {
+        for (const key in oldData) {
+          let oldValue = oldData[key];
+          if (isDate(oldValue)) {
+            oldValue = formatDate(oldValue);
+          }
+          changes.push(JSON.stringify({ key, oldValue }));
         }
       } else if (
         newData &&

@@ -44,16 +44,18 @@ class NegotiationService {
 
   async update(id: string, changes: NegotiationType) {
     const negotiation = await this.findOne(id);
-    const rta = await negotiation.update(changes);
+    const oldNegotiation = { ...negotiation.get() };
+    const newNegotiation = await negotiation.update(changes);
 
-    return rta;
+    return { oldNegotiation, newNegotiation };
   }
 
   async delete(id: string) {
     const negotiation = await this.findOne(id);
+    const oldNegotiation = { ...negotiation.get() };
     await negotiation.destroy();
 
-    return { id };
+    return oldNegotiation;
   }
 }
 

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import ExtContactTypeService from "../../app/extrajudicial/services/ext-contact-type.service";
 import UserLogService from "../../app/dash/services/user-log.service";
 import extContactTypeModel from "../../db/models/ext-contact-type.model";
+import { generateLogSummary } from "../../utils/dash/user-log";
 
 const service = new ExtContactTypeService();
 const serviceUserLog = new UserLogService();
@@ -71,6 +72,12 @@ export const createExtContactTypeController = async (
     const body = req.body;
     const newExtContactType = await service.create(body);
 
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: newExtContactType.dataValues.id,
+      newData: newExtContactType.dataValues,
+    });
+
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P18-01",
@@ -78,6 +85,7 @@ export const createExtContactTypeController = async (
       entityId: Number(newExtContactType.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
+      methodSumary: sumary,
     });
 
     res.status(201).json(newExtContactType);
@@ -94,18 +102,26 @@ export const updateExtContactTypeController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const extContactType = await service.update(id, body);
+    const { oldExtContactType, newExtContactType } = await service.update(id, body);
+
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: newExtContactType.dataValues.id,
+      oldData: oldExtContactType,
+      newData: newExtContactType.dataValues,
+    });
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P18-02",
       entity: EXT_CONTACT_TYPE_TABLE,
-      entityId: Number(extContactType.dataValues.id),
+      entityId: Number(newExtContactType.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
+      methodSumary: sumary,
     });
 
-    res.json(extContactType);
+    res.json(newExtContactType);
   } catch (error) {
     next(error);
   }
@@ -118,7 +134,13 @@ export const deleteExtContactTypeController = async (
 ) => {
   try {
     const { id } = req.params;
-    await service.delete(id);
+    const oldExtContactType = await service.delete(id);
+
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: id,
+      oldData: oldExtContactType,
+    });
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
@@ -127,6 +149,7 @@ export const deleteExtContactTypeController = async (
       entityId: Number(id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
+      methodSumary: sumary,
     });
 
     res.status(201).json({ id });

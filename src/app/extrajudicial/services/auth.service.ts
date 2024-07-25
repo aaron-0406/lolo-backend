@@ -52,10 +52,16 @@ class AuthService {
 
   async changeCredentials(data: ChangeCredentialsType, customerUserId: number) {
     const { dni, lastname, name, phone } = data;
+    const customerUser = await models.CUSTOMER_USER.findOne({
+      where: { id: customerUserId },
+    });
+    if (!customerUser) throw boom.notFound("Usuario no encontrado");
+    const oldCustomerUser = { ...customerUser.get() };
     await models.CUSTOMER_USER.update(
       { dni, lastName: lastname, name, phone },
       { where: { id: customerUserId } }
     );
+    return oldCustomerUser;
   }
 
   async generate2fa(email: string, userId: number) {

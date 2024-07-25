@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import JudicialSubjectService from "../../app/judicial/services/judicial-subject.service";
 import UserLogService from "../../app/dash/services/user-log.service";
 import judicialSubjectModel from "../../db/models/judicial-subject.model";
+import { generateLogSummary } from "../../utils/dash/user-log";
 
 const service = new JudicialSubjectService();
 const serviceUserLog = new UserLogService();
@@ -57,18 +58,21 @@ export const createJudicialSubjectController = async (
     const body = req.body;
     const newJudicialSubject = await service.create(body);
 
-    const { visible } = req.query;
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: newJudicialSubject.dataValues.id,
+      newData: newJudicialSubject.dataValues,
+    });
 
-    if (visible === "true") {
       await serviceUserLog.create({
         customerUserId: Number(req.user?.id),
-        codeAction: "P27-01",
+        codeAction: "P21-01",
         entity: JUDICIAL_SUBJECT_TABLE,
         entityId: Number(newJudicialSubject.dataValues.id),
         ip: req.clientIp ?? "",
         customerId: Number(req.user?.customerId),
+        methodSumary: sumary,
       });
-    }
 
     res.status(201).json(newJudicialSubject);
   } catch (error) {
@@ -84,22 +88,26 @@ export const updateJudicialSubjectController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const judicialSubject = await service.update(id, body);
+    const { oldJudicialSubject, newJudicialSubject } = await service.update(id, body);
 
-    const { visible } = req.query;
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: newJudicialSubject.dataValues.id,
+      oldData: oldJudicialSubject,
+      newData: newJudicialSubject.dataValues,
+    });
 
-    if (visible === "true") {
       await serviceUserLog.create({
         customerUserId: Number(req.user?.id),
-        codeAction: "P27-02",
+        codeAction: "P21-02",
         entity: JUDICIAL_SUBJECT_TABLE,
-        entityId: Number(judicialSubject.dataValues.id),
+        entityId: Number(newJudicialSubject.dataValues.id),
         ip: req.clientIp ?? "",
         customerId: Number(req.user?.customerId),
+        methodSumary: sumary,
       });
-    }
 
-    res.json(judicialSubject);
+    res.json(newJudicialSubject);
   } catch (error) {
     next(error);
   }
@@ -112,20 +120,22 @@ export const deleteJudicialSubjectController = async (
 ) => {
   try {
     const { id } = req.params;
-    await service.delete(id);
+    const oldJudicialSubject = await service.delete(id);
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: id,
+      oldData: oldJudicialSubject,
+    });
 
-    const { visible } = req.query;
-
-    if (visible === "true") {
       await serviceUserLog.create({
         customerUserId: Number(req.user?.id),
-        codeAction: "P27-03",
+        codeAction: "P21-03",
         entity: JUDICIAL_SUBJECT_TABLE,
         entityId: Number(id),
         ip: req.clientIp ?? "",
         customerId: Number(req.user?.customerId),
+        methodSumary: sumary,
       });
-    }
 
     res.status(201).json({ id });
   } catch (error) {

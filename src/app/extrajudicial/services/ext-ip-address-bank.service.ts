@@ -52,23 +52,26 @@ class ExtIpAddressBankService {
 
   async update(id: string, changes: ExtIpAddressBankType) {
     const extIpAddress = await this.findByID(id, String(changes.customerId));
-    const rta = await extIpAddress.update(changes);
+    const oldExtIpAddress = { ...extIpAddress.get() };
+    const newExtIpAddress = await extIpAddress.update(changes);
 
-    return rta;
+    return { oldExtIpAddress, newExtIpAddress };
   }
 
   async updateState(id: string, customerId: string, state: boolean) {
     const extIpAddress = await this.findByID(id, customerId);
-    const rta = await extIpAddress.update({ ...extIpAddress, state });
+    const oldExtIpAddress = { ...extIpAddress.get() };
+    const newExtIpAddress = await extIpAddress.update({ ...extIpAddress, state });
 
-    return rta;
+    return { oldExtIpAddress, newExtIpAddress };
   }
 
   async delete(id: string, customerId: string) {
     const extIpAddress = await this.findByID(id, customerId);
+    const oldExtIpAddress = { ...extIpAddress.get() };
     await extIpAddress.destroy();
 
-    return { id };
+    return oldExtIpAddress;
   }
 }
 

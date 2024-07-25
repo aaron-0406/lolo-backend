@@ -64,23 +64,26 @@ class ExtTagService {
 
   async update(id: string, changes: ExtTagType) {
     const extTag = await this.findByID(id);
-    const rta = await extTag.update(changes);
+    const oldExtTag = { ...extTag.get() };
+    const newExtTag = await extTag.update(changes);
 
-    return rta;
+    return { oldExtTag, newExtTag };
   }
 
   async updateAction(id: string, action: boolean) {
     const extTag = await this.findByID(id);
-    const rta = await extTag.update({ ...extTag, action });
+    const oldExtTag = { ...extTag.get() };
+    const newExtTag = await extTag.update({ ...extTag, action });
 
-    return rta;
+    return { oldExtTag, newExtTag };
   }
 
   async delete(id: string) {
     const extTag = await this.findByID(id);
+    const oldExtTag = { ...extTag.get() };
     await extTag.destroy();
 
-    return { id };
+    return oldExtTag;
   }
 }
 
