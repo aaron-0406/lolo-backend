@@ -105,7 +105,11 @@ class JudicialCaseFileService {
             };
             // Agregar filtro por nombre de cliente si se proporciona
             if (clientName) {
-                filtersWhere = Object.assign(Object.assign({}, filtersWhere), { "$client.name$": { [sequelize_2.Op.like]: `%${clientName}%` } });
+                filtersWhere = Object.assign(Object.assign({}, filtersWhere), { [sequelize_2.Op.or]: [
+                        { "$client.name$": { [sequelize_2.Op.like]: `%${clientName}%` } },
+                        { number_case_file: { [sequelize_2.Op.like]: `%${clientName}%` } },
+                        { secretary: { [sequelize_2.Op.like]: `%${clientName}%` } },
+                    ] });
             }
             // Combinar filtros adicionales si se proporcionan
             if (Object.keys(filters).length > 0) {
