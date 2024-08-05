@@ -37,15 +37,17 @@ class JudicialRegistrationAreaService {
 
   async update(id: string, changes: JudicialRegistrationAreaType) {
     const judicialRegistrationArea = await this.findByID(id);
-    const rta = await judicialRegistrationArea.update(changes);
-    return rta;
+    const oldJudicialRegistrationArea = { ...judicialRegistrationArea.get() };
+    const newJudicialRegistrationArea = await judicialRegistrationArea.update(changes);
+    return { oldJudicialRegistrationArea, newJudicialRegistrationArea };
   }
 
   async delete(id: string) {
     const registrationArea = await this.findByID(id);
+    const oldJudicialRegistrationArea = { ...registrationArea.get() };
     await registrationArea.destroy();
 
-    return { id };
+    return oldJudicialRegistrationArea;
   }
 }
 

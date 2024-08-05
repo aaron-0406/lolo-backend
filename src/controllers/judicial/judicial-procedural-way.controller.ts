@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import JudicialProceduralWayService from "../../app/judicial/services/judicial-procedural-way.service";
 import UserLogService from "../../app/dash/services/user-log.service";
 import judicialProceduralWayModel from "../../db/models/judicial-procedural-way.model";
+import { generateLogSummary } from "../../utils/dash/user-log";
 
 const service = new JudicialProceduralWayService();
 const serviceUserLog = new UserLogService();
@@ -58,9 +59,12 @@ export const createJudicialProceduralWayController = async (
     const body = req.body;
     const newJudicialProceduralWay = await service.create(body);
 
-    const { visible } = req.query;
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: newJudicialProceduralWay.dataValues.id,
+      newData: newJudicialProceduralWay.dataValues,
+    });
 
-    if (visible === "true") {
       await serviceUserLog.create({
         customerUserId: Number(req.user?.id),
         codeAction: "P22-01",
@@ -68,8 +72,8 @@ export const createJudicialProceduralWayController = async (
         entityId: Number(newJudicialProceduralWay.dataValues.id),
         ip: req.clientIp ?? "",
         customerId: Number(req.user?.customerId),
+        methodSumary: sumary,
       });
-    }
 
     res.status(201).json(newJudicialProceduralWay);
   } catch (error) {
@@ -85,22 +89,26 @@ export const updateJudicialProceduralWayController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const judicialProceduralWay = await service.update(id, body);
+    const { oldJudicialProceduralWay, newJudicialProceduralWay } = await service.update(id, body);
 
-    const { visible } = req.query;
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: newJudicialProceduralWay.dataValues.id,
+      oldData: oldJudicialProceduralWay,
+      newData: newJudicialProceduralWay.dataValues,
+    });
 
-    if (visible === "true") {
       await serviceUserLog.create({
         customerUserId: Number(req.user?.id),
         codeAction: "P22-02",
         entity: JUDICIAL_PROCEDURAL_WAY_TABLE,
-        entityId: Number(judicialProceduralWay.dataValues.id),
+        entityId: Number(newJudicialProceduralWay.dataValues.id),
         ip: req.clientIp ?? "",
         customerId: Number(req.user?.customerId),
+        methodSumary: sumary,
       });
-    }
 
-    res.json(judicialProceduralWay);
+    res.json(newJudicialProceduralWay);
   } catch (error) {
     next(error);
   }
@@ -113,11 +121,14 @@ export const deleteJudicialProceduralWayController = async (
 ) => {
   try {
     const { id } = req.params;
-    await service.delete(id);
+    const oldJudicialProceduralWay = await service.delete(id);
 
-    const { visible } = req.query;
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: id,
+      oldData: oldJudicialProceduralWay,
+    });
 
-    if (visible === "true") {
       await serviceUserLog.create({
         customerUserId: Number(req.user?.id),
         codeAction: "P22-03",
@@ -125,8 +136,8 @@ export const deleteJudicialProceduralWayController = async (
         entityId: Number(id),
         ip: req.clientIp ?? "",
         customerId: Number(req.user?.customerId),
+        methodSumary: sumary,
       });
-    }
 
     res.status(201).json({ id });
   } catch (error) {

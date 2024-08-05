@@ -40,16 +40,18 @@ class JudicialSubjectService {
 
   async update(id: string, changes: JudicialSubjectType) {
     const judicialSubject = await this.findByID(id);
-    const rta = await judicialSubject.update(changes);
+    const oldJudicialSubject = { ...judicialSubject.get() };
+    const newJudicialSubject = await judicialSubject.update(changes);
 
-    return rta;
+    return { oldJudicialSubject, newJudicialSubject };
   }
 
   async delete(id: string) {
     const judicialSubject = await this.findByID(id);
+    const oldJudicialSubject = { ...judicialSubject.get() };
     await judicialSubject.destroy();
 
-    return { id };
+    return oldJudicialSubject;
   }
 }
 

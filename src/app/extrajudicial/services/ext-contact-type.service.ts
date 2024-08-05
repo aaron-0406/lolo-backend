@@ -46,16 +46,18 @@ class ExtTagGroupService {
 
   async update(id: string, changes: ExtContactTypeType) {
     const extContactType = await this.findByID(id);
-    const rta = await extContactType.update(changes);
+    const oldExtContactType = { ...extContactType.get() };
+    const newExtContactType = await extContactType.update(changes);
 
-    return rta;
+    return { oldExtContactType, newExtContactType };
   }
 
   async delete(id: string) {
     const extContactType = await this.findByID(id);
+    const oldExtContactType = { ...extContactType.get() };
     await extContactType.destroy();
 
-    return { id };
+    return oldExtContactType;
   }
 }
 

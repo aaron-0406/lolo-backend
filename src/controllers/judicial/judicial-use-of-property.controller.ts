@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import judicialUseOfPropertyModel from "../../db/models/judicial-use-of-property.model";
 import JudicialUseOfPropertyService from "../../app/judicial/services/judicial-use-of-property.service";
 import UserLogService from "../../app/dash/services/user-log.service";
+import { generateLogSummary } from "../../utils/dash/user-log";
 
 const service = new JudicialUseOfPropertyService();
 const serviceUserLog = new UserLogService();
@@ -44,7 +45,11 @@ export const createUseOfPropertyController = async (
   try {
     const body = req.body;
     const newUseOfProperty = await service.create(body);
-
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: newUseOfProperty.dataValues.id,
+      newData: newUseOfProperty.dataValues,
+    });
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P38-01",
@@ -52,6 +57,7 @@ export const createUseOfPropertyController = async (
       entityId: Number(newUseOfProperty.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
+      methodSumary: sumary,
     });
 
     res.json(newUseOfProperty);
@@ -68,18 +74,26 @@ export const updateUseOfPropertyController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const useOfProperty = await service.update(id, body);
+    const { oldJudicialUseOfProperty, newJudicialUseOfProperty } = await service.update(id, body);
+
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: newJudicialUseOfProperty.dataValues.id,
+      oldData: oldJudicialUseOfProperty,
+      newData: newJudicialUseOfProperty.dataValues,
+    });
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P38-02",
       entity: JUDICIAL_USE_OF_PROPERTY_TABLE,
-      entityId: Number(useOfProperty.dataValues.id),
+      entityId: Number(newJudicialUseOfProperty.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
+      methodSumary: sumary,
     });
 
-    res.json(useOfProperty);
+    res.json(newJudicialUseOfProperty);
   } catch (error) {
     next(error);
   }
@@ -92,18 +106,25 @@ export const deletedUseOfPropertyController = async (
 ) => {
   try {
     const { id } = req.params;
-    const useOfProperty = await service.delete(id);
+    const oldJudicialUseOfProperty = await service.delete(id);
+
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: id,
+      oldData: oldJudicialUseOfProperty,
+    });
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P38-03",
       entity: JUDICIAL_USE_OF_PROPERTY_TABLE,
-      entityId: Number(useOfProperty.id),
+      entityId: Number(oldJudicialUseOfProperty.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
+      methodSumary: sumary,
     });
 
-    res.json(useOfProperty);
+    res.json(oldJudicialUseOfProperty);
   } catch (error) {
     next(error);
   }

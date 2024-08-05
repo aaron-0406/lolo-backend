@@ -361,24 +361,40 @@ class ClientService {
     chbTransferred: string
   ) {
     const client = await this.findCode(code, chb);
-    await client.update({
+    const oldData = { ...client.get() };
+    const newData = await client.update({
       ...client,
       chbTransferred: chb == chbTransferred ? null : chbTransferred,
     });
 
-    return { id: client.dataValues.id, chbTransferred };
+    return { id: client.dataValues.id, chbTransferred, oldData:oldData, newData: newData.dataValues };
   }
 
   async updateClients(
-  clients: Omit<ClientType, "id" | "createdAt">[],
+  clients: Omit<ClientType, "createdAt">[],
     chb: string
-  ) {
+  ) {;
+    const oldClients: any[] = [];
+
     const updates = clients.map(async clientData => {
-      return await this.update(clientData.code, chb, clientData);
+      const oldDataClient = await models.CLIENT.findOne({
+        where: {
+          code: clientData.code,
+          id: clientData.id,
+          [Op.or]: [
+            { chb_transferred: chb },
+            { customer_has_bank_id_customer_has_bank: chb },
+          ],
+        },
+      })
+      if (!oldDataClient) return;
+      oldClients.push({...oldDataClient.get()});
+      const {id, ...newData} = clientData;
+      return await this.update(clientData.code, chb, newData);
     });
 
-    const rta = await Promise.all(updates);
-    return rta;
+    const newClients = (await Promise.all(updates));
+    return { oldClientsUpdates: oldClients, newClientsUpdates: newClients };
   }
 
   async update(
@@ -395,7 +411,7 @@ class ClientService {
   async delete(code: string, chb: string, idCustomer: number) {
     const client = await this.findCode(code, chb);
     await client.destroy();
-    return { code, id: client.dataValues.id };
+    return { code, id: client.dataValues.id, client: client.dataValues };
   }
 
   async readAndUpdateExcelFile(date: Date, cityId: number) {

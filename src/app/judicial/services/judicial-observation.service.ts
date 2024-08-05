@@ -109,6 +109,7 @@ class JudicialObservationService {
     params: { idCustomer: number; code: string }
   ) {
     const judicialObservation = await this.findByID(id);
+    const oldJudicialObservation = { ...judicialObservation.get() };
     await judicialObservation.update(changes);
 
     const fileCreationPromises = files.map(async (file) => {
@@ -144,15 +145,16 @@ class JudicialObservationService {
 
     await Promise.all(fileCreationPromises);
 
-    const observation = await this.findByID(judicialObservation.dataValues.id);
-    return observation;
+    const newJudicialObservation = await this.findByID(judicialObservation.dataValues.id);
+    return { oldJudicialObservation, newJudicialObservation };
   }
 
   async delete(id: string) {
     const judicialObservation = await this.findByID(id);
+    const oldJudicialObservation = { ...judicialObservation.get() };
     await judicialObservation.destroy();
 
-    return { id };
+    return oldJudicialObservation;
   }
 }
 

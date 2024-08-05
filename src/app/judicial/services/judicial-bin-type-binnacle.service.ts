@@ -37,15 +37,17 @@ class JudicialBinTypeBinnacleService {
 
   async update(id: string, changes: JudicialBinTypeBinnacleType) {
     const judicialBinTypeBinnacle = await this.findByID(id);
-    const rta = await judicialBinTypeBinnacle.update(changes);
-    return rta;
+    const oldJudicialBinTypeBinnacle = { ...judicialBinTypeBinnacle.get() };
+    const newJudicialBinTypeBinnacle = await judicialBinTypeBinnacle.update(changes);
+    return { oldJudicialBinTypeBinnacle, newJudicialBinTypeBinnacle };
   }
 
   async delete(id: string) {
     const judicialBinTypeBinnacle = await this.findByID(id);
+    const oldJudicialBinTypeBinnacle = { ...judicialBinTypeBinnacle.get() };
     await judicialBinTypeBinnacle.destroy();
 
-    return { id };
+    return oldJudicialBinTypeBinnacle;
   }
 }
 

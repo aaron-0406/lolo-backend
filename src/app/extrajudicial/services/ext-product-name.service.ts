@@ -46,16 +46,18 @@ class ExtProductNameService {
 
   async update(id: string, changes: ExtProductNameType) {
     const extProductName = await this.findByID(id);
-    const rta = await extProductName.update(changes);
+    const oldProductName = { ...extProductName.get() };
+    const newProductName = await extProductName.update(changes);
 
-    return rta;
+    return { oldProductName, newProductName };
   }
 
   async delete(id: string) {
     const extProductName = await this.findByID(id);
+    const oldProductName = { ...extProductName.get() };
     await extProductName.destroy();
 
-    return { id };
+    return oldProductName;
   }
 }
 

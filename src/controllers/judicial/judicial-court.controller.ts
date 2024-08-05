@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import JudicialCourtService from "../../app/judicial/services/judicial-court.service";
 import judicialCourtModel from "../../db/models/judicial-court.model";
 import UserLogService from "../../app/dash/services/user-log.service";
+import { generateLogSummary } from "../../utils/dash/user-log";
 
 const service = new JudicialCourtService();
 const serviceUserLog = new UserLogService();
@@ -57,9 +58,12 @@ export const createJudicialCourtController = async (
     const body = req.body;
     const newJudicialCourt = await service.create(body);
 
-    const { visible } = req.query;
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: newJudicialCourt.dataValues.id,
+      newData: newJudicialCourt.dataValues,
+    });
 
-    if (visible === "true") {
       await serviceUserLog.create({
         customerUserId: Number(req.user?.id),
         codeAction: "P20-01",
@@ -67,9 +71,8 @@ export const createJudicialCourtController = async (
         entityId: Number(newJudicialCourt.dataValues.id),
         ip: req.clientIp ?? "",
         customerId: Number(req.user?.customerId),
+        methodSumary: sumary,
       });
-    }
-
     res.status(201).json(newJudicialCourt);
   } catch (error) {
     next(error);
@@ -84,23 +87,26 @@ export const updateJudicialCourtController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const judicialCourt = await service.update(id, body);
+    const { oldJudicialCourt, newJudicialCourt } = await service.update(id, body);
 
-    const { visible } = req.query;
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: newJudicialCourt.dataValues.id,
+      oldData: oldJudicialCourt,
+      newData: newJudicialCourt.dataValues,
+    });
 
-    if (visible === "true") {
       await serviceUserLog.create({
         customerUserId: Number(req.user?.id),
         codeAction: "P20-02",
         entity: JUDICIAL_COURT_TABLE,
-        entityId: Number(judicialCourt.dataValues.id),
+        entityId: Number(newJudicialCourt.dataValues.id),
         ip: req.clientIp ?? "",
         customerId: Number(req.user?.customerId),
+        methodSumary: sumary,
       });
-    }
 
-
-    res.json(judicialCourt);
+    res.json(newJudicialCourt);
   } catch (error) {
     next(error);
   }
@@ -113,10 +119,13 @@ export const deleteJudicialCourtController = async (
 ) => {
   try {
     const { id } = req.params;
-    await service.delete(id);
-    const { visible } = req.query;
+    const oldJudicialCourt = await service.delete(id);
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: id,
+      oldData: oldJudicialCourt,
+    });
 
-    if (visible === "true") {
       await serviceUserLog.create({
         customerUserId: Number(req.user?.id),
         codeAction: "P20-03",
@@ -124,9 +133,8 @@ export const deleteJudicialCourtController = async (
         entityId: Number(id),
         ip: req.clientIp ?? "",
         customerId: Number(req.user?.customerId),
+        methodSumary: sumary,
       });
-    }
-
 
     res.status(201).json({ id });
   } catch (error) {
