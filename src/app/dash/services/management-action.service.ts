@@ -47,18 +47,16 @@ class ManagementActionService {
 
   async update(id: string, changes: ManagementActionType) {
     const managementAction = await this.findOne(id);
-    const oldManagementAction = { ...managementAction.get() };
-    const newManagementAction = await managementAction.update(changes);
+    const rta = await managementAction.update(changes);
 
-    return { oldManagementAction, newManagementAction };
+    return rta;
   }
 
   async delete(id: string) {
     const managementAction = await this.findOne(id);
-    const oldManagementAction = { ...managementAction.get() };
     await managementAction.destroy();
 
-    return oldManagementAction;
+    return { id };
   }
 }
 

@@ -113,17 +113,6 @@ class JudicialCaseFileHasCollateralService {
         )
     );
 
-    const JudicialCaseFileHasCollateralWithoutChanges =
-      currentJudicialCaseFileHasCollaterals.filter(
-        (data) =>
-          !JudicialCaseFileHasCollateralsToDelete.some(
-            (item) => item.id === data.id
-          ) &&
-          !JudicialCaseFileHasCollateralsToCreate.some(
-            (item) => item.id === data.id
-          )
-      );
-
     try {
       for (const collateral of JudicialCaseFileHasCollateralsToDelete) {
         await models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.destroy({
@@ -137,7 +126,7 @@ class JudicialCaseFileHasCollateralService {
       for (const newCollateral of JudicialCaseFileHasCollateralsToCreate) {
         await models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.create(newCollateral);
       }
-      return { JudicialCaseFileHasCollateralsToDelete, JudicialCaseFileHasCollateralsToCreate, JudicialCaseFileHasCollateralWithoutChanges, data };
+      return data;
     } catch (error) {
       throw error;
     }

@@ -5,7 +5,6 @@ import UserLogService from "../../app/dash/services/user-log.service";
 import cityModel from "../../db/models/city.model";
 import clientModel from "../../db/models/client.model";
 import { ClientType } from "../../app/extrajudicial/types/client.type";
-import { generateLogSummary } from "../../utils/dash/user-log";
 
 const service = new ClientService();
 const serviceUserLog = new UserLogService();
@@ -130,12 +129,6 @@ export const saveClientController = async (
       req.user
     );
 
-    const sumary = generateLogSummary ({
-      method: req.method,
-      newData: client.dataValues,
-      id: client.dataValues.id,
-    })
-
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: permission,
@@ -143,7 +136,6 @@ export const saveClientController = async (
       entityId: Number(client.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     res.status(201).json(client);
@@ -162,16 +154,7 @@ export const updateClientsController = async (
     const body = req.body;
     const clients = await service.updateClients(body.clients, chb);
 
-    clients.newClientsUpdates.forEach(async (client: any) => {
-      const oldClient = clients.oldClientsUpdates.find((oldClient: any) => oldClient.id === client.dataValues.id);
-
-      const sumary = generateLogSummary({
-        method: req.method,
-        oldData: oldClient,
-        newData: client.dataValues,
-        id: client.dataValues.id,
-      });
-
+    body.clients.forEach(async (client: ClientType) => {
       await serviceUserLog.create({
         customerUserId: Number(req.user?.id),
         codeAction: "P02-04",
@@ -179,11 +162,10 @@ export const updateClientsController = async (
         entityId: Number(client.id),
         ip: req.clientIp ?? "",
         customerId: Number(req.user?.customerId),
-        methodSumary: sumary,
       });
     });
 
-    res.status(201).json(clients.newClientsUpdates);
+    res.status(201).json(clients);
   } catch (error) {
     next(error);
   }
@@ -204,13 +186,6 @@ export const transferClientToAnotherBankController = async (
       body.chbTransferred
     );
 
-    const sumary = generateLogSummary({
-      method: req.method,
-      oldData: data.oldData,
-      newData: data.newData,
-      id: data.id,
-    });
-
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P02-06",
@@ -218,7 +193,6 @@ export const transferClientToAnotherBankController = async (
       entityId: Number(body.code),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     res.status(201).json({ id: data.id, chbTransferred: data.chbTransferred });
@@ -234,22 +208,15 @@ export const deleteClientController = async (
 ) => {
   try {
     const { code, chb, idCustomer } = req.params;
-    const { client, id } = await service.delete(code, chb, Number(idCustomer));
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      oldData: client,
-      id: client.id,
-    });
+    const client = await service.delete(code, chb, Number(idCustomer));
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P02-05",
       entity: CLIENT_TABLE,
-      entityId: Number(client.id ?? id),
+      entityId: Number(client.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     res.status(201).json({ code, chb, id: client.id });

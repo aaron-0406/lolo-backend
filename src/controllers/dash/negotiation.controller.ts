@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import NegotiationService from "../../app/dash/services/negotiation.service";
 import UserLogService from "../../app/dash/services/user-log.service";
 import negotiationModel from "../../db/models/negotiation.model";
-import { generateLogSummary } from "../../utils/dash/user-log";
 
 const service = new NegotiationService();
 const serviceUserLog = new UserLogService();
@@ -58,12 +57,6 @@ export const createNegotiationController = async (
     const body = req.body;
     const newNegotiation = await service.create(body);
 
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newNegotiation.dataValues.id,
-      newData: newNegotiation.dataValues,
-    });
-
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P09-01",
@@ -71,7 +64,6 @@ export const createNegotiationController = async (
       entityId: Number(newNegotiation.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     res.status(201).json(newNegotiation);
@@ -88,26 +80,18 @@ export const updateNegotiationController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const { oldNegotiation, newNegotiation } = await service.update(id, body);
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newNegotiation.dataValues.id,
-      oldData: oldNegotiation,
-      newData: newNegotiation.dataValues,
-    });
+    const negotiation = await service.update(id, body);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P09-02",
       entity: NEGOTIATION_TABLE,
-      entityId: Number(newNegotiation.dataValues.id),
+      entityId: Number(negotiation.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
-    res.json(newNegotiation);
+    res.json(negotiation);
   } catch (error) {
     next(error);
   }
@@ -120,13 +104,7 @@ export const deleteNegotiationController = async (
 ) => {
   try {
     const { id } = req.params;
-    const oldNegotiation = await service.delete(id);
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: id,
-      oldData: oldNegotiation,
-    });
+    await service.delete(id);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
@@ -135,7 +113,6 @@ export const deleteNegotiationController = async (
       entityId: Number(id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     res.status(201).json({ id });

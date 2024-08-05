@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import JudicialCollateralChargesEncumbrancesTypeLoadService from "../../app/judicial/services/judicial-collateral-charges-encumbrances-type-load.service";
 import UserLogService from "../../app/dash/services/user-log.service";
 import judicialCollateralChargesEncumbrancesTypeLoadModel from "../../db/models/judicial-collateral-charges-encumbrances-type-load.model";
-import { generateLogSummary } from "../../utils/dash/user-log";
 
 const service = new JudicialCollateralChargesEncumbrancesTypeLoadService();
 const userLogService = new UserLogService();
@@ -46,12 +45,6 @@ export const createCollateralChargesEncumbrancesTypeLoadController = async (
     const body = req.body;
     const newCollateralChargesEncumbrancesTypeLoad = await service.create(body);
 
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newCollateralChargesEncumbrancesTypeLoad.dataValues.id,
-      newData: newCollateralChargesEncumbrancesTypeLoad.dataValues,
-    });
-
     await userLogService.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P42-01",
@@ -59,9 +52,7 @@ export const createCollateralChargesEncumbrancesTypeLoadController = async (
       entityId: Number(newCollateralChargesEncumbrancesTypeLoad.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
-
     res.json(newCollateralChargesEncumbrancesTypeLoad);
   } catch (error) {
     next(error);
@@ -76,29 +67,20 @@ export const updateCollateralChargesEncumbrancesTypeLoadController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const { oldJudicialCollateralChargesEncumbrancesTypeLoad, newJudicialCollateralChargesEncumbrancesTypeLoad } = await service.update(
+    const collateralChargesEncumbrancesTypeLoad = await service.update(
       id,
       body
     );
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newJudicialCollateralChargesEncumbrancesTypeLoad.dataValues.id,
-      newData: newJudicialCollateralChargesEncumbrancesTypeLoad.dataValues,
-      oldData: oldJudicialCollateralChargesEncumbrancesTypeLoad,
-    });
-
     await userLogService.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P42-02",
       entity: JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE,
-      entityId: Number(newJudicialCollateralChargesEncumbrancesTypeLoad.dataValues.id),
+      entityId: Number(collateralChargesEncumbrancesTypeLoad.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
-    res.json(newJudicialCollateralChargesEncumbrancesTypeLoad);
+    res.json(collateralChargesEncumbrancesTypeLoad);
   } catch (error) {
     next(error);
   }
@@ -111,25 +93,18 @@ export const deletedCollateralChargesEncumbrancesTypeLoadController = async (
 ) => {
   try {
     const { id } = req.params;
-    const oldCollateralChargesEncumbrancesTypeLoad = await service.delete(id);
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: oldCollateralChargesEncumbrancesTypeLoad.id,
-      oldData: oldCollateralChargesEncumbrancesTypeLoad,
-    });
+    const collateralChargesEncumbrancesTypeLoad = await service.delete(id);
 
     await userLogService.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P42-03",
       entity: JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE,
-      entityId: Number(oldCollateralChargesEncumbrancesTypeLoad.id),
+      entityId: Number(collateralChargesEncumbrancesTypeLoad.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
-    res.json({ id });
+    res.json(collateralChargesEncumbrancesTypeLoad);
   } catch (error) {
     next(error);
   }

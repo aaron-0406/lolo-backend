@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import extAddressTypeervice from "../../app/extrajudicial/services/ext-address-type.service";
 import extAddressTypeModel from "../../db/models/ext-address-type.model";
 import UserLogService from "../../app/dash/services/user-log.service";
-import { generateLogSummary } from "../../utils/dash/user-log";
 
 const service = new extAddressTypeervice();
 const serviceUserLog = new UserLogService();
@@ -59,12 +58,6 @@ export const createAddressTypeController = async (
     const body = req.body;
     const newAddress = await service.create(body);
 
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newAddress.dataValues.id,
-      newData: newAddress.dataValues,
-    });
-
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P16-01",
@@ -72,7 +65,6 @@ export const createAddressTypeController = async (
       entityId: Number(newAddress.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     res.status(201).json(newAddress);
@@ -89,26 +81,18 @@ export const updateAddressTypeController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const { oldAddress, newAddress } = await service.update(id, body);
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newAddress.dataValues.id,
-      oldData: oldAddress,
-      newData: newAddress.dataValues,
-    })
+    const direction = await service.update(id, body);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P16-02",
       entity: EXT_ADDRESS_TYPE_TABLE,
-      entityId: Number(newAddress.dataValues.id),
+      entityId: Number(direction.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
-    res.json(newAddress);
+    res.json(direction);
   } catch (error) {
     next(error);
   }
@@ -121,13 +105,7 @@ export const deleteAddressTypeController = async (
 ) => {
   try {
     const { id, chb } = req.params;
-    const oldAddress = await service.delete(id, chb);
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: id,
-      oldData: oldAddress,
-    });
+    await service.delete(id, chb);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
@@ -136,7 +114,6 @@ export const deleteAddressTypeController = async (
       entityId: Number(id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     res.status(201).json({ id });

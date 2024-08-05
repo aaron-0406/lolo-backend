@@ -3,7 +3,6 @@ import boom from "@hapi/boom";
 import ProductService from "../../app/extrajudicial/services/product.service";
 import UserLogService from "../../app/dash/services/user-log.service";
 import productModel from "../../db/models/product.model";
-import { generateLogSummary } from "../../utils/dash/user-log";
 
 const service = new ProductService();
 const serviceUserLog = new UserLogService();
@@ -74,11 +73,6 @@ export const assignJudicialCaseFileToProductsController = async (
     for (const product of products) {
       const productId = Number(product.id);
 
-      const sumary = generateLogSummary({
-        method: req.method,
-        id: productId,
-        newData: product,
-      })
       await serviceUserLog.create({
         customerUserId: Number(userId),
         codeAction: "P13-01-03-02",
@@ -86,7 +80,6 @@ export const assignJudicialCaseFileToProductsController = async (
         entityId: Number(productId),
         ip: req.clientIp ?? "",
         customerId: Number(customerId),
-        methodSumary: sumary,
       });
     }
 
@@ -103,15 +96,10 @@ export const removeJudicialCaseFileFromProductController = async (
 ) => {
   try {
     const { productRemovedId, judicialCaseFileId } = req.body;
-    const { id, oldProduct } = await service.removeJudicialCaseFileFromProduct(
+    const { id } = await service.removeJudicialCaseFileFromProduct(
       productRemovedId,
       judicialCaseFileId
     );
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: id,
-      oldData: oldProduct,
-    })
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
@@ -120,7 +108,6 @@ export const removeJudicialCaseFileFromProductController = async (
       entityId: Number(id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     res.json({ id });
@@ -165,11 +152,7 @@ export const createProductController = async (
 ) => {
   try {
     const product = await service.create(req.body);
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: product.dataValues.id,
-      newData: product.dataValues,
-    })
+
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P02-02-06-01",
@@ -177,7 +160,6 @@ export const createProductController = async (
       entityId: Number(product.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     res.json(product);
@@ -193,26 +175,18 @@ export const updateProductController = async (
 ) => {
   try {
     const { id } = req.params;
-    const { oldProduct, productEdited } = await service.update(req.body, Number(id));
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: productEdited.dataValues.id,
-      oldData: oldProduct,
-      newData: productEdited.dataValues,
-    })
+    const product = await service.update(req.body, Number(id));
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P02-02-06-02",
       entity: PRODUCT_TABLE,
-      entityId: Number(productEdited.dataValues.id),
+      entityId: Number(product.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
-    res.json(productEdited);
+    res.json(product);
   } catch (error: any) {
     next(boom.badRequest(error.message));
   }
@@ -225,13 +199,7 @@ export const deleteProductController = async (
 ) => {
   try {
     const { id } = req.params;
-    const oldProduct = await service.delete(Number(id));
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: id,
-      oldData: oldProduct,
-    })
+    await service.delete(Number(id));
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
@@ -240,7 +208,6 @@ export const deleteProductController = async (
       entityId: Number(id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     res.json(Number(id));

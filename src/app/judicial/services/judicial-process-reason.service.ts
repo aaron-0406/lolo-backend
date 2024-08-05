@@ -46,18 +46,16 @@ class judicialProcessReasonService {
 
   async update(id: number, changes: JudicialProcessReasonType) {
     const judicialProcessReason = await this.findByID(id);
-    const oldJudicialProcessReason = { ...judicialProcessReason.get() };
-    const newJudicialProcessReason = await judicialProcessReason.update(changes);
+    const rta = await judicialProcessReason.update(changes);
 
-    return { oldJudicialProcessReason, newJudicialProcessReason };
+    return rta;
   }
 
   async delete(id: number) {
     const judicialProcessReason = await this.findByID(id);
-    const oldJudicialProcessReason = { ...judicialProcessReason.get() };
     await judicialProcessReason.destroy();
 
-    return oldJudicialProcessReason;
+    return { id };
   }
 }
 

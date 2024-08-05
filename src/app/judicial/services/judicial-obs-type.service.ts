@@ -46,18 +46,16 @@ class judicialObsTypeService {
 
   async update(id: string, changes: JudicialObsTypeType) {
     const judicialObsType = await this.findByID(id);
-    const oldJudicialObsType = { ...judicialObsType.get() };
-    const newJudicialObsType = await judicialObsType.update(changes);
+    const rta = await judicialObsType.update(changes);
 
-    return { oldJudicialObsType, newJudicialObsType };
+    return rta;
   }
 
   async delete(id: string) {
     const judicialObsType = await this.findByID(id);
-    const oldJudicialObsType = { ...judicialObsType.get() };
     await judicialObsType.destroy();
 
-    return oldJudicialObsType;
+    return { id };
   }
 }
 

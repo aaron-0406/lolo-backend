@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import JudicialCollateralService from "../../app/judicial/services/judicial-collateral.service";
 import UserLogService from "../../app/dash/services/user-log.service";
 import judicialCollateralModel from "../../db/models/judicial-collateral.model";
-import { generateLogSummary } from "../../utils/dash/user-log";
 
 const service = new JudicialCollateralService();
 const userLogService = new UserLogService();
@@ -48,12 +47,6 @@ export const createCollateralController = async (
     const body = req.body;
     const newCollateral = await service.create(body, JudicialCaseFileId);
 
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newCollateral.dataValues.id,
-      newData: newCollateral.dataValues,
-    })
-
     await userLogService.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P13-01-06-02",
@@ -61,7 +54,6 @@ export const createCollateralController = async (
       entityId: Number(newCollateral.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
     res.json(newCollateral);
   } catch (error) {
@@ -77,26 +69,17 @@ export const updateCollateralController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const { oldJudicialCollateral, newJudicialCollateral } = await service.update(id, body);
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newJudicialCollateral.dataValues.id,
-      oldData: oldJudicialCollateral,
-      newData: newJudicialCollateral.dataValues,
-    });
-
+    const collateral = await service.update(id, body);
     await userLogService.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P13-01-06-03",
       entity: JUDICIAL_COLLATERAL_TABLE,
-      entityId: Number(newJudicialCollateral.dataValues.id),
+      entityId: Number(collateral.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
-    res.json(newJudicialCollateral);
+    res.json(collateral);
   } catch (error) {
     next(error);
   }
@@ -109,25 +92,18 @@ export const deletedCollateralController = async (
 ) => {
   try {
     const { id } = req.params;
-    const oldJudicialCollateral = await service.delete(id);
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: id,
-      oldData: oldJudicialCollateral,
-    });
+    const collateral = await service.delete(id);
 
     await userLogService.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P13-01-06-04",
       entity: JUDICIAL_COLLATERAL_TABLE,
-      entityId: Number(id),
+      entityId: Number(collateral.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
-    res.json(oldJudicialCollateral);
+    res.json(collateral);
   } catch (error) {
     next(error);
   }

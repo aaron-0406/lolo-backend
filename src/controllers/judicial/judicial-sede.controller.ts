@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import JudicialSedeService from "../../app/judicial/services/judicial-sede.service";
 import UserLogService from "../../app/dash/services/user-log.service";
 import judicialSedeModel from "../../db/models/judicial-sede.model";
-import { generateLogSummary } from "../../utils/dash/user-log";
 
 const service = new JudicialSedeService();
 const serviceUserLog = new UserLogService();
@@ -72,12 +71,6 @@ export const createJudicialSedeController = async (
     const body = req.body;
     const newJudicialSede = await service.create(body);
 
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newJudicialSede.dataValues.id,
-      newData: newJudicialSede.dataValues,
-    });
-
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P28-01",
@@ -85,7 +78,6 @@ export const createJudicialSedeController = async (
       entityId: Number(newJudicialSede.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     res.status(201).json(newJudicialSede);
@@ -102,26 +94,18 @@ export const updateJudicialSedeController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const { oldJudicialSede, newJudicialSede } = await service.update(id, body);
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newJudicialSede.dataValues.id,
-      oldData: oldJudicialSede,
-      newData: newJudicialSede.dataValues,
-    });
+    const judicialSede = await service.update(id, body);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P28-02",
       entity: JUDICIAL_SEDE_TABLE,
-      entityId: Number(newJudicialSede.dataValues.id),
+      entityId: Number(judicialSede.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
-    res.json(newJudicialSede);
+    res.json(judicialSede);
   } catch (error) {
     next(error);
   }
@@ -134,12 +118,8 @@ export const deleteJudicialSedeController = async (
 ) => {
   try {
     const { id } = req.params;
-    const oldJudicialSede = await service.delete(id);
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: id,
-      oldData: oldJudicialSede,
-    });
+    await service.delete(id);
+
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P28-03",
@@ -147,7 +127,6 @@ export const deleteJudicialSedeController = async (
       entityId: Number(id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     res.status(201).json({ id });

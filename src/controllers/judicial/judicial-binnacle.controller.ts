@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import JudicialBinnacleService from "../../app/judicial/services/judicial-binnacle.service";
 import UserLogService from "../../app/dash/services/user-log.service";
 import judicialBinnacleModel from "../../db/models/judicial-binnacle.model";
-import { generateLogSummary } from "../../utils/dash/user-log";
 
 const service = new JudicialBinnacleService();
 const serviceUserLog = new UserLogService();
@@ -47,33 +46,20 @@ export const createJudicialBinnacleController = async (
 ) => {
   try {
     const { body, files, params } = req;
-    const { binnacle, allBinFiles } = await service.create(body, files as [], {
+    const newJudicialBinnacle = await service.create(body, files as [], {
       code: params.code,
       idCustomer: Number(params.idCustomer),
-    });
-
-    const { judicialBinFiles, ...restData} = binnacle.dataValues
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: binnacle.dataValues.id,
-      newData: {
-        ...restData,
-        binFiles: JSON.stringify(
-          allBinFiles.map((binFile) => binFile.dataValues.originalName)
-        ),
-      },
     });
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P13-01-01-01",
       entity: JUDICIAL_BINNACLE_TABLE,
-      entityId: Number(binnacle.dataValues.id),
+      entityId: Number(newJudicialBinnacle.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
-    res.status(201).json(binnacle);
+    res.status(201).json(newJudicialBinnacle);
   } catch (error) {
     next(error);
   }
@@ -87,28 +73,20 @@ export const updateJudicialBinnacleController = async (
   try {
     const { id } = req.params;
     const { body, files, params } = req;
-    const { oldJudicialBinacle, newJudicialBinnacle } = await service.update(id, body, files as [], {
+    const judicialBinnacle = await service.update(id, body, files as [], {
       code: params.code,
       idCustomer: Number(params.idCustomer),
-    });
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newJudicialBinnacle.dataValues.id,
-      oldData: oldJudicialBinacle,
-      newData: newJudicialBinnacle.dataValues,
     });
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P13-01-01-02",
       entity: JUDICIAL_BINNACLE_TABLE,
-      entityId: Number(newJudicialBinnacle.dataValues.id),
+      entityId: Number(judicialBinnacle.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
-    res.json(newJudicialBinnacle);
+    res.json(judicialBinnacle);
   } catch (error) {
     next(error);
   }
@@ -121,13 +99,7 @@ export const deleteJudicialBinnacleController = async (
 ) => {
   try {
     const { id } = req.params;
-    const oldJudicialBinacle = await service.delete(id);
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: id,
-      oldData: oldJudicialBinacle,
-    });
+    await service.delete(id);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
@@ -136,7 +108,6 @@ export const deleteJudicialBinnacleController = async (
       entityId: Number(id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
     res.status(201).json({ id: Number(id) });
   } catch (error) {

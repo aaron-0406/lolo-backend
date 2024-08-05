@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import ExtTagService from "../../app/extrajudicial/services/ext-tag.service";
 import UserLogService from "../../app/dash/services/user-log.service";
 import extTagModel from "../../db/models/ext-tag.model";
-import { generateLogSummary } from "../../utils/dash/user-log";
 
 const service = new ExtTagService();
 const serviceUserLog = new UserLogService();
@@ -73,12 +72,6 @@ export const createExtTagController = async (
     const body = req.body;
     const newExtTag = await service.create(body);
 
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newExtTag.dataValues.id,
-      newData: newExtTag.dataValues,
-    });
-
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P14-01",
@@ -86,7 +79,6 @@ export const createExtTagController = async (
       entityId: Number(newExtTag.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     res.status(201).json(newExtTag);
@@ -103,26 +95,18 @@ export const updateExtTagController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const { oldExtTag, newExtTag } = await service.update(id, body);
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newExtTag.dataValues.id,
-      oldData: oldExtTag,
-      newData: newExtTag.dataValues,
-    });
+    const extTag = await service.update(id, body);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P14-02",
       entity: EXT_TAG_TABLE,
-      entityId: Number(newExtTag.dataValues.id),
+      entityId: Number(extTag.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
-    res.json(newExtTag);
+    res.json(extTag);
   } catch (error) {
     next(error);
   }
@@ -136,26 +120,18 @@ export const updateExtTagActionController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const { oldExtTag, newExtTag } = await service.updateAction(id, body.action);
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newExtTag.dataValues.id,
-      oldData: oldExtTag,
-      newData: newExtTag.dataValues,
-    });
+    const extTag = await service.updateAction(id, body.action);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P14-02",
       entity: EXT_TAG_TABLE,
-      entityId: Number(newExtTag.dataValues.id),
+      entityId: Number(extTag.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
-    res.json(newExtTag);
+    res.json(extTag);
   } catch (error) {
     next(error);
   }
@@ -168,13 +144,7 @@ export const deleteExtTagController = async (
 ) => {
   try {
     const { id } = req.params;
-    const oldExtTag = await service.delete(id);
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: id,
-      oldData: oldExtTag,
-    });
+    await service.delete(id);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
@@ -183,7 +153,6 @@ export const deleteExtTagController = async (
       entityId: Number(id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     res.status(201).json({ id });

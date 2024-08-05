@@ -38,17 +38,15 @@ class JudicialUseOfPropertyService {
 
   async update(id: string, changes: JudicialUseOfPropertyType) {
     const judicialUseOfProperty = await this.findByID(id);
-    const oldJudicialUseOfProperty = { ...judicialUseOfProperty.get() };
-    const newJudicialUseOfProperty = await judicialUseOfProperty.update(changes);
-    return { oldJudicialUseOfProperty, newJudicialUseOfProperty };
+    const rta = await judicialUseOfProperty.update(changes);
+    return rta;
   }
 
   async delete(id: string) {
     const useOfProperty = await this.findByID(id);
-    const oldJudicialUseOfProperty = { ...useOfProperty.get() };
     await useOfProperty.destroy();
 
-    return oldJudicialUseOfProperty;
+    return { id };
   }
 }
 

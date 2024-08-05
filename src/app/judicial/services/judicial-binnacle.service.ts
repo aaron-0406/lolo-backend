@@ -121,7 +121,7 @@ class JudicialBinnacleService {
     const newJudicialBinnacle = await models.JUDICIAL_BINNACLE.create({
       ...data,
     });
-    const addBinFiles = files.map(async (file) => {
+    files.forEach(async (file) => {
       const newBinFile = await models.JUDICIAL_BIN_FILE.create({
         judicialBinnacleId: newJudicialBinnacle.dataValues.id,
         originalName: file.originalname,
@@ -147,16 +147,8 @@ class JudicialBinnacleService {
       // DELETE TEMP FILE
       await deleteFile("../public/docs", file.filename);
     });
-
-    await Promise.all(addBinFiles);
     const binnacle = await this.findByID(newJudicialBinnacle.dataValues.id);
-    const allBinFiles = await models.JUDICIAL_BIN_FILE.findAll({
-      where: {
-        judicialBinnacleId: newJudicialBinnacle.dataValues.id,
-      },
-    });
-
-    return { binnacle, allBinFiles };
+    return binnacle;
   }
 
   async update(
@@ -166,7 +158,6 @@ class JudicialBinnacleService {
     params: { idCustomer: number; code: string }
   ) {
     const judicialBinnacle = await this.findByID(id);
-    const oldJudicialBinacle = { ...judicialBinnacle.get() };
     await judicialBinnacle.update(changes);
     files.forEach(async (file) => {
       const newBinFile = await models.JUDICIAL_BIN_FILE.create({
@@ -197,15 +188,14 @@ class JudicialBinnacleService {
     });
 
     const newJudicialBinnacle = await this.findByID(id);
-    return { oldJudicialBinacle, newJudicialBinnacle };
+    return newJudicialBinnacle;
   }
 
   async delete(id: string) {
     const judicialBinnacle = await this.findByID(id);
-    const oldJudicialBinacle = { ...judicialBinnacle.get() };
     await judicialBinnacle.destroy();
 
-    return oldJudicialBinacle;
+    return { id };
   }
 
   // INFO: LOGIC FOR JOBS

@@ -7,7 +7,6 @@ import PermissionService from "../../app/dash/services/permission.service";
 import CustomerUserService from "../../app/dash/services/customer-user.service";
 import UserLogService from "../../app/dash/services/user-log.service";
 import userAppModel from "../../db/models/user-app.model";
-import { generateLogSummary } from "../../utils/dash/user-log";
 
 const serviceAuth = new AuthService();
 const servicePermission = new PermissionService();
@@ -79,20 +78,13 @@ export const changeCredentialsController = async (
   next: NextFunction
 ) => {
   try {
-    const oldCustomerUser = await serviceAuth.changeCredentials(req.body, Number(req.user?.id));
+    await serviceAuth.changeCredentials(req.body, Number(req.user?.id));
     const user = await serviceCustomerUser.findOne(String(req.user?.id));
     const permissions = await servicePermission.findAllByRoleId(
       user.dataValues.roleId
     );
     const customerUser = { ...user.dataValues, permissions };
     const token = signToken(user.dataValues, `${process.env.JWT_SECRET}`);
-
-    const sumary = generateLogSummary({
-      method: "PUT",
-      id: oldCustomerUser.id,
-      oldData: oldCustomerUser,
-      newData: user.dataValues,
-    });
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
@@ -101,7 +93,6 @@ export const changeCredentialsController = async (
       entityId: Number(req.user?.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     return res.json({

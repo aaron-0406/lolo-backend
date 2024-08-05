@@ -88,17 +88,15 @@ class JudicialCollateralService {
 
   async update(id: string, changes: JudicialCollateralType) {
     const judicialCollateral = await this.findByID(id);
-    const oldJudicialCollateral = { ...judicialCollateral.get() };
-    const newJudicialCollateral = await judicialCollateral.update(changes);
-    return { oldJudicialCollateral, newJudicialCollateral };
+    const rta = await judicialCollateral.update(changes);
+    return rta;
   }
 
   async delete(id: string) {
     const collateral = await this.findByID(id);
-    const oldJudicialCollateral = { ...collateral.get() };
     await collateral.destroy();
 
-    return oldJudicialCollateral;
+    return { id };
   }
 }
 

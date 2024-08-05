@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import JudicialObsTypeService from "../../app/judicial/services/judicial-obs-type.service";
 import UserLogService from "../../app/dash/services/user-log.service";
 import judicialObsTypeModel from "../../db/models/judicial-obs-type.model";
-import { generateLogSummary } from "../../utils/dash/user-log";
 
 const service = new JudicialObsTypeService();
 const serviceUserLog = new UserLogService();
@@ -72,12 +71,6 @@ export const createJudicialObsTypeController = async (
     const body = req.body;
     const newJudicialObsType = await service.create(body);
 
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newJudicialObsType.dataValues.id,
-      newData: newJudicialObsType.dataValues,
-    });
-
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P23-01",
@@ -85,7 +78,6 @@ export const createJudicialObsTypeController = async (
       entityId: Number(newJudicialObsType.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     res.status(201).json(newJudicialObsType);
@@ -102,26 +94,18 @@ export const updateJudicialObsTypeController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const { oldJudicialObsType, newJudicialObsType } = await service.update(id, body);
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newJudicialObsType.dataValues.id,
-      oldData: oldJudicialObsType,
-      newData: newJudicialObsType.dataValues,
-    });
+    const judicialObsType = await service.update(id, body);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P23-02",
       entity: JUDICIAL_OBS_TYPE_TABLE,
-      entityId: Number(newJudicialObsType.dataValues.id),
+      entityId: Number(judicialObsType.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
-    res.json(newJudicialObsType);
+    res.json(judicialObsType);
   } catch (error) {
     next(error);
   }
@@ -134,12 +118,8 @@ export const deleteJudicialObsTypeController = async (
 ) => {
   try {
     const { id } = req.params;
-    const oldJudicialObsType = await service.delete(id);
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: id,
-      oldData: oldJudicialObsType,
-    });
+    await service.delete(id);
+
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P23-03",
@@ -147,7 +127,6 @@ export const deleteJudicialObsTypeController = async (
       entityId: Number(id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     res.status(201).json({ id });

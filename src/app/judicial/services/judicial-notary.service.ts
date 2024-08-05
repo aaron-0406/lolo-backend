@@ -35,17 +35,15 @@ class JudicialNotaryService {
 
   async update(id: string, changes: JudicialNotaryType) {
     const judicialNotary = await this.findByID(id);
-    const oldJudicialNotary = { ...judicialNotary.get() };
-    const newJudicialNotary = await judicialNotary.update(changes);
-    return { oldJudicialNotary, newJudicialNotary };
+    const rta = await judicialNotary.update(changes);
+    return rta;
   }
 
   async delete(id: string) {
     const notary = await this.findByID(id);
-    const oldJudicialNotary = { ...notary.get() };
     await notary.destroy();
 
-    return oldJudicialNotary;
+    return { id };
   }
 }
 

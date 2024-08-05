@@ -78,7 +78,7 @@ router.post(
   saveClientController
 );
 
-router.patch(
+router.post(
   "/transfer-client-to-another-bank/:chb",
   JWTAuth,
   checkPermissions("P02-06"),

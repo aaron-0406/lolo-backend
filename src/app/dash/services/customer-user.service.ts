@@ -78,45 +78,41 @@ class CustomerUserService {
 
   async update(id: string, changes: CustomerUserType) {
     const user = await this.findOne(id);
-    const oldUser = {...user.get()};
     if (changes.password)
       changes.password = await encryptPassword(changes.password);
-    const newUser = await user.update(changes);
+    const rta = await user.update(changes);
 
-    await newUser.reload({
+    await rta.reload({
       include: ["role"],
       attributes: {
         exclude: ["password"],
       },
     });
 
-    return { oldUser, newUser };
+    return rta;
   }
 
   async updateState(id: string, state: boolean) {
     state ?? this.failedAttemptsCounter(id, true);
 
     const user = await this.findOne(id);
-    const oldUser = {...user.get()};
-    const newUser = await user.update({ ...user, state });
+    const rta = await user.update({ ...user, state });
 
-    return { oldUser, newUser };
+    return rta;
   }
 
   async delete(id: string) {
     const user = await this.findOne(id);
-    const oldUser = {...user.get()};
     await user.destroy();
 
-    return oldUser;
+    return { id };
   }
 
   async removeCode2fa(id: string) {
     const user = await this.findOne(id);
-    const oldUser = {...user.get()};
-    const newUser = await user.update({ ...user, code2fa: null, firstAccess: false });
+    const rta = await user.update({ ...user, code2fa: null, firstAccess: false });
 
-    return { oldUser, newUser };
+    return rta;
   }
 }
 

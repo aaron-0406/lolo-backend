@@ -103,7 +103,7 @@ class ProductService {
     productRemovedId: number,
     judicialCaseFileId: number
   ) {
-    const oldProduct = await models.PRODUCT.update(
+    await models.PRODUCT.update(
       { judicialCaseFileId: null },
       {
         where: {
@@ -113,7 +113,7 @@ class ProductService {
       }
     );
 
-    return { id: productRemovedId, oldProduct };
+    return { id: productRemovedId };
   }
 
   //INFO: DASHBOARD SECTION
@@ -185,17 +185,15 @@ class ProductService {
 
   async update(product: ProductType, id: number) {
     const productFound = await this.getByProductId(id);
-    const oldProduct = { ...productFound.get() };
     await productFound.update(product);
     const productEdited = await this.getByProductId(id);
-    return { oldProduct, productEdited };
+    return productEdited;
   }
 
   async delete(id: number) {
     const product = await this.getByProductId(id);
-    const oldProduct = { ...product.get() };
     await product.destroy();
-    return oldProduct;
+    return Number(id);
   }
 
   async deleteByCode(code: string) {

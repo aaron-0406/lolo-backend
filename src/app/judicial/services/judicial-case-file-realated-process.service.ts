@@ -374,9 +374,8 @@ class JudicialCaseFileRelatedProcessService {
 
   async update(id: string, changes: JudicialCaseFileType) {
     const judicialCaseFile = await this.findByID(id);
-    const oldJudicialCaseFile = { ...judicialCaseFile.get() };
-    const newJudicialCaseFile = await judicialCaseFile.update(changes);
-    return { oldJudicialCaseFile, newJudicialCaseFile };
+    const rta = await judicialCaseFile.update(changes);
+    return rta;
   }
 
   async updateProcessStatus(
@@ -390,10 +389,9 @@ class JudicialCaseFileRelatedProcessService {
 
   async delete(id: string) {
     const client = await this.findByID(id);
-    const oldJudicialCaseFile = { ...client.get() };
     await client.destroy();
 
-    return oldJudicialCaseFile;
+    return { id };
   }
 }
 

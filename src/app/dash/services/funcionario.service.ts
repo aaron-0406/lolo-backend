@@ -42,18 +42,16 @@ class FuncionarioService {
 
   async update(id: string, changes: FuncionarioType) {
     const funcionario = await this.findOne(id);
-    const oldFuncionario = { ...funcionario.get() };
-    const newFuncionario = await funcionario.update(changes);
+    const rta = await funcionario.update(changes);
 
-    return { oldFuncionario, newFuncionario };
+    return rta;
   }
 
   async delete(id: string) {
     const funcionario = await this.findOne(id);
-    const oldFuncionario = { ...funcionario.get() };
     await funcionario.destroy();
 
-    return oldFuncionario;
+    return { id };
   }
 }
 

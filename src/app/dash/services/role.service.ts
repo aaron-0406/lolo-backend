@@ -43,26 +43,12 @@ class RoleService {
     permissions: Array<number>
   ) {
     const role = await this.findOne(id);
-    const oldRole = {...role.get()};
-    const oldRolePermissions = await models.ROLE_PERMISSION.findAll({
-      where: {
-        roleId: role.dataValues.id,
-      },
-    });
-
-    const formatOldRolePermissions = oldRolePermissions.map((item) => item.dataValues);
-
-    const permissionsToDelete = formatOldRolePermissions.filter((item) => !permissions.includes(item.permissionId));
-    const permissionWithoutChanges = formatOldRolePermissions.filter((item) => permissions.includes(item.permissionId));
-    const permissionWithoutChangesIds = permissionWithoutChanges.map((item) => item.permissionId);
-
+    const rta = await role.update(changes);
     await models.ROLE_PERMISSION.destroy({
       where: {
         roleId: role.dataValues.id,
       },
     });
-
-    const newRole = await role.update(changes);
     for (let i = 0; i < permissions.length; i++) {
       const element = permissions[i];
       await models.ROLE_PERMISSION.create({
@@ -70,26 +56,16 @@ class RoleService {
         permissionId: element,
       });
     }
-
-    const newRolePermissions = await models.ROLE_PERMISSION.findAll({
-      where: {
-        roleId: role.dataValues.id,
-      },
-    });
-
-    const formatNewRolePermissions = newRolePermissions.map((item) => item.dataValues);
-    const permissionsToAdd = formatNewRolePermissions.filter((item) => !permissionWithoutChangesIds.includes(item.permissionId));
-    return { oldRole, newRole, permissionsToDelete, permissionWithoutChanges, permissionsToAdd };
+    return rta;
   }
 
   async delete(id: string) {
     const role = await this.findOne(id);
-    const oldRole = {...role.get()};
     await models.ROLE_PERMISSION.destroy({
       where: { roleId: id },
     });
     await role.destroy();
-    return oldRole;
+    return { id };
   }
 }
 

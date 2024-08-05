@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import ExtIpAddressBankService from "../../app/extrajudicial/services/ext-ip-address-bank.service";
 import UserLogService from "../../app/dash/services/user-log.service";
 import ExtIpAddressBankModel from "../../db/models/ext-ip-address-bank.model";
-import { generateLogSummary } from "../../utils/dash/user-log";
 
 const service = new ExtIpAddressBankService();
 const serviceUserLog = new UserLogService();
@@ -60,12 +59,6 @@ export const createIpAddressController = async (
     const body = req.body;
     const newIpAddress = await service.create(body);
 
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newIpAddress.dataValues.id,
-      newData: newIpAddress.dataValues,
-    });
-
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P15-01",
@@ -73,7 +66,6 @@ export const createIpAddressController = async (
       entityId: Number(newIpAddress.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     res.status(201).json(newIpAddress);
@@ -90,26 +82,18 @@ export const updateIpAddressStateController = async (
   try {
     const { id, customerId } = req.params;
     const body = req.body;
-    const { oldExtIpAddress, newExtIpAddress } = await service.updateState(id, customerId, body.state);
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newExtIpAddress.dataValues.id,
-      oldData: oldExtIpAddress,
-      newData: newExtIpAddress.dataValues,
-    });
+    const ipAddress = await service.updateState(id, customerId, body.state);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P15-02",
       entity: EXT_IP_ADDRESS_BANK_TABLE,
-      entityId: Number(newExtIpAddress.dataValues.id),
+      entityId: Number(ipAddress.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
-    res.json(newExtIpAddress);
+    res.json(ipAddress);
   } catch (error) {
     next(error);
   }
@@ -123,26 +107,18 @@ export const updateIpAddressController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const { oldExtIpAddress, newExtIpAddress } = await service.update(id, body);
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newExtIpAddress.dataValues.id,
-      oldData: oldExtIpAddress,
-      newData: newExtIpAddress.dataValues,
-    });
+    const ipAddress = await service.update(id, body);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P15-03",
       entity: EXT_IP_ADDRESS_BANK_TABLE,
-      entityId: Number(newExtIpAddress.dataValues.id),
+      entityId: Number(ipAddress.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
-    res.json(newExtIpAddress);
+    res.json(ipAddress);
   } catch (error) {
     next(error);
   }
@@ -155,13 +131,7 @@ export const deleteIpAddressController = async (
 ) => {
   try {
     const { id, customerId } = req.params;
-    const oldExtIpAddress = await service.delete(id, customerId);
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: id,
-      oldData: oldExtIpAddress,
-    });
+    await service.delete(id, customerId);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
@@ -170,7 +140,6 @@ export const deleteIpAddressController = async (
       entityId: Number(id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     res.status(201).json({ id });

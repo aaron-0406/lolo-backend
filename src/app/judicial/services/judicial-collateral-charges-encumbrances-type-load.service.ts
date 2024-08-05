@@ -46,21 +46,19 @@ class JudicialCollateralChargesEncumbrancesTypeLoadService {
     const judicialCollateralChargesEncumbrancesTypeLoad = await this.findByID(
       id
     );
-    const oldJudicialCollateralChargesEncumbrancesTypeLoad = { ...judicialCollateralChargesEncumbrancesTypeLoad.get() };
-    const newJudicialCollateralChargesEncumbrancesTypeLoad = await judicialCollateralChargesEncumbrancesTypeLoad.update(
+    const rta = await judicialCollateralChargesEncumbrancesTypeLoad.update(
       changes
     );
-    return { oldJudicialCollateralChargesEncumbrancesTypeLoad, newJudicialCollateralChargesEncumbrancesTypeLoad };
+    return rta;
   }
 
   async delete(id: string) {
     const judicialCollateralChargesEncumbrancesTypeLoad = await this.findByID(
       id
     );
-    const oldJudicialCollateralChargesEncumbrancesTypeLoad = { ...judicialCollateralChargesEncumbrancesTypeLoad.get() };
     await judicialCollateralChargesEncumbrancesTypeLoad.destroy();
 
-    return oldJudicialCollateralChargesEncumbrancesTypeLoad;
+    return { id };
   }
 }
 

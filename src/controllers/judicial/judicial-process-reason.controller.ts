@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import judicialProcessReasonService from "../../app/judicial/services/judicial-process-reason.service";
 import judicialProcessReasonModel from "../../db/models/judicial-process-reason.model";
 import UserLogService from "../../app/dash/services/user-log.service";
-import { generateLogSummary } from "../../utils/dash/user-log";
 
 const { JUDICIAL_PROCESS_REASON_TABLE } = judicialProcessReasonModel
 const service = new judicialProcessReasonService();
@@ -57,11 +56,6 @@ export const createJudicialProcessReasonController = async (
   try {
     const body = req.body;
     const newJudicialProcessReason = await service.create(body);
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newJudicialProcessReason.dataValues.id,
-      newData: newJudicialProcessReason.dataValues,
-    });
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
@@ -70,7 +64,6 @@ export const createJudicialProcessReasonController = async (
       entityId: Number(newJudicialProcessReason.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     res.status(201).json(newJudicialProcessReason);
@@ -87,27 +80,19 @@ export const updateJudicialProcessReasonController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const { oldJudicialProcessReason, newJudicialProcessReason } = await service.update(Number(id), body);
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: newJudicialProcessReason.dataValues.id,
-      oldData: oldJudicialProcessReason,
-      newData: newJudicialProcessReason.dataValues,
-    });
+    const judicialProcessReason = await service.update(Number(id), body);
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P27-02",
       entity: JUDICIAL_PROCESS_REASON_TABLE,
-      entityId: Number(newJudicialProcessReason.dataValues.id),
+      entityId: Number(judicialProcessReason.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
 
-    res.json(newJudicialProcessReason);
+    res.json(judicialProcessReason);
   } catch (error) {
     next(error);
   }
@@ -120,22 +105,15 @@ export const deleteJudicialProcessReasonController = async (
 ) => {
   try {
     const { id } = req.params;
-    const oldJudicialProcessReason = await service.delete(Number(id));
-
-    const sumary = generateLogSummary({
-      method: req.method,
-      id: id,
-      oldData: oldJudicialProcessReason,
-    });
+    const judicialProcessReason = await service.delete(Number(id));
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P27-03",
       entity: JUDICIAL_PROCESS_REASON_TABLE,
-      entityId: Number(oldJudicialProcessReason.id),
+      entityId: Number(judicialProcessReason.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
-      methodSumary: sumary,
     });
 
     res.status(201).json({ id });
