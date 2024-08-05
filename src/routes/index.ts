@@ -62,7 +62,7 @@ import compareExcelsRouter from "./config/compare-excels.routes";
 import departmentRouter from "./config/department.routes";
 import districtRouter from "./config/districts.routes";
 import provinceRouter from "./config/province.routes";
-
+import judicialCollateralAuctionRoundRouter from "./judicial/judicial-collateral-auction-round.routes";
 
 const routerApi = (app: Express) => {
   const router = express.Router();
@@ -117,6 +117,7 @@ const routerApi = (app: Express) => {
   router.use("/judicial/collateral-charges-encumbrances", judicialCollateralChargesEncumbrancesRouter);
   router.use("/judicial/collateral-charges-encumbrances-type-load", judicialCollateralChargesEncumbrancesTypeLoadRouter);
   router.use("/judicial/collateral-files", judicialCollateralFilesRouter);
+  router.use("/judicial/collateral-auction-round", judicialCollateralAuctionRoundRouter);
 
   router.use("/dash/auth", authDashRouter);
   router.use("/dash/role", roleRouter);

@@ -1,12 +1,12 @@
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
-import { Op, FindOptions, Model, ModelCtor } from 'sequelize';
+import { Op, FindOptions, Model, ModelCtor } from "sequelize";
 import { JudicialCaseFileType } from "../types/judicial-case-file.type";
 import { JudicialCasefileProcessStatus } from "../types/judicial-case-file-process-status.type";
 import { toDataURL } from "qrcode";
 
 const { models } = sequelize;
-type OrderItem = [string, 'ASC' | 'DESC'];
+type OrderItem = [string, "ASC" | "DESC"];
 class JudicialCaseFileService {
   constructor() {}
 
@@ -30,8 +30,19 @@ class JudicialCaseFileService {
   }
 
   async findAllByCHB(chb: string, query: any) {
-    const { limit, page, filter, courts, sedes, proceduralWays, subjects, users, sortBy, order } =
-      query;
+    const {
+      limit,
+      page,
+      filter,
+      courts,
+      sedes,
+      proceduralWays,
+      subjects,
+      users,
+      responsibles,
+      sortBy,
+      order,
+    } = query;
 
     const limite = parseInt(limit, 10);
     const pagina = parseInt(page, 10);
@@ -40,6 +51,7 @@ class JudicialCaseFileService {
     const listProceduralWays = JSON.parse(proceduralWays);
     const listSubjects = JSON.parse(subjects);
     const listUsers = JSON.parse(users);
+    const listResponsibles = JSON.parse(responsibles);
     const listSedes = JSON.parse(sedes);
     const sortByField = sortBy as string;
 
@@ -58,38 +70,46 @@ class JudicialCaseFileService {
     if (listUsers.length) {
       filters.customer_user_id_customer_user = { [Op.in]: listUsers };
     }
+    if (listResponsibles.length) {
+      filters.responsible_user_id = { [Op.in]: listResponsibles };
+    }
     if (listSedes.length) {
       filters.judicial_sede_id_judicial_sede = { [Op.in]: listSedes };
     }
 
     let sortField: string;
-    let orderConfig: FindOptions<any>['order'];
+    let orderConfig: FindOptions<any>["order"];
     let model: ModelCtor<Model<any, any>> | undefined;
-
 
     if (sortBy && order) {
       switch (sortByField) {
-        case 'CLIENTE':
-          sortField = 'name';
+        case "CLIENTE":
+          sortField = "name";
           model = models.CLIENT;
           break;
-        case 'judicialCourt':
-          sortField = 'name';
+        case "judicialCourt":
+          sortField = "name";
           model = models.JUDICIAL_COURT;
           break;
-        case 'proceduralWay':
-          sortField = 'name';
+        case "proceduralWay":
+          sortField = "name";
           model = models.JUDICIAL_PROCEDURAL_WAY;
-          break
+          break;
         default:
-          sortField = 'createdAt';
+          sortField = "createdAt";
           model = undefined;
       }
 
       if (model) {
-        orderConfig = [[{ model, as: model.name.toLowerCase() }, sortField, order as 'ASC' | 'DESC']];
+        orderConfig = [
+          [
+            { model, as: model.name.toLowerCase() },
+            sortField,
+            order as "ASC" | "DESC",
+          ],
+        ];
       } else {
-        orderConfig = [[sortField, order as 'ASC' | 'DESC']];
+        orderConfig = [[sortField, order as "ASC" | "DESC"]];
       }
     } else {
       orderConfig = undefined;
@@ -121,9 +141,7 @@ class JudicialCaseFileService {
 
     try {
       const quantity = await models.JUDICIAL_CASE_FILE.count({
-        include: [
-          { model: models.CLIENT, as: "client" },
-        ],
+        include: [{ model: models.CLIENT, as: "client" }],
         where: filtersWhere,
       });
 
@@ -132,6 +150,11 @@ class JudicialCaseFileService {
           {
             model: models.CUSTOMER_USER,
             as: "customerUser",
+            attributes: ["id", "name"],
+          },
+          {
+            model: models.CUSTOMER_USER,
+            as: "responsibleUser",
             attributes: ["id", "name"],
           },
           { model: models.JUDICIAL_COURT, as: "judicialCourt" },
@@ -197,6 +220,11 @@ class JudicialCaseFileService {
           attributes: ["id", "name"],
         },
         {
+          model: models.CUSTOMER_USER,
+          as: "responsibleUser",
+          attributes: ["id", "name"],
+        },
+        {
           model: models.JUDICIAL_COURT,
           as: "judicialCourt",
         },
@@ -234,7 +262,16 @@ class JudicialCaseFileService {
   async findByNumberCaseFile(numberCaseFile: string, chb: number) {
     const judicialCaseFile = await models.JUDICIAL_CASE_FILE.findOne({
       include: [
-
+        {
+          model: models.CUSTOMER_USER,
+          as: "responsibleUser",
+          attributes: ["id", "name"],
+        },
+        {
+          model: models.JUDICIAL_CASE_FILE,
+          as: "relatedJudicialCaseFile",
+          attributes: ["numberCaseFile"],
+        },
         {
           model: models.CLIENT,
           as: "client",
@@ -246,13 +283,7 @@ class JudicialCaseFileService {
             },
           ],
         },
-        {
-          model: models.JUDICIAL_CASE_FILE,
-          as: "relatedJudicialCaseFile",
-          attributes: ["numberCaseFile"],
-        }
       ],
-
       where: {
         numberCaseFile,
         customer_has_bank_id: chb,

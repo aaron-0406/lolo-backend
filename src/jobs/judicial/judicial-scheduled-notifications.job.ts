@@ -112,6 +112,7 @@ const updateCronJobs = async () => {
                       <h2>Cliente: ${judicialBinnacle["judicialFileCase.client.name"]} (${judicialBinnacle["customerHasBank.bank.name"]}) - (${city.toUpperCase()})</h2>
                       <p class="expediente"><strong>Exp.:</strong> ${judicialBinnacle["judicialFileCase.numberCaseFile"]}</p>
                       <p class="especialista"><strong>Esp.:</strong> ${judicialBinnacle["judicialFileCase.secretary"]} - ${judicialBinnacle["judicialFileCase.judicialCourt.court"]}</p>
+                      <p class="responsable"><strong>Responsable:</strong> ${judicialBinnacle["judicialFileCase.responsibleUser.name"] ? judicialBinnacle["judicialFileCase.responsibleUser.name"] : "No asignado"}</p>
                       <p><strong>Escritos SIN PROVEÍDO a la fecha:</strong></p>
                       <ul class="detalles">
                           <li>${moment.utc(judicialBinnacle.date).format("DD-MM-YYYY")} - ${judicialBinnacle.lastPerformed}</li>
@@ -151,7 +152,7 @@ const updateCronJobs = async () => {
                               .cliente p {
                                   margin: 5px 0;
                               }
-                              .expediente, .especialista, .detalles {
+                              .expediente, .especialista, .detalles, .responsable {
                                   margin-left: 20px;
                               }
                               .detalles {
@@ -168,7 +169,6 @@ const updateCronJobs = async () => {
                       </html>
                       `,
                 };
-
                 transport.sendMail(message, (error, info) => {
                   //TODO: We need to record this info in a table to show to the user if the email was send or no.
                   if (error) console.log(error);

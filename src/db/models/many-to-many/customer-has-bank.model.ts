@@ -115,6 +115,10 @@ class CustomerHasBank extends Model {
       as: "judicialCollateralFiles",
       foreignKey: "customerHasBankId",
     });
+    this.hasMany(models.JUDICIAL_COLLATERAL_AUCTION_ROUND, {
+      as: "judicialCollateralAuctionRound",
+      foreignKey: "customerHasBankId",
+    });
   }
 
   static config(sequelize: Sequelize) {

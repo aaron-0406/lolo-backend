@@ -108,6 +108,14 @@ class CustomerUser extends sequelize_1.Model {
             as: 'scheduledNotificationsUsers',
             foreignKey: 'customerUserId'
         });
+        this.hasMany(models.JUDICIAL_CASE_FILE, {
+            as: "customerUser",
+            foreignKey: "customerUserId",
+        });
+        this.hasMany(models.JUDICIAL_CASE_FILE, {
+            as: "responsibleUser",
+            foreignKey: "responsibleUserId",
+        });
     }
     static config(sequelize) {
         return {

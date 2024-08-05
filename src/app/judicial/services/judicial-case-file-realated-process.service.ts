@@ -10,7 +10,7 @@ class JudicialCaseFileRelatedProcessService {
   constructor() {}
 
   async findAllRelatedProcessbyCaseFileId(fileCaseId: string, query: any) {
-    const { limit, page, filter, courts, proceduralWays, subjects, users } =
+    const { limit, page, filter, courts, proceduralWays, subjects, users, responsibles } =
       query;
 
     const limite = parseInt(limit, 10);
@@ -19,6 +19,7 @@ class JudicialCaseFileRelatedProcessService {
     const listCourts = JSON.parse(courts);
     const listProceduralWays = JSON.parse(proceduralWays);
     const listSubjects = JSON.parse(subjects);
+    const listResponsibles = JSON.parse(responsibles);
     const listUsers = JSON.parse(users);
 
     const filters: any = {};
@@ -36,7 +37,9 @@ class JudicialCaseFileRelatedProcessService {
     if (listUsers.length) {
       filters.customer_user_id_customer_user = { [Op.in]: listUsers };
     }
-
+    if (listResponsibles.length) {
+      filters.responsible_user_id = { [Op.in]: listResponsibles };
+    }
     let filtersWhere: any = {
       id_judicial_case_file_related: fileCaseId,
     };
@@ -71,6 +74,11 @@ class JudicialCaseFileRelatedProcessService {
         {
           model: models.CUSTOMER_USER,
           as: "customerUser",
+          attributes: ["id", "name"],
+        },
+        {
+          model: models.CUSTOMER_USER,
+          as: "responsibleUser",
           attributes: ["id", "name"],
         },
         {
@@ -187,6 +195,11 @@ class JudicialCaseFileRelatedProcessService {
           attributes: ["id", "name"],
         },
         {
+          model: models.CUSTOMER_USER,
+          as: "responsibleUser",
+          attributes: ["id", "name"],
+        },
+        {
           model: models.JUDICIAL_COURT,
           as: "judicialCourt",
         },
@@ -280,17 +293,24 @@ class JudicialCaseFileRelatedProcessService {
 
   async findByNumberCaseFile(numberCaseFile: string, chb: number) {
     const judicialCaseFile = await models.JUDICIAL_CASE_FILE.findOne({
-      include: {
-        model: models.CLIENT,
-        as: "client",
-        include: [
-          {
-            model: models.CUSTOMER_USER,
-            as: "customerUser",
-            attributes: ["id", "name"],
-          },
-        ],
-      },
+      include: [
+        {
+          model: models.CUSTOMER_USER,
+          as: "responsibleUser",
+          attributes: ["id", "name"],
+        },
+        {
+          model: models.CLIENT,
+          as: "client",
+          include: [
+            {
+              model: models.CUSTOMER_USER,
+              as: "customerUser",
+              attributes: ["id", "name"],
+            },
+          ],
+        },
+      ],
       where: {
         numberCaseFile,
         customer_has_bank_id: chb,

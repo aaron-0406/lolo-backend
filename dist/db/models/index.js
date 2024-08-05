@@ -65,6 +65,7 @@ const judicial_case_file_has_collateral_model_1 = __importDefault(require("./jud
 const judicial_collateral_charges_encumbrances_model_1 = __importDefault(require("./judicial-collateral-charges-encumbrances.model"));
 const judicial_collateral_charges_encumbrances_type_load_model_1 = __importDefault(require("./judicial-collateral-charges-encumbrances-type-load.model"));
 const judicial_collateral_files_model_1 = __importDefault(require("./judicial-collateral-files.model"));
+const judicial_collateral_auction_round_model_1 = __importDefault(require("./judicial-collateral-auction-round.model"));
 const { Customer, CustomerSchema } = customer_model_1.default;
 const { Funcionario, FuncionarioSchema } = funcionario_model_1.default;
 const { Bank, BankSchema } = bank_model_1.default;
@@ -126,6 +127,7 @@ const { JudicialCaseFileHasCollateral, JudicialCaseFileHasCollateralSchema } = j
 const { JudicialCollateralChargesEncumbrances, JudicialCollateralChargesEncumbrancesSchema, } = judicial_collateral_charges_encumbrances_model_1.default;
 const { JudicialCollateralChargesEncumbrancesTypeLoad, JudicialCollateralChargesEncumbrancesTypeLoadSchema, } = judicial_collateral_charges_encumbrances_type_load_model_1.default;
 const { JudicialCollateralFiles, JudicialCollateralFilesSchema } = judicial_collateral_files_model_1.default;
+const { JudicialCollateralAuctionRound, JudicialCollateralAuctionRoundSchema } = judicial_collateral_auction_round_model_1.default;
 const setupModels = (sequelize) => {
     Customer.init(CustomerSchema, Customer.config(sequelize));
     Bank.init(BankSchema, Bank.config(sequelize));
@@ -188,6 +190,7 @@ const setupModels = (sequelize) => {
     JudicialCollateralChargesEncumbrances.init(JudicialCollateralChargesEncumbrancesSchema, JudicialCollateralChargesEncumbrances.config(sequelize));
     JudicialCollateralChargesEncumbrancesTypeLoad.init(JudicialCollateralChargesEncumbrancesTypeLoadSchema, JudicialCollateralChargesEncumbrancesTypeLoad.config(sequelize));
     JudicialCollateralFiles.init(JudicialCollateralFilesSchema, JudicialCollateralFiles.config(sequelize));
+    JudicialCollateralAuctionRound.init(JudicialCollateralAuctionRoundSchema, JudicialCollateralAuctionRound.config(sequelize));
     Customer.associate(sequelize.models);
     CustomerUser.associate(sequelize.models);
     Bank.associate(sequelize.models);
@@ -247,5 +250,6 @@ const setupModels = (sequelize) => {
     JudicialCollateralChargesEncumbrances.associate(sequelize.models);
     JudicialCollateralChargesEncumbrancesTypeLoad.associate(sequelize.models);
     JudicialCollateralFiles.associate(sequelize.models);
+    JudicialCollateralAuctionRound.associate(sequelize.models);
 };
 exports.setupModels = setupModels;

@@ -66,6 +66,7 @@ const compare_excels_routes_1 = __importDefault(require("./config/compare-excels
 const department_routes_1 = __importDefault(require("./config/department.routes"));
 const districts_routes_1 = __importDefault(require("./config/districts.routes"));
 const province_routes_1 = __importDefault(require("./config/province.routes"));
+const judicial_collateral_auction_round_routes_1 = __importDefault(require("./judicial/judicial-collateral-auction-round.routes"));
 const routerApi = (app) => {
     const router = express_1.default.Router();
     app.use("/api/v1", router);
@@ -113,6 +114,7 @@ const routerApi = (app) => {
     router.use("/judicial/collateral-charges-encumbrances", judicial_collateral_charges_encumbrances_routes_1.default);
     router.use("/judicial/collateral-charges-encumbrances-type-load", judicial_collateral_charges_encumbrances_type_load_routes_1.default);
     router.use("/judicial/collateral-files", judicial_collateral_files_routes_1.default);
+    router.use("/judicial/collateral-auction-round", judicial_collateral_auction_round_routes_1.default);
     router.use("/dash/auth", auth_routes_2.default);
     router.use("/dash/role", role_routes_1.default);
     router.use("/dash/permission", permission_routes_1.default);
