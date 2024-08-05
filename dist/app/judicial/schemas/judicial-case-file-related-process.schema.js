@@ -47,6 +47,7 @@ const courts = joi_1.default.string().required();
 const proceduralWays = joi_1.default.string().required();
 const subjects = joi_1.default.string().required();
 const users = joi_1.default.string().required();
+const responsibles = joi_1.default.string().required();
 const customerId = joi_1.default.number();
 const responsibleUserId = joi_1.default.number();
 const createJudicialCaseFileRelatedProcessSchema = joi_1.default.object({
@@ -119,6 +120,16 @@ const getJudicialCaseFileRelatedProcesByCHBSchemaQuery = joi_1.default.object({
     subjects,
     users,
 }).options({ abortEarly: true });
+const getJudicialCaseFileRelatedProcesByCaseFileId = joi_1.default.object({
+    page,
+    limit,
+    filter,
+    courts,
+    proceduralWays,
+    subjects,
+    users,
+    responsibles
+}).options({ abortEarly: true });
 const getJudicialCaseFileRelatedProcesByIDSchema = joi_1.default.object({
     id: id.required(),
 });
@@ -142,6 +153,7 @@ exports.default = {
     getJudicialCaseFileRelatedProcesByCHBSchemaQuery,
     getJudicialCaseFileRelatedProcesByIDSchema,
     getJudicialCaseFileRelatedProcesByNumberCaseFileSchema,
+    getJudicialCaseFileRelatedProcesByCaseFileId,
     getJudicialCaseFileRelatedProcesByCustomerIdSchema,
     createQrCodeRelatedProcessSchema,
 };

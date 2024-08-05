@@ -40,7 +40,7 @@ class JudicialCaseFileService {
     }
     findAllByCHB(chb, query) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { limit, page, filter, courts, sedes, proceduralWays, subjects, users, responsibles, sortBy, order } = query;
+            const { limit, page, filter, courts, sedes, proceduralWays, subjects, users, responsibles, sortBy, order, } = query;
             const limite = parseInt(limit, 10);
             const pagina = parseInt(page, 10);
             const clientName = filter;
@@ -77,24 +77,30 @@ class JudicialCaseFileService {
             let model;
             if (sortBy && order) {
                 switch (sortByField) {
-                    case 'CLIENTE':
-                        sortField = 'name';
+                    case "CLIENTE":
+                        sortField = "name";
                         model = models.CLIENT;
                         break;
-                    case 'judicialCourt':
-                        sortField = 'name';
+                    case "judicialCourt":
+                        sortField = "name";
                         model = models.JUDICIAL_COURT;
                         break;
-                    case 'proceduralWay':
-                        sortField = 'name';
+                    case "proceduralWay":
+                        sortField = "name";
                         model = models.JUDICIAL_PROCEDURAL_WAY;
                         break;
                     default:
-                        sortField = 'createdAt';
+                        sortField = "createdAt";
                         model = undefined;
                 }
                 if (model) {
-                    orderConfig = [[{ model, as: model.name.toLowerCase() }, sortField, order]];
+                    orderConfig = [
+                        [
+                            { model, as: model.name.toLowerCase() },
+                            sortField,
+                            order,
+                        ],
+                    ];
                 }
                 else {
                     orderConfig = [[sortField, order]];
@@ -123,9 +129,7 @@ class JudicialCaseFileService {
             }
             try {
                 const quantity = yield models.JUDICIAL_CASE_FILE.count({
-                    include: [
-                        { model: models.CLIENT, as: "client" },
-                    ],
+                    include: [{ model: models.CLIENT, as: "client" }],
                     where: filtersWhere,
                 });
                 const caseFiles = yield models.JUDICIAL_CASE_FILE.findAll({
@@ -250,6 +254,11 @@ class JudicialCaseFileService {
                         attributes: ["id", "name"],
                     },
                     {
+                        model: models.JUDICIAL_CASE_FILE,
+                        as: "relatedJudicialCaseFile",
+                        attributes: ["numberCaseFile"],
+                    },
+                    {
                         model: models.CLIENT,
                         as: "client",
                         include: [
@@ -260,11 +269,6 @@ class JudicialCaseFileService {
                             },
                         ],
                     },
-                    {
-                        model: models.JUDICIAL_CASE_FILE,
-                        as: "relatedJudicialCaseFile",
-                        attributes: ["numberCaseFile"],
-                    }
                 ],
                 where: {
                     numberCaseFile,

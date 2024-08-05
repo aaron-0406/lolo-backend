@@ -20,13 +20,14 @@ class JudicialCaseFileRelatedProcessService {
     constructor() { }
     findAllRelatedProcessbyCaseFileId(fileCaseId, query) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { limit, page, filter, courts, proceduralWays, subjects, users } = query;
+            const { limit, page, filter, courts, proceduralWays, subjects, users, responsibles } = query;
             const limite = parseInt(limit, 10);
             const pagina = parseInt(page, 10);
             const clientName = filter;
             const listCourts = JSON.parse(courts);
             const listProceduralWays = JSON.parse(proceduralWays);
             const listSubjects = JSON.parse(subjects);
+            const listResponsibles = JSON.parse(responsibles);
             const listUsers = JSON.parse(users);
             const filters = {};
             if (listCourts.length) {
@@ -42,6 +43,9 @@ class JudicialCaseFileRelatedProcessService {
             }
             if (listUsers.length) {
                 filters.customer_user_id_customer_user = { [sequelize_2.Op.in]: listUsers };
+            }
+            if (listResponsibles.length) {
+                filters.responsible_user_id = { [sequelize_2.Op.in]: listResponsibles };
             }
             let filtersWhere = {
                 id_judicial_case_file_related: fileCaseId,
@@ -70,6 +74,11 @@ class JudicialCaseFileRelatedProcessService {
                     {
                         model: models.CUSTOMER_USER,
                         as: "customerUser",
+                        attributes: ["id", "name"],
+                    },
+                    {
+                        model: models.CUSTOMER_USER,
+                        as: "responsibleUser",
                         attributes: ["id", "name"],
                     },
                     {
@@ -175,6 +184,11 @@ class JudicialCaseFileRelatedProcessService {
                         attributes: ["id", "name"],
                     },
                     {
+                        model: models.CUSTOMER_USER,
+                        as: "responsibleUser",
+                        attributes: ["id", "name"],
+                    },
+                    {
                         model: models.JUDICIAL_COURT,
                         as: "judicialCourt",
                     },
@@ -265,17 +279,24 @@ class JudicialCaseFileRelatedProcessService {
     findByNumberCaseFile(numberCaseFile, chb) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialCaseFile = yield models.JUDICIAL_CASE_FILE.findOne({
-                include: {
-                    model: models.CLIENT,
-                    as: "client",
-                    include: [
-                        {
-                            model: models.CUSTOMER_USER,
-                            as: "customerUser",
-                            attributes: ["id", "name"],
-                        },
-                    ],
-                },
+                include: [
+                    {
+                        model: models.CUSTOMER_USER,
+                        as: "responsibleUser",
+                        attributes: ["id", "name"],
+                    },
+                    {
+                        model: models.CLIENT,
+                        as: "client",
+                        include: [
+                            {
+                                model: models.CUSTOMER_USER,
+                                as: "customerUser",
+                                attributes: ["id", "name"],
+                            },
+                        ],
+                    },
+                ],
                 where: {
                     numberCaseFile,
                     customer_has_bank_id: chb,

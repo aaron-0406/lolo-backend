@@ -213,6 +213,11 @@ class JudicialBinnacleService {
                             as: "judicialFileCase",
                             include: [
                                 {
+                                    model: models.CUSTOMER_USER,
+                                    as: "responsibleUser",
+                                    attributes: ["id", "name"],
+                                },
+                                {
                                     model: models.CLIENT,
                                     as: "client",
                                     include: [
