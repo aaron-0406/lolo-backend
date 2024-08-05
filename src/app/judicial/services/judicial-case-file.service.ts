@@ -124,7 +124,11 @@ class JudicialCaseFileService {
     if (clientName) {
       filtersWhere = {
         ...filtersWhere,
-        "$client.name$": { [Op.like]: `%${clientName}%` }, // Filtrar por nombre de cliente (parcialmente coincidente)
+        [Op.or]: [
+          { "$client.name$": { [Op.like]: `%${clientName}%` } },
+          { number_case_file: { [Op.like]: `%${clientName}%` } },
+          { secretary: { [Op.like]: `%${clientName}%` } },
+        ],
       };
     }
 
