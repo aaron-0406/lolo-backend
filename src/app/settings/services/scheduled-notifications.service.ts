@@ -55,27 +55,25 @@ class ScheduledNotificationsService {
       await models.SCHEDULED_NOTIFICATIONS.create(data);
 
     updateCronJobs();
-    return {
-      ...newScheduledNotification.dataValues,
-      daysToNotify: JSON.parse(newScheduledNotification.dataValues.daysToNotify)
-    }
+    return newScheduledNotification
   }
 
-  async update(id: string, data: ScheduledNotificationType) {
-    const scheduledNotification = await models.SCHEDULED_NOTIFICATIONS.findByPk(
-      id
-    );
 
-    if (!scheduledNotification) {
+  async update(id: string, data: ScheduledNotificationType) {
+    const notification = await models.SCHEDULED_NOTIFICATIONS.findByPk(id);
+
+    if (!notification) {
       throw boom.notFound("Notificación programada no encontrada");
     }
-
-    await scheduledNotification.update(data);
-
+    const oldNotification = { ...notification.get() };
+    const newNotification = await notification.update(data);
     updateCronJobs();
     return {
-      ...scheduledNotification.dataValues,
-      daysToNotify: JSON.parse(scheduledNotification.dataValues.daysToNotify)
+      oldNotification,
+      newNotification: {
+        ...newNotification.dataValues,
+        daysToNotify: JSON.parse(newNotification.dataValues.daysToNotify),
+      },
     };
   }
 

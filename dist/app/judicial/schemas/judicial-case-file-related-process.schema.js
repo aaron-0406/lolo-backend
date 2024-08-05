@@ -47,8 +47,10 @@ const courts = joi_1.default.string().required();
 const proceduralWays = joi_1.default.string().required();
 const subjects = joi_1.default.string().required();
 const users = joi_1.default.string().required();
+const responsibles = joi_1.default.string().required();
 const customerId = joi_1.default.number();
 const chbTransferred = joi_1.default.number();
+const responsibleUserId = joi_1.default.number();
 const createJudicialCaseFileRelatedProcessSchema = joi_1.default.object({
     numberCaseFile: numberCaseFile.required(),
     judgmentNumber: judgmentNumber.optional().empty("").allow(""),
@@ -74,6 +76,7 @@ const createJudicialCaseFileRelatedProcessSchema = joi_1.default.object({
     bankId: bankId.optional().empty("").allow(""),
     qrCode: qrCode.optional().empty("").allow(""),
     chbTransferred: chbTransferred.optional().empty("").allow(""),
+    responsibleUserId: responsibleUserId.optional().empty("").allow(""),
 });
 const updateJudicialCaseFileRelatedProcessSchema = joi_1.default.object({
     numberCaseFile: numberCaseFile.required(),
@@ -100,6 +103,7 @@ const updateJudicialCaseFileRelatedProcessSchema = joi_1.default.object({
     bankId: bankId.optional().empty("").allow(""),
     qrCode: qrCode.optional().empty("").allow(""),
     chbTransferred: chbTransferred.optional().empty("").allow(""),
+    responsibleUserId: responsibleUserId.optional().empty("").allow(""),
 });
 const getRelatedProcessByCaseFileIdSchema = joi_1.default.object({
     caseFileId: caseFileId.required(),
@@ -118,6 +122,16 @@ const getJudicialCaseFileRelatedProcesByCHBSchemaQuery = joi_1.default.object({
     proceduralWays,
     subjects,
     users,
+}).options({ abortEarly: true });
+const getJudicialCaseFileRelatedProcesByCaseFileId = joi_1.default.object({
+    page,
+    limit,
+    filter,
+    courts,
+    proceduralWays,
+    subjects,
+    users,
+    responsibles
 }).options({ abortEarly: true });
 const getJudicialCaseFileRelatedProcesByIDSchema = joi_1.default.object({
     id: id.required(),
@@ -142,6 +156,7 @@ exports.default = {
     getJudicialCaseFileRelatedProcesByCHBSchemaQuery,
     getJudicialCaseFileRelatedProcesByIDSchema,
     getJudicialCaseFileRelatedProcesByNumberCaseFileSchema,
+    getJudicialCaseFileRelatedProcesByCaseFileId,
     getJudicialCaseFileRelatedProcesByCustomerIdSchema,
     createQrCodeRelatedProcessSchema,
 };

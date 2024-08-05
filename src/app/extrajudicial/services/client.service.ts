@@ -375,9 +375,11 @@ class ClientService {
       caseFiles.forEach(async (caseFile) => {
         await caseFile.update({
           ...caseFile,
-          chbTransferred: caseFile.dataValues.customerHasBankId == chbTransferred ? null : chbTransferred,
+          chbTransferred: caseFile.dataValues.customerHasBankId == chbTransferred ? null : Number(chbTransferred),
         });
-      }); 
+      });
+
+      console.log(caseFiles);
 
       return { id: client.dataValues.id, chbTransferred };
     } catch(e){

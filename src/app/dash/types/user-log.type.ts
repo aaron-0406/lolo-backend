@@ -7,4 +7,5 @@ export type UserLogType = {
   createAt: Date;
   customerUserId: number;
   customerId: number;
+  methodSumary?: string;
 };

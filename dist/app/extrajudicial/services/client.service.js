@@ -361,8 +361,9 @@ class ClientService {
                     },
                 });
                 caseFiles.forEach((caseFile) => __awaiter(this, void 0, void 0, function* () {
-                    yield caseFile.update(Object.assign(Object.assign({}, caseFile), { chbTransferred: caseFile.dataValues.customerHasBankId == chbTransferred ? null : chbTransferred }));
+                    yield caseFile.update(Object.assign(Object.assign({}, caseFile), { chbTransferred: caseFile.dataValues.customerHasBankId == chbTransferred ? null : Number(chbTransferred) }));
                 }));
+                console.log(caseFiles);
                 return { id: client.dataValues.id, chbTransferred };
             }
             catch (e) {

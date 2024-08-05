@@ -204,6 +204,10 @@ class JudicialCollateral extends sequelize_1.Model {
             as: "judicialCollateralChargesEncumbrances",
             foreignKey: "judicialCollateralIdJudicialCollateral",
         });
+        this.hasMany(models.JUDICIAL_COLLATERAL_AUCTION_ROUND, {
+            as: "judicialCollateralAuctionRound",
+            foreignKey: "judicialCollateralIdJudicialCollateral",
+        });
     }
     static config(sequelize) {
         return {

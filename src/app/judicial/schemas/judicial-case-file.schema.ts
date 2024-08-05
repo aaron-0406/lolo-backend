@@ -52,12 +52,14 @@ const courts = Joi.string().required();
 const proceduralWays = Joi.string().required();
 const subjects = Joi.string().required();
 const users = Joi.string().required();
+const responsibles = Joi.string().required();
 const sedes = Joi.string().required();
 const sortBy = Joi.string().optional().empty("").allow("");
 const order = Joi.string().optional().empty("").allow("");
 
 const customerId = Joi.number();
 const chbTransferred = Joi.number();
+const responsibleUserId = Joi.number();
 
 const createJudicialCaseFileSchema = Joi.object<
   Omit<
@@ -90,6 +92,7 @@ const createJudicialCaseFileSchema = Joi.object<
   bankId: bankId.optional().empty("").allow(""),
   qrCode: qrCode.optional().empty("").allow(""),
   chbTransferred: chbTransferred.optional().empty("").allow(""),
+  responsibleUserId: responsibleUserId.optional().empty("").allow(""),
 });
 
 const updateJudicialCaseFileSchema = Joi.object<
@@ -123,6 +126,7 @@ const updateJudicialCaseFileSchema = Joi.object<
   bankId: bankId.optional().empty("").allow(""),
   qrCode: qrCode.optional().empty("").allow(""),
   chbTransferred: chbTransferred.optional().empty("").allow(""),
+  responsibleUserId: responsibleUserId.optional().empty("").allow(""),
 });
 
 const updateJudicialCaseFileProcessStatusSchema = Joi.object<
@@ -153,6 +157,7 @@ const getJudicialCaseFileByCHBSchemaQuery = Joi.object({
   proceduralWays,
   subjects,
   users,
+  responsibles,
   sedes,
   sortBy,
   order,

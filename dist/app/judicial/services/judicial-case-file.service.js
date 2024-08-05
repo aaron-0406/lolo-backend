@@ -40,7 +40,7 @@ class JudicialCaseFileService {
     }
     findAllByCHB(chb, query) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { limit, page, filter, courts, sedes, proceduralWays, subjects, users, sortBy, order } = query;
+            const { limit, page, filter, courts, sedes, proceduralWays, subjects, users, responsibles, sortBy, order, } = query;
             const limite = parseInt(limit, 10);
             const pagina = parseInt(page, 10);
             const clientName = filter;
@@ -48,6 +48,7 @@ class JudicialCaseFileService {
             const listProceduralWays = JSON.parse(proceduralWays);
             const listSubjects = JSON.parse(subjects);
             const listUsers = JSON.parse(users);
+            const listResponsibles = JSON.parse(responsibles);
             const listSedes = JSON.parse(sedes);
             const sortByField = sortBy;
             const filters = {};
@@ -65,6 +66,9 @@ class JudicialCaseFileService {
             if (listUsers.length) {
                 filters.customer_user_id_customer_user = { [sequelize_2.Op.in]: listUsers };
             }
+            if (listResponsibles.length) {
+                filters.responsible_user_id = { [sequelize_2.Op.in]: listResponsibles };
+            }
             if (listSedes.length) {
                 filters.judicial_sede_id_judicial_sede = { [sequelize_2.Op.in]: listSedes };
             }
@@ -73,24 +77,30 @@ class JudicialCaseFileService {
             let model;
             if (sortBy && order) {
                 switch (sortByField) {
-                    case 'CLIENTE':
-                        sortField = 'name';
+                    case "CLIENTE":
+                        sortField = "name";
                         model = models.CLIENT;
                         break;
-                    case 'judicialCourt':
-                        sortField = 'name';
+                    case "judicialCourt":
+                        sortField = "name";
                         model = models.JUDICIAL_COURT;
                         break;
-                    case 'proceduralWay':
-                        sortField = 'name';
+                    case "proceduralWay":
+                        sortField = "name";
                         model = models.JUDICIAL_PROCEDURAL_WAY;
                         break;
                     default:
-                        sortField = 'createdAt';    
+                        sortField = "createdAt";
                         model = undefined;
                 }
                 if (model) {
-                    orderConfig = [[{ model, as: model.name.toLowerCase() }, sortField, order]];
+                    orderConfig = [
+                        [
+                            { model, as: model.name.toLowerCase() },
+                            sortField,
+                            order,
+                        ],
+                    ];
                 }
                 else {
                     orderConfig = [[sortField, order]];
@@ -108,7 +118,16 @@ class JudicialCaseFileService {
             };
             // Agregar filtro por nombre de cliente si se proporciona
             if (clientName) {
-                filtersWhere = Object.assign(Object.assign({}, filtersWhere), { "$client.name$": { [sequelize_2.Op.like]: `%${clientName}%` } });
+                filtersWhere = Object.assign(Object.assign({}, filtersWhere), { [sequelize_2.Op.and]: [
+                        filtersWhere,
+                        {
+                            [sequelize_2.Op.or]: [
+                                { "$client.name$": { [sequelize_2.Op.like]: `%${clientName}%` } },
+                                { number_case_file: { [sequelize_2.Op.like]: `%${clientName}%` } },
+                                { secretary: { [sequelize_2.Op.like]: `%${clientName}%` } },
+                            ],
+                        },
+                    ] });
             }
             // Combinar filtros adicionales si se proporcionan
             if (Object.keys(filters).length > 0) {
@@ -118,9 +137,7 @@ class JudicialCaseFileService {
             }
             try {
                 const quantity = yield models.JUDICIAL_CASE_FILE.count({
-                    include: [
-                        { model: models.CLIENT, as: "client" },
-                    ],
+                    include: [{ model: models.CLIENT, as: "client" }],
                     where: filtersWhere,
                 });
                 const caseFiles = yield models.JUDICIAL_CASE_FILE.findAll({
@@ -128,6 +145,11 @@ class JudicialCaseFileService {
                         {
                             model: models.CUSTOMER_USER,
                             as: "customerUser",
+                            attributes: ["id", "name"],
+                        },
+                        {
+                            model: models.CUSTOMER_USER,
+                            as: "responsibleUser",
                             attributes: ["id", "name"],
                         },
                         { model: models.JUDICIAL_COURT, as: "judicialCourt" },
@@ -193,6 +215,11 @@ class JudicialCaseFileService {
                         attributes: ["id", "name"],
                     },
                     {
+                        model: models.CUSTOMER_USER,
+                        as: "responsibleUser",
+                        attributes: ["id", "name"],
+                    },
+                    {
                         model: models.JUDICIAL_COURT,
                         as: "judicialCourt",
                     },
@@ -230,6 +257,16 @@ class JudicialCaseFileService {
             const judicialCaseFile = yield models.JUDICIAL_CASE_FILE.findOne({
                 include: [
                     {
+                        model: models.CUSTOMER_USER,
+                        as: "responsibleUser",
+                        attributes: ["id", "name"],
+                    },
+                    {
+                        model: models.JUDICIAL_CASE_FILE,
+                        as: "relatedJudicialCaseFile",
+                        attributes: ["numberCaseFile"],
+                    },
+                    {
                         model: models.CLIENT,
                         as: "client",
                         include: [
@@ -240,15 +277,13 @@ class JudicialCaseFileService {
                             },
                         ],
                     },
-                    {
-                        model: models.JUDICIAL_CASE_FILE,
-                        as: "relatedJudicialCaseFile",
-                        attributes: ["numberCaseFile"],
-                    }
                 ],
                 where: {
                     numberCaseFile,
-                    customer_has_bank_id: chb,
+                    [sequelize_2.Op.or]: [
+                        { customer_has_bank_id: chb },
+                        { chb_transferred: chb },
+                    ],
                 },
             });
             if (!judicialCaseFile) {
