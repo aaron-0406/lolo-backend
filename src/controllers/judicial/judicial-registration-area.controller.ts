@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import JudicialRegistrationAreaService from "../../app/judicial/services/judicial-registration-area.service";
 import UserLogService from "../../app/dash/services/user-log.service";
 import judicialRegistrationAreaModel from "../../db/models/judicial-registration-area.model";
+import { generateLogSummary } from "../../utils/dash/user-log";
 
 const service = new JudicialRegistrationAreaService();
 const serviceUserLog = new UserLogService();
@@ -44,6 +45,11 @@ export const createRegistrationAreaController = async (
   try {
     const body = req.body;
     const newRegistrationArea = await service.create(body);
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: newRegistrationArea.dataValues.id,
+      newData: newRegistrationArea.dataValues,
+    });
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
@@ -52,6 +58,7 @@ export const createRegistrationAreaController = async (
       entityId: Number(newRegistrationArea.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
+      methodSumary: sumary,
     });
 
     res.json(newRegistrationArea);
@@ -68,18 +75,26 @@ export const updateRegistrationAreaController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const registrationArea = await service.update(id, body);
+    const { oldJudicialRegistrationArea, newJudicialRegistrationArea } = await service.update(id, body);
+
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: newJudicialRegistrationArea.dataValues.id,
+      oldData: oldJudicialRegistrationArea,
+      newData: newJudicialRegistrationArea.dataValues,
+    });
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P39-02",
       entity: JUDICIAL_REGISTRATION_AREA_TABLE,
-      entityId: Number(registrationArea.dataValues.id),
+      entityId: Number(newJudicialRegistrationArea.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
+      methodSumary: sumary,
     });
 
-    res.json(registrationArea);
+    res.json(newJudicialRegistrationArea);
   } catch (error) {
     next(error);
   }
@@ -92,18 +107,25 @@ export const deletedRegistrationAreaController = async (
 ) => {
   try {
     const { id } = req.params;
-    const registrationArea = await service.delete(id);
+    const oldJudicialRegistrationArea = await service.delete(id);
+
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: id,
+      oldData: oldJudicialRegistrationArea,
+    });
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P39-03",
       entity: JUDICIAL_REGISTRATION_AREA_TABLE,
-      entityId: Number(registrationArea.id),
+      entityId: Number(oldJudicialRegistrationArea.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
+      methodSumary: sumary,
     });
 
-    res.json(registrationArea);
+    res.json({ id });
   } catch (error) {
     next(error);
   }

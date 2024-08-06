@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import JudicialNotaryService from "../../app/judicial/services/judicial-notary.service";
 import judicialNotaryModel from "../../db/models/judicial-notary.model";
 import UserLogService from "../../app/dash/services/user-log.service";
+import { generateLogSummary } from "../../utils/dash/user-log";
 
 const service = new JudicialNotaryService();
 const serviceUserLog = new UserLogService();
@@ -45,6 +46,12 @@ export const createNotaryController = async (
     const body = req.body;
     const newNotary = await service.create(body);
 
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: newNotary.dataValues.id,
+      newData: newNotary.dataValues,
+    });
+
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P41-01",
@@ -52,6 +59,7 @@ export const createNotaryController = async (
       entityId: Number(newNotary.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
+      methodSumary: sumary,
     });
 
     res.json(newNotary);
@@ -68,18 +76,27 @@ export const updateNotaryController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const notary = await service.update(id, body);
+    const { oldJudicialNotary, newJudicialNotary } = await service.update(id, body);
+
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: newJudicialNotary.dataValues.id,
+      newData: newJudicialNotary.dataValues,
+      oldData: oldJudicialNotary,
+    });
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P41-02",
       entity: JUDICIAL_NOTARY_TABLE,
-      entityId: Number(notary.dataValues.id),
+      entityId: Number(newJudicialNotary.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
+      methodSumary: sumary,
     });
 
-    res.json(notary);
+    res.json(newJudicialNotary);
+
   } catch (error) {
     next(error);
   }
@@ -92,18 +109,25 @@ export const deletedNotaryController = async (
 ) => {
   try {
     const { id } = req.params;
-    const notary = await service.delete(id);
+    const oldNotary = await service.delete(id);
+
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: oldNotary.id,
+      oldData: oldNotary,
+    });
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P41-03",
       entity: JUDICIAL_NOTARY_TABLE,
-      entityId: Number(notary.id),
+      entityId: Number(oldNotary.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
+      methodSumary: sumary,
     });
 
-    res.json(notary);
+    res.json({ id });
   } catch (error) {
     next(error);
   }

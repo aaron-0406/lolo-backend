@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { generateLogSummary } from "../../utils/dash/user-log";
 import JudicialBinProceduralStageService from "../../app/judicial/services/judicial-bin-procedural-stage.service";
 import UserLogService from "../../app/dash/services/user-log.service";
 import judicialBinProceduralStageModel from "../../db/models/judicial-bin-procedural-stage.model";
@@ -6,7 +7,6 @@ import judicialBinProceduralStageModel from "../../db/models/judicial-bin-proced
 const service = new JudicialBinProceduralStageService();
 const serviceUserLog = new UserLogService();
 const { JUDICIAL_BIN_PROCEDURAL_STAGE_TABLE } = judicialBinProceduralStageModel;
-
 
 export const getJudicialBinProceduralStageByCHBController = async (
   req: Request,
@@ -46,7 +46,13 @@ export const createJudicialBinProceduralStageController = async (
     const newJudicialBinProceduralStage = await service.create(body);
     const { visible } = req.query;
 
-    if (visible === "true") {
+    const sumary = generateLogSummary({
+      method: req.method,
+      newData: newJudicialBinProceduralStage.dataValues,
+      name: newJudicialBinProceduralStage.dataValues.name,
+      id: newJudicialBinProceduralStage.dataValues.id,
+    });
+
       await serviceUserLog.create({
         customerUserId: Number(req.user?.id),
         codeAction: "P24-01",
@@ -54,8 +60,8 @@ export const createJudicialBinProceduralStageController = async (
         entityId: Number(newJudicialBinProceduralStage.dataValues.id),
         ip: req.clientIp ?? "",
         customerId: Number(req.user?.customerId),
+        methodSumary: sumary,
       });
-    }
 
     res.status(201).json(newJudicialBinProceduralStage);
   } catch (error) {
@@ -71,22 +77,25 @@ export const updateJudicialBinProceduralStageController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const judicialBinProceduralStage = await service.update(id, body);
+    const { oldData, newData } = await service.update(id, body);
 
-    const { visible } = req.query;
-
-    if (visible === "true") {
+    const sumary = generateLogSummary({
+      method: req.method,
+      oldData: oldData,
+      newData: newData,
+      id: Number(id),
+    });
       await serviceUserLog.create({
         customerUserId: Number(req.user?.id),
         codeAction: "P24-02",
         entity: JUDICIAL_BIN_PROCEDURAL_STAGE_TABLE,
-        entityId: Number(judicialBinProceduralStage.dataValues.id),
+        entityId: Number(id),
         ip: req.clientIp ?? "",
         customerId: Number(req.user?.customerId),
+        methodSumary: sumary,
       });
-    }
 
-    res.json(judicialBinProceduralStage);
+    res.json(newData);
   } catch (error) {
     next(error);
   }
@@ -99,11 +108,16 @@ export const deleteJudicialBinProceduralStageController = async (
 ) => {
   try {
     const { id } = req.params;
-    await service.delete(id);
+    const { oldData } = await service.delete(id);
 
     const { visible } = req.query;
 
-    if (visible === "true") {
+    const sumary = generateLogSummary({
+      method: req.method,
+      oldData: oldData,
+      id: Number(id),
+    });
+
       await serviceUserLog.create({
         customerUserId: Number(req.user?.id),
         codeAction: "P24-03",
@@ -111,8 +125,8 @@ export const deleteJudicialBinProceduralStageController = async (
         entityId: Number(id),
         ip: req.clientIp ?? "",
         customerId: Number(req.user?.customerId),
+        methodSumary: sumary,
       });
-    }
 
     res.status(201).json({ id: Number(id) });
   } catch (error) {

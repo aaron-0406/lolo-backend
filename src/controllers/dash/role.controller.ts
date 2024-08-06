@@ -3,6 +3,7 @@ import RoleService from "../../app/dash/services/role.service";
 import PermissionService from "../../app/dash/services/permission.service";
 import UserLogService from "../../app/dash/services/user-log.service";
 import rolesModel from "../../db/models/roles.model";
+import { generateLogSummary } from "../../utils/dash/user-log";
 
 const service = new RoleService();
 const servicePermission = new PermissionService();
@@ -51,6 +52,12 @@ export const createRoleController = async (
     const body = req.body;
     const newRole = await service.create(body, body.permissions);
 
+    const sumary = generateLogSummary({
+      method: req.method,
+      newData: newRole.dataValues,
+      id: newRole.dataValues.id,
+    })
+
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P11-01",
@@ -58,6 +65,7 @@ export const createRoleController = async (
       entityId: Number(newRole.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
+      methodSumary: sumary,
     });
 
     res.status(201).json(newRole);
@@ -74,18 +82,52 @@ export const updateRoleController = async (
   try {
     const { id } = req.params;
     const body = req.body;
-    const role = await service.update(id, body, body.permissions);
+    const { oldRole, newRole, permissionsToDelete, permissionsToAdd, permissionWithoutChanges } = await service.update(id, body, body.permissions);
+
+    console.log(oldRole);
+    console.log(newRole);
+
+    console.log(permissionsToDelete);
+    console.log(permissionsToAdd);
+    console.log(permissionWithoutChanges);
+
+    const permissionsRolSumary = generateLogSummary({
+      method: req.method,
+      oldData: permissionsToDelete ?? [],
+      newData: permissionsToAdd ?? [],
+      withoutChanges: permissionWithoutChanges ?? [],
+      name: ROLE_TABLE,
+      id: newRole.dataValues.id,
+    });
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P11-02",
       entity: ROLE_TABLE,
-      entityId: Number(role.dataValues.id),
+      entityId: Number(newRole.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
+      methodSumary: permissionsRolSumary,
     });
 
-    res.json(role);
+    const sumary = generateLogSummary({
+      method: req.method,
+      oldData: oldRole,
+      newData: newRole.dataValues,
+      id: newRole.dataValues.id,
+    })
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P11-02",
+      entity: ROLE_TABLE,
+      entityId: Number(newRole.dataValues.id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+      methodSumary: sumary,
+    });
+
+    res.json(newRole);
   } catch (error) {
     next(error);
   }
@@ -98,7 +140,13 @@ export const deleteRoleController = async (
 ) => {
   try {
     const { id } = req.params;
-    await service.delete(id);
+    const oldRole = await service.delete(id);
+
+    const sumary = generateLogSummary({
+      method: req.method,
+      oldData: oldRole,
+      id: oldRole.id,
+    })
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
@@ -107,6 +155,7 @@ export const deleteRoleController = async (
       entityId: Number(id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
+      methodSumary: sumary,
     });
 
     res.status(201).json({ id });

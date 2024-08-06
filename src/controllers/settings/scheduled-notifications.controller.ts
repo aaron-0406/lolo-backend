@@ -1,13 +1,12 @@
 import { Request, Response, NextFunction } from "express";
+import { generateLogSummary } from "../../utils/dash/user-log";
 import ScheduledNotificationsService from "../../app/settings/services/scheduled-notifications.service";
 import UserLogService from "../../app/dash/services/user-log.service";
 import shceduledNotificationsModel from "../../db/models/settings/scheduled-notifications.model";
-import userLogUtils from "../../utils/dash/user-log.util";
 
 const service = new ScheduledNotificationsService();
 const serviceUserLog = new UserLogService();
 const { SCHEDULED_NOTIFICATIONS_TABLE } = shceduledNotificationsModel;
-const { generateLogSummary } = userLogUtils;
 
 export const getNotificationByChbController = async (
   req: Request,

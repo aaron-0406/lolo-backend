@@ -61,23 +61,25 @@ class JudicialCourtService {
 
   async update(id: string, changes: JudicialCourtType) {
     const judicialCourt = await this.findByID(id);
-    const rta = await judicialCourt.update(changes);
-    await rta.reload({
+    const oldJudicialCourt = { ...judicialCourt.get() };
+    const newJudicialCourt = await judicialCourt.update(changes);
+    await newJudicialCourt.reload({
       include: {
         model: models.CITY,
         as: "city",
         attributes: ["id", "name"],
       },
     });
-    return rta;
+    return { oldJudicialCourt, newJudicialCourt };
   }
 
   async delete(id: string) {
     const court = await this.findByID(id);
+    const oldJudicialCourt = { ...court.get() };
     await court.destroy();
 
-    return { id };
-  }
+    return oldJudicialCourt;
+  } 
 }
 
 export default JudicialCourtService;

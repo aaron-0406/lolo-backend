@@ -40,15 +40,17 @@ class ExtAddressTypeService {
 
   async update(id: string, changes: ExtAddressType) {
     const address = await this.findByID(id, String(changes.customerHasBankId));
-    const rta = await address.update(changes);
-    return rta;
+    const oldAddress = { ...address.get() };
+    const newAddress = await address.update(changes);
+    return { oldAddress, newAddress };
   }
 
   async delete(id: string, chb: string) {
     const address = await this.findByID(id, chb);
+    const oldAddress = { ...address.get() };
     await address.destroy();
 
-    return { id };
+    return oldAddress;
   }
 }
 

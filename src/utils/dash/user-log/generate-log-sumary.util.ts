@@ -25,7 +25,7 @@ const isDate = (value: any): boolean => {
   return false;
 };
 
-const generateLogSummary = ({
+export const generateLogSummary = ({
   method,
   oldData,
   newData,
@@ -39,7 +39,14 @@ const generateLogSummary = ({
   switch (method.toUpperCase()) {
     case "POST":
       summary += `${id}\n`;
-      if (newData && !Array.isArray(newData)) {
+      if (
+        newData &&
+        !oldData &&
+        !withoutChanges &&
+        !Array.isArray(newData) &&
+        !Array.isArray(withoutChanges) &&
+        !Array.isArray(oldData)
+      ) {
         for (const key in newData) {
           let newValue = newData[key];
           if (isDate(newValue)) {
@@ -47,7 +54,29 @@ const generateLogSummary = ({
           }
           changes.push(JSON.stringify({ key, newValue }));
         }
-      } else if (Array.isArray(newData)) {
+      } else if (
+        oldData &&
+        !newData &&
+        !withoutChanges &&
+        !Array.isArray(oldData) &&
+        !Array.isArray(newData) &&
+        !Array.isArray(withoutChanges)
+      ) {
+        for (const key in oldData) {
+          let oldValue = oldData[key];
+          if (isDate(oldValue)) {
+            oldValue = formatDate(oldValue);
+          }
+          changes.push(JSON.stringify({ key, oldValue }));
+        }
+      } else if (
+        newData &&
+        oldData &&
+        withoutChanges &&
+        Array.isArray(newData) &&
+        Array.isArray(oldData) &&
+        Array.isArray(withoutChanges)
+      ) {
         changes.push(
           JSON.stringify({
             oldValue: oldData,
@@ -58,6 +87,44 @@ const generateLogSummary = ({
       }
       break;
     case "PUT":
+      summary += `${id}\n`;
+      if (
+        newData &&
+        oldData &&
+        !Array.isArray(newData) &&
+        !Array.isArray(oldData)
+      ) {
+        for (const key in newData) {
+          let oldValue = oldData[key];
+          let newValue = newData[key];
+
+          if (isDate(oldValue) && isDate(newValue)) {
+            oldValue = formatDate(oldValue);
+            newValue = formatDate(newValue);
+          }
+
+          if (newValue !== oldValue) {
+            changes.push(JSON.stringify({ key, oldValue, newValue }));
+          }
+        }
+      } else if (
+        newData &&
+        oldData &&
+        withoutChanges &&
+        Array.isArray(newData) &&
+        Array.isArray(oldData) &&
+        Array.isArray(withoutChanges)
+      ) {
+        changes.push(
+          JSON.stringify({
+            oldValue: oldData,
+            newValue: newData,
+            withoutChanges,
+          })
+        );
+      }
+      break;
+
     case "PATCH":
       summary += `${id}\n`;
       if (
@@ -79,6 +146,22 @@ const generateLogSummary = ({
             changes.push(JSON.stringify({ key, oldValue, newValue }));
           }
         }
+      }
+      else if (
+        newData &&
+        oldData &&
+        withoutChanges &&
+        Array.isArray(newData) &&
+        Array.isArray(oldData) &&
+        Array.isArray(withoutChanges)
+      ) {
+        changes.push(
+          JSON.stringify({
+            oldValue: oldData,
+            newValue: newData,
+            withoutChanges,
+          })
+        );
       }
       break;
     case "DELETE":
@@ -103,5 +186,4 @@ const generateLogSummary = ({
 
   return summary;
 };
-
-export default { generateLogSummary };
+;

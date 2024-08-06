@@ -40,16 +40,18 @@ class JudicialProceduralWayService {
 
   async update(id: string, changes: JudicialProceduralWayType) {
     const judicialProceduralWay = await this.findByID(id);
-    const rta = await judicialProceduralWay.update(changes);
+    const oldJudicialProceduralWay = { ...judicialProceduralWay.get() };
+    const newJudicialProceduralWay = await judicialProceduralWay.update(changes);
 
-    return rta;
+    return { oldJudicialProceduralWay, newJudicialProceduralWay };
   }
 
   async delete(id: string) {
     const judicialProceduralWay = await this.findByID(id);
+    const oldJudicialProceduralWay = { ...judicialProceduralWay.get() };
     await judicialProceduralWay.destroy();
 
-    return { id };
+    return oldJudicialProceduralWay;
   }
 }
 
