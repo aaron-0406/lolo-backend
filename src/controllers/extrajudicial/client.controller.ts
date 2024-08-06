@@ -206,9 +206,9 @@ export const transferClientToAnotherBankController = async (
 
     const sumary = generateLogSummary({
       method: req.method,
-      oldData: data.oldData,
-      newData: data.newData,
-      id: data.id,
+      oldData: data?.oldData ?? {},
+      newData: data?.newData ?? {},
+      id: data?.id ?? 0,
     });
 
     await serviceUserLog.create({
