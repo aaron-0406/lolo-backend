@@ -58,15 +58,17 @@ class judicialSedeService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialSede = yield this.findByID(id);
-            const rta = yield judicialSede.update(changes);
-            return rta;
+            const oldJudicialSede = Object.assign({}, judicialSede.get());
+            const newJudicialSede = yield judicialSede.update(changes);
+            return { oldJudicialSede, newJudicialSede };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialSede = yield this.findByID(id);
+            const oldJudicialSede = Object.assign({}, judicialSede.get());
             yield judicialSede.destroy();
-            return { id };
+            return oldJudicialSede;
         });
     }
 }

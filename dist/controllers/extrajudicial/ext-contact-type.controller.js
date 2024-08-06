@@ -16,6 +16,7 @@ exports.deleteExtContactTypeController = exports.updateExtContactTypeController 
 const ext_contact_type_service_1 = __importDefault(require("../../app/extrajudicial/services/ext-contact-type.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const ext_contact_type_model_1 = __importDefault(require("../../db/models/ext-contact-type.model"));
+const user_log_1 = require("../../utils/dash/user-log");
 const service = new ext_contact_type_service_1.default();
 const serviceUserLog = new user_log_service_1.default();
 const { EXT_CONTACT_TYPE_TABLE } = ext_contact_type_model_1.default;
@@ -68,6 +69,11 @@ const createExtContactTypeController = (req, res, next) => __awaiter(void 0, voi
     try {
         const body = req.body;
         const newExtContactType = yield service.create(body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newExtContactType.dataValues.id,
+            newData: newExtContactType.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
             codeAction: "P18-01",
@@ -75,6 +81,7 @@ const createExtContactTypeController = (req, res, next) => __awaiter(void 0, voi
             entityId: Number(newExtContactType.dataValues.id),
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
             customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+            methodSumary: sumary,
         });
         res.status(201).json(newExtContactType);
     }
@@ -88,16 +95,23 @@ const updateExtContactTypeController = (req, res, next) => __awaiter(void 0, voi
     try {
         const { id } = req.params;
         const body = req.body;
-        const extContactType = yield service.update(id, body);
+        const { oldExtContactType, newExtContactType } = yield service.update(id, body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newExtContactType.dataValues.id,
+            oldData: oldExtContactType,
+            newData: newExtContactType.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
             codeAction: "P18-02",
             entity: EXT_CONTACT_TYPE_TABLE,
-            entityId: Number(extContactType.dataValues.id),
+            entityId: Number(newExtContactType.dataValues.id),
             ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
             customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            methodSumary: sumary,
         });
-        res.json(extContactType);
+        res.json(newExtContactType);
     }
     catch (error) {
         next(error);
@@ -108,7 +122,12 @@ const deleteExtContactTypeController = (req, res, next) => __awaiter(void 0, voi
     var _k, _l, _m;
     try {
         const { id } = req.params;
-        yield service.delete(id);
+        const oldExtContactType = yield service.delete(id);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: id,
+            oldData: oldExtContactType,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.id),
             codeAction: "P18-03",
@@ -116,6 +135,7 @@ const deleteExtContactTypeController = (req, res, next) => __awaiter(void 0, voi
             entityId: Number(id),
             ip: (_l = req.clientIp) !== null && _l !== void 0 ? _l : "",
             customerId: Number((_m = req.user) === null || _m === void 0 ? void 0 : _m.customerId),
+            methodSumary: sumary,
         });
         res.status(201).json({ id });
     }

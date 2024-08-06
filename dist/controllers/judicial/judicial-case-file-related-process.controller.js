@@ -17,6 +17,7 @@ const user_log_service_1 = __importDefault(require("../../app/dash/services/user
 const judicial_case_file_model_1 = __importDefault(require("../../db/models/judicial-case-file.model"));
 const judicial_case_file_realated_process_service_1 = __importDefault(require("../../app/judicial/services/judicial-case-file-realated-process.service"));
 const judicial_case_file_service_1 = __importDefault(require("../../app/judicial/services/judicial-case-file.service"));
+const user_log_1 = require("../../utils/dash/user-log");
 const service = new judicial_case_file_realated_process_service_1.default();
 const serviceCaseFile = new judicial_case_file_service_1.default();
 const serviceUserLog = new user_log_service_1.default();
@@ -103,6 +104,11 @@ const createJudicialCaseFileRelatedProcessController = (req, res, next) => __awa
         const { customerId } = req.params;
         const body = req.body;
         const newJudicialCaseFile = yield service.create(body, customerId);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newJudicialCaseFile.dataValues.id,
+            newData: newJudicialCaseFile.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
             codeAction: "P13-01-05-02",
@@ -110,6 +116,7 @@ const createJudicialCaseFileRelatedProcessController = (req, res, next) => __awa
             entityId: Number(newJudicialCaseFile.dataValues.id),
             ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
             customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
+            methodSumary: sumary,
         });
         res.status(201).json(newJudicialCaseFile);
     }
@@ -134,16 +141,23 @@ const updateJudicialCaseFileRelatedProcessController = (req, res, next) => __awa
     try {
         const { id } = req.params;
         const body = req.body;
-        const caseFile = yield service.update(id, body);
+        const { oldJudicialCaseFile, newJudicialCaseFile } = yield service.update(id, body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newJudicialCaseFile.dataValues.id,
+            oldData: oldJudicialCaseFile,
+            newData: newJudicialCaseFile.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
             codeAction: "P13-01-05-03",
             entity: JUDICIAL_CASE_FILE_TABLE,
-            entityId: Number(caseFile.dataValues.id),
+            entityId: Number(newJudicialCaseFile.dataValues.id),
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
             customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+            methodSumary: sumary,
         });
-        res.json(caseFile);
+        res.json(newJudicialCaseFile);
     }
     catch (error) {
         next(error);
@@ -154,14 +168,20 @@ const deleteJudicialCaseFileRelatedProcessController = (req, res, next) => __awa
     var _g, _h, _j;
     try {
         const { id } = req.params;
-        const judicialCaseFile = yield service.delete(id);
+        const oldJudicialCaseFile = yield service.delete(id);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: id,
+            oldData: oldJudicialCaseFile,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
             codeAction: "P13-01-05-04",
             entity: JUDICIAL_CASE_FILE_TABLE,
-            entityId: Number(judicialCaseFile.id),
+            entityId: Number(oldJudicialCaseFile.id),
             ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
             customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            methodSumary: sumary,
         });
         res.status(201).json({ id });
     }

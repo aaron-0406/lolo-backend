@@ -16,6 +16,7 @@ exports.deletedCollateralChargesEncumbrancesTypeLoadController = exports.updateC
 const judicial_collateral_charges_encumbrances_type_load_service_1 = __importDefault(require("../../app/judicial/services/judicial-collateral-charges-encumbrances-type-load.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const judicial_collateral_charges_encumbrances_type_load_model_1 = __importDefault(require("../../db/models/judicial-collateral-charges-encumbrances-type-load.model"));
+const user_log_1 = require("../../utils/dash/user-log");
 const service = new judicial_collateral_charges_encumbrances_type_load_service_1.default();
 const userLogService = new user_log_service_1.default();
 const { JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE } = judicial_collateral_charges_encumbrances_type_load_model_1.default;
@@ -46,6 +47,11 @@ const createCollateralChargesEncumbrancesTypeLoadController = (req, res, next) =
     try {
         const body = req.body;
         const newCollateralChargesEncumbrancesTypeLoad = yield service.create(body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newCollateralChargesEncumbrancesTypeLoad.dataValues.id,
+            newData: newCollateralChargesEncumbrancesTypeLoad.dataValues,
+        });
         yield userLogService.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
             codeAction: "P42-01",
@@ -53,6 +59,7 @@ const createCollateralChargesEncumbrancesTypeLoadController = (req, res, next) =
             entityId: Number(newCollateralChargesEncumbrancesTypeLoad.dataValues.id),
             ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
             customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
+            methodSumary: sumary,
         });
         res.json(newCollateralChargesEncumbrancesTypeLoad);
     }
@@ -66,16 +73,23 @@ const updateCollateralChargesEncumbrancesTypeLoadController = (req, res, next) =
     try {
         const { id } = req.params;
         const body = req.body;
-        const collateralChargesEncumbrancesTypeLoad = yield service.update(id, body);
+        const { oldJudicialCollateralChargesEncumbrancesTypeLoad, newJudicialCollateralChargesEncumbrancesTypeLoad } = yield service.update(id, body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newJudicialCollateralChargesEncumbrancesTypeLoad.dataValues.id,
+            newData: newJudicialCollateralChargesEncumbrancesTypeLoad.dataValues,
+            oldData: oldJudicialCollateralChargesEncumbrancesTypeLoad,
+        });
         yield userLogService.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
             codeAction: "P42-02",
             entity: JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE,
-            entityId: Number(collateralChargesEncumbrancesTypeLoad.dataValues.id),
+            entityId: Number(newJudicialCollateralChargesEncumbrancesTypeLoad.dataValues.id),
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
             customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+            methodSumary: sumary,
         });
-        res.json(collateralChargesEncumbrancesTypeLoad);
+        res.json(newJudicialCollateralChargesEncumbrancesTypeLoad);
     }
     catch (error) {
         next(error);
@@ -86,16 +100,22 @@ const deletedCollateralChargesEncumbrancesTypeLoadController = (req, res, next) 
     var _g, _h, _j;
     try {
         const { id } = req.params;
-        const collateralChargesEncumbrancesTypeLoad = yield service.delete(id);
+        const oldCollateralChargesEncumbrancesTypeLoad = yield service.delete(id);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: oldCollateralChargesEncumbrancesTypeLoad.id,
+            oldData: oldCollateralChargesEncumbrancesTypeLoad,
+        });
         yield userLogService.create({
             customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
             codeAction: "P42-03",
             entity: JUDICIAL_COLLATERAL_CHARGES_ENCUMBRANCES_TYPE_LOAD_TABLE,
-            entityId: Number(collateralChargesEncumbrancesTypeLoad.id),
+            entityId: Number(oldCollateralChargesEncumbrancesTypeLoad.id),
             ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
             customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            methodSumary: sumary,
         });
-        res.json(collateralChargesEncumbrancesTypeLoad);
+        res.json({ id });
     }
     catch (error) {
         next(error);

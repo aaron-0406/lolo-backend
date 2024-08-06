@@ -60,15 +60,17 @@ class ManagementActionService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const managementAction = yield this.findOne(id);
-            const rta = yield managementAction.update(changes);
-            return rta;
+            const oldManagementAction = Object.assign({}, managementAction.get());
+            const newManagementAction = yield managementAction.update(changes);
+            return { oldManagementAction, newManagementAction };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const managementAction = yield this.findOne(id);
+            const oldManagementAction = Object.assign({}, managementAction.get());
             yield managementAction.destroy();
-            return { id };
+            return oldManagementAction;
         });
     }
 }

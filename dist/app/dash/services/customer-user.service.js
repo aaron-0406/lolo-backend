@@ -88,38 +88,42 @@ class CustomerUserService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield this.findOne(id);
+            const oldUser = Object.assign({}, user.get());
             if (changes.password)
                 changes.password = yield (0, bcrypt_1.encryptPassword)(changes.password);
-            const rta = yield user.update(changes);
-            yield rta.reload({
+            const newUser = yield user.update(changes);
+            yield newUser.reload({
                 include: ["role"],
                 attributes: {
                     exclude: ["password"],
                 },
             });
-            return rta;
+            return { oldUser, newUser };
         });
     }
     updateState(id, state) {
         return __awaiter(this, void 0, void 0, function* () {
             state !== null && state !== void 0 ? state : this.failedAttemptsCounter(id, true);
             const user = yield this.findOne(id);
-            const rta = yield user.update(Object.assign(Object.assign({}, user), { state }));
-            return rta;
+            const oldUser = Object.assign({}, user.get());
+            const newUser = yield user.update(Object.assign(Object.assign({}, user), { state }));
+            return { oldUser, newUser };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield this.findOne(id);
+            const oldUser = Object.assign({}, user.get());
             yield user.destroy();
-            return { id };
+            return oldUser;
         });
     }
     removeCode2fa(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield this.findOne(id);
-            const rta = yield user.update(Object.assign(Object.assign({}, user), { code2fa: null, firstAccess: false }));
-            return rta;
+            const oldUser = Object.assign({}, user.get());
+            const newUser = yield user.update(Object.assign(Object.assign({}, user), { code2fa: null, firstAccess: false }));
+            return { oldUser, newUser };
         });
     }
 }

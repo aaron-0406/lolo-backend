@@ -52,15 +52,17 @@ class JudicialProceduralWayService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialProceduralWay = yield this.findByID(id);
-            const rta = yield judicialProceduralWay.update(changes);
-            return rta;
+            const oldJudicialProceduralWay = Object.assign({}, judicialProceduralWay.get());
+            const newJudicialProceduralWay = yield judicialProceduralWay.update(changes);
+            return { oldJudicialProceduralWay, newJudicialProceduralWay };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialProceduralWay = yield this.findByID(id);
+            const oldJudicialProceduralWay = Object.assign({}, judicialProceduralWay.get());
             yield judicialProceduralWay.destroy();
-            return { id };
+            return oldJudicialProceduralWay;
         });
     }
 }

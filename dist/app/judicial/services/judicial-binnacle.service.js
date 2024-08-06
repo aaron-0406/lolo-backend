@@ -119,7 +119,7 @@ class JudicialBinnacleService {
     create(data, files, params) {
         return __awaiter(this, void 0, void 0, function* () {
             const newJudicialBinnacle = yield models.JUDICIAL_BINNACLE.create(Object.assign({}, data));
-            files.forEach((file) => __awaiter(this, void 0, void 0, function* () {
+            const addBinFiles = files.map((file) => __awaiter(this, void 0, void 0, function* () {
                 const newBinFile = yield models.JUDICIAL_BIN_FILE.create({
                     judicialBinnacleId: newJudicialBinnacle.dataValues.id,
                     originalName: file.originalname,
@@ -139,13 +139,20 @@ class JudicialBinnacleService {
                 // DELETE TEMP FILE
                 yield (0, helpers_1.deleteFile)("../public/docs", file.filename);
             }));
+            yield Promise.all(addBinFiles);
             const binnacle = yield this.findByID(newJudicialBinnacle.dataValues.id);
-            return binnacle;
+            const allBinFiles = yield models.JUDICIAL_BIN_FILE.findAll({
+                where: {
+                    judicialBinnacleId: newJudicialBinnacle.dataValues.id,
+                },
+            });
+            return { binnacle, allBinFiles };
         });
     }
     update(id, changes, files, params) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialBinnacle = yield this.findByID(id);
+            const oldJudicialBinacle = Object.assign({}, judicialBinnacle.get());
             yield judicialBinnacle.update(changes);
             files.forEach((file) => __awaiter(this, void 0, void 0, function* () {
                 const newBinFile = yield models.JUDICIAL_BIN_FILE.create({
@@ -168,14 +175,15 @@ class JudicialBinnacleService {
                 yield (0, helpers_1.deleteFile)("../public/docs", file.filename);
             }));
             const newJudicialBinnacle = yield this.findByID(id);
-            return newJudicialBinnacle;
+            return { oldJudicialBinacle, newJudicialBinnacle };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialBinnacle = yield this.findByID(id);
+            const oldJudicialBinacle = Object.assign({}, judicialBinnacle.get());
             yield judicialBinnacle.destroy();
-            return { id };
+            return oldJudicialBinacle;
         });
     }
     // INFO: LOGIC FOR JOBS

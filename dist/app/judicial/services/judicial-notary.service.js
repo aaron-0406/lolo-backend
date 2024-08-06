@@ -47,15 +47,17 @@ class JudicialNotaryService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialNotary = yield this.findByID(id);
-            const rta = yield judicialNotary.update(changes);
-            return rta;
+            const oldJudicialNotary = Object.assign({}, judicialNotary.get());
+            const newJudicialNotary = yield judicialNotary.update(changes);
+            return { oldJudicialNotary, newJudicialNotary };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const notary = yield this.findByID(id);
+            const oldJudicialNotary = Object.assign({}, notary.get());
             yield notary.destroy();
-            return { id };
+            return oldJudicialNotary;
         });
     }
 }

@@ -47,15 +47,17 @@ class JudicialBinProceduralStageService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialBinProceduralStage = yield this.findByID(id);
-            const rta = yield judicialBinProceduralStage.update(changes);
-            return rta;
+            const oldData = Object.assign({}, judicialBinProceduralStage.get());
+            const newData = (yield judicialBinProceduralStage.update(changes)).dataValues;
+            return { oldData, newData };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const proceduralStage = yield this.findByID(id);
+            const oldData = Object.assign({}, proceduralStage.get());
             yield proceduralStage.destroy();
-            return { id };
+            return { oldData };
         });
     }
 }

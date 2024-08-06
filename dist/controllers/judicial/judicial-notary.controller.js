@@ -16,6 +16,7 @@ exports.deletedNotaryController = exports.updateNotaryController = exports.creat
 const judicial_notary_service_1 = __importDefault(require("../../app/judicial/services/judicial-notary.service"));
 const judicial_notary_model_1 = __importDefault(require("../../db/models/judicial-notary.model"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
+const user_log_1 = require("../../utils/dash/user-log");
 const service = new judicial_notary_service_1.default();
 const serviceUserLog = new user_log_service_1.default();
 const { JUDICIAL_NOTARY_TABLE } = judicial_notary_model_1.default;
@@ -46,6 +47,11 @@ const createNotaryController = (req, res, next) => __awaiter(void 0, void 0, voi
     try {
         const body = req.body;
         const newNotary = yield service.create(body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newNotary.dataValues.id,
+            newData: newNotary.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
             codeAction: "P41-01",
@@ -53,6 +59,7 @@ const createNotaryController = (req, res, next) => __awaiter(void 0, void 0, voi
             entityId: Number(newNotary.dataValues.id),
             ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
             customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
+            methodSumary: sumary,
         });
         res.json(newNotary);
     }
@@ -66,16 +73,23 @@ const updateNotaryController = (req, res, next) => __awaiter(void 0, void 0, voi
     try {
         const { id } = req.params;
         const body = req.body;
-        const notary = yield service.update(id, body);
+        const { oldJudicialNotary, newJudicialNotary } = yield service.update(id, body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newJudicialNotary.dataValues.id,
+            newData: newJudicialNotary.dataValues,
+            oldData: oldJudicialNotary,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
             codeAction: "P41-02",
             entity: JUDICIAL_NOTARY_TABLE,
-            entityId: Number(notary.dataValues.id),
+            entityId: Number(newJudicialNotary.dataValues.id),
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
             customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+            methodSumary: sumary,
         });
-        res.json(notary);
+        res.json(newJudicialNotary);
     }
     catch (error) {
         next(error);
@@ -86,16 +100,22 @@ const deletedNotaryController = (req, res, next) => __awaiter(void 0, void 0, vo
     var _g, _h, _j;
     try {
         const { id } = req.params;
-        const notary = yield service.delete(id);
+        const oldNotary = yield service.delete(id);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: oldNotary.id,
+            oldData: oldNotary,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
             codeAction: "P41-03",
             entity: JUDICIAL_NOTARY_TABLE,
-            entityId: Number(notary.id),
+            entityId: Number(oldNotary.id),
             ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
             customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            methodSumary: sumary,
         });
-        res.json(notary);
+        res.json({ id });
     }
     catch (error) {
         next(error);

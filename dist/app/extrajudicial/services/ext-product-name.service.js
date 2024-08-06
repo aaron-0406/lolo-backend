@@ -58,15 +58,17 @@ class ExtProductNameService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const extProductName = yield this.findByID(id);
-            const rta = yield extProductName.update(changes);
-            return rta;
+            const oldProductName = Object.assign({}, extProductName.get());
+            const newProductName = yield extProductName.update(changes);
+            return { oldProductName, newProductName };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const extProductName = yield this.findByID(id);
+            const oldProductName = Object.assign({}, extProductName.get());
             yield extProductName.destroy();
-            return { id };
+            return oldProductName;
         });
     }
 }

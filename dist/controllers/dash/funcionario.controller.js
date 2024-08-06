@@ -16,6 +16,7 @@ exports.deleteFuncionarioController = exports.updateFuncionarioController = expo
 const funcionario_service_1 = __importDefault(require("../../app/dash/services/funcionario.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const funcionario_model_1 = __importDefault(require("../../db/models/funcionario.model"));
+const user_log_1 = require("../../utils/dash/user-log");
 const service = new funcionario_service_1.default();
 const serviceUserLog = new user_log_service_1.default();
 const { FUNCIONARIO_TABLE } = funcionario_model_1.default;
@@ -56,6 +57,11 @@ const createFuncionarioController = (req, res, next) => __awaiter(void 0, void 0
     try {
         const body = req.body;
         const newFuncionario = yield service.create(body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newFuncionario.dataValues.id,
+            newData: newFuncionario.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
             codeAction: "P08-01",
@@ -63,6 +69,7 @@ const createFuncionarioController = (req, res, next) => __awaiter(void 0, void 0
             entityId: Number(newFuncionario.dataValues.id),
             ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
             customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
+            methodSumary: sumary,
         });
         res.status(201).json(newFuncionario);
     }
@@ -76,16 +83,23 @@ const updateFuncionarioController = (req, res, next) => __awaiter(void 0, void 0
     try {
         const { id } = req.params;
         const body = req.body;
-        const funcionario = yield service.update(id, body);
+        const { oldFuncionario, newFuncionario } = yield service.update(id, body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newFuncionario.dataValues.id,
+            oldData: oldFuncionario,
+            newData: newFuncionario.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
             codeAction: "P08-02",
             entity: FUNCIONARIO_TABLE,
-            entityId: Number(funcionario.dataValues.id),
+            entityId: Number(newFuncionario.dataValues.id),
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
             customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+            methodSumary: sumary,
         });
-        res.json(funcionario);
+        res.json(newFuncionario);
     }
     catch (error) {
         next(error);
@@ -96,7 +110,12 @@ const deleteFuncionarioController = (req, res, next) => __awaiter(void 0, void 0
     var _g, _h, _j;
     try {
         const { id } = req.params;
-        yield service.delete(id);
+        const oldFuncionario = yield service.delete(id);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: id,
+            oldData: oldFuncionario,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
             codeAction: "P08-03",
@@ -104,6 +123,7 @@ const deleteFuncionarioController = (req, res, next) => __awaiter(void 0, void 0
             entityId: Number(id),
             ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
             customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            methodSumary: sumary,
         });
         res.status(201).json({ id });
     }

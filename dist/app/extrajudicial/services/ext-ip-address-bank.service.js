@@ -64,22 +64,25 @@ class ExtIpAddressBankService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const extIpAddress = yield this.findByID(id, String(changes.customerId));
-            const rta = yield extIpAddress.update(changes);
-            return rta;
+            const oldExtIpAddress = Object.assign({}, extIpAddress.get());
+            const newExtIpAddress = yield extIpAddress.update(changes);
+            return { oldExtIpAddress, newExtIpAddress };
         });
     }
     updateState(id, customerId, state) {
         return __awaiter(this, void 0, void 0, function* () {
             const extIpAddress = yield this.findByID(id, customerId);
-            const rta = yield extIpAddress.update(Object.assign(Object.assign({}, extIpAddress), { state }));
-            return rta;
+            const oldExtIpAddress = Object.assign({}, extIpAddress.get());
+            const newExtIpAddress = yield extIpAddress.update(Object.assign(Object.assign({}, extIpAddress), { state }));
+            return { oldExtIpAddress, newExtIpAddress };
         });
     }
     delete(id, customerId) {
         return __awaiter(this, void 0, void 0, function* () {
             const extIpAddress = yield this.findByID(id, customerId);
+            const oldExtIpAddress = Object.assign({}, extIpAddress.get());
             yield extIpAddress.destroy();
-            return { id };
+            return oldExtIpAddress;
         });
     }
 }

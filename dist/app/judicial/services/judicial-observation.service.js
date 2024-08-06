@@ -97,6 +97,7 @@ class JudicialObservationService {
     update(id, changes, files, params) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialObservation = yield this.findByID(id);
+            const oldJudicialObservation = Object.assign({}, judicialObservation.get());
             yield judicialObservation.update(changes);
             const fileCreationPromises = files.map((file) => __awaiter(this, void 0, void 0, function* () {
                 const newObsFile = yield models.JUDICIAL_OBS_FILE.create({
@@ -121,15 +122,16 @@ class JudicialObservationService {
                 yield (0, helpers_1.deleteFile)("../public/docs", file.filename);
             }));
             yield Promise.all(fileCreationPromises);
-            const observation = yield this.findByID(judicialObservation.dataValues.id);
-            return observation;
+            const newJudicialObservation = yield this.findByID(judicialObservation.dataValues.id);
+            return { oldJudicialObservation, newJudicialObservation };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialObservation = yield this.findByID(id);
+            const oldJudicialObservation = Object.assign({}, judicialObservation.get());
             yield judicialObservation.destroy();
-            return { id };
+            return oldJudicialObservation;
         });
     }
 }

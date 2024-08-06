@@ -58,15 +58,17 @@ class NegotiationService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const negotiation = yield this.findOne(id);
-            const rta = yield negotiation.update(changes);
-            return rta;
+            const oldNegotiation = Object.assign({}, negotiation.get());
+            const newNegotiation = yield negotiation.update(changes);
+            return { oldNegotiation, newNegotiation };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const negotiation = yield this.findOne(id);
+            const oldNegotiation = Object.assign({}, negotiation.get());
             yield negotiation.destroy();
-            return { id };
+            return oldNegotiation;
         });
     }
 }

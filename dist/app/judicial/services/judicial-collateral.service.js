@@ -99,15 +99,17 @@ class JudicialCollateralService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialCollateral = yield this.findByID(id);
-            const rta = yield judicialCollateral.update(changes);
-            return rta;
+            const oldJudicialCollateral = Object.assign({}, judicialCollateral.get());
+            const newJudicialCollateral = yield judicialCollateral.update(changes);
+            return { oldJudicialCollateral, newJudicialCollateral };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const collateral = yield this.findByID(id);
+            const oldJudicialCollateral = Object.assign({}, collateral.get());
             yield collateral.destroy();
-            return { id };
+            return oldJudicialCollateral;
         });
     }
 }

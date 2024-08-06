@@ -58,15 +58,17 @@ class judicialObsTypeService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialObsType = yield this.findByID(id);
-            const rta = yield judicialObsType.update(changes);
-            return rta;
+            const oldJudicialObsType = Object.assign({}, judicialObsType.get());
+            const newJudicialObsType = yield judicialObsType.update(changes);
+            return { oldJudicialObsType, newJudicialObsType };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialObsType = yield this.findByID(id);
+            const oldJudicialObsType = Object.assign({}, judicialObsType.get());
             yield judicialObsType.destroy();
-            return { id };
+            return oldJudicialObsType;
         });
     }
 }

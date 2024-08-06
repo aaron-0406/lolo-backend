@@ -47,15 +47,17 @@ class JudicialBinTypeBinnacleService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialBinTypeBinnacle = yield this.findByID(id);
-            const rta = yield judicialBinTypeBinnacle.update(changes);
-            return rta;
+            const oldJudicialBinTypeBinnacle = Object.assign({}, judicialBinTypeBinnacle.get());
+            const newJudicialBinTypeBinnacle = yield judicialBinTypeBinnacle.update(changes);
+            return { oldJudicialBinTypeBinnacle, newJudicialBinTypeBinnacle };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialBinTypeBinnacle = yield this.findByID(id);
+            const oldJudicialBinTypeBinnacle = Object.assign({}, judicialBinTypeBinnacle.get());
             yield judicialBinTypeBinnacle.destroy();
-            return { id };
+            return oldJudicialBinTypeBinnacle;
         });
     }
 }

@@ -16,6 +16,7 @@ exports.deleteAddressTypeController = exports.updateAddressTypeController = expo
 const ext_address_type_service_1 = __importDefault(require("../../app/extrajudicial/services/ext-address-type.service"));
 const ext_address_type_model_1 = __importDefault(require("../../db/models/ext-address-type.model"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
+const user_log_1 = require("../../utils/dash/user-log");
 const service = new ext_address_type_service_1.default();
 const serviceUserLog = new user_log_service_1.default();
 const { EXT_ADDRESS_TYPE_TABLE } = ext_address_type_model_1.default;
@@ -56,6 +57,11 @@ const createAddressTypeController = (req, res, next) => __awaiter(void 0, void 0
     try {
         const body = req.body;
         const newAddress = yield service.create(body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newAddress.dataValues.id,
+            newData: newAddress.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
             codeAction: "P16-01",
@@ -63,6 +69,7 @@ const createAddressTypeController = (req, res, next) => __awaiter(void 0, void 0
             entityId: Number(newAddress.dataValues.id),
             ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
             customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
+            methodSumary: sumary,
         });
         res.status(201).json(newAddress);
     }
@@ -76,16 +83,23 @@ const updateAddressTypeController = (req, res, next) => __awaiter(void 0, void 0
     try {
         const { id } = req.params;
         const body = req.body;
-        const direction = yield service.update(id, body);
+        const { oldAddress, newAddress } = yield service.update(id, body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newAddress.dataValues.id,
+            oldData: oldAddress,
+            newData: newAddress.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
             codeAction: "P16-02",
             entity: EXT_ADDRESS_TYPE_TABLE,
-            entityId: Number(direction.dataValues.id),
+            entityId: Number(newAddress.dataValues.id),
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
             customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+            methodSumary: sumary,
         });
-        res.json(direction);
+        res.json(newAddress);
     }
     catch (error) {
         next(error);
@@ -96,7 +110,12 @@ const deleteAddressTypeController = (req, res, next) => __awaiter(void 0, void 0
     var _g, _h, _j;
     try {
         const { id, chb } = req.params;
-        yield service.delete(id, chb);
+        const oldAddress = yield service.delete(id, chb);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: id,
+            oldData: oldAddress,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
             codeAction: "P16-03",
@@ -104,6 +123,7 @@ const deleteAddressTypeController = (req, res, next) => __awaiter(void 0, void 0
             entityId: Number(id),
             ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
             customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            methodSumary: sumary,
         });
         res.status(201).json({ id });
     }

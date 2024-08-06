@@ -8,6 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -354,7 +365,8 @@ class ClientService {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const client = yield this.findCode(code, chb);
-                yield client.update(Object.assign(Object.assign({}, client), { chbTransferred: chb == chbTransferred ? null : chbTransferred }));
+                const oldData = Object.assign({}, client.get());
+                const newData = yield client.update(Object.assign(Object.assign({}, client), { chbTransferred: chb == chbTransferred ? null : chbTransferred }));
                 const caseFiles = yield models.JUDICIAL_CASE_FILE.findAll({
                     where: {
                         clientId: client.dataValues.id,
@@ -364,7 +376,7 @@ class ClientService {
                     yield caseFile.update(Object.assign(Object.assign({}, caseFile), { chbTransferred: caseFile.dataValues.customerHasBankId == chbTransferred ? null : Number(chbTransferred) }));
                 }));
                 console.log(caseFiles);
-                return { id: client.dataValues.id, chbTransferred };
+                return { id: client.dataValues.id, chbTransferred, oldData: oldData, newData: newData.dataValues };
             }
             catch (e) {
                 console.log(e);
@@ -373,11 +385,27 @@ class ClientService {
     }
     updateClients(clients, chb) {
         return __awaiter(this, void 0, void 0, function* () {
+            ;
+            const oldClients = [];
             const updates = clients.map((clientData) => __awaiter(this, void 0, void 0, function* () {
-                return yield this.update(clientData.code, chb, clientData);
+                const oldDataClient = yield models.CLIENT.findOne({
+                    where: {
+                        code: clientData.code,
+                        id: clientData.id,
+                        [sequelize_2.Op.or]: [
+                            { chb_transferred: chb },
+                            { customer_has_bank_id_customer_has_bank: chb },
+                        ],
+                    },
+                });
+                if (!oldDataClient)
+                    return;
+                oldClients.push(Object.assign({}, oldDataClient.get()));
+                const { id } = clientData, newData = __rest(clientData, ["id"]);
+                return yield this.update(clientData.code, chb, newData);
             }));
-            const rta = yield Promise.all(updates);
-            return rta;
+            const newClients = (yield Promise.all(updates));
+            return { oldClientsUpdates: oldClients, newClientsUpdates: newClients };
         });
     }
     update(code, chb, changes) {
@@ -391,7 +419,7 @@ class ClientService {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield this.findCode(code, chb);
             yield client.destroy();
-            return { code, id: client.dataValues.id };
+            return { code, id: client.dataValues.id, client: client.dataValues };
         });
     }
     readAndUpdateExcelFile(date, cityId) {

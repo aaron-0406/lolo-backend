@@ -354,8 +354,9 @@ class JudicialCaseFileRelatedProcessService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialCaseFile = yield this.findByID(id);
-            const rta = yield judicialCaseFile.update(changes);
-            return rta;
+            const oldJudicialCaseFile = Object.assign({}, judicialCaseFile.get());
+            const newJudicialCaseFile = yield judicialCaseFile.update(changes);
+            return { oldJudicialCaseFile, newJudicialCaseFile };
         });
     }
     updateProcessStatus(id, changes) {
@@ -368,8 +369,9 @@ class JudicialCaseFileRelatedProcessService {
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield this.findByID(id);
+            const oldJudicialCaseFile = Object.assign({}, client.get());
             yield client.destroy();
-            return { id };
+            return oldJudicialCaseFile;
         });
     }
 }

@@ -16,6 +16,7 @@ exports.assingCollateralToCaseFile = exports.getAllRelatedCaseFileAssociatedToCo
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const judicial_case_file_has_collateral_service_1 = __importDefault(require("../../app/judicial/services/judicial-case-file-has-collateral.service"));
 const judicial_case_file_has_collateral_model_1 = __importDefault(require("../../db/models/judicial-case-file-has-collateral.model"));
+const user_log_1 = require("../../utils/dash/user-log");
 const service = new judicial_case_file_has_collateral_service_1.default();
 const userLogService = new user_log_service_1.default();
 const { JUDICIAL_CASE_FILE_HAS_COLLATERAL_TABLE } = judicial_case_file_has_collateral_model_1.default;
@@ -35,7 +36,14 @@ const assingCollateralToCaseFile = (req, res, next) => __awaiter(void 0, void 0,
     try {
         const { collateralId } = req.params;
         const { newJudicialCasefileHasCollateral } = req.body;
-        const result = yield service.assingCollateralToCaseFile(newJudicialCasefileHasCollateral, collateralId);
+        const { JudicialCaseFileHasCollateralsToDelete, JudicialCaseFileHasCollateralsToCreate, JudicialCaseFileHasCollateralWithoutChanges, data, } = yield service.assingCollateralToCaseFile(newJudicialCasefileHasCollateral, collateralId);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: collateralId,
+            oldData: JudicialCaseFileHasCollateralsToDelete,
+            newData: JudicialCaseFileHasCollateralsToCreate,
+            withoutChanges: JudicialCaseFileHasCollateralWithoutChanges,
+        });
         yield userLogService.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
             codeAction: "P13-01-06-01-01",
@@ -43,8 +51,9 @@ const assingCollateralToCaseFile = (req, res, next) => __awaiter(void 0, void 0,
             entityId: Number(collateralId),
             ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
             customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
+            methodSumary: sumary,
         });
-        res.json(result);
+        res.json(data);
     }
     catch (error) {
         next(error);

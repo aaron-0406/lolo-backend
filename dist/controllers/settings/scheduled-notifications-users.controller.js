@@ -13,14 +13,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.changeNotificationsUsersController = exports.getNotificationsUsersBySchuldeNotificationIdController = void 0;
+const user_log_1 = require("../../utils/dash/user-log");
 const scheduled_notifications_users_service_1 = __importDefault(require("../../app/settings/services/scheduled-notifications-users.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const scheduled_notifications_users_model_1 = __importDefault(require("../../db/models/settings/scheduled-notifications-users.model"));
-const user_log_util_1 = __importDefault(require("../../utils/dash/user-log.util"));
 const service = new scheduled_notifications_users_service_1.default();
 const serviceUserLog = new user_log_service_1.default();
 const { SCHEDULED_NOTIFICATIONS_USERS_TABLE } = scheduled_notifications_users_model_1.default;
-const { generateLogSummary } = user_log_util_1.default;
 const getNotificationsUsersBySchuldeNotificationIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { scheduledNotificationId } = req.params;
@@ -38,7 +37,7 @@ const changeNotificationsUsersController = (req, res, next) => __awaiter(void 0,
         const { idNotification } = req.params;
         const body = req.body;
         const notificationsUsers = yield service.changeNotificationsUsers(idNotification, body.data);
-        const sumary = generateLogSummary({
+        const sumary = (0, user_log_1.generateLogSummary)({
             method: req.method,
             oldData: (_a = notificationsUsers === null || notificationsUsers === void 0 ? void 0 : notificationsUsers.formatedNotificationsToDelete) !== null && _a !== void 0 ? _a : [],
             newData: (_b = notificationsUsers === null || notificationsUsers === void 0 ? void 0 : notificationsUsers.formatedNewNotifications) !== null && _b !== void 0 ? _b : [],

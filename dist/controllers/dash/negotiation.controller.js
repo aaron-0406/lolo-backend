@@ -16,6 +16,7 @@ exports.deleteNegotiationController = exports.updateNegotiationController = expo
 const negotiation_service_1 = __importDefault(require("../../app/dash/services/negotiation.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const negotiation_model_1 = __importDefault(require("../../db/models/negotiation.model"));
+const user_log_1 = require("../../utils/dash/user-log");
 const service = new negotiation_service_1.default();
 const serviceUserLog = new user_log_service_1.default();
 const { NEGOTIATION_TABLE } = negotiation_model_1.default;
@@ -56,6 +57,11 @@ const createNegotiationController = (req, res, next) => __awaiter(void 0, void 0
     try {
         const body = req.body;
         const newNegotiation = yield service.create(body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newNegotiation.dataValues.id,
+            newData: newNegotiation.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
             codeAction: "P09-01",
@@ -63,6 +69,7 @@ const createNegotiationController = (req, res, next) => __awaiter(void 0, void 0
             entityId: Number(newNegotiation.dataValues.id),
             ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
             customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
+            methodSumary: sumary,
         });
         res.status(201).json(newNegotiation);
     }
@@ -76,16 +83,23 @@ const updateNegotiationController = (req, res, next) => __awaiter(void 0, void 0
     try {
         const { id } = req.params;
         const body = req.body;
-        const negotiation = yield service.update(id, body);
+        const { oldNegotiation, newNegotiation } = yield service.update(id, body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newNegotiation.dataValues.id,
+            oldData: oldNegotiation,
+            newData: newNegotiation.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
             codeAction: "P09-02",
             entity: NEGOTIATION_TABLE,
-            entityId: Number(negotiation.dataValues.id),
+            entityId: Number(newNegotiation.dataValues.id),
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
             customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+            methodSumary: sumary,
         });
-        res.json(negotiation);
+        res.json(newNegotiation);
     }
     catch (error) {
         next(error);
@@ -96,7 +110,12 @@ const deleteNegotiationController = (req, res, next) => __awaiter(void 0, void 0
     var _g, _h, _j;
     try {
         const { id } = req.params;
-        yield service.delete(id);
+        const oldNegotiation = yield service.delete(id);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: id,
+            oldData: oldNegotiation,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
             codeAction: "P09-03",
@@ -104,6 +123,7 @@ const deleteNegotiationController = (req, res, next) => __awaiter(void 0, void 0
             entityId: Number(id),
             ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
             customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            methodSumary: sumary,
         });
         res.status(201).json({ id });
     }

@@ -49,15 +49,17 @@ class JudicialCollateralChargesEncumbrancesTypeLoadService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialCollateralChargesEncumbrancesTypeLoad = yield this.findByID(id);
-            const rta = yield judicialCollateralChargesEncumbrancesTypeLoad.update(changes);
-            return rta;
+            const oldJudicialCollateralChargesEncumbrancesTypeLoad = Object.assign({}, judicialCollateralChargesEncumbrancesTypeLoad.get());
+            const newJudicialCollateralChargesEncumbrancesTypeLoad = yield judicialCollateralChargesEncumbrancesTypeLoad.update(changes);
+            return { oldJudicialCollateralChargesEncumbrancesTypeLoad, newJudicialCollateralChargesEncumbrancesTypeLoad };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialCollateralChargesEncumbrancesTypeLoad = yield this.findByID(id);
+            const oldJudicialCollateralChargesEncumbrancesTypeLoad = Object.assign({}, judicialCollateralChargesEncumbrancesTypeLoad.get());
             yield judicialCollateralChargesEncumbrancesTypeLoad.destroy();
-            return { id };
+            return oldJudicialCollateralChargesEncumbrancesTypeLoad;
         });
     }
 }

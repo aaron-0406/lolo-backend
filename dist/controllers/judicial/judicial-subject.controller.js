@@ -16,6 +16,7 @@ exports.deleteJudicialSubjectController = exports.updateJudicialSubjectControlle
 const judicial_subject_service_1 = __importDefault(require("../../app/judicial/services/judicial-subject.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const judicial_subject_model_1 = __importDefault(require("../../db/models/judicial-subject.model"));
+const user_log_1 = require("../../utils/dash/user-log");
 const service = new judicial_subject_service_1.default();
 const serviceUserLog = new user_log_service_1.default();
 const { JUDICIAL_SUBJECT_TABLE } = judicial_subject_model_1.default;
@@ -56,17 +57,20 @@ const createJudicialSubjectController = (req, res, next) => __awaiter(void 0, vo
     try {
         const body = req.body;
         const newJudicialSubject = yield service.create(body);
-        const { visible } = req.query;
-        if (visible === "true") {
-            yield serviceUserLog.create({
-                customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
-                codeAction: "P27-01",
-                entity: JUDICIAL_SUBJECT_TABLE,
-                entityId: Number(newJudicialSubject.dataValues.id),
-                ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
-                customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
-            });
-        }
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newJudicialSubject.dataValues.id,
+            newData: newJudicialSubject.dataValues,
+        });
+        yield serviceUserLog.create({
+            customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
+            codeAction: "P21-01",
+            entity: JUDICIAL_SUBJECT_TABLE,
+            entityId: Number(newJudicialSubject.dataValues.id),
+            ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
+            customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
+            methodSumary: sumary,
+        });
         res.status(201).json(newJudicialSubject);
     }
     catch (error) {
@@ -79,19 +83,23 @@ const updateJudicialSubjectController = (req, res, next) => __awaiter(void 0, vo
     try {
         const { id } = req.params;
         const body = req.body;
-        const judicialSubject = yield service.update(id, body);
-        const { visible } = req.query;
-        if (visible === "true") {
-            yield serviceUserLog.create({
-                customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
-                codeAction: "P27-02",
-                entity: JUDICIAL_SUBJECT_TABLE,
-                entityId: Number(judicialSubject.dataValues.id),
-                ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
-                customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
-            });
-        }
-        res.json(judicialSubject);
+        const { oldJudicialSubject, newJudicialSubject } = yield service.update(id, body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newJudicialSubject.dataValues.id,
+            oldData: oldJudicialSubject,
+            newData: newJudicialSubject.dataValues,
+        });
+        yield serviceUserLog.create({
+            customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
+            codeAction: "P21-02",
+            entity: JUDICIAL_SUBJECT_TABLE,
+            entityId: Number(newJudicialSubject.dataValues.id),
+            ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
+            customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+            methodSumary: sumary,
+        });
+        res.json(newJudicialSubject);
     }
     catch (error) {
         next(error);
@@ -102,18 +110,21 @@ const deleteJudicialSubjectController = (req, res, next) => __awaiter(void 0, vo
     var _g, _h, _j;
     try {
         const { id } = req.params;
-        yield service.delete(id);
-        const { visible } = req.query;
-        if (visible === "true") {
-            yield serviceUserLog.create({
-                customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
-                codeAction: "P27-03",
-                entity: JUDICIAL_SUBJECT_TABLE,
-                entityId: Number(id),
-                ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
-                customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
-            });
-        }
+        const oldJudicialSubject = yield service.delete(id);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: id,
+            oldData: oldJudicialSubject,
+        });
+        yield serviceUserLog.create({
+            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
+            codeAction: "P21-03",
+            entity: JUDICIAL_SUBJECT_TABLE,
+            entityId: Number(id),
+            ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
+            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            methodSumary: sumary,
+        });
         res.status(201).json({ id });
     }
     catch (error) {

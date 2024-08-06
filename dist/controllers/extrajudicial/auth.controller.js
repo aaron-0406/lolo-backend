@@ -31,6 +31,7 @@ const permission_service_1 = __importDefault(require("../../app/dash/services/pe
 const customer_user_service_1 = __importDefault(require("../../app/dash/services/customer-user.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const user_app_model_1 = __importDefault(require("../../db/models/user-app.model"));
+const user_log_1 = require("../../utils/dash/user-log");
 const serviceAuth = new auth_service_1.default();
 const servicePermission = new permission_service_1.default();
 const serviceCustomerUser = new customer_user_service_1.default();
@@ -86,11 +87,17 @@ exports.changePasswordController = changePasswordController;
 const changeCredentialsController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _f, _g, _h, _j, _k, _l;
     try {
-        yield serviceAuth.changeCredentials(req.body, Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.id));
+        const oldCustomerUser = yield serviceAuth.changeCredentials(req.body, Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.id));
         const user = yield serviceCustomerUser.findOne(String((_g = req.user) === null || _g === void 0 ? void 0 : _g.id));
         const permissions = yield servicePermission.findAllByRoleId(user.dataValues.roleId);
         const customerUser = Object.assign(Object.assign({}, user.dataValues), { permissions });
         const token = (0, jwt_1.signToken)(user.dataValues, `${process.env.JWT_SECRET}`);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: "PUT",
+            id: oldCustomerUser.id,
+            oldData: oldCustomerUser,
+            newData: user.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_h = req.user) === null || _h === void 0 ? void 0 : _h.id),
             codeAction: "P01-02",
@@ -98,6 +105,7 @@ const changeCredentialsController = (req, res, next) => __awaiter(void 0, void 0
             entityId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.id),
             ip: (_k = req.clientIp) !== null && _k !== void 0 ? _k : "",
             customerId: Number((_l = req.user) === null || _l === void 0 ? void 0 : _l.customerId),
+            methodSumary: sumary,
         });
         return res.json({
             user: customerUser,

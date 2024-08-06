@@ -52,12 +52,22 @@ class RoleService {
     update(id, changes, permissions) {
         return __awaiter(this, void 0, void 0, function* () {
             const role = yield this.findOne(id);
-            const rta = yield role.update(changes);
+            const oldRole = Object.assign({}, role.get());
+            const oldRolePermissions = yield models.ROLE_PERMISSION.findAll({
+                where: {
+                    roleId: role.dataValues.id,
+                },
+            });
+            const formatOldRolePermissions = oldRolePermissions.map((item) => item.dataValues);
+            const permissionsToDelete = formatOldRolePermissions.filter((item) => !permissions.includes(item.permissionId));
+            const permissionWithoutChanges = formatOldRolePermissions.filter((item) => permissions.includes(item.permissionId));
+            const permissionWithoutChangesIds = permissionWithoutChanges.map((item) => item.permissionId);
             yield models.ROLE_PERMISSION.destroy({
                 where: {
                     roleId: role.dataValues.id,
                 },
             });
+            const newRole = yield role.update(changes);
             for (let i = 0; i < permissions.length; i++) {
                 const element = permissions[i];
                 yield models.ROLE_PERMISSION.create({
@@ -65,17 +75,25 @@ class RoleService {
                     permissionId: element,
                 });
             }
-            return rta;
+            const newRolePermissions = yield models.ROLE_PERMISSION.findAll({
+                where: {
+                    roleId: role.dataValues.id,
+                },
+            });
+            const formatNewRolePermissions = newRolePermissions.map((item) => item.dataValues);
+            const permissionsToAdd = formatNewRolePermissions.filter((item) => !permissionWithoutChangesIds.includes(item.permissionId));
+            return { oldRole, newRole, permissionsToDelete, permissionWithoutChanges, permissionsToAdd };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const role = yield this.findOne(id);
+            const oldRole = Object.assign({}, role.get());
             yield models.ROLE_PERMISSION.destroy({
                 where: { roleId: id },
             });
             yield role.destroy();
-            return { id };
+            return oldRole;
         });
     }
 }

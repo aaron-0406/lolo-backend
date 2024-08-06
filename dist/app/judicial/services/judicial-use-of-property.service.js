@@ -47,15 +47,17 @@ class JudicialUseOfPropertyService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialUseOfProperty = yield this.findByID(id);
-            const rta = yield judicialUseOfProperty.update(changes);
-            return rta;
+            const oldJudicialUseOfProperty = Object.assign({}, judicialUseOfProperty.get());
+            const newJudicialUseOfProperty = yield judicialUseOfProperty.update(changes);
+            return { oldJudicialUseOfProperty, newJudicialUseOfProperty };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const useOfProperty = yield this.findByID(id);
+            const oldJudicialUseOfProperty = Object.assign({}, useOfProperty.get());
             yield useOfProperty.destroy();
-            return { id };
+            return oldJudicialUseOfProperty;
         });
     }
 }

@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteJudicialBinProceduralStageController = exports.updateJudicialBinProceduralStageController = exports.createJudicialBinProceduralStageController = exports.getJudicialBinProceduralStageByIdController = exports.getJudicialBinProceduralStageByCHBController = void 0;
+const user_log_1 = require("../../utils/dash/user-log");
 const judicial_bin_procedural_stage_service_1 = __importDefault(require("../../app/judicial/services/judicial-bin-procedural-stage.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const judicial_bin_procedural_stage_model_1 = __importDefault(require("../../db/models/judicial-bin-procedural-stage.model"));
@@ -47,16 +48,21 @@ const createJudicialBinProceduralStageController = (req, res, next) => __awaiter
         const body = req.body;
         const newJudicialBinProceduralStage = yield service.create(body);
         const { visible } = req.query;
-        if (visible === "true") {
-            yield serviceUserLog.create({
-                customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
-                codeAction: "P24-01",
-                entity: JUDICIAL_BIN_PROCEDURAL_STAGE_TABLE,
-                entityId: Number(newJudicialBinProceduralStage.dataValues.id),
-                ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
-                customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
-            });
-        }
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            newData: newJudicialBinProceduralStage.dataValues,
+            name: newJudicialBinProceduralStage.dataValues.name,
+            id: newJudicialBinProceduralStage.dataValues.id,
+        });
+        yield serviceUserLog.create({
+            customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
+            codeAction: "P24-01",
+            entity: JUDICIAL_BIN_PROCEDURAL_STAGE_TABLE,
+            entityId: Number(newJudicialBinProceduralStage.dataValues.id),
+            ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
+            customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
+            methodSumary: sumary,
+        });
         res.status(201).json(newJudicialBinProceduralStage);
     }
     catch (error) {
@@ -69,19 +75,23 @@ const updateJudicialBinProceduralStageController = (req, res, next) => __awaiter
     try {
         const { id } = req.params;
         const body = req.body;
-        const judicialBinProceduralStage = yield service.update(id, body);
-        const { visible } = req.query;
-        if (visible === "true") {
-            yield serviceUserLog.create({
-                customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
-                codeAction: "P24-02",
-                entity: JUDICIAL_BIN_PROCEDURAL_STAGE_TABLE,
-                entityId: Number(judicialBinProceduralStage.dataValues.id),
-                ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
-                customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
-            });
-        }
-        res.json(judicialBinProceduralStage);
+        const { oldData, newData } = yield service.update(id, body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            oldData: oldData,
+            newData: newData,
+            id: Number(id),
+        });
+        yield serviceUserLog.create({
+            customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
+            codeAction: "P24-02",
+            entity: JUDICIAL_BIN_PROCEDURAL_STAGE_TABLE,
+            entityId: Number(id),
+            ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
+            customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+            methodSumary: sumary,
+        });
+        res.json(newData);
     }
     catch (error) {
         next(error);
@@ -92,18 +102,22 @@ const deleteJudicialBinProceduralStageController = (req, res, next) => __awaiter
     var _g, _h, _j;
     try {
         const { id } = req.params;
-        yield service.delete(id);
+        const { oldData } = yield service.delete(id);
         const { visible } = req.query;
-        if (visible === "true") {
-            yield serviceUserLog.create({
-                customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
-                codeAction: "P24-03",
-                entity: JUDICIAL_BIN_PROCEDURAL_STAGE_TABLE,
-                entityId: Number(id),
-                ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
-                customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
-            });
-        }
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            oldData: oldData,
+            id: Number(id),
+        });
+        yield serviceUserLog.create({
+            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
+            codeAction: "P24-03",
+            entity: JUDICIAL_BIN_PROCEDURAL_STAGE_TABLE,
+            entityId: Number(id),
+            ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
+            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            methodSumary: sumary,
+        });
         res.status(201).json({ id: Number(id) });
     }
     catch (error) {

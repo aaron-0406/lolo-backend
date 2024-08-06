@@ -74,22 +74,24 @@ class JudicialCourtService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialCourt = yield this.findByID(id);
-            const rta = yield judicialCourt.update(changes);
-            yield rta.reload({
+            const oldJudicialCourt = Object.assign({}, judicialCourt.get());
+            const newJudicialCourt = yield judicialCourt.update(changes);
+            yield newJudicialCourt.reload({
                 include: {
                     model: models.CITY,
                     as: "city",
                     attributes: ["id", "name"],
                 },
             });
-            return rta;
+            return { oldJudicialCourt, newJudicialCourt };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const court = yield this.findByID(id);
+            const oldJudicialCourt = Object.assign({}, court.get());
             yield court.destroy();
-            return { id };
+            return oldJudicialCourt;
         });
     }
 }

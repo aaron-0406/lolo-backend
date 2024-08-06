@@ -58,15 +58,17 @@ class ExtTagGroupService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const extContactType = yield this.findByID(id);
-            const rta = yield extContactType.update(changes);
-            return rta;
+            const oldExtContactType = Object.assign({}, extContactType.get());
+            const newExtContactType = yield extContactType.update(changes);
+            return { oldExtContactType, newExtContactType };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const extContactType = yield this.findByID(id);
+            const oldExtContactType = Object.assign({}, extContactType.get());
             yield extContactType.destroy();
-            return { id };
+            return oldExtContactType;
         });
     }
 }

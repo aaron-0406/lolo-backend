@@ -47,15 +47,17 @@ class JudicialRegistrationAreaService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialRegistrationArea = yield this.findByID(id);
-            const rta = yield judicialRegistrationArea.update(changes);
-            return rta;
+            const oldJudicialRegistrationArea = Object.assign({}, judicialRegistrationArea.get());
+            const newJudicialRegistrationArea = yield judicialRegistrationArea.update(changes);
+            return { oldJudicialRegistrationArea, newJudicialRegistrationArea };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const registrationArea = yield this.findByID(id);
+            const oldJudicialRegistrationArea = Object.assign({}, registrationArea.get());
             yield registrationArea.destroy();
-            return { id };
+            return oldJudicialRegistrationArea;
         });
     }
 }

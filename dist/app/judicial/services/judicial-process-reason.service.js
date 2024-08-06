@@ -58,15 +58,17 @@ class judicialProcessReasonService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialProcessReason = yield this.findByID(id);
-            const rta = yield judicialProcessReason.update(changes);
-            return rta;
+            const oldJudicialProcessReason = Object.assign({}, judicialProcessReason.get());
+            const newJudicialProcessReason = yield judicialProcessReason.update(changes);
+            return { oldJudicialProcessReason, newJudicialProcessReason };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const judicialProcessReason = yield this.findByID(id);
+            const oldJudicialProcessReason = Object.assign({}, judicialProcessReason.get());
             yield judicialProcessReason.destroy();
-            return { id };
+            return oldJudicialProcessReason;
         });
     }
 }

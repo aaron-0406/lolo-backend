@@ -16,6 +16,7 @@ exports.deleteJudicialProcessReasonController = exports.updateJudicialProcessRea
 const judicial_process_reason_service_1 = __importDefault(require("../../app/judicial/services/judicial-process-reason.service"));
 const judicial_process_reason_model_1 = __importDefault(require("../../db/models/judicial-process-reason.model"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
+const user_log_1 = require("../../utils/dash/user-log");
 const { JUDICIAL_PROCESS_REASON_TABLE } = judicial_process_reason_model_1.default;
 const service = new judicial_process_reason_service_1.default();
 const serviceUserLog = new user_log_service_1.default();
@@ -56,6 +57,11 @@ const createJudicialProcessReasonController = (req, res, next) => __awaiter(void
     try {
         const body = req.body;
         const newJudicialProcessReason = yield service.create(body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newJudicialProcessReason.dataValues.id,
+            newData: newJudicialProcessReason.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
             codeAction: "P27-01",
@@ -63,6 +69,7 @@ const createJudicialProcessReasonController = (req, res, next) => __awaiter(void
             entityId: Number(newJudicialProcessReason.dataValues.id),
             ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
             customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
+            methodSumary: sumary,
         });
         res.status(201).json(newJudicialProcessReason);
     }
@@ -76,16 +83,23 @@ const updateJudicialProcessReasonController = (req, res, next) => __awaiter(void
     try {
         const { id } = req.params;
         const body = req.body;
-        const judicialProcessReason = yield service.update(Number(id), body);
+        const { oldJudicialProcessReason, newJudicialProcessReason } = yield service.update(Number(id), body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newJudicialProcessReason.dataValues.id,
+            oldData: oldJudicialProcessReason,
+            newData: newJudicialProcessReason.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
             codeAction: "P27-02",
             entity: JUDICIAL_PROCESS_REASON_TABLE,
-            entityId: Number(judicialProcessReason.dataValues.id),
+            entityId: Number(newJudicialProcessReason.dataValues.id),
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
             customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+            methodSumary: sumary,
         });
-        res.json(judicialProcessReason);
+        res.json(newJudicialProcessReason);
     }
     catch (error) {
         next(error);
@@ -96,14 +110,20 @@ const deleteJudicialProcessReasonController = (req, res, next) => __awaiter(void
     var _g, _h, _j;
     try {
         const { id } = req.params;
-        const judicialProcessReason = yield service.delete(Number(id));
+        const oldJudicialProcessReason = yield service.delete(Number(id));
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: id,
+            oldData: oldJudicialProcessReason,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
             codeAction: "P27-03",
             entity: JUDICIAL_PROCESS_REASON_TABLE,
-            entityId: Number(judicialProcessReason.id),
+            entityId: Number(oldJudicialProcessReason.id),
             ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
             customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            methodSumary: sumary,
         });
         res.status(201).json({ id });
     }

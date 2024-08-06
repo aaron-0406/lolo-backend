@@ -56,15 +56,17 @@ class FuncionarioService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const funcionario = yield this.findOne(id);
-            const rta = yield funcionario.update(changes);
-            return rta;
+            const oldFuncionario = Object.assign({}, funcionario.get());
+            const newFuncionario = yield funcionario.update(changes);
+            return { oldFuncionario, newFuncionario };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const funcionario = yield this.findOne(id);
+            const oldFuncionario = Object.assign({}, funcionario.get());
             yield funcionario.destroy();
-            return { id };
+            return oldFuncionario;
         });
     }
 }

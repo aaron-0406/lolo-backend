@@ -105,13 +105,13 @@ class ProductService {
     }
     removeJudicialCaseFileFromProduct(productRemovedId, judicialCaseFileId) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield models.PRODUCT.update({ judicialCaseFileId: null }, {
+            const oldProduct = yield models.PRODUCT.update({ judicialCaseFileId: null }, {
                 where: {
                     id: productRemovedId,
                     judicial_case_file_id_judicial_case_file: judicialCaseFileId,
                 },
             });
-            return { id: productRemovedId };
+            return { id: productRemovedId, oldProduct };
         });
     }
     //INFO: DASHBOARD SECTION
@@ -185,16 +185,18 @@ class ProductService {
     update(product, id) {
         return __awaiter(this, void 0, void 0, function* () {
             const productFound = yield this.getByProductId(id);
+            const oldProduct = Object.assign({}, productFound.get());
             yield productFound.update(product);
             const productEdited = yield this.getByProductId(id);
-            return productEdited;
+            return { oldProduct, productEdited };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const product = yield this.getByProductId(id);
+            const oldProduct = Object.assign({}, product.get());
             yield product.destroy();
-            return Number(id);
+            return oldProduct;
         });
     }
     deleteByCode(code) {

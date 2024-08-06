@@ -16,6 +16,7 @@ exports.deletedRegistrationAreaController = exports.updateRegistrationAreaContro
 const judicial_registration_area_service_1 = __importDefault(require("../../app/judicial/services/judicial-registration-area.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const judicial_registration_area_model_1 = __importDefault(require("../../db/models/judicial-registration-area.model"));
+const user_log_1 = require("../../utils/dash/user-log");
 const service = new judicial_registration_area_service_1.default();
 const serviceUserLog = new user_log_service_1.default();
 const { JUDICIAL_REGISTRATION_AREA_TABLE } = judicial_registration_area_model_1.default;
@@ -46,6 +47,11 @@ const createRegistrationAreaController = (req, res, next) => __awaiter(void 0, v
     try {
         const body = req.body;
         const newRegistrationArea = yield service.create(body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newRegistrationArea.dataValues.id,
+            newData: newRegistrationArea.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
             codeAction: "P39-01",
@@ -53,6 +59,7 @@ const createRegistrationAreaController = (req, res, next) => __awaiter(void 0, v
             entityId: Number(newRegistrationArea.dataValues.id),
             ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
             customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
+            methodSumary: sumary,
         });
         res.json(newRegistrationArea);
     }
@@ -66,16 +73,23 @@ const updateRegistrationAreaController = (req, res, next) => __awaiter(void 0, v
     try {
         const { id } = req.params;
         const body = req.body;
-        const registrationArea = yield service.update(id, body);
+        const { oldJudicialRegistrationArea, newJudicialRegistrationArea } = yield service.update(id, body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newJudicialRegistrationArea.dataValues.id,
+            oldData: oldJudicialRegistrationArea,
+            newData: newJudicialRegistrationArea.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
             codeAction: "P39-02",
             entity: JUDICIAL_REGISTRATION_AREA_TABLE,
-            entityId: Number(registrationArea.dataValues.id),
+            entityId: Number(newJudicialRegistrationArea.dataValues.id),
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
             customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+            methodSumary: sumary,
         });
-        res.json(registrationArea);
+        res.json(newJudicialRegistrationArea);
     }
     catch (error) {
         next(error);
@@ -86,16 +100,22 @@ const deletedRegistrationAreaController = (req, res, next) => __awaiter(void 0, 
     var _g, _h, _j;
     try {
         const { id } = req.params;
-        const registrationArea = yield service.delete(id);
+        const oldJudicialRegistrationArea = yield service.delete(id);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: id,
+            oldData: oldJudicialRegistrationArea,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
             codeAction: "P39-03",
             entity: JUDICIAL_REGISTRATION_AREA_TABLE,
-            entityId: Number(registrationArea.id),
+            entityId: Number(oldJudicialRegistrationArea.id),
             ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
             customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            methodSumary: sumary,
         });
-        res.json(registrationArea);
+        res.json({ id });
     }
     catch (error) {
         next(error);

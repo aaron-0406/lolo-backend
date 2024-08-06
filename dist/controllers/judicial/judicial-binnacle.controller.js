@@ -8,6 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -16,6 +27,7 @@ exports.deleteJudicialBinnacleController = exports.updateJudicialBinnacleControl
 const judicial_binnacle_service_1 = __importDefault(require("../../app/judicial/services/judicial-binnacle.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const judicial_binnacle_model_1 = __importDefault(require("../../db/models/judicial-binnacle.model"));
+const user_log_1 = require("../../utils/dash/user-log");
 const service = new judicial_binnacle_service_1.default();
 const serviceUserLog = new user_log_service_1.default();
 const { JUDICIAL_BINNACLE_TABLE } = judicial_binnacle_model_1.default;
@@ -46,19 +58,26 @@ const createJudicialBinnacleController = (req, res, next) => __awaiter(void 0, v
     var _a, _b, _c;
     try {
         const { body, files, params } = req;
-        const newJudicialBinnacle = yield service.create(body, files, {
+        const { binnacle, allBinFiles } = yield service.create(body, files, {
             code: params.code,
             idCustomer: Number(params.idCustomer),
+        });
+        const _d = binnacle.dataValues, { judicialBinFiles } = _d, restData = __rest(_d, ["judicialBinFiles"]);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: binnacle.dataValues.id,
+            newData: Object.assign(Object.assign({}, restData), { binFiles: JSON.stringify(allBinFiles.map((binFile) => binFile.dataValues.originalName)) }),
         });
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
             codeAction: "P13-01-01-01",
             entity: JUDICIAL_BINNACLE_TABLE,
-            entityId: Number(newJudicialBinnacle.dataValues.id),
+            entityId: Number(binnacle.dataValues.id),
             ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
             customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
+            methodSumary: sumary,
         });
-        res.status(201).json(newJudicialBinnacle);
+        res.status(201).json(binnacle);
     }
     catch (error) {
         next(error);
@@ -66,23 +85,30 @@ const createJudicialBinnacleController = (req, res, next) => __awaiter(void 0, v
 });
 exports.createJudicialBinnacleController = createJudicialBinnacleController;
 const updateJudicialBinnacleController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _d, _e, _f;
+    var _e, _f, _g;
     try {
         const { id } = req.params;
         const { body, files, params } = req;
-        const judicialBinnacle = yield service.update(id, body, files, {
+        const { oldJudicialBinacle, newJudicialBinnacle } = yield service.update(id, body, files, {
             code: params.code,
             idCustomer: Number(params.idCustomer),
         });
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newJudicialBinnacle.dataValues.id,
+            oldData: oldJudicialBinacle,
+            newData: newJudicialBinnacle.dataValues,
+        });
         yield serviceUserLog.create({
-            customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
+            customerUserId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id),
             codeAction: "P13-01-01-02",
             entity: JUDICIAL_BINNACLE_TABLE,
-            entityId: Number(judicialBinnacle.dataValues.id),
-            ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
-            customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+            entityId: Number(newJudicialBinnacle.dataValues.id),
+            ip: (_f = req.clientIp) !== null && _f !== void 0 ? _f : "",
+            customerId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.customerId),
+            methodSumary: sumary,
         });
-        res.json(judicialBinnacle);
+        res.json(newJudicialBinnacle);
     }
     catch (error) {
         next(error);
@@ -90,17 +116,23 @@ const updateJudicialBinnacleController = (req, res, next) => __awaiter(void 0, v
 });
 exports.updateJudicialBinnacleController = updateJudicialBinnacleController;
 const deleteJudicialBinnacleController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _g, _h, _j;
+    var _h, _j, _k;
     try {
         const { id } = req.params;
-        yield service.delete(id);
+        const oldJudicialBinacle = yield service.delete(id);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: id,
+            oldData: oldJudicialBinacle,
+        });
         yield serviceUserLog.create({
-            customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
+            customerUserId: Number((_h = req.user) === null || _h === void 0 ? void 0 : _h.id),
             codeAction: "P13-01-01-03",
             entity: JUDICIAL_BINNACLE_TABLE,
             entityId: Number(id),
-            ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
-            customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            ip: (_j = req.clientIp) !== null && _j !== void 0 ? _j : "",
+            customerId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.customerId),
+            methodSumary: sumary,
         });
         res.status(201).json({ id: Number(id) });
     }

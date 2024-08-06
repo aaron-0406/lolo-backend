@@ -55,7 +55,14 @@ class AuthService {
     changeCredentials(data, customerUserId) {
         return __awaiter(this, void 0, void 0, function* () {
             const { dni, lastname, name, phone } = data;
+            const customerUser = yield models.CUSTOMER_USER.findOne({
+                where: { id: customerUserId },
+            });
+            if (!customerUser)
+                throw boom_1.default.notFound("Usuario no encontrado");
+            const oldCustomerUser = Object.assign({}, customerUser.get());
             yield models.CUSTOMER_USER.update({ dni, lastName: lastname, name, phone }, { where: { id: customerUserId } });
+            return oldCustomerUser;
         });
     }
     generate2fa(email, userId) {

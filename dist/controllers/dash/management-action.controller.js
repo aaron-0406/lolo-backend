@@ -16,6 +16,7 @@ exports.deleteManagementActionController = exports.updateManagementActionControl
 const management_action_service_1 = __importDefault(require("../../app/dash/services/management-action.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const management_action_model_1 = __importDefault(require("../../db/models/management-action.model"));
+const user_log_1 = require("../../utils/dash/user-log");
 const service = new management_action_service_1.default();
 const serviceUserLog = new user_log_service_1.default();
 const { MANAGEMENT_ACTION_TABLE } = management_action_model_1.default;
@@ -56,6 +57,11 @@ const createManagementActionController = (req, res, next) => __awaiter(void 0, v
     try {
         const body = req.body;
         const newManagementAction = yield service.create(body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newManagementAction.dataValues.id,
+            newData: newManagementAction.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
             codeAction: "P07-01",
@@ -63,6 +69,7 @@ const createManagementActionController = (req, res, next) => __awaiter(void 0, v
             entityId: Number(newManagementAction.dataValues.id),
             ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
             customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
+            methodSumary: sumary,
         });
         res.status(201).json(newManagementAction);
     }
@@ -76,16 +83,23 @@ const updateManagementActionController = (req, res, next) => __awaiter(void 0, v
     try {
         const { id } = req.params;
         const body = req.body;
-        const managementAction = yield service.update(id, body);
+        const { oldManagementAction, newManagementAction } = yield service.update(id, body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newManagementAction.dataValues.id,
+            oldData: oldManagementAction,
+            newData: newManagementAction.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
             codeAction: "P07-02",
             entity: MANAGEMENT_ACTION_TABLE,
-            entityId: Number(managementAction.dataValues.id),
+            entityId: Number(newManagementAction.dataValues.id),
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
             customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+            methodSumary: sumary,
         });
-        res.json(managementAction);
+        res.json(newManagementAction);
     }
     catch (error) {
         next(error);
@@ -96,7 +110,12 @@ const deleteManagementActionController = (req, res, next) => __awaiter(void 0, v
     var _g, _h, _j;
     try {
         const { id } = req.params;
-        yield service.delete(id);
+        const oldManagementAction = yield service.delete(id);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: id,
+            oldData: oldManagementAction,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
             codeAction: "P07-03",
@@ -104,6 +123,7 @@ const deleteManagementActionController = (req, res, next) => __awaiter(void 0, v
             entityId: Number(id),
             ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
             customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            methodSumary: sumary,
         });
         res.status(201).json({ id });
     }

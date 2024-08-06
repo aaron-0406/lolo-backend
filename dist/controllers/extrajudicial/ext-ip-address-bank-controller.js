@@ -16,6 +16,7 @@ exports.deleteIpAddressController = exports.updateIpAddressController = exports.
 const ext_ip_address_bank_service_1 = __importDefault(require("../../app/extrajudicial/services/ext-ip-address-bank.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const ext_ip_address_bank_model_1 = __importDefault(require("../../db/models/ext-ip-address-bank.model"));
+const user_log_1 = require("../../utils/dash/user-log");
 const service = new ext_ip_address_bank_service_1.default();
 const serviceUserLog = new user_log_service_1.default();
 const { EXT_IP_ADDRESS_BANK_TABLE } = ext_ip_address_bank_model_1.default;
@@ -57,6 +58,11 @@ const createIpAddressController = (req, res, next) => __awaiter(void 0, void 0, 
     try {
         const body = req.body;
         const newIpAddress = yield service.create(body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newIpAddress.dataValues.id,
+            newData: newIpAddress.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
             codeAction: "P15-01",
@@ -64,6 +70,7 @@ const createIpAddressController = (req, res, next) => __awaiter(void 0, void 0, 
             entityId: Number(newIpAddress.dataValues.id),
             ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
             customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
+            methodSumary: sumary,
         });
         res.status(201).json(newIpAddress);
     }
@@ -77,16 +84,23 @@ const updateIpAddressStateController = (req, res, next) => __awaiter(void 0, voi
     try {
         const { id, customerId } = req.params;
         const body = req.body;
-        const ipAddress = yield service.updateState(id, customerId, body.state);
+        const { oldExtIpAddress, newExtIpAddress } = yield service.updateState(id, customerId, body.state);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newExtIpAddress.dataValues.id,
+            oldData: oldExtIpAddress,
+            newData: newExtIpAddress.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_d = req.user) === null || _d === void 0 ? void 0 : _d.id),
             codeAction: "P15-02",
             entity: EXT_IP_ADDRESS_BANK_TABLE,
-            entityId: Number(ipAddress.dataValues.id),
+            entityId: Number(newExtIpAddress.dataValues.id),
             ip: (_e = req.clientIp) !== null && _e !== void 0 ? _e : "",
             customerId: Number((_f = req.user) === null || _f === void 0 ? void 0 : _f.customerId),
+            methodSumary: sumary,
         });
-        res.json(ipAddress);
+        res.json(newExtIpAddress);
     }
     catch (error) {
         next(error);
@@ -98,16 +112,23 @@ const updateIpAddressController = (req, res, next) => __awaiter(void 0, void 0, 
     try {
         const { id } = req.params;
         const body = req.body;
-        const ipAddress = yield service.update(id, body);
+        const { oldExtIpAddress, newExtIpAddress } = yield service.update(id, body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newExtIpAddress.dataValues.id,
+            oldData: oldExtIpAddress,
+            newData: newExtIpAddress.dataValues,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.id),
             codeAction: "P15-03",
             entity: EXT_IP_ADDRESS_BANK_TABLE,
-            entityId: Number(ipAddress.dataValues.id),
+            entityId: Number(newExtIpAddress.dataValues.id),
             ip: (_h = req.clientIp) !== null && _h !== void 0 ? _h : "",
             customerId: Number((_j = req.user) === null || _j === void 0 ? void 0 : _j.customerId),
+            methodSumary: sumary,
         });
-        res.json(ipAddress);
+        res.json(newExtIpAddress);
     }
     catch (error) {
         next(error);
@@ -118,7 +139,12 @@ const deleteIpAddressController = (req, res, next) => __awaiter(void 0, void 0, 
     var _k, _l, _m;
     try {
         const { id, customerId } = req.params;
-        yield service.delete(id, customerId);
+        const oldExtIpAddress = yield service.delete(id, customerId);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: id,
+            oldData: oldExtIpAddress,
+        });
         yield serviceUserLog.create({
             customerUserId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.id),
             codeAction: "P15-04",
@@ -126,6 +152,7 @@ const deleteIpAddressController = (req, res, next) => __awaiter(void 0, void 0, 
             entityId: Number(id),
             ip: (_l = req.clientIp) !== null && _l !== void 0 ? _l : "",
             customerId: Number((_m = req.user) === null || _m === void 0 ? void 0 : _m.customerId),
+            methodSumary: sumary,
         });
         res.status(201).json({ id });
     }

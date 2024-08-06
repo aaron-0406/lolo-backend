@@ -55,15 +55,17 @@ class ExtAddressTypeService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const address = yield this.findByID(id, String(changes.customerHasBankId));
-            const rta = yield address.update(changes);
-            return rta;
+            const oldAddress = Object.assign({}, address.get());
+            const newAddress = yield address.update(changes);
+            return { oldAddress, newAddress };
         });
     }
     delete(id, chb) {
         return __awaiter(this, void 0, void 0, function* () {
             const address = yield this.findByID(id, chb);
+            const oldAddress = Object.assign({}, address.get());
             yield address.destroy();
-            return { id };
+            return oldAddress;
         });
     }
 }

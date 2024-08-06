@@ -77,22 +77,25 @@ class ExtTagService {
     update(id, changes) {
         return __awaiter(this, void 0, void 0, function* () {
             const extTag = yield this.findByID(id);
-            const rta = yield extTag.update(changes);
-            return rta;
+            const oldExtTag = Object.assign({}, extTag.get());
+            const newExtTag = yield extTag.update(changes);
+            return { oldExtTag, newExtTag };
         });
     }
     updateAction(id, action) {
         return __awaiter(this, void 0, void 0, function* () {
             const extTag = yield this.findByID(id);
-            const rta = yield extTag.update(Object.assign(Object.assign({}, extTag), { action }));
-            return rta;
+            const oldExtTag = Object.assign({}, extTag.get());
+            const newExtTag = yield extTag.update(Object.assign(Object.assign({}, extTag), { action }));
+            return { oldExtTag, newExtTag };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const extTag = yield this.findByID(id);
+            const oldExtTag = Object.assign({}, extTag.get());
             yield extTag.destroy();
-            return { id };
+            return oldExtTag;
         });
     }
 }

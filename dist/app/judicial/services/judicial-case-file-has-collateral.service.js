@@ -74,6 +74,8 @@ class JudicialCaseFileHasCollateralService {
                 currentCollateral.judicialCaseFileId));
             const JudicialCaseFileHasCollateralsToCreate = data.filter((collateral) => !currentJudicialCaseFileHasCollaterals.some((currentCollateral) => currentCollateral.judicialCaseFileId ===
                 collateral.judicialCaseFileId));
+            const JudicialCaseFileHasCollateralWithoutChanges = currentJudicialCaseFileHasCollaterals.filter((data) => !JudicialCaseFileHasCollateralsToDelete.some((item) => item.id === data.id) &&
+                !JudicialCaseFileHasCollateralsToCreate.some((item) => item.id === data.id));
             try {
                 for (const collateral of JudicialCaseFileHasCollateralsToDelete) {
                     yield models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.destroy({
@@ -86,7 +88,7 @@ class JudicialCaseFileHasCollateralService {
                 for (const newCollateral of JudicialCaseFileHasCollateralsToCreate) {
                     yield models.JUDICIAL_CASE_FILE_HAS_COLLATERAL.create(newCollateral);
                 }
-                return data;
+                return { JudicialCaseFileHasCollateralsToDelete, JudicialCaseFileHasCollateralsToCreate, JudicialCaseFileHasCollateralWithoutChanges, data };
             }
             catch (error) {
                 throw error;
