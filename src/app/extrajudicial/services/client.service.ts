@@ -360,14 +360,32 @@ class ClientService {
     chb: string,
     chbTransferred: string
   ) {
-    const client = await this.findCode(code, chb);
-    const oldData = { ...client.get() };
+    try{
+      const client = await this.findCode(code, chb);
+      const oldData = { ...client.get() };
     const newData = await client.update({
-      ...client,
-      chbTransferred: chb == chbTransferred ? null : chbTransferred,
-    });
+        ...client,
+        chbTransferred: chb == chbTransferred ? null : chbTransferred,
+      });
+      const caseFiles = await models.JUDICIAL_CASE_FILE.findAll({
+        where: {
+          clientId: client.dataValues.id,
+        },
+      });
 
-    return { id: client.dataValues.id, chbTransferred, oldData:oldData, newData: newData.dataValues };
+      caseFiles.forEach(async (caseFile) => {
+        await caseFile.update({
+          ...caseFile,
+          chbTransferred: caseFile.dataValues.customerHasBankId == chbTransferred ? null : Number(chbTransferred),
+        });
+      });
+
+      console.log(caseFiles);
+
+      return { id: client.dataValues.id, chbTransferred, oldData:oldData, newData: newData.dataValues };
+    } catch(e){
+      console.log(e)
+    }
   }
 
   async updateClients(

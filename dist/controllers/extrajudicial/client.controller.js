@@ -187,7 +187,7 @@ const transferClientToAnotherBankController = (req, res, next) => __awaiter(void
             ip: (_l = req.clientIp) !== null && _l !== void 0 ? _l : "",
             customerId: Number((_m = req.user) === null || _m === void 0 ? void 0 : _m.customerId),
         });
-        res.status(201).json({ id: data.id, chbTransferred: data.chbTransferred });
+        res.status(201).json({ id: data === null || data === void 0 ? void 0 : data.id, chbTransferred: data === null || data === void 0 ? void 0 : data.chbTransferred });
     }
     catch (error) {
         next(error);

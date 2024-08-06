@@ -352,9 +352,23 @@ class ClientService {
     }
     transferToAnotherBank(code, chb, chbTransferred) {
         return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.findCode(code, chb);
-            yield client.update(Object.assign(Object.assign({}, client), { chbTransferred: chb == chbTransferred ? null : chbTransferred }));
-            return { id: client.dataValues.id, chbTransferred };
+            try {
+                const client = yield this.findCode(code, chb);
+                yield client.update(Object.assign(Object.assign({}, client), { chbTransferred: chb == chbTransferred ? null : chbTransferred }));
+                const caseFiles = yield models.JUDICIAL_CASE_FILE.findAll({
+                    where: {
+                        clientId: client.dataValues.id,
+                    },
+                });
+                caseFiles.forEach((caseFile) => __awaiter(this, void 0, void 0, function* () {
+                    yield caseFile.update(Object.assign(Object.assign({}, caseFile), { chbTransferred: caseFile.dataValues.customerHasBankId == chbTransferred ? null : Number(chbTransferred) }));
+                }));
+                console.log(caseFiles);
+                return { id: client.dataValues.id, chbTransferred };
+            }
+            catch (e) {
+                console.log(e);
+            }
         });
     }
     updateClients(clients, chb) {

@@ -58,6 +58,7 @@ const sortBy = Joi.string().optional().empty("").allow("");
 const order = Joi.string().optional().empty("").allow("");
 
 const customerId = Joi.number();
+const chbTransferred = Joi.number();
 const responsibleUserId = Joi.number();
 
 const createJudicialCaseFileSchema = Joi.object<
@@ -90,6 +91,7 @@ const createJudicialCaseFileSchema = Joi.object<
     .allow(""),
   bankId: bankId.optional().empty("").allow(""),
   qrCode: qrCode.optional().empty("").allow(""),
+  chbTransferred: chbTransferred.optional().empty("").allow(""),
   responsibleUserId: responsibleUserId.optional().empty("").allow(""),
 });
 
@@ -123,6 +125,7 @@ const updateJudicialCaseFileSchema = Joi.object<
     .allow(""),
   bankId: bankId.optional().empty("").allow(""),
   qrCode: qrCode.optional().empty("").allow(""),
+  chbTransferred: chbTransferred.optional().empty("").allow(""),
   responsibleUserId: responsibleUserId.optional().empty("").allow(""),
 });
 

@@ -116,7 +116,10 @@ class JudicialCaseFileService {
     }
 
     let filtersWhere: any = {
-      customer_has_bank_id: chb,
+      [Op.or]: [
+        { customer_has_bank_id: chb },
+        { chb_transferred: chb },
+      ],
       id_judicial_case_file_related: null,
     };
 
@@ -124,10 +127,15 @@ class JudicialCaseFileService {
     if (clientName) {
       filtersWhere = {
         ...filtersWhere,
-        [Op.or]: [
-          { "$client.name$": { [Op.like]: `%${clientName}%` } },
-          { number_case_file: { [Op.like]: `%${clientName}%` } },
-          { secretary: { [Op.like]: `%${clientName}%` } },
+        [Op.and]: [
+          filtersWhere,
+          {
+            [Op.or]: [
+              { "$client.name$": { [Op.like]: `%${clientName}%` } },
+              { number_case_file: { [Op.like]: `%${clientName}%` } },
+              { secretary: { [Op.like]: `%${clientName}%` } },
+            ],
+          },
         ],
       };
     }
@@ -172,7 +180,6 @@ class JudicialCaseFileService {
         where: filtersWhere,
         order: orderConfig, // Orden configurado dinámicamente según sortBy y order
       });
-
       return { caseFiles, quantity };
     } catch (error) {
       console.error("Error en findAllByCHB:", error);
@@ -286,7 +293,10 @@ class JudicialCaseFileService {
       ],
       where: {
         numberCaseFile,
-        customer_has_bank_id: chb,
+        [Op.or]: [
+          { customer_has_bank_id: chb },
+          { chb_transferred: chb },
+        ],
       },
     });
 

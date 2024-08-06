@@ -110,15 +110,23 @@ class JudicialCaseFileService {
                 orderConfig = undefined;
             }
             let filtersWhere = {
-                customer_has_bank_id: chb,
+                [sequelize_2.Op.or]: [
+                    { customer_has_bank_id: chb },
+                    { chb_transferred: chb },
+                ],
                 id_judicial_case_file_related: null,
             };
             // Agregar filtro por nombre de cliente si se proporciona
             if (clientName) {
-                filtersWhere = Object.assign(Object.assign({}, filtersWhere), { [sequelize_2.Op.or]: [
-                        { "$client.name$": { [sequelize_2.Op.like]: `%${clientName}%` } },
-                        { number_case_file: { [sequelize_2.Op.like]: `%${clientName}%` } },
-                        { secretary: { [sequelize_2.Op.like]: `%${clientName}%` } },
+                filtersWhere = Object.assign(Object.assign({}, filtersWhere), { [sequelize_2.Op.and]: [
+                        filtersWhere,
+                        {
+                            [sequelize_2.Op.or]: [
+                                { "$client.name$": { [sequelize_2.Op.like]: `%${clientName}%` } },
+                                { number_case_file: { [sequelize_2.Op.like]: `%${clientName}%` } },
+                                { secretary: { [sequelize_2.Op.like]: `%${clientName}%` } },
+                            ],
+                        },
                     ] });
             }
             // Combinar filtros adicionales si se proporcionan
@@ -272,7 +280,10 @@ class JudicialCaseFileService {
                 ],
                 where: {
                     numberCaseFile,
-                    customer_has_bank_id: chb,
+                    [sequelize_2.Op.or]: [
+                        { customer_has_bank_id: chb },
+                        { chb_transferred: chb },
+                    ],
                 },
             });
             if (!judicialCaseFile) {

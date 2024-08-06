@@ -25,4 +25,5 @@ export type JudicialCaseFileType = {
   idJudicialCaseFileRelated: number;
   bankId: number;
   qrCode: string;
+  chbTransferred: number;
 };

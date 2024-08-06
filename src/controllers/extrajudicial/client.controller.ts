@@ -206,9 +206,9 @@ export const transferClientToAnotherBankController = async (
 
     const sumary = generateLogSummary({
       method: req.method,
-      oldData: data.oldData,
-      newData: data.newData,
-      id: data.id,
+      oldData: data?.oldData ?? {},
+      newData: data?.newData ?? {},
+      id: data?.id ?? 0,
     });
 
     await serviceUserLog.create({
@@ -221,7 +221,7 @@ export const transferClientToAnotherBankController = async (
       methodSumary: sumary,
     });
 
-    res.status(201).json({ id: data.id, chbTransferred: data.chbTransferred });
+    res.status(201).json({ id: data?.id, chbTransferred: data?.chbTransferred });
   } catch (error) {
     next(error);
   }
