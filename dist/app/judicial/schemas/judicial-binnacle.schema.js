@@ -13,6 +13,10 @@ const judicialFileCaseId = joi_1.default.number();
 const date = joi_1.default.date();
 const sortBy = joi_1.default.string().optional().empty("").allow("");
 const order = joi_1.default.string().optional().empty("").allow("");
+const notificationType = joi_1.default.string().optional().empty("").allow("");
+const userDescription = joi_1.default.string().optional().empty("").allow("");
+const fojas = joi_1.default.number().optional().empty("").allow("");
+const createdBy = joi_1.default.number().optional().empty("").allow("");
 const createJudicialBinnacleSchema = joi_1.default.object({
     binnacleTypeId: binnacleTypeId.required(),
     judicialBinProceduralStageId: judicialBinProceduralStageId.required(),
@@ -20,12 +24,20 @@ const createJudicialBinnacleSchema = joi_1.default.object({
     lastPerformed: lastPerformed.required(),
     date: date.required(),
     judicialFileCaseId: judicialFileCaseId.required(),
+    notificationType: notificationType.required(),
+    userDescription: userDescription.required(),
+    fojas: fojas.required(),
+    createdBy: createdBy.required(),
 });
 const updateJudicialBinnacleSchema = joi_1.default.object({
     lastPerformed: lastPerformed.required(),
     judicialBinProceduralStageId: judicialBinProceduralStageId.required(),
     binnacleTypeId: binnacleTypeId.required(),
     date: date.required(),
+    notificationType: notificationType.required(),
+    userDescription: userDescription.required(),
+    fojas: fojas.required(),
+    createdBy: createdBy.required(),
 });
 const getJudicialBinnacleByIDSchema = joi_1.default.object({
     id: id.required(),

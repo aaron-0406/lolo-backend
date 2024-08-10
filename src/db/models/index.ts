@@ -61,6 +61,7 @@ import judicialCollateralChargesEncumbrancesModel from "./judicial-collateral-ch
 import judicialCollateralChargesEncumbrancesTypeLoadModel from "./judicial-collateral-charges-encumbrances-type-load.model";
 import judicialCollateralFilesModel from "./judicial-collateral-files.model";
 import judicialCollateralActionRound from "./judicial-collateral-auction-round.model";
+import judicialBinNotificationModel from "./judicial-bin-notification.model";
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
@@ -144,6 +145,9 @@ const { JudicialCollateralFiles, JudicialCollateralFilesSchema } =
   judicialCollateralFilesModel;
 const { JudicialCollateralAuctionRound, JudicialCollateralAuctionRoundSchema } =
   judicialCollateralActionRound;
+
+const { JudicialBinNotification, JudicialBinNotificationSchema } =
+  judicialBinNotificationModel;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -294,6 +298,11 @@ export const setupModels = (sequelize: Sequelize) => {
     JudicialCollateralAuctionRound.config(sequelize)
   );
 
+  JudicialBinNotification.init(
+    JudicialBinNotificationSchema,
+    JudicialBinNotification.config(sequelize)
+  );
+
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
   Bank.associate(sequelize.models);
@@ -354,4 +363,5 @@ export const setupModels = (sequelize: Sequelize) => {
   JudicialCollateralChargesEncumbrancesTypeLoad.associate(sequelize.models);
   JudicialCollateralFiles.associate(sequelize.models);
   JudicialCollateralAuctionRound.associate(sequelize.models);
+  JudicialBinNotification.associate(sequelize.models);
 };

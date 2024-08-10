@@ -97,6 +97,31 @@ const JudicialBinnacleSchema: ModelAttributes<
     type: DataTypes.TEXT("long"),
     field: "last_performed",
   },
+
+  notificationType: {
+    allowNull: true,
+    type: DataTypes.STRING(200),
+    field: "notification_type",
+  },
+
+  userDescription: {
+    allowNull: true,
+    type: DataTypes.STRING(200),
+    field: "user_description",
+  },
+
+  fojas: {
+    allowNull: true,
+    type: DataTypes.NUMBER,
+    field: "fojas",
+  },
+
+  createdBy: {
+    allowNull: true,
+    type: DataTypes.NUMBER,
+    field: "created_by",
+  },
+
 };
 
 class JudicialBinnacle extends Model {
@@ -112,6 +137,10 @@ class JudicialBinnacle extends Model {
     this.belongsTo(models.JUDICIAL_BIN_TYPE_BINNACLE, { as: "binnacleType" });
     this.belongsTo(models.JUDICIAL_BIN_PROCEDURAL_STAGE, {
       as: "judicialBinProceduralStage",
+    });
+    this.hasMany(models.JUDICIAL_BIN_NOTIFICATION, {
+      as: "judicialBinNotifications",
+      foreignKey: "idJudicialBinacle",
     });
   }
 

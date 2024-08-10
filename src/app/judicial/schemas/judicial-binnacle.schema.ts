@@ -1,4 +1,4 @@
-import Joi from "joi";
+import Joi, { not } from "joi";
 import { JudicialBinnacleType } from "../types/judicial-binnacle.type";
 
 const id = Joi.number();
@@ -10,6 +10,10 @@ const judicialFileCaseId = Joi.number();
 const date = Joi.date();
 const sortBy = Joi.string().optional().empty("").allow("");
 const order = Joi.string().optional().empty("").allow("");
+const notificationType = Joi.string().optional().empty("").allow("");
+const userDescription = Joi.string().optional().empty("").allow("");
+const fojas = Joi.number().optional().empty("").allow("");
+const createdBy = Joi.number().optional().empty("").allow("");
 
 const createJudicialBinnacleSchema = Joi.object<
   Omit<JudicialBinnacleType, "id" | "createdAt" | "updatedAt" | "deletedAt">,
@@ -21,6 +25,10 @@ const createJudicialBinnacleSchema = Joi.object<
   lastPerformed: lastPerformed.required(),
   date: date.required(),
   judicialFileCaseId: judicialFileCaseId.required(),
+  notificationType: notificationType.required(),
+  userDescription: userDescription.required(),
+  fojas: fojas.required(),
+  createdBy: createdBy.required(),
 });
 
 const updateJudicialBinnacleSchema = Joi.object<
@@ -39,6 +47,10 @@ const updateJudicialBinnacleSchema = Joi.object<
   judicialBinProceduralStageId: judicialBinProceduralStageId.required(),
   binnacleTypeId: binnacleTypeId.required(),
   date: date.required(),
+  notificationType: notificationType.required(),
+  userDescription: userDescription.required(),
+  fojas: fojas.required(),
+  createdBy: createdBy.required(),
 });
 
 const getJudicialBinnacleByIDSchema = Joi.object<{ id: number }, true>({
