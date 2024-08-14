@@ -63,6 +63,9 @@ import departmentRouter from "./config/department.routes";
 import districtRouter from "./config/districts.routes";
 import provinceRouter from "./config/province.routes";
 import judicialCollateralAuctionRoundRouter from "./judicial/judicial-collateral-auction-round.routes";
+import tariffRouter from "./config/tariff.routes";
+import tariffIntervalRouter from "./config/tariff-intervals.routes";
+import tariffIntervalMatchRouter from "./config/tariff-intervals-match.routes";
 
 const routerApi = (app: Express) => {
   const router = express.Router();
@@ -144,6 +147,9 @@ const routerApi = (app: Express) => {
   router.use("/config/departments", departmentRouter)
   router.use("/config/districts", districtRouter)
   router.use("/config/provinces", provinceRouter)
+  router.use("/config/tariff", tariffRouter)
+  router.use("/config/tariff-intervals", tariffIntervalRouter)
+  router.use("/config/tariff-intervals-match", tariffIntervalMatchRouter) 
 };
 
 export default routerApi;

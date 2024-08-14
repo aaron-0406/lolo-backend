@@ -10,6 +10,8 @@ const judicialFileCaseId = Joi.number();
 const date = Joi.date();
 const sortBy = Joi.string().optional().empty("").allow("");
 const order = Joi.string().optional().empty("").allow("");
+const totalTariff = Joi.number().optional().empty(0).allow(0);
+const tariffHistory = Joi.string().optional().empty("").allow("");
 
 const createJudicialBinnacleSchema = Joi.object<
   Omit<JudicialBinnacleType, "id" | "createdAt" | "updatedAt" | "deletedAt">,
@@ -20,6 +22,8 @@ const createJudicialBinnacleSchema = Joi.object<
   customerHasBankId: customerHasBankId.required(),
   lastPerformed: lastPerformed.required(),
   date: date.required(),
+  totalTariff: totalTariff.required(),
+  tariffHistory: tariffHistory.required(),
   judicialFileCaseId: judicialFileCaseId.required(),
 });
 
@@ -39,6 +43,8 @@ const updateJudicialBinnacleSchema = Joi.object<
   judicialBinProceduralStageId: judicialBinProceduralStageId.required(),
   binnacleTypeId: binnacleTypeId.required(),
   date: date.required(),
+  totalTariff: totalTariff.required(),
+  tariffHistory: tariffHistory.required(),
 });
 
 const getJudicialBinnacleByIDSchema = Joi.object<{ id: number }, true>({

@@ -66,6 +66,9 @@ const judicial_collateral_charges_encumbrances_model_1 = __importDefault(require
 const judicial_collateral_charges_encumbrances_type_load_model_1 = __importDefault(require("./judicial-collateral-charges-encumbrances-type-load.model"));
 const judicial_collateral_files_model_1 = __importDefault(require("./judicial-collateral-files.model"));
 const judicial_collateral_auction_round_model_1 = __importDefault(require("./judicial-collateral-auction-round.model"));
+const tariff_model_1 = __importDefault(require("./tariff.model"));
+const tariff_interval_model_1 = __importDefault(require("./tariff-interval.model"));
+const tariff_interval_match_model_1 = __importDefault(require("./tariff-interval-match.model"));
 const { Customer, CustomerSchema } = customer_model_1.default;
 const { Funcionario, FuncionarioSchema } = funcionario_model_1.default;
 const { Bank, BankSchema } = bank_model_1.default;
@@ -128,6 +131,9 @@ const { JudicialCollateralChargesEncumbrances, JudicialCollateralChargesEncumbra
 const { JudicialCollateralChargesEncumbrancesTypeLoad, JudicialCollateralChargesEncumbrancesTypeLoadSchema, } = judicial_collateral_charges_encumbrances_type_load_model_1.default;
 const { JudicialCollateralFiles, JudicialCollateralFilesSchema } = judicial_collateral_files_model_1.default;
 const { JudicialCollateralAuctionRound, JudicialCollateralAuctionRoundSchema } = judicial_collateral_auction_round_model_1.default;
+const { Tariff, TariffSchema } = tariff_model_1.default;
+const { TariffInterval, TariffIntervalSchema } = tariff_interval_model_1.default;
+const { TariffIntervalMatch, TariffIntervalMatchSchema } = tariff_interval_match_model_1.default;
 const setupModels = (sequelize) => {
     Customer.init(CustomerSchema, Customer.config(sequelize));
     Bank.init(BankSchema, Bank.config(sequelize));
@@ -191,6 +197,9 @@ const setupModels = (sequelize) => {
     JudicialCollateralChargesEncumbrancesTypeLoad.init(JudicialCollateralChargesEncumbrancesTypeLoadSchema, JudicialCollateralChargesEncumbrancesTypeLoad.config(sequelize));
     JudicialCollateralFiles.init(JudicialCollateralFilesSchema, JudicialCollateralFiles.config(sequelize));
     JudicialCollateralAuctionRound.init(JudicialCollateralAuctionRoundSchema, JudicialCollateralAuctionRound.config(sequelize));
+    Tariff.init(TariffSchema, Tariff.config(sequelize));
+    TariffInterval.init(TariffIntervalSchema, TariffInterval.config(sequelize));
+    TariffIntervalMatch.init(TariffIntervalMatchSchema, TariffIntervalMatch.config(sequelize));
     Customer.associate(sequelize.models);
     CustomerUser.associate(sequelize.models);
     Bank.associate(sequelize.models);
@@ -251,5 +260,8 @@ const setupModels = (sequelize) => {
     JudicialCollateralChargesEncumbrancesTypeLoad.associate(sequelize.models);
     JudicialCollateralFiles.associate(sequelize.models);
     JudicialCollateralAuctionRound.associate(sequelize.models);
+    Tariff.associate(sequelize.models);
+    TariffInterval.associate(sequelize.models);
+    TariffIntervalMatch.associate(sequelize.models);
 };
 exports.setupModels = setupModels;
