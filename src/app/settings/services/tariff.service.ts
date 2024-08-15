@@ -59,7 +59,6 @@ class TariffService {
 
     if (!requestOf.length) return;
 
-    console.log(requestOf[0].dataValues.tariffIntervalMatch);
 
     if (!requestOf[0].dataValues.tariffIntervalMatch.length) return;
 
