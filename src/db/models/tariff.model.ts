@@ -35,9 +35,8 @@ const TariffSchema: ModelAttributes<Tariff, TariffType> = {
 class Tariff extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.hasMany(models.TARIFF_INTERVAL_MATCH, {
-      foreignKey: "tariffId",
-      sourceKey: "id",
       as: "tariffIntervalMatch",
+      foreignKey: "tariffId",
     });
   }
 

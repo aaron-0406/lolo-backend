@@ -10,6 +10,8 @@ import { TariffIntervalMatchType } from "../../app/settings/types/tariff-interva
 import tariffIntervalModel from "./tariff-interval.model";
 import tariffModel from "./tariff.model";
 
+const { TARIFF_TABLE } = tariffModel
+const { TARIFF_INTERVAL_TABLE } = tariffIntervalModel
 const TARIFF_INTERVAL_MATCH_TABLE = "TARIFF_INTERVAL_MATCH";
 
 const TariffIntervalMatchSchema: ModelAttributes<TariffIntervalMatch, TariffIntervalMatchType> = {
@@ -23,8 +25,9 @@ const TariffIntervalMatchSchema: ModelAttributes<TariffIntervalMatch, TariffInte
   tariffId: {
     allowNull: false,
     type: DataTypes.INTEGER,
+    field: "tariff_id",
     references: {
-      model: tariffModel.TARIFF_TABLE,
+      model: TARIFF_TABLE,
       key: "id_tariff",
     },
     onUpdate: "CASCADE",
@@ -33,8 +36,9 @@ const TariffIntervalMatchSchema: ModelAttributes<TariffIntervalMatch, TariffInte
   intervalId: {
     allowNull: false,
     type: DataTypes.INTEGER,
+    field: "interval_id",
     references: {
-      model: tariffIntervalModel.TARIFF_INTERVAL_TABLE,
+      model: TARIFF_INTERVAL_TABLE,
       key: "id_tariff_interval",
     },
     onUpdate: "CASCADE",
@@ -49,8 +53,12 @@ const TariffIntervalMatchSchema: ModelAttributes<TariffIntervalMatch, TariffInte
 class TariffIntervalMatch extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.belongsTo(models.TARIFF_INTERVAL,{
+      as: "tariffInterval",
       foreignKey: "intervalId",
-      as: "interval",
+    })
+    this.belongsTo(models.TARIFF,{
+      as: "tariff",
+      foreignKey: "tariffId",
     })
   }
   static config(sequelize: Sequelize) {

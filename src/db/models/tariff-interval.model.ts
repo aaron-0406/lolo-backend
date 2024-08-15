@@ -18,6 +18,7 @@ const TariffIntervalSchema: ModelAttributes<TariffInterval, TariffIntervalType> 
     type: DataTypes.INTEGER,
   },
   description:{
+    field: "description",
     allowNull: false,
     type: DataTypes.TEXT("long"),
   },
@@ -26,8 +27,9 @@ const TariffIntervalSchema: ModelAttributes<TariffInterval, TariffIntervalType> 
     type: DataTypes.STRING(200),
   },
   intervalDescription: {
-    allowNull: false,
     type: DataTypes.STRING(200),
+    allowNull: false,
+    field: "interval_description",
   },
 };
 
@@ -35,7 +37,6 @@ class TariffInterval extends Model {
   static associate(models: { [key: string]: ModelCtor<Model> }) {
     this.hasMany(models.TARIFF_INTERVAL_MATCH, {
       foreignKey: "intervalId",
-      sourceKey: "id",
       as: "tariffIntervalMatch",
     });
   }

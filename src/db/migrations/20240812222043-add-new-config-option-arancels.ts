@@ -61,7 +61,7 @@ const tariffInterval = [
   { description: 'MÁS 1000 URP HASTA 2000 URP', interval: "[515000, 1030000]", interval_description: 'MÁS S/ 515,000 A S/ 1\'030,000' },
   { description: 'MÁS 2000 URP HASTA 3000 URP', interval: "[1030000, 1545000]", interval_description: 'MÁS S/ 1\'030,000 A S/ 1\'545,000' },
   { description: 'MÁS 3000 URP HASTA 3500 URP', interval: "[1545000, 1802500]", interval_description: 'MÁS DE S/ 1\'545,000 A S/ 1\'802,500' },
-  { description: 'MÁS 3500 URP HASTA 4500 URP', interval: "[1802500, null]", interval_description: 'MÁS DE S/ 1\'802,500' },
+  { description: 'MÁS de 3500 URP', interval: "[1802500, null]", interval_description: 'MÁS DE S/ 1\'802,500' },
 ]
 
 const tariffIntervalMatch = [
