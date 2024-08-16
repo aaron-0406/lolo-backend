@@ -7,7 +7,6 @@ export const getTariffsController = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { type } = req.params;
   const data = await service.findAll()
   res.status(200).json(data);
 };
