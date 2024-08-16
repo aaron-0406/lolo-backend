@@ -10,8 +10,12 @@ const judicialFileCaseId = Joi.number();
 const date = Joi.date();
 const sortBy = Joi.string().optional().empty("").allow("");
 const order = Joi.string().optional().empty("").allow("");
-const totalTariff = Joi.number().optional().empty(0).allow(0);
-const tariffHistory = Joi.string().optional().empty("").allow("");
+const totalTariff = Joi.number().optional().empty(0).allow(0).messages({
+  "number.empty": "El debe seleccionar un proceso",
+});
+const tariffHistory = Joi.string().optional().empty("").allow("").messages({
+  "string.empty": "No se selecciono ningun proceso",
+});
 
 const createJudicialBinnacleSchema = Joi.object<
   Omit<JudicialBinnacleType, "id" | "createdAt" | "updatedAt" | "deletedAt">,
@@ -71,8 +75,8 @@ const updateJudicialBinnacleTariffBodySchema = Joi.object<
   { totalTariff: number, tariffHistory:string },
   true
 >({
-  totalTariff: totalTariff.required(),
-  tariffHistory: tariffHistory.required(),
+  totalTariff: totalTariff,
+  tariffHistory: tariffHistory,
 });
 
 const getJudicialBinnacleByCHBSchema = Joi.object<{ fileCase: number }, true>({
