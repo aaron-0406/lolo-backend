@@ -127,8 +127,14 @@ export const updateJudicialBinnacleTariffController = async (
     const sumary = generateLogSummary({
       method: req.method,
       id: newJudicialBinnacle.dataValues.id,
-      oldData: oldJudicialBinacle,
-      newData: newJudicialBinnacle.dataValues,
+      oldData: {
+        ...oldJudicialBinacle,
+        tariffHistory: oldJudicialBinacle.tariffHistory.replace(/"/g, "").split(","),
+      },
+      newData: {
+        ...newJudicialBinnacle.dataValues,
+        tariffHistory: newJudicialBinnacle.dataValues.tariffHistory.replace(/"/g, "").split(","),
+      },
     });
 
     await serviceUserLog.create({
