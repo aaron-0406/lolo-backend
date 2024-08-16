@@ -15,7 +15,7 @@ const newPermissions = [
   {
     name:"CUADRO DE ARANCELES",
     code:"P43",
-    icon:"-",
+    icon:"ri-coin-fill",
     link:"/configuracion/:urlIdentifier/cuadro-aranceles",
     id_permission_main: 185,
   }

@@ -9,6 +9,7 @@ import {
   getJudicialBinnacleByCHBController,
   getJudicialBinnacleByIdController,
   updateJudicialBinnacleController,
+  updateJudicialBinnacleTariffController,
 } from "../../controllers/judicial/judicial-binnacle.controller";
 import { JWTAuth } from "../../middlewares/auth.handler";
 import { archivosBinnacle } from "../../middlewares/multer.handler";
@@ -19,6 +20,7 @@ const {
   getJudicialBinnacleByCHBSchema,
   updateJudicialBinnacleParamSchema,
   getJudicialBinnacleByCHBSchemaQuery,
+  updateJudicialBinnacleTariffBodySchema,
 } = judicialBinnacleSchema;
 
 const router = express.Router();
@@ -59,6 +61,14 @@ router.patch(
   validatorHandler(updateJudicialBinnacleParamSchema, "params"),
   multerFile,
   updateJudicialBinnacleController
+);
+
+router.patch(
+  "/:id/tariff",
+  JWTAuth,
+  validatorHandler(getJudicialBinnacleByIDSchema, "params"),
+  validatorHandler(updateJudicialBinnacleTariffBodySchema, "body"),
+  updateJudicialBinnacleTariffController
 );
 
 router.delete(

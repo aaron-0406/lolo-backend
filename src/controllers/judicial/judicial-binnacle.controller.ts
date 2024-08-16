@@ -114,6 +114,38 @@ export const updateJudicialBinnacleController = async (
   }
 };
 
+export const updateJudicialBinnacleTariffController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const { body } = req;
+    const { oldJudicialBinacle, newJudicialBinnacle } = await service.updateTariff(id, body);
+
+    const sumary = generateLogSummary({
+      method: req.method,
+      id: newJudicialBinnacle.dataValues.id,
+      oldData: oldJudicialBinacle,
+      newData: newJudicialBinnacle.dataValues,
+    });
+
+    await serviceUserLog.create({
+      customerUserId: Number(req.user?.id),
+      codeAction: "P13-01-01-02",
+      entity: JUDICIAL_BINNACLE_TABLE,
+      entityId: Number(newJudicialBinnacle.dataValues.id),
+      ip: req.clientIp ?? "",
+      customerId: Number(req.user?.customerId),
+      methodSumary: sumary,
+    });
+    res.json(newJudicialBinnacle);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const deleteJudicialBinnacleController = async (
   req: Request,
   res: Response,

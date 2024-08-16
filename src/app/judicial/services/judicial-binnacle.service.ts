@@ -165,39 +165,57 @@ class JudicialBinnacleService {
     files: Array<any>,
     params: { idCustomer: number; code: string }
   ) {
-    const judicialBinnacle = await this.findByID(id);
-    const oldJudicialBinacle = { ...judicialBinnacle.get() };
-    await judicialBinnacle.update(changes);
-    files.forEach(async (file) => {
-      const newBinFile = await models.JUDICIAL_BIN_FILE.create({
-        judicialBinnacleId: id,
-        originalName: file.originalname,
-        nameOriginAws: "",
-        customerHasBankId: judicialBinnacle.dataValues.customerHasBankId,
-        size: file.size,
+    try {
+      const judicialBinnacle = await this.findByID(id);
+      const oldJudicialBinacle = { ...judicialBinnacle.get() };
+      console.log(changes)
+      await judicialBinnacle.update(changes);
+      files.forEach(async (file) => {
+        const newBinFile = await models.JUDICIAL_BIN_FILE.create({
+          judicialBinnacleId: id,
+          originalName: file.originalname,
+          nameOriginAws: "",
+          customerHasBankId: judicialBinnacle.dataValues.customerHasBankId,
+          size: file.size,
+        });
+
+        const newFileName = `${newBinFile.dataValues.id}-${file.filename}`;
+        await renameFile(`../public/docs/`, file.filename, newFileName);
+        file.filename = newFileName;
+
+        // UPLOAD TO AWS
+        await uploadFile(
+          file,
+          `${config.AWS_CHB_PATH}${params.idCustomer}/${judicialBinnacle.dataValues.customerHasBankId}/${params.code}/case-file/${judicialBinnacle.dataValues.judicialFileCaseId}/binnacle`
+        );
+
+        // UPDATE NAME IN DATABASE
+        newBinFile.update({
+          nameOriginAws: file.filename,
+        });
+
+        // DELETE TEMP FILE
+        await deleteFile("../public/docs", file.filename);
       });
 
-      const newFileName = `${newBinFile.dataValues.id}-${file.filename}`;
-      await renameFile(`../public/docs/`, file.filename, newFileName);
-      file.filename = newFileName;
+      const newJudicialBinnacle = await this.findByID(id);
+      return { oldJudicialBinacle, newJudicialBinnacle };
+    } catch (error) {
+      console.error("Error in update:", error);
+      throw error;
+    }
+  }
 
-      // UPLOAD TO AWS
-      await uploadFile(
-        file,
-        `${config.AWS_CHB_PATH}${params.idCustomer}/${judicialBinnacle.dataValues.customerHasBankId}/${params.code}/case-file/${judicialBinnacle.dataValues.judicialFileCaseId}/binnacle`
-      );
-
-      // UPDATE NAME IN DATABASE
-      newBinFile.update({
-        nameOriginAws: file.filename,
-      });
-
-      // DELETE TEMP FILE
-      await deleteFile("../public/docs", file.filename);
-    });
-
-    const newJudicialBinnacle = await this.findByID(id);
-    return { oldJudicialBinacle, newJudicialBinnacle };
+  async updateTariff(id: string, changes: { totalTariff: number, tariffHistory:string}) {
+    try {
+      const judicialBinnacle = await this.findByID(id);
+      const oldJudicialBinacle = { ...judicialBinnacle.get() };
+      const newJudicialBinnacle = await judicialBinnacle.update(changes);
+      return { oldJudicialBinacle, newJudicialBinnacle };
+    } catch (error) {
+      console.error("Error in update:", error);
+      throw error;
+    }
   }
 
   async delete(id: string) {

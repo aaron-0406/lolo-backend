@@ -67,6 +67,14 @@ const updateJudicialBinnacleParamSchema = Joi.object<
   idCustomer: Joi.number().required(),
 });
 
+const updateJudicialBinnacleTariffBodySchema = Joi.object<
+  { totalTariff: number, tariffHistory:string },
+  true
+>({
+  totalTariff: totalTariff.required(),
+  tariffHistory: tariffHistory.required(),
+});
+
 const getJudicialBinnacleByCHBSchema = Joi.object<{ fileCase: number }, true>({
   fileCase: Joi.number().required(),
 });
@@ -83,5 +91,6 @@ export default {
   getJudicialBinnacleByIDSchema,
   createJudicialBinnacleParamSchema,
   updateJudicialBinnacleParamSchema,
+  updateJudicialBinnacleTariffBodySchema,
   getJudicialBinnacleByCHBSchemaQuery,
 };
