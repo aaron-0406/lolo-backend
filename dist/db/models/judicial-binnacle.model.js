@@ -86,6 +86,18 @@ const JudicialBinnacleSchema = {
         type: sequelize_1.DataTypes.TEXT("long"),
         field: "last_performed",
     },
+    totalTariff: {
+        allowNull: false,
+        type: sequelize_1.DataTypes.DECIMAL(10, 2),
+        defaultValue: 0,
+        field: "total_tariff",
+    },
+    tariffHistory: {
+        allowNull: false,
+        defaultValue: "",
+        type: sequelize_1.DataTypes.TEXT("long"),
+        field: "tariff_history",
+    }
 };
 class JudicialBinnacle extends sequelize_1.Model {
     static associate(models) {

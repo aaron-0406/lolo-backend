@@ -6,6 +6,8 @@ export type JudicialBinnacleType = {
   date: Date;
   judicialFileCaseId: number;
   customerHasBankId: number;
+  totalTariff: number;
+  tariffHistory: string;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
