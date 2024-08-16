@@ -11,6 +11,7 @@ const TariffIntervalSchema = {
         type: sequelize_1.DataTypes.INTEGER,
     },
     description: {
+        field: "description",
         allowNull: false,
         type: sequelize_1.DataTypes.TEXT("long"),
     },
@@ -19,15 +20,15 @@ const TariffIntervalSchema = {
         type: sequelize_1.DataTypes.STRING(200),
     },
     intervalDescription: {
-        allowNull: false,
         type: sequelize_1.DataTypes.STRING(200),
+        allowNull: false,
+        field: "interval_description",
     },
 };
 class TariffInterval extends sequelize_1.Model {
     static associate(models) {
         this.hasMany(models.TARIFF_INTERVAL_MATCH, {
             foreignKey: "intervalId",
-            sourceKey: "id",
             as: "tariffIntervalMatch",
         });
     }

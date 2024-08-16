@@ -67,6 +67,7 @@ const department_routes_1 = __importDefault(require("./config/department.routes"
 const districts_routes_1 = __importDefault(require("./config/districts.routes"));
 const province_routes_1 = __importDefault(require("./config/province.routes"));
 const judicial_collateral_auction_round_routes_1 = __importDefault(require("./judicial/judicial-collateral-auction-round.routes"));
+const tariff_routes_1 = __importDefault(require("./config/tariff.routes"));
 const routerApi = (app) => {
     const router = express_1.default.Router();
     app.use("/api/v1", router);
@@ -133,5 +134,6 @@ const routerApi = (app) => {
     router.use("/config/departments", department_routes_1.default);
     router.use("/config/districts", districts_routes_1.default);
     router.use("/config/provinces", province_routes_1.default);
+    router.use("/config/tariff", tariff_routes_1.default);
 };
 exports.default = routerApi;

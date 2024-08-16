@@ -26,9 +26,8 @@ const TariffSchema = {
 class Tariff extends sequelize_1.Model {
     static associate(models) {
         this.hasMany(models.TARIFF_INTERVAL_MATCH, {
-            foreignKey: "tariffId",
-            sourceKey: "id",
             as: "tariffIntervalMatch",
+            foreignKey: "tariffId",
         });
     }
     static config(sequelize) {

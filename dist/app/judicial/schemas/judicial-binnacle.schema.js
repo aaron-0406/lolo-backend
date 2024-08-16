@@ -13,8 +13,12 @@ const judicialFileCaseId = joi_1.default.number();
 const date = joi_1.default.date();
 const sortBy = joi_1.default.string().optional().empty("").allow("");
 const order = joi_1.default.string().optional().empty("").allow("");
-const totalTariff = joi_1.default.number().optional().empty(0).allow(0);
-const tariffHistory = joi_1.default.string().optional().empty("").allow("");
+const totalTariff = joi_1.default.number().optional().empty(0).allow(0).messages({
+    "number.empty": "El debe seleccionar un proceso",
+});
+const tariffHistory = joi_1.default.string().optional().empty("").allow("").messages({
+    "string.empty": "No se selecciono ningun proceso",
+});
 const createJudicialBinnacleSchema = joi_1.default.object({
     binnacleTypeId: binnacleTypeId.required(),
     judicialBinProceduralStageId: judicialBinProceduralStageId.required(),
@@ -45,6 +49,10 @@ const updateJudicialBinnacleParamSchema = joi_1.default.object({
     code: joi_1.default.string().required(),
     idCustomer: joi_1.default.number().required(),
 });
+const updateJudicialBinnacleTariffBodySchema = joi_1.default.object({
+    totalTariff: totalTariff,
+    tariffHistory: tariffHistory,
+});
 const getJudicialBinnacleByCHBSchema = joi_1.default.object({
     fileCase: joi_1.default.number().required(),
 });
@@ -59,5 +67,6 @@ exports.default = {
     getJudicialBinnacleByIDSchema,
     createJudicialBinnacleParamSchema,
     updateJudicialBinnacleParamSchema,
+    updateJudicialBinnacleTariffBodySchema,
     getJudicialBinnacleByCHBSchemaQuery,
 };

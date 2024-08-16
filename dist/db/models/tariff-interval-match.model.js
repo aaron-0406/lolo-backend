@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const tariff_interval_model_1 = __importDefault(require("./tariff-interval.model"));
 const tariff_model_1 = __importDefault(require("./tariff.model"));
+const { TARIFF_TABLE } = tariff_model_1.default;
+const { TARIFF_INTERVAL_TABLE } = tariff_interval_model_1.default;
 const TARIFF_INTERVAL_MATCH_TABLE = "TARIFF_INTERVAL_MATCH";
 const TariffIntervalMatchSchema = {
     id: {
@@ -18,8 +20,9 @@ const TariffIntervalMatchSchema = {
     tariffId: {
         allowNull: false,
         type: sequelize_1.DataTypes.INTEGER,
+        field: "tariff_id",
         references: {
-            model: tariff_model_1.default.TARIFF_TABLE,
+            model: TARIFF_TABLE,
             key: "id_tariff",
         },
         onUpdate: "CASCADE",
@@ -28,8 +31,9 @@ const TariffIntervalMatchSchema = {
     intervalId: {
         allowNull: false,
         type: sequelize_1.DataTypes.INTEGER,
+        field: "interval_id",
         references: {
-            model: tariff_interval_model_1.default.TARIFF_INTERVAL_TABLE,
+            model: TARIFF_INTERVAL_TABLE,
             key: "id_tariff_interval",
         },
         onUpdate: "CASCADE",
@@ -43,8 +47,12 @@ const TariffIntervalMatchSchema = {
 class TariffIntervalMatch extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.TARIFF_INTERVAL, {
+            as: "tariffInterval",
             foreignKey: "intervalId",
-            as: "interval",
+        });
+        this.belongsTo(models.TARIFF, {
+            as: "tariff",
+            foreignKey: "tariffId",
         });
     }
     static config(sequelize) {
