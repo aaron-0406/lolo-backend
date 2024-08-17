@@ -23,7 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteJudicialBinnacleController = exports.updateJudicialBinnacleController = exports.createJudicialBinnacleController = exports.getJudicialBinnacleByIdController = exports.getJudicialBinnacleByCHBController = void 0;
+exports.deleteJudicialBinnacleController = exports.updateJudicialBinnacleTariffController = exports.updateJudicialBinnacleController = exports.createJudicialBinnacleController = exports.getJudicialBinnacleByIdController = exports.getJudicialBinnacleByCHBController = void 0;
 const judicial_binnacle_service_1 = __importDefault(require("../../app/judicial/services/judicial-binnacle.service"));
 const user_log_service_1 = __importDefault(require("../../app/dash/services/user-log.service"));
 const judicial_binnacle_model_1 = __importDefault(require("../../db/models/judicial-binnacle.model"));
@@ -115,8 +115,36 @@ const updateJudicialBinnacleController = (req, res, next) => __awaiter(void 0, v
     }
 });
 exports.updateJudicialBinnacleController = updateJudicialBinnacleController;
-const deleteJudicialBinnacleController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const updateJudicialBinnacleTariffController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _h, _j, _k;
+    try {
+        const { id } = req.params;
+        const { body } = req;
+        const { oldJudicialBinacle, newJudicialBinnacle } = yield service.updateTariff(id, body);
+        const sumary = (0, user_log_1.generateLogSummary)({
+            method: req.method,
+            id: newJudicialBinnacle.dataValues.id,
+            oldData: Object.assign(Object.assign({}, oldJudicialBinacle), { tariffHistory: oldJudicialBinacle.tariffHistory.replace(/"/g, "").split(",") }),
+            newData: Object.assign(Object.assign({}, newJudicialBinnacle.dataValues), { tariffHistory: newJudicialBinnacle.dataValues.tariffHistory.replace(/"/g, "").split(",") }),
+        });
+        yield serviceUserLog.create({
+            customerUserId: Number((_h = req.user) === null || _h === void 0 ? void 0 : _h.id),
+            codeAction: "P13-01-01-02",
+            entity: JUDICIAL_BINNACLE_TABLE,
+            entityId: Number(newJudicialBinnacle.dataValues.id),
+            ip: (_j = req.clientIp) !== null && _j !== void 0 ? _j : "",
+            customerId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.customerId),
+            methodSumary: sumary,
+        });
+        res.json(newJudicialBinnacle);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.updateJudicialBinnacleTariffController = updateJudicialBinnacleTariffController;
+const deleteJudicialBinnacleController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _l, _m, _o;
     try {
         const { id } = req.params;
         const oldJudicialBinacle = yield service.delete(id);
@@ -126,12 +154,12 @@ const deleteJudicialBinnacleController = (req, res, next) => __awaiter(void 0, v
             oldData: oldJudicialBinacle,
         });
         yield serviceUserLog.create({
-            customerUserId: Number((_h = req.user) === null || _h === void 0 ? void 0 : _h.id),
+            customerUserId: Number((_l = req.user) === null || _l === void 0 ? void 0 : _l.id),
             codeAction: "P13-01-01-03",
             entity: JUDICIAL_BINNACLE_TABLE,
             entityId: Number(id),
-            ip: (_j = req.clientIp) !== null && _j !== void 0 ? _j : "",
-            customerId: Number((_k = req.user) === null || _k === void 0 ? void 0 : _k.customerId),
+            ip: (_m = req.clientIp) !== null && _m !== void 0 ? _m : "",
+            customerId: Number((_o = req.user) === null || _o === void 0 ? void 0 : _o.customerId),
             methodSumary: sumary,
         });
         res.status(201).json({ id: Number(id) });

@@ -35,13 +35,31 @@ const newPermissions = [
 ]
 
 export async function up(queryInterface: QueryInterface) {
+  await queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'index', {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    defaultValue: null
+  })
+
+  await queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'resolution_date', {
+    type: DataTypes.DATE,
+    allowNull: true,
+    defaultValue: null
+  })
+
+  await queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'entry_date', {
+    type: DataTypes.DATE,
+    allowNull: true,
+    defaultValue: null
+  })
+
   await queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'notification_type', {
     type: DataTypes.STRING(200),
     allowNull: true,
     defaultValue: null
   })
 
-  await queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'user_description', {
+  await queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'acto', {
     type: DataTypes.STRING(200),
     allowNull: true,
     defaultValue: null
@@ -53,8 +71,26 @@ export async function up(queryInterface: QueryInterface) {
     defaultValue: null
   })
 
-  await queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'created_by', {
+  await queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'folios', {
     type: DataTypes.INTEGER,
+    allowNull: true,
+    defaultValue: null
+  })
+
+  await queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'provedio_date', {
+    type: DataTypes.DATE,
+    allowNull: true,
+    defaultValue: null
+   })
+
+  await queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'user_description', {
+    type: DataTypes.STRING(200),
+    allowNull: true,
+    defaultValue: null
+  })
+
+  await queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'created_by', {
+    type: DataTypes.STRING(200),
     allowNull: true,
     defaultValue: null
   })

@@ -62,6 +62,9 @@ import judicialCollateralChargesEncumbrancesTypeLoadModel from "./judicial-colla
 import judicialCollateralFilesModel from "./judicial-collateral-files.model";
 import judicialCollateralActionRound from "./judicial-collateral-auction-round.model";
 import judicialBinNotificationModel from "./judicial-bin-notification.model";
+import tariffModel from "./tariff.model"
+import tariffIntervalModel from "./tariff-interval.model"
+import tariffIntervalMatchModel from "./tariff-interval-match.model"
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
@@ -145,6 +148,9 @@ const { JudicialCollateralFiles, JudicialCollateralFilesSchema } =
   judicialCollateralFilesModel;
 const { JudicialCollateralAuctionRound, JudicialCollateralAuctionRoundSchema } =
   judicialCollateralActionRound;
+const { Tariff, TariffSchema } = tariffModel;
+const { TariffInterval, TariffIntervalSchema } = tariffIntervalModel;
+const { TariffIntervalMatch, TariffIntervalMatchSchema } = tariffIntervalMatchModel;
 
 const { JudicialBinNotification, JudicialBinNotificationSchema } =
   judicialBinNotificationModel;
@@ -302,6 +308,9 @@ export const setupModels = (sequelize: Sequelize) => {
     JudicialBinNotificationSchema,
     JudicialBinNotification.config(sequelize)
   );
+  Tariff.init(TariffSchema, Tariff.config(sequelize));
+  TariffInterval.init(TariffIntervalSchema, TariffInterval.config(sequelize));
+  TariffIntervalMatch.init(TariffIntervalMatchSchema, TariffIntervalMatch.config(sequelize));
 
   Customer.associate(sequelize.models);
   CustomerUser.associate(sequelize.models);
@@ -364,4 +373,7 @@ export const setupModels = (sequelize: Sequelize) => {
   JudicialCollateralFiles.associate(sequelize.models);
   JudicialCollateralAuctionRound.associate(sequelize.models);
   JudicialBinNotification.associate(sequelize.models);
+  Tariff.associate(sequelize.models);
+  TariffInterval.associate(sequelize.models);
+  TariffIntervalMatch.associate(sequelize.models);
 };

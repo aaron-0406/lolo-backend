@@ -48,12 +48,27 @@ const newPermissions = [
 ];
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
+        yield queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'index', {
+            type: sequelize_1.DataTypes.INTEGER,
+            allowNull: true,
+            defaultValue: null
+        });
+        yield queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'resolution_date', {
+            type: sequelize_1.DataTypes.DATE,
+            allowNull: true,
+            defaultValue: null
+        });
+        yield queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'entry_date', {
+            type: sequelize_1.DataTypes.DATE,
+            allowNull: true,
+            defaultValue: null
+        });
         yield queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'notification_type', {
             type: sequelize_1.DataTypes.STRING(200),
             allowNull: true,
             defaultValue: null
         });
-        yield queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'user_description', {
+        yield queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'acto', {
             type: sequelize_1.DataTypes.STRING(200),
             allowNull: true,
             defaultValue: null
@@ -63,8 +78,23 @@ function up(queryInterface) {
             allowNull: true,
             defaultValue: null
         });
-        yield queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'created_by', {
+        yield queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'folios', {
             type: sequelize_1.DataTypes.INTEGER,
+            allowNull: true,
+            defaultValue: null
+        });
+        yield queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'provedio_date', {
+            type: sequelize_1.DataTypes.DATE,
+            allowNull: true,
+            defaultValue: null
+        });
+        yield queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'user_description', {
+            type: sequelize_1.DataTypes.STRING(200),
+            allowNull: true,
+            defaultValue: null
+        });
+        yield queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'created_by', {
+            type: sequelize_1.DataTypes.STRING(200),
             allowNull: true,
             defaultValue: null
         });

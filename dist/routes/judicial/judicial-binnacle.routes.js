@@ -10,7 +10,7 @@ const boom_1 = __importDefault(require("@hapi/boom"));
 const judicial_binnacle_controller_1 = require("../../controllers/judicial/judicial-binnacle.controller");
 const auth_handler_1 = require("../../middlewares/auth.handler");
 const multer_handler_1 = require("../../middlewares/multer.handler");
-const { getJudicialBinnacleByIDSchema, createJudicialBinnacleParamSchema, getJudicialBinnacleByCHBSchema, updateJudicialBinnacleParamSchema, getJudicialBinnacleByCHBSchemaQuery, } = judicial_binnacle_schema_1.default;
+const { getJudicialBinnacleByIDSchema, createJudicialBinnacleParamSchema, getJudicialBinnacleByCHBSchema, updateJudicialBinnacleParamSchema, getJudicialBinnacleByCHBSchemaQuery, updateJudicialBinnacleTariffBodySchema, } = judicial_binnacle_schema_1.default;
 const router = express_1.default.Router();
 const multerFile = (req, res, next) => {
     multer_handler_1.archivosBinnacle.array("file")(req, res, (err) => {
@@ -23,5 +23,6 @@ router.get("/file-case/:fileCase", auth_handler_1.JWTAuth, (0, validator_handler
 router.get("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getJudicialBinnacleByIDSchema, "params"), judicial_binnacle_controller_1.getJudicialBinnacleByIdController);
 router.post("/:idCustomer/:code", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(createJudicialBinnacleParamSchema, "params"), multerFile, judicial_binnacle_controller_1.createJudicialBinnacleController);
 router.patch("/:id/:idCustomer/:code", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(updateJudicialBinnacleParamSchema, "params"), multerFile, judicial_binnacle_controller_1.updateJudicialBinnacleController);
+router.patch("/:id/tariff", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getJudicialBinnacleByIDSchema, "params"), (0, validator_handler_1.default)(updateJudicialBinnacleTariffBodySchema, "body"), judicial_binnacle_controller_1.updateJudicialBinnacleTariffController);
 router.delete("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getJudicialBinnacleByIDSchema, "params"), judicial_binnacle_controller_1.deleteJudicialBinnacleController);
 exports.default = router;

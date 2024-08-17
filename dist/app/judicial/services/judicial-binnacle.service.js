@@ -151,31 +151,52 @@ class JudicialBinnacleService {
     }
     update(id, changes, files, params) {
         return __awaiter(this, void 0, void 0, function* () {
-            const judicialBinnacle = yield this.findByID(id);
-            const oldJudicialBinacle = Object.assign({}, judicialBinnacle.get());
-            yield judicialBinnacle.update(changes);
-            files.forEach((file) => __awaiter(this, void 0, void 0, function* () {
-                const newBinFile = yield models.JUDICIAL_BIN_FILE.create({
-                    judicialBinnacleId: id,
-                    originalName: file.originalname,
-                    nameOriginAws: "",
-                    customerHasBankId: judicialBinnacle.dataValues.customerHasBankId,
-                    size: file.size,
-                });
-                const newFileName = `${newBinFile.dataValues.id}-${file.filename}`;
-                yield (0, helpers_1.renameFile)(`../public/docs/`, file.filename, newFileName);
-                file.filename = newFileName;
-                // UPLOAD TO AWS
-                yield (0, aws_bucket_1.uploadFile)(file, `${config_1.default.AWS_CHB_PATH}${params.idCustomer}/${judicialBinnacle.dataValues.customerHasBankId}/${params.code}/case-file/${judicialBinnacle.dataValues.judicialFileCaseId}/binnacle`);
-                // UPDATE NAME IN DATABASE
-                newBinFile.update({
-                    nameOriginAws: file.filename,
-                });
-                // DELETE TEMP FILE
-                yield (0, helpers_1.deleteFile)("../public/docs", file.filename);
-            }));
-            const newJudicialBinnacle = yield this.findByID(id);
-            return { oldJudicialBinacle, newJudicialBinnacle };
+            try {
+                const judicialBinnacle = yield this.findByID(id);
+                const oldJudicialBinacle = Object.assign({}, judicialBinnacle.get());
+                console.log(changes);
+                yield judicialBinnacle.update(changes);
+                files.forEach((file) => __awaiter(this, void 0, void 0, function* () {
+                    const newBinFile = yield models.JUDICIAL_BIN_FILE.create({
+                        judicialBinnacleId: id,
+                        originalName: file.originalname,
+                        nameOriginAws: "",
+                        customerHasBankId: judicialBinnacle.dataValues.customerHasBankId,
+                        size: file.size,
+                    });
+                    const newFileName = `${newBinFile.dataValues.id}-${file.filename}`;
+                    yield (0, helpers_1.renameFile)(`../public/docs/`, file.filename, newFileName);
+                    file.filename = newFileName;
+                    // UPLOAD TO AWS
+                    yield (0, aws_bucket_1.uploadFile)(file, `${config_1.default.AWS_CHB_PATH}${params.idCustomer}/${judicialBinnacle.dataValues.customerHasBankId}/${params.code}/case-file/${judicialBinnacle.dataValues.judicialFileCaseId}/binnacle`);
+                    // UPDATE NAME IN DATABASE
+                    newBinFile.update({
+                        nameOriginAws: file.filename,
+                    });
+                    // DELETE TEMP FILE
+                    yield (0, helpers_1.deleteFile)("../public/docs", file.filename);
+                }));
+                const newJudicialBinnacle = yield this.findByID(id);
+                return { oldJudicialBinacle, newJudicialBinnacle };
+            }
+            catch (error) {
+                console.error("Error in update:", error);
+                throw error;
+            }
+        });
+    }
+    updateTariff(id, changes) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const judicialBinnacle = yield this.findByID(id);
+                const oldJudicialBinacle = Object.assign({}, judicialBinnacle.get());
+                const newJudicialBinnacle = yield judicialBinnacle.update(changes);
+                return { oldJudicialBinacle, newJudicialBinnacle };
+            }
+            catch (error) {
+                console.error("Error in update:", error);
+                throw error;
+            }
         });
     }
     delete(id) {

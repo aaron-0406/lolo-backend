@@ -98,16 +98,34 @@ const JudicialBinnacleSchema: ModelAttributes<
     field: "last_performed",
   },
 
+  index: {
+    allowNull: true,
+    type: DataTypes.INTEGER,
+    field: "index",
+  },
+
+  resolutionDate: {
+    allowNull: true,
+    type: DataTypes.DATE,
+    field: "resolution_date",
+  },
+
+  entryDate: {
+    allowNull: true,
+    type: DataTypes.DATE,
+    field: "entry_date",
+  },
+
   notificationType: {
     allowNull: true,
     type: DataTypes.STRING(200),
     field: "notification_type",
   },
 
-  userDescription: {
+  acto: {
     allowNull: true,
     type: DataTypes.STRING(200),
-    field: "user_description",
+    field: "acto",
   },
 
   fojas: {
@@ -116,10 +134,41 @@ const JudicialBinnacleSchema: ModelAttributes<
     field: "fojas",
   },
 
+  folios: {
+    allowNull: true,
+    type: DataTypes.NUMBER,
+    field: "folios",
+  },
+
+  provedioDate: {
+    allowNull: true,
+    type: DataTypes.DATE,
+    field: "provedio_date",
+  },
+
+  userDescription: {
+    allowNull: true,
+    type: DataTypes.STRING(200),
+    field: "user_description",
+  },
+
   createdBy: {
     allowNull: true,
     type: DataTypes.NUMBER,
     field: "created_by",
+  },
+
+  totalTariff: {
+    allowNull: false,
+    type: DataTypes.DECIMAL(10, 2),
+    defaultValue: 0,
+    field: "total_tariff",
+  },
+  tariffHistory: {
+    allowNull: false,
+    defaultValue: "",
+    type: DataTypes.TEXT("long"),
+    field: "tariff_history",
   },
 
 };

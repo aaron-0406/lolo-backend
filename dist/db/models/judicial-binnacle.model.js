@@ -86,25 +86,67 @@ const JudicialBinnacleSchema = {
         type: sequelize_1.DataTypes.TEXT("long"),
         field: "last_performed",
     },
+    index: {
+        allowNull: true,
+        type: sequelize_1.DataTypes.INTEGER,
+        field: "index",
+    },
+    resolutionDate: {
+        allowNull: true,
+        type: sequelize_1.DataTypes.DATE,
+        field: "resolution_date",
+    },
+    entryDate: {
+        allowNull: true,
+        type: sequelize_1.DataTypes.DATE,
+        field: "entry_date",
+    },
     notificationType: {
         allowNull: true,
         type: sequelize_1.DataTypes.STRING(200),
         field: "notification_type",
     },
-    userDescription: {
+    acto: {
         allowNull: true,
         type: sequelize_1.DataTypes.STRING(200),
-        field: "user_description",
+        field: "acto",
     },
     fojas: {
         allowNull: true,
         type: sequelize_1.DataTypes.NUMBER,
         field: "fojas",
     },
+    folios: {
+        allowNull: true,
+        type: sequelize_1.DataTypes.NUMBER,
+        field: "folios",
+    },
+    provedioDate: {
+        allowNull: true,
+        type: sequelize_1.DataTypes.DATE,
+        field: "provedio_date",
+    },
+    userDescription: {
+        allowNull: true,
+        type: sequelize_1.DataTypes.STRING(200),
+        field: "user_description",
+    },
     createdBy: {
         allowNull: true,
         type: sequelize_1.DataTypes.NUMBER,
         field: "created_by",
+    },
+    totalTariff: {
+        allowNull: false,
+        type: sequelize_1.DataTypes.DECIMAL(10, 2),
+        defaultValue: 0,
+        field: "total_tariff",
+    },
+    tariffHistory: {
+        allowNull: false,
+        defaultValue: "",
+        type: sequelize_1.DataTypes.TEXT("long"),
+        field: "tariff_history",
     },
 };
 class JudicialBinnacle extends sequelize_1.Model {
