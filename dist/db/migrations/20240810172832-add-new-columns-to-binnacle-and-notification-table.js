@@ -101,49 +101,77 @@ function up(queryInterface) {
         yield queryInterface.createTable(JUDICIAL_BIN_NOTIFICATION_TABLE, {
             id: {
                 type: sequelize_1.DataTypes.INTEGER,
+                field: 'id_judicial_bin_notification',
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
             },
             number: {
+                field: 'number',
                 type: sequelize_1.DataTypes.INTEGER,
                 allowNull: false,
             },
             addressee: {
+                field: 'addressee',
                 type: sequelize_1.DataTypes.STRING(200),
                 allowNull: false,
             },
             shipDate: {
                 type: sequelize_1.DataTypes.DATE,
                 allowNull: false,
+                field: 'ship_date',
             },
             attachments: {
                 type: sequelize_1.DataTypes.STRING(200),
                 allowNull: false,
+                field: 'attachments',
             },
             deliveryMethod: {
                 type: sequelize_1.DataTypes.STRING(200),
                 allowNull: false,
+                field: 'delivery_method',
             },
             resolutionDate: {
                 type: sequelize_1.DataTypes.DATE,
                 allowNull: false,
+                field: 'resolution_date',
             },
             notificationPrint: {
                 type: sequelize_1.DataTypes.STRING(200),
                 allowNull: false,
+                field: 'notification_print',
             },
             sentCentral: {
                 type: sequelize_1.DataTypes.STRING(200),
                 allowNull: false,
+                field: 'sent_central',
             },
             centralReceipt: {
                 type: sequelize_1.DataTypes.STRING(200),
                 allowNull: false,
+                field: 'central_receipt',
+            },
+            createdAt: {
+                allowNull: false,
+                field: "created_at",
+                defaultValue: sequelize_1.DataTypes.NOW,
+                type: sequelize_1.DataTypes.DATE,
+            },
+            updatedAt: {
+                allowNull: false,
+                field: "updated_at",
+                defaultValue: sequelize_1.DataTypes.NOW,
+                type: sequelize_1.DataTypes.DATE,
+            },
+            deletedAt: {
+                allowNull: true,
+                field: "deleted_at",
+                type: sequelize_1.DataTypes.DATE,
             },
             idJudicialBinacle: {
                 type: sequelize_1.DataTypes.INTEGER,
                 allowNull: false,
+                field: 'judicial_binacle_id_judicial_binacle',
                 references: {
                     model: JUDICIAL_BINNACLE_TABLE,
                     key: 'id_judicial_binnacle',

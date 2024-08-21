@@ -10,4 +10,7 @@ export type JudicialBinNotificationType = {
   sentCentral: string;
   centralReceipt: string;
   idJudicialBinacle: number;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date;  
 };

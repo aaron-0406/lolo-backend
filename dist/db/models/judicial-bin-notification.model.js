@@ -63,13 +63,30 @@ const JudicialBinNotificationSchema = {
     idJudicialBinacle: {
         allowNull: false,
         type: sequelize_1.DataTypes.INTEGER,
-        field: "id_judicial_binacle",
+        field: "judicial_binacle_id_judicial_binacle",
         references: {
             model: JUDICIAL_BINNACLE_TABLE,
             key: "id_judicial_binnacle",
         },
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
+    },
+    createdAt: {
+        allowNull: false,
+        field: "created_at",
+        defaultValue: sequelize_1.DataTypes.NOW,
+        type: sequelize_1.DataTypes.DATE,
+    },
+    updatedAt: {
+        allowNull: false,
+        field: "updated_at",
+        defaultValue: sequelize_1.DataTypes.NOW,
+        type: sequelize_1.DataTypes.DATE,
+    },
+    deletedAt: {
+        allowNull: true,
+        field: "deleted_at",
+        type: sequelize_1.DataTypes.DATE,
     },
 };
 class JudicialBinNotification extends sequelize_1.Model {

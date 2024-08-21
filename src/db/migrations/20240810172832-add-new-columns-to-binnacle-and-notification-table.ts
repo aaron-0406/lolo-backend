@@ -98,49 +98,77 @@ export async function up(queryInterface: QueryInterface) {
   await queryInterface.createTable(JUDICIAL_BIN_NOTIFICATION_TABLE, {
     id: {
       type: DataTypes.INTEGER,
+      field: 'id_judicial_bin_notification',
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
     },
     number: {
+      field: 'number',
       type: DataTypes.INTEGER,
       allowNull: false,
     },
     addressee: {
+      field: 'addressee',
       type: DataTypes.STRING(200),
       allowNull: false,
     },
     shipDate: {
       type: DataTypes.DATE,
       allowNull: false,
+      field: 'ship_date',
     },
     attachments: {
       type: DataTypes.STRING(200),
       allowNull: false,
+      field: 'attachments',
     },
     deliveryMethod: {
       type: DataTypes.STRING(200),
       allowNull: false,
+      field: 'delivery_method',
     },
     resolutionDate: {
       type: DataTypes.DATE,
       allowNull: false,
+      field: 'resolution_date',
     },
     notificationPrint: {
       type: DataTypes.STRING(200),
       allowNull: false,
+      field: 'notification_print',
     },
     sentCentral: {
       type: DataTypes.STRING(200),
       allowNull: false,
+      field: 'sent_central',
     },
     centralReceipt: {
       type: DataTypes.STRING(200),
       allowNull: false,
+      field: 'central_receipt',
+    },
+    createdAt: {
+      allowNull: false,
+      field: "created_at",
+      defaultValue: DataTypes.NOW,
+      type: DataTypes.DATE,
+    },
+    updatedAt: {
+      allowNull: false,
+      field: "updated_at",
+      defaultValue: DataTypes.NOW,
+      type: DataTypes.DATE,
+    },
+    deletedAt: {
+      allowNull: true,
+      field: "deleted_at",
+      type: DataTypes.DATE,
     },
     idJudicialBinacle: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      field: 'judicial_binacle_id_judicial_binacle',
       references: {
         model: JUDICIAL_BINNACLE_TABLE,
         key: 'id_judicial_binnacle',

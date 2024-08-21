@@ -71,13 +71,30 @@ const JudicialBinNotificationSchema: ModelAttributes<
   idJudicialBinacle: {
     allowNull: false,
     type: DataTypes.INTEGER,
-    field: "id_judicial_binacle",
+    field: "judicial_binacle_id_judicial_binacle",
     references: {
       model: JUDICIAL_BINNACLE_TABLE,
       key: "id_judicial_binnacle",
     },
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
+  },
+  createdAt: {
+    allowNull: false,
+    field: "created_at",
+    defaultValue: DataTypes.NOW,
+    type: DataTypes.DATE,
+  },
+  updatedAt: {
+    allowNull: false,
+    field: "updated_at",
+    defaultValue: DataTypes.NOW,
+    type: DataTypes.DATE,
+  },
+  deletedAt: {
+    allowNull: true,
+    field: "deleted_at",
+    type: DataTypes.DATE,
   },
 };
 

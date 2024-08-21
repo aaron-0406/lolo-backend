@@ -58,7 +58,7 @@ const whitelist = [
   "http://lolobank.com",
 ];
 const options: CorsOptions = {
-  origin: (origin, callback) => {
+  origin: (origin,   callback) => {
     if (whitelist.includes(origin ?? "") || !origin) {
       callback(null, true);
     } else {
