@@ -149,21 +149,33 @@ function up(queryInterface) {
                 defaultValue: null
             },
             notificationPrint: {
-                type: sequelize_1.DataTypes.STRING(200),
+                type: sequelize_1.DataTypes.DATE,
                 allowNull: true,
                 field: 'notification_print',
                 defaultValue: null
             },
             sentCentral: {
-                type: sequelize_1.DataTypes.STRING(200),
+                type: sequelize_1.DataTypes.DATE,
                 allowNull: true,
                 field: 'sent_central',
                 defaultValue: null
             },
             centralReceipt: {
-                type: sequelize_1.DataTypes.STRING(200),
+                type: sequelize_1.DataTypes.DATE,
                 allowNull: true,
                 field: 'central_receipt',
+                defaultValue: null
+            },
+            notificationToRecipientOn: {
+                type: sequelize_1.DataTypes.DATE,
+                allowNull: true,
+                field: 'notification_to_recipient_on',
+                defaultValue: null
+            },
+            chargeReturnedToCourtOn: {
+                type: sequelize_1.DataTypes.DATE,
+                allowNull: true,
+                field: 'charge_returned_to_court_on',
                 defaultValue: null
             },
             createdAt: {

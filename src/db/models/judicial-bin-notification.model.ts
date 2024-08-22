@@ -60,21 +60,33 @@ notificationCode: {
     defaultValue: null
   },
   notificationPrint: {
-    type: DataTypes.STRING(200),
+    type: DataTypes.DATE,
     allowNull: true,
     field: 'notification_print',
     defaultValue: null
   },
   sentCentral: {
-    type: DataTypes.STRING(200),
+    type: DataTypes.DATE,
     allowNull: true,
     field: 'sent_central',
     defaultValue: null
   },
   centralReceipt: {
-    type: DataTypes.STRING(200),
+    type: DataTypes.DATE,
     allowNull: true,
     field: 'central_receipt',
+    defaultValue: null
+  },
+  notificationToRecipientOn: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    field: 'notification_to_recipient_on',
+    defaultValue: null
+  },
+  chargeReturnedToCourtOn: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    field: 'charge_returned_to_court_on',
     defaultValue: null
   },
   createdAt: {

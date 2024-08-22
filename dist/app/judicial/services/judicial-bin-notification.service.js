@@ -19,16 +19,17 @@ class JudicialBinNotificationService {
     constructor() { }
     findAllByBinnacleId(binnacleId) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const rta = yield models.JUDICIAL_BIN_NOTIFICATION.findAll();
-                if (!rta) {
-                    throw boom_1.default.notFound("Notificaciones no encontradas");
-                }
-                return rta;
-            }
-            catch (error) {
-                throw boom_1.default.badImplementation("Error al obtener notificaciones");
-            }
+            const rta = yield models.JUDICIAL_BIN_NOTIFICATION.findAll({
+                where: {
+                    idJudicialBinacle: binnacleId,
+                },
+                attributes: {
+                    exclude: ["judicialBinnacleId"],
+                },
+            });
+            if (!rta)
+                throw boom_1.default.notFound("No se encontraron notificaciones");
+            return rta;
         });
     }
     findByID(id) {

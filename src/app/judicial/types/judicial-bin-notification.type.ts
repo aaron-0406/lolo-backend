@@ -9,6 +9,8 @@ export type JudicialBinNotificationType = {
   notificationPrint: string;
   sentCentral: string;
   centralReceipt: string;
+  notificationToRecipientOn: string;
+  chargeReturnedToCourtOn: string;
   idJudicialBinacle: number;
   createdAt: Date;
   updatedAt: Date;
