@@ -64,6 +64,7 @@ const JudicialBinnacleSchema = {
     judicialBinProceduralStageId: {
         allowNull: false,
         type: sequelize_1.DataTypes.INTEGER,
+        defaultValue: null,
         references: {
             model: JUDICIAL_BIN_PROCEDURAL_STAGE_TABLE,
             key: "id_judicial_bin_procedural_stage",

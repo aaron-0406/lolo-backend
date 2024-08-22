@@ -73,6 +73,7 @@ const JudicialBinnacleSchema: ModelAttributes<
   judicialBinProceduralStageId: {
     allowNull: false,
     type: DataTypes.INTEGER,
+    defaultValue: null,
     references: {
       model: JUDICIAL_BIN_PROCEDURAL_STAGE_TABLE,
       key: "id_judicial_bin_procedural_stage",

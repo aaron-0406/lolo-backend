@@ -28,20 +28,26 @@ const newPermissions = [
         link: '/judicial/:urlIdentifier/expediente/:code/bitacora/:binnacleCode'
     },
     {
-        name: 'AGREGAR NOTIFICACIÓN',
-        code: 'P13-01-01-04-01',
-        icon: '-',
-        link: '#'
+        name: "NOTIFICACIONES",
+        code: "P13-01-01-04-01",
+        icon: "ri-notification-badge-fill",
+        link: "/judicial/:urlIdentifier/expediente/:code/bitacora/:binnacleCode/notificaciones"
     },
     {
-        name: 'ACTUALIZAR NOTIFICACIÓN',
+        name: 'AGREGAR NOTIFICACIÓN',
         code: 'P13-01-01-04-02',
         icon: '-',
         link: '#'
     },
     {
-        name: 'ELIMINAR NOTIFICACIÓN',
+        name: 'ACTUALIZAR NOTIFICACIÓN',
         code: 'P13-01-01-04-03',
+        icon: '-',
+        link: '#'
+    },
+    {
+        name: 'ELIMINAR NOTIFICACIÓN',
+        code: 'P13-01-01-04-04',
         icon: '-',
         link: '#'
     }
@@ -106,50 +112,59 @@ function up(queryInterface) {
                 autoIncrement: true,
                 primaryKey: true,
             },
-            number: {
-                field: 'number',
-                type: sequelize_1.DataTypes.INTEGER,
-                allowNull: false,
+            notificationCode: {
+                field: 'notification_code',
+                type: sequelize_1.DataTypes.STRING(200),
+                allowNull: true,
+                defaultValue: null
             },
             addressee: {
                 field: 'addressee',
                 type: sequelize_1.DataTypes.STRING(200),
-                allowNull: false,
+                allowNull: true,
+                defaultValue: null
             },
             shipDate: {
                 type: sequelize_1.DataTypes.DATE,
-                allowNull: false,
+                allowNull: true,
                 field: 'ship_date',
+                defaultValue: null
             },
             attachments: {
                 type: sequelize_1.DataTypes.STRING(200),
-                allowNull: false,
+                allowNull: true,
                 field: 'attachments',
+                defaultValue: null
             },
             deliveryMethod: {
                 type: sequelize_1.DataTypes.STRING(200),
-                allowNull: false,
+                allowNull: true,
                 field: 'delivery_method',
+                defaultValue: null
             },
             resolutionDate: {
                 type: sequelize_1.DataTypes.DATE,
-                allowNull: false,
+                allowNull: true,
                 field: 'resolution_date',
+                defaultValue: null
             },
             notificationPrint: {
                 type: sequelize_1.DataTypes.STRING(200),
-                allowNull: false,
+                allowNull: true,
                 field: 'notification_print',
+                defaultValue: null
             },
             sentCentral: {
                 type: sequelize_1.DataTypes.STRING(200),
-                allowNull: false,
+                allowNull: true,
                 field: 'sent_central',
+                defaultValue: null
             },
             centralReceipt: {
                 type: sequelize_1.DataTypes.STRING(200),
-                allowNull: false,
+                allowNull: true,
                 field: 'central_receipt',
+                defaultValue: null
             },
             createdAt: {
                 allowNull: false,

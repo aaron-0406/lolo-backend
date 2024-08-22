@@ -68,6 +68,7 @@ const districts_routes_1 = __importDefault(require("./config/districts.routes"))
 const province_routes_1 = __importDefault(require("./config/province.routes"));
 const judicial_collateral_auction_round_routes_1 = __importDefault(require("./judicial/judicial-collateral-auction-round.routes"));
 const tariff_routes_1 = __importDefault(require("./config/tariff.routes"));
+const judicial_bin_notification_routes_1 = __importDefault(require("./judicial/judicial-bin-notification.routes"));
 const routerApi = (app) => {
     const router = express_1.default.Router();
     app.use("/api/v1", router);
@@ -103,6 +104,7 @@ const routerApi = (app) => {
     router.use("/judicial/obs-file", judicial_obs_file_routes_1.default);
     router.use("/judicial/sede", judicial_sede_routes_1.default);
     router.use("/judicial/bin-type-binnacle", judicial_bin_type_binnacle_routes_1.default);
+    router.use("/judicial/bin-notification", judicial_bin_notification_routes_1.default);
     router.use("/judicial/binnacle", judicial_binnacle_routes_1.default);
     router.use("/judicial/bin-file", judicial_bin_file_routes_1.default);
     router.use("/judicial/bin-procedural-stage", judicial_bin_procedural_stage_routes_1.default);

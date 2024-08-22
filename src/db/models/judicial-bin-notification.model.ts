@@ -17,67 +17,65 @@ const JudicialBinNotificationSchema: ModelAttributes<
   JudicialBinNotificationType
 > = {
   id: {
-    primaryKey: true,
+    type: DataTypes.INTEGER,
+    field: 'id_judicial_bin_notification',
     allowNull: false,
     autoIncrement: true,
-    field: "id_judicial_bin_notification",
-    type: DataTypes.INTEGER,
+    primaryKey: true,
   },
-  number: {
-    allowNull: false,
-    type: DataTypes.INTEGER,
-    field: "number",
+notificationCode: {
+    field: 'notification_code',
+    type: DataTypes.STRING(200),
+    allowNull: true,
+    defaultValue: null
   },
   addressee: {
-    allowNull: false,
+    field: 'addressee',
     type: DataTypes.STRING(200),
-    field: "addressee",
+    allowNull: true,
+    defaultValue: null
   },
   shipDate: {
-    allowNull: false,
     type: DataTypes.DATE,
-    field: "ship_date",
+    allowNull: true,
+    field: 'ship_date',
+    defaultValue: null
   },
   attachments: {
-    allowNull: false,
     type: DataTypes.STRING(200),
-    field: "attachments",
+    allowNull: true,
+    field: 'attachments',
+    defaultValue: null
   },
   deliveryMethod: {
-    allowNull: false,
     type: DataTypes.STRING(200),
-    field: "delivery_method",
+    allowNull: true,
+    field: 'delivery_method',
+    defaultValue: null
   },
   resolutionDate: {
-    allowNull: false,
     type: DataTypes.DATE,
-    field: "resolution_date",
+    allowNull: true,
+    field: 'resolution_date',
+    defaultValue: null
   },
   notificationPrint: {
-    allowNull: false,
     type: DataTypes.STRING(200),
-    field: "notification_print",
+    allowNull: true,
+    field: 'notification_print',
+    defaultValue: null
   },
   sentCentral: {
-    allowNull: false,
     type: DataTypes.STRING(200),
-    field: "sent_central",
+    allowNull: true,
+    field: 'sent_central',
+    defaultValue: null
   },
   centralReceipt: {
-    allowNull: false,
     type: DataTypes.STRING(200),
-    field: "central_receipt",
-  },
-  idJudicialBinacle: {
-    allowNull: false,
-    type: DataTypes.INTEGER,
-    field: "judicial_binacle_id_judicial_binacle",
-    references: {
-      model: JUDICIAL_BINNACLE_TABLE,
-      key: "id_judicial_binnacle",
-    },
-    onUpdate: "CASCADE",
-    onDelete: "NO ACTION",
+    allowNull: true,
+    field: 'central_receipt',
+    defaultValue: null
   },
   createdAt: {
     allowNull: false,
@@ -95,6 +93,17 @@ const JudicialBinNotificationSchema: ModelAttributes<
     allowNull: true,
     field: "deleted_at",
     type: DataTypes.DATE,
+  },
+  idJudicialBinacle: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    field: 'judicial_binacle_id_judicial_binacle',
+    references: {
+      model: JUDICIAL_BINNACLE_TABLE,
+      key: 'id_judicial_binnacle',
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'NO ACTION',
   },
 };
 

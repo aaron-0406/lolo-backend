@@ -64,6 +64,7 @@ import districtRouter from "./config/districts.routes";
 import provinceRouter from "./config/province.routes";
 import judicialCollateralAuctionRoundRouter from "./judicial/judicial-collateral-auction-round.routes";
 import tariffRouter from "./config/tariff.routes";
+import judicialBinNotificationRouter from "./judicial/judicial-bin-notification.routes";
 
 const routerApi = (app: Express) => {
   const router = express.Router();
@@ -103,6 +104,7 @@ const routerApi = (app: Express) => {
   router.use("/judicial/sede", judicialSedeRouter);
 
   router.use("/judicial/bin-type-binnacle", judicialBinTypeBinnacleRouter);
+  router.use("/judicial/bin-notification", judicialBinNotificationRouter);
   router.use("/judicial/binnacle", judicialBinnacleRouter);
   router.use("/judicial/bin-file", judicialBinFileRouter);
   router.use(
