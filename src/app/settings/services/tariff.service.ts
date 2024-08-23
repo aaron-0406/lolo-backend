@@ -7,6 +7,7 @@ const { models } = sequelize;
 const TariffType = {
   CONTENTIOUS_PROCESS: "PROCESOS CONTENCIOSOS",
   REQUEST_OF: "POR SOLICITUD DE",
+  BY_EXHORT_PROCESS:"POR TRAMITE DE EXHORTO"
 };
 
 class TariffService {
@@ -15,6 +16,7 @@ class TariffService {
   async findAll() {
     let contentiousProcessesHeaders: any[] = [];
     let requestOfHeaders: any[] = [];
+    let byExhortProcessHeaders: any[] = [];
 
     const rta = await models.TARIFF.findAll(
       {
@@ -40,6 +42,7 @@ class TariffService {
 
   const contentiousProcesses = rta.filter(tariff => tariff.dataValues.type === TariffType.CONTENTIOUS_PROCESS);
   const requestOf = rta.filter(tariff => tariff.dataValues.type === TariffType.REQUEST_OF);
+  const byExhortProcess = rta.filter(tariff => tariff.dataValues.type === TariffType.BY_EXHORT_PROCESS);
 
     if (!contentiousProcesses.length) return;
 
@@ -59,7 +62,6 @@ class TariffService {
 
     if (!requestOf.length) return;
 
-
     if (!requestOf[0].dataValues.tariffIntervalMatch.length) return;
 
         requestOf[0].dataValues.tariffIntervalMatch.forEach(
@@ -74,8 +76,24 @@ class TariffService {
           }
         );
 
+    if (!byExhortProcess.length) return;
 
-    return { contentiousProcessesHeaders, requestOfHeaders, contentiousProcesses, requestOf };
+    if (!byExhortProcess[0].dataValues.tariffIntervalMatch.length) return;
+
+        requestOf[0].dataValues.tariffIntervalMatch.forEach(
+          (intervalMatch: any) => {
+            byExhortProcessHeaders.push({
+              description:
+                intervalMatch.dataValues.tariffInterval.dataValues.description,
+              headerTitle:
+                intervalMatch.dataValues.tariffInterval.dataValues
+                  .intervalDescription,
+            });
+          }
+        );
+
+
+    return { contentiousProcessesHeaders, requestOfHeaders, contentiousProcesses, requestOf, byExhortProcessHeaders, byExhortProcess };
 
   }
 
