@@ -18,6 +18,7 @@ const { models } = sequelize_1.default;
 const TariffType = {
     CONTENTIOUS_PROCESS: "PROCESOS CONTENCIOSOS",
     REQUEST_OF: "POR SOLICITUD DE",
+    BY_EXHORT_PROCESS: "POR TRAMITE DE EXHORTO"
 };
 class TariffService {
     constructor() { }
@@ -25,6 +26,7 @@ class TariffService {
         return __awaiter(this, void 0, void 0, function* () {
             let contentiousProcessesHeaders = [];
             let requestOfHeaders = [];
+            let byExhortProcessHeaders = [];
             const rta = yield models.TARIFF.findAll({
                 include: [
                     {
@@ -45,6 +47,7 @@ class TariffService {
             }
             const contentiousProcesses = rta.filter(tariff => tariff.dataValues.type === TariffType.CONTENTIOUS_PROCESS);
             const requestOf = rta.filter(tariff => tariff.dataValues.type === TariffType.REQUEST_OF);
+            const byExhortProcess = rta.filter(tariff => tariff.dataValues.type === TariffType.BY_EXHORT_PROCESS);
             if (!contentiousProcesses.length)
                 return;
             if (!contentiousProcesses[0].dataValues.tariffIntervalMatch.length)
@@ -67,7 +70,18 @@ class TariffService {
                         .intervalDescription,
                 });
             });
-            return { contentiousProcessesHeaders, requestOfHeaders, contentiousProcesses, requestOf };
+            if (!byExhortProcess.length)
+                return;
+            if (!byExhortProcess[0].dataValues.tariffIntervalMatch.length)
+                return;
+            requestOf[0].dataValues.tariffIntervalMatch.forEach((intervalMatch) => {
+                byExhortProcessHeaders.push({
+                    description: intervalMatch.dataValues.tariffInterval.dataValues.description,
+                    headerTitle: intervalMatch.dataValues.tariffInterval.dataValues
+                        .intervalDescription,
+                });
+            });
+            return { contentiousProcessesHeaders, requestOfHeaders, contentiousProcesses, requestOf, byExhortProcessHeaders, byExhortProcess };
         });
     }
     findAllByType(type) {
