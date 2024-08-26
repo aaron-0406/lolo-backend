@@ -56,6 +56,8 @@ const order = joi_1.default.string().optional().empty("").allow("");
 const customerId = joi_1.default.number();
 const chbTransferred = joi_1.default.number();
 const responsibleUserId = joi_1.default.number();
+const isScanValid = joi_1.default.boolean();
+const wasScanned = joi_1.default.boolean();
 const createJudicialCaseFileSchema = joi_1.default.object({
     numberCaseFile: numberCaseFile.required(),
     judgmentNumber: judgmentNumber.optional().empty("").allow(""),
@@ -82,6 +84,8 @@ const createJudicialCaseFileSchema = joi_1.default.object({
     qrCode: qrCode.optional().empty("").allow(""),
     chbTransferred: chbTransferred.optional().empty("").allow(""),
     responsibleUserId: responsibleUserId.optional().empty("").allow(""),
+    isScanValid: isScanValid.optional(),
+    wasScanned: wasScanned.optional(),
 });
 const updateJudicialCaseFileSchema = joi_1.default.object({
     numberCaseFile: numberCaseFile.required(),
@@ -109,6 +113,8 @@ const updateJudicialCaseFileSchema = joi_1.default.object({
     qrCode: qrCode.optional().empty("").allow(""),
     chbTransferred: chbTransferred.optional().empty("").allow(""),
     responsibleUserId: responsibleUserId.optional().empty("").allow(""),
+    isScanValid: isScanValid.optional(),
+    wasScanned: wasScanned.optional(),
 });
 const updateJudicialCaseFileProcessStatusSchema = joi_1.default.object({
     processStatus: processStatus.optional().empty("").allow(""),

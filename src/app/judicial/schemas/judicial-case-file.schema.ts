@@ -60,6 +60,8 @@ const order = Joi.string().optional().empty("").allow("");
 const customerId = Joi.number();
 const chbTransferred = Joi.number();
 const responsibleUserId = Joi.number();
+const isScanValid = Joi.boolean();
+const wasScanned = Joi.boolean();
 
 const createJudicialCaseFileSchema = Joi.object<
   Omit<
@@ -93,6 +95,8 @@ const createJudicialCaseFileSchema = Joi.object<
   qrCode: qrCode.optional().empty("").allow(""),
   chbTransferred: chbTransferred.optional().empty("").allow(""),
   responsibleUserId: responsibleUserId.optional().empty("").allow(""),
+  isScanValid: isScanValid.optional(),
+  wasScanned: wasScanned.optional(),
 });
 
 const updateJudicialCaseFileSchema = Joi.object<
@@ -127,6 +131,8 @@ const updateJudicialCaseFileSchema = Joi.object<
   qrCode: qrCode.optional().empty("").allow(""),
   chbTransferred: chbTransferred.optional().empty("").allow(""),
   responsibleUserId: responsibleUserId.optional().empty("").allow(""),
+  isScanValid: isScanValid.optional(),
+  wasScanned: wasScanned.optional(),  
 });
 
 const updateJudicialCaseFileProcessStatusSchema = Joi.object<

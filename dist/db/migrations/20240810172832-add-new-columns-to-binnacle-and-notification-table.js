@@ -17,9 +17,11 @@ const sequelize_1 = require("sequelize");
 const judicial_binnacle_model_1 = __importDefault(require("../models/judicial-binnacle.model"));
 const judicial_bin_notification_model_1 = __importDefault(require("../models/judicial-bin-notification.model"));
 const permission_model_1 = __importDefault(require("../models/permission.model"));
+const judicial_case_file_model_1 = __importDefault(require("../models/judicial-case-file.model"));
 const { JUDICIAL_BINNACLE_TABLE } = judicial_binnacle_model_1.default;
 const { JUDICIAL_BIN_NOTIFICATION_TABLE } = judicial_bin_notification_model_1.default;
 const { PERMISSION_TABLE } = permission_model_1.default;
+const { JUDICIAL_CASE_FILE_TABLE } = judicial_case_file_model_1.default;
 const newPermissions = [
     {
         name: 'DETALLES DE LA BITACORA',
@@ -54,6 +56,16 @@ const newPermissions = [
 ];
 function up(queryInterface) {
     return __awaiter(this, void 0, void 0, function* () {
+        yield queryInterface.addColumn(JUDICIAL_CASE_FILE_TABLE, 'is_scan_valid', {
+            type: sequelize_1.DataTypes.BOOLEAN,
+            allowNull: true,
+            defaultValue: true
+        });
+        yield queryInterface.addColumn(JUDICIAL_CASE_FILE_TABLE, 'was_scanned', {
+            type: sequelize_1.DataTypes.BOOLEAN,
+            allowNull: true,
+            defaultValue: false
+        });
         yield queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'index', {
             type: sequelize_1.DataTypes.INTEGER,
             allowNull: true,

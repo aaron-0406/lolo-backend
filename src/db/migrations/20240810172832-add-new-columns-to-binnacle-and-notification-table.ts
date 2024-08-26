@@ -2,10 +2,12 @@ import { QueryInterface, DataTypes, Op } from "sequelize";
 import judicialBinnacleModel from "../models/judicial-binnacle.model"
 import judicialBinNotificationModel from "../models/judicial-bin-notification.model";
 import permissionsModel from "../models/permission.model";
+import judicialCaseFileModel from "../models/judicial-case-file.model";
 
 const { JUDICIAL_BINNACLE_TABLE } = judicialBinnacleModel
 const { JUDICIAL_BIN_NOTIFICATION_TABLE } = judicialBinNotificationModel
 const { PERMISSION_TABLE } = permissionsModel
+const { JUDICIAL_CASE_FILE_TABLE } = judicialCaseFileModel
 
 const newPermissions = [
   {
@@ -41,6 +43,19 @@ const newPermissions = [
 ]
 
 export async function up(queryInterface: QueryInterface) {
+
+  await queryInterface.addColumn(JUDICIAL_CASE_FILE_TABLE, 'is_scan_valid', {
+    type: DataTypes.BOOLEAN,
+    allowNull: true,
+    defaultValue: true
+  })
+
+  await queryInterface.addColumn(JUDICIAL_CASE_FILE_TABLE, 'was_scanned', {
+    type: DataTypes.BOOLEAN,
+    allowNull: true,
+    defaultValue: false
+  })
+
   await queryInterface.addColumn(JUDICIAL_BINNACLE_TABLE, 'index', {
     type: DataTypes.INTEGER,
     allowNull: true,
