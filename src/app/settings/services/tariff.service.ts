@@ -7,7 +7,8 @@ const { models } = sequelize;
 const TariffType = {
   CONTENTIOUS_PROCESS: "PROCESOS CONTENCIOSOS",
   REQUEST_OF: "POR SOLICITUD DE",
-  BY_EXHORT_PROCESS:"POR TRAMITE DE EXHORTO"
+  BY_EXHORT_PROCESS:"POR TRAMITE DE EXHORTO",
+  CUSTOM_TARIFF: "TARIFA PERSONALIZADA"
 };
 
 class TariffService {
@@ -17,6 +18,7 @@ class TariffService {
     let contentiousProcessesHeaders: any[] = [];
     let requestOfHeaders: any[] = [];
     let byExhortProcessHeaders: any[] = [];
+    let customTariffHeaders: any[] = [];
 
     const rta = await models.TARIFF.findAll(
       {
@@ -43,6 +45,7 @@ class TariffService {
   const contentiousProcesses = rta.filter(tariff => tariff.dataValues.type === TariffType.CONTENTIOUS_PROCESS);
   const requestOf = rta.filter(tariff => tariff.dataValues.type === TariffType.REQUEST_OF);
   const byExhortProcess = rta.filter(tariff => tariff.dataValues.type === TariffType.BY_EXHORT_PROCESS);
+  const customTariff = rta.filter(tariff => tariff.dataValues.type === TariffType.CUSTOM_TARIFF);
 
     if (!contentiousProcesses.length) return;
 
@@ -80,20 +83,11 @@ class TariffService {
 
     if (!byExhortProcess[0].dataValues.tariffIntervalMatch.length) return;
 
-        requestOf[0].dataValues.tariffIntervalMatch.forEach(
-          (intervalMatch: any) => {
-            byExhortProcessHeaders.push({
-              description:
-                intervalMatch.dataValues.tariffInterval.dataValues.description,
-              headerTitle:
-                intervalMatch.dataValues.tariffInterval.dataValues
-                  .intervalDescription,
-            });
-          }
-        );
+    if (!customTariff.length) return;
 
+    if (!customTariff[0].dataValues.tariffIntervalMatch.length) return;
 
-    return { contentiousProcessesHeaders, requestOfHeaders, contentiousProcesses, requestOf, byExhortProcessHeaders, byExhortProcess };
+    return { contentiousProcessesHeaders, requestOfHeaders, contentiousProcesses, requestOf, byExhortProcessHeaders, byExhortProcess, customTariffHeaders, customTariff };
 
   }
 
