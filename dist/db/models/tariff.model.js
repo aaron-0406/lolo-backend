@@ -14,6 +14,11 @@ const TariffSchema = {
         allowNull: false,
         type: sequelize_1.DataTypes.STRING(255),
     },
+    customerHasBankId: {
+        field: "customer_has_bank_id_customer_has_bank",
+        allowNull: false,
+        type: sequelize_1.DataTypes.INTEGER,
+    },
     code: {
         allowNull: false,
         type: sequelize_1.DataTypes.TEXT("long"),

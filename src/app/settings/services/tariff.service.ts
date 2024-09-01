@@ -14,70 +14,84 @@ const TariffType = {
 class TariffService {
   constructor() {}
 
-  async findAll() {
+  async findAll(chb: number) {
     let contentiousProcessesHeaders: any[] = [];
     let requestOfHeaders: any[] = [];
     let byExhortProcessHeaders: any[] = [];
     let customTariffHeaders: any[] = [];
 
-    const rta = await models.TARIFF.findAll(
-      {
+    const rta = await models.TARIFF.findAll({
+      where: {
+        customer_has_bank_id_customer_has_bank: chb,
+      },
       include: [
         {
           model: models.TARIFF_INTERVAL_MATCH,
           as: "tariffIntervalMatch",
-          include:[
+          include: [
             {
               model: models.TARIFF_INTERVAL,
               as: "tariffInterval",
-              attributes: ["id", "description", "interval", "intervalDescription"],
-            }
-          ]
-        }
+              attributes: [
+                "id",
+                "description",
+                "interval",
+                "intervalDescription",
+              ],
+            },
+          ],
+        },
       ],
+    });
+
+    if (!rta) {
+      throw boom.notFound("No existen tarifas");
     }
-  );
 
-  if (!rta) {
-    throw boom.notFound("No existen tarifas");
-  }
-
-  const contentiousProcesses = rta.filter(tariff => tariff.dataValues.type === TariffType.CONTENTIOUS_PROCESS);
-  const requestOf = rta.filter(tariff => tariff.dataValues.type === TariffType.REQUEST_OF);
-  const byExhortProcess = rta.filter(tariff => tariff.dataValues.type === TariffType.BY_EXHORT_PROCESS);
-  const customTariff = rta.filter(tariff => tariff.dataValues.type === TariffType.CUSTOM_TARIFF);
+    const contentiousProcesses = rta.filter(
+      (tariff) => tariff.dataValues.type === TariffType.CONTENTIOUS_PROCESS
+    );
+    const requestOf = rta.filter(
+      (tariff) => tariff.dataValues.type === TariffType.REQUEST_OF
+    );
+    const byExhortProcess = rta.filter(
+      (tariff) => tariff.dataValues.type === TariffType.BY_EXHORT_PROCESS
+    );
+    const customTariff = rta.filter(
+      (tariff) => tariff.dataValues.type === TariffType.CUSTOM_TARIFF
+    );
 
     if (!contentiousProcesses.length) return;
 
     if (!contentiousProcesses[0].dataValues.tariffIntervalMatch.length) return;
 
-        contentiousProcesses[0].dataValues.tariffIntervalMatch.forEach(
-          (intervalMatch: any) => {
-            contentiousProcessesHeaders.push({
-              description:
-                intervalMatch.dataValues.tariffInterval.dataValues.description,
-              headerTitle:
-                intervalMatch.dataValues.tariffInterval.dataValues
-                  .intervalDescription,
-            });
-          }
-        );
+    contentiousProcesses[0].dataValues.tariffIntervalMatch.forEach(
+      (intervalMatch: any) => {
+        contentiousProcessesHeaders.push({
+          description:
+            intervalMatch.dataValues.tariffInterval.dataValues.description,
+          headerTitle:
+            intervalMatch.dataValues.tariffInterval.dataValues
+              .intervalDescription,
+        });
+      }
+    );
 
     if (!requestOf.length) return;
 
     if (!requestOf[0].dataValues.tariffIntervalMatch.length) return;
 
-        requestOf[0].dataValues.tariffIntervalMatch.forEach(
-          (intervalMatch: any) => {
-            requestOfHeaders.push({
-              description:
-                intervalMatch.dataValues.tariffInterval.dataValues.description,
-              headerTitle:
-                intervalMatch.dataValues.tariffInterval.dataValues
-                  .intervalDescription,
-            });
-          }
-        );
+    requestOf[0].dataValues.tariffIntervalMatch.forEach(
+      (intervalMatch: any) => {
+        requestOfHeaders.push({
+          description:
+            intervalMatch.dataValues.tariffInterval.dataValues.description,
+          headerTitle:
+            intervalMatch.dataValues.tariffInterval.dataValues
+              .intervalDescription,
+        });
+      }
+    );
 
     if (!byExhortProcess.length) return;
 
@@ -87,8 +101,16 @@ class TariffService {
 
     if (!customTariff[0].dataValues.tariffIntervalMatch.length) return;
 
-    return { contentiousProcessesHeaders, requestOfHeaders, contentiousProcesses, requestOf, byExhortProcessHeaders, byExhortProcess, customTariffHeaders, customTariff };
-
+    return {
+      contentiousProcessesHeaders,
+      requestOfHeaders,
+      contentiousProcesses,
+      requestOf,
+      byExhortProcessHeaders,
+      byExhortProcess,
+      customTariffHeaders,
+      customTariff,
+    };
   }
 
   async findAllByType(type: string) {
@@ -101,14 +123,19 @@ class TariffService {
           model: models.TARIFF_INTERVAL_MATCH,
           as: "intervals",
           attributes: ["id", "value"],
-          include:[
+          include: [
             {
               model: models.TARIFF_INTERVAL,
               as: "interval",
-              attributes: ["id", "description", "interval", "intervalDescription"],
-            }
-          ]
-        }
+              attributes: [
+                "id",
+                "description",
+                "interval",
+                "intervalDescription",
+              ],
+            },
+          ],
+        },
       ],
     });
 
@@ -119,34 +146,118 @@ class TariffService {
     return rta;
   }
 
-  async create(data: TariffType) {
-    const newTariff = await models.TARIFF.create(data)
+  async create(data: Omit<TariffType, "id" | "tariffIntervalMatch">) {
+    // const newTariff = await models.TARIFF.create(data);
+    const newTariff = await models.TARIFF.create({
+      code: data.code,
+      type: data.type,
+      description: data.description,
+      customerHasBankId: data.customerHasBankId,
+    });
 
-    return newTariff;
-  }
+    if(!newTariff) return boom.notFound("Hubo un error al crear el tarifa");
 
-  async update(id: string, data: TariffType) {
-    const tariff = await models.TARIFF.findByPk(id);
-
-    if (!tariff) {
-      throw boom.notFound("Tarifa no encontrada");
+    if(data.type === TariffType.CUSTOM_TARIFF){
+      try {
+        await models.TARIFF_INTERVAL_MATCH.create({
+          tariffId: newTariff.dataValues.id,
+          intervalId: 20,
+          value: data.value,
+        });
+      } catch (error) {
+        return boom.badRequest("Hubo un error al crear el interval match de tarifas");
+      }
     }
 
-    await tariff.update(data);
+    const tariffInterval = await models.TARIFF.findByPk(newTariff.dataValues.id, {
+      include: [
+        {
+          model: models.TARIFF_INTERVAL_MATCH,
+          as: "tariffIntervalMatch",
+          include: [
+            {
+              model: models.TARIFF_INTERVAL,
+              as: "tariffInterval",
+              attributes: [
+                "id",
+                "description",
+                "interval",
+                "intervalDescription",
+              ],
+            },
+          ],
+        },
+      ],
+    });
 
-    return tariff;
+    return tariffInterval;
+
+  }
+
+  async update(id:number, data: Omit<TariffType, "id" | "tariffIntervalMatch">) {
+    const tariff = await models.TARIFF.findByPk(id);
+
+    if (!tariff) return boom.notFound("Tarifa no encontrada");
+    tariff.update({
+      code: data.code,
+      type: data.type,
+      description: data.description,
+    });
+    const tariffIntervalMatch = await models.TARIFF_INTERVAL_MATCH.findAll({
+      where: {
+        tariffId: id,
+      },
+    });
+
+    if (!tariffIntervalMatch.length) return boom.notFound("Tarifa no encontrada");
+    if(data.type === TariffType.CUSTOM_TARIFF){
+      try {
+        await tariffIntervalMatch[0].update({
+          value: data.value,
+        });
+      } catch (error) {
+        return boom.badRequest("Hubo un error al crear el interval match de tarifas");
+      }
+    }
+
+    const newTariff = await models.TARIFF.findByPk(tariff.dataValues.id, {
+      include: [
+        {
+          model: models.TARIFF_INTERVAL_MATCH,
+          as: "tariffIntervalMatch",
+          include: [
+            {
+              model: models.TARIFF_INTERVAL,
+              as: "tariffInterval",
+              attributes: [
+                "id",
+                "description",
+                "interval",
+                "intervalDescription",
+              ],
+            },
+          ],
+        },
+      ],
+    });
+    return newTariff;
+
   }
 
   async delete(id: string) {
-    const tariff = await models.TARIFF.findByPk(id);
+    await models.TARIFF_INTERVAL_MATCH.destroy({
+      where: {
+        tariffId: id,
+      },
+    });
+    const tariff = await models.TARIFF.destroy({
+      where: {
+        id: id,
+      },
+    });
 
-    if (!tariff) {
-      throw boom.notFound("Tarifa no encontrada");
-    }
+    return id;
 
-    await tariff.destroy();
-
-    return { id };
   }
 }
 

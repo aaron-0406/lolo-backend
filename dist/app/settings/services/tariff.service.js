@@ -18,7 +18,8 @@ const { models } = sequelize_1.default;
 const TariffType = {
     CONTENTIOUS_PROCESS: "PROCESOS CONTENCIOSOS",
     REQUEST_OF: "POR SOLICITUD DE",
-    BY_EXHORT_PROCESS: "POR TRAMITE DE EXHORTO"
+    BY_EXHORT_PROCESS: "POR TRAMITE DE EXHORTO",
+    CUSTOM_TARIFF: "TARIFA PERSONALIZADA"
 };
 class TariffService {
     constructor() { }
@@ -27,6 +28,7 @@ class TariffService {
             let contentiousProcessesHeaders = [];
             let requestOfHeaders = [];
             let byExhortProcessHeaders = [];
+            let customTariffHeaders = [];
             const rta = yield models.TARIFF.findAll({
                 include: [
                     {
@@ -48,6 +50,7 @@ class TariffService {
             const contentiousProcesses = rta.filter(tariff => tariff.dataValues.type === TariffType.CONTENTIOUS_PROCESS);
             const requestOf = rta.filter(tariff => tariff.dataValues.type === TariffType.REQUEST_OF);
             const byExhortProcess = rta.filter(tariff => tariff.dataValues.type === TariffType.BY_EXHORT_PROCESS);
+            const customTariff = rta.filter(tariff => tariff.dataValues.type === TariffType.CUSTOM_TARIFF);
             if (!contentiousProcesses.length)
                 return;
             if (!contentiousProcesses[0].dataValues.tariffIntervalMatch.length)
@@ -74,14 +77,11 @@ class TariffService {
                 return;
             if (!byExhortProcess[0].dataValues.tariffIntervalMatch.length)
                 return;
-            requestOf[0].dataValues.tariffIntervalMatch.forEach((intervalMatch) => {
-                byExhortProcessHeaders.push({
-                    description: intervalMatch.dataValues.tariffInterval.dataValues.description,
-                    headerTitle: intervalMatch.dataValues.tariffInterval.dataValues
-                        .intervalDescription,
-                });
-            });
-            return { contentiousProcessesHeaders, requestOfHeaders, contentiousProcesses, requestOf, byExhortProcessHeaders, byExhortProcess };
+            if (!customTariff.length)
+                return;
+            if (!customTariff[0].dataValues.tariffIntervalMatch.length)
+                return;
+            return { contentiousProcessesHeaders, requestOfHeaders, contentiousProcesses, requestOf, byExhortProcessHeaders, byExhortProcess, customTariffHeaders, customTariff };
         });
     }
     findAllByType(type) {

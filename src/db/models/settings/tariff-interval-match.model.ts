@@ -6,7 +6,7 @@ import {
   ModelCtor,
 } from "sequelize";
 
-import { TariffIntervalMatchType } from "../../app/settings/types/tariff-interval-match.type";
+import { TariffIntervalMatchType } from "../../../app/settings/types/tariff-interval-match.type";
 import tariffIntervalModel from "./tariff-interval.model";
 import tariffModel from "./tariff.model";
 

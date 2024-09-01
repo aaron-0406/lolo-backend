@@ -1,7 +1,7 @@
 import { QueryInterface } from "sequelize"
-import tariffModel from "../models/tariff.model";
-import tariffIntervalModel from "../models/tariff-interval.model";
-import tariffIntervalMatchModel from "../models/tariff-interval-match.model";
+import tariffModel from "../models/settings/tariff.model";
+import tariffIntervalModel from "../models/settings/tariff-interval.model";
+import tariffIntervalMatchModel from "../models/settings/tariff-interval-match.model";
 
 const { TARIFF_TABLE } = tariffModel;
 const { TARIFF_INTERVAL_TABLE } = tariffIntervalModel;
