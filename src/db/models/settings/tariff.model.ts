@@ -6,7 +6,7 @@ import {
   ModelCtor,
 } from "sequelize";
 
-import { TariffType } from "../../app/settings/types/tariff.type";
+import { TariffType } from "../../../app/settings/types/tariff.type";
 
 const TARIFF_TABLE = "TARIFF";
 
@@ -21,6 +21,11 @@ const TariffSchema: ModelAttributes<Tariff, TariffType> = {
   type: {
     allowNull: false,
     type: DataTypes.STRING(255),
+  },
+  customerHasBankId: {
+    field: "customer_has_bank_id_customer_has_bank",
+    allowNull: false,
+    type: DataTypes.INTEGER,
   },
   code: {
     allowNull: false,

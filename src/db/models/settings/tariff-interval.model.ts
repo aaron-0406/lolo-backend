@@ -5,7 +5,7 @@ import {
   ModelAttributes,
   ModelCtor,
 } from "sequelize";
-import { TariffIntervalType } from "../../app/settings/types/tariff-interval.type";
+import { TariffIntervalType } from "../../../app/settings/types/tariff-interval.type";
 
 const TARIFF_INTERVAL_TABLE = "TARIFF_INTERVAL";
 

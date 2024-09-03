@@ -84,13 +84,6 @@ export const updateRoleController = async (
     const body = req.body;
     const { oldRole, newRole, permissionsToDelete, permissionsToAdd, permissionWithoutChanges } = await service.update(id, body, body.permissions);
 
-    console.log(oldRole);
-    console.log(newRole);
-
-    console.log(permissionsToDelete);
-    console.log(permissionsToAdd);
-    console.log(permissionWithoutChanges);
-
     const permissionsRolSumary = generateLogSummary({
       method: req.method,
       oldData: permissionsToDelete ?? [],

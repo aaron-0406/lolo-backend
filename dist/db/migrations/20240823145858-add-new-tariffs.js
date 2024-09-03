@@ -13,9 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.up = void 0;
-const tariff_model_1 = __importDefault(require("../models/tariff.model"));
-const tariff_interval_model_1 = __importDefault(require("../models/tariff-interval.model"));
-const tariff_interval_match_model_1 = __importDefault(require("../models/tariff-interval-match.model"));
+const tariff_model_1 = __importDefault(require("../models/settings/tariff.model"));
+const tariff_interval_model_1 = __importDefault(require("../models/settings/tariff-interval.model"));
+const tariff_interval_match_model_1 = __importDefault(require("../models/settings/tariff-interval-match.model"));
 const { TARIFF_TABLE } = tariff_model_1.default;
 const { TARIFF_INTERVAL_TABLE } = tariff_interval_model_1.default;
 const { TARIFF_INTERVAL_MATCH_TABLE } = tariff_interval_match_model_1.default;
