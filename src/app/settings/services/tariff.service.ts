@@ -1,6 +1,7 @@
 import sequelize from "../../../libs/sequelize";
 import boom from "@hapi/boom";
 import { TariffType } from "../types/tariff.type";
+import { Model } from "sequelize";
 
 const { models } = sequelize;
 
@@ -146,6 +147,16 @@ class TariffService {
     return rta;
   }
 
+  async findById(id: string): Promise<Model | null> {
+    const tariff = await models.TARIFF.findByPk(id);
+    if (!tariff) {
+      boom.notFound("Tarifa no encontrada")
+      return null;
+    } ;
+
+    return tariff;
+  }
+
   async create(data: Omit<TariffType, "id" | "tariffIntervalMatch">) {
     const newTariff = await models.TARIFF.create({
       code: data.code,
@@ -154,7 +165,10 @@ class TariffService {
       customerHasBankId: data.customerHasBankId,
     });
 
-    if(!newTariff) return boom.notFound("Hubo un error al crear el tarifa");
+    if(!newTariff) {
+      boom.notFound("Hubo un error al crear el tarifa")
+      return ;
+    };
 
     if(data.type === TariffType.CUSTOM_TARIFF || data.type === TariffType.BY_EXHORT_PROCESS) {
       try {
@@ -164,7 +178,7 @@ class TariffService {
           value: data.value,
         });
       } catch (error) {
-        return boom.badRequest("Hubo un error al crear el interval match de tarifas");
+        return console.log(error)
       }
     }
 
@@ -189,15 +203,44 @@ class TariffService {
       ],
     });
 
+    if(!tariffInterval) {
+      boom.notFound("Tarifa no encontrada")
+      return ;
+    };
+
     return tariffInterval;
 
   }
 
-  async update(id:number, data: Omit<TariffType, "id" | "tariffIntervalMatch">) {
-    const tariff = await models.TARIFF.findByPk(id);
+  async update(id:number, data: Omit<TariffType, "id" | "tariffIntervalMatch">): Promise<{ oldTariff: Model | null, newTariff: Model | null } > {
+    const tariff = await models.TARIFF.findByPk(id, {
+      include: [
+        {
+          model: models.TARIFF_INTERVAL_MATCH,
+          as: "tariffIntervalMatch",
+          include: [
+            {
+              model: models.TARIFF_INTERVAL,
+              as: "tariffInterval",
+              attributes: [
+                "id",
+                "description",
+                "interval",
+                "intervalDescription",
+              ],
+            },
+          ],
+        },
+      ],
+    });
+    if (!tariff) {
+      boom.notFound("Tarifa no encontrada");
+      return { oldTariff: null, newTariff: null };
+    }
 
-    if (!tariff) return boom.notFound("Tarifa no encontrada");
-    tariff.update({
+    const oldTariff = { ...tariff.get() };
+
+    await tariff.update({
       code: data.code,
       type: data.type,
       description: data.description,
@@ -208,14 +251,21 @@ class TariffService {
       },
     });
 
-    if (!tariffIntervalMatch.length) return boom.notFound("Tarifa no encontrada");
-    if(data.type === TariffType.CUSTOM_TARIFF || data.type === TariffType.BY_EXHORT_PROCESS){
+    if (!tariffIntervalMatch.length) {
+      boom.notFound("Tarifa no encontrada")
+      return { oldTariff: null, newTariff: null };
+    }
+    if (
+      data.type === TariffType.CUSTOM_TARIFF ||
+      data.type === TariffType.BY_EXHORT_PROCESS
+    ) {
       try {
         await tariffIntervalMatch[0].update({
           value: data.value,
         });
       } catch (error) {
-        return boom.badRequest("Hubo un error al crear el interval match de tarifas");
+        boom.badRequest("Hubo un error al crear el interval match de tarifas");
+        return { oldTariff: null, newTariff: null };
       }
     }
 
@@ -239,23 +289,25 @@ class TariffService {
         },
       ],
     });
-    return newTariff;
-
+    return { oldTariff, newTariff };
   }
 
   async delete(id: string) {
+    const tariff = await this.findById(id);
+    if (!tariff) return null
+    const oldTariff = { ...tariff.get() };
     await models.TARIFF_INTERVAL_MATCH.destroy({
       where: {
         tariffId: id,
       },
     });
-    const tariff = await models.TARIFF.destroy({
+    await models.TARIFF.destroy({
       where: {
         id: id,
       },
     });
 
-    return id;
+    return oldTariff;
 
   }
 }

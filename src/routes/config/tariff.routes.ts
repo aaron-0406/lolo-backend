@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { JWTAuth } from '../../middlewares/auth.handler';
+import { checkPermissions, JWTAuth } from '../../middlewares/auth.handler';
 import { createTariffController, deleteTariffController, getTariffsController, updateTariffController } from '../../controllers/settings/tariff.controller'
 import validatorHandler from "../../middlewares/validator.handler";
 
@@ -19,6 +19,7 @@ router.get(
 router.post(
   "/",
   JWTAuth,
+  checkPermissions("P43-01"),
   validatorHandler(createTariffSchema, "body"),
   createTariffController
 );
@@ -26,6 +27,7 @@ router.post(
 router.patch(
   "/:id",
   JWTAuth,
+  checkPermissions("P43-02"),
   validatorHandler(updateTariffSchema, "body"),
   updateTariffController
 );
@@ -33,6 +35,7 @@ router.patch(
 router.delete(
   "/:id",
   JWTAuth,
+  checkPermissions("P43-03"),
   validatorHandler(deleteTariffSchema, "params"),
   deleteTariffController
 );
