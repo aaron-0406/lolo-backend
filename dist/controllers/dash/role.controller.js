@@ -78,11 +78,6 @@ const updateRoleController = (req, res, next) => __awaiter(void 0, void 0, void 
         const { id } = req.params;
         const body = req.body;
         const { oldRole, newRole, permissionsToDelete, permissionsToAdd, permissionWithoutChanges } = yield service.update(id, body, body.permissions);
-        console.log(oldRole);
-        console.log(newRole);
-        console.log(permissionsToDelete);
-        console.log(permissionsToAdd);
-        console.log(permissionWithoutChanges);
         const permissionsRolSumary = (0, user_log_1.generateLogSummary)({
             method: req.method,
             oldData: permissionsToDelete !== null && permissionsToDelete !== void 0 ? permissionsToDelete : [],

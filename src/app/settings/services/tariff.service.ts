@@ -147,7 +147,6 @@ class TariffService {
   }
 
   async create(data: Omit<TariffType, "id" | "tariffIntervalMatch">) {
-    // const newTariff = await models.TARIFF.create(data);
     const newTariff = await models.TARIFF.create({
       code: data.code,
       type: data.type,
@@ -157,7 +156,7 @@ class TariffService {
 
     if(!newTariff) return boom.notFound("Hubo un error al crear el tarifa");
 
-    if(data.type === TariffType.CUSTOM_TARIFF){
+    if(data.type === TariffType.CUSTOM_TARIFF || data.type === TariffType.BY_EXHORT_PROCESS) {
       try {
         await models.TARIFF_INTERVAL_MATCH.create({
           tariffId: newTariff.dataValues.id,
@@ -210,7 +209,7 @@ class TariffService {
     });
 
     if (!tariffIntervalMatch.length) return boom.notFound("Tarifa no encontrada");
-    if(data.type === TariffType.CUSTOM_TARIFF){
+    if(data.type === TariffType.CUSTOM_TARIFF || data.type === TariffType.BY_EXHORT_PROCESS){
       try {
         await tariffIntervalMatch[0].update({
           value: data.value,

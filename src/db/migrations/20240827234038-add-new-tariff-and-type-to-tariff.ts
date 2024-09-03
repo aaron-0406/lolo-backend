@@ -1,11 +1,44 @@
 import { QueryInterface, DataTypes } from "sequelize"
 import tariffModel from "../models/settings/tariff.model";
-import tariffIntervalModel from "../models/settings/tariff-interval.model";
 import tariffIntervalMatchModel from "../models/settings/tariff-interval-match.model";
+import permissionModel from "../models/permission.model";
 
 const { TARIFF_TABLE } = tariffModel;
-const { TARIFF_INTERVAL_TABLE } = tariffIntervalModel;
 const { TARIFF_INTERVAL_MATCH_TABLE } = tariffIntervalMatchModel;
+const { PERMISSION_TABLE } = permissionModel;
+
+const newPermissions = [
+  {
+    name: "AGREGAR ARANCEL",
+    code: "P43-01",
+    icon: "-",
+    link: "#",
+  },
+  {
+    name: "ACTUALIZAR ARANCEL",
+    code: "P43-02",
+    icon: "-",
+    link: "#",
+  },
+  {
+    name: "ELIMINAR ARANCEL",
+    code: "P43-03",
+    icon: "-",
+    link: "#",
+  },
+  {
+    name: "VER CUADRO TARIFAS",
+    code: "P13-01-01-04",
+    icon: "-",
+    link: "#",
+  },
+  {
+    name: "VER TARIFAS ASIGNADAS",
+    code: "P13-01-01-05",
+    icon: "-",
+    link: "#",
+  }
+]
 
 const tariff = [
   { code:"PTE-00003-01", type:"POR TRAMITE DE EXHORTO",  description:"Copia literal"},
@@ -23,9 +56,6 @@ const tariff = [
   { code:"TP-00004-07", type:"TARIFA PERSONALIZADA", description:"REINTEGRO"},
 ]
 
-const tariffInterval = [
-  { description: 'Asignado a intervalo', interval: "[null, null]", interval_description: 'Asignado a intervalo de tarifas' },
-]
 
 const tariffIntervalMatch = [
   { tariff_id: 18, interval_id: 20, value: 150.00 },
@@ -33,6 +63,7 @@ const tariffIntervalMatch = [
   { tariff_id: 20, interval_id: 20, value: 115.00 },
   { tariff_id: 21, interval_id: 20, value: 450.00 },
   { tariff_id: 22, interval_id: 20, value: 51.50 },
+  
   { tariff_id: 23, interval_id: 20, value: 0.00 },
   { tariff_id: 24, interval_id: 20, value: 0.00 },
   { tariff_id: 25, interval_id: 20, value: 0.00 },
@@ -43,6 +74,8 @@ const tariffIntervalMatch = [
 ]
 
 export async function up(queryInterface: QueryInterface) {
+  await queryInterface.bulkInsert(PERMISSION_TABLE, newPermissions);
+
   await queryInterface.addColumn(TARIFF_TABLE, "customer_has_bank_id_customer_has_bank",{
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -51,7 +84,6 @@ export async function up(queryInterface: QueryInterface) {
 
   try {
     await queryInterface.bulkInsert(TARIFF_TABLE, tariff);
-    await queryInterface.bulkInsert(TARIFF_INTERVAL_TABLE, tariffInterval);
     await queryInterface.bulkInsert(
       TARIFF_INTERVAL_MATCH_TABLE,
       tariffIntervalMatch
@@ -66,7 +98,6 @@ export async function up(queryInterface: QueryInterface) {
 export async function down(queryInterface: QueryInterface) {
   try {
     await queryInterface.bulkDelete(TARIFF_TABLE, tariff);
-    await queryInterface.bulkDelete(TARIFF_INTERVAL_TABLE, tariffInterval);
     await queryInterface.bulkDelete(
       TARIFF_INTERVAL_MATCH_TABLE,
       tariffIntervalMatch,
