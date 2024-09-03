@@ -133,6 +133,17 @@ class TariffService {
             return rta;
         });
     }
+    findById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const tariff = yield models.TARIFF.findByPk(id);
+            if (!tariff) {
+                boom_1.default.notFound("Tarifa no encontrada");
+                return null;
+            }
+            ;
+            return tariff;
+        });
+    }
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const newTariff = yield models.TARIFF.create({
@@ -141,8 +152,11 @@ class TariffService {
                 description: data.description,
                 customerHasBankId: data.customerHasBankId,
             });
-            if (!newTariff)
-                return boom_1.default.notFound("Hubo un error al crear el tarifa");
+            if (!newTariff) {
+                boom_1.default.notFound("Hubo un error al crear el tarifa");
+                return;
+            }
+            ;
             if (data.type === TariffType.CUSTOM_TARIFF || data.type === TariffType.BY_EXHORT_PROCESS) {
                 try {
                     yield models.TARIFF_INTERVAL_MATCH.create({
@@ -152,7 +166,7 @@ class TariffService {
                     });
                 }
                 catch (error) {
-                    return boom_1.default.badRequest("Hubo un error al crear el interval match de tarifas");
+                    return console.log(error);
                 }
             }
             const tariffInterval = yield models.TARIFF.findByPk(newTariff.dataValues.id, {
@@ -175,15 +189,42 @@ class TariffService {
                     },
                 ],
             });
+            if (!tariffInterval) {
+                boom_1.default.notFound("Tarifa no encontrada");
+                return;
+            }
+            ;
             return tariffInterval;
         });
     }
     update(id, data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const tariff = yield models.TARIFF.findByPk(id);
-            if (!tariff)
-                return boom_1.default.notFound("Tarifa no encontrada");
-            tariff.update({
+            const tariff = yield models.TARIFF.findByPk(id, {
+                include: [
+                    {
+                        model: models.TARIFF_INTERVAL_MATCH,
+                        as: "tariffIntervalMatch",
+                        include: [
+                            {
+                                model: models.TARIFF_INTERVAL,
+                                as: "tariffInterval",
+                                attributes: [
+                                    "id",
+                                    "description",
+                                    "interval",
+                                    "intervalDescription",
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            });
+            if (!tariff) {
+                boom_1.default.notFound("Tarifa no encontrada");
+                return { oldTariff: null, newTariff: null };
+            }
+            const oldTariff = Object.assign({}, tariff.get());
+            yield tariff.update({
                 code: data.code,
                 type: data.type,
                 description: data.description,
@@ -193,16 +234,20 @@ class TariffService {
                     tariffId: id,
                 },
             });
-            if (!tariffIntervalMatch.length)
-                return boom_1.default.notFound("Tarifa no encontrada");
-            if (data.type === TariffType.CUSTOM_TARIFF || data.type === TariffType.BY_EXHORT_PROCESS) {
+            if (!tariffIntervalMatch.length) {
+                boom_1.default.notFound("Tarifa no encontrada");
+                return { oldTariff: null, newTariff: null };
+            }
+            if (data.type === TariffType.CUSTOM_TARIFF ||
+                data.type === TariffType.BY_EXHORT_PROCESS) {
                 try {
                     yield tariffIntervalMatch[0].update({
                         value: data.value,
                     });
                 }
                 catch (error) {
-                    return boom_1.default.badRequest("Hubo un error al crear el interval match de tarifas");
+                    boom_1.default.badRequest("Hubo un error al crear el interval match de tarifas");
+                    return { oldTariff: null, newTariff: null };
                 }
             }
             const newTariff = yield models.TARIFF.findByPk(tariff.dataValues.id, {
@@ -225,22 +270,26 @@ class TariffService {
                     },
                 ],
             });
-            return newTariff;
+            return { oldTariff, newTariff };
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
+            const tariff = yield this.findById(id);
+            if (!tariff)
+                return null;
+            const oldTariff = Object.assign({}, tariff.get());
             yield models.TARIFF_INTERVAL_MATCH.destroy({
                 where: {
                     tariffId: id,
                 },
             });
-            const tariff = yield models.TARIFF.destroy({
+            yield models.TARIFF.destroy({
                 where: {
                     id: id,
                 },
             });
-            return id;
+            return oldTariff;
         });
     }
 }

@@ -11,7 +11,7 @@ const tariff_schema_1 = __importDefault(require("../../app/settings/schemas/tari
 const { getTariffsSchema, createTariffSchema, updateTariffSchema, deleteTariffSchema } = tariff_schema_1.default;
 const router = (0, express_1.Router)();
 router.get("/:chb", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(getTariffsSchema, "params"), tariff_controller_1.getTariffsController);
-router.post("/", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(createTariffSchema, "body"), tariff_controller_1.createTariffController);
-router.patch("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(updateTariffSchema, "body"), tariff_controller_1.updateTariffController);
-router.delete("/:id", auth_handler_1.JWTAuth, (0, validator_handler_1.default)(deleteTariffSchema, "params"), tariff_controller_1.deleteTariffController);
+router.post("/", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P43-01"), (0, validator_handler_1.default)(createTariffSchema, "body"), tariff_controller_1.createTariffController);
+router.patch("/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P43-02"), (0, validator_handler_1.default)(updateTariffSchema, "body"), tariff_controller_1.updateTariffController);
+router.delete("/:id", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P43-03"), (0, validator_handler_1.default)(deleteTariffSchema, "params"), tariff_controller_1.deleteTariffController);
 exports.default = router;
