@@ -1,9 +1,9 @@
 import { QueryInterface, Op, DataTypes } from 'sequelize';
 import permissionModel from "../models/permission.model";
 import judicialBinnacleModel from '../models/judicial-binnacle.model';
-import tariffModel from '../models/tariff.model';
-import tariffIntervalModel from '../models/tariff-interval.model';
-import tariffIntervalMatchModel from '../models/tariff-interval-match.model';
+import tariffModel from '../models/settings/tariff.model';
+import tariffIntervalModel from '../models/settings/tariff-interval.model';
+import tariffIntervalMatchModel from '../models/settings/tariff-interval-match.model';
 
 const { PERMISSION_TABLE } = permissionModel;
 const { JUDICIAL_BINNACLE_TABLE } = judicialBinnacleModel;

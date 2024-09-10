@@ -62,9 +62,9 @@ import judicialCollateralChargesEncumbrancesTypeLoadModel from "./judicial-colla
 import judicialCollateralFilesModel from "./judicial-collateral-files.model";
 import judicialCollateralActionRound from "./judicial-collateral-auction-round.model";
 import judicialBinNotificationModel from "./judicial-bin-notification.model";
-import tariffModel from "./tariff.model"
-import tariffIntervalModel from "./tariff-interval.model"
-import tariffIntervalMatchModel from "./tariff-interval-match.model"
+import tariffModel from "./settings/tariff.model"
+import tariffIntervalModel from "./settings/tariff-interval.model"
+import tariffIntervalMatchModel from "./settings/tariff-interval-match.model"
 
 const { Customer, CustomerSchema } = customerModel;
 const { Funcionario, FuncionarioSchema } = funcionarioModel;
