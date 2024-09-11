@@ -14,7 +14,7 @@ const { getAllNotificationsByBinnacleIdSchema } = judicialBinNotificationSchema;
 router.get(
   "/:binnacleId",
   JWTAuth,
-  checkPermissions("P13-01-01-04-01"),
+  checkPermissions("P13-01-01-06-01"),
   validatorHandler(getAllNotificationsByBinnacleIdSchema, "params"),
   getAllNotificationsByBinnacleIdController
 );

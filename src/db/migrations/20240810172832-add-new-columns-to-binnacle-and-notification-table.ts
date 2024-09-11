@@ -12,31 +12,31 @@ const { JUDICIAL_CASE_FILE_TABLE } = judicialCaseFileModel
 const newPermissions = [
   {
     name: 'DETALLES DE LA BITACORA',
-    code: 'P13-01-01-04',
+    code: 'P13-01-01-06',
     icon: '-',
     link: '/judicial/:urlIdentifier/expediente/:code/bitacora/:binnacleCode'
   },
   {
     name: "NOTIFICACIONES",
-    code: "P13-01-01-04-01",
+    code: "P13-01-01-06-01",
     icon: "ri-notification-badge-fill",
     link: "/judicial/:urlIdentifier/expediente/:code/bitacora/:binnacleCode/notificaciones"
   },
   {
     name: 'AGREGAR NOTIFICACIÓN',
-    code: 'P13-01-01-04-02',
+    code: 'P13-01-01-06-02',
     icon: '-',
     link: '#'
   },
   {
     name: 'ACTUALIZAR NOTIFICACIÓN',
-    code: 'P13-01-01-04-03',
+    code: 'P13-01-01-06-03',
     icon: '-',
     link: '#'
   },
   {
     name: 'ELIMINAR NOTIFICACIÓN',
-    code: 'P13-01-01-04-04',
+    code: 'P13-01-01-06-04',
     icon: '-',
     link: '#'
   }
@@ -232,10 +232,10 @@ export async function down(queryInterface: QueryInterface) {
   const deleteCriteria = {
     code: {
       [Op.startsWith]: [
-        "P13-01-01-04",
-        "P13-01-01-04-01",
-        "P13-01-01-04-02",
-        "P13-01-01-04-03",
+        "P13-01-01-06",
+        "P13-01-01-06-01",
+        "P13-01-01-06-02",
+        "P13-01-01-06-03",
       ],
     },
   };
