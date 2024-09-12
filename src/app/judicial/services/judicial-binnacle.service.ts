@@ -168,37 +168,41 @@ class JudicialBinnacleService {
     try {
       const judicialBinnacle = await this.findByID(id);
       const oldJudicialBinacle = { ...judicialBinnacle.get() };
-      console.log(changes)
+
       await judicialBinnacle.update(changes);
-      files.forEach(async (file) => {
-        const newBinFile = await models.JUDICIAL_BIN_FILE.create({
-          judicialBinnacleId: id,
-          originalName: file.originalname,
-          nameOriginAws: "",
-          customerHasBankId: judicialBinnacle.dataValues.customerHasBankId,
-          size: file.size,
-        });
 
-        const newFileName = `${newBinFile.dataValues.id}-${file.filename}`;
-        await renameFile(`../public/docs/`, file.filename, newFileName);
-        file.filename = newFileName;
+      await Promise.all(
+        files.map(async (file) => {
+          const newBinFile = await models.JUDICIAL_BIN_FILE.create({
+            judicialBinnacleId: id,
+            originalName: file.originalname,
+            nameOriginAws: "",
+            customerHasBankId: judicialBinnacle.dataValues.customerHasBankId,
+            size: file.size,
+          });
 
-        // UPLOAD TO AWS
-        await uploadFile(
-          file,
-          `${config.AWS_CHB_PATH}${params.idCustomer}/${judicialBinnacle.dataValues.customerHasBankId}/${params.code}/case-file/${judicialBinnacle.dataValues.judicialFileCaseId}/binnacle`
-        );
+          const newFileName = `${newBinFile.dataValues.id}-${file.filename}`;
+          await renameFile(`../public/docs/`, file.filename, newFileName);
+          file.filename = newFileName;
 
-        // UPDATE NAME IN DATABASE
-        newBinFile.update({
-          nameOriginAws: file.filename,
-        });
+          // Cargar a AWS
+          await uploadFile(
+            file,
+            `${config.AWS_CHB_PATH}${params.idCustomer}/${judicialBinnacle.dataValues.customerHasBankId}/${params.code}/case-file/${judicialBinnacle.dataValues.judicialFileCaseId}/binnacle`
+          );
 
-        // DELETE TEMP FILE
-        await deleteFile("../public/docs", file.filename);
-      });
+          // Actualiza el nombre en la base de datos
+          await newBinFile.update({
+            nameOriginAws: file.filename,
+          });
+
+          // Elimina el archivo temporal
+          await deleteFile("../public/docs", file.filename);
+        })
+      );
 
       const newJudicialBinnacle = await this.findByID(id);
+
       return { oldJudicialBinacle, newJudicialBinnacle };
     } catch (error) {
       console.error("Error in update:", error);
@@ -206,7 +210,10 @@ class JudicialBinnacleService {
     }
   }
 
-  async updateTariff(id: string, changes: { totalTariff: number, tariffHistory:string}) {
+  async updateTariff(
+    id: string,
+    changes: { totalTariff: number; tariffHistory: string }
+  ) {
     try {
       const judicialBinnacle = await this.findByID(id);
       const oldJudicialBinacle = { ...judicialBinnacle.get() };
