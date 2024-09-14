@@ -13,6 +13,10 @@ const judgmentNumber = joi_1.default.number();
 const secretary = joi_1.default.string().max(150);
 const amountDemandedSoles = joi_1.default.number();
 const amountDemandedDollars = joi_1.default.number();
+const comercialValueSoles = joi_1.default.number();
+const comercialValueDollars = joi_1.default.number();
+const amountAffectionSoles = joi_1.default.number();
+const amountAffectionDollars = joi_1.default.number();
 const cautionaryCode = joi_1.default.string().max(150);
 const errandCode = joi_1.default.string().max(150);
 const judicialSedeId = joi_1.default.number().positive();
@@ -64,6 +68,10 @@ const createJudicialCaseFileSchema = joi_1.default.object({
     secretary: secretary.optional().empty("").allow(""),
     amountDemandedSoles: amountDemandedSoles.optional().empty("").allow(""),
     amountDemandedDollars: amountDemandedDollars.optional().empty("").allow(""),
+    comercialValueSoles: comercialValueSoles.optional().empty("").allow(""),
+    comercialValueDollars: comercialValueDollars.optional().empty("").allow(""),
+    amountAffectionSoles: amountAffectionSoles.optional().empty("").allow(""),
+    amountAffectionDollars: amountAffectionDollars.optional().empty("").allow(""),
     cautionaryCode: cautionaryCode.optional().empty("").allow(""),
     errandCode: errandCode.optional().empty("").allow(""),
     judicialSedeId: judicialSedeId.optional().empty("").allow(""),
@@ -93,6 +101,10 @@ const updateJudicialCaseFileSchema = joi_1.default.object({
     secretary: secretary.optional().empty("").allow(""),
     amountDemandedSoles: amountDemandedSoles.optional().empty("").allow(""),
     amountDemandedDollars: amountDemandedDollars.optional().empty("").allow(""),
+    comercialValueSoles: comercialValueSoles.optional().empty("").allow(""),
+    comercialValueDollars: comercialValueDollars.optional().empty("").allow(""),
+    amountAffectionSoles: amountAffectionSoles.optional().empty("").allow(""),
+    amountAffectionDollars: amountAffectionDollars.optional().empty("").allow(""),
     cautionaryCode: cautionaryCode.optional().empty("").allow(""),
     errandCode: errandCode.optional().empty("").allow(""),
     judicialSedeId: judicialSedeId.optional().empty("").allow(""),

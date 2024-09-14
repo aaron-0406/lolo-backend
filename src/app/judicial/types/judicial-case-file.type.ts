@@ -5,6 +5,10 @@ export type JudicialCaseFileType = {
   secretary: string;
   amountDemandedSoles: number;
   amountDemandedDollars: number;
+  comercialValueSoles: number;
+  comercialValueDollars: number;
+  amountAffectionSoles: number;
+  amountAffectionDollars: number;
   cautionaryCode: string;
   errandCode: string;
   judicialSedeId: number;

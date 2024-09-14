@@ -48,6 +48,26 @@ const JudicialCaseFileSchema = {
         field: "amount_demanded_dollars",
         type: sequelize_1.DataTypes.DECIMAL(10, 2),
     },
+    comercialValueSoles: {
+        allowNull: true,
+        field: "comercial_value_soles",
+        type: sequelize_1.DataTypes.DECIMAL(10, 2),
+    },
+    comercialValueDollars: {
+        allowNull: true,
+        field: "comercial_value_dollars",
+        type: sequelize_1.DataTypes.DECIMAL(10, 2),
+    },
+    amountAffectionSoles: {
+        allowNull: true,
+        field: "amount_affection_soles",
+        type: sequelize_1.DataTypes.DECIMAL(10, 2),
+    },
+    amountAffectionDollars: {
+        allowNull: true,
+        field: "amount_affection_dollars",
+        type: sequelize_1.DataTypes.DECIMAL(10, 2),
+    },
     cautionaryCode: {
         allowNull: true,
         field: "cautionary_code",

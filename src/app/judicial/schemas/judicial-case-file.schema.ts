@@ -13,6 +13,10 @@ const judgmentNumber = Joi.number();
 const secretary = Joi.string().max(150);
 const amountDemandedSoles = Joi.number();
 const amountDemandedDollars = Joi.number();
+const comercialValueSoles = Joi.number();
+const comercialValueDollars = Joi.number();
+const amountAffectionSoles = Joi.number();
+const amountAffectionDollars = Joi.number();
 const cautionaryCode = Joi.string().max(150);
 const errandCode = Joi.string().max(150);
 const judicialSedeId = Joi.number().positive();
@@ -75,6 +79,10 @@ const createJudicialCaseFileSchema = Joi.object<
   secretary: secretary.optional().empty("").allow(""),
   amountDemandedSoles: amountDemandedSoles.optional().empty("").allow(""),
   amountDemandedDollars: amountDemandedDollars.optional().empty("").allow(""),
+  comercialValueSoles: comercialValueSoles.optional().empty("").allow(""),
+  comercialValueDollars: comercialValueDollars.optional().empty("").allow(""),
+  amountAffectionSoles: amountAffectionSoles.optional().empty("").allow(""),
+  amountAffectionDollars: amountAffectionDollars.optional().empty("").allow(""),
   cautionaryCode: cautionaryCode.optional().empty("").allow(""),
   errandCode: errandCode.optional().empty("").allow(""),
   judicialSedeId: judicialSedeId.optional().empty("").allow(""),
@@ -111,6 +119,10 @@ const updateJudicialCaseFileSchema = Joi.object<
   secretary: secretary.optional().empty("").allow(""),
   amountDemandedSoles: amountDemandedSoles.optional().empty("").allow(""),
   amountDemandedDollars: amountDemandedDollars.optional().empty("").allow(""),
+  comercialValueSoles: comercialValueSoles.optional().empty("").allow(""),
+  comercialValueDollars: comercialValueDollars.optional().empty("").allow(""),
+  amountAffectionSoles: amountAffectionSoles.optional().empty("").allow(""),
+  amountAffectionDollars: amountAffectionDollars.optional().empty("").allow(""),
   cautionaryCode: cautionaryCode.optional().empty("").allow(""),
   errandCode: errandCode.optional().empty("").allow(""),
   judicialSedeId: judicialSedeId.optional().empty("").allow(""),
