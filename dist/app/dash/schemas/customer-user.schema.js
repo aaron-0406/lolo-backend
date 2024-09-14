@@ -10,6 +10,7 @@ const lastName = joi_1.default.string().min(2).max(100);
 const phone = joi_1.default.string().min(2).max(50);
 const dni = joi_1.default.string().max(8);
 const email = joi_1.default.string().min(2).max(70);
+const subRoles = joi_1.default.string().max(100);
 const password = joi_1.default.string()
     .min(12)
     .max(70)
@@ -35,6 +36,7 @@ const createCustomerUserSchema = joi_1.default.object({
     roleId: roleId.required(),
     loginAttempts: loginAttempts.optional(),
     firstAccess: joi_1.default.boolean().optional(),
+    subRoles: subRoles.optional(),
 });
 const updateCustomerUserStateSchema = joi_1.default.object({
     state: state.required(),
@@ -48,6 +50,7 @@ const updateCustomerUserSchema = joi_1.default.object({
     password: password.optional(),
     roleId: roleId.required(),
     firstAccess: joi_1.default.boolean().optional(),
+    subRoles: subRoles.optional(),
 });
 const getCustomerUserSchema = joi_1.default.object({
     id: id.required(),

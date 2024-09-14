@@ -81,6 +81,11 @@ const CustomerUserSchema = {
         allowNull: false,
         field: "login_attempts",
     },
+    subRoles: {
+        field: "sub_roles",
+        allowNull: true,
+        type: sequelize_1.DataTypes.STRING(100),
+    },
     code2fa: {
         allowNull: true,
         type: sequelize_1.DataTypes.STRING(70),

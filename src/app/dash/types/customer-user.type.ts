@@ -15,6 +15,7 @@ export type CustomerUserType = {
     name: string;
     icon: string;
   }>;
+  subRoles: string;
   customerId: number;
   loginAttempts?: number;
   code2fa?: string;
