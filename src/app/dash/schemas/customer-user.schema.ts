@@ -7,6 +7,7 @@ const lastName = Joi.string().min(2).max(100);
 const phone = Joi.string().min(2).max(50);
 const dni = Joi.string().max(8);
 const email = Joi.string().min(2).max(70);
+const subRoles = Joi.string().max(100);
 const password = Joi.string()
   .min(12)
   .max(70)
@@ -37,6 +38,7 @@ const createCustomerUserSchema = Joi.object<
   roleId: roleId.required(),
   loginAttempts: loginAttempts.optional(),
   firstAccess: Joi.boolean().optional(),
+  subRoles: subRoles.optional(),
 });
 
 const updateCustomerUserStateSchema = Joi.object<{ state: boolean }, true>({
@@ -64,6 +66,7 @@ const updateCustomerUserSchema = Joi.object<
   password: password.optional(),
   roleId: roleId.required(),
   firstAccess: Joi.boolean().optional(),
+  subRoles: subRoles.optional(),
 });
 
 const getCustomerUserSchema = Joi.object<{ id: number }, true>({

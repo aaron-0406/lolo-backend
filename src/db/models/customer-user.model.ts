@@ -85,6 +85,13 @@ const CustomerUserSchema: ModelAttributes<CustomerUser, CustomerUserType> = {
     allowNull: false,
     field: "login_attempts",
   },
+
+  subRoles: {
+    field:"sub_roles",
+    allowNull: true,
+    type: DataTypes.STRING(100),
+  },
+
   code2fa: {
     allowNull: true,
     type: DataTypes.STRING(70),
