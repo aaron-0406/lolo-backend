@@ -7,7 +7,7 @@ export type JudicialCollateralType = {
   constructionArea: string;
   electronicRecord: string;
   dateOfPublicDeed: Date;
-  numberOfCollateral: number;
+  numberOfCollateral: string;
   registrationSeat: string;
 
   customerHasBankId: number;

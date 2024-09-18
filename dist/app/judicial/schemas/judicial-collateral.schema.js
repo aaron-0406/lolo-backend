@@ -26,8 +26,8 @@ const electronicRecord = joi_1.default.string().min(1).max(150).messages({
 const dateOfPublicDeed = joi_1.default.date().messages({
     "date.base": `El campo 'Fecha de escritura pública' debe ser una fecha válida`
 });
-const numberOfCollateral = joi_1.default.number().messages({
-    "number.base": `El campo 'Número de garantía' debe ser un número`
+const numberOfCollateral = joi_1.default.string().messages({
+    "string.empty": `El campo 'Número de garantía' no puede estar vacío`
 });
 const registrationSeat = joi_1.default.string().min(1).max(150).messages({
     "string.empty": `El campo 'Asiento de registro' no puede estar vacío`
