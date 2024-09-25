@@ -95,15 +95,15 @@ const updateJudicialBinnacleController = (req, res, next) => __awaiter(void 0, v
         });
         const sumary = (0, user_log_1.generateLogSummary)({
             method: req.method,
-            id: newJudicialBinnacle.dataValues.id,
+            id: newJudicialBinnacle === null || newJudicialBinnacle === void 0 ? void 0 : newJudicialBinnacle.dataValues.id,
             oldData: oldJudicialBinacle,
-            newData: newJudicialBinnacle.dataValues,
+            newData: newJudicialBinnacle === null || newJudicialBinnacle === void 0 ? void 0 : newJudicialBinnacle.dataValues,
         });
         yield serviceUserLog.create({
             customerUserId: Number((_e = req.user) === null || _e === void 0 ? void 0 : _e.id),
             codeAction: "P13-01-01-02",
             entity: JUDICIAL_BINNACLE_TABLE,
-            entityId: Number(newJudicialBinnacle.dataValues.id),
+            entityId: Number(newJudicialBinnacle === null || newJudicialBinnacle === void 0 ? void 0 : newJudicialBinnacle.dataValues.id),
             ip: (_f = req.clientIp) !== null && _f !== void 0 ? _f : "",
             customerId: Number((_g = req.user) === null || _g === void 0 ? void 0 : _g.customerId),
             methodSumary: sumary,

@@ -154,9 +154,8 @@ class JudicialBinnacleService {
             try {
                 const judicialBinnacle = yield this.findByID(id);
                 const oldJudicialBinacle = Object.assign({}, judicialBinnacle.get());
-                console.log(changes);
                 yield judicialBinnacle.update(changes);
-                files.forEach((file) => __awaiter(this, void 0, void 0, function* () {
+                yield Promise.all(files.map((file) => __awaiter(this, void 0, void 0, function* () {
                     const newBinFile = yield models.JUDICIAL_BIN_FILE.create({
                         judicialBinnacleId: id,
                         originalName: file.originalname,
@@ -167,15 +166,15 @@ class JudicialBinnacleService {
                     const newFileName = `${newBinFile.dataValues.id}-${file.filename}`;
                     yield (0, helpers_1.renameFile)(`../public/docs/`, file.filename, newFileName);
                     file.filename = newFileName;
-                    // UPLOAD TO AWS
+                    // Cargar a AWS
                     yield (0, aws_bucket_1.uploadFile)(file, `${config_1.default.AWS_CHB_PATH}${params.idCustomer}/${judicialBinnacle.dataValues.customerHasBankId}/${params.code}/case-file/${judicialBinnacle.dataValues.judicialFileCaseId}/binnacle`);
-                    // UPDATE NAME IN DATABASE
-                    newBinFile.update({
+                    // Actualiza el nombre en la base de datos
+                    yield newBinFile.update({
                         nameOriginAws: file.filename,
                     });
-                    // DELETE TEMP FILE
+                    // Elimina el archivo temporal
                     yield (0, helpers_1.deleteFile)("../public/docs", file.filename);
-                }));
+                })));
                 const newJudicialBinnacle = yield this.findByID(id);
                 return { oldJudicialBinacle, newJudicialBinnacle };
             }

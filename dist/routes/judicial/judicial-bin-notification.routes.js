@@ -10,5 +10,5 @@ const judicial_bin_notification_schema_1 = __importDefault(require("../../app/ju
 const judicial_bin_notification_controller_1 = require("../../controllers/judicial/judicial-bin-notification.controller");
 const router = express_1.default.Router();
 const { getAllNotificationsByBinnacleIdSchema } = judicial_bin_notification_schema_1.default;
-router.get("/:binnacleId", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P13-01-01-04-01"), (0, validator_handler_1.default)(getAllNotificationsByBinnacleIdSchema, "params"), judicial_bin_notification_controller_1.getAllNotificationsByBinnacleIdController);
+router.get("/:binnacleId", auth_handler_1.JWTAuth, (0, auth_handler_1.checkPermissions)("P13-01-01-06-01"), (0, validator_handler_1.default)(getAllNotificationsByBinnacleIdSchema, "params"), judicial_bin_notification_controller_1.getAllNotificationsByBinnacleIdController);
 exports.default = router;
