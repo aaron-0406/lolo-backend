@@ -76,7 +76,7 @@ const JudicialCollateralSchema: ModelAttributes<
   numberOfCollateral: {
     allowNull: false,
     field: "number_of_collateral",
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING(150),
   },
   registrationSeat: {
     allowNull: false,

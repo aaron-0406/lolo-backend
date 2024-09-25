@@ -67,7 +67,7 @@ const JudicialCollateralSchema = {
     numberOfCollateral: {
         allowNull: false,
         field: "number_of_collateral",
-        type: sequelize_1.DataTypes.INTEGER,
+        type: sequelize_1.DataTypes.STRING(150),
     },
     registrationSeat: {
         allowNull: false,
