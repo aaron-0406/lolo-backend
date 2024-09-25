@@ -64,6 +64,7 @@ const JudicialBinnacleSchema = {
     judicialBinProceduralStageId: {
         allowNull: false,
         type: sequelize_1.DataTypes.INTEGER,
+        defaultValue: null,
         references: {
             model: JUDICIAL_BIN_PROCEDURAL_STAGE_TABLE,
             key: "id_judicial_bin_procedural_stage",
@@ -86,6 +87,56 @@ const JudicialBinnacleSchema = {
         type: sequelize_1.DataTypes.TEXT("long"),
         field: "last_performed",
     },
+    index: {
+        allowNull: true,
+        type: sequelize_1.DataTypes.INTEGER,
+        field: "index",
+    },
+    resolutionDate: {
+        allowNull: true,
+        type: sequelize_1.DataTypes.DATE,
+        field: "resolution_date",
+    },
+    entryDate: {
+        allowNull: true,
+        type: sequelize_1.DataTypes.DATE,
+        field: "entry_date",
+    },
+    notificationType: {
+        allowNull: true,
+        type: sequelize_1.DataTypes.STRING(200),
+        field: "notification_type",
+    },
+    acto: {
+        allowNull: true,
+        type: sequelize_1.DataTypes.STRING(200),
+        field: "acto",
+    },
+    fojas: {
+        allowNull: true,
+        type: sequelize_1.DataTypes.NUMBER,
+        field: "fojas",
+    },
+    folios: {
+        allowNull: true,
+        type: sequelize_1.DataTypes.NUMBER,
+        field: "folios",
+    },
+    provedioDate: {
+        allowNull: true,
+        type: sequelize_1.DataTypes.DATE,
+        field: "provedio_date",
+    },
+    userDescription: {
+        allowNull: true,
+        type: sequelize_1.DataTypes.STRING(200),
+        field: "user_description",
+    },
+    createdBy: {
+        allowNull: true,
+        type: sequelize_1.DataTypes.NUMBER,
+        field: "created_by",
+    },
     totalTariff: {
         allowNull: false,
         type: sequelize_1.DataTypes.DECIMAL(10, 2),
@@ -97,7 +148,7 @@ const JudicialBinnacleSchema = {
         defaultValue: "",
         type: sequelize_1.DataTypes.TEXT("long"),
         field: "tariff_history",
-    }
+    },
 };
 class JudicialBinnacle extends sequelize_1.Model {
     static associate(models) {
@@ -112,6 +163,10 @@ class JudicialBinnacle extends sequelize_1.Model {
         this.belongsTo(models.JUDICIAL_BIN_TYPE_BINNACLE, { as: "binnacleType" });
         this.belongsTo(models.JUDICIAL_BIN_PROCEDURAL_STAGE, {
             as: "judicialBinProceduralStage",
+        });
+        this.hasMany(models.JUDICIAL_BIN_NOTIFICATION, {
+            as: "judicialBinNotifications",
+            foreignKey: "idJudicialBinacle",
         });
     }
     static config(sequelize) {

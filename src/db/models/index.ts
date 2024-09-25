@@ -61,6 +61,7 @@ import judicialCollateralChargesEncumbrancesModel from "./judicial-collateral-ch
 import judicialCollateralChargesEncumbrancesTypeLoadModel from "./judicial-collateral-charges-encumbrances-type-load.model";
 import judicialCollateralFilesModel from "./judicial-collateral-files.model";
 import judicialCollateralActionRound from "./judicial-collateral-auction-round.model";
+import judicialBinNotificationModel from "./judicial-bin-notification.model";
 import tariffModel from "./settings/tariff.model"
 import tariffIntervalModel from "./settings/tariff-interval.model"
 import tariffIntervalMatchModel from "./settings/tariff-interval-match.model"
@@ -150,6 +151,9 @@ const { JudicialCollateralAuctionRound, JudicialCollateralAuctionRoundSchema } =
 const { Tariff, TariffSchema } = tariffModel;
 const { TariffInterval, TariffIntervalSchema } = tariffIntervalModel;
 const { TariffIntervalMatch, TariffIntervalMatchSchema } = tariffIntervalMatchModel;
+
+const { JudicialBinNotification, JudicialBinNotificationSchema } =
+  judicialBinNotificationModel;
 
 export const setupModels = (sequelize: Sequelize) => {
   Customer.init(CustomerSchema, Customer.config(sequelize));
@@ -300,6 +304,10 @@ export const setupModels = (sequelize: Sequelize) => {
     JudicialCollateralAuctionRound.config(sequelize)
   );
 
+  JudicialBinNotification.init(
+    JudicialBinNotificationSchema,
+    JudicialBinNotification.config(sequelize)
+  );
   Tariff.init(TariffSchema, Tariff.config(sequelize));
   TariffInterval.init(TariffIntervalSchema, TariffInterval.config(sequelize));
   TariffIntervalMatch.init(TariffIntervalMatchSchema, TariffIntervalMatch.config(sequelize));
@@ -364,6 +372,7 @@ export const setupModels = (sequelize: Sequelize) => {
   JudicialCollateralChargesEncumbrancesTypeLoad.associate(sequelize.models);
   JudicialCollateralFiles.associate(sequelize.models);
   JudicialCollateralAuctionRound.associate(sequelize.models);
+  JudicialBinNotification.associate(sequelize.models);
   Tariff.associate(sequelize.models);
   TariffInterval.associate(sequelize.models);
   TariffIntervalMatch.associate(sequelize.models);

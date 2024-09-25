@@ -243,6 +243,20 @@ const JudicialCaseFileSchema: ModelAttributes<
     onUpdate: "CASCADE",
     onDelete: "NO ACTION",
   },
+  isScanValid: {
+    allowNull: true,
+    field: "is_scan_valid",
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
+  },
+
+  wasScanned: {
+    allowNull: true,
+    field: "was_scanned",
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+
   qrCode: {
     allowNull: true,
     field: "qr_code",

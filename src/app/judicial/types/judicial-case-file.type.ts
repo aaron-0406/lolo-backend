@@ -27,6 +27,8 @@ export type JudicialCaseFileType = {
   processComment: string;
   processReasonId: number;
   idJudicialCaseFileRelated: number;
+  isScanValid: boolean;
+  wasScanned: boolean;
   bankId: number;
   qrCode: string;
   chbTransferred: number;

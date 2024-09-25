@@ -1,4 +1,4 @@
-import Joi from "joi";
+import Joi, { not } from "joi";
 import { JudicialBinnacleType } from "../types/judicial-binnacle.type";
 
 const id = Joi.number();
@@ -10,6 +10,16 @@ const judicialFileCaseId = Joi.number();
 const date = Joi.date();
 const sortBy = Joi.string().optional().empty("").allow("");
 const order = Joi.string().optional().empty("").allow("");
+const index = Joi.number().optional().empty("").allow("");
+const resolutionDate = Joi.date().optional().empty("").allow("");
+const entryDate = Joi.date().optional().empty("").allow("");
+const notificationType = Joi.string().optional().empty("").allow("");
+const acto = Joi.string().optional().empty("").allow("");
+const fojas = Joi.number().optional().empty("").allow("");
+const folios = Joi.number().optional().empty("").allow("");
+const provedioDate = Joi.date().optional().empty("").allow("");
+const userDescription = Joi.string().optional().empty("").allow("");
+const createdBy = Joi.number().optional().empty("").allow("");
 const totalTariff = Joi.number().optional().empty(0).allow(0).messages({
   "number.empty": "El debe seleccionar un proceso",
 });
@@ -29,6 +39,16 @@ const createJudicialBinnacleSchema = Joi.object<
   totalTariff: totalTariff.required(),
   tariffHistory: tariffHistory.required(),
   judicialFileCaseId: judicialFileCaseId.required(),
+  index: index.required(),
+  resolutionDate: resolutionDate.required(),
+  entryDate: entryDate.required(),
+  notificationType: notificationType.required(),
+  acto: acto.required(),
+  fojas: fojas.required(),
+  folios: folios.required(),
+  provedioDate: provedioDate.required(),
+  userDescription: userDescription.required(),
+  createdBy: createdBy.required(),
 });
 
 const updateJudicialBinnacleSchema = Joi.object<
@@ -47,6 +67,16 @@ const updateJudicialBinnacleSchema = Joi.object<
   judicialBinProceduralStageId: judicialBinProceduralStageId.required(),
   binnacleTypeId: binnacleTypeId.required(),
   date: date.required(),
+  index: index.required(),
+  resolutionDate: resolutionDate.required(),
+  entryDate: entryDate.required(),
+  notificationType: notificationType.required(),
+  acto: acto.required(),
+  fojas: fojas.required(),
+  folios: folios.required(),
+  provedioDate: provedioDate.required(),
+  userDescription: userDescription.required(),
+  createdBy: createdBy.required(),
   totalTariff: totalTariff.required(),
   tariffHistory: tariffHistory.required(),
 });

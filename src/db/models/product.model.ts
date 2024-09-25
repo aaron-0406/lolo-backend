@@ -11,7 +11,7 @@ import customerHasBankModel from "./many-to-many/customer-has-bank.model";
 import customerModel from "./customer.model";
 import negotiationModel from "./negotiation.model";
 import extProductNameModel from "./ext-product-name.model";
-import judicialCaseFileModel from "../models/judicial-case-file.model";
+import judicialCaseFileModel from "./judicial-case-file.model";
 
 const PRODUCT_TABLE = "PRODUCT";
 

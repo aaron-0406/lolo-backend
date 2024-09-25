@@ -60,6 +60,9 @@ const customerId = Joi.number();
 const chbTransferred = Joi.number();
 const responsibleUserId = Joi.number();
 
+const isScanValid = Joi.boolean();
+const wasScanned = Joi.boolean();
+
 const createJudicialCaseFileRelatedProcessSchema = Joi.object<
   Omit<
     JudicialCaseFileType,
@@ -96,6 +99,8 @@ const createJudicialCaseFileRelatedProcessSchema = Joi.object<
   qrCode: qrCode.optional().empty("").allow(""),
   chbTransferred: chbTransferred.optional().empty("").allow(""),
   responsibleUserId: responsibleUserId.optional().empty("").allow(""),
+  isScanValid: isScanValid.optional(),
+  wasScanned: wasScanned.optional(),
 });
 
 const updateJudicialCaseFileRelatedProcessSchema = Joi.object<
@@ -134,6 +139,8 @@ const updateJudicialCaseFileRelatedProcessSchema = Joi.object<
   qrCode: qrCode.optional().empty("").allow(""),
   chbTransferred: chbTransferred.optional().empty("").allow(""),
   responsibleUserId: responsibleUserId.optional().empty("").allow(""),
+  isScanValid: isScanValid.optional(),
+  wasScanned: wasScanned.optional(),
 });
 
 const getRelatedProcessByCaseFileIdSchema = Joi.object<

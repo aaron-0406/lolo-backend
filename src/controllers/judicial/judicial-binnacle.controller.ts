@@ -94,20 +94,21 @@ export const updateJudicialBinnacleController = async (
 
     const sumary = generateLogSummary({
       method: req.method,
-      id: newJudicialBinnacle.dataValues.id,
+      id: newJudicialBinnacle?.dataValues.id,
       oldData: oldJudicialBinacle,
-      newData: newJudicialBinnacle.dataValues,
+      newData: newJudicialBinnacle?.dataValues,
     });
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P13-01-01-02",
       entity: JUDICIAL_BINNACLE_TABLE,
-      entityId: Number(newJudicialBinnacle.dataValues.id),
+      entityId: Number(newJudicialBinnacle?.dataValues.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
       methodSumary: sumary,
     });
+
     res.json(newJudicialBinnacle);
   } catch (error) {
     next(error);

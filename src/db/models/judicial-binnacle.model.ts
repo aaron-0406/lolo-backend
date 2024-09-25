@@ -73,6 +73,7 @@ const JudicialBinnacleSchema: ModelAttributes<
   judicialBinProceduralStageId: {
     allowNull: false,
     type: DataTypes.INTEGER,
+    defaultValue: null,
     references: {
       model: JUDICIAL_BIN_PROCEDURAL_STAGE_TABLE,
       key: "id_judicial_bin_procedural_stage",
@@ -98,6 +99,66 @@ const JudicialBinnacleSchema: ModelAttributes<
     field: "last_performed",
   },
 
+  index: {
+    allowNull: true,
+    type: DataTypes.INTEGER,
+    field: "index",
+  },
+
+  resolutionDate: {
+    allowNull: true,
+    type: DataTypes.DATE,
+    field: "resolution_date",
+  },
+
+  entryDate: {
+    allowNull: true,
+    type: DataTypes.DATE,
+    field: "entry_date",
+  },
+
+  notificationType: {
+    allowNull: true,
+    type: DataTypes.STRING(200),
+    field: "notification_type",
+  },
+
+  acto: {
+    allowNull: true,
+    type: DataTypes.STRING(200),
+    field: "acto",
+  },
+
+  fojas: {
+    allowNull: true,
+    type: DataTypes.NUMBER,
+    field: "fojas",
+  },
+
+  folios: {
+    allowNull: true,
+    type: DataTypes.NUMBER,
+    field: "folios",
+  },
+
+  provedioDate: {
+    allowNull: true,
+    type: DataTypes.DATE,
+    field: "provedio_date",
+  },
+
+  userDescription: {
+    allowNull: true,
+    type: DataTypes.STRING(200),
+    field: "user_description",
+  },
+
+  createdBy: {
+    allowNull: true,
+    type: DataTypes.NUMBER,
+    field: "created_by",
+  },
+
   totalTariff: {
     allowNull: false,
     type: DataTypes.DECIMAL(10, 2),
@@ -109,7 +170,7 @@ const JudicialBinnacleSchema: ModelAttributes<
     defaultValue: "",
     type: DataTypes.TEXT("long"),
     field: "tariff_history",
-  }
+  },
 
 };
 
@@ -126,6 +187,10 @@ class JudicialBinnacle extends Model {
     this.belongsTo(models.JUDICIAL_BIN_TYPE_BINNACLE, { as: "binnacleType" });
     this.belongsTo(models.JUDICIAL_BIN_PROCEDURAL_STAGE, {
       as: "judicialBinProceduralStage",
+    });
+    this.hasMany(models.JUDICIAL_BIN_NOTIFICATION, {
+      as: "judicialBinNotifications",
+      foreignKey: "idJudicialBinacle",
     });
   }
 
