@@ -59,6 +59,21 @@ export const updateCustomerStateController = async (
   }
 };
 
+export const updateCustomerScrapperStateController = async(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const customer = await service.updateScreapperState(id, body.state);
+    res.json(customer);
+  } catch (error) {
+    next(error);
+  }
+}
+
 export const updateCustomerController = async (
   req: Request,
   res: Response,

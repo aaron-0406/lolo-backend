@@ -7,6 +7,7 @@ import {
   getCustomerByUrlIdentifierController,
   updateCustomerController,
   updateCustomerStateController,
+  updateCustomerScrapperStateController
 } from "../../controllers/dash/customer.controller";
 import { JWTAuth } from "../../middlewares/auth.handler";
 
@@ -16,6 +17,7 @@ const {
   getCustomerByID,
   updateCustomerSchema,
   updateStateCustomerSchema,
+  updateScrapperStateCustomerSchema
 } = customerSchemas;
 const router = express.Router();
 
@@ -40,6 +42,14 @@ router.put(
   validatorHandler(getCustomerByID, "params"),
   validatorHandler(updateStateCustomerSchema, "body"),
   updateCustomerStateController
+);
+
+router.put(
+  "/scrapper-state/:id",
+  JWTAuth,
+  validatorHandler(getCustomerByID, "params"),
+  validatorHandler(updateScrapperStateCustomerSchema, "body"),
+  updateCustomerScrapperStateController
 );
 
 router.put(

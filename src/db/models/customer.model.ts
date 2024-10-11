@@ -47,6 +47,12 @@ const CustomerSchema: ModelAttributes<Customer, CustomerType> = {
     defaultValue: DataTypes.NOW,
     type: DataTypes.DATE,
   },
+  isScrapperActive:{
+    allowNull: false,
+    type: DataTypes.BOOLEAN,
+    field: "is_scrapper_active",
+    defaultValue: false,
+  }
 };
 
 class Customer extends Model {

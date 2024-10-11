@@ -6,4 +6,5 @@ export type CustomerType = {
   description?: string;
   state: boolean;
   createdAt: Date;
+  isScrapperActive: boolean;
 };

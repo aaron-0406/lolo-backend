@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateCustomerController = exports.updateCustomerStateController = exports.createCustomerController = exports.getCustomerByUrlIdentifierController = exports.getAllCustomersController = void 0;
+exports.updateCustomerController = exports.updateCustomerScrapperStateController = exports.updateCustomerStateController = exports.createCustomerController = exports.getCustomerByUrlIdentifierController = exports.getAllCustomersController = void 0;
 const customer_service_1 = __importDefault(require("../../app/dash/services/customer.service"));
 const service = new customer_service_1.default();
 const getAllCustomersController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -59,6 +59,18 @@ const updateCustomerStateController = (req, res, next) => __awaiter(void 0, void
     }
 });
 exports.updateCustomerStateController = updateCustomerStateController;
+const updateCustomerScrapperStateController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const body = req.body;
+        const customer = yield service.updateScreapperState(id, body.state);
+        res.json(customer);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.updateCustomerScrapperStateController = updateCustomerScrapperStateController;
 const updateCustomerController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;

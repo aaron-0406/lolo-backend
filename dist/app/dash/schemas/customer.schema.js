@@ -11,6 +11,7 @@ const urlIdentifier = joi_1.default.string().min(1).max(100);
 const description = joi_1.default.string();
 const state = joi_1.default.boolean();
 const createAt = joi_1.default.date();
+const isScrapperActive = joi_1.default.boolean();
 const createCustomerSchema = joi_1.default.object({
     ruc: ruc.required(),
     companyName: companyName.required(),
@@ -18,14 +19,19 @@ const createCustomerSchema = joi_1.default.object({
     description: description.optional(),
     state: state.required(),
     createdAt: createAt.optional(),
+    isScrapperActive: isScrapperActive.optional(),
 });
 const updateCustomerSchema = joi_1.default.object({
     ruc: ruc.required(),
     companyName: companyName.required(),
     urlIdentifier: urlIdentifier.required(),
     description: description.optional(),
+    isScrapperActive: isScrapperActive.optional(),
 });
 const updateStateCustomerSchema = joi_1.default.object({
+    state: state.required(),
+});
+const updateScrapperStateCustomerSchema = joi_1.default.object({
     state: state.required(),
 });
 const getCustomerByUrlSchema = joi_1.default.object({
@@ -40,4 +46,5 @@ exports.default = {
     updateStateCustomerSchema,
     getCustomerByUrlSchema,
     getCustomerByID,
+    updateScrapperStateCustomerSchema
 };

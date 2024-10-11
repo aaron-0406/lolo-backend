@@ -77,6 +77,13 @@ class CustomerService {
             return rta;
         });
     }
+    updateScreapperState(id, state) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const customer = yield this.findOneByID(id);
+            const rta = yield customer.update(Object.assign(Object.assign({}, customer), { isScrapperActive: state }));
+            return rta;
+        });
+    }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const customer = yield this.findOneByID(id);

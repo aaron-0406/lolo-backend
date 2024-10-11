@@ -68,6 +68,12 @@ class CustomerService {
     return rta;
   }
 
+  async updateScreapperState(id:string, state: boolean) {
+    const customer = await this.findOneByID(id);
+    const rta = await customer.update({ ...customer, isScrapperActive: state });
+    return rta; 
+  }
+
   async delete(id: string) {
     const customer = await this.findOneByID(id);
     await customer.destroy();

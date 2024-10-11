@@ -40,6 +40,12 @@ const CustomerSchema = {
         defaultValue: sequelize_1.DataTypes.NOW,
         type: sequelize_1.DataTypes.DATE,
     },
+    isScrapperActive: {
+        allowNull: false,
+        type: sequelize_1.DataTypes.BOOLEAN,
+        field: "is_scrapper_active",
+        defaultValue: false,
+    }
 };
 class Customer extends sequelize_1.Model {
     static associate(models) {
