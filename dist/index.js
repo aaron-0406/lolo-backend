@@ -50,7 +50,6 @@ app.use((req, res, next) => {
     next();
 });
 (0, routes_1.default)(app);
-// Todas las peticiones GET que no hayamos manejado en las líneas anteriores retornaran nuestro app React
 app.get("*", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "/public/build", "index.html"));
 });

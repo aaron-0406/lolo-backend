@@ -55,7 +55,13 @@ class JudicialBinnacleService {
                     let sortField;
                     switch (field.trim()) {
                         case "FECHA":
-                            sortField = "date";
+                            sortField = sequelize_1.default.literal(`
+              CASE
+                WHEN \`resolution_date\` IS NOT NULL THEN \`resolution_date\`
+                WHEN \`entry_date\` IS NOT NULL THEN \`entry_date\`
+                ELSE \`date\`
+              END
+            `);
                             break;
                         default:
                             sortField = field.trim();

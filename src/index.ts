@@ -80,7 +80,6 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 routerApi(app);
 
-// Todas las peticiones GET que no hayamos manejado en las líneas anteriores retornaran nuestro app React
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/public/build", "index.html"));
 });

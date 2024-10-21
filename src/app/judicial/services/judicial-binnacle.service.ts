@@ -44,11 +44,17 @@ class JudicialBinnacleService {
       const orderDirections = (order as string).split(",");
 
       orderConfig = sortByFields.map((field, index) => {
-        let sortField: string;
+        let sortField: string | any;
 
         switch (field.trim()) {
           case "FECHA":
-            sortField = "date";
+            sortField = sequelize.literal(`
+              CASE
+                WHEN \`resolution_date\` IS NOT NULL THEN \`resolution_date\`
+                WHEN \`entry_date\` IS NOT NULL THEN \`entry_date\`
+                ELSE \`date\`
+              END
+            `);
             break;
 
           default:
@@ -82,6 +88,7 @@ class JudicialBinnacleService {
         judicialFileCaseId: fileCase,
       },
     });
+
     return rta;
   }
 
