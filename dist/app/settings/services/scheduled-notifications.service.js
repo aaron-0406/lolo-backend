@@ -60,7 +60,7 @@ class ScheduledNotificationsService {
         return __awaiter(this, void 0, void 0, function* () {
             const newScheduledNotification = yield models.SCHEDULED_NOTIFICATIONS.create(data);
             (0, judicial_scheduled_notifications_job_1.default)();
-            return newScheduledNotification;
+            return Object.assign(Object.assign({}, newScheduledNotification.dataValues), { daysToNotify: JSON.parse(newScheduledNotification.dataValues.daysToNotify) });
         });
     }
     update(id, data) {

@@ -31,20 +31,19 @@ export const createNotificationController = async (
   try {
     const body = req.body;
     const newNotification = await service.create(body);
-
+    console.log(newNotification)
     const sumary = generateLogSummary({
       method: req.method,
-      oldData: newNotification.dataValues,
-      newData: newNotification.dataValues,
-      name: newNotification.dataValues.nameNotification,
-      id: newNotification.dataValues.id,
+      newData: newNotification,
+      name: newNotification.nameNotification,
+      id: newNotification.id,
     });
 
     await serviceUserLog.create({
       customerUserId: Number(req.user?.id),
       codeAction: "P29-01",
       entity: SCHEDULED_NOTIFICATIONS_TABLE,
-      entityId: Number(newNotification.dataValues.id),
+      entityId: Number(newNotification.id),
       ip: req.clientIp ?? "",
       customerId: Number(req.user?.customerId),
       methodSumary: sumary,

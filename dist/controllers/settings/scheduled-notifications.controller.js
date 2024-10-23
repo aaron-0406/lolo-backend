@@ -36,18 +36,18 @@ const createNotificationController = (req, res, next) => __awaiter(void 0, void 
     try {
         const body = req.body;
         const newNotification = yield service.create(body);
+        console.log(newNotification);
         const sumary = (0, user_log_1.generateLogSummary)({
             method: req.method,
-            oldData: newNotification.dataValues,
-            newData: newNotification.dataValues,
-            name: newNotification.dataValues.nameNotification,
-            id: newNotification.dataValues.id,
+            newData: newNotification,
+            name: newNotification.nameNotification,
+            id: newNotification.id,
         });
         yield serviceUserLog.create({
             customerUserId: Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id),
             codeAction: "P29-01",
             entity: SCHEDULED_NOTIFICATIONS_TABLE,
-            entityId: Number(newNotification.dataValues.id),
+            entityId: Number(newNotification.id),
             ip: (_b = req.clientIp) !== null && _b !== void 0 ? _b : "",
             customerId: Number((_c = req.user) === null || _c === void 0 ? void 0 : _c.customerId),
             methodSumary: sumary,
